@@ -48,6 +48,15 @@ An **authenticated token** (`Symfony\Component\Security\Core\Authentication\Toke
 holds the `UserInterface`, the firewall name and the roles. Once it is in the
 `TokenStorageInterface`, the user is "logged in" for that request.
 
+!!! question "Predict first"
+    A request hits a `lazy` firewall but the controller never reads the user.
+    Does the authenticator actually run?
+
+??? note "Reveal"
+    No. `lazy: true` defers authentication until the token is *read*
+    (`getUser()`/`is_granted()`). If nothing reads it, the `AuthenticatorManager`
+    never runs and no session is loaded — that is the whole point of laziness.
+
 ## Deep Dive — how it works internally
 
 ### From request to token
@@ -147,6 +156,35 @@ Guard with `?->`, `??`, or an earlier `#[IsGranted('IS_AUTHENTICATED_FULLY')]` /
 !!! note "Null in real life"
     `null` here is the visitor who walked in without ever stopping at the desk —
     there is no wristband to read, so asking "what's their name?" gets you nothing.
+
+!!! info "Expert note"
+    `supports()` returning `null` is not "no" — it means "authenticate me
+    lazily". Stateless authenticators (e.g. `access_token`) return `null` so the
+    manager only invokes them when a token is actually needed, avoiding a wasted
+    credential check on every anonymous request.
+
+??? example "Debugging story"
+    **Symptom:** after switching an API firewall to `stateless: true`, clients
+    appeared "logged out" on every request. **Diagnosis:** `php bin/console
+    debug:firewall api` confirmed no `ContextListener` was registered — expected
+    for stateless. The real bug was client code relying on the session cookie that
+    a stateless firewall never sets, so each request arrived with no credential.
+    **Fix:** send the bearer token on *every* request and let the
+    `AccessTokenAuthenticator` re-authenticate. **Avoid:** read "stateless" as
+    "must carry its own credential each time", never "remembers me".
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Security\Http\Firewall` — the `kernel.request` listener
+      that selects the active firewall via `FirewallMap`.
+    - `Symfony\Component\Security\Http\Authentication\AuthenticatorManager` — runs
+      `supports()`/`authenticate()`, dispatches the events, stores the token.
+    - `Symfony\Component\Security\Http\Authenticator\Passport\Passport` — the badge
+      container returned by `authenticate()`.
+    - `Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage`
+      — holds the authenticated `TokenInterface` for the request.
+    - `CheckPassportEvent` listeners (`UserProviderListener`,
+      `CheckCredentialsListener`, `CsrfProtectionListener`) resolve the badges
+      before `createToken()` runs.
 
 ## Configuration & code
 
@@ -303,10 +341,31 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
     - `TokenInterface` in `TokenStorageInterface` = "logged in".
     - `stateless: true` ⇒ no `ContextListener`, no session token.
 
+## Connections
+
+- **Depends on:** [Event Dispatcher](../architecture/events.md) — the flow *is*
+  events (`CheckPassportEvent`, `LoginSuccessEvent`) on the dispatcher.
+- **Depends on:** [HTTP Cookies & Sessions](../http/cookies.md) — stateful tokens
+  are persisted in the session between requests.
+- **Reused in:** [Authenticators](authenticators.md) — the Passport/badge contract
+  this flow drives.
+- **Confused with:** [Authorization](authorization.md) — authentication is *who*;
+  authorization is *what you may do*.
+
 ## Official References
 - [Symfony docs — Security](https://symfony.com/doc/current/security.html)
 - [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
 - [Symfony source — AuthenticatorManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the authenticator system exists and what the token proves
+- [ ] wire a `form_login` and an `access_token` firewall in Symfony 8
+- [ ] debug an unexpected "logout" on a `stateless: true` firewall
+- [ ] spot that `supports()` returning `null` means "lazy", not "no"
+- [ ] trace request → Passport → `CheckPassportEvent` → token internally
 
 ---
 

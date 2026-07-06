@@ -41,6 +41,14 @@ $violations = $validator->validate($user, groups: ['registration']);
 
 If you pass no groups, the validator uses `['Default']`.
 
+!!! question "Predict first"
+    A `User` class defines a `#[Assert\GroupSequence]`. You validate the `Default`
+    group, then the `User` group. Do they behave the same?
+
+??? note "Reveal"
+    No. `Default` triggers the *sequence* (stepwise, stop-on-first-failure); the
+    `{ClassName}` group `User` runs the same constraints *flat*, bypassing the order.
+
 ## Deep Dive — Default vs {ClassName}
 
 Two special groups make the exam tricky:
@@ -251,9 +259,25 @@ context** is often clearer than many groups. In forms, set the group via the
     - Sequenced class: `Default` → sequence; `{ShortClassName}` → no sequence.
     - Case-sensitive; capital-D `Default`.
 
+## Connections
+
+- **Depends on:** [Object Validation](object-validation.md) — you pass `groups:` to the same `validate()` call.
+- **Reused in:** [Group Sequence](group-sequence.md) — a sequence is an ordered list of these groups.
+- **Confused with:** [Form Handling](../forms/handling.md) — in forms you set groups via the `validation_groups` option, not the `validate()` argument.
+
 ## Official References
 - [Official Symfony docs — Validation groups](https://symfony.com/doc/current/validation/groups.html)
 - [Symfony source — Constraint::DEFAULT_GROUP](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** groups let one object validate differently per context
+- [ ] assign and run named groups in Symfony 8
+- [ ] debug a custom group that unexpectedly drops the `Default` constraints
+- [ ] spot the `Default` vs `{ClassName}` trick on a sequenced class
+- [ ] explain how the current group propagates during a cascade
 
 ---
 

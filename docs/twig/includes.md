@@ -34,6 +34,16 @@ fragment *in place* — a card, a menu, a form row. Two forms exist:
 
 By default the partial inherits **the current context** (all variables in scope).
 
+!!! question "Predict first"
+    `{% include '_card.html.twig' with { title: 'Sales' } %}` — inside `_card`, can
+    you still read a variable `product` that only the parent set? What if you add `only`?
+
+??? note "Reveal"
+    Without `only`, **yes** — the include inherits the whole parent context *plus*
+    the `with` vars. Add `only` and the include sees **just** `title` (the `with`
+    set) — the parent scope is hidden. `with` merges; `only` isolates. (The `app`
+    global stays available either way.)
+
 ## Deep Dive — how it works internally
 
 The tag compiles to a call to `Twig\Template::display()` (or `render()` for the
@@ -204,10 +214,26 @@ components (modals, cards with slots).
     - `ignore missing` · list `['a','b']` → first existing.
     - `{% embed 'x' %}{% block y %}…{% endblock %}{% endembed %}`.
 
+## Connections
+
+- **Depends on:** [Template Inheritance](inheritance.md) — `embed` reuses the block-overriding machinery from `extends`.
+- **Reused in:** [Controller Rendering](controller-rendering.md) — when a fragment needs its own data, embed a controller instead of an `include`.
+- **Confused with:** [Template Inheritance](inheritance.md) — `include` drops a fragment; only `embed`/`extends` can override blocks.
+
 ## Official References
 - [Official — Including templates](https://symfony.com/doc/current/templates.html#including-templates)
 - [Twig — include / embed](https://twig.symfony.com/doc/3.x/tags/include.html)
 - [Twig source — FilesystemLoader](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** includes exist and how they differ from inheritance
+- [ ] control scope with `with` / `only` and handle `ignore missing` in Symfony 8
+- [ ] debug a partial that unexpectedly sees (or can't see) a parent variable
+- [ ] spot the trick answer claiming `include` can override blocks
+- [ ] explain that includes compile to separate cached template classes, not inlined markup
 
 ---
 

@@ -34,6 +34,15 @@ multiple inheritance of *state*.
 | Properties | No (constants only) | Yes |
 | Constructor | No | Yes |
 
+!!! question "Predict first"
+    A parent method returns `Animal`. A child overrides it to return `object`
+    (wider). Legal covariant override, or fatal error?
+
+??? note "Reveal"
+    Fatal error. Return types are **covariant** — a child may only *narrow*
+    (`Cat`), never widen. Widening would break Liskov substitutability, so PHP
+    rejects it at compile time.
+
 ## Deep Dive — variance & type declarations
 
 ### Covariance & contravariance
@@ -251,11 +260,27 @@ $r instanceof \Stringable;                    // false (Response isn't)
     - Interface: constants only (typed 8.3), no properties, multiple `extends`.
     - `instanceof` never throws on non-objects.
 
+## Connections
+
+- **Depends on:** [OOP](oop.md) — interfaces sit on top of the class/visibility model.
+- **Reused in:** [SPL](spl.md) — `Iterator`, `Countable` and `ArrayAccess` are the interfaces you implement in practice.
+- **Confused with:** [Abstract Classes](abstract-classes.md) — pure contract + multiple inheritance vs shared state + a single parent.
+
 ## Official References
 - [PHP: Interfaces](https://www.php.net/manual/en/language.oop5.interfaces.php)
 - [PHP: Variance](https://www.php.net/manual/en/language.oop5.variance.php)
 - [PHP: Type declarations](https://www.php.net/manual/en/language.types.declarations.php)
 - [Symfony source — EventDispatcherInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/EventDispatcher/EventDispatcherInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** variance rules exist (Liskov substitutability)
+- [ ] implement multiple interfaces with intersection/DNF type declarations in Symfony 8
+- [ ] debug a fatal error from a widened return or a narrowed parameter
+- [ ] spot the trick: `instanceof` on a non-object (returns `false`, never throws)
+- [ ] explain how `instanceof` walks parents and every implemented interface
 
 ---
 

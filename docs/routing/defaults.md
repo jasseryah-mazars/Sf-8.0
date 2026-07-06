@@ -36,6 +36,15 @@ Crucially, **only the trailing placeholders can be optional**. `/{a}/{b}` cannot
 make `a` optional while `b` is required, because the matcher cannot tell where the
 missing segment was.
 
+!!! question "Predict first"
+    `page` defaults to `1`. What does `generateUrl('blog_list', ['page' => 1])`
+    produce — `/blog/1` or `/blog`?
+
+??? note "Reveal"
+    `/blog`. The generator **omits** a trailing segment whose value equals its
+    default, producing the canonical shortest URL. Pass `page => 2` and you get
+    `/blog/2`.
+
 ## Deep Dive — how it works internally
 
 During compilation, `RouteCompiler` marks a token as **optional** when the
@@ -253,9 +262,25 @@ over defaulting.
     - Matches with & without the trailing segment.
     - `generateUrl(default value)` ⇒ segment omitted.
 
+## Connections
+
+- **Depends on:** [Requirements](requirements.md) — inline order is `{name<requirement>?default}`, the default following the regex.
+- **Reused in:** [URL generation](url-generation.md) — generation drops trailing segments equal to their default.
+- **Confused with:** [Special attributes](special-attributes.md) — non-path defaults like `_format`/`_locale` never appear in the path.
+
 ## Official References
 - [Official Symfony docs — Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** only trailing placeholders can be optional
+- [ ] implement inline `{page<\d+>?1}` and the array `defaults` form in Symfony 8
+- [ ] debug a "middle" optional parameter that will not compile / match
+- [ ] spot that `{slug?}` defaults to `null` (not `''`) and defaults are dropped on generation
+- [ ] explain how `RouteCompiler` emits nested optional regex groups
 
 ---
 

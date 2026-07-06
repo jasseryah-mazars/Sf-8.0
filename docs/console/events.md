@@ -36,6 +36,15 @@ event dispatcher. `Symfony\Component\Console\ConsoleEvents` defines four:
 Each carries a dedicated event object exposing the command, input, output and — for
 error/terminate — the exit code.
 
+!!! question "Predict first"
+    A command throws halfway through `execute()`. Which console events fire, in
+    which order, and does `TERMINATE` still run?
+
+??? note "Reveal"
+    `COMMAND` fired before execution; the throw triggers `ERROR`; then `TERMINATE`
+    runs **regardless**. So the order is `COMMAND → ERROR → TERMINATE`. `TERMINATE`
+    always runs — it is your last chance to change the exit code.
+
 ## Deep Dive — how it works internally
 
 `Symfony\Bundle\FrameworkBundle\Console\Application` (via
@@ -258,10 +267,29 @@ use the `SIGNAL` event for app-wide concerns.
     - `getSubscribedSignals()` + `handleSignal($sig, $prevExit)`.
     - Signal-terminated convention: exit `128 + signal`.
 
+## Connections
+
+- **Depends on:** [Architecture — Events & the dispatcher](../architecture/events.md) —
+  console events ride the same `EventDispatcher`, so no dispatcher means no events.
+- **Reused in:** [Custom commands](custom-commands.md) — listeners observe the commands
+  you write without touching their code.
+- **Confused with:** [Configuration](configuration.md) — `initialize`/`interact`/`execute`
+  are overridable methods, not dispatched events.
+
 ## Official References
 - [Official Symfony docs — Console events](https://symfony.com/doc/current/components/console/events.html)
 - [Official Symfony docs — Handling signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals)
 - [Symfony source — ConsoleEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/ConsoleEvents.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** console events exist (cross-cutting hooks around any command)
+- [ ] listen with `#[AsEventListener]` and adjust the exit code in Symfony 8
+- [ ] debug a listener that "never fires" (no dispatcher / raw Console component)
+- [ ] spot the trick on firing order, the `113` disabled code, and 0–255 clamping
+- [ ] explain signal handling via `SignalableCommandInterface` vs the `SIGNAL` event
 
 ---
 

@@ -40,6 +40,15 @@ A rule has two halves: **matchers** (does this rule apply?) and
 |---|---|
 | `path`, `host`, `port`, `ip`/`ips`, `methods` | `roles`, `allow_if`, `requires_channel` |
 
+!!! question "Predict first"
+    Your list has `{ path: ^/, roles: PUBLIC_ACCESS }` first, then
+    `{ path: ^/admin, roles: ROLE_ADMIN }`. Is `/admin` protected?
+
+??? note "Reveal"
+    No. Only the **first matching rule** applies, and `^/` matches `/admin`, so
+    the `PUBLIC_ACCESS` rule wins and admin is wide open. Order specific → general;
+    the `^/` catch-all always goes last.
+
 ## Deep Dive — how it works internally
 
 ### Where it runs
@@ -97,6 +106,33 @@ authentication, so it protects even the login page.
 - `ips` accepts single addresses or CIDR ranges; a rule with `ips` only applies
   to matching clients (useful with `PUBLIC_ACCESS` to whitelist an internal net).
 - `methods`, `host`, `port` further narrow when the rule applies.
+
+!!! info "Expert note"
+    `access_control` calls the *same* `AccessDecisionManager` and voters as
+    `isGranted()` — it is only a URL-shaped front end. The one thing it cannot do
+    is pass a **subject**, so "can edit *this* post" is impossible here; that
+    belongs to `#[IsGranted]` + a voter. Think of `access_control` as coarse zone
+    protection, voters as per-object protection.
+
+??? example "Debugging story"
+    **Symptom:** an internal metrics dashboard at `/admin/metrics` returned 403 for
+    office users even from the LAN. **Diagnosis:** the `{ ips: [...],
+    roles: PUBLIC_ACCESS }` rule was listed *after* a broad `{ path: ^/admin,
+    roles: ROLE_ADMIN }`, which matched first. **Fix:** move the specific
+    `^/admin/metrics` rule above `^/admin`. **Avoid:** always order rules
+    specific → general and verify with `debug:config security access_control`.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Security\Http\AccessMap` — the compiled list; returns the
+      first matching pattern's requirements.
+    - `...\Http\Firewall\AccessListener` — looks up the match and calls the
+      decision manager.
+    - `...\Http\Firewall\ChannelListener` — enforces `requires_channel` *before*
+      authentication.
+    - `...\Core\Authorization\AccessDecisionManager` — the same manager/voters as
+      `isGranted()`.
+    - `...\Core\Authorization\Voter\ExpressionVoter` — evaluates `allow_if`
+      expressions.
 
 ## Configuration & code
 

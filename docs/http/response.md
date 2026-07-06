@@ -46,6 +46,15 @@ Cache-Control: private, max-age=0
 - **Headers** — metadata (`Content-Type`, `Cache-Control`, `Set-Cookie`, …).
 - **Body** — the payload.
 
+!!! question "Predict first"
+    You `new Response('hi')` and set nothing else. Can a CDN store it, and what
+    `Cache-Control` does it carry?
+
+??? note "Reveal"
+    No — a default `Response` gets **`Cache-Control: no-cache, private`** from
+    `ResponseHeaderBag`, so shared caches won't store it until you call
+    `setPublic()`/`setSharedMaxAge()`.
+
 ## Deep Dive — how it works internally
 
 ### The `Response` family
@@ -304,10 +313,26 @@ return `$this->render()` which produces a `Response`.
       `StreamedResponse` = generated output.
     - Disposition via `HeaderUtils::makeDisposition()`.
 
+## Connections
+
+- **Depends on:** [HTTP Request](request.md) — `prepare(Request)` makes the response compliant with the incoming request.
+- **Reused in:** [The Response (Controllers)](../controllers/response.md) — `$this->render()`/`json()` hand you a `Response`.
+- **Confused with:** [Caching Overview](caching.md) — the cache setters (`setPublic`, `setEtag`) live on `Response`.
+
 ## Official References
 - [Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html#response)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 - [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the `Response` subclasses exist and when to pick each
+- [ ] choose between `Response`, `JsonResponse`, `BinaryFileResponse` and `StreamedResponse`
+- [ ] debug a huge-file download that exhausts memory (buffering vs streaming)
+- [ ] spot the trick: `$response->headers` is a `ResponseHeaderBag`, and `prepare()` strips the body for HEAD/304
+- [ ] explain what `prepare()` and `send()` (`sendHeaders()` + `sendContent()`) do internally
 
 ---
 

@@ -40,6 +40,16 @@ caches it on its own terms, and stitches the result into the outer page. The
 outer page can therefore be cached for a long time even though one fragment is
 private or short-lived.
 
+!!! question "Predict first"
+    You wrap a per-user greeting in `render_esi(...)` but run the app **without** a
+    reverse proxy. What does the rendered page contain where the greeting goes?
+
+??? note "Reveal"
+    The greeting itself, rendered **inline**. `render_esi` emits an
+    `<esi:include>` tag only when a surrogate advertises ESI capability
+    (`Surrogate-Capability`); otherwise it falls back to inline rendering so the
+    same template works with or without a proxy — you just get no separate caching.
+
 ## Deep Dive — how it works internally
 
 ### Capability negotiation
@@ -276,6 +286,25 @@ may fit better.
     - No surrogate → `render_esi` falls back to **inline** rendering.
     - Classes: `HttpCache\Esi` (SurrogateInterface), `Fragment\EsiFragmentRenderer`.
     - Without ESI, the shortest embedded TTL caps the whole page.
+
+## Connections
+
+- **Depends on:** [Server-Side Caching](server-side.md) — the surrogate that fills
+  ESI holes is the reverse proxy (`HttpCache`/Varnish).
+- **Reused in:** [Controller Rendering (Twig)](../twig/controller-rendering.md) —
+  `render_esi(controller(...))` builds on the fragment/sub-request machinery.
+- **Confused with:** [Cache Types](cache-types.md) — ESI isolates a *fragment's*
+  freshness rather than choosing `public`/`private` for the whole page.
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** ESI exists — mixed freshness on one page without capping the shell's TTL
+- [ ] enable `framework.esi` and embed a fragment with `render_esi` in Symfony 8
+- [ ] debug "nothing is cached separately" (no surrogate → inline fallback)
+- [ ] spot that without ESI the shortest embedded TTL (`ResponseCacheStrategy`) caps the whole page
+- [ ] name the classes — `HttpCache\Esi`, `EsiFragmentRenderer`, `UriSigner` — and how they collaborate
 
 ## Official References
 - [Symfony docs — ESI](https://symfony.com/doc/current/http_cache/esi.html)

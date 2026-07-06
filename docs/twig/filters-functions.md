@@ -48,6 +48,15 @@ Common built-in **filters**:
 Common built-in **functions**: `path()`, `url()`, `asset()`, `range()`, `max()`,
 `min()`, `random()`, `include()`, `dump()`, `constant()`, `cycle()`.
 
+!!! question "Predict first"
+    Your custom filter returns the string `<b>x</b>`, but the page shows the literal
+    `<b>x</b>` text instead of bold. Why — and what one option fixes it?
+
+??? note "Reveal"
+    Filter output is **auto-escaped** like any other value, so the markup is encoded
+    on print. Declare the filter with `is_safe: ['html']` (or `#[AsTwigFilter(..., isSafe: ['html'])]`)
+    to mark its output as trusted HTML — but only when you're certain the content is safe.
+
 ## Deep Dive — how it works internally
 
 Filters and functions are provided by **Twig extensions** —
@@ -281,10 +290,26 @@ transforms an existing value (`value|price`).
     - Register: `getFilters()`/`getFunctions()` or `#[AsTwigFilter/Function]`.
     - `default` covers undefined **and** empty; `json_encode` is escaped.
 
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — filters bind tighter than operators, which decides how `value|f` parses.
+- **Reused in:** [URL Generation](urls.md), [Translations](translations.md) — `path()`/`url()` and `trans` are just bridge-provided functions/filters.
+- **Confused with:** [Auto-Escaping](auto-escaping.md) — a filter's HTML output is escaped unless it declares `is_safe`.
+
 ## Official References
 - [Official — Twig extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
 - [Twig — filters & functions reference](https://twig.symfony.com/doc/3.x/#reference)
 - [Twig source — CoreExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/CoreExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** filters (`|`) and functions (`f()`) are distinct and when each reads best
+- [ ] register a custom filter/function in Symfony 8 via `#[AsTwigFilter]`/`#[AsTwigFunction]`
+- [ ] debug HTML from a filter that shows up escaped on the page
+- [ ] spot the trick answer that expects `json_encode` output to be printable raw
+- [ ] explain how a runtime class defers heavy dependencies until the filter is used
 
 ---
 

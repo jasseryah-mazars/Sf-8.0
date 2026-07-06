@@ -32,6 +32,15 @@ Locale can also come from a **path prefix** (`/{_locale}/blog`) or be **guessed*
 from the request. Whatever the source, the framework stores it on the request and
 remembers it for the session so links stay in the user's language.
 
+!!! question "Predict first"
+    You set only `framework.default_locale: en`. A browser sends
+    `Accept-Language: fr`. Does Symfony serve French automatically?
+
+??? note "Reveal"
+    No. Symfony does **not** parse `Accept-Language` by default — opt in with
+    `set_locale_from_accept_language`, or read `Request::getPreferredLanguage()`
+    yourself. Precedence: matched `_locale` → sticky session → `default_locale`.
+
 ## Deep Dive — how it works internally
 
 A localized route (`path` as an array) is expanded at load time into several
@@ -276,9 +285,25 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     - `generateUrl(name, {_locale: 'fr'})`.
     - `framework.default_locale`; guess via `set_locale_from_accept_language`.
 
+## Connections
+
+- **Depends on:** [Special attributes](special-attributes.md) — `_locale` is a special parameter that triggers `Request::setLocale()`.
+- **Reused in:** [Intl](../miscellaneous/intl.md) — the matched locale drives translation and formatting.
+- **Confused with:** [Host matching](host-matching.md) — host-based vs path-prefix locale strategies.
+
 ## Official References
 - [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain how `_locale` is guessed, set, and remembered (the precedence order)
+- [ ] implement a localized `path` array and a `/{_locale}` prefix in Symfony 8
+- [ ] debug `/xx/blog` matching because the `_locale` requirement is missing
+- [ ] spot that `Accept-Language` guessing is opt-in, not automatic
+- [ ] explain how `LocaleListener`/`LocaleAwareListener` propagate the locale
 
 ---
 

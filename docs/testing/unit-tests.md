@@ -32,6 +32,15 @@ Symfony 8 targets **PHPUnit 11/12**, which is fully **attribute-driven**:
 docblock annotations such as `@dataProvider` and `@covers` are removed. Test
 methods are discovered by the `test` prefix or the `#[Test]` attribute.
 
+!!! question "Predict first"
+    You `createStub(Foo::class)` but the class under test never actually calls it,
+    and you assert nothing about the stub. Does the test fail?
+
+??? note "Reveal"
+    No — a **stub** only supplies canned values and never verifies interactions.
+    Only a **mock** with `->expects(...)` is checked at teardown; a missed call on
+    a mock fails, a missed call on a stub does not.
+
 ## Deep Dive — how it works internally
 
 PHPUnit builds a **test suite** by reflecting over classes that extend
@@ -316,10 +325,26 @@ use [`KernelTestCase`](framework-objects.md).
     - Doubles: `createStub()` (values) vs `createMock()` + `expects()`.
     - Matchers: `self::once()`, `self::never()`, `self::exactly(n)`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — testable classes take collaborators as constructor arguments you can double.
+- **Reused in:** [Functional Tests](functional-tests.md) — the same doubles replace boundary services once the kernel is booted.
+- **Confused with:** [PHPUnit Bridge](phpunit-bridge.md) — the bridge adds deprecation/clock tooling on top of plain PHPUnit, not the base `TestCase`.
+
 ## Official References
 - [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
 - [PHPUnit — Writing tests](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** isolating one unit with doubles pinpoints a failure
+- [ ] write a `#[DataProvider]` / `#[TestWith]` test on PHPUnit 11/12
+- [ ] debug a "data provider must be public static" error
+- [ ] spot the trap that a stub never verifies calls (only a mock does)
+- [ ] explain how PHPUnit builds a fresh test instance per method
 
 ---
 

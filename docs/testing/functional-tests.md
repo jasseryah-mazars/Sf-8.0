@@ -36,6 +36,15 @@ Twig → security) and asserts on the response. There are two base classes:
 need the container (e.g. to test a service with real wiring or run a Messenger
 handler), use `KernelTestCase`.
 
+!!! question "Predict first"
+    You call `self::getContainer()->get()` in a `WebTestCase` and successfully
+    fetch a service that is `private` at runtime. Where did that service come from?
+
+??? note "Reveal"
+    Not the runtime container — the `test` env compiles a *second* container,
+    `test.service_container` (a `TestContainer`), that keeps private/non-shared
+    services reachable. `static::$kernel->getContainer()` would still hide it.
+
 ## Deep Dive — how it works internally
 
 `Symfony\Bundle\FrameworkBundle\Test\KernelTestCase` creates the kernel via
@@ -288,10 +297,26 @@ you to know. Do **not** functional-test pure logic that a fast
     - Test container id: `test.service_container` (`TestContainer`).
     - Enable via `framework.test: true` in `config/packages/test/`.
 
+## Connections
+
+- **Depends on:** [Controllers](../controllers/index.md) — the request you drive is routed into a controller action.
+- **Reused in:** [The Client](client.md) — `createClient()` returns the `KernelBrowser` this chapter introduces.
+- **Confused with:** [Unit Tests](unit-tests.md) — unit tests boot no kernel; functional tests boot the real one.
+
 ## Official References
 - [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
 - [Symfony source — WebTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `WebTestCase` extends `KernelTestCase` and when to pick each
+- [ ] boot a client with `static::createClient()` and drive a full HTTP request
+- [ ] debug a "kernel already booted" error from mixing `bootKernel()` with `createClient()`
+- [ ] spot the trap that `static::$kernel->getContainer()` hides private services
+- [ ] explain how the `test` container exposes private services internally
 
 ---
 

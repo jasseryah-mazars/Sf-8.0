@@ -53,6 +53,14 @@ flowchart TD
     X --> R
 ```
 
+!!! question "Predict first"
+    A sequence `[User, Strong]`: group `User` yields one violation. Does any
+    constraint in `Strong` run?
+
+??? note "Reveal"
+    No. The sequence stops at the first *group* that produces any violation — all of
+    `User` runs, then it halts, so `Strong` is skipped entirely.
+
 ## Deep Dive — how stepwise validation works
 
 `Symfony\Component\Validator\Constraints\GroupSequence` is a value object holding
@@ -314,9 +322,25 @@ stages depend on runtime state.
     - Provider: `#[Assert\GroupSequenceProvider]` + `implements GroupSequenceProviderInterface`.
     - `getGroupSequence(): array|GroupSequence`.
 
+## Connections
+
+- **Depends on:** [Validation Groups](groups.md) — a sequence just orders named groups and remaps `Default`.
+- **Reused in:** [Callbacks](callbacks.md) — group-tagged callbacks slot into a sequence step like any constraint.
+- **Confused with:** [Object Validation](object-validation.md) — validating `{ClassName}` runs the flat set and bypasses the sequence.
+
 ## Official References
 - [Official Symfony docs — Group sequence & provider](https://symfony.com/doc/current/validation/sequence_provider.html)
 - [Symfony source — GroupSequence](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/GroupSequence.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** ordered stages gate expensive checks behind cheap ones
+- [ ] declare a `#[Assert\GroupSequence]` and a `GroupSequenceProvider` in Symfony 8
+- [ ] debug a sequence that loops because it references its own `Default`
+- [ ] spot the "stops at first failing constraint" vs "first failing group" trick
+- [ ] explain how `Default` is remapped to the sequence internally
 
 ---
 

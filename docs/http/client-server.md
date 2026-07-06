@@ -46,6 +46,14 @@ HTTP is an **application-layer** protocol. It relies on lower layers:
 TLS wraps the TCP connection so HTTP travels encrypted (that is *HTTPS* — HTTP
 over TLS, conventionally on port 443; plain HTTP on port 80).
 
+!!! question "Predict first"
+    Who decides whether a request is served over HTTP/2 — PHP, or something else?
+
+??? note "Reveal"
+    The **web server / reverse proxy**, via ALPN during the TLS handshake. PHP only
+    *observes* the negotiated version through `$request->getProtocolVersion()`; it
+    neither picks the version nor terminates TLS.
+
 ## Deep Dive — how it works internally
 
 ### The full cycle

@@ -35,6 +35,15 @@ generation), its **path** (the URL pattern with `{placeholders}`), and its
 **controller** (the callable to run). Everything else — methods, host,
 requirements, defaults — is an optional refinement.
 
+!!! question "Predict first"
+    Two routes both match `/blog/latest` — one is declared before the other. Which
+    controller runs, and does the *more specific* route win the tie?
+
+??? note "Reveal"
+    The route declared **first** wins. Matching is first-match-wins over the ordered
+    `RouteCollection`; specificity is irrelevant — that is why you must put specific
+    routes before catch-all ones.
+
 ## Deep Dive — how it works internally
 
 Every declared route becomes a `Symfony\Component\Routing\Route` object, collected
@@ -284,10 +293,26 @@ is no runtime performance difference.
     - Import types: `attribute`, `yaml`, `directory`; keys `prefix`, `name_prefix`.
     - `debug:router` / `debug:router <name>` to inspect.
 
+## Connections
+
+- **Depends on:** [Controllers](../controllers/index.md) — a route exists to point a URL at a controller.
+- **Reused in:** [URL generation](url-generation.md) — the same `RouteCollection` compiles the generator.
+- **Confused with:** [Requirements](requirements.md) — declaration *order* and regex *specificity* decide different things.
+
 ## Official References
 - [Official Symfony docs — Routing](https://symfony.com/doc/current/routing.html)
 - [Symfony source — Router](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Router.php)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** routes compile into one cached `RouteCollection`/matcher
+- [ ] implement a class-prefixed `#[Route]` set and a YAML import in Symfony 8
+- [ ] debug a route that never matches because a catch-all precedes it
+- [ ] spot that `Annotation\Route` / `type: annotation` is the wrong Symfony 8 answer
+- [ ] explain how loaders → `RouteCompiler` → `CompiledUrlMatcher` build matching
 
 ---
 

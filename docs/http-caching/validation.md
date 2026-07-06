@@ -46,6 +46,16 @@ Two validators exist:
 (semantically equivalent — e.g. same content, different compression). Conditional
 GETs (`If-None-Match`) use *weak comparison*, so weak tags are fine for caching.
 
+!!! question "Predict first"
+    `Response::isNotModified($request)` returns `true`. What is now in `$response`,
+    and what must you still do?
+
+??? note "Reveal"
+    It has **mutated the response in place**: status is `304`, and the body plus
+    content headers (`Content-Type`, `Content-Length`, `Last-Modified`, …) are
+    stripped. The boolean is just a signal — you must still `return $response`
+    yourself to short-circuit rendering.
+
 ## Deep Dive — how it works internally
 
 ### The 304 round-trip
@@ -299,6 +309,25 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
     - Conditional headers: `If-None-Match` (ETag) · `If-Modified-Since` (date).
     - ETag wins over Last-Modified when both present.
     - `#[Cache(etag:, lastModified:)]` → 304 before controller; ETag is SHA-256'd.
+
+## Connections
+
+- **Depends on:** [Expiration](expiration.md) — validation is the other half of the
+  cache model; the best setups pair a short TTL with a validator.
+- **Reused in:** [Server-Side Caching](server-side.md) — the reverse proxy issues
+  the conditional GET and turns a backend `304` into a refreshed hit.
+- **Confused with:** [Cache Types](cache-types.md) — validators say *whether it
+  changed*, not *who may store it*.
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** validation exists — a bodyless `304` saves bandwidth and rendering
+- [ ] set `setEtag`/`setLastModified` and short-circuit with `isNotModified()` in Symfony 8
+- [ ] debug a validator that never matches (e.g. `Last-Modified` set to `now()`)
+- [ ] spot that ETag beats Last-Modified when both conditional headers are present
+- [ ] explain how `#[Cache]` expressions evaluate pre-controller and SHA-256-hash the ETag
 
 ## Official References
 - [Symfony docs — Validation](https://symfony.com/doc/current/http_cache/validation.html)

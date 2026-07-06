@@ -46,6 +46,14 @@ Content-Type: application/json
 - **Headers** — metadata (`Host`, `Content-Type`, `Accept`, `Cookie`, …).
 - **Body** — payload for POST/PUT/PATCH (form data, JSON, uploaded files).
 
+!!! question "Predict first"
+    For `GET /users/42?draft=1`, which bag holds `42` and which holds `draft`?
+
+??? note "Reveal"
+    `42` is a **route parameter** → `attributes` (a `ParameterBag`), written by the
+    Router. `draft` is a **query param** → `query` (an `InputBag`, from `$_GET`).
+    Route parameters are *never* in `query` — that is the classic exam trap.
+
 ## Deep Dive — how it works internally
 
 `Symfony\Component\HttpFoundation\Request` is an **object-oriented wrapper around
@@ -306,10 +314,26 @@ for the raw `Request` when you need low-level access (headers, IP, raw body).
     - `getMethod()` vs `getRealMethod()`; `getPathInfo()` vs `getRequestUri()`.
     - `getPayload()` reads JSON or form body uniformly; `getContent()` is raw.
 
+## Connections
+
+- **Depends on:** [Client / Server](client-server.md) — `Request` is the OO wrapper around the raw inbound exchange.
+- **Reused in:** [The Request (Controllers)](../controllers/request.md) — [value resolvers](../controllers/value-resolvers.md) read these bags for you.
+- **Confused with:** [HTTP Response](response.md) — inbound `InputBag`/`ParameterBag` vs the outbound `ResponseHeaderBag`.
+
 ## Official References
 - [Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 - [Symfony source — InputBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `Request` wraps the superglobals and what `createFromGlobals()` does
+- [ ] name every bag and its class (`InputBag`/`ParameterBag`/`ServerBag`/`HeaderBag`/`FileBag`)
+- [ ] read query, body, route and header data with the right typed getter
+- [ ] spot the trick: route params live in `attributes`, not `query`
+- [ ] explain why `InputBag` restricts values to scalars and how `getPayload()` reads any body
 
 ---
 

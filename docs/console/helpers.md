@@ -36,6 +36,15 @@ Helpers are reusable UI utilities available to every command through the
 
 `SymfonyStyle` wraps most of these, but you can use them directly for finer control.
 
+!!! question "Predict first"
+    Inside a classic `Command::execute()`, how do you get hold of the
+    `QuestionHelper` to prompt the user — and where does it come from?
+
+??? note "Reveal"
+    Call `$this->getHelper('question')`; helpers are fetched **by string name** from
+    the `HelperSet` the Application populates. In invokable commands you cannot call
+    `$this->getHelper()` — reach for `SymfonyStyle`, which wraps most helpers.
+
 ## Deep Dive — how it works internally
 
 A classic `Command` gets its helpers from
@@ -275,6 +284,15 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     - `ask`/`askHidden`/`confirm`/`choice` via `SymfonyStyle`.
     - `ProgressBar`: `start($max)`, `advance()`, `finish()`.
     - `Table`: `setHeaders()`, `setRows()`, `render()`.
+
+## Connections
+
+- **Depends on:** [Input & output](input-output.md) — helpers render through
+  `OutputInterface`, and `SymfonyStyle` wraps most of them.
+- **Reused in:** [Custom commands](custom-commands.md) — prompts, tables and progress
+  bars are how those commands talk to a user.
+- **Confused with:** [Input & output](input-output.md) — `SymfonyStyle` *is* the styled
+  facade over these helpers, so you rarely fetch them by hand.
 
 ## Official References
 - [Official Symfony docs — Console helpers](https://symfony.com/doc/current/components/console/helpers/index.html)

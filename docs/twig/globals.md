@@ -50,6 +50,16 @@ session and environment.
 {% if app.user %}Hi {{ app.user.userIdentifier }}{% else %}Guest{% endif %}
 ```
 
+!!! question "Predict first"
+    A page renders for an anonymous visitor and does `{{ app.user.roles|length }}`.
+    What is `app.user`, and what happens on that line?
+
+??? note "Reveal"
+    `app.user` is **`null`** when nobody is authenticated — `AppVariable::getUser()`
+    returns the token's user or `null`. Reading `.roles` on `null` crashes the
+    classic anonymous-page render. Guard first: `{% if app.user %}…{% endif %}` or
+    the ternary `app.user ? … : …`.
+
 ## Deep Dive — how it works internally
 
 `app` is an instance of **`Symfony\Bridge\Twig\AppVariable`**. TwigBundle
@@ -249,10 +259,26 @@ global namespace.
     - `app.environment` = dev/prod · `app.debug` = bool · `app.locale`.
     - Custom: `twig.globals.X: value` or `implements GlobalsInterface`.
 
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — `app.user` uses the same attribute-resolution and null rules as any variable.
+- **Reused in:** [URL Generation](urls.md) — `app.current_route` / `app.current_route_parameters` rebuild the current link.
+- **Confused with:** [Authentication](../security/authentication.md) — `app.user` is only the view side; the token it reads is populated by the security layer.
+
 ## Official References
 - [Official — The app global variable](https://symfony.com/doc/current/templates.html#the-app-global-variable)
 - [Official — Global variables](https://symfony.com/doc/current/templates.html#global-variables)
 - [Symfony source — AppVariable](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `app` exists and what it exposes without controller plumbing
+- [ ] register a custom global via `twig.globals` or `GlobalsInterface` in Symfony 8
+- [ ] debug an anonymous-page crash from dereferencing a `null` `app.user`
+- [ ] spot the trick answer treating `app.user` as always present or `app.username`
+- [ ] explain how `AppVariable` maps `app.X` to services (token storage, request stack)
 
 ---
 

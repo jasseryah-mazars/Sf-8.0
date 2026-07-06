@@ -30,6 +30,15 @@ inside a single action.
 The related `schemes` option restricts the URL scheme (`http`/`https`). Combining
 them expresses "POST, over HTTPS only" in the route definition.
 
+!!! question "Predict first"
+    A route allows only `GET`. A `POST` hits that exact path. Is it a 404, a 405, or
+    does the `GET` action run anyway?
+
+??? note "Reveal"
+    **405 Method Not Allowed** with an `Allow` header — the *path* matched but the
+    verb didn't (a wrong path would be 404). Note `methods: ['GET']` also matches
+    `HEAD` automatically.
+
 ## Deep Dive — how it works internally
 
 `methods` and `schemes` are stored on the `Route` and folded into the compiled
@@ -241,9 +250,25 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - GET ⇒ HEAD. Wrong verb ⇒ 405. Wrong scheme ⇒ redirect.
     - Override: `Request::enableHttpMethodParameterOverride()`.
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — `methods`/`schemes` refine an already-declared route.
+- **Reused in:** [Redirects](redirects.md) — a scheme mismatch redirects, and a trailing-slash POST is a 405.
+- **Confused with:** [Controllers → The Request](../controllers/request.md) — the matcher tests `Request::getMethod()` (with any override).
+
 ## Official References
 - [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a wrong verb is 405 (+`Allow`) but a wrong scheme redirects
+- [ ] implement per-verb routes and an HTTPS-only endpoint in Symfony 8
+- [ ] debug a `_method` override that "does nothing" (not enabled)
+- [ ] spot that declaring `HEAD` beside `GET` is redundant and 404 ≠ 405
+- [ ] explain how `matchCollection()` collects allowed methods for the `Allow` header
 
 ---
 

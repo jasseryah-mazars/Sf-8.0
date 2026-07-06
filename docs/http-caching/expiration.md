@@ -69,6 +69,16 @@ reverse proxy computes and emits `Age` for you.
   (it is *not* "don't cache").
 - `no-store` — must **never** store anywhere. Use for truly sensitive data.
 
+!!! question "Predict first"
+    You call `$response->setSharedMaxAge(600)` and nothing else. Is the response
+    `public` or `private`, and does the browser cache it?
+
+??? note "Reveal"
+    It becomes **`public`** — `setSharedMaxAge()` sets the `public` flag too, since
+    a shared TTL is meaningless on a private response. It emits only `s-maxage=600`,
+    which the browser ignores, so browsers get no freshness window (they revalidate)
+    while shared caches keep it fresh for 600 s.
+
 ## Deep Dive — how it works internally
 
 ### From API call to header
@@ -326,6 +336,25 @@ with a cheap 304.
     - `no-cache` ≠ `no-store`. `must-revalidate` via `setCache`/attribute only.
     - Shared freshness: `s-maxage` > `max-age` > `Expires`. `Age` counts elapsed.
     - `#[Cache]` listener: CONTROLLER_ARGUMENTS (304 short-circuit) + RESPONSE −10.
+
+## Connections
+
+- **Depends on:** [Cache Types](cache-types.md) — freshness only helps once you've
+  decided who may store the response (`public`/`private`).
+- **Reused in:** [Server-Side Caching](server-side.md) — the reverse proxy reads
+  `s-maxage` to decide fresh hits and emits the `Age` header.
+- **Confused with:** [Validation](validation.md) — expiration *predicts* a lifetime;
+  validation *asks the origin* whether the copy changed.
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** freshness lets a cache answer without hitting the origin
+- [ ] set lifetimes with `setMaxAge`/`setSharedMaxAge`/`setCache([...])` and `#[Cache]` in Symfony 8
+- [ ] debug "the CDN won't cache longer than the browser" (needs `s-maxage`, not just `max-age`)
+- [ ] spot the traps: `no-cache` ≠ `no-store`, and there is no `setMustRevalidate()`
+- [ ] explain the shared-cache precedence `s-maxage` > `max-age` > `Expires` and the `#[Cache]` listener timing
 
 ## Official References
 - [Symfony docs — Expiration](https://symfony.com/doc/current/http_cache/expiration.html)

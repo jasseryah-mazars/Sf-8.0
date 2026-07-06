@@ -53,6 +53,18 @@ count…).
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You `dispatch()` a message routed to an `async` transport, then immediately
+    read `$envelope->last(HandledStamp::class)`. Do you get the handler's result,
+    `null`, or an exception?
+
+??? note "Reveal"
+    `null`. `SendMessageMiddleware` serialized and enqueued the message, then
+    **stopped** the bus — no handler ran in this process, so no `HandledStamp`
+    exists and the nullsafe `?->` yields `null`. The result only appears after a
+    **worker** consumes the message, and even then in the worker's process, not
+    yours.
+
 ### The core classes
 
 | Role | FQCN |
@@ -253,6 +265,42 @@ null".
     letter was delivered (you hold the envelope), the recipient just didn't send
     anything back.
 
+!!! info "Expert note"
+    The middleware stack is **per bus**, not global. A common senior move is
+    giving the command bus a transaction middleware while the event bus has none —
+    so events dispatched inside a handler with `DispatchAfterCurrentBusStamp` fire
+    only *after* the surrounding transaction commits. Ordering matters too:
+    `SendMessageMiddleware` must sit **after** your transaction middleware, or you
+    enqueue work that references rows never committed.
+
+??? example "Debugging story"
+    **Symptom:** a `SendReminder` handler ran twice in production for a few
+    messages. **Diagnosis:** two supervisor programs each started
+    `messenger:consume` against the *same* `doctrine://` transport, and the
+    handler was **not idempotent** — a slow first attempt outlived the visibility
+    window, so the row was redelivered (`RedeliveryStamp` attempt 2) while attempt
+    1 was still running. Confirmed by logging
+    `$envelope->last(RedeliveryStamp::class)?->getRetryCount()` in a
+    `WorkerMessageReceivedEvent` listener. **Fix:** make handlers idempotent
+    (dedupe on a business key) and cap concurrency. **Avoid:** treating a queue as
+    "exactly-once" — the delivery contract is **at-least-once**.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Messenger\MessageBus::dispatch()` wraps the message in an
+      `Symfony\Component\Messenger\Envelope` and drives an ordered
+      `Middleware\StackInterface` (russian-doll `->next()->handle()`).
+    - `Middleware\SendMessageMiddleware` consults the routing senders; if one
+      matches it adds a `Stamp\SentStamp` and **returns early** (handler skipped).
+    - `Middleware\HandleMessageMiddleware` asks
+      `Handler\HandlersLocatorInterface` (impl `Handler\HandlersLocator`) for the
+      handlers, invokes each, and appends a `Stamp\HandledStamp` with the return
+      value + handler name.
+    - `Worker::run()` loops `Transport\TransportInterface::get()` → re-dispatch
+      with a `Stamp\ReceivedStamp` → `ack()`/`reject()`, firing the
+      `Event\WorkerMessage*` events around each step.
+    - `Transport\Serialization\SerializerInterface` (default `PhpSerializer`)
+      encodes/decodes the envelope and its stamps across the process boundary.
+
 ## Configuration & code
 
 === "PHP Attributes"
@@ -449,12 +497,29 @@ after-response hook when you don't need durability or retries.
     - Failure: `messenger:failed:show|retry|remove`; `UnrecoverableMessageHandlingException` = no retry.
     - Events: `WorkerStarted/MessageReceived/MessageHandled/MessageFailed/Running/Stopped`.
 
+## Connections
+
+- **Depends on:** [DI: Tags](../dependency-injection/tags.md) — handlers and middleware are discovered through tagged service locators, not manual wiring.
+- **Reused in:** [Mailer](mailer.md) — `SendEmailMessage` rides Messenger for async delivery; [Console](../console/index.md) — the worker *is* the `messenger:consume` command.
+- **Builds on:** [Events](../architecture/events.md) — the worker fires `WorkerMessage*` events through the same EventDispatcher you already know.
+- **Confused with:** [Events](../architecture/events.md) — the event *dispatcher* runs listeners synchronously in-process; the *message bus* can defer work to another process.
+
 ## Official References
 - [Official docs — Messenger](https://symfony.com/doc/current/messenger.html)
 - [Official docs — Messenger: sync & queued](https://symfony.com/doc/current/messenger.html#transports-async-queued-messages)
 - [Symfony source — MessageBus](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/MessageBus.php)
 - [Symfony source — Worker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Worker.php)
 - [Symfony source — Stamps](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger/Stamp)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a bus + transports decouple slow/side-effecting work from the request
+- [ ] wire a message + `#[AsMessageHandler]` and route it to an async transport in Symfony 8
+- [ ] debug a message that "never runs" (missing handler, worker not consuming, wrong routing)
+- [ ] spot the trick: `dispatch()` returns an `Envelope`, and async ⇒ no in-process `HandledStamp`
+- [ ] trace the middleware stack and the `Worker::run()` receive→handle→ack loop internally
 
 ---
 

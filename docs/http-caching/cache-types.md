@@ -80,6 +80,16 @@ Freshness (`max-age`, `s-maxage`, `Expires`) is the [expiration](expiration.md)
 model; revalidation (`no-cache`, `ETag`, `Last-Modified`) is the
 [validation](validation.md) model.
 
+!!! question "Predict first"
+    A response carries `Cache-Control: public, max-age=60, s-maxage=600`. How long
+    does the **browser** treat it as fresh, and how long does a **CDN**?
+
+??? note "Reveal"
+    The browser honours `max-age=60` and ignores `s-maxage`, so it reuses the copy
+    for 60 s. A shared cache resolves freshness as `s-maxage` > `max-age`, so the
+    CDN keeps it fresh for 600 s. Same header, two lifetimes — that split is exactly
+    why both directives exist.
+
 ## Deep Dive — how it works internally
 
 ### Where the directives are computed
@@ -296,6 +306,25 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
     - `max-age` = everyone; `s-maxage` = shared caches only (browser ignores).
     - `Vary` = extra cache-key headers. `Vary: *`/`Cookie` ≈ no shared caching.
     - Reverse proxy = gateway cache = `HttpCache`/Varnish (a shared cache).
+
+## Connections
+
+- **Depends on:** [HTTP Response](../http/response.md) — `Cache-Control`/`Vary`
+  live on the response header bag you learn to build there.
+- **Reused in:** [Server-Side Caching](server-side.md) — the reverse proxy (gateway
+  cache) is the shared cache you own, described here.
+- **Confused with:** [Expiration](expiration.md) — cache *type* (who may store) is
+  a different axis from *freshness* (how long it may be reused).
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `public` must be opt-in and what the default `no-cache, private` protects
+- [ ] mark a response `public`/`private` and set `max-age`/`s-maxage` in Symfony 8
+- [ ] debug a CDN serving one user's page to another (missing `private`/stray session)
+- [ ] spot the trick that `setPublic()` then `setPrivate()` yields only `private`
+- [ ] explain how `ResponseHeaderBag::computeCacheControlValue()` renders the header
 
 ## Official References
 - [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)

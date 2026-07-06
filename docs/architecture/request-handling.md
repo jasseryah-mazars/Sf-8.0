@@ -53,6 +53,16 @@ request types; the old `MASTER_REQUEST` constant was removed.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A listener on `kernel.request` calls `$event->setResponse(...)`. Does your
+    controller still run, and which of the eight events get skipped?
+
+??? note "Reveal"
+    The controller never runs. `kernel.controller`, `kernel.controller_arguments`
+    and `kernel.view` are skipped too — the kernel jumps straight to
+    `kernel.response`, so your response still passes header/cookie listeners before
+    being returned.
+
 ### The front controller and Runtime
 
 `public/index.php` is intentionally tiny. The `symfony/runtime` component wraps it:
@@ -219,6 +229,37 @@ value to a `JsonResponse`).
     with no box**: `kernel.view` is the worker who boxes it, and if nobody does the
     package is rejected at the dock — the "controller must return a Response" error.
 
+!!! info "Expert note"
+    `handle()` is only a thin public wrapper; the real orchestration lives in the
+    **private** `HttpKernel::handleRaw()`, which is why you cannot subclass to
+    intercept a single step — you hook the **events** instead. And `terminate()`
+    only runs if the runtime calls it: long-lived runtimes (FrankenPHP/RoadRunner
+    worker mode) reuse one kernel across many requests, so `kernel.terminate` work
+    must never assume a fresh PHP process.
+
+??? example "Debugging story"
+    **Symptom:** an API route intermittently returned the HTML profiler page
+    instead of JSON. **Diagnosis:** a `kernel.view` listener serialized *arrays* to
+    JSON, but one code path `return`ed `null` on a cache miss. With no `Response`
+    and nothing for the view listener to build, the kernel threw
+    `ControllerDoesNotReturnResponseException`, which the dev error page rendered as
+    HTML. `php bin/console debug:event-dispatcher kernel.view` confirmed the listener
+    only fired for arrays. **Fix:** return an explicit `new JsonResponse(null, 204)`
+    on the miss. **Avoid:** never let a controller fall through to an implicit `null`.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\HttpKernel\HttpKernel::handle()` wraps `handleRaw()` in a
+      `try/catch` and is the single public entry point.
+    - `HttpKernel::handleRaw()` dispatches every kernel event in order and
+      pushes/pops the `Symfony\Component\HttpKernel\RequestStack`.
+    - `Symfony\Component\HttpKernel\Controller\ControllerResolverInterface` turns the
+      `_controller` attribute into a callable; `ArgumentResolverInterface` builds its
+      arguments from a chain of `ValueResolverInterface`.
+    - `Symfony\Component\EventDispatcher\EventDispatcher` invokes the listeners wired
+      by `RegisterListenersPass`.
+    - `Symfony\Component\HttpKernel\KernelEvents` holds the event-name constants; each
+      event object extends `Symfony\Component\HttpKernel\Event\KernelEvent`.
+
 ## Configuration & code
 
 === "PHP Attributes"
@@ -379,11 +420,27 @@ itself.
     - `MAIN_REQUEST=1`, `SUB_REQUEST=2`; no `MASTER_REQUEST`.
     - `KernelEvents` constants = event-name strings (`kernel.request`, …).
 
+## Connections
+
+- **Depends on:** [HTTP Request/Response](../http/request.md) — a `Request` in and a `Response` out is the whole contract; and [Dependency Injection](../dependency-injection/index.md), which compiles the kernel, dispatcher and resolvers as services.
+- **Reused in:** [Controllers](../controllers/index.md) — the resolved controller and its [value-resolved arguments](../controllers/value-resolvers.md) come out of this flow.
+- **Confused with:** [Events](events.md) — `HttpKernel` *orchestrates* the flow; the `EventDispatcher` only *delivers* each event to listeners.
+
 ## Official References
 - [Official docs — HttpKernel workflow](https://symfony.com/doc/current/components/http_kernel.html)
 - [Official docs — Built-in events](https://symfony.com/doc/current/reference/events.html)
 - [Symfony source — HttpKernel](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernel.php)
 - [Symfony source — KernelEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/KernelEvents.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** one `handle()` entry point plus events makes Symfony extensible without patching core
+- [ ] implement a `kernel.request` listener that short-circuits with `setResponse()`
+- [ ] debug a "controller must return a Response" error and name which events fired
+- [ ] spot the trap that `kernel.terminate` does **not** run for sub-requests
+- [ ] explain how `handleRaw()` drives the eight events and the `RequestStack`
 
 ---
 

@@ -44,6 +44,17 @@ Whichever style, the method returns an **`int` exit code**. Use the constants:
 Never `return 0;` literally — use the constants for clarity and forward
 compatibility.
 
+!!! question "Predict first"
+    You mark a plain class (it extends nothing) with `#[AsCommand]` and give it an
+    `__invoke(): int` method. Will Symfony register and run it, or must it extend
+    `Command`?
+
+??? note "Reveal"
+    It runs. Autoconfiguration tags any `#[AsCommand]` class (or `Command`
+    subclass) `console.command`; an internal `InvokableCommand` adapter turns
+    `__invoke()` into `execute()`. You do **not** extend `Command` — but you still
+    return its constants (`Command::SUCCESS`/`FAILURE`/`INVALID`).
+
 ## Deep Dive — how it works internally
 
 `Symfony\Component\Console\Attribute\AsCommand` carries the command's `name`,
@@ -323,10 +334,29 @@ call from HTTP.
     - `SUCCESS=0`, `FAILURE=1`, `INVALID=2`.
     - Tag `console.command` is applied automatically.
 
+## Connections
+
+- **Depends on:** [Service tags](../dependency-injection/tags.md) — autoconfiguration
+  applies the `console.command` tag that registers the command.
+- **Reused in:** [Configuration](configuration.md) — the metadata and lifecycle of the
+  command you just registered.
+- **Confused with:** [Built-in commands](built-in-commands.md) — those ship with the
+  framework; here you write your own.
+
 ## Official References
 - [Official Symfony docs — Console commands](https://symfony.com/doc/current/console.html)
 - [Official Symfony docs — Commands as services](https://symfony.com/doc/current/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a command exists (a thin CLI adapter over a reusable service)
+- [ ] implement an invokable `#[AsCommand]` with `#[Argument]` / `#[Option]` in Symfony 8
+- [ ] debug a "command not found" / unregistered-command failure
+- [ ] spot the wrong answer on `SUCCESS`/`FAILURE`/`INVALID` return values
+- [ ] explain how autoconfiguration + `AddConsoleCommandPass` load commands lazily
 
 ---
 

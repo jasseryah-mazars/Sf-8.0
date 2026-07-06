@@ -45,6 +45,13 @@ classDiagram
     Exception <|-- LogicException
 ```
 
+!!! question "Predict first"
+    A `catch (\Exception $e)` block wraps `intdiv(1, 0)`. Does it catch the fault?
+
+??? note "Reveal"
+    No. `intdiv(1, 0)` throws `DivisionByZeroError`, which extends `Error`, not
+    `Exception`. Only `catch (\Throwable)` (or `\DivisionByZeroError`) catches it.
+
 ## Deep Dive — how it works internally
 
 ### `Error` vs `Exception`
@@ -250,11 +257,27 @@ set_error_handler(static function (int $level, string $msg, string $file, int $l
     - Multi-catch: `catch (A | B $e)`; variable optional (8.0+).
     - `set_error_handler` → warnings; `set_exception_handler` → uncaught throws.
 
+## Connections
+
+- **Depends on:** [OOP](oop.md) — the `Throwable` hierarchy is ordinary inheritance plus an interface.
+- **Reused in:** [Web Security](web-security.md) — controlled error handling avoids leaking internals; the [Security stage](../security/index.md) renders failures safely.
+- **Confused with:** [Interfaces](interfaces.md) — `Throwable` is an interface, so `Error` and `Exception` are two branches implementing it.
+
 ## Official References
 - [PHP: Exceptions](https://www.php.net/manual/en/language.exceptions.php)
 - [PHP: Predefined Exceptions](https://www.php.net/manual/en/reserved.exceptions.php)
 - [PHP: Errors in PHP 7+](https://www.php.net/manual/en/language.errors.php7.php)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `Error` and `Exception` are split under `Throwable`
+- [ ] implement chained exceptions and `set_error_handler`→`ErrorException` in Symfony 8
+- [ ] debug a "caught nothing" bug from catching `\Exception` instead of `\Throwable`
+- [ ] spot the trick: a `return` in `finally` overriding `try`'s return
+- [ ] explain how `finally` runs on return, throw and normal completion
 
 ---
 

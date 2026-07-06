@@ -41,6 +41,15 @@ Two places can configure a command:
   **arguments and options** in the classic style, and where you can call
   `setHelp()`, `setAliases()`, etc.
 
+!!! question "Predict first"
+    In what order do `configure()`, `initialize()`, `interact()` and `execute()`
+    run — and which one has already happened before any input exists?
+
+??? note "Reveal"
+    Order: **configure → initialize → interact → execute** (with `input->validate()`
+    between the last two). `configure()` runs in the **constructor**, before input is
+    bound, so it may only declare structure — never read arguments.
+
 ## Deep Dive — how it works internally
 
 `configure()` is called from the `Command` **constructor**, so it runs the moment a
@@ -268,10 +277,29 @@ nothing to share between `interact()` and `execute()`.
     - `execute()` = returns `int`.
     - `hidden` hides from `list`, still runnable.
 
+## Connections
+
+- **Depends on:** [Custom commands](custom-commands.md) — the command you configure
+  is registered there.
+- **Reused in:** [Events](events.md) — the console events wrap the same lifecycle you
+  hook via `initialize`/`interact`/`execute`.
+- **Confused with:** [Arguments & options](options-arguments.md) — `configure()` also
+  declares those, but metadata (name/help) is not the input definition.
+
 ## Official References
 - [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
 - [Official Symfony docs — Commands as services (lazy)](https://symfony.com/doc/current/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the name lives in `#[AsCommand]` (lazy loading) and what it solves
+- [ ] set name/description/help/aliases/hidden via attribute or `configure()` in Symfony 8
+- [ ] debug a command whose arguments seem "missing" inside `configure()`
+- [ ] spot the trick on lifecycle order and when `interact()` is skipped (`-n`)
+- [ ] explain why `configure()` runs in the constructor, before input is bound
 
 ---
 

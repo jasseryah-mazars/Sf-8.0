@@ -31,6 +31,15 @@ compound** (`collection`, `repeated`), and **buttons**.
     bridge type and is **out of scope** for this material. Use `ChoiceType` with
     explicit `choices` for the non-Doctrine equivalent.
 
+!!! question "Predict first"
+    A `ChoiceType` is configured with `expanded => true` and `multiple => true`.
+    Which widget does the browser render — a `<select>`, radios, or checkboxes?
+
+??? note "Reveal"
+    Checkboxes. The widget is decided by the `expanded` × `multiple` pair: collapsed
+    ⇒ `<select>` (single) or multi-select; expanded ⇒ radios (single) or checkboxes
+    (multiple). `ChoiceType` has no separate `widget` option.
+
 ## Deep Dive — how it works internally
 
 ### Scalar & text types
@@ -276,10 +285,26 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
     - `Collection`: `entry_type`, `allow_add/delete`, `by_reference:false`, `prototype`.
     - `Repeated`: `type`, `first_options`/`second_options`.
 
+## Connections
+
+- **Depends on:** [Form types](types.md) — every core type sits in the resolved-type hierarchy.
+- **Reused in:** [Data transformers](data-transformers.md) — numeric/date types ship the view transformers studied there.
+- **Confused with:** [File uploads](file-upload.md) — `FileType` looks scalar but yields an `UploadedFile`, not a string.
+
 ## Official References
 - [Official Symfony docs — Form types reference](https://symfony.com/doc/current/reference/forms/types.html)
 - [Official Symfony docs — CollectionType](https://symfony.com/doc/current/reference/forms/types/collection.html)
 - [Symfony source — Core form types](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Form/Extension/Core/Type)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** core types exist and when to reach for one over a custom type
+- [ ] configure `ChoiceType`, `CollectionType`, `RepeatedType`, `MoneyType`, `DateType` in Symfony 8
+- [ ] debug a `CollectionType` that ignores adder/remover methods (`by_reference`)
+- [ ] spot the wrong answer about which `expanded` × `multiple` pair renders checkboxes
+- [ ] explain how `MoneyType`'s `divisor` scales the stored model value
 
 ---
 

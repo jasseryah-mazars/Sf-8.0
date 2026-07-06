@@ -38,6 +38,13 @@ errors clearly when one is missing.
 | `json` | JSON encode/decode | Core; always available in 8.x |
 | `filter` | Data filtering | Validation, sanitisation |
 
+!!! question "Predict first"
+    Do `strlen('café')` and `mb_strlen('café', 'UTF-8')` return the same number?
+
+??? note "Reveal"
+    No: `5` vs `4`. `strlen` counts **bytes** (é is 2 bytes in UTF-8);
+    `mb_strlen` counts **characters** — the classic length-validation trap.
+
 ## Deep Dive — detection & requirement
 
 ### Detecting an extension
@@ -220,6 +227,12 @@ flowchart LR
     - Require: `"ext-mbstring": "*"` etc. in composer.json.
     - `mb_*` for text; `ctype_*` beware integer-as-ASCII gotcha.
     - Prefer native ext over Symfony polyfill.
+
+## Connections
+
+- **Depends on:** [Namespaces](namespaces.md) — `ext-*` requirements live in the same `composer.json` that configures PSR-4 autoloading.
+- **Reused in:** [Web Security](web-security.md) — `openssl` and `filter` back hashing and validation defences.
+- **Confused with:** [SPL](spl.md) — SPL is always-available core, not an optional `ext-*` you must declare.
 
 ## Official References
 - [PHP: Extensions overview](https://www.php.net/manual/en/extensions.php)

@@ -41,6 +41,16 @@ chain.
 The common root is `Symfony\Component\Form\Extension\Core\Type\FormType`, and the
 common *field* base is `TextType` for scalar inputs.
 
+!!! question "Predict first"
+    Your custom type's `getParent()` returns `TextType::class`. In what order do the
+    parent's and child's `configureOptions`/`buildForm` run — and what does
+    `getParent()` actually return?
+
+??? note "Reveal"
+    **Parent first, then child.** The `ResolvedFormType` walks the chain top-down, so
+    the child sees the parent's defaults already set and writes only the delta.
+    `getParent()` returns a **class string** (FQCN), never an instance.
+
 ## Deep Dive — how it works internally
 
 ### The hierarchy
@@ -272,10 +282,26 @@ For a one-off, just configure options at `->add()`.
     - No `getName()`; `getBlockPrefix()` for theming; FQCN is the id.
     - `form.type` tag autoconfigured → inject services into types.
 
+## Connections
+
+- **Depends on:** [Dependency injection](../dependency-injection/index.md) — types are autoconfigured with the `form.type` tag, so you can inject services into them.
+- **Reused in:** [Type extensions](type-extensions.md) — the `ResolvedFormType` bundles a type with its applicable extensions.
+- **Confused with:** [Built-in types](built-in-types.md) — those are concrete field types; this chapter is the hierarchy/`ResolvedFormType` mechanism behind them.
+
 ## Official References
 - [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
 - [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
 - [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** types inherit down a chain to `FormType`
+- [ ] build a custom type with `getParent()` and `OptionsResolver` in Symfony 8
+- [ ] debug a compound custom type whose parent is a scalar `TextType`
+- [ ] spot the wrong answer returning `new TextType()` from `getParent()` or expecting `getName()`
+- [ ] explain what a `ResolvedFormType` bundles and the parent → child hook order
 
 ---
 

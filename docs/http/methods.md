@@ -44,6 +44,15 @@ The **method** (verb) states the client's intent. The core methods:
 | `TRACE` | Loop-back diagnostic | No |
 | `CONNECT` | Establish a tunnel (proxies) | No |
 
+!!! question "Predict first"
+    A form POSTs with a hidden `_method=DELETE` field, but you haven't touched any
+    config. What does `$request->getMethod()` return?
+
+??? note "Reveal"
+    `POST`. `http_method_override` defaults to **`false`**, so `_method` is ignored.
+    Enable `framework.http_method_override: true`; then `getMethod()` returns
+    `DELETE` while `getRealMethod()` still returns `POST`.
+
 ## Deep Dive — how it works internally
 
 ### Safe, idempotent, cacheable
@@ -255,10 +264,26 @@ apps — JS clients (fetch) can send any verb directly and don't need it.
       PUT/PATCH/DELETE.
     - Route match: `#[Route('/x', methods: ['POST'])]`.
 
+## Connections
+
+- **Depends on:** [HTTP Request](request.md) — `getMethod()`/`isMethodSafe()` and the override logic live on `Request`.
+- **Reused in:** [HTTP Methods Matching](../routing/methods.md) — routes restrict verbs with `methods: [...]`.
+- **Confused with:** [Status Codes](status-codes.md) — 303-after-POST exists because POST is not idempotent.
+
 ## Official References
 - [MDN — HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 - [Symfony docs — Routing (method matching)](https://symfony.com/doc/current/routing.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** safe/idempotent/cacheable matter and how they relate
+- [ ] classify GET/HEAD/PUT/DELETE/POST/PATCH on each axis without hesitation
+- [ ] debug a "delete button" form that Symfony treats as a plain POST
+- [ ] spot the trick: `_method` is POST-only and **off by default**
+- [ ] explain the difference between `getMethod()` and `getRealMethod()` after an override
 
 ---
 

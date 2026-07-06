@@ -62,6 +62,14 @@ class Event
 }
 ```
 
+!!! question "Predict first"
+    Your `#[Assert\Callback]` method returns `false` when the data is invalid, yet no
+    error ever appears. Why?
+
+??? note "Reveal"
+    Return values are ignored. A callback must call
+    `$context->buildViolation('…')->addViolation()`; the boolean does nothing.
+
 ## Deep Dive — how the callback is invoked
 
 `#[Assert\Callback]` maps to
@@ -296,9 +304,25 @@ without gating it behind a group/sequence.
     - Class-scoped: read object via `$this` / `$context->getObject()`.
     - `atPath('field')` to attribute the error to a property.
 
+## Connections
+
+- **Depends on:** [Violations Builder](violations-builder.md) — you register errors through the `ExecutionContext`.
+- **Reused in:** [Group Sequence](group-sequence.md) — callbacks honour `groups`, so they take part in sequences.
+- **Confused with:** [Custom Constraints](custom-constraints.md) — a callback is class-specific and one-off; a constraint is reusable.
+
 ## Official References
 - [Official Symfony docs — Callback](https://symfony.com/doc/current/reference/constraints/Callback.html)
 - [Symfony source — CallbackValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/CallbackValidator.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a callback fits one-off, cross-field rules
+- [ ] wire an instance and a static `#[Assert\Callback]` in Symfony 8
+- [ ] debug a nullable-property callback that throws or never fires
+- [ ] spot the instance-vs-static signature trick (who gets the object first)
+- [ ] explain how `CallbackValidator` resolves and invokes the method
 
 ---
 

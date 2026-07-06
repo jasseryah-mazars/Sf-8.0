@@ -32,6 +32,13 @@ form that captures the parent scope **automatically, by value**.
 | `fn () => $x` | Automatic (by value) | Single expr | Bound if in a method |
 | `strlen(...)` | — | First-class callable | Bound to source |
 
+!!! question "Predict first"
+    `$x = 10; $f = fn () => $x; $x = 99;` — does `$f()` return `10` or `99`?
+
+??? note "Reveal"
+    `10`. Arrow functions (like `use ($x)`) capture **by value at definition
+    time**. Only `use (&$x)` — impossible with `fn` — would see the later `99`.
+
 ## Deep Dive — how it works internally
 
 ### Capture semantics
@@ -232,11 +239,27 @@ flowchart LR
     - `bindTo($obj, $scope)` / `bind()` (static) / `call($obj)`.
     - `strlen(...)` == `Closure::fromCallable('strlen')`.
 
+## Connections
+
+- **Depends on:** [OOP](oop.md) — a closure is a `Closure` object carrying a bound `$this` and a scope.
+- **Reused in:** [SPL](spl.md) — generators and callables lean on closures; [PHP API](php-api.md) covers the first-class callable syntax.
+- **Confused with:** [Traits](traits.md) — `use` inside a class imports a trait, not a closure capture list.
+
 ## Official References
 - [PHP: Anonymous functions](https://www.php.net/manual/en/functions.anonymous.php)
 - [PHP: Arrow functions](https://www.php.net/manual/en/functions.arrow.php)
 - [PHP: Closure class](https://www.php.net/manual/en/class.closure.php)
 - [Symfony source — ServiceClosureArgument](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Argument/ServiceClosureArgument.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** scope (not the call site) controls a closure's private access
+- [ ] implement `bindTo`/`Closure::bind` and first-class callables in Symfony 8
+- [ ] debug a `fn` that "ignores" a later mutation (it captured a copy)
+- [ ] spot the trick: `fn` capturing by reference (it cannot) or `use` binding at call time
+- [ ] explain how `Closure::bind` returns a *new* closure and grants a scope
 
 ---
 

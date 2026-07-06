@@ -40,6 +40,16 @@ template's **file extension** — so `page.html.twig` escapes as HTML,
 Because escaping is automatic, the developer's job shrinks to two decisions:
 **which context** a value lands in, and **when a value is trusted HTML** (rare).
 
+!!! question "Predict first"
+    A partial is named `report.txt.twig` and contains `{{ '<script>alert(1)</script>' }}`.
+    What ends up in the output — escaped entities or the raw tag?
+
+??? note "Reveal"
+    The raw `<script>…</script>` — unescaped. `.txt.twig` maps to the *none*
+    strategy via `FileExtensionEscapingStrategy::guess()`, so nothing is encoded.
+    The default is chosen by **file extension**, not a fixed `html`; only
+    `.html.twig` (and the fallback) escape as HTML.
+
 ## Deep Dive — how it works internally
 
 Escaping is a Twig **extension**, `Twig\Extension\EscaperExtension`, backed by
@@ -247,10 +257,26 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
     - `|raw` = trust me. `{% autoescape 's' %}…{% endautoescape %}`.
     - Escape at `{{ }}`, not at `{% set %}`.
 
+## Connections
+
+- **Depends on:** [Web Security](../php-web-security/web-security.md) — auto-escaping is a defence against the XSS attack model described there.
+- **Reused in:** [Filters & Functions](filters-functions.md) — a custom filter/function must declare `is_safe: ['html']` to opt out of this escaping.
+- **Confused with:** [Twig Syntax](syntax.md) — escaping happens at **print** (`{{ }}`), not at `{% set %}`; printing and escaping are one step.
+
 ## Official References
 - [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
 - [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
 - [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** auto-escaping exists and which attack (XSS) it stops
+- [ ] configure it in Symfony 8 and name the strategy per file extension
+- [ ] debug a value that renders as escaped entities when I wanted raw HTML
+- [ ] spot the trick answer that assumes the default is always `html`
+- [ ] explain the internal `EscaperExtension` → strategy → escaper flow
 
 ---
 

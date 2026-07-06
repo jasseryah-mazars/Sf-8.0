@@ -64,6 +64,15 @@ class Author
 Three placement scopes exist — **property**, **getter** and **class** — covered
 in depth in [Scopes](scopes.md). Here we focus on *running* the validator.
 
+!!! question "Predict first"
+    You call `$validator->validate($author)` on an object with three failing
+    constraints. What is the return type, and how do you tell it failed?
+
+??? note "Reveal"
+    A `ConstraintViolationListInterface` — never a bool, never a thrown exception.
+    You inspect it with `count($violations) > 0`; the three failures are three
+    elements in that one list.
+
 ## Deep Dive — how it works internally
 
 The entry point is `Symfony\Component\Validator\Validator\ValidatorInterface`,
@@ -328,9 +337,25 @@ automatically.
     - Metadata: `AttributeLoader` → `ClassMetadata`, PSR-6 cached.
     - `debug:validator "App\Entity\X"` lists the mapped constraints.
 
+## Connections
+
+- **Depends on:** [Autowiring](../dependency-injection/autowiring.md) — you autowire `ValidatorInterface` rather than `new` it.
+- **Reused in:** [Form Handling](../forms/handling.md) — `handleRequest()` runs the validator for you.
+- **Confused with:** [Scopes](scopes.md) — *where* constraints attach vs *how* you run the validator here.
+
 ## Official References
 - [Official Symfony docs — Validation](https://symfony.com/doc/current/validation.html)
 - [Symfony source — RecursiveValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveValidator.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `validate()` returns a list instead of throwing or returning a bool
+- [ ] run `validate()`, `validateProperty()` and `validatePropertyValue()` in Symfony 8
+- [ ] debug an empty list wrongly read as "invalid" via a truthiness `count()` mistake
+- [ ] spot the trick answer claiming `validate()` throws on failure
+- [ ] explain how `AttributeLoader` builds and caches `ClassMetadata`
 
 ---
 

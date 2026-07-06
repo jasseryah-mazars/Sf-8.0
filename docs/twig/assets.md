@@ -39,6 +39,16 @@ configured base path and version:
 Given `public/css/app.css`, `asset('css/app.css')` might render
 `/css/app.css?v=42` (with versioning) or `/build/app.css` (with a manifest).
 
+!!! question "Predict first"
+    A JSON manifest maps `app.css` → `app.7f3c.css`. What does
+    `{{ asset('css/app.css') }}` resolve to — the literal path or the hashed name?
+
+??? note "Reveal"
+    The **hashed** name from `manifest.json` (e.g. `/build/app.7f3c.css`). With a
+    `JsonManifestVersionStrategy`, `asset()` looks the logical path up in the
+    manifest rather than returning it verbatim — that lookup is what makes cache
+    busting work.
+
 ## Deep Dive — how it works internally
 
 `asset()` is provided by **`Symfony\Bridge\Twig\Extension\AssetExtension`**,
@@ -196,10 +206,26 @@ here**; `asset()` merely resolves the final public path/version.
     - `framework.assets.version` / `json_manifest_path` / `packages`.
     - `asset()` = static files; `path()`/`url()` = routes.
 
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — `asset()` is an ordinary Twig function call.
+- **Reused in:** [Template Inheritance](inheritance.md) — asset links usually live in `base.html.twig` blocks shared by every page.
+- **Confused with:** [URL Generation](urls.md) — `asset()` is for static files under `public/`; `path()`/`url()` are for routes.
+
 ## Official References
 - [Official — Linking to CSS/JS assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
 - [Official — Asset component](https://symfony.com/doc/current/components/asset.html)
 - [Symfony source — Packages](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Asset/Packages.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `asset()` exists instead of hard-coded paths (versioning, base path)
+- [ ] configure a version strategy or CDN package in Symfony 8
+- [ ] debug a stale asset that a browser refuses to refetch
+- [ ] spot the trick answer confusing `asset()` with `path()`/`url()`
+- [ ] explain how `AssetExtension` delegates to `Packages` + a `VersionStrategy`
 
 ---
 

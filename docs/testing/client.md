@@ -30,6 +30,15 @@ browser** that talks to the kernel *in-process* (no real network): it keeps a
 **cookie jar** and a **history**, follows or holds redirects, and returns a
 [`Crawler`](crawler.md) over the response DOM for every navigation call.
 
+!!! question "Predict first"
+    A controller returns a 302. You immediately call
+    `assertSelectorTextContains('h1', 'Dashboard')` and it fails. Why?
+
+??? note "Reveal"
+    The client does **not** follow redirects by default, so the current DOM is the
+    (near-empty) 302 page, not the target. Call `$client->followRedirect()` first,
+    or `followRedirects()` before the request to auto-follow.
+
 ## Deep Dive — how it works internally
 
 `AbstractBrowser::request()` builds a `Symfony\Component\BrowserKit\Request`,
@@ -299,10 +308,26 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
     - `followRedirect()` = once; `followRedirects(true|false)` = toggle.
     - `disableReboot()`, `getCookieJar()`, `getHistory()`, `back()`, `restart()`.
 
+## Connections
+
+- **Depends on:** [Functional Tests](functional-tests.md) — `createClient()` boots the kernel this client drives.
+- **Reused in:** [The Crawler](crawler.md) — every navigation call returns a `Crawler` over the response DOM.
+- **Confused with:** [Client Configuration](client-configuration.md) — this chapter is behaviour; that one is boot options and server params.
+
 ## Official References
 - [Official Symfony docs — Making requests](https://symfony.com/doc/current/testing.html#making-requests)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
 - [Symfony source — KernelBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/KernelBrowser.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the in-process `KernelBrowser` is not a real HTTP client
+- [ ] send requests, submit forms, and click links in Symfony 8
+- [ ] debug a `LogicException` from `followRedirect()` on a non-redirect response
+- [ ] spot the trap that `request()` returns a `Crawler`, not a `Response`
+- [ ] explain how `disableReboot()` preserves container state across requests
 
 ---
 

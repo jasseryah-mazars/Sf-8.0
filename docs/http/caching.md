@@ -41,6 +41,15 @@ of hitting your app again. There are **two complementary models**:
 - **Validation** still asks the server, but the server can answer **`304 Not
   Modified`** with no body if nothing changed — saves bandwidth and rendering.
 
+!!! question "Predict first"
+    A client holds a cached copy with `max-age=60` that is 20 seconds old, and it
+    also stored an `ETag`. Does fetching it again hit your server?
+
+??? note "Reveal"
+    No. While the copy is **fresh** (inside `max-age`) it is served with *no
+    request at all* — freshness wins first. The `ETag` only comes into play once
+    the copy goes stale, when a conditional GET may return a bodyless **304**.
+
 ## Deep Dive — how it works internally
 
 ```mermaid
@@ -207,10 +216,26 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
     - `setEtag` + `isNotModified($request)` → 304.
     - Full stage: `../http-caching/`.
 
+## Connections
+
+- **Depends on:** [HTTP Response](response.md) — every cache header is a setter on the `Response` object.
+- **Reused in:** [HTTP Caching stage](../http-caching/index.md) — reverse proxies, ESI, `Vary` and `s-maxage` all build on these two models.
+- **Confused with:** [Status Codes](status-codes.md) — validation ends in **304**, freshness in a served **200**; don't mix the two models.
+
 ## Official References
 - [Symfony docs — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** HTTP caching exists and how freshness differs from validation
+- [ ] set cache headers on a Symfony `Response` (`setMaxAge`, `setSharedMaxAge`, `setEtag`)
+- [ ] debug a page that won't cache or keeps serving stale data
+- [ ] spot the trick: `max-age` vs `s-maxage`, `public` vs `private`
+- [ ] explain what `isNotModified()` does internally (turns the response into a bodyless 304)
 
 ---
 

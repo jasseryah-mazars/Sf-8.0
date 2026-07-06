@@ -31,6 +31,15 @@ A condition is a last-mile filter: the route is considered matched **only if** t
 expression returns `true`. Because it can inspect anything on the request, it is
 powerful — but it runs on every candidate match, so keep it cheap.
 
+!!! question "Predict first"
+    A route's `condition` evaluates to `false` at request time. Does
+    `generateUrl()` for that same route also fail?
+
+??? note "Reveal"
+    No. Conditions affect **matching only** — there is no request to evaluate during
+    generation, so the URL is produced normally. A false condition is a 404, and it
+    is your job to ensure the target context will actually match.
+
 ## Deep Dive — how it works internally
 
 `RouteCompiler` leaves the `condition` as an expression string on the `Route`. The
@@ -248,9 +257,25 @@ also cannot show a login page).
     - False condition ⇒ 404. Generation ignores it.
     - Tag: `#[AsRoutingConditionService(alias: '...')]`.
 
+## Connections
+
+- **Depends on:** [Host matching](host-matching.md) — the condition runs only after host + path have matched.
+- **Reused in:** [Config & ExpressionLanguage](../miscellaneous/configuration.md) — conditions are compiled ExpressionLanguage expressions.
+- **Confused with:** [Security](../security/index.md) — a failed condition is a 404, not authorization (which is a 403 via voters).
+
 ## Official References
 - [Official Symfony docs — Matching expressions](https://symfony.com/doc/current/routing.html#matching-expressions)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** conditions are matching-only and never affect generation
+- [ ] implement a `condition` using `request`/`env()` and a tagged `service()` in Symfony 8
+- [ ] debug a `service()` call that fails because the target isn't tagged
+- [ ] spot that a false condition is 404 (not 403) and conditions are compiled (not `eval`'d)
+- [ ] explain where `UrlMatcher::handleRouteRequirements()` runs the compiled closure
 
 ---
 

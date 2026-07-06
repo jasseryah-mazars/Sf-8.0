@@ -34,6 +34,15 @@ Symfony 8 offers two equivalent syntaxes: **inline** `{id<\d+>}` inside the path
 and the **`requirements`** array. Inline is concise and keeps the constraint next
 to the placeholder; the array is better when the regex is long or reused.
 
+!!! question "Predict first"
+    `/blog/{page<\d+>}` receives `/blog/latest`. Does the router raise a 400, does
+    `page` become `'latest'`, or does something else happen?
+
+??? note "Reveal"
+    Neither — the requirement is compiled **into the route regex**, so the URL simply
+    fails to match this route and the matcher moves on (typically a 404). Requirements
+    are part of *matching*, never validation, so there is no 400 from routing.
+
 ## Deep Dive — how it works internally
 
 `Symfony\Component\Routing\RouteCompiler::compile()` parses the path, extracts each
@@ -261,9 +270,25 @@ complex business logic in a route regex.
     - Fail = 404 (no match), not 400.
     - Order numeric routes before slug routes.
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — a requirement refines a route in the same `RouteCollection`.
+- **Reused in:** [Defaults](defaults.md) — inline `{id<\d+>?1}` combines a requirement with a default.
+- **Confused with:** [Validation](../validation/index.md) — routing regex disambiguates matching; business validity is the Validator's job.
+
 ## Official References
 - [Official Symfony docs — Parameter validation](https://symfony.com/doc/current/routing.html#parameters-validation)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a requirement is compiled into the regex (matching, not validation)
+- [ ] implement inline `{id<\d+>}` and the equivalent `requirements` array in Symfony 8
+- [ ] debug a `{slug}` route shadowing a numeric `{id<\d+>}` route
+- [ ] spot that a violating value yields 404, never a 400
+- [ ] explain the default `[^/]+` token and when to widen it to `.+`
 
 ---
 

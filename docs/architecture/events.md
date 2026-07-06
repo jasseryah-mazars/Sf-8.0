@@ -43,6 +43,16 @@ Two ways to attach behaviour:
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Three listeners are registered for `kernel.response` with priorities `10`, `0`
+    and `-10`. In which order do they run, and what happens if the priority-`0` one
+    calls `stopPropagation()`?
+
+??? note "Reveal"
+    High → low: `10`, then `0`, then `-10`. The check runs *before* each call, so
+    the `0` listener still runs fully, but `stopPropagation()` means the `-10`
+    listener is never invoked. Already-run listeners are not rewound.
+
 ### Classes & interfaces
 
 | Role | FQCN |
@@ -147,6 +157,34 @@ listener's return value; it never does — it returns the event you passed in.
 !!! note "Null in real life"
     An event with no listeners is a **tower radio call that nobody answers**: the
     message still goes out and comes back to you unchanged — silence is not an error.
+
+!!! info "Expert note"
+    Listeners are registered **lazily**: `RegisterListenersPass` stores the service
+    *id*, not an instance, so the listener object is only constructed the first time
+    its event actually fires. That is why an expensive constructor on a rarely-fired
+    listener costs nothing on the hot path — and why you must never do real work in a
+    subscriber's `getSubscribedEvents()` (it is called at container **compile time**).
+
+??? example "Debugging story"
+    **Symptom:** a security-header listener silently stopped adding headers after a
+    refactor. **Diagnosis:** a new higher-priority `kernel.response` listener called
+    `stopPropagation()` unconditionally, so lower-priority listeners never ran.
+    `php bin/console debug:event-dispatcher kernel.response` revealed the real
+    ordering and the offending high-priority entry. **Fix:** drop the blanket
+    `stopPropagation()` (it only made sense on `kernel.request`) and set explicit
+    priorities. **Avoid:** call `stopPropagation()` only on events you truly own.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\EventDispatcher\EventDispatcher::dispatch()` fetches the
+      sorted listener list and invokes each until propagation stops.
+    - `EventDispatcher::sortListeners()` orders `listeners[eventName][priority]`
+      descending and memoises the result into `sorted[eventName]`.
+    - `Symfony\Contracts\EventDispatcher\Event::stopPropagation()` /
+      `isPropagationStopped()` carry the halt flag checked before each call.
+    - `Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass`
+      wires tagged services and `#[AsEventListener]` attributes at compile time.
+    - `Symfony\Component\EventDispatcher\EventSubscriberInterface::getSubscribedEvents()`
+      is read by the same pass to register a subscriber's handlers.
 
 ## Configuration & code
 
@@ -293,10 +331,26 @@ clearer than an event.
     - Default priority `0`; higher first.
     - Compiled by `RegisterListenersPass`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — listeners and subscribers are compiled into the dispatcher by `RegisterListenersPass`.
+- **Reused in:** [Request Handling](request-handling.md) — the kernel lifecycle is dispatched through this component; [Exception Handling](exception-handling.md) hooks `kernel.exception`.
+- **Confused with:** [Interoperability & PSRs](psr.md) — Symfony's dispatcher *implements* PSR-14 but adds priorities and `stopPropagation()` on top.
+
 ## Official References
 - [Official docs — EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html)
 - [Official docs — Events reference](https://symfony.com/doc/current/reference/events.html)
 - [Symfony source — EventDispatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/EventDispatcher/EventDispatcher.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the dispatcher decouples callers from reactions (the mediator pattern)
+- [ ] implement both a `#[AsEventListener]` and an `EventSubscriberInterface`
+- [ ] debug a listener that never runs because of priority or `stopPropagation()`
+- [ ] spot that `dispatch()` returns the **event object**, not a listener's value
+- [ ] explain how listeners are stored, sorted by priority and invoked lazily
 
 ---
 

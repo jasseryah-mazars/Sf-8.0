@@ -40,6 +40,16 @@ It obeys the standard headers you already know — `Cache-Control` (especially
     dedicated cache (Varnish, an HTTP-caching CDN); the same response headers
     drive both.
 
+!!! question "Predict first"
+    A logged-in user requests a page marked `s-maxage=60` through the Symfony
+    reverse proxy. Do they get a shared-cache hit?
+
+??? note "Reveal"
+    No. Their request carries a session `Cookie`, which is in the proxy's
+    `private_headers` (default `Authorization, Cookie`), so `HttpCache` treats it as
+    **private** — it neither serves from nor stores in the shared cache. Anonymous
+    requests (no cookie) *do* get cached; move per-user bits into [ESI](esi.md).
+
 ## Deep Dive — how it works internally
 
 ### The wrapping model
@@ -317,6 +327,25 @@ Varnish).
     - Ctor: `(kernel, store, ?surrogate, options)`; default `Store` = filesystem.
     - Trace header `X-Symfony-Cache`; `private_headers` = Cookie, Authorization.
     - Shared cache → honours `s-maxage`; supports [ESI](esi.md).
+
+## Connections
+
+- **Depends on:** [Request Handling](../architecture/request-handling.md) —
+  `HttpCache` is an `HttpKernelInterface` that wraps the kernel before it runs.
+- **Reused in:** [Edge Side Includes](esi.md) — the reverse proxy is the surrogate
+  that fetches and stitches ESI fragments.
+- **Confused with:** [Client-Side Caching](client-side.md) — this is a *shared*
+  cache you own; the browser cache is private and per-user.
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a gateway cache exists — serve shared hits before the app runs
+- [ ] enable it with `framework.http_cache` or by wrapping the kernel in Symfony 8
+- [ ] debug "edits don't show up" (proxy enabled in dev) via the `X-Symfony-Cache` trace
+- [ ] spot the traps: `private_headers` skip auth requests; `allow_reload` is off by default
+- [ ] describe the `Store` lookup → validate → store flow and the `HttpCache` constructor
 
 ## Official References
 - [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)

@@ -41,6 +41,15 @@ Each voter returns one of three votes:
 | Deny | `ACCESS_DENIED` (-1) | I say no |
 | Abstain | `ACCESS_ABSTAIN` (0) | Not my concern |
 
+!!! question "Predict first"
+    Under the **unanimous** strategy, voter A grants and voter B *abstains*. Is
+    access granted?
+
+??? note "Reveal"
+    Yes. Unanimous grants when **no voter denies** and at least one grants; an
+    abstain is neutral. The trap is returning `false` ("not mine") instead of
+    abstaining — that is a **deny** and would block access here.
+
 ## Deep Dive — how it works internally
 
 ### The `Voter` base class
@@ -147,6 +156,32 @@ attribute *is* ours — abstaining would be wrong (see "Abstain is not deny" abo
 !!! note "Null in real life"
     A judge asked to rule on an anonymous petitioner with no identity papers:
     there is nobody to judge, so the vote is a straight "no".
+
+!!! info "Expert note"
+    The base `Voter::vote()` returns `ACCESS_ABSTAIN` for *every* unsupported
+    attribute, so a fleet of narrow voters is cheap: only the ones whose
+    `supports()` matches ever run `voteOnAttribute()`. This is why "one voter per
+    concern" scales — irrelevant voters silently abstain instead of interfering.
+
+??? example "Debugging story"
+    **Symptom:** after adding a new "account suspended" voter, an unrelated
+    `/dashboard` page started throwing 403. **Diagnosis:** the new voter returned
+    `false` from `voteOnAttribute()` for attributes it did not own instead of
+    filtering them in `supports()`; under `unanimous` that `ACCESS_DENIED` blocked
+    everything. **Fix:** tighten `supports()` to the suspension attribute so the
+    voter *abstains* elsewhere. **Avoid:** never return `false` to mean "not mine"
+    — filter in `supports()` and let the base class abstain.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Security\Core\Authorization\Voter\Voter` — base class
+      that maps `supports()`/`voteOnAttribute()` to the three vote constants.
+    - `...\Voter\VoterInterface` — the raw contract (`vote()` → GRANTED/DENIED/ABSTAIN).
+    - `...\Authorization\AccessDecisionManager` — polls every `security.voter`
+      service and delegates to a strategy.
+    - `...\Authorization\Strategy\{Affirmative,Consensus,Unanimous,Priority}Strategy`
+      — reduce the collected votes to a single decision.
+    - `...\Voter\RoleHierarchyVoter` and `AuthenticatedVoter` — the built-in voters
+      running alongside yours.
 
 ## Configuration & code
 
@@ -312,10 +347,31 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
     - Strategy config: `security.access_decision_manager.strategy`.
     - Voters autoconfigured via `security.voter` tag.
 
+## Connections
+
+- **Depends on:** [Authorization](authorization.md) — `isGranted()` →
+  `AccessDecisionManager` is what invokes your voter.
+- **Depends on:** [Service tags](../dependency-injection/tags.md) — voters are
+  autoconfigured with the `security.voter` tag.
+- **Reused in:** [Access Control Rules](access-control.md) — `access_control`
+  runs through the same voters via the `ExpressionVoter`/`RoleVoter`.
+- **Confused with:** [Roles](roles.md) — roles are coarse, subject-less; voters
+  are the per-object layer.
+
 ## Official References
 - [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
 - [Symfony source — Voter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/Voter.php)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** voters exist where roles and `access_control` cannot reach
+- [ ] write a `Voter` with `supports()` + `voteOnAttribute()` in Symfony 8
+- [ ] debug an accidental deny caused by returning `false` instead of abstaining
+- [ ] pick the wrong strategy in a trick question (affirmative vs unanimous)
+- [ ] explain how `AccessDecisionManager` reduces votes internally
 
 ---
 

@@ -39,6 +39,14 @@ Property and getter constraints target *one* value. Class-level constraints
 (e.g. `#[Assert\Callback]`, `#[Assert\Expression]`, or a custom class constraint)
 see the whole object — ideal for **cross-field** rules.
 
+!!! question "Predict first"
+    An `Order` has a `?Address $shippingAddress` whose own `#[Assert\NotBlank]`
+    constraints never fire. What is missing?
+
+??? note "Reveal"
+    `#[Assert\Valid]` on the property. Nested objects are not traversed unless the
+    property opts into cascading; without it the address node is skipped.
+
 ## Deep Dive — how the validator traverses a graph
 
 The validator walks an object as a **node graph**. For an object node it reads
@@ -277,9 +285,25 @@ graph on every request has a cost. For collections of scalars use `All`
     - `Valid` = cascade; `traverse` (default true) controls iterating a collection.
     - Object collection → `#[Assert\Valid]`; scalar collection → `All`.
 
+## Connections
+
+- **Depends on:** [Object Validation](object-validation.md) — scope decides *where* the running validator looks.
+- **Reused in:** [Callbacks](callbacks.md) — class scope is exactly where cross-field callbacks live.
+- **Confused with:** [Built-in Constraints](built-in-constraints.md) — `Valid` cascades into objects; `All` applies constraints to scalar elements.
+
 ## Official References
 - [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/current/validation.html)
 - [Symfony source — RecursiveContextualValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveContextualValidator.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** cross-field rules belong at class scope
+- [ ] attach property, getter and class constraints correctly in Symfony 8
+- [ ] debug nested-object constraints that never run (missing `Valid`)
+- [ ] spot the getter property-path trick (`isActive()` → `active`)
+- [ ] explain how the validator builds property paths while walking the graph
 
 ---
 

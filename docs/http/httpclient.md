@@ -44,6 +44,15 @@ Two transports back it:
 
 `HttpClient::create()` picks the best available automatically.
 
+!!! question "Predict first"
+    You call `$client->request('GET', $url)` three times in a loop without reading
+    any response. How many HTTP transfers have completed?
+
+??? note "Reveal"
+    Zero from `request()` alone — it is **lazy**. The three transfers run
+    concurrently in the background and each completes only on the first read of its
+    status/headers/content. Batch first, read later, and concurrency is free.
+
 ## Deep Dive — how it works internally
 
 ### Interfaces and the lazy/async model
@@ -372,10 +381,26 @@ PSR-18-compatible if a library needs it.
     - Concurrency: loop `request()`, then `$client->stream($responses)`.
     - Test: `MockHttpClient` + `MockResponse`. Resilience: `RetryableHttpClient`.
 
+## Connections
+
+- **Depends on:** [HTTP Response](response.md) — `ResponseInterface` mirrors the response model, one direction out.
+- **Reused in:** [Messenger Component](../miscellaneous/messenger.md) — pair outbound calls with async fan-out and retries.
+- **Confused with:** [HTTP Request](request.md) — HttpClient is the *outgoing* client; `Request` wraps the *incoming* exchange.
+
 ## Official References
 - [Symfony docs — HttpClient](https://symfony.com/doc/current/http_client.html)
 - [Symfony source — HttpClient](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpClient/HttpClient.php)
 - [Symfony source — HttpClientInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/HttpClient/HttpClientInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** you type-hint `HttpClientInterface` instead of a concrete transport
+- [ ] configure a scoped/base-URI client and send per-request options
+- [ ] debug lost concurrency (reading inside the request loop) and empty-body decode errors
+- [ ] spot the trick: `request()` is lazy, `getContent()`/`toArray()` throw on 3xx–5xx
+- [ ] explain how `stream()`, `RetryableHttpClient` and `MockHttpClient` fit together
 
 ---
 

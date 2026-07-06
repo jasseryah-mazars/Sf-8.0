@@ -61,6 +61,16 @@ The helpers it exposes (all `protected`):
 | `getParameter()` | scalar/array/enum | Read a container parameter |
 | `addLink()` / `sendEarlyHints()` | `void` / `Response` | HTTP `Link` / 103 Early Hints |
 
+!!! question "Predict first"
+    Your controller extends `AbstractController` and calls `$this->render(...)`.
+    Where did the Twig service come from — a constructor argument, the global
+    container, or somewhere else?
+
+??? note "Reveal"
+    From a **lazy service locator** injected via `setContainer()`, not the
+    constructor. `getSubscribedServices()` declares the keys; the compiler builds a
+    restricted locator holding only those services, each instantiated on first use.
+
 ## Deep Dive — how it works internally
 
 `AbstractController` implements
@@ -346,10 +356,26 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
     - Helpers return: `render`→Response, `json`→JsonResponse, `redirectToRoute`→
       RedirectResponse, `createNotFoundException`→exception (you `throw` it).
 
+## Connections
+
+- **Depends on:** [Service Locators](../dependency-injection/service-locators.md) — the lazy locator that feeds every helper on demand.
+- **Reused in:** [Flash Messages](flash-messages.md) — `addFlash()` is one of the helpers this base class exposes.
+- **Confused with:** [Naming Conventions](naming-conventions.md) — extending it is optional; any callable is a valid controller.
+
 ## Official References
 - [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html#the-base-controller-class-services)
 - [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 - [Symfony source — AbstractController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** it uses a service subscriber instead of a fat constructor
+- [ ] extend `getSubscribedServices()` in Symfony 8 without losing the built-ins
+- [ ] debug a "service not subscribed" error from `$this->container->get(...)`
+- [ ] spot that `$this->container` is a restricted locator, not the full DI container
+- [ ] explain how the compiler wires the locator via `setContainer()`
 
 ---
 

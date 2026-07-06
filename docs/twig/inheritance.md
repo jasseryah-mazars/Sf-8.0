@@ -60,6 +60,15 @@ overrides the blocks it cares about.
 A child may `extends` **only one** parent (single inheritance), but layouts can
 be **chained** to any depth: `page → section → base`.
 
+!!! question "Predict first"
+    You want a page to pull in blocks from *two* different templates. Can one
+    template `extends` two parents? If not, what's the tool?
+
+??? note "Reveal"
+    No — a template `extends` **exactly one** parent (single vertical inheritance).
+    To mix in named blocks from several templates use `{% use %}` (horizontal reuse,
+    like a PHP trait); it imports blocks only and does **not** set a parent.
+
 ## Deep Dive — how it works internally
 
 Each template compiles to a PHP class extending `Twig\Template`. A `{% block %}`
@@ -230,6 +239,12 @@ definitions — no `extends`, no surrounding HTML.
     - `{% block x %}…{% endblock %}` → overridable region.
     - `{{ parent() }}` parent block · `{{ block('x') }}` any block.
     - `{% use '_t.html.twig' with x as y %}` horizontal, blocks only.
+
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — blocks and `extends` are just tags; `extends` must be the first tag.
+- **Reused in:** [Includes](includes.md) — `embed` layers block-overriding onto an include.
+- **Confused with:** [Includes](includes.md) — inheritance fills *holes* in a layout; includes drop a *fragment* in place.
 
 ## Official References
 - [Official — Template inheritance](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts)

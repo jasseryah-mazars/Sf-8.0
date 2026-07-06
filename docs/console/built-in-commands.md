@@ -55,6 +55,15 @@ The **FrameworkBundle** adds application commands. The exam-relevant ones:
     part of the Console component or the core framework. Do not confuse them with
     built-in commands.
 
+!!! question "Predict first"
+    You run `php bin/console` with no arguments at all. Which command executes —
+    `help` or `list`?
+
+??? note "Reveal"
+    `list`. It is the Application's registered **default command**, so a bare
+    `bin/console` prints the available commands. `help` only runs when you ask for
+    it (`help <cmd>` or `<cmd> --help`).
+
 ## Deep Dive — how it works internally
 
 `bin/console` is a thin entry point built on the **Runtime** component. It requires
@@ -233,10 +242,29 @@ request — it is a CLI/deploy step.
     - Framework: `cache:clear`, `cache:warmup`, `debug:container|router|autowiring|config|event-dispatcher`.
     - `Application` = `Symfony\Component\Console\Application`; framework subclass boots the kernel.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — the
+  Application boots the kernel/container to discover `console.command` services.
+- **Reused in:** [Custom commands](custom-commands.md) — your commands join this same
+  Application and `list`.
+- **Confused with:** [Configuration](configuration.md) — inspecting existing commands
+  vs. declaring your own metadata.
+
 ## Official References
 - [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
 - [Official Symfony docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
 - [Symfony source — Application](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Application.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the Application ships core commands and what `list`/`about` solve
+- [ ] use `debug:*`, `cache:clear`, `help` and completion in Symfony 8
+- [ ] debug a wrong/ambiguous command name (abbreviation resolution)
+- [ ] spot the trick that `make:*` is MakerBundle, not core, and the default is `list`
+- [ ] explain how `bin/console` boots the Application via the Runtime component
 
 ---
 

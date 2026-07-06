@@ -34,6 +34,15 @@ implementation + shared state**, whereas an interface is a pure contract.
 | Can define constructor? | Yes | No |
 | Method bodies? | Yes + abstract | None |
 
+!!! question "Predict first"
+    A concrete class extends an abstract class but forgets to implement one
+    abstract method. Compile-time error, runtime error, or silent `null`?
+
+??? note "Reveal"
+    Fatal error at class-definition time: a class with any unimplemented abstract
+    method must itself be declared `abstract`. PHP refuses to allow a
+    half-defined type to be instantiated.
+
 ## Deep Dive — how it works internally
 
 ### What `abstract` enforces
@@ -238,10 +247,26 @@ abstract classes providing shared helpers while forcing you to fill in specifics
     - Template method: `final` skeleton → abstract hooks.
     - `extends` one class, `implements` many interfaces.
 
+## Connections
+
+- **Depends on:** [Interfaces](interfaces.md) — overriding an abstract method obeys the same variance rules; an interface is the pure-contract alternative.
+- **Reused in:** [OOP](oop.md) — the template method leans on `final`, visibility and inheritance.
+- **Confused with:** [Traits](traits.md) — horizontal copy-in reuse vs an "is-a" parent carrying shared state.
+
 ## Official References
 - [PHP: Class Abstraction](https://www.php.net/manual/en/language.oop5.abstract.php)
 - [PHP: Object Inheritance](https://www.php.net/manual/en/language.oop5.inheritance.php)
 - [Symfony source — AbstractController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** abstract classes exist (partial implementation + shared state)
+- [ ] implement a template method (`final` skeleton + abstract hook) in Symfony 8
+- [ ] debug the fatal error from an unimplemented abstract method
+- [ ] spot the trick: extending two classes, or an abstract method given a body
+- [ ] explain how variance applies when a subclass implements an abstract method
 
 ---
 

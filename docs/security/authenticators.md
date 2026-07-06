@@ -47,6 +47,16 @@ public function onAuthenticationFailure(Request $r, AuthenticationException $e):
 who the user is and what must be verified. It does **not** verify anything
 itself; badge resolution happens on `CheckPassportEvent`.
 
+!!! question "Predict first"
+    Your authenticator builds a `Passport` with a `UserBadge` but you forget to
+    add the `CsrfTokenBadge` on a form login. What happens on submit?
+
+??? note "Reveal"
+    Login *succeeds* with no CSRF protection. Badges are only checked if present —
+    there is no implicit CSRF for custom authenticators. The missing
+    `CsrfProtectionListener` check means a forged cross-site POST would log the
+    victim in. Always add the `CsrfTokenBadge` to state-changing logins.
+
 ## Deep Dive — how it works internally
 
 ### Passport and badges
@@ -156,6 +166,35 @@ successful passport: either the user resolves, or authentication fails.
     A badge with a `null` loader is an application form with only your name on it —
     the clerk looks you up in the directory. If the lookup finds nobody, the
     application is rejected, not stamped blank.
+
+!!! info "Expert note"
+    `Passport::checkIfCompletelyResolved()` is your safety net: every badge must
+    be marked resolved by *some* `CheckPassportEvent` listener or the passport is
+    rejected. That is why adding a badge with no matching listener (e.g. a custom
+    badge you never wrote a listener for) fails authentication — silence is not
+    success.
+
+??? example "Debugging story"
+    **Symptom:** a bespoke SSO authenticator "logged in" but `getUser()` was the
+    wrong account under load. **Diagnosis:** `authenticate()` called the identity
+    provider *and* resolved the `UserBadge` with a closure that captured a shared
+    request-scoped variable, so concurrent requests crossed users. **Fix:** build
+    `new UserBadge($identifier)` with a *pure* loader (no captured mutable state),
+    letting `UserProviderListener` resolve it on `CheckPassportEvent`. **Avoid:**
+    never do identity resolution with shared state inside `authenticate()` — build
+    a passport, let the listeners resolve it.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface` — the
+      five-method contract (`supports`/`authenticate`/`createToken`/success/failure).
+    - `...\Authenticator\AbstractLoginFormAuthenticator` — adds `supports()`, the
+      entry point (`start()`) and a default failure redirect.
+    - `...\Authenticator\Passport\Passport` and `SelfValidatingPassport` — badge
+      containers; the latter carries only a `UserBadge`.
+    - `...\Authenticator\Passport\Badge\UserBadge` +
+      `...\EventListener\UserProviderListener` — how the identifier becomes a user.
+    - `...\Authenticator\Passport\Credentials\PasswordCredentials` +
+      `CheckCredentialsListener` — where the password is actually verified.
 
 ## Configuration & code
 
@@ -354,10 +393,31 @@ a full authenticator.
     - `authenticate()` builds; `CheckPassportEvent` verifies.
     - `access_token` needs a `token_handler` → `UserBadge`.
 
+## Connections
+
+- **Depends on:** [Authentication](authentication.md) — the `AuthenticatorManager`
+  flow that invokes this contract.
+- **Depends on:** [Event Dispatcher](../architecture/events.md) — badges are
+  resolved by listeners on `CheckPassportEvent`.
+- **Reused in:** [Password Hashers](password-hashers.md) — the `PasswordCredentials`
+  badge is verified with the configured hasher.
+- **Confused with:** [Providers](providers.md) — the authenticator *builds* the
+  passport; the provider only *loads* the user behind the `UserBadge`.
+
 ## Official References
 - [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
 - [Symfony docs — Access token authentication](https://symfony.com/doc/current/security/access_token.html)
 - [Symfony source — Passport](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Security/Http/Authenticator/Passport)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `authenticate()` only builds a Passport and verifies nothing
+- [ ] implement a custom authenticator with the right badges in Symfony 8
+- [ ] debug an "unresolved badge" / missing-CSRF failure
+- [ ] spot when `SelfValidatingPassport` is correct vs a plain `Passport`
+- [ ] name which listener resolves each badge on `CheckPassportEvent`
 
 ---
 

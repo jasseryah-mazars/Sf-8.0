@@ -36,6 +36,15 @@ may be `final`, `abstract`, or (8.2+) `readonly`.
 | `static` (LSB) | The class that was *called* at runtime |
 | `parent` | The parent class |
 
+!!! question "Predict first"
+    A parent method does `return new self();`. A subclass `User extends Model`
+    calls `User::create()`. What class is the returned object?
+
+??? note "Reveal"
+    A `Model` — `self` is fixed at compile time to the class where the code is
+    written. Only `new static()` (late static binding) resolves to the called
+    class and would return a `User`.
+
 ## Deep Dive — how it works internally
 
 ### Late static binding (LSB)
@@ -277,11 +286,27 @@ flowchart TD
     - `callable` cannot be promoted; readonly needs a type + no default.
     - Visibility: private = declaring class only; protected = + subclasses.
 
+## Connections
+
+- **Depends on:** [PHP API](php-api.md) — promotion, `readonly` and enums build on this object model.
+- **Reused in:** [Traits](traits.md) & [Abstract Classes](abstract-classes.md) — both extend how members are composed and inherited.
+- **Confused with:** [Interfaces](interfaces.md) — `self`/`static` and visibility here vs a pure contract with variance rules there.
+
 ## Official References
 - [PHP: Classes and Objects](https://www.php.net/manual/en/language.oop5.php)
 - [PHP: Late Static Bindings](https://www.php.net/manual/en/language.oop5.late-static-bindings.php)
 - [PHP: Object cloning](https://www.php.net/manual/en/language.oop5.cloning.php)
 - [Symfony source — ParameterBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ParameterBag.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** late static binding exists (subclass-safe factories)
+- [ ] implement `new static()` and a `__clone` deep-copy in a Symfony 8 value object
+- [ ] debug a factory returning the wrong class because it used `new self()`
+- [ ] spot the trick: `__get` claimed to fire on an *accessible* property (it does not)
+- [ ] explain how `clone` copies object references and when `__clone` runs
 
 ---
 

@@ -28,6 +28,15 @@ adds a constraint on the request's host name, so `admin.example.com/` and
 host may itself contain **placeholders** (`{subdomain}.example.com`), turning the
 subdomain into a controller parameter — the basis of multi-tenant apps.
 
+!!! question "Predict first"
+    In `host: '{tenant}.example.com'` with no `requirements`, what does `{tenant}`
+    match — and is the host tested before or after the path?
+
+??? note "Reveal"
+    It matches `[^.]+` — a single label with no dot, because host tokens default to a
+    dot separator, not `/`. The host regex is checked **first** in
+    `matchCollection()`; only if it passes does the path regex run.
+
 ## Deep Dive — how it works internally
 
 `RouteCompiler` compiles the `host` into a **second regex** stored on the
@@ -239,9 +248,25 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     - Cross-host `generateUrl` → absolute URL.
     - Import-level `host:` groups routes.
 
+## Connections
+
+- **Depends on:** [Requirements](requirements.md) — host placeholders obey the same `requirements`/`defaults` rules (with a different default regex).
+- **Reused in:** [URL generation](url-generation.md) — a cross-host route forces an absolute/network URL.
+- **Confused with:** [Locale](locale.md) — host-based locale (`fr.example.com`) vs a prefixed-path locale.
+
 ## Official References
 - [Official Symfony docs — Sub-domain routing](https://symfony.com/doc/current/routing.html#sub-domain-routing)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a host placeholder defaults to `[^.]+` and is matched before the path
+- [ ] implement a fixed-host route and a `{tenant}` subdomain route in Symfony 8
+- [ ] debug a plain-domain 404 caused by a missing host `default`
+- [ ] spot that cross-host generation returns an absolute URL, not a path
+- [ ] explain how the host compiles to a separate regex on `CompiledRoute`
 
 ---
 

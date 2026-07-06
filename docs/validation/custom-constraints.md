@@ -39,6 +39,14 @@ When a rule is **reusable** across classes, promote it from a callback to a
 The constraint links to its validator via `validatedBy()`, which by convention
 returns `static::class . 'Validator'`.
 
+!!! question "Predict first"
+    You add `#[\Attribute(\Attribute::TARGET_CLASS)]` to a custom constraint but the
+    validator still treats it as a property constraint. What did you forget?
+
+??? note "Reveal"
+    Override `getTargets()` to return `self::CLASS_CONSTRAINT`. The PHP attribute
+    target and the validator's `getTargets()` are separate switches — you need both.
+
 ## Deep Dive — the two classes and their contract
 
 ### The Constraint
@@ -381,9 +389,25 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
     - `extends ConstraintValidator` → `validate($value, Constraint $c): void`, use `$this->context`.
     - Class validator: `$value` is the object.
 
+## Connections
+
+- **Depends on:** [Violations Builder](violations-builder.md) — the validator reports through `$this->context->buildViolation()`.
+- **Reused in:** [Autowiring](../dependency-injection/autowiring.md) — validators are autoconfigured services, so you can inject a repository or `Security`.
+- **Confused with:** [Callbacks](callbacks.md) — a callback is the one-off alternative; promote to a constraint only when the rule is reusable.
+
 ## Official References
 - [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/current/validation/custom_constraint.html)
 - [Symfony source — Constraint](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a reusable rule becomes a `Constraint` + `ConstraintValidator` pair
+- [ ] write both classes with `#[HasNamedArguments]` in Symfony 8
+- [ ] debug a class constraint that behaves like a property one
+- [ ] spot the trick answer about the default `validatedBy()` name
+- [ ] explain how the `validator.constraint_validator` tag wires the validator as a service
 
 ---
 

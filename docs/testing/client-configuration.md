@@ -32,6 +32,15 @@
 Server parameters model what a web server would set, so this is how you simulate
 headers, HTTPS, a custom host, or Basic auth without touching the controller.
 
+!!! question "Predict first"
+    You pass `['Accept' => 'application/json']` as the second argument of
+    `createClient()` and the controller never sees the header. Why?
+
+??? note "Reveal"
+    Server parameters follow CGI naming: a request header must be `HTTP_ACCEPT`,
+    not `Accept`. The second argument is the `$_SERVER` bag — `HTTP_*` for headers,
+    unprefixed for `HTTPS` / `PHP_AUTH_USER` / `PHP_AUTH_PW`.
+
 ## Deep Dive — how it works internally
 
 Server parameters follow CGI conventions: request headers become
@@ -323,10 +332,26 @@ on.
     - Auth: `loginUser($user)` or `PHP_AUTH_USER`/`PHP_AUTH_PW`.
     - `insulate(true)` / `insulate(false)`.
 
+## Connections
+
+- **Depends on:** [The Client](client.md) — configuration tunes the client this builds on.
+- **Reused in:** [Security](../security/index.md) — `loginUser()` sets the token a firewall then trusts.
+- **Confused with:** [The Client](client.md) — behaviour (redirects, cookies) lives there; boot options and server params live here.
+
 ## Official References
 - [Official Symfony docs — Configuring the test client](https://symfony.com/doc/current/testing.html#configuring-the-test-client)
 - [Official Symfony docs — Logging in users](https://symfony.com/doc/current/testing.html#logging-in-users-authentication)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** server params model `$_SERVER`, not raw header strings
+- [ ] set headers, HTTPS, and HTTP Basic auth via `createClient()` in Symfony 8
+- [ ] debug a header that never reaches the controller (wrong arg or missing `HTTP_`)
+- [ ] spot the trap that `$server` is the *second* arg of `createClient()` and the *5th* of `request()`
+- [ ] explain what `insulate()` gives up (in-process profiler/container access)
 
 ---
 

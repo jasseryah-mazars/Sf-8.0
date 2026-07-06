@@ -44,6 +44,15 @@ The controller helper `AbstractController::createForm(FqcnType::class, $data, $o
 is the everyday entry point. Under the hood it calls
 `FormFactoryInterface::create(...)`.
 
+!!! question "Predict first"
+    You call `createForm(RegistrationType::class)` on a compound form that does **not**
+    set `data_class`, then read `getData()` before any submit. What comes back?
+
+??? note "Reveal"
+    An associative **array** keyed by child field name (or `null`/the initial array you
+    passed). Only with `data_class` set does the form materialise a `new $dataClass()`
+    via `empty_data` and map children onto that object through the data mapper.
+
 ## Deep Dive — how it works internally
 
 ### The form type class
@@ -321,10 +330,26 @@ CSRF for you).
     - Ad-hoc: `$this->createFormBuilder($data)->add(...)->getForm()`
     - Pass `$form` (the `FormInterface`) to Twig; `createView()` is implicit.
 
+## Connections
+
+- **Depends on:** [Dependency injection](../dependency-injection/index.md) — types are autowired services (`form.type` tag); [Controllers](../controllers/index.md) supplies `createForm()`.
+- **Reused in:** [Handling submissions](handling.md) — the built form is exactly what `handleRequest()` binds.
+- **Confused with:** [Form types](types.md) — a *type class* describes fields; the *resolved type* is what the factory actually builds.
+
 ## Official References
 - [Official Symfony docs — Forms](https://symfony.com/doc/current/forms.html)
 - [Official Symfony docs — How to define the data_class](https://symfony.com/doc/current/form/data_class.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a reusable type class beats an inline `createFormBuilder`
+- [ ] build a form with `buildForm` + `configureOptions` and `createForm()` in Symfony 8
+- [ ] debug an unbound, `data_class`-less form that hands you `null` from `getData()`
+- [ ] spot the wrong answer claiming a compound form returns an object without `data_class`
+- [ ] explain the `createForm` → `FormFactory` → `ResolvedFormType` → builder tree path
 
 ---
 

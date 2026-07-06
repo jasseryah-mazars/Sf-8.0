@@ -34,6 +34,14 @@ callers read them back from a
 `Symfony\Component\Validator\ConstraintViolationListInterface`. Understanding
 both ends is essential for custom constraints and API error responses.
 
+!!! question "Predict first"
+    A custom validator calls `$this->context->buildViolation('Bad SKU')` and sets a
+    few parameters, but the field always validates. What is wrong?
+
+??? note "Reveal"
+    It never calls `addViolation()`. The builder records nothing until you commit
+    with `addViolation()` — the missing terminal call silently passes the value.
+
 ## Deep Dive — building a violation
 
 `ExecutionContextInterface::buildViolation(string $message, array $parameters = [])`
@@ -280,9 +288,25 @@ only when you render errors yourself.
     - Read: `getPropertyPath()`, `getMessage()`, `getCode()`, `getInvalidValue()`.
     - List: `count()`, `foreach`, `findByCodes()`, `__toString()`.
 
+## Connections
+
+- **Depends on:** [Custom Constraints](custom-constraints.md) — you build violations inside a `ConstraintValidator`.
+- **Reused in:** [Form Handling](../forms/handling.md) — forms map the resulting violations back onto fields.
+- **Confused with:** [Callbacks](callbacks.md) — same `ExecutionContext` API, different entry point.
+
 ## Official References
 - [Official Symfony docs — Custom constraint (violations)](https://symfony.com/doc/current/validation/custom_constraint.html)
 - [Symfony source — ConstraintViolationBuilderInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Violation/ConstraintViolationBuilderInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the builder defers until `addViolation()` commits
+- [ ] build and read violations with the fluent API in Symfony 8
+- [ ] debug a validator that silently passes because `addViolation()` was omitted
+- [ ] spot the `getMessage()` vs `getMessageTemplate()` trick
+- [ ] explain how `atPath()` appends to the current property path
 
 ---
 

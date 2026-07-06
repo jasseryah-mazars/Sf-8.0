@@ -37,6 +37,14 @@ attribute on the value it guards.
 The catalogue is large — the exam tests the **common ones and their edge cases**,
 not obscure options. Learn the categories below.
 
+!!! question "Predict first"
+    A nullable `?string $email` carries only `#[Assert\Email]` and is left `null`.
+    Does validation report an error?
+
+??? note "Reveal"
+    No. Like most constraints, `Email` skips `null`/`''` and never runs. To make
+    "missing" an error, stack `#[Assert\NotBlank]` (or `NotNull`) in front of it.
+
 ## Deep Dive — categories the exam tests
 
 ### Basic
@@ -373,9 +381,25 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
     - Collection: `Collection`, `Count`, `Unique`, `All`, `Valid`.
     - Conditional: `When(expression, constraints)`.
 
+## Connections
+
+- **Depends on:** [Object Validation](object-validation.md) — these constraints only do anything once the validator runs the object.
+- **Reused in:** [Scopes](scopes.md) — `Valid` and `All` decide how they cascade into nested objects and collections.
+- **Confused with:** [Custom Constraints](custom-constraints.md) — reach here first; write your own only when no built-in fits.
+
 ## Official References
 - [Official Symfony docs — Constraints reference](https://symfony.com/doc/current/reference/constraints.html)
 - [Symfony source — Constraints/](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Validator/Constraints)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** most constraints deliberately pass on empty/null values
+- [ ] pick and configure the right built-in for a rule in Symfony 8
+- [ ] debug an `Email`/`Url` that "never rejects" an empty field
+- [ ] spot the `NotBlank` vs `NotNull` (or `All` vs `Collection`) trick answer
+- [ ] explain how `Valid` cascades where other constraints do not
 
 ---
 

@@ -39,6 +39,16 @@ the main controller, **embed a controller** and let it render itself:
 `controller('…::method', {args})` builds a **reference** to a controller; `render()`
 executes it as a **sub-request** and inlines the returned `Response` content.
 
+!!! question "Predict first"
+    You ship `render_esi(controller(...))` but production has **no** ESI-capable
+    reverse proxy. Does the fragment error, render empty, or something else?
+
+??? note "Reveal"
+    It **falls back to inline** rendering — a normal HttpKernel sub-request. ESI is
+    a progressive enhancement: `FragmentHandler` degrades gracefully to the inline
+    renderer when no proxy advertises ESI support, so the page still renders (just
+    without independent caching).
+
 ## Deep Dive — how it works internally
 
 `render` and `controller` are provided by
@@ -222,10 +232,26 @@ includes unless the fragment genuinely needs isolated logic.
     - Enable via `framework.fragments` / `framework.esi`.
     - `include` for cheap fragments; embed for isolated logic.
 
+## Connections
+
+- **Depends on:** [Includes](includes.md) — embedding is the heavier alternative when a plain `include` can't fetch its own data.
+- **Reused in:** [HTTP Caching → ESI](../http-caching/esi.md) — `render_esi` is where fragment caching by a reverse proxy pays off.
+- **Confused with:** [Controllers](../controllers/index.md) — inline rendering is a real **sub-request**, not a plain method call.
+
 ## Official References
 - [Official — Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers)
 - [Official — ESI](https://symfony.com/doc/current/http_cache/esi.html)
 - [Symfony source — FragmentHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** to embed a controller instead of querying in the template
+- [ ] embed a controller inline and via ESI in Symfony 8
+- [ ] debug a fragment that reruns kernel listeners as its own sub-request
+- [ ] spot the trick answer about `render_esi` with no ESI proxy
+- [ ] explain the `HttpKernelExtension` → `FragmentHandler` → renderer path
 
 ---
 

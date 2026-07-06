@@ -50,6 +50,16 @@ caches on the path:
 | `min-fresh=N` | Only accept a response fresh for at least N more seconds |
 | `only-if-cached` | Return a cached copy or `504` — no origin request |
 
+!!! question "Predict first"
+    A user presses **F5** (normal reload) on a page whose asset is still fresh.
+    Does the browser refetch the asset, revalidate it, or reuse it silently?
+
+??? note "Reveal"
+    A normal reload sends `Cache-Control: max-age=0`, forcing **revalidation**: the
+    browser issues a conditional request and usually gets a bodyless `304`, keeping
+    the old bytes. Only a **hard reload** (`no-cache`) refetches fully; plain
+    navigation to a fresh resource skips the network entirely.
+
 ## Deep Dive — how it works internally
 
 ### Reload vs hard reload
@@ -249,6 +259,25 @@ resource — you change its **URL** instead (cache busting).
     - Reload → `max-age=0` (304 possible). Hard reload → `no-cache` (refetch).
     - Fingerprinted asset → `public, max-age=31536000, immutable`.
     - Cache busting = new URL, not "clearing" the browser cache.
+
+## Connections
+
+- **Depends on:** [Cache Types](cache-types.md) — the browser is the *private*
+  cache, so it obeys `max-age` but ignores `s-maxage`.
+- **Reused in:** [Validation](validation.md) — the browser's conditional request
+  (`If-None-Match`) on a stale entry is what turns into a `304`.
+- **Confused with:** [Server-Side Caching](server-side.md) — the browser cache is
+  per-user and out of your control; the reverse proxy is shared and yours.
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the browser is a private cache and what problem client-side reuse solves
+- [ ] emit browser-friendly headers (`immutable`, long `max-age`) for a fingerprinted asset in Symfony 8
+- [ ] debug "my reload doesn't fetch the new CSS" (reload vs hard reload vs cache busting)
+- [ ] spot the trap that the browser ignores `s-maxage`
+- [ ] explain how a UI action (F5 / Ctrl+Shift+R) maps to `Cache-Control` request directives
 
 ## Official References
 - [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)

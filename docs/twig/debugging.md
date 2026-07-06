@@ -34,6 +34,16 @@ equivalent of PHP's `dump()`/`var_dump()`:
 `dump()` (function) **outputs** the dump where it is called; `{% dump %}` (tag)
 sends data to the dump destination **without** injecting markup into the page.
 
+!!! question "Predict first"
+    A `{{ dump(order) }}` slips into a committed template and reaches **production**.
+    What happens on the first request that renders it?
+
+??? note "Reveal"
+    A fatal `Unknown "dump" function` error. `DumpExtension` is registered **only**
+    in debug mode, so the function simply does not exist in `prod`. Dump tooling is
+    a dev-only convenience — remove dumps before deploy and use logging/the profiler
+    (in a non-prod env) for diagnosis.
+
 ## Deep Dive — how it works internally
 
 Two layers exist:
@@ -184,10 +194,26 @@ production issues, use logging — never `dump()`.
     - Debug/dev only; unavailable in prod.
     - Backed by VarDumper (`VarCloner` + `HtmlDumper`).
 
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — `dump()` is a function, `{% dump %}` a tag; the delimiter decides where output goes.
+- **Reused in:** [Global Variables](globals.md) — no-arg `dump()` inspects the whole render context, `app` global included.
+- **Confused with:** [Profiler](../miscellaneous/profiler.md) — for request-wide diagnosis (queries, events, timing) reach for the profiler, not `dump()`.
+
 ## Official References
 - [Official — The dump Twig utilities](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
 - [Official — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
 - [Symfony source — DumpExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/DumpExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** rich `dump()` output beats `var_dump` and where it goes
+- [ ] use `dump()`, no-arg `dump()`, and `{% dump %}` correctly in Symfony 8
+- [ ] debug a stray `dump()` that 500s in production
+- [ ] spot the trick answer claiming the tag form prints inline
+- [ ] explain that VarDumper (`VarCloner` + `HtmlDumper`), not Twig's `DebugExtension`, powers it
 
 ---
 
