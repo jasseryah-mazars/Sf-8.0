@@ -6,6 +6,13 @@
     fact: an auto-registered service's **id is its FQCN**, and `autowire` (args by
     type) and `autoconfigure` (tags by interface) are **independent** flags.
 
+!!! example "Real-world analogy"
+    Registration is writing the kitchen's station list: which classes are cooks on
+    duty (services) and which are just pantry stock (value objects, entities). The
+    `App\:` glob is a blanket "everyone in this room is on shift", `autowire` hands
+    each cook their ingredients by type, and a named block is a sticky note amending
+    one cook's setup.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -84,6 +91,23 @@ time and is handy for library classes that carry their own wiring.
     `Symfony\Component\DependencyInjection\Attribute\Autoconfigure` and
     `ContainerBuilder::registerAttributeForAutoconfiguration()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Attribute/Autoconfigure.php).
+
+### Null behavior
+
+Required dependencies belong in the constructor; **optional** ones are where null
+lives. Setter/`calls` injection of an absent service, or a `@?service.id` optional
+reference, leaves the property at its declared default — so type it
+`private ?LoggerInterface $logger = null` and null-guard every use. An **alias**
+pointing at a non-existent target is a *compile error*, not a null. The example's
+`setLogger()` pattern only stays safe because the property defaults to `null` and
+the class checks before calling. The common bug is a nullable-defaulted property
+that a required code path assumes is always set — inject it through the constructor
+instead, so the container proves it exists at build time.
+
+!!! note "Null in real life"
+    An optional cook who may not show up (optional setter dep): leave the station
+    marked empty (`= null`) and check before assigning work — don't build the menu
+    assuming they're there.
 
 ## Configuration & code
 

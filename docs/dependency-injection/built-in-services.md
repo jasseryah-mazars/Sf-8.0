@@ -7,6 +7,13 @@
     fact: inject `RequestStack` (then `getCurrentRequest()`), never a raw
     `Request`.
 
+!!! example "Real-world analogy"
+    The framework's built-in services are the house pantry — hundreds of staples
+    already stocked (`router`, `logger`, `serializer`). You don't fetch them by
+    shelf number (raw id); you ask by *ingredient type* (autowire the interface) and
+    the kitchen knows which jar. `debug:autowiring` is the pantry index that tells
+    you which type-hint maps to which jar.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -81,6 +88,25 @@ use a controller argument / `#[MapRequestPayload]`. This is a classic trap.
     FrameworkBundle wires the core services in
     `Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/FrameworkExtension.php).
+
+### Null behavior
+
+The headline null here is `RequestStack::getCurrentRequest()`, which returns
+**`null`** when there is no active request — outside the HTTP cycle (a console
+command, a Messenger worker, some `kernel.terminate` edges). That is why the
+chapter's example writes
+`$this->requestStack->getCurrentRequest()?->getPathInfo()`: the nullsafe operator
+short-circuits to `null` instead of "method call on null". The same holds for
+`getMainRequest()`. The common bug is injecting `RequestStack` into a service that
+*also* runs in a command and calling `getCurrentRequest()->…` without the `?->`,
+which fatals the moment there is no request. Guard with `?->`, an early
+`if (null === $request) { return; }`, or keep request-agnostic services free of the
+request altogether.
+
+!!! note "Null in real life"
+    Asking "what's the current table's order?" when the restaurant is closed (no
+    request) — there is no table, so `getCurrentRequest()` hands back nothing
+    (null); check before reading it.
 
 ## Configuration & code
 

@@ -7,6 +7,14 @@
     Highest-yield fact: `prepend()` runs **before** all `load()` calls, letting one
     bundle set defaults for another.
 
+!!! example "Real-world analogy"
+    Semantic config is a bundle's printed order form with a validating clerk. The
+    `Configuration` tree is the form — which fields exist, their types, defaults,
+    which are required — and it rejects nonsense before it reaches the kitchen.
+    `Extension::load()` is the clerk turning the accepted form into actual prep
+    tickets (services and parameters). `prepend()` is filling in sensible defaults
+    on *another* bundle's form before anyone submits it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -77,6 +85,24 @@ needed.
     `Symfony\Component\DependencyInjection\Extension\Extension` and
     `PrependExtensionInterface` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php).
+
+### Null behavior
+
+Config values reach `load()`/`loadExtension()` as an array, and absent optional keys
+are where null appears. A node with no `defaultValue()` and no `isRequired()` arrives
+as **`null`** when the user omits it; `->defaultNull()` makes that explicit. So
+`$config['title']` is safe *only* because the tree marks it `isRequired()` — read an
+optional key with `$config['icon'] ?? null` (or give the node a default) rather than
+assuming presence. Setting a container parameter to `null` is legal, but code
+autowiring that parameter into a non-nullable arg then fails at build. The common
+bug is trusting `$config['optional']` to exist: without a tree default it is `null`,
+and passing that straight into `setParameter()` + `#[Autowire(param:)]` surfaces as
+a `TypeError` far from the config file.
+
+!!! note "Null in real life"
+    A blank optional field on the order form (omitted config key) reaches the clerk
+    as "nothing entered" (null) — the form must require it or supply a default, or
+    the kitchen gets an empty ticket.
 
 ## Configuration & code
 

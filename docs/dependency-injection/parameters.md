@@ -96,6 +96,25 @@ Three ways, all resolved at compile time into the definition:
     built-in processors —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php).
 
+### Null behavior
+
+An **unset** env var with no fallback makes resolution fail, so nullability is
+explicit: `%env(default::SOME_VAR)%` yields **`null`** when `SOME_VAR` is missing
+(the empty middle segment names *no* fallback parameter), and
+`%env(default:app.fallback:SOME_VAR)%` falls back to a parameter first. A parameter
+can be declared `null` directly (`app.optional: null`). Reading a *missing*
+parameter with `ParameterBagInterface::get('nope')` throws
+`ParameterNotFoundException` — it never returns `null` — so use `has()` first for
+optional lookups. Watch the casts: `%env(int:MISSING)%` with no default errors, and
+`%env(int:default::MISSING)%` casts empty/`null` to `0`, which can hide a
+misconfiguration. The common bug is assuming an absent env var silently becomes
+`null` everywhere; without a `default:` processor it is a hard failure.
+
+!!! note "Null in real life"
+    A recipe step reading "salt to taste" with the jar missing (unset env): either
+    the dish stalls (error) or you note "skip if none" (`default::`) and plate it
+    unseasoned (null).
+
 ## Configuration & code
 
 === "PHP Attributes"
