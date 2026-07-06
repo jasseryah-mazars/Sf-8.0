@@ -31,6 +31,15 @@ release, and only for APIs that were **deprecated** first. This is what makes th
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A minor release adds a new **optional** method to a `final` Symfony class you
+    have subclassed. Is that a BC break, and are you protected?
+
+??? note "Reveal"
+    Adding an optional method is **not** a break for users. But you subclassed a
+    `final` class — extending it was never covered by the promise, so your override
+    can break at any time. Decorate instead.
+
 ### Two viewpoints
 
 The promise is written from **two sides**:
@@ -214,10 +223,26 @@ inheritance of framework classes.
     - Breaks: major only, post-deprecation.
     - Users vs extenders: extenders have fewer guarantees.
 
+## Connections
+
+- **Depends on:** [Release Management](release-management.md) — the promise is what makes minor upgrades safe within a major.
+- **Reused in:** [Deprecations](deprecations.md) — the deprecation path is how covered API is removed without a surprise break; [Dependency Injection](../dependency-injection/index.md) decoration is the BC-safe alternative to subclassing.
+- **Confused with:** [Framework Overloading](overloading.md) — overriding a bundle's resources is app-level customisation, not a statement about API stability.
+
 ## Official References
 - [Backward Compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
 - [Conventions — @internal / @final](https://symfony.com/doc/current/contributing/code/conventions.html)
 - [Experimental features](https://symfony.com/doc/current/contributing/code/experimental.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the BC promise exists and what it guarantees within a major
+- [ ] apply `@internal`, `final`/`@final` and `@experimental` correctly in my code
+- [ ] debug an upgrade break caused by relying on `@internal` API
+- [ ] spot that subclassing a `final` class is never BC-protected
+- [ ] explain the difference in guarantees for *users* vs *extenders*
 
 ---
 

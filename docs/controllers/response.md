@@ -46,6 +46,15 @@ main variants:
 `json()`→`JsonResponse`, `file()`→`BinaryFileResponse`, `stream()`→
 `StreamedResponse`, `redirectToRoute()`→`RedirectResponse`.
 
+!!! question "Predict first"
+    An action returns a plain PHP array instead of a `Response`. Does Symfony
+    auto-serialize it to JSON, or something else?
+
+??? note "Reveal"
+    Neither by default. A non-`Response` return fires `kernel.view` (`ViewEvent`);
+    if no listener builds a `Response`, the kernel throws a `LogicException`. There
+    is no built-in array→JSON listener — return a `JsonResponse` yourself.
+
 ## Deep Dive — how it works internally
 
 The kernel calls your controller inside `HttpKernel::handle()`. If the returned

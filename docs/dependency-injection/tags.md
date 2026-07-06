@@ -299,6 +299,16 @@ simpler. If you must *transform* definitions (not just collect), you need a
 - [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 - [Symfony source — PriorityTaggedServiceTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PriorityTaggedServiceTrait.php)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** tags enable the collect-all-of-a-kind pattern
+- [ ] wire `tagged_iterator` and `tagged_locator` in Symfony 8
+- [ ] debug an empty collection or a duplicate index-key overwrite
+- [ ] spot that a tag alone does nothing and higher `priority` is earlier
+- [ ] explain how `PriorityTaggedServiceTrait` orders and keys services
+
 ---
 
 <small>Related: [Service Locators](service-locators.md) ·

@@ -303,10 +303,26 @@ groups + max-depth to keep payloads bounded.
     - Attributes namespace: `Symfony\Component\Serializer\Attribute`.
     - Encoders: `JsonEncoder`, `XmlEncoder`, `CsvEncoder`, `YamlEncoder`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — normalizers and encoders are tagged services autowired into the `serializer`.
+- **Reused in:** [Messenger](messenger.md) — a transport serializer can use the Serializer to encode envelopes across languages; [Mailer](mailer.md) shares the same DI wiring.
+- **Confused with:** PHP's `json_encode` — the Serializer adds normalization, groups, and denormalization back into typed objects.
+
 ## Official References
 - [Official docs — Serializer](https://symfony.com/doc/current/serializer.html)
 - [Official docs — Serializer component](https://symfony.com/doc/current/components/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** normalizers and encoders are separate stages
+- [ ] control output with `#[Groups]`/`#[SerializedName]`/`#[Ignore]` + context in Symfony 8
+- [ ] debug "all fields leaked" (forgot the `groups` context) and a `CircularReferenceException`
+- [ ] spot the trick: `#[Groups]` filters only when `groups` is in the context
+- [ ] describe how `Serializer` selects a normalizer via `supportsNormalization()`
 
 ---
 

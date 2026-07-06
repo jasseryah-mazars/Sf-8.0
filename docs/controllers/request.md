@@ -269,10 +269,26 @@ returns a scalar or `null`, never an array.)
     - `getInt/getString/getEnum/getBoolean` on `query` & `request`.
     - Services: `RequestStack::getCurrentRequest()`. Never autowire `Request`.
 
+## Connections
+
+- **Depends on:** [HTTP → Request](../http/request.md) — the HttpFoundation `Request` this chapter reads inside a controller.
+- **Reused in:** [Value Resolvers](value-resolvers.md) — `RequestValueResolver` (priority 120) supplies the `Request` argument.
+- **Confused with:** [The Session](session.md) — inject `RequestStack` (not `Request`/`Session`) into services.
+
 ## Official References
 - [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html)
 - [Official Symfony docs — Request as controller argument](https://symfony.com/doc/current/controller.html)
 - [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `Request` is request-scoped and not autowireable
+- [ ] read the right bag/typed getter for query, body, attributes, and headers in Symfony 8
+- [ ] debug a route param not found because it was sought in `query`
+- [ ] spot the `get()` (nullable) vs `getInt`/`getString` (defaulted) difference
+- [ ] explain how `RequestValueResolver` fills a `Request` argument
 
 ---
 

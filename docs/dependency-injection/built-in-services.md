@@ -49,6 +49,15 @@ rest — is worth several exam points.
 | Serializer | `SerializerInterface` | `serializer` |
 | Validation | `ValidatorInterface` | `validator` |
 
+!!! question "Predict first"
+    You inject `RequestStack` into a service that also runs from a console command,
+    and call `getCurrentRequest()->getPathInfo()`. What happens in the command?
+
+??? note "Reveal"
+    `getCurrentRequest()` returns **`null`** outside the HTTP cycle, so the chained
+    call fatals. Use `getCurrentRequest()?->getPathInfo()` or guard early — and keep
+    request-agnostic services free of the request.
+
 ## Deep Dive — how it works internally
 
 ### Where they come from

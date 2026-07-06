@@ -249,10 +249,31 @@ When a decision depends on the target object or runtime state, use a
     - `PUBLIC_ACCESS` = everyone; `IS_AUTHENTICATED_FULLY` = strict; `_REMEMBERED` = looser.
     - `IS_IMPERSONATOR` on a `SwitchUserToken`.
 
+## Connections
+
+- **Depends on:** [Users](users.md) — roles originate from
+  `UserInterface::getRoles()`.
+- **Reused in:** [Authorization](authorization.md) — `RoleHierarchyVoter` votes on
+  `ROLE_*` attributes.
+- **Reused in:** [Access Control Rules](access-control.md) — `roles:` in a rule is
+  a role check.
+- **Confused with:** [Voters](voters.md) — roles are subject-less; per-object
+  rules need a voter.
+
 ## Official References
 - [Symfony docs — Roles](https://symfony.com/doc/current/security.html#roles)
 - [Symfony docs — Role hierarchy](https://symfony.com/doc/current/security.html#hierarchical-roles)
 - [Symfony source — RoleHierarchy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Role/RoleHierarchy.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** roles need the `ROLE_` prefix for `RoleVoter`
+- [ ] configure `role_hierarchy` and choose `_FULLY` vs `_REMEMBERED`
+- [ ] debug a hierarchy expectation that flows the wrong direction
+- [ ] spot that `IS_AUTHENTICATED_*`/`PUBLIC_ACCESS` are not roles
+- [ ] explain how `RoleHierarchyVoter` expands reachable roles internally
 
 ---
 

@@ -43,6 +43,15 @@ computes-and-stores on miss in a single call.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Your `get()` callback returns `null` (the record wasn't found). On the **next**
+    call with the same key, does the callback run again?
+
+??? note "Reveal"
+    No. `null` is a **valid cached value**: the contracts cache stores it and the
+    next call returns it as a **hit**, skipping the callback until it expires. Only
+    a genuine miss (nothing stored) runs the callback again.
+
 ### PSR-6 pool + item lifecycle
 
 `CacheItemPoolInterface::getItem($key)` returns a
