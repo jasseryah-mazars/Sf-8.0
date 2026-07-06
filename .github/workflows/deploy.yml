@@ -41,6 +41,18 @@ jobs:
       - name: Completeness & references audit
         run: python tools/audit.py
 
+      - name: Validate quiz bank
+        run: python tools/validate_quiz.py
+
+      - name: Set up PHP (lint code snippets)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          coverage: none
+
+      - name: Lint PHP snippets
+        run: python tools/lint_php.py
+
       - name: Build site (strict)
         run: mkdocs build --strict
 

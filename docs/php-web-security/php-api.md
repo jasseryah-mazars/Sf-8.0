@@ -177,6 +177,7 @@ Marks a method as intended to override a parent/interface method. If it does
 ```php
 <?php
 declare(strict_types=1);
+// lint-skip: intentionally demonstrates a fatal error (no parent method)
 
 class Kernel
 {
