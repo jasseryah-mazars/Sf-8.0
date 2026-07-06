@@ -230,4 +230,3 @@ switch off CSRF explicitly.
 
 <small>Related: [Theming](theming.md) · [Creating forms](creation.md) ·
 [CSRF protection](csrf.md)</small>
-</content>

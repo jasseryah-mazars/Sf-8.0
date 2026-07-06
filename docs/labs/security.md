@@ -404,4 +404,3 @@ This lab drills all of it in code you can run.
 ---
 
 <small>Theory: [Voters](../security/voters.md) · [Authorization](../security/authorization.md) · Labs: [all labs](index.md)</small>
-</content>

@@ -19,7 +19,8 @@ have; it tells you what to open.
 | **[Easily Confused](confusions.md)** | Kill the near-miss traps the exam loves | Quick, exam morning |
 | **[Top Certification Traps](traps.md)** | The subtle distinctions, gathered per area | Quick/Deep |
 | **[Memory Aids](memory-aids.md)** | Mnemonics for orderings you must recall cold | Quick |
-| **[Mock Exam](mock-exam.md)** | 75 Q / 90 min simulation, exam-weighted | Exam |
+| **[Study Planner](study-planner.md)** | Pick an 8/4/1-week schedule | Planning |
+| **[Mock Exams A/B/C](mock-exam.md)** | Three 75 Q / 90 min papers, exam-weighted | Exam |
 | **[Practice Quiz Bank](quiz.md)** | Run the full bank with certificationy-cli | Deep/Exam |
 
 !!! tip "Priority order when time is short"

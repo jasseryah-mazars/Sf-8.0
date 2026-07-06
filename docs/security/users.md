@@ -292,4 +292,3 @@ changes to invalidate existing sessions immediately.
 
 <small>Related: [Providers](providers.md) · [Password Hashers](password-hashers.md) ·
 [Roles](roles.md) · [Authentication](authentication.md)</small>
-</content>

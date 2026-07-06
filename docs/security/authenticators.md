@@ -363,4 +363,3 @@ a full authenticator.
 
 <small>Related: [Authentication](authentication.md) · [Users](users.md) ·
 [Password Hashers](password-hashers.md) · [Firewalls](firewalls.md)</small>
-</content>

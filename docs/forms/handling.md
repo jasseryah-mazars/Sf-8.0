@@ -295,4 +295,3 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
 
 <small>Related: [Creating forms](creation.md) · [Form events](events.md) ·
 [Data transformers](data-transformers.md)</small>
-</content>

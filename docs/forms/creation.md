@@ -330,4 +330,3 @@ CSRF for you).
 
 <small>Related: [Handling submissions](handling.md) · [Form types](types.md) ·
 [Rendering](rendering.md)</small>
-</content>

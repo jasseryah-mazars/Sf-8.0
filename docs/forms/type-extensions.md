@@ -298,4 +298,3 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
 
 <small>Related: [Form types](types.md) · [Form events](events.md) ·
 [Theming](theming.md)</small>
-</content>

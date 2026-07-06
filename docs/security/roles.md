@@ -249,4 +249,3 @@ When a decision depends on the target object or runtime state, use a
 
 <small>Related: [Authorization](authorization.md) · [Voters & Voting Strategies](voters.md) ·
 [Access Control Rules](access-control.md) · [Users](users.md)</small>
-</content>

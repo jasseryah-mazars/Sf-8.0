@@ -260,4 +260,3 @@ verification usually lives in a `token_handler`, not the password hasher.
 
 <small>Related: [Users](users.md) · [Providers](providers.md) ·
 [Authenticators, Passports & Badges](authenticators.md) · [Configuration](configuration.md)</small>
-</content>

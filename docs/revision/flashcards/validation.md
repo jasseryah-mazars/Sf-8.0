@@ -1,6 +1,6 @@
 # Flashcards — Data Validation
 
-27 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+32 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -193,6 +193,41 @@
     atPath() relocates the violation to a path relative to the current node, commonly used in class-level constraints to blame a specific field.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/custom_constraint.html)
+
+??? question "28. Which constraint passes only when the value IS strictly null?"
+    **✅ IsNull**
+
+    IsNull requires the value to be exactly null (fails otherwise). It is the inverse of NotNull. Blank (its cousin) passes for null or ''.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/constraints/IsNull.html)
+
+??? question "29. In #[Assert\GroupSequence(['A', 'B'])], if a constraint in group 'A' fails, group 'B' is…"
+    **✅ Not validated — the sequence stops at the first group that produces a violation**
+
+    A GroupSequence validates groups in order and stops as soon as one group yields a violation, so later groups (and their expensive checks) never run.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/sequence_provider.html)
+
+??? question "30. A constraint declared without any explicit 'groups' option belongs to which validation group?"
+    **✅ The special 'Default' group**
+
+    Every constraint with no explicit groups is placed in the Default group, which is the group used when you call validate() without specifying groups.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/groups.html)
+
+??? question "31. To make a single custom constraint usable on BOTH a property and a class, getTargets() should return…"
+    **✅ [self::PROPERTY_CONSTRAINT, self::CLASS_CONSTRAINT]**
+
+    getTargets() may return a single string or an array of them. Returning both PROPERTY_CONSTRAINT and CLASS_CONSTRAINT lets the same constraint be placed on a property and on a class.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/custom_constraint.html)
+
+??? question "32. You put #[Assert\Valid] on a property holding a Collection/array of Address objects. What happens on validate()?"
+    **✅ Each element is traversed and its own constraints are validated (cascade)**
+
+    Assert\Valid cascades into nested objects, and for a traversable/array it validates every element's constraints. Without it, nested objects are not validated at all.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/constraints/Valid.html)
 
 ---
 

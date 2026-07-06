@@ -321,4 +321,3 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
 
 <small>Related: [Authorization](authorization.md) · [Roles](roles.md) ·
 [Access Control Rules](access-control.md) · [Configuration](configuration.md)</small>
-</content>

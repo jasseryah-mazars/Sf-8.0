@@ -242,4 +242,3 @@ differs per path.
 
 <small>Related: [Configuration](configuration.md) · [Authentication](authentication.md) ·
 [Access Control Rules](access-control.md) · [Providers](providers.md)</small>
-</content>

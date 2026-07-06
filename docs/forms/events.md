@@ -344,4 +344,3 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
 <small>Related: [Handling submissions](handling.md) ·
 [Data transformers](data-transformers.md) · [Type extensions](type-extensions.md)</small>
-</content>

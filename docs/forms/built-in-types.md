@@ -285,4 +285,3 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 
 <small>Related: [Form types](types.md) · [Data transformers](data-transformers.md) ·
 [File uploads](file-upload.md)</small>
-</content>

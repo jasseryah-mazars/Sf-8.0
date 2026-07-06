@@ -1,0 +1,6 @@
+# Optional: offline PDF export. NOT used by the site build or CI.
+# Install alongside requirements.txt only when you want to generate a PDF.
+#   pip install -r requirements.txt -r requirements-pdf.txt
+# System libs (Debian/Ubuntu): libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0
+-r requirements.txt
+mkdocs-with-pdf==1.0.6

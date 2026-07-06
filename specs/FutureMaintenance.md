@@ -116,3 +116,34 @@ the CI gate.
 [QualityRequirements](QualityRequirements.md) · [Architecture](Architecture.md) ·
 [MigrationPlan](MigrationPlan.md) · [ContentStructure](ContentStructure.md) ·
 [TraceabilityMatrix](TraceabilityMatrix.md) · [DefinitionOfDone](DefinitionOfDone.md).
+
+## Offline PDF export (optional)
+
+The site build (`mkdocs.yml`) and CI intentionally do **not** include a PDF plugin,
+to keep the deploy fast and dependency-light. To produce a single PDF locally:
+
+```console
+$ pip install -r requirements.txt -r requirements-pdf.txt
+# Debian/Ubuntu also need: libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0
+$ ENABLE_PDF=1 mkdocs build   # after adding the with-pdf plugin block below
+```
+
+Add this block under `plugins:` in a throwaway/local `mkdocs.yml` (or a copy) —
+keep it out of the committed config so the main build stays unaffected:
+
+```yaml
+  - with-pdf:
+      output_path: pdf/symfony8-cert-prep.pdf
+      cover_title: Symfony 8 Expert Certification Prep
+      enabled_if_env: ENABLE_PDF
+```
+
+## Non-gating quality checks
+
+`.github/workflows/quality.yml` runs weekly (and on demand):
+
+- **markdownlint** (`.markdownlint.yaml`, relaxed) — style, informational.
+- **lychee link check** (`fail: false`) — surfaces link-rot without failing.
+
+These never block the docs deploy. `dependabot.yml` opens monthly PRs to bump the
+pip toolchain and GitHub Actions.

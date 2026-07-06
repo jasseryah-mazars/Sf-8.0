@@ -322,4 +322,3 @@ rules belong to the Validator.
 
 <small>Related: [Handling submissions](handling.md) · [Form events](events.md) ·
 [Form types](types.md)</small>
-</content>

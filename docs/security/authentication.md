@@ -312,4 +312,3 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
 <small>Related: [Authenticators, Passports & Badges](authenticators.md) ·
 [Firewalls](firewalls.md) · [Authorization](authorization.md) · [Users](users.md)</small>
-</content>

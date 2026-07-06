@@ -430,3 +430,78 @@ categories:
           atPath() relocates the violation to a path relative to the current node,
           commonly used in class-level constraints to blame a specific field.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+  - name: "Data Validation — Constraints & Cascade"
+    questions:
+      - question: "Which constraint passes only when the value IS strictly null?"
+        answers:
+          - value: "IsNull"
+            correct: true
+          - value: "NotNull"
+            correct: false
+          - value: "NotBlank"
+            correct: false
+          - value: "Blank"
+            correct: false
+        explanation: >-
+          IsNull requires the value to be exactly null (fails otherwise). It is the
+          inverse of NotNull. Blank (its cousin) passes for null or ''.
+        documentation: "https://symfony.com/doc/current/reference/constraints/IsNull.html"
+      - question: "In #[Assert\\GroupSequence(['A', 'B'])], if a constraint in group 'A' fails, group 'B' is…"
+        answers:
+          - value: "Not validated — the sequence stops at the first group that produces a violation"
+            correct: true
+          - value: "Still validated, and all violations are merged"
+            correct: false
+          - value: "Validated only if 'A' had exactly one violation"
+            correct: false
+          - value: "Validated in a separate pass afterwards"
+            correct: false
+        explanation: >-
+          A GroupSequence validates groups in order and stops as soon as one group
+          yields a violation, so later groups (and their expensive checks) never run.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+      - question: "A constraint declared without any explicit 'groups' option belongs to which validation group?"
+        answers:
+          - value: "The special 'Default' group"
+            correct: true
+          - value: "No group at all, so it is never validated"
+            correct: false
+          - value: "A group named after the property"
+            correct: false
+          - value: "The 'Strict' group"
+            correct: false
+        explanation: >-
+          Every constraint with no explicit groups is placed in the Default group,
+          which is the group used when you call validate() without specifying groups.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+      - question: "To make a single custom constraint usable on BOTH a property and a class, getTargets() should return…"
+        answers:
+          - value: "[self::PROPERTY_CONSTRAINT, self::CLASS_CONSTRAINT]"
+            correct: true
+          - value: "self::ALL_CONSTRAINTS"
+            correct: false
+          - value: "self::PROPERTY_CONSTRAINT only"
+            correct: false
+          - value: "an empty array to allow any target"
+            correct: false
+        explanation: >-
+          getTargets() may return a single string or an array of them. Returning
+          both PROPERTY_CONSTRAINT and CLASS_CONSTRAINT lets the same constraint be
+          placed on a property and on a class.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+      - question: "You put #[Assert\\Valid] on a property holding a Collection/array of Address objects. What happens on validate()?"
+        answers:
+          - value: "Each element is traversed and its own constraints are validated (cascade)"
+            correct: true
+          - value: "Only the first element is validated"
+            correct: false
+          - value: "The collection count is validated but not the elements"
+            correct: false
+          - value: "Nothing — Valid works only on single objects"
+            correct: false
+        explanation: >-
+          Assert\Valid cascades into nested objects, and for a traversable/array it
+          validates every element's constraints. Without it, nested objects are not
+          validated at all.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Valid.html"

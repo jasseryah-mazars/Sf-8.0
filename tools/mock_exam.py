@@ -50,8 +50,16 @@ def build(seed=8):
     rng.shuffle(picked)
     return picked
 
-def render(picked):
-    L = ["# Mock Exam (Exam Mode)", "",
+VARIANTS = {"A": (8, "mock-exam.md"), "B": (88, "mock-exam-b.md"), "C": (888, "mock-exam-c.md")}
+
+def render(picked, label="A"):
+    others = " · ".join(
+        f"[Mock {k}]({v[1]})" for k, v in VARIANTS.items() if k != label
+    )
+    L = [f"# Mock Exam {label} (Exam Mode)", "",
+         f"!!! note \"Three independent papers\"",
+         f"    This is **Mock {label}**. Also try: {others}. Each draws a different "
+         f"random sample from the bank — sit them on separate days and log every miss.", "",
          "!!! danger \"Exam-mode rules\"",
          "    **75 questions · 90 minutes.** Set a timer. No notes, no docs. Answer "
          "every question (there is no negative marking). Multiple answers may be "
@@ -90,9 +98,8 @@ def render(picked):
     return "\n".join(L) + "\n"
 
 if __name__ == "__main__":
-    picked = build()
-    open(OUT, "w", encoding="utf-8").write(render(picked))
-    from collections import Counter
-    c = Counter(s for s, _ in picked)
-    print(f"mock exam: {len(picked)} questions ->", os.path.relpath(OUT, ROOT))
-    print("distribution:", ", ".join(f"{TITLES[k]}={v}" for k, v in c.items()))
+    outdir = os.path.join(ROOT, "docs", "revision")
+    for label, (seed, fname) in VARIANTS.items():
+        picked = build(seed)
+        open(os.path.join(outdir, fname), "w", encoding="utf-8").write(render(picked, label))
+        print(f"mock {label}: {len(picked)} questions -> docs/revision/{fname}")

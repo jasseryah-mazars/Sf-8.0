@@ -1,6 +1,6 @@
 # Flashcards — Automated Tests
 
-25 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+31 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -177,6 +177,48 @@
     **✅ As an environment/server variable (e.g. in phpunit.dist.xml <php>)**
 
     It is read from the environment; commonly set via <php><server name="SYMFONY_DEPRECATIONS_HELPER" .../></php> or the shell.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html#configuration)
+
+??? question "26. You must test a service that needs the container but sends no HTTP requests. Which base class fits best?"
+    **✅ KernelTestCase — boots the kernel and exposes the container, without an HTTP client**
+
+    KernelTestCase boots the kernel and gives you self::getContainer() with no browser. WebTestCase adds the HTTP client and is reserved for tests that make requests; a plain TestCase boots no kernel at all.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#integration-tests)
+
+??? question "27. To swap a real service for a mock before making a request in a functional test, you should…"
+    **✅ Fetch the test container with self::getContainer() and call ->set('service.id', $mock) before the request**
+
+    The test container returned by self::getContainer() allows ->set() to override a (used) service with a double. Do this before issuing the request so the kernel uses the replacement.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#mocking-services)
+
+??? question "28. What does the WebTestCase helper assertResponseIsSuccessful() verify?"
+    **✅ That the last response has a 2xx status code**
+
+    assertResponseIsSuccessful() passes for any 2xx status. These assertResponse*/assertSelector* helpers come from the BrowserKit/DomCrawler assertion traits mixed into WebTestCase; assertSelectorTextContains() checks a CSS-selected element's text.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#testing-the-response-status-code-headers-and-content)
+
+??? question "29. A method referenced by #[DataProvider('provide')] must be…"
+    **✅ public static and return an array or other iterable of argument sets**
+
+    PHPUnit\Framework\Attributes\DataProvider names a public static method returning an iterable (array or Generator) of argument arrays; each set becomes one parameterised run of the test.
+
+    :material-book-open-variant: [Docs](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html#data-providers)
+
+??? question "30. Which utility tests a console command's output and exit code without a real terminal?"
+    **✅ CommandTester — call execute([...]) then getDisplay() and getStatusCode()**
+
+    Symfony\Component\Console\Tester\CommandTester wraps a single command: execute() supplies input, then getDisplay() returns captured output and getStatusCode() the exit code. ApplicationTester covers the whole app.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/console.html#testing-commands)
+
+??? question "31. Which SYMFONY_DEPRECATIONS_HELPER value makes the build fail on the very first deprecation?"
+    **✅ max[total]=0**
+
+    max[total]=0 sets a zero threshold, so any deprecation fails the suite. weak reports without failing, and disabled=1 turns collection off entirely.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html#configuration)
 

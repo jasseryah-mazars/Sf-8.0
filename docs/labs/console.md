@@ -296,5 +296,4 @@ tested, and `assertCommandIsSuccessful()` is the shortcut for "exit code was 0".
 
 <small>Theory: [Custom commands](../console/custom-commands.md) ·
 [Arguments & options](../console/options-arguments.md) · Labs: [all labs](index.md)</small>
-</content>
 </invoke>

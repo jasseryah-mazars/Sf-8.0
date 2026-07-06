@@ -1,0 +1,37 @@
+name: Quality (non-gating)
+
+# Informational checks that must NOT block the docs deploy: they run on a schedule
+# and on demand, in their own workflow. Link-rot and lint findings surface here
+# without turning the main Build & Deploy pipeline red.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  markdownlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Markdown lint (informational)
+        continue-on-error: true
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: "docs/**/*.md"
+
+  linkcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links (informational, does not fail the run)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --max-concurrency 4
+            --exclude-path site
+            './docs/**/*.md' './*.md'
+          fail: false

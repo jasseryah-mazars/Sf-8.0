@@ -279,4 +279,3 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
 <small>Related: [Users](users.md) · [Password Hashers](password-hashers.md) ·
 [Configuration](configuration.md) · [Authenticators, Passports & Badges](authenticators.md)</small>
-</content>

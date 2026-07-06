@@ -281,4 +281,3 @@ For a one-off, just configure options at `->add()`.
 
 <small>Related: [Creating forms](creation.md) · [Built-in types](built-in-types.md) ·
 [Type extensions](type-extensions.md)</small>
-</content>

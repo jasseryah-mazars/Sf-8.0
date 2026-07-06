@@ -228,4 +228,3 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
 
 <small>Related: [Roles](roles.md) · [Firewalls](firewalls.md) ·
 [Voters & Voting Strategies](voters.md) · [Authorization](authorization.md)</small>
-</content>

@@ -274,4 +274,3 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
 <small>Related: [Controllers — file upload](../controllers/file-upload.md) ·
 [Handling submissions](handling.md) · [Built-in types](built-in-types.md)</small>
-</content>

@@ -246,4 +246,3 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
 
 <small>Related: [Firewalls](firewalls.md) · [Providers](providers.md) ·
 [Access Control Rules](access-control.md) · [Password Hashers](password-hashers.md)</small>
-</content>

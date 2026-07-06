@@ -291,4 +291,3 @@ mutates state under cookie auth **must** keep CSRF.
 
 <small>Related: [Web Security Fundamentals](../php-web-security/web-security.md) ·
 [Handling submissions](handling.md) · [Form events](events.md)</small>
-</content>

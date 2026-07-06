@@ -272,4 +272,3 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
 <small>Related: [Voters & Voting Strategies](voters.md) · [Roles](roles.md) ·
 [Access Control Rules](access-control.md) · [Authentication](authentication.md)</small>
-</content>
