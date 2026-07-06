@@ -365,7 +365,7 @@ categories:
       - id: "VAL-CONSTRAINTS-08"
         question: "You have an indexed array of email strings and place #[Assert\\Collection([...])] on it. Why is that wrong?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "validation/built-in-constraints"
         concepts: ["Collection", "All", "keys-vs-elements"]
         syllabus: "Data Validation → Built-in constraints"
@@ -418,7 +418,7 @@ categories:
       - id: "VAL-CONSTRAINTS-10"
         question: "#[Assert\\Choice(choices: ['a','b','c'])] is placed on an array property $roles, and elements outside the list are NOT rejected. Why?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "validation/built-in-constraints"
         concepts: ["Choice", "multiple", "array"]
         syllabus: "Data Validation → Built-in constraints"
@@ -1133,7 +1133,7 @@ categories:
       - id: "VAL-CALLBACK-06"
         question: "A #[Assert\\Callback(groups: ['checkout'])] never fires during a plain validate($obj). Why, and does it join sequences?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "validation/callbacks"
         concepts: ["Callback", "groups", "sequence"]
         syllabus: "Data Validation → Callback validators"
@@ -1276,7 +1276,7 @@ categories:
       - id: "VAL-CUSTOM-04"
         question: "What does #[HasNamedArguments] do on a custom Constraint constructor?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "validation/custom-constraints"
         concepts: ["HasNamedArguments", "named-arguments", "typed-options"]
         syllabus: "Data Validation → Custom constraints"
@@ -1560,7 +1560,7 @@ categories:
       - id: "VAL-VIOLATIONS-07"
         question: "A developer uses $violations[0] (works) but array_map(..., $violations) (fails). Why?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "validation/violations-builder"
         concepts: ["ConstraintViolationList", "Countable", "not-array"]
         syllabus: "Data Validation → Violations & the execution context"
