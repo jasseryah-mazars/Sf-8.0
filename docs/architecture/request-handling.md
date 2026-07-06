@@ -176,7 +176,7 @@ freshness and rebuilds when source config changes.
     namespace App\EventListener;
 
     use Symfony\Component\HttpKernel\Event\ResponseEvent;
-    use Symfony\Component\HttpKernel\Attribute\AsEventListener;
+    use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
     use Symfony\Component\HttpKernel\KernelEvents;
 
     #[AsEventListener(event: KernelEvents::RESPONSE, priority: -10)]
@@ -259,7 +259,7 @@ itself.
     namespace App\EventListener;
 
     use Symfony\Component\HttpFoundation\Response;
-    use Symfony\Component\HttpKernel\Attribute\AsEventListener;
+    use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
     use Symfony\Component\HttpKernel\Event\RequestEvent;
     use Symfony\Component\HttpKernel\KernelEvents;
 

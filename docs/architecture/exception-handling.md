@@ -108,7 +108,7 @@ exception page depends on `kernel.debug = true`, resolved at boot.
 
     use App\Exception\QuotaExceededException;
     use Symfony\Component\HttpFoundation\JsonResponse;
-    use Symfony\Component\HttpKernel\Attribute\AsEventListener;
+    use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
     use Symfony\Component\HttpKernel\Event\ExceptionEvent;
     use Symfony\Component\HttpKernel\KernelEvents;
 

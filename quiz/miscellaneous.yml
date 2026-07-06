@@ -1,0 +1,533 @@
+categories:
+  - name: "Miscellaneous — Messenger"
+    questions:
+      - question: "What does MessageBusInterface::dispatch() return?"
+        answers:
+          - value: "An Envelope"
+            correct: true
+          - value: "The handler's return value"
+            correct: false
+          - value: "void"
+            correct: false
+          - value: "A HandledStamp"
+            correct: false
+        explanation: >-
+          dispatch() always returns the (possibly stamped) Envelope. A handler's
+          return value is available via $envelope->last(HandledStamp::class)->getResult().
+        documentation: "https://symfony.com/doc/current/messenger.html"
+      - question: "A message is routed to an async transport. During dispatch() in the web process, the handler…"
+        answers:
+          - value: "does not run — SendMessageMiddleware serializes and sends it, stopping the bus"
+            correct: true
+          - value: "runs immediately and is also queued"
+            correct: false
+          - value: "runs only if a worker is currently active"
+            correct: false
+          - value: "throws NoHandlerForMessageException"
+            correct: false
+        explanation: >-
+          When a message is routed to a transport, SendMessageMiddleware adds a
+          SentStamp, sends the envelope and stops the pipeline; a worker handles it later.
+        documentation: "https://symfony.com/doc/current/messenger.html#transports-async-queued-messages"
+      - question: "DelayStamp(5000) delays delivery by how long?"
+        answers:
+          - value: "5000 milliseconds (5 seconds)"
+            correct: true
+          - value: "5000 seconds"
+            correct: false
+          - value: "5000 microseconds"
+            correct: false
+          - value: "5000 minutes"
+            correct: false
+        explanation: >-
+          DelayStamp is expressed in milliseconds, so 5000 means 5 seconds.
+        documentation: "https://symfony.com/doc/current/messenger.html#delaying-messages"
+      - question: "After a message exhausts its configured retries, where does it go?"
+        answers:
+          - value: "To the configured failure transport"
+            correct: true
+          - value: "To the sync transport"
+            correct: false
+          - value: "It is silently discarded"
+            correct: false
+          - value: "Back to the front of the same queue forever"
+            correct: false
+        explanation: >-
+          Once max_retries is reached the envelope is sent to the failure_transport,
+          where messenger:failed:show/retry can inspect and requeue it.
+        documentation: "https://symfony.com/doc/current/messenger.html#saving-retrying-failed-messages"
+      - question: "Which middleware locates and invokes the handler(s), adding a HandledStamp?"
+        answers:
+          - value: "HandleMessageMiddleware"
+            correct: true
+          - value: "SendMessageMiddleware"
+            correct: false
+          - value: "DispatchAfterCurrentBusMiddleware"
+            correct: false
+          - value: "ValidationMiddleware"
+            correct: false
+        explanation: >-
+          HandleMessageMiddleware resolves handlers for the message type, calls them,
+          and records each result in a HandledStamp.
+        documentation: "https://symfony.com/doc/current/messenger.html#middleware"
+      - question: "How do you make a failing handler skip retries and go straight to the failure transport?"
+        answers:
+          - value: "Throw UnrecoverableMessageHandlingException"
+            correct: true
+          - value: "Return false from the handler"
+            correct: false
+          - value: "Add a DelayStamp(0)"
+            correct: false
+          - value: "Call $envelope->stopPropagation()"
+            correct: false
+        explanation: >-
+          UnrecoverableMessageHandlingException marks the failure as non-retryable, so
+          the worker sends the message to the failure transport immediately.
+        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
+      - question: "Which attribute marks a service as a message handler in Symfony 8?"
+        answers:
+          - value: "#[AsMessageHandler]"
+            correct: true
+          - value: "#[MessageHandler]"
+            correct: false
+          - value: "#[AsHandler]"
+            correct: false
+          - value: "#[Handler]"
+            correct: false
+        explanation: >-
+          Symfony\Component\Messenger\Attribute\AsMessageHandler registers an invokable
+          service (or a specific method) as a handler for its typed message argument.
+        documentation: "https://symfony.com/doc/current/messenger.html#registering-handlers"
+      - question: "What is the purpose of DispatchAfterCurrentBusStamp?"
+        answers:
+          - value: "Defer delivery of a message dispatched inside a handler until the current handling finishes successfully"
+            correct: true
+          - value: "Send the message to every bus in the application"
+            correct: false
+          - value: "Add a delay equal to the current bus latency"
+            correct: false
+          - value: "Retry the message on the next bus in a chain"
+            correct: false
+        explanation: >-
+          It prevents dispatching side-effect messages (e.g. a confirmation email)
+          before the surrounding work commits, so a failure/rollback cancels them.
+        documentation: "https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html"
+
+  - name: "Miscellaneous — Cache"
+    questions:
+      - question: "Symfony\\Contracts\\Cache\\CacheInterface::get() runs its callback…"
+        answers:
+          - value: "only on a cache miss, then stores and returns the value"
+            correct: true
+          - value: "on every call"
+            correct: false
+          - value: "never — you must call save() yourself"
+            correct: false
+          - value: "only when the beta factor is INF"
+            correct: false
+        explanation: >-
+          The callback computes the value on a miss; the result is persisted and
+          returned. It also provides probabilistic early-expiration stampede protection.
+        documentation: "https://symfony.com/doc/current/cache.html#cache-contracts"
+      - question: "Which statement about PSR-6 vs PSR-16 is correct?"
+        answers:
+          - value: "PSR-6 (pools/items) supports deferred saves and, via TagAwareAdapter, tags; PSR-16 (SimpleCache) does not"
+            correct: true
+          - value: "PSR-16 supports tags but PSR-6 does not"
+            correct: false
+          - value: "Both are identical key/value APIs"
+            correct: false
+          - value: "PSR-6 has no expiration support"
+            correct: false
+        explanation: >-
+          PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or
+          tags. PSR-6 uses CacheItem objects and supports tags through a TagAwareAdapter.
+        documentation: "https://symfony.com/doc/current/components/cache.html"
+      - question: "Cache stampede protection in Symfony Cache is implemented by…"
+        answers:
+          - value: "probabilistic early expiration controlled by the $beta factor"
+            correct: true
+          - value: "a global mutex acquired on every key"
+            correct: false
+          - value: "disabling TTLs entirely"
+            correct: false
+          - value: "duplicating the value across all adapters"
+            correct: false
+        explanation: >-
+          As an item nears expiry, one request is probabilistically chosen to
+          recompute early while others serve the cached value ($beta=INF forces it).
+        documentation: "https://symfony.com/doc/current/cache.html#stampede-prevention"
+      - question: "Which adapter keeps entries only for the current process (ideal for tests)?"
+        answers:
+          - value: "ArrayAdapter"
+            correct: true
+          - value: "FilesystemAdapter"
+            correct: false
+          - value: "RedisAdapter"
+            correct: false
+          - value: "ApcuAdapter"
+            correct: false
+        explanation: >-
+          ArrayAdapter stores items in memory for the current request/process only, so
+          nothing persists across requests — useful for deterministic tests.
+        documentation: "https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html"
+
+  - name: "Miscellaneous — Serializer"
+    questions:
+      - question: "In serialize(), which stage runs first?"
+        answers:
+          - value: "The normalizer (object to array), then the encoder (array to string)"
+            correct: true
+          - value: "The encoder, then the normalizer"
+            correct: false
+          - value: "Only the encoder runs"
+            correct: false
+          - value: "They run concurrently"
+            correct: false
+        explanation: >-
+          serialize() normalizes the object to an array/scalars, then encodes that to
+          a string. deserialize() decodes then denormalizes.
+        documentation: "https://symfony.com/doc/current/components/serializer.html"
+      - question: "#[Groups(['read'])] on a property takes effect when…"
+        answers:
+          - value: "the context includes ['groups' => ['read']]"
+            correct: true
+          - value: "always, regardless of context"
+            correct: false
+          - value: "only during deserialization"
+            correct: false
+          - value: "the property is public"
+            correct: false
+        explanation: >-
+          Group filtering only applies when matching groups are passed in the context;
+          otherwise the group attribute has no effect.
+        documentation: "https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes"
+      - question: "Which normalizer reads and writes private properties directly via reflection?"
+        answers:
+          - value: "PropertyNormalizer"
+            correct: true
+          - value: "ObjectNormalizer"
+            correct: false
+          - value: "GetSetMethodNormalizer"
+            correct: false
+          - value: "JsonEncoder"
+            correct: false
+        explanation: >-
+          PropertyNormalizer accesses object properties directly (including private),
+          whereas ObjectNormalizer uses accessors and the constructor.
+        documentation: "https://symfony.com/doc/current/serializer.html#normalizers"
+      - question: "By default, what is the Serializer's circular reference limit before it throws?"
+        answers:
+          - value: "1 (unless a circular reference handler or #[MaxDepth] is set)"
+            correct: true
+          - value: "0 — it never throws"
+            correct: false
+          - value: "Unlimited"
+            correct: false
+          - value: "10"
+            correct: false
+        explanation: >-
+          The default circular reference limit is 1; beyond it a CircularReferenceException
+          is thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
+        documentation: "https://symfony.com/doc/current/serializer.html#handling-circular-references"
+
+  - name: "Miscellaneous — Configuration & DotEnv"
+    questions:
+      - question: "In which environment is .env.local NOT loaded?"
+        answers:
+          - value: "test"
+            correct: true
+          - value: "dev"
+            correct: false
+          - value: "prod"
+            correct: false
+          - value: "staging"
+            correct: false
+        explanation: >-
+          .env.local is intentionally skipped in the test environment so tests run
+          from committed defaults and stay reproducible.
+        documentation: "https://symfony.com/doc/current/configuration.html#selecting-the-active-environment"
+      - question: "What does `composer dump-env prod` produce, and what is the effect?"
+        answers:
+          - value: ".env.local.php — Symfony loads it directly and skips parsing .env* files"
+            correct: true
+          - value: ".env.prod — parsed on every request"
+            correct: false
+          - value: "config/prod.php overriding all bundles"
+            correct: false
+          - value: "Nothing; it only validates env vars"
+            correct: false
+        explanation: >-
+          The whole .env* cascade is compiled to a plain PHP array in .env.local.php,
+          which Symfony loads directly, avoiding DotEnv parsing on each request.
+        documentation: "https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production"
+      - question: "ExpressionLanguage::compile() returns what?"
+        answers:
+          - value: "A string of PHP source code"
+            correct: true
+          - value: "The evaluated result value"
+            correct: false
+          - value: "An AST node object"
+            correct: false
+          - value: "A boolean success flag"
+            correct: false
+        explanation: >-
+          compile() transpiles an expression to PHP source you can cache/reuse, while
+          evaluate() interprets the expression and returns its value.
+        documentation: "https://symfony.com/doc/current/components/expression_language.html"
+
+  - name: "Miscellaneous — Process"
+    questions:
+      - question: "Which Process constructor auto-escapes each argument?"
+        answers:
+          - value: "new Process(['git', 'log', '--oneline'])"
+            correct: true
+          - value: "Process::fromShellCommandline('git log --oneline')"
+            correct: false
+          - value: "Both escape equally"
+            correct: false
+          - value: "Neither escapes anything"
+            correct: false
+        explanation: >-
+          The array form escapes each element automatically. fromShellCommandline()
+          runs a raw shell string and does not escape, risking command injection.
+        documentation: "https://symfony.com/doc/current/components/process.html"
+      - question: "What does Process::run() return?"
+        answers:
+          - value: "The integer exit code"
+            correct: true
+          - value: "The stdout as a string"
+            correct: false
+          - value: "void"
+            correct: false
+          - value: "A boolean success flag"
+            correct: false
+        explanation: >-
+          run() blocks until completion and returns the exit code; use getOutput() for
+          stdout and mustRun() to throw a ProcessFailedException on failure.
+        documentation: "https://symfony.com/doc/current/components/process.html#usage"
+      - question: "What is the default Process timeout?"
+        answers:
+          - value: "60 seconds"
+            correct: true
+          - value: "Unlimited"
+            correct: false
+          - value: "30 seconds"
+            correct: false
+          - value: "300 seconds"
+            correct: false
+        explanation: >-
+          The default timeout is 60 seconds; pass null to setTimeout() to disable it.
+          Exceeding it throws a ProcessTimedOutException.
+        documentation: "https://symfony.com/doc/current/components/process.html#process-timeout"
+
+  - name: "Miscellaneous — Lock"
+    questions:
+      - question: "LockInterface::acquire() called with no argument is…"
+        answers:
+          - value: "non-blocking — it returns false immediately if the lock is held"
+            correct: true
+          - value: "blocking — it waits until the lock is free"
+            correct: false
+          - value: "throwing an exception if the lock is held"
+            correct: false
+          - value: "always successful"
+            correct: false
+        explanation: >-
+          acquire() defaults to non-blocking; pass true to block until the resource
+          becomes available (store permitting).
+        documentation: "https://symfony.com/doc/current/lock.html#blocking-locks"
+      - question: "Which lock store provides mutual exclusion across multiple servers?"
+        answers:
+          - value: "RedisStore"
+            correct: true
+          - value: "FlockStore"
+            correct: false
+          - value: "SemaphoreStore"
+            correct: false
+          - value: "InMemoryStore"
+            correct: false
+        explanation: >-
+          Flock and Semaphore stores are local to one machine. Shared stores like
+          Redis (or a database store) coordinate locks across servers.
+        documentation: "https://symfony.com/doc/current/components/lock.html#available-stores"
+      - question: "Why call refresh() during a long critical section?"
+        answers:
+          - value: "To extend the lock's TTL so it is not considered expired mid-job"
+            correct: true
+          - value: "To release then reacquire the lock"
+            correct: false
+          - value: "To switch to a different store"
+            correct: false
+          - value: "To convert it to a shared lock"
+            correct: false
+        explanation: >-
+          Locks have a TTL to avoid deadlocks after crashes. refresh() prolongs it so
+          a still-working owner keeps exclusivity.
+        documentation: "https://symfony.com/doc/current/components/lock.html#expiring-locks"
+
+  - name: "Miscellaneous — Mailer"
+    questions:
+      - question: "With Messenger routing configured for emails, MailerInterface::send() will…"
+        answers:
+          - value: "dispatch a SendEmailMessage to be delivered by a worker"
+            correct: true
+          - value: "always send synchronously over SMTP"
+            correct: false
+          - value: "throw if no worker is running"
+            correct: false
+          - value: "render but not send the email"
+            correct: false
+        explanation: >-
+          When SendEmailMessage is routed to a transport, send() enqueues it; a worker
+          delivers it later, giving async sending plus retries.
+        documentation: "https://symfony.com/doc/current/mailer.html#sending-messages-async"
+      - question: "Which class renders Twig templates into an email body?"
+        answers:
+          - value: "Symfony\\Bridge\\Twig\\Mime\\TemplatedEmail"
+            correct: true
+          - value: "Symfony\\Component\\Mime\\Email"
+            correct: false
+          - value: "Symfony\\Component\\Mailer\\Mailer"
+            correct: false
+          - value: "Symfony\\Component\\Mime\\Message"
+            correct: false
+        explanation: >-
+          TemplatedEmail (in the Twig bridge) carries htmlTemplate()/textTemplate() and
+          context(); a body renderer turns them into MIME parts before sending.
+        documentation: "https://symfony.com/doc/current/mailer.html#twig-html-css"
+
+  - name: "Miscellaneous — Runtime & Clock"
+    questions:
+      - question: "What does public/index.php return under the Runtime component?"
+        answers:
+          - value: "A callable that produces the application object (e.g. a Kernel)"
+            correct: true
+          - value: "A Response object"
+            correct: false
+          - value: "Nothing — it echoes the output directly"
+            correct: false
+          - value: "The exit code as an int"
+            correct: false
+        explanation: >-
+          index.php returns a callable; autoload_runtime.php resolves its arguments,
+          invokes it, then a RunnerInterface handles/sends/terminates.
+        documentation: "https://symfony.com/doc/current/components/runtime.html"
+      - question: "Which environment variable selects the runtime class?"
+        answers:
+          - value: "APP_RUNTIME"
+            correct: true
+          - value: "APP_ENV"
+            correct: false
+          - value: "SYMFONY_RUNTIME"
+            correct: false
+          - value: "RUNTIME_CLASS"
+            correct: false
+        explanation: >-
+          APP_RUNTIME (or composer.json extra.runtime.class) chooses the RuntimeInterface
+          implementation; the default is SymfonyRuntime, which extends GenericRuntime.
+        documentation: "https://symfony.com/doc/current/components/runtime.html#using-the-runtime"
+      - question: "ClockInterface::now() returns what type?"
+        answers:
+          - value: "A \\DateTimeImmutable (a DatePoint)"
+            correct: true
+          - value: "A Unix timestamp int"
+            correct: false
+          - value: "A mutable \\DateTime"
+            correct: false
+          - value: "A float of seconds"
+            correct: false
+        explanation: >-
+          now() returns an immutable DatePoint (a \\DateTimeImmutable subclass). Tests
+          swap the NativeClock for a MockClock to freeze or advance time.
+        documentation: "https://symfony.com/doc/current/components/clock.html"
+
+  - name: "Miscellaneous — Debugging, Errors & Profiler"
+    questions:
+      - question: "Which object does VarDumper's VarCloner produce before rendering?"
+        answers:
+          - value: "A Data object"
+            correct: true
+          - value: "A Response"
+            correct: false
+          - value: "A FlattenException"
+            correct: false
+          - value: "A StopwatchEvent"
+            correct: false
+        explanation: >-
+          The cloner captures the variable into an immutable, depth-limited Data object,
+          which a CliDumper or HtmlDumper then renders — separating capture from output.
+        documentation: "https://symfony.com/doc/current/components/var_dumper.html"
+      - question: "An uncaught exception that does NOT implement HttpExceptionInterface produces which status code?"
+        answers:
+          - value: "500"
+            correct: true
+          - value: "404"
+            correct: false
+          - value: "400"
+            correct: false
+          - value: "200"
+            correct: false
+        explanation: >-
+          Only HttpExceptionInterface carries a custom status code; any other throwable
+          defaults to HTTP 500 via the error controller.
+        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+      - question: "When does the Web Profiler collect data for a request?"
+        answers:
+          - value: "On kernel.response, with late collectors running at kernel.terminate"
+            correct: true
+          - value: "On kernel.request only"
+            correct: false
+          - value: "During container compilation"
+            correct: false
+          - value: "Only in the CLI"
+            correct: false
+        explanation: >-
+          Profiler::collect() runs on kernel.response, invoking each DataCollector;
+          LateDataCollectorInterface::lateCollect() runs later at terminate.
+        documentation: "https://symfony.com/doc/current/profiler.html"
+
+  - name: "Miscellaneous — Intl, Filesystem & Finder"
+    questions:
+      - question: "Which mechanism does Symfony 8 use for translation pluralization?"
+        answers:
+          - value: "ICU MessageFormat, e.g. {count, plural, one {…} other {# …}}"
+            correct: true
+          - value: "The singular|plural pipe syntax"
+            correct: false
+          - value: "A %count% placeholder only"
+            correct: false
+          - value: "Separate keys per number"
+            correct: false
+        explanation: >-
+          ICU MessageFormat handles plural/select rules with locale-aware categories
+          (one/few/many/other); the old pipe syntax is legacy.
+        documentation: "https://symfony.com/doc/current/translation/message_format.html"
+      - question: "What makes Filesystem::dumpFile() safe against partial reads?"
+        answers:
+          - value: "It writes to a temporary file then atomically renames it into place"
+            correct: true
+          - value: "It acquires an flock on the file"
+            correct: false
+          - value: "It compresses the content"
+            correct: false
+          - value: "It buffers writes in memory forever"
+            correct: false
+        explanation: >-
+          dumpFile() writes to a temp file and renames it, so a reader always sees
+          either the old content or the complete new content, never a half-written file.
+        documentation: "https://symfony.com/doc/current/components/filesystem.html"
+      - question: "Which Finder method defines the directories to search?"
+        answers:
+          - value: "in()"
+            correct: true
+          - value: "from()"
+            correct: false
+          - value: "search()"
+            correct: false
+          - value: "path()"
+            correct: false
+        explanation: >-
+          Finder::in() sets the search directories; without it the Finder throws. It
+          yields Symfony SplFileInfo objects with helpers like getRelativePathname().
+        documentation: "https://symfony.com/doc/current/components/finder.html"
