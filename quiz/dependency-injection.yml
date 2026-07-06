@@ -1,0 +1,585 @@
+categories:
+  - name: "Dependency Injection"
+    questions:
+      # --- container.md ---
+      - question: "Why are Symfony services private by default?"
+        answers:
+          - value: "So the compiler can inline/remove them and to enforce proper dependency injection"
+            correct: true
+          - value: "Because public services are deprecated in Symfony 8"
+            correct: false
+          - value: "To make them read-only value objects"
+            correct: false
+          - value: "So that get() runs faster at runtime"
+            correct: false
+        explanation: >-
+          Private services can be inlined into their single consumer and pruned
+          when unreferenced, shrinking the compiled container, and it discourages
+          the service-locator anti-pattern of pulling from the container.
+        documentation: "https://symfony.com/doc/current/service_container.html"
+
+      - question: "Calling $container->get() on a private service id results in what?"
+        answers:
+          - value: "A ServiceNotFoundException"
+            correct: true
+          - value: "The service instance is returned"
+            correct: false
+          - value: "null"
+            correct: false
+          - value: "A fresh instance each call"
+            correct: false
+        explanation: >-
+          Private services are not fetchable by id from the public container; they
+          may only be injected. Fetching one throws ServiceNotFoundException.
+        documentation: "https://symfony.com/doc/current/service_container.html"
+
+      - question: "What is written to var/cache/prod/ after compilation?"
+        answers:
+          - value: "A dumped, optimised PHP container class produced by PhpDumper"
+            correct: true
+          - value: "The ContainerBuilder instance serialized"
+            correct: false
+          - value: "The raw YAML service definitions"
+            correct: false
+          - value: "Serialized service instances"
+            correct: false
+        explanation: >-
+          PhpDumper writes a compiled PHP class with a method per service; the
+          runtime uses it directly, never the ContainerBuilder.
+        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+
+      - question: "Which objects exist only at build time, not at runtime? (choose one)"
+        answers:
+          - value: "Definition, Reference, Alias and Parameter metadata objects"
+            correct: true
+          - value: "The service instances themselves"
+            correct: false
+          - value: "The compiled container class"
+            correct: false
+          - value: "The RequestStack"
+            correct: false
+        explanation: >-
+          Definition/Reference/Alias/Parameter are build-time recipes held by the
+          ContainerBuilder; the runtime container holds instances.
+        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+
+      # --- built-in-services.md ---
+      - question: "How should you access the current request inside a service?"
+        answers:
+          - value: "Inject RequestStack and call getCurrentRequest()"
+            correct: true
+          - value: "Type-hint Request in the constructor"
+            correct: false
+          - value: "Inject HttpKernelInterface"
+            correct: false
+          - value: "Call $container->get('request')"
+            correct: false
+        explanation: >-
+          The Request is per-cycle and can change across sub-requests, so it is not
+          injectable directly. Inject RequestStack and read the current request.
+        documentation: "https://symfony.com/doc/current/service_container/request.html"
+
+      - question: "Which command lists what a given type-hint autowires to?"
+        answers:
+          - value: "debug:autowiring"
+            correct: true
+          - value: "debug:config"
+            correct: false
+          - value: "debug:router"
+            correct: false
+          - value: "config:dump-reference"
+            correct: false
+        explanation: >-
+          debug:autowiring shows the types you can type-hint and which service each
+          resolves to; debug:container inspects a definition by id.
+        documentation: "https://symfony.com/doc/current/service_container/debug.html"
+
+      - question: "By default, debug:container hides which services?"
+        answers:
+          - value: "Private services (shown only with --show-private)"
+            correct: true
+          - value: "Public services"
+            correct: false
+          - value: "Aliases"
+            correct: false
+          - value: "Parameters"
+            correct: false
+        explanation: >-
+          debug:container lists public services and aliases; add --show-private to
+          include private ones.
+        documentation: "https://symfony.com/doc/current/service_container/debug.html"
+
+      # --- parameters.md ---
+      - question: "When is %env(DATABASE_URL)% resolved?"
+        answers:
+          - value: "At runtime, via an env-var processor"
+            correct: true
+          - value: "At compilation, frozen into the cache"
+            correct: false
+          - value: "When .env is parsed at deploy time only"
+            correct: false
+          - value: "Never; it is a literal string"
+            correct: false
+        explanation: >-
+          Env placeholders resolve at runtime so a single compiled container works
+          across environments; parameters (%x%) are frozen at compile time.
+        documentation: "https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables"
+
+      - question: "What does the expression %env(int:MAX)% produce?"
+        answers:
+          - value: "The value of MAX cast to an integer"
+            correct: true
+          - value: "The raw string value of MAX"
+            correct: false
+          - value: "A parameter named int"
+            correct: false
+          - value: "null when MAX is unset"
+            correct: false
+        explanation: >-
+          The int: processor casts the raw env string to an integer. Processors
+          chain right-to-left.
+        documentation: "https://symfony.com/doc/current/configuration/env_var_processors.html"
+
+      - question: "Which attribute injects the container parameter app.name into a constructor argument?"
+        answers:
+          - value: "#[Autowire(param: 'app.name')]"
+            correct: true
+          - value: "#[Autowire('app.name')]"
+            correct: false
+          - value: "#[Parameter('app.name')]"
+            correct: false
+          - value: "#[Autowire(env: 'app.name')]"
+            correct: false
+        explanation: >-
+          param: names a container parameter; a bare string without %% is a
+          literal, and env: reads an environment variable.
+        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+
+      - question: "How do you write a literal percent sign inside a parameter value?"
+        answers:
+          - value: "Double it: %%"
+            correct: true
+          - value: "Escape it: \\%"
+            correct: false
+          - value: "URL-encode it: %25"
+            correct: false
+          - value: "It is impossible"
+            correct: false
+        explanation: >-
+          A doubled percent escapes to a single literal % so it is not treated as a
+          parameter reference.
+        documentation: "https://symfony.com/doc/current/configuration.html#configuration-parameters"
+
+      # --- registration.md ---
+      - question: "Using the App\\: resource glob, what is a service's id?"
+        answers:
+          - value: "Its fully-qualified class name (FQCN)"
+            correct: true
+          - value: "A short snake_case name"
+            correct: false
+          - value: "The relative file path"
+            correct: false
+          - value: "A generated hash"
+            correct: false
+        explanation: >-
+          PSR-4 auto-registration creates one definition per class using the FQCN
+          as the service id.
+        documentation: "https://symfony.com/doc/current/service_container.html"
+
+      - question: "What does autoconfigure: true do (as opposed to autowire)?"
+        answers:
+          - value: "Applies tags/flags based on implemented interfaces and attributes"
+            correct: true
+          - value: "Fills constructor arguments by type"
+            correct: false
+          - value: "Makes all services public"
+            correct: false
+          - value: "Clears the compiled cache"
+            correct: false
+        explanation: >-
+          Autoconfigure adds tags automatically (e.g. event subscriber); autowire
+          is the separate flag that fills arguments by type.
+        documentation: "https://symfony.com/doc/current/service_container.html#the-autoconfigure-option"
+
+      - question: "How do you make an interface type-hint resolve to a concrete class?"
+        answers:
+          - value: "Define an alias, e.g. Interface: '@Class'"
+            correct: true
+          - value: "Type-hint the class instead of the interface"
+            correct: false
+          - value: "Make the class public"
+            correct: false
+          - value: "Add a tag to the class"
+            correct: false
+        explanation: >-
+          An alias from the interface id to the concrete service lets autowiring
+          resolve the interface type-hint.
+        documentation: "https://symfony.com/doc/current/service_container/alias_private.html"
+
+      # --- decoration.md ---
+      - question: "In a decorator definition, what does @.inner reference?"
+        answers:
+          - value: "The original (decorated) service, renamed by the compiler"
+            correct: true
+          - value: "The decorator service itself"
+            correct: false
+          - value: "The parent bundle service"
+            correct: false
+          - value: "A private alias of the container"
+            correct: false
+        explanation: >-
+          DecoratorServicePass renames the decorated service and exposes it as
+          .inner so the decorator can delegate to it.
+        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+
+      - question: "Which attribute injects the decorated (inner) service into a decorator?"
+        answers:
+          - value: "#[AutowireDecorated]"
+            correct: true
+          - value: "#[AsDecorator]"
+            correct: false
+          - value: "#[Inner]"
+            correct: false
+          - value: "#[Decorated]"
+            correct: false
+        explanation: >-
+          #[AsDecorator] declares the decoration; #[AutowireDecorated] resolves the
+          parameter to the .inner service.
+        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+
+      - question: "With two decorators on one id, a higher decoration_priority means the decorator is..."
+        answers:
+          - value: "Applied first and sits closer to the original (innermost)"
+            correct: true
+          - value: "Applied last and is the outermost"
+            correct: false
+          - value: "Ignored"
+            correct: false
+          - value: "Made public automatically"
+            correct: false
+        explanation: >-
+          Higher priority decorators are applied first and end up innermost;
+          consumers receive the lowest-priority, outermost decorator.
+        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority"
+
+      - question: "decoration_on_invalid: ignore does what when the decorated service is missing?"
+        answers:
+          - value: "Removes the decorator entirely"
+            correct: true
+          - value: "Injects null as .inner"
+            correct: false
+          - value: "Throws an exception"
+            correct: false
+          - value: "Creates an empty stub service"
+            correct: false
+        explanation: >-
+          ignore drops the decorator; null would inject null; exception (the
+          default) throws when the target is absent.
+        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+
+      # --- tags.md ---
+      - question: "What does a tagged_locator argument inject?"
+        answers:
+          - value: "A lazy ServiceLocator keyed by an index"
+            correct: true
+          - value: "An array of already-instantiated services"
+            correct: false
+          - value: "A compiler pass"
+            correct: false
+          - value: "The raw tag name string"
+            correct: false
+        explanation: >-
+          tagged_locator injects a ServiceLocator that instantiates services on
+          demand, keyed by the configured index; tagged_iterator yields instances.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+
+      - question: "A higher priority on a tag places the service where in the tagged iterator?"
+        answers:
+          - value: "Earlier (tagged collections are sorted by descending priority)"
+            correct: true
+          - value: "Later"
+            correct: false
+          - value: "It has no effect on order"
+            correct: false
+          - value: "Randomly"
+            correct: false
+        explanation: >-
+          Tagged services are ordered by descending priority, so higher priority
+          comes first.
+        documentation: "https://symfony.com/doc/current/service_container/tags.html#tagged-services-with-priority"
+
+      - question: "How can every implementation of an interface receive a tag automatically?"
+        answers:
+          - value: "Use #[AutoconfigureTag] on the interface or _instanceof in YAML"
+            correct: true
+          - value: "It happens with no configuration"
+            correct: false
+          - value: "Only by writing a compiler pass"
+            correct: false
+          - value: "By adding #[AsTaggedItem] to each class"
+            correct: false
+        explanation: >-
+          Autoconfiguration maps an interface to a tag so all implementers are
+          tagged without manual annotation.
+        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+
+      # --- semantic-config.md ---
+      - question: "Which class validates and defaults a bundle's configuration schema?"
+        answers:
+          - value: "Configuration, via a TreeBuilder"
+            correct: true
+          - value: "Extension::load()"
+            correct: false
+          - value: "Kernel::build()"
+            correct: false
+          - value: "ContainerBuilder"
+            correct: false
+        explanation: >-
+          Configuration defines allowed keys, types, defaults and validation;
+          Extension::load() only consumes the processed result.
+        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+
+      - question: "When does prepend() run relative to the extensions' load() calls?"
+        answers:
+          - value: "Before all load() calls"
+            correct: true
+          - value: "After all load() calls"
+            correct: false
+          - value: "At runtime on each request"
+            correct: false
+          - value: "Only in the dev environment"
+            correct: false
+        explanation: >-
+          Prepend runs first so a bundle can inject default configuration into
+          other bundles before they load.
+        documentation: "https://symfony.com/doc/current/bundles/prepend_extension.html"
+
+      - question: "Which command prints a bundle's configuration reference tree?"
+        answers:
+          - value: "config:dump-reference"
+            correct: true
+          - value: "debug:container"
+            correct: false
+          - value: "debug:autowiring"
+            correct: false
+          - value: "debug:router"
+            correct: false
+        explanation: >-
+          config:dump-reference dumps the schema defined by Configuration;
+          debug:config shows the currently resolved values.
+        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+
+      # --- factories.md ---
+      - question: "For a factory-built service, where are its arguments passed?"
+        answers:
+          - value: "To the factory method"
+            correct: true
+          - value: "To the class constructor"
+            correct: false
+          - value: "To __invoke only"
+            correct: false
+          - value: "They are ignored"
+            correct: false
+        explanation: >-
+          With a factory, the container calls the factory and passes the
+          definition's arguments to it, not to a constructor.
+        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+
+      - question: "How do you configure a factory produced value via attributes?"
+        answers:
+          - value: "#[Autowire(factory: [Factory::class, 'create'])]"
+            correct: true
+          - value: "#[Factory([Factory::class, 'create'])]"
+            correct: false
+          - value: "#[AsFactory]"
+            correct: false
+          - value: "#[AsAlias(Factory::class)]"
+            correct: false
+        explanation: >-
+          There is no dedicated #[Factory] attribute; factories are configured with
+          #[Autowire(factory:)] or in YAML/PHP config.
+        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+
+      - question: "How is an instance-method factory referenced in YAML?"
+        answers:
+          - value: "factory: ['@service_id', 'method']"
+            correct: true
+          - value: "factory: '@service_id::method'"
+            correct: false
+          - value: "factory: 'service_id.method'"
+            correct: false
+          - value: "factory: @service_id"
+            correct: false
+        explanation: >-
+          An array of [reference, method] denotes a method call on a service; a
+          static factory uses the 'Class::method' string form.
+        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+
+      # --- compiler-passes.md ---
+      - question: "Which attribute registers a compiler pass? (choose one)"
+        answers:
+          - value: "There is no attribute; register it via addCompilerPass() in Kernel/bundle build()"
+            correct: true
+          - value: "#[CompilerPass]"
+            correct: false
+          - value: "#[AsCompilerPass]"
+            correct: false
+          - value: "#[Autoconfigure(pass: true)]"
+            correct: false
+        explanation: >-
+          Compiler passes are registered programmatically via
+          ContainerBuilder::addCompilerPass(), typically in Kernel::build() or a
+          bundle's build(). There is no core attribute for this.
+        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+
+      - question: "What is the default phase for a compiler pass registered without one?"
+        answers:
+          - value: "TYPE_BEFORE_OPTIMIZATION"
+            correct: true
+          - value: "TYPE_OPTIMIZATION"
+            correct: false
+          - value: "TYPE_REMOVING"
+            correct: false
+          - value: "TYPE_AFTER_REMOVING"
+            correct: false
+        explanation: >-
+          PassConfig runs passes in phase order; unspecified passes run in the
+          before-optimization phase.
+        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+
+      - question: "What does ContainerBuilder::findTaggedServiceIds('t') return?"
+        answers:
+          - value: "A map of service id => array of that tag's attribute sets"
+            correct: true
+          - value: "Instantiated service objects"
+            correct: false
+          - value: "A ServiceLocator"
+            correct: false
+          - value: "Only the first tagged id"
+            correct: false
+        explanation: >-
+          It returns definitions' ids each mapped to the attributes of every
+          occurrence of the tag, used to wire collectors at compile time.
+        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+
+      - question: "Inside a compiler pass process() method, what should you manipulate?"
+        answers:
+          - value: "Definition objects (build-time metadata)"
+            correct: true
+          - value: "Live service instances via get()"
+            correct: false
+          - value: "The current HTTP request"
+            correct: false
+          - value: "The runtime event dispatcher"
+            correct: false
+        explanation: >-
+          Compilation deals only with definitions; nothing is instantiated yet, so
+          calling get() inside a pass is wrong.
+        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+
+      # --- autowiring.md ---
+      - question: "What can autowiring resolve automatically?"
+        answers:
+          - value: "Object dependencies identified by their type-hint"
+            correct: true
+          - value: "Scalar and string arguments"
+            correct: false
+          - value: "Array parameters"
+            correct: false
+          - value: "Environment variables"
+            correct: false
+        explanation: >-
+          Autowiring maps a type-hint to a service; scalars and env vars must be
+          bound explicitly with bind or #[Autowire].
+        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+
+      - question: "Two services implement one interface with no default alias. Autowiring by that interface..."
+        answers:
+          - value: "Throws an ambiguity error at compile time"
+            correct: true
+          - value: "Silently picks the first candidate"
+            correct: false
+          - value: "Injects null"
+            correct: false
+          - value: "Picks the last candidate"
+            correct: false
+        explanation: >-
+          Ambiguity is a hard build error; you disambiguate with a named alias,
+          #[Target], #[Autowire(service:)] or bind.
+        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+
+      - question: "What does the #[Target('requestLogger')] attribute do?"
+        answers:
+          - value: "Selects the named autowiring alias explicitly, decoupled from the parameter name"
+            correct: true
+          - value: "Creates a new service definition"
+            correct: false
+          - value: "Adds a tag to the service"
+            correct: false
+          - value: "Makes the service public"
+            correct: false
+        explanation: >-
+          #[Target] binds to a named autowiring alias by name, so renaming the
+          constructor parameter does not break wiring.
+        documentation: "https://symfony.com/doc/current/service_container/autowiring.html#fixing-non-autowireable-arguments"
+
+      # --- service-locators.md ---
+      - question: "How does a ServiceLocator differ from injecting the whole container?"
+        answers:
+          - value: "It exposes only an explicitly declared, whitelisted set of services"
+            correct: true
+          - value: "It is eager while the container is lazy"
+            correct: false
+          - value: "It cannot instantiate services"
+            correct: false
+          - value: "There is no real difference"
+            correct: false
+        explanation: >-
+          A locator's set is explicit and analysable; injecting the whole container
+          hides dependencies and is an anti-pattern.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+
+      - question: "When does a ServiceLocator instantiate the services it holds?"
+        answers:
+          - value: "Lazily, on get()"
+            correct: true
+          - value: "All of them at construction"
+            correct: false
+          - value: "At container compilation"
+            correct: false
+          - value: "On kernel boot"
+            correct: false
+        explanation: >-
+          A locator defers construction until a service is actually requested,
+          which is its main advantage over injecting all candidates.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators"
+
+      - question: "What interface does Symfony's ServiceLocator implement?"
+        answers:
+          - value: "Psr\\Container\\ContainerInterface (PSR-11)"
+            correct: true
+          - value: "Symfony's own ContainerInterface"
+            correct: false
+          - value: "IteratorAggregate only"
+            correct: false
+          - value: "CompilerPassInterface"
+            correct: false
+        explanation: >-
+          ServiceLocator is a PSR-11 container exposing get() and has() over a
+          fixed, compile-time set of services.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators"
+
+      - question: "What does ServiceSubscriberInterface::getSubscribedServices() declare?"
+        answers:
+          - value: "The set of services the subscriber may lazily use, injected as a locator"
+            correct: true
+          - value: "Instantiated services returned eagerly"
+            correct: false
+          - value: "The compiler passes to register"
+            correct: false
+          - value: "The whole container"
+            correct: false
+        explanation: >-
+          It declares a whitelist; the container injects a matching ServiceLocator
+          so services are built only when requested.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"

@@ -150,13 +150,9 @@ $label = match (true) {
 
 ### Nullsafe operator `?->` (8.0)
 
-Short-circuits the *rest of the chain* to `null` if the operand is `null`. It is
-not a null-coalescing replacement and cannot be used as an lvalue.
-
-```php
-<?php
-$country = $session?->getUser()?->getAddress()?->country;
-```
+Short-circuits the *rest of the chain* to `null` if the operand is `null`; it is
+not a `??` replacement and cannot be an lvalue:
+`$c = $session?->getUser()?->getAddress()?->country;`.
 
 ### Typed class constants (8.3)
 

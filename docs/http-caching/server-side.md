@@ -138,6 +138,7 @@ to confirm hits.
 
     use App\Kernel;
     use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
+    use Symfony\Component\HttpKernel\HttpKernelInterface;
 
     require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
