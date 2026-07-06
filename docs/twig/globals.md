@@ -5,6 +5,12 @@
     request, user, session and environment, backed by `AppVariable`. Exam hook:
     `app.user` is `null` when nobody is logged in, so always guard it.
 
+!!! example "Real-world analogy"
+    `app` is a shared clipboard pinned to the office wall: every template can glance
+    at it for the current user, request, session or locale without anyone handing
+    them a copy. Symfony keeps that clipboard (`AppVariable`) up to date for each
+    request, and you can pin your own notes to it with custom globals.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

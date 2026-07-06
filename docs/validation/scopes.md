@@ -5,6 +5,12 @@
     class (the whole object, for cross-field rules). The rule to memorise: a nested
     object is only validated if its property carries `#[Assert\Valid]`.
 
+!!! example "Real-world analogy"
+    Scope is **where the scanner points**: at one item (property), at what a sensor
+    computes from the bag (getter), or at the whole bag and how its contents fit
+    together (class). And a bag-within-a-bag is only opened if it carries an
+    "inspect contents" tag — that tag is `#[Assert\Valid]`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -5,6 +5,14 @@
     cacheable properties. Exam hook: PUT and DELETE are idempotent but not safe,
     POST and PATCH are neither, and `_method` override is **off by default**.
 
+!!! example "Real-world analogy"
+    The method is the **type of postal service** you pick for a letter. `GET` is
+    asking for a copy of a document — safe, it changes nothing. `PUT`/`DELETE` are
+    registered instructions that leave the same end state no matter how many
+    duplicates arrive (idempotent). `POST` is dropping a *new* order form each
+    time — send it twice and you get two orders. `_method` override is scribbling
+    "treat as DELETE" on a plain envelope, honoured only if the office opted in.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

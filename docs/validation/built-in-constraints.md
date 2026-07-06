@@ -6,6 +6,13 @@
     `NotBlank` rejects the empty string, while `NotNull` accepts it — only a real
     `null` fails `NotNull`.
 
+!!! example "Real-world analogy"
+    Each constraint is **one scanner** on the screening line: the X-ray checks
+    shape (`Length`), the sniffer checks for liquids (`Email`/`Regex`), the metal
+    detector checks a threshold (`Range`). `NotBlank` means "the bag must contain
+    something"; `NotNull` only means "a bag must be on the belt" — an empty bag
+    still counts.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -164,6 +171,38 @@ flowchart TD
 !!! note "Source reference"
     Constraint classes and their validators —
     [symfony/symfony `8.0` `Constraints/`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Validator/Constraints).
+
+### Null behavior
+
+`null` is where constraints trip up most exam takers. The three "presence"
+constraints are deliberately different:
+
+- **`NotNull`** — fails only on strict `null`. `''`, `0`, `[]` and `'   '` all
+  pass.
+- **`NotBlank`** — fails on `null`, `''`, `[]` and (by default) whitespace-only
+  strings. Set `allowNull: true` to let `null` through while still rejecting `''`.
+- **`IsNull`** — the inverse: passes only when the value **is** `null`.
+
+Almost every *other* constraint (`Email`, `Url`, `Length`, `Regex`, `Range`,
+`Choice`, `Type`, the comparisons…) **skips `null` and returns no violation** —
+their validators bail out early on an empty value. That is why an unset `null`
+email passes: `Email` never runs. To require a value *and* validate its shape,
+stack the two so the presence check does the rejecting:
+
+```php
+#[Assert\NotBlank]   // rejects null / '' / []
+#[Assert\Email]      // only runs once there is a value
+public ?string $email = null;
+```
+
+Inside a `Collection`, missing keys are governed by the `Required` and `Optional`
+wrappers: a `Required` field that is absent fails, while an `Optional` field is
+skipped when absent but still validated when present.
+
+!!! note "Null in real life"
+    `NotNull` = a bag must be on the belt (an empty bag still counts); `NotBlank`
+    = the bag must actually contain something; most other scanners simply wave an
+    empty slot through without inspecting it.
 
 ## Configuration & code
 

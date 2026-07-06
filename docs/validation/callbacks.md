@@ -7,6 +7,12 @@
     instance form is `(ExecutionContextInterface, mixed $payload)`; the static form
     gets the object as its first argument.
 
+!!! example "Real-world analogy"
+    A callback is the **supervisor who eyeballs the whole bag at once**, catching
+    combinations the single-purpose scanners miss — a knife *and* a mismatched
+    boarding pass. They don't announce a verdict; they write the incident into the
+    same log everyone else uses (the `ExecutionContext`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

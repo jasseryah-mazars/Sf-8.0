@@ -6,6 +6,15 @@
     **PRE_SET_DATA → POST_SET_DATA** (setting data) and **PRE_SUBMIT → SUBMIT →
     POST_SUBMIT** (submitting).
 
+!!! example "Real-world analogy"
+    Form events are **checkpoints as the form is filled and submitted**. As the blank
+    form is laid out you pass `PRE_SET_DATA`/`POST_SET_DATA` — the moment to add
+    extra fields for who's filling it in. As you hand it back you pass
+    `PRE_SUBMIT` (an inspector still sees your raw handwriting), then `SUBMIT`, then
+    `POST_SUBMIT` (the answers are now filed on your record). Each checkpoint lets
+    you inspect or adjust — but you can only **add sections** at the early ones,
+    before the form is bound.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -111,6 +120,23 @@ You can only add/remove fields **before** they are bound — that is why these t
   `getSubscribedEvents()`; add with `$builder->addEventSubscriber($subscriber)`.
 
 Subscribers are reusable across forms and testable in isolation.
+
+### Null behavior
+
+`PRE_SET_DATA` can carry `null`: a form created without initial data (no
+`data_class`, or an explicit `null`) hands your listener `$event->getData() === null`,
+so guard with `instanceof` / `??` before calling methods on it. The dynamic-field
+bug is calling `$data->getId()` on a null "new entity" form — the `ArticleType`
+example survives because it checks `$article instanceof Article` first. `PRE_SUBMIT`
+carries the **raw request array**, where a field the user left blank is simply an
+absent key: read it with `$data['country'] ?? null`, not `$data['country']`, or you
+trip an undefined-key warning. `POST_SUBMIT` sees the bound model, which is
+`null`/empty for an empty submission. Never assume a key or object is present inside
+a listener.
+
+!!! note "Null in real life"
+    `null` = a checkpoint waving through someone with **no papers yet** — check
+    whether they're holding anything before you try to inspect it.
 
 ## Configuration & code
 

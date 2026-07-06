@@ -6,6 +6,13 @@
     `serialize()` = normalize then encode, and `#[Groups]` only filters fields
     when you pass `['groups' => [...]]` in the context.
 
+!!! example "Real-world analogy"
+    Serializing is **packing a suitcase**; deserializing is unpacking it.
+    Normalizers **fold your objects into a flat, standard layout** (arrays);
+    encoders **zip the suitcase into one string** (JSON/XML/CSV) for travel. At
+    the destination you unzip (decode) then unfold (denormalize) back into
+    objects. `#[Groups]` is deciding which items you actually pack for this trip.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -96,6 +103,22 @@ via a **circular reference limit** (default 1) and throws
     `Symfony\Component\Serializer\Serializer::serialize()` and
     `AbstractObjectNormalizer` (circular-ref handling) —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php).
+
+### Null behavior
+
+By default a `null` property **is** serialized: `ObjectNormalizer` emits
+`"nickname":null` in the output. To drop nulls entirely, pass the
+`AbstractObjectNormalizer::SKIP_NULL_VALUES` context key (the `skip_null_values`
+default-context option) — then null-valued keys are omitted from the payload.
+Going the other way, a **missing** JSON key denormalizes to the property's
+default (or `null` for a nullable typed property with no default); a present
+`null` sets it to null. The classic bug: enabling `skip_null_values`, then a
+consumer treating an absent key as an error rather than "the value was null".
+
+!!! note "Null in real life"
+    A null property is an **empty slot in the suitcase**: `skip_null_values`
+    decides whether you pack that slot as visibly empty or leave it out of the bag
+    altogether.
 
 ## Configuration & code
 

@@ -90,6 +90,23 @@ If input cannot be converted (e.g. an ID with no matching object), throw
 field's `invalid_message`. **Never** throw generic exceptions or return `null`
 silently — that hides errors from validation.
 
+### Null behavior
+
+Fields are frequently empty, so both directions meet emptiness. On **display**,
+`transform(null)` fires for an unset model value — return `''` (an empty string the
+widget can show), **not** `null`, or the input renders oddly and later value
+comparisons break. On **submit**, an empty input arrives as `''` (or `null`), so
+`reverseTransform('')` must map back to your model's empty value (`null`, `[]`,
+`0` …) rather than trying to parse it and throwing. Guard the first line of each
+method with an emptiness check before any real conversion — exactly what the
+`MinutesToClockTransformer` above does. The classic bug: `reverseTransform('')`
+running the parser on an empty string and raising a spurious
+`TransformationFailedException` on an otherwise **optional** field.
+
+!!! note "Null in real life"
+    `null`/`''` = an empty slip at the exchange booth — hand back an empty receipt,
+    don't try to convert zero currency and stamp it "invalid".
+
 ### Model vs view — which to pick
 
 - Use a **view transformer** when only the *string representation* changes

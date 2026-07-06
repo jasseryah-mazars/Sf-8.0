@@ -5,6 +5,13 @@
     `HttpExceptionInterface` sets the status (anything else is 500). Exam hook:
     `createNotFoundException()` only *returns* the 404 — you must `throw` it.
 
+!!! example "Real-world analogy"
+    When a visitor asks for someone who isn't in the building, the **receptionist**
+    doesn't invent an answer — they raise a flag (`throw`) and the building's error
+    desk (the kernel) issues the official "not found" notice on headed paper (the
+    error page with the right status). Your job is to raise the flag with the right
+    label; rendering the formal notice is someone else's.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,14 @@
     `$response->headers` is a **`ResponseHeaderBag`**, and `prepare()` makes the
     response compliant with the request before `send()` transmits it.
 
+!!! example "Real-world analogy"
+    If the request is the letter you posted, the `Response` is the **reply the
+    office mails back**. The **status line** is the outcome stamp on the outside
+    (`200 OK`, `404`), the **headers** are the handling notes (content type,
+    caching, cookies to keep), and the **body** is the reply itself. `prepare()`
+    is the mail room making the envelope compliant with your original letter
+    before `send()` drops it in the outgoing post.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

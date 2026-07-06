@@ -6,6 +6,12 @@
     you call `addViolation()`. Callers read the errors back from a Countable,
     iterable `ConstraintViolationList`.
 
+!!! example "Real-world analogy"
+    The violations builder is the **incident report form**. The officer fills in
+    the fields — which item, the offending object, a reference code — but nothing
+    is logged until they hit "submit" (`addViolation()`). Later, supervisors read
+    back the stack of filed reports (the `ConstraintViolationList`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

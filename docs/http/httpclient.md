@@ -6,6 +6,14 @@
     `request()` is **lazy/async**; the transfer runs only on first read of the
     response (which makes concurrency free).
 
+!!! example "Real-world analogy"
+    If HttpFoundation handles the mail arriving at *your* office, HttpClient is
+    **you posting letters to another office** and awaiting their reply. You write
+    the request, hand it to the courier (`request()`), and — because the courier
+    is async — you can send a whole stack at once and only wait when you actually
+    open a reply (`getContent()`). A scoped client is a pre-addressed,
+    pre-stamped envelope for one specific office.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

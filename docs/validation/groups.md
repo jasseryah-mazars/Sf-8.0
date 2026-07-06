@@ -6,6 +6,12 @@
     validating `Default` runs the sequence, while `{ClassName}` runs the same
     constraints flat, bypassing the ordering.
 
+!!! example "Real-world analogy"
+    Groups are the **different screening lanes** at the airport. A crew member, a
+    domestic passenger and an international passenger walk through different sets of
+    scanners even though it is the same checkpoint. Validating a group picks the
+    lane; the `Default` lane is the one everyone uses when no lane is named.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

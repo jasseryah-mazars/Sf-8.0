@@ -7,6 +7,12 @@
     Exam hook: there is no `enable_authenticator_manager` flag anymore — it *is*
     how security works.
 
+!!! example "Real-world analogy"
+    Authentication is showing your ID at the gate. You hand over a credential —
+    the **Passport** of badges — the guard checks it against the records
+    (`CheckPassportEvent` listeners), and if it holds up you get a wristband (the
+    **token**) that proves who you are for the rest of your visit.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -118,6 +124,29 @@ decides *how to start* authentication — e.g. redirect to a login form, or retu
 `401` with a `WWW-Authenticate` header. If a firewall has **more than one**
 authenticator that is also an entry point, you **must** name one explicitly via
 `entry_point:` in `security.yaml`, or the container throws.
+
+### Null behavior
+
+Before any authenticator runs — and forever on a truly anonymous request — there
+is **no token** in the `TokenStorageInterface`, so `Security::getUser()` returns
+**`null`** (and `getToken()` can itself be `null` on a lazy firewall whose token
+was never read). This is by design: "not logged in" is the *absence* of a user,
+not an exception.
+
+The classic bug is assuming `getUser()` always hands back a user:
+
+```php
+$user = $security->getUser();                     // ?UserInterface — may be null
+$name = $user->getUserIdentifier();               // fatal on an anonymous request
+$name = $user?->getUserIdentifier() ?? 'guest';   // nullsafe + fallback
+```
+
+Guard with `?->`, `??`, or an earlier `#[IsGranted('IS_AUTHENTICATED_FULLY')]` /
+`denyAccessUnlessGranted()` so `$user` is guaranteed non-null past that point.
+
+!!! note "Null in real life"
+    `null` here is the visitor who walked in without ever stopping at the desk —
+    there is no wristband to read, so asking "what's their name?" gets you nothing.
 
 ## Configuration & code
 

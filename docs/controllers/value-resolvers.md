@@ -120,6 +120,32 @@ Resolution runs once per controller call. Resolvers are lazy services in a
 locator; only those in the chain are considered, and targeted resolvers only
 activate on their attribute — so the cost is small and predictable.
 
+### Null behavior
+
+Here the subtlety is **"yields nothing" vs "yields `null`"** — they are not the
+same, and confusing them is the classic resolver bug:
+
+- *Yielding nothing* (`return [];`, or a generator that never `yield`s) means
+  "not my argument" — the resolver declines and `ArgumentResolver` moves to the
+  next one. `null` is never bound.
+- *Yielding `null`* (`yield null;`) means "the value is `null`" — a real,
+  deliberate argument value, bound to a nullable parameter.
+
+Two traps follow. First, `return null;` instead of `return [];` is a `TypeError`:
+`resolve()` is declared `: iterable`, and `null` is not iterable. Always decline
+with an empty array. Second, if no resolver yields and the parameter has no
+default, `ArgumentResolver` throws a `\RuntimeException` ("could not resolve
+argument") — it does not quietly pass `null`. The `DefaultValueResolver` (-100)
+exists precisely to supply the declared default before that failure; a nullable
+param such as `#[MapQueryString] ?SearchQuery $q = null` resolves to `null` when
+the query string is empty *because of that default*, not because a resolver
+returned nothing.
+
+!!! note "Null in real life"
+    A translator who shrugs and passes you down the line (declines) is not the same
+    as one who hands you a page that is deliberately blank (`null`). One means "ask
+    someone else"; the other is a real, empty answer.
+
 ## Configuration & code
 
 === "Built-in attributes"

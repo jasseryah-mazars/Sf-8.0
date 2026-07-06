@@ -8,6 +8,12 @@
     Exam hook: only the `isGranted()` path can pass a **subject**; `access_control`
     is URL-based only.
 
+!!! example "Real-world analogy"
+    Authorization is which doors your badge opens. The gate already knows *who*
+    you are (the token); now each locked door asks "is this badge allowed
+    through?". `isGranted()` is you tapping the reader — the **voters** behind it
+    decide whether the light turns green.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -90,6 +96,23 @@ not authenticated, or a **403** if they are but lack the attribute.
 - **Attributes + voters** are the fine-grained layer: business rules like
   "can this user edit *this* post?" that need the **subject**. Roles cannot
   express per-object rules; voters can.
+
+### Null behavior
+
+The token can be **absent**. On an anonymous request the `AuthorizationChecker`
+reads a `null` token from storage; rather than crash, it substitutes a
+**`NullToken`** (`Symfony\Component\Security\Core\Authentication\Token\NullToken`)
+and votes as usual. So `isGranted('ROLE_ADMIN')` on a logged-out user is a clean
+`false`, not an error: `AuthenticatedVoter` denies the `IS_AUTHENTICATED_*`
+attributes for a `NullToken`, while `PUBLIC_ACCESS` still grants.
+
+Where `null` actually bites is *inside* a voter: `$token->getUser()` is `null`
+for an unauthenticated token, so guard with an `instanceof` check before touching
+user data (see [Voters](voters.md)).
+
+!!! note "Null in real life"
+    `null` here is tapping a door reader with no badge: the reader still runs its
+    check and simply refuses — it does not break.
 
 ## Configuration & code
 

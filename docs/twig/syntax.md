@@ -112,6 +112,30 @@ Tests use `is`: `{{ x is defined }}`, `is null`, `is empty`, `is even`/`odd`,
 `is iterable`, `is same as(y)`, `divisible by(3)`, `constant('App\\Foo::BAR')`.
 Negate with `is not`: `{% if x is not null %}`.
 
+### Null behavior
+
+Twig is deliberately null-tolerant. **Printing** `null` outputs an empty string,
+never an error: `{{ missing }}` renders nothing. (With `strict_variables` on, an
+*undefined* variable throws, but a variable that resolves to `null` still prints
+empty.) Reading an attribute **on** `null` — `{{ user.name }}` when `user` is
+`null` — yields `null` (again, empty on print) unless `strict_variables` is on.
+
+Handle it explicitly with three tools:
+
+- **`??`** — null-coalescing: `{{ count ?? 0 }}` replaces `null`/undefined only.
+- **`|default`** — `{{ name|default('Anon') }}` replaces `null`, undefined **and**
+  empty (`''`, `[]`).
+- **tests** — `{% if x is defined %}`, `{% if x is null %}`, `is not null` to
+  branch before you touch a value.
+
+The classic bug: assuming `{{ a.b.c }}` throws when `a.b` is `null`. In lenient
+mode it quietly prints empty and the typo only surfaces once `strict_variables`
+is on — so keep it on in dev.
+
+!!! note "Null in real life"
+    A null variable is a blank line on a form: Twig leaves it empty and moves on
+    rather than refusing the whole page.
+
 ## Configuration & code
 
 === "Twig template"

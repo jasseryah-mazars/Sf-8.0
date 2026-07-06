@@ -5,6 +5,12 @@
     from the file extension (`.html.twig` → HTML, `.js.twig` → JS…). Exam hook:
     `.txt.twig` escapes nothing, and `|raw` / `{% autoescape false %}` turn it off.
 
+!!! example "Real-world analogy"
+    Auto-escaping is a safety net strung under a trapeze. Whatever a visitor throws
+    into your page — `<script>`, quotes, angle brackets — falls into the net and is
+    defused into harmless text before the audience ever sees it. You only unclip the
+    net (`|raw`) for performers you have personally vetted.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -85,6 +91,20 @@ a URL, a JS string, or a CSS value each needs its own encoding. Using the wrong
 strategy is a real XSS vector. See
 [Web Security Fundamentals](../php-web-security/web-security.md) for the attack
 model.
+
+### Null behavior
+
+The escaper is null-safe. Printing a `null` value — `{{ comment }}` when there is
+no comment — produces an **empty string**, not `"null"` and not an error: the
+implicit `|escape` simply has nothing to encode. The same holds for an explicit
+`{{ x|e }}` or `{{ x|e('js') }}` on `null`. So a nullable value (an unset user
+bio, an absent flash) is safe to print directly — escaping never turns `null`
+into visible text. If you want a placeholder instead of a blank, reach for
+`|default` **before** escaping: `{{ bio|default('—') }}`.
+
+!!! note "Null in real life"
+    A null value at the safety net is an empty trapeze: nothing falls, so there is
+    nothing to catch — the net stays quiet and the page renders blank.
 
 ## Configuration & code
 

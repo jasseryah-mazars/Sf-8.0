@@ -6,6 +6,12 @@
     inside the sequence reference the `{ClassName}` group, never `Default` (which
     would loop).
 
+!!! example "Real-world analogy"
+    A group sequence is the **checkpoint corridor**: document check, then X-ray,
+    then pat-down. Fail the document check and you are turned away on the spot —
+    the later stations never even see you. Screening stops at the first failed
+    checkpoint, which is exactly stop-on-first-failing-group.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

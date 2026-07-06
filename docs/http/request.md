@@ -131,6 +131,38 @@ the modern, content-type-agnostic way to read submitted data.
     request format (from `_format`) is `getRequestFormat()`; the client-preferred
     format is `getPreferredFormat()` (see [Content Negotiation](content-negotiation.md)).
 
+### Null behavior
+
+A bag getter is a *lookup*, and a missing key is normal. `HeaderBag::get('X')`
+and `ParameterBag::get('x')` return **`null`** when the key is absent — the second
+argument is the default and it *defaults to `null`*
+(`get(string $key, mixed $default = null)`). So
+`$request->headers->get('X-Trace-Id')` is `null` for a client that never sent it,
+not an error.
+
+`getClientIp()` can also return **`null`**: with no trusted-proxy configuration
+and no usable `REMOTE_ADDR` (for example a console-created request) there is
+simply no IP to report.
+
+Handle it at the edge with `??`:
+
+```php
+$id = $request->headers->get('X-Trace-Id') ?? bin2hex(random_bytes(8));
+$ip = $request->getClientIp() ?? '0.0.0.0';
+$q  = $request->query->getString('q'); // '' when absent — never null
+```
+
+Typed getters (`getInt`, `getString`, `getBoolean`) *coalesce* a missing value to
+the type's zero (`0`, `''`, `false`), so they never hand back `null` — reach for
+the raw `get()` only when "absent" must stay distinguishable from "empty". The
+common bug is calling a string method on `headers->get()` with no `??` guard and
+hitting a `TypeError` the first time that header is missing.
+
+!!! note "Null in real life"
+    `null` here is a letter that arrived with **no return address** in the margin:
+    the envelope is fine, that one note just isn't there — you supply a sensible
+    default rather than refuse the mail.
+
 ## Configuration & code
 
 === "PHP Attributes"

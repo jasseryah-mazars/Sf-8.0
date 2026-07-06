@@ -6,6 +6,12 @@
     validator's name is the constraint name plus `Validator`, and a class-level
     rule must override `getTargets()` to return `CLASS_CONSTRAINT`.
 
+!!! example "Real-world analogy"
+    When the standard scanners can't detect your specific contraband, the airport
+    commissions a **custom scanner**: the machine that declares what it looks for
+    (the `Constraint`) plus the trained operator who reads it and files the report
+    (the `ConstraintValidator`). One describes the rule; the other enforces it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,14 @@
     adds built-in stampede protection. Remember: only PSR-6 (via a
     `TagAwareAdapter`) supports tags; PSR-16 does not.
 
+!!! example "Real-world analogy"
+    A cache is a **notepad you check before doing expensive work**. Before
+    recomputing a costly value you glance at the pad (`get()`): if the answer is
+    already written there (a hit) you read it off; if not (a miss) you do the work
+    **once**, jot it down, and hand it back — next time you just read the note.
+    Tags are sticky labels grouping related notes so you can tear them all out at
+    once (`invalidateTags()`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
