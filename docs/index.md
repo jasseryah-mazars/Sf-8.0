@@ -39,8 +39,15 @@ flowchart LR
 3. Work each topic area's chapters; attempt the exercises and inline questions
    *before* revealing answers.
 4. Self-test with the **[Practice Quiz Bank](revision/quiz.md)**.
-5. In the final days, drill the **[Revision Hub](revision/index.md)** — master cheat
-   sheet, trap index, and memory aids.
+5. In the final days, drill the **[Revision Hub](revision/index.md)** — pick a
+   **[revision mode](revision/modes.md)** by the time you have.
+
+!!! tip "Three ways to study (your coach picks by time)"
+    - :material-flash: **Quick (5–15 min):** [Cheat Sheet](revision/cheat-sheet.md),
+      [Flashcards](revision/flashcards/index.md), [Easily Confused](revision/confusions.md).
+    - :material-book-open-page-variant: **Deep (45–90 min):** a topic area end-to-end
+      (Deep Dive + exercises).
+    - :material-timer: **Exam (90 min):** the timed [Mock Exam](revision/mock-exam.md).
 
 !!! tip "Start here"
     New to the platform? Read the [Exam Format](exam-guide/format.md), then jump to
@@ -76,7 +83,8 @@ flowchart LR
 
 - [Exam Guide](exam-guide/index.md) — format, scoring, Advanced vs Expert, strategy.
 - [Roadmap](roadmap.md) — the ordered study path and dependency graph.
-- [Revision Hub](revision/index.md) — cheat sheets, traps, memory aids, quiz.
+- [Revision Hub](revision/index.md) — modes, cheat sheets, flashcards, confusions,
+  mock exam, traps, memory aids, quiz.
 
 ---
 

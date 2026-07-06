@@ -301,7 +301,26 @@ nav:
       - Clock Component: miscellaneous/clock.md
   - Revision Hub:
       - revision/index.md
+      - Revision Modes: revision/modes.md
       - Master Cheat Sheet: revision/cheat-sheet.md
+      - Easily Confused: revision/confusions.md
       - Top Certification Traps: revision/traps.md
       - Memory Aids: revision/memory-aids.md
+      - Flashcards:
+          - revision/flashcards/index.md
+          - PHP & Web Security: revision/flashcards/php-web-security.md
+          - HTTP: revision/flashcards/http.md
+          - Symfony Architecture: revision/flashcards/architecture.md
+          - Controllers: revision/flashcards/controllers.md
+          - Routing: revision/flashcards/routing.md
+          - Templating (Twig): revision/flashcards/twig.md
+          - Forms: revision/flashcards/forms.md
+          - Data Validation: revision/flashcards/validation.md
+          - Dependency Injection: revision/flashcards/dependency-injection.md
+          - Security: revision/flashcards/security.md
+          - HTTP Caching: revision/flashcards/http-caching.md
+          - Console: revision/flashcards/console.md
+          - Automated Tests: revision/flashcards/testing.md
+          - Miscellaneous: revision/flashcards/miscellaneous.md
+      - Mock Exam: revision/mock-exam.md
       - Practice Quiz Bank: revision/quiz.md

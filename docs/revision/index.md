@@ -1,60 +1,66 @@
-# Revision Hub
+# Revision Hub — Your Coach
 
-Your last-mile toolkit. When you have worked through the topic areas, this hub is
-where you consolidate: glanceable cheat sheets, the cross-area trap index, memory
-devices for the orderings you must recall, and the practice quiz bank.
+This is your **last-mile coach**, not a document dump. Tell it how much time you
+have; it tells you what to open.
 
-!!! abstract "Use this in the final stretch"
-    Stop reading new material a few days before the exam. Cycle through these four
-    pages instead, on a widening spaced-repetition schedule, and re-run the quiz.
+!!! abstract "Pick a mode (full guide: Revision Modes)"
+    - :material-flash: **Quick (5–15 min):** [Cheat Sheet](cheat-sheet.md) → [Flashcards](flashcards/index.md) → [Easily Confused](confusions.md)
+    - :material-book-open-page-variant: **Deep (45–90 min):** work a [topic area](../roadmap.md) end-to-end (Deep Dive + exercises)
+    - :material-timer: **Exam (90 min):** the [Mock Exam](mock-exam.md), timed, no notes
 
-## The four pages
+    → **[Revision Modes](modes.md)** explains each in detail.
 
-- **[Master Cheat Sheet](cheat-sheet.md)** — the highest-yield facts across all 14
-  topic areas, condensed to fit on a phone screen. Links out to each area index.
-- **[Top Certification Traps](traps.md)** — the subtle distinctions the exam loves,
-  gathered from every area.
-- **[Memory Aids](memory-aids.md)** — mnemonics for the orderings and enumerations
-  you must recall cold (kernel events, status classes, cache directives, badges).
-- **[Practice Quiz Bank](quiz.md)** — how to run the `quiz/` YAML bank with
-  certificationy-cli, and how questions map to chapters.
+## Your toolkit
 
-## Topic-area cheat sheets
+| Tool | Use it to | When |
+|---|---|---|
+| **[Master Cheat Sheet](cheat-sheet.md)** | Refresh highest-yield facts per area | Quick |
+| **[Flashcards](flashcards/index.md)** | Active recall, 534 tap-to-reveal cards (+ Anki CSV) | Quick, daily |
+| **[Easily Confused](confusions.md)** | Kill the near-miss traps the exam loves | Quick, exam morning |
+| **[Top Certification Traps](traps.md)** | The subtle distinctions, gathered per area | Quick/Deep |
+| **[Memory Aids](memory-aids.md)** | Mnemonics for orderings you must recall cold | Quick |
+| **[Mock Exam](mock-exam.md)** | 75 Q / 90 min simulation, exam-weighted | Exam |
+| **[Practice Quiz Bank](quiz.md)** | Run the full bank with certificationy-cli | Deep/Exam |
 
-Each area's own `index.md` and its chapters carry a **Last-minute revision** block.
-Jump straight to an area to refresh it:
+!!! tip "Priority order when time is short"
+    Drill the **Critical** areas first: **Architecture, Dependency Injection,
+    Security, Messenger**. See the [Roadmap](../roadmap.md).
 
-- [PHP & Web Security](../php-web-security/index.md)
-- [HTTP](../http/index.md)
-- [Symfony Architecture](../architecture/index.md)
-- [Dependency Injection](../dependency-injection/index.md)
-- [Controllers](../controllers/index.md)
-- [Routing](../routing/index.md)
-- [Templating (Twig)](../twig/index.md)
-- [Data Validation](../validation/index.md)
-- [Forms](../forms/index.md)
-- [Security](../security/index.md)
-- [HTTP Caching](../http-caching/index.md)
-- [Console](../console/index.md)
-- [Automated Tests](../testing/index.md)
-- [Miscellaneous](../miscellaneous/index.md)
+## Jump to a topic-area recap
 
-## Suggested final-week plan
+Each area's `index.md` and chapters carry a **Last-minute revision** block:
+
+- [PHP & Web Security](../php-web-security/index.md) ·
+  [HTTP](../http/index.md) ·
+  [Symfony Architecture](../architecture/index.md) ·
+  [Dependency Injection](../dependency-injection/index.md) ·
+  [Controllers](../controllers/index.md) ·
+  [Routing](../routing/index.md) ·
+  [Templating (Twig)](../twig/index.md) ·
+  [Data Validation](../validation/index.md) ·
+  [Forms](../forms/index.md) ·
+  [Security](../security/index.md) ·
+  [HTTP Caching](../http-caching/index.md) ·
+  [Console](../console/index.md) ·
+  [Automated Tests](../testing/index.md) ·
+  [Miscellaneous](../miscellaneous/index.md)
+
+## Suggested final week
 
 ```mermaid
 flowchart LR
-    D7[Day -7..-3: cheat sheet + quiz per area] --> D2[Day -2: trap index + memory aids]
-    D2 --> D1[Day -1: skim only, rest]
-    D1 --> E[Exam day]
+    A["Days -7..-4<br>Deep mode: Critical areas"] --> B["Days -3..-2<br>Quick mode + 1 mock/day"]
+    B --> C["Day -1<br>Confusions + flashcards, rest"]
+    C --> D["Exam day<br>skim cheat sheet only"]
 ```
 
-!!! tip "Priority order"
-    If time is short, drill the **Critical** areas first: **Architecture,
-    Dependency Injection, Security, Messenger**. See the [Roadmap](../roadmap.md).
+!!! warning "Stop learning new material ~3 days out"
+    In the final stretch, cycle these tools on a widening spaced-repetition
+    schedule and re-run mocks. New topics late add stress, not marks.
 
 ---
 
-<small>Related: [Master Cheat Sheet](cheat-sheet.md) · [Top Certification Traps](traps.md) · [Exam Guide](../exam-guide/index.md)</small>
+<small>Related: [Revision Modes](modes.md) · [Master Cheat Sheet](cheat-sheet.md) · [Easily Confused](confusions.md) · [Mock Exam](mock-exam.md) · [Exam Guide](../exam-guide/index.md)</small>
 
 ## Official References
 
