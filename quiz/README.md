@@ -48,3 +48,43 @@ categories:
 `php-web-security.yml`, `http.yml`, `architecture.yml`, `controllers.yml`,
 `routing.yml`, `twig.yml`, `forms.yml`, `validation.yml`, `dependency-injection.yml`,
 `security.yml`, `http-caching.yml`, `console.yml`, `testing.yml`, `miscellaneous.yml`.
+
+---
+
+## Rich metadata (v2) — the Global Question Bank
+
+Questions may carry metadata that powers the Chapter Exams and the
+coverage/difficulty/type-aware mock generator. Base fields stay required;
+metadata fields are strongly recommended on new/updated questions.
+
+```yaml
+categories:
+  - name: "Security — Voters"
+    questions:
+      - id: "SEC-VOTERS-01"          # unique, stable: <AREA>-<SUBTOPIC>-<n>
+        question: "…"
+        type: "single"                # see types below
+        difficulty: "medium"          # easy | medium | hard
+        subchapter: "security/voters" # docs path without .md (maps to the chapter)
+        concepts: ["voter", "access-decision", "strategy"]
+        syllabus: "Security → Voters & voting strategies"
+        answers:
+          - { value: "…", correct: true }
+          - { value: "…", correct: false }
+        explanation: >-
+          Why the correct answer is correct, why the others are wrong, the
+          Symfony-internal behaviour that justifies it, and the common misconception.
+        documentation: "https://symfony.com/doc/current/security/voters.html"
+```
+
+**`type` enum:** `single` · `multiple` · `true-false` · `code` (code-reading) ·
+`config` (configuration analysis) · `debug` (debugging scenario) · `internals`
+(internal Symfony behaviour) · `scenario` (real-world) · `trap` (certification trick).
+
+**Rules for v2 questions**
+- `id` unique across the whole bank; `subchapter` matches a `docs/<area>/<file>` (no `.md`).
+- Balance types across each area; don't make everything `single`.
+- `explanation` must justify correct **and** wrong answers where applicable.
+- Every question maps to a syllabus objective via `syllabus`.
+- Coverage goal: **every subchapter has at least one question** (checked by
+  `tools/validate_quiz.py`).

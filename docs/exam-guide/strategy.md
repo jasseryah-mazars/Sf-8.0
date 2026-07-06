@@ -88,6 +88,35 @@ the exam.
     cheat sheet and trap index only. Prepare your room and equipment for the
     proctored session (see [Exam Format](format.md)).
 
+## Community prep wisdom (what past candidates report)
+
+Distilled from experienced candidates and official/partner prep resources (links
+below). These recur across almost every account:
+
+- **The exam tests precise recall, not vibes.** Exact class names, method
+  signatures, config keys, and **default values** are fair game. "Roughly right"
+  loses points. → drill the [Cheat Sheet](../revision/cheat-sheet.md) and [Glossary](../glossary.md).
+- **Internals over usage.** Many questions probe *how Symfony works inside* (kernel
+  event order, DI compilation, the security passport flow) — not just how to call
+  the API. Do the [Deep Dive](../architecture/request-handling.md) sections.
+- **Pure PHP shows up.** OOP, SPL, closures, traits, and PHP 8.4 syntax are on the
+  exam — don't skip [PHP & Web Security](../php-web-security/index.md).
+- **Read code/config carefully.** Some questions hinge on one line, a deprecated
+  call, or a subtle default. Slow down on code-reading items.
+- **Breadth beats depth.** Questions are randomized across the whole syllabus, so
+  broad coverage matters more than mastering one area. Use the [Study Planner](../revision/study-planner.md).
+- **Time is the real enemy.** ~72 s/question. Flag and move on; answer everything
+  (no negative marking). Practise with the [Mock Exams](../revision/mock-exam.md).
+- **Practise with a question bank.** Repeated retrieval under time pressure is the
+  single biggest score-mover — cycle the [Flashcards](../revision/flashcards/index.md)
+  and mocks, and re-test only what you miss.
+
+!!! info "Further reading (community & partner resources)"
+    - [SensioLabs — official Symfony 8 certification prep course](https://sensiolabs.com/fr/formation/cours/preparation-a-la-certification-symfony-8)
+    - [baksla.sh — Symfony certification write-up](https://baksla.sh/blog/symfony-certification)
+    - [DND — comment bien préparer sa certification Symfony](https://www.dnd.fr/comment-bien-preparer-sa-certification-symfony-7/)
+    - [Popov — My experience with the Symfony certification (Medium)](https://medium.com/@popov256/my-experience-with-symfony-certification-c265fe60422f)
+
 ---
 
 <small>Related: [Exam Format & Scoring](format.md) · [Top Certification Traps](../revision/traps.md) · [Memory Aids](../revision/memory-aids.md)</small>
