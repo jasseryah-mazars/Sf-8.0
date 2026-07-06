@@ -1,5 +1,11 @@
 # Custom Commands
 
+!!! tip "In a nutshell"
+    A custom command is a class marked `#[AsCommand]`; the modern style is invokable
+    — an `__invoke()` method with `#[Argument]`/`#[Option]` parameters that extends
+    nothing. Remember for the exam: return `Command::SUCCESS` (0), `FAILURE` (1) or
+    `INVALID` (2), never a bare integer.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

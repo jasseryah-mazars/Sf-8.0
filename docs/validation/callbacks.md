@@ -1,5 +1,12 @@
 # Custom Callback Validators
 
+!!! tip "In a nutshell"
+    A `#[Assert\Callback]` runs your own method during validation — the quickest
+    way to do one-off, cross-field checks. You add errors via
+    `$context->buildViolation()`, never by returning a value. Remember: the
+    instance form is `(ExecutionContextInterface, mixed $payload)`; the static form
+    gets the object as its first argument.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

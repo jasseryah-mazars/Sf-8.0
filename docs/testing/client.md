@@ -1,5 +1,11 @@
 # The Test Client
 
+!!! tip "In a nutshell"
+    The test client is a `KernelBrowser` that talks to the kernel in-process like a
+    headless browser, keeping a cookie jar and history. Every navigation call
+    returns a `Crawler`, not a `Response`. Exam hook: redirects are **not** followed
+    automatically — you call `followRedirect()`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

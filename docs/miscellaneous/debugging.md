@@ -1,5 +1,11 @@
 # Code Debugging (VarDumper, Debug, Stopwatch)
 
+!!! tip "In a nutshell"
+    VarDumper is a smarter `var_dump` that clones a value into an immutable
+    `Data` snapshot, then renders it with a CLI or HTML dumper. Stopwatch times
+    named events for the profiler. Exam gold: `dd()` dumps and exits; `dump()`
+    keeps running.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

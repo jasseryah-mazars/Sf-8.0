@@ -1,5 +1,11 @@
 # Command Configuration
 
+!!! tip "In a nutshell"
+    A command's metadata (name, description, aliases, hidden, help) is declared with
+    the `#[AsCommand]` attribute or the `configure()` method. Remember for the exam:
+    the lifecycle runs configure → initialize → interact → execute, and the name
+    belongs in the attribute so commands load lazily.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

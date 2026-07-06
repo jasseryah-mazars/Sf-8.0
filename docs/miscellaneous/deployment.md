@@ -1,5 +1,11 @@
 # Deployment Best Practices
 
+!!! tip "In a nutshell"
+    A prod deploy ships prod-only deps, a warmed cache, `APP_DEBUG=0`, and
+    opcache/preload enabled so no per-request work parses config. Exam gold:
+    prod loads the compiled container as-is and never auto-detects config
+    changes, so you must clear and warm the cache on every deploy.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

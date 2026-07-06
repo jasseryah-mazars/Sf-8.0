@@ -1,5 +1,11 @@
 # Tags
 
+!!! tip "In a nutshell"
+    A tag is a build-time label on a service; on its own it does nothing until a
+    collector consumes it. Use `tagged_iterator` / `#[AutowireIterator]` for
+    instances, or `tagged_locator` / `#[AutowireLocator]` for a lazy keyed set.
+    Highest-yield fact: **higher `priority` = earlier** in the iterator.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

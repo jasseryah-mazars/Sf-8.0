@@ -1,5 +1,11 @@
 # Form Events
 
+!!! tip "In a nutshell"
+    Form events let you change a form while it is being built or submitted — add
+    fields dynamically or clean raw input. The one fact to burn in: two sequences,
+    **PRE_SET_DATA → POST_SET_DATA** (setting data) and **PRE_SUBMIT → SUBMIT →
+    POST_SUBMIT** (submitting).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -78,8 +84,9 @@ You can only add/remove fields **before** they are bound — that is why these t
 ### Listener vs subscriber
 
 - **Closure listener:** `$builder->addEventListener(FormEvents::PRE_SUBMIT, fn (FormEvent $e) => ...)`.
-- **Subscriber:** a class implementing `Symfony\Component\Form\FormEventSubscriberInterface`
-  (which extends the EventDispatcher's `EventSubscriberInterface`) declaring
+- **Subscriber:** a class implementing the EventDispatcher's
+  `Symfony\Component\EventDispatcher\EventSubscriberInterface` (the Form component
+  has no dedicated `FormEventSubscriberInterface`) declaring
   `getSubscribedEvents()`; add with `$builder->addEventSubscriber($subscriber)`.
 
 Subscribers are reusable across forms and testable in isolation.

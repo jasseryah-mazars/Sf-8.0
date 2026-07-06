@@ -1,5 +1,12 @@
 # Autowiring
 
+!!! tip "In a nutshell"
+    Autowiring reads a constructor parameter's type-hint and injects the matching
+    service — all resolved at **compile time**, so mistakes are build errors. It
+    never guesses scalars. Highest-yield fact: multiple candidates with no default
+    alias → an **ambiguity error**; disambiguate with `#[Target]`, `#[Autowire]`,
+    or a named alias.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

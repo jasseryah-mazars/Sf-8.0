@@ -1,5 +1,11 @@
 # Functional Tests
 
+!!! tip "In a nutshell"
+    Functional tests boot the *real* kernel and drive it like a browser to prove a
+    whole request works end to end. `WebTestCase` (HTTP + client) extends
+    `KernelTestCase` (kernel only). Exam hook: `self::getContainer()` returns the
+    special **test** container, so it can hand you even **private** services.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

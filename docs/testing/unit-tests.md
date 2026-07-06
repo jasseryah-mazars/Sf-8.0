@@ -1,5 +1,11 @@
 # Unit Tests with PHPUnit
 
+!!! tip "In a nutshell"
+    A unit test exercises one class in isolation, faking its collaborators with
+    test doubles so a failure points at exactly one unit. You extend PHPUnit's
+    `TestCase` directly — Symfony ships no unit-test base class. Exam hook: PHPUnit
+    11/12 is attribute-only, so it is `#[DataProvider]`, never `@dataProvider`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -40,7 +46,7 @@ generate a subclass of the target type at runtime:
 
 - **Stub** — supplies canned return values; it does **not** assert how it is used.
 - **Mock** — a stub that *also* verifies **expectations** (`expects()`), checked
-  automatically during teardown via `Mockery`-style verification.
+  automatically by PHPUnit's own verification during teardown.
 
 Both are configured with `method()`, `willReturn()`, `willReturnCallback()`,
 `willThrowException()`, and matchers like `$this->once()`,

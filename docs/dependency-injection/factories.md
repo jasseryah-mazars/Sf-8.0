@@ -1,5 +1,12 @@
 # Factories
 
+!!! tip "In a nutshell"
+    A factory builds a service the container cannot just `new` — a static method,
+    another service's method, or an invokable object — and the container stores its
+    return value. Highest-yield fact: `arguments:` go to the **factory method**
+    (not a constructor), and there is **no `#[Factory]` attribute** (use
+    `#[Autowire(factory:)]`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

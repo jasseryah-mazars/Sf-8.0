@@ -1,5 +1,11 @@
 # Built-in Constraints
 
+!!! tip "In a nutshell"
+    Symfony ships a constraint for almost every common rule; you attach them as
+    `#[Assert\...]` attributes on the value they guard. The fact examiners love:
+    `NotBlank` rejects the empty string, while `NotNull` accepts it — only a real
+    `null` fails `NotNull`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

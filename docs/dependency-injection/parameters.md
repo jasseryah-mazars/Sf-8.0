@@ -1,5 +1,11 @@
 # Configuration Parameters
 
+!!! tip "In a nutshell"
+    Parameters (`%app.name%`) are static config **frozen at compile time**; env
+    vars (`%env(DATABASE_URL)%`) resolve **at runtime**, so one compiled cache
+    works across environments. Highest-yield fact: env **processors** like
+    `%env(int:MAX)%` cast/transform the raw string and chain right-to-left.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
