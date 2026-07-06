@@ -1,5 +1,11 @@
 # Exception Handling
 
+!!! tip "In a nutshell"
+    When an uncaught exception escapes, the kernel catches it and dispatches
+    `kernel.exception` so a listener can turn it into a `Response`. Highest-yield:
+    `ErrorListener` runs at priority **-128** (yours run first), and only
+    `HttpExceptionInterface` carries a status code — everything else becomes **500**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

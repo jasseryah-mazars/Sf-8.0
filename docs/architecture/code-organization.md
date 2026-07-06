@@ -1,5 +1,11 @@
 # Code Organization
 
+!!! tip "In a nutshell"
+    A Symfony app follows a conventional tree so tools, recipes and developers know
+    where everything lives. Highest-yield: `public/` is the only web root
+    (`public/index.php`), bundles are enabled in `config/bundles.php`, and
+    `App\Kernel` stays tiny thanks to `MicroKernelTrait`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

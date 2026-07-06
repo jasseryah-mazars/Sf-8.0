@@ -1,5 +1,11 @@
 # Naming Conventions
 
+!!! tip "In a nutshell"
+    Consistent names are functional, not cosmetic — they let autowiring,
+    autoconfiguration and the router work automatically. Highest-yield: `Interface`
+    and `Trait` **suffixes**, `Abstract` **prefix**, service id = **FQCN**, routes
+    **snake_case**, env vars **UPPER_SNAKE** (`APP_`-prefixed).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

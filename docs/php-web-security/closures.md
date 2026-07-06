@@ -1,5 +1,10 @@
 # Anonymous Functions & Closures
 
+!!! tip "In a nutshell"
+    A closure is a `Closure` object carrying a bound `$this` and a scope. Exam
+    hook: `use ($x)` captures **by value at definition time** (add `&` for a
+    reference), while arrow functions `fn` auto-capture by value only.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

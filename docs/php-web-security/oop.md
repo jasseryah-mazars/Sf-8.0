@@ -1,5 +1,10 @@
 # Object-Oriented Programming
 
+!!! tip "In a nutshell"
+    PHP objects use single class inheritance plus interfaces and traits. The one
+    fact examiners love: `static::` resolves to the *called* class at runtime
+    (late static binding), while `self::` is fixed at compile time.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

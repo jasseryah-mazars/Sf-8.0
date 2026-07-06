@@ -1,5 +1,11 @@
 # Backward Compatibility Promise
 
+!!! tip "In a nutshell"
+    The BC promise guarantees code written against the stable public API keeps
+    working across every minor and patch within a major. Highest-yield: BC breaks
+    happen **only in a major, and only after deprecation** — `@internal`,
+    `@experimental` and `final` sit outside the promise.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

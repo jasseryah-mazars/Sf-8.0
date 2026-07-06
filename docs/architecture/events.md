@@ -1,5 +1,11 @@
 # Event Dispatcher & Kernel Events
 
+!!! tip "In a nutshell"
+    The EventDispatcher is how Symfony stays decoupled: code dispatches an event
+    object and any number of listeners react. Highest-yield: **higher priority runs
+    first**, `dispatch()` takes the **event object first** (PSR-14), and a subscriber
+    declares its events in `getSubscribedEvents()`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

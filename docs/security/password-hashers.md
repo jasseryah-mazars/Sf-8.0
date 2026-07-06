@@ -1,5 +1,11 @@
 # Password Hashers
 
+!!! tip "In a nutshell"
+    Passwords are stored as slow, salted one-way hashes; you configure hashers per
+    user class and never verify them by hand.
+    Exam hook: use `auto` (currently bcrypt) as the default, and transparent rehash
+    needs **both** `migrate_from` *and* a `PasswordUpgraderInterface` provider.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

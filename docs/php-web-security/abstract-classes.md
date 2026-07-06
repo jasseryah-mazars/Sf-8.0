@@ -1,5 +1,10 @@
 # Abstract Classes
 
+!!! tip "In a nutshell"
+    An abstract class can't be instantiated; it mixes shared state with methods
+    subclasses must implement. Key fact: a single `abstract` method forces the
+    whole class to be declared `abstract`, and you can `extends` only one.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

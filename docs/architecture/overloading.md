@@ -1,5 +1,11 @@
 # Framework Overloading
 
+!!! tip "In a nutshell"
+    "Overloading" means changing what a third-party bundle provides without touching
+    `vendor/`. Highest-yield: services via **decoration/redefinition**, templates via
+    `templates/bundles/<BundleName>/`, config via `config/packages/` — and bundle
+    inheritance (`getParent()`) is **gone**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

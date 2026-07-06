@@ -1,5 +1,11 @@
 # Official Best Practices
 
+!!! tip "In a nutshell"
+    Symfony's official Best Practices are the pragmatic conventions the exam expects
+    you to know and justify. Highest-yield: business logic goes in **private,
+    autowired services** (thin controllers), routing/validation use **attributes**,
+    and secrets live in the vault.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

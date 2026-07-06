@@ -1,5 +1,11 @@
 # Symfony Flex
 
+!!! tip "In a nutshell"
+    Symfony Flex is a Composer plugin that turns `composer require` into a fully
+    configured feature by applying **recipes** and resolving **aliases**.
+    Highest-yield: it runs at Composer time only (no runtime role), and
+    `symfony.lock` tracks recipes — not package versions, which is `composer.lock`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -73,7 +79,7 @@ flowchart LR
 
 ### How bundles get registered
 
-FrameworkBundle's `bundles` configurator writes entries into `config/bundles.php`,
+Flex's `bundles` configurator writes entries into `config/bundles.php`,
 an array mapping bundle class → environments:
 
 ```php

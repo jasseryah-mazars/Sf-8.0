@@ -1,5 +1,11 @@
 # Request Handling (HttpKernel)
 
+!!! tip "In a nutshell"
+    Every request becomes a `Response` through one method — `HttpKernel::handle()` —
+    which fires kernel events around your controller. Highest-yield: memorise the
+    order **request → controller → controller_arguments → view → response →
+    finish_request → terminate** (plus `exception`, out of band, on error).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

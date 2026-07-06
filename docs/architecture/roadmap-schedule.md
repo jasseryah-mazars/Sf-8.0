@@ -1,5 +1,10 @@
 # Roadmap & Schedule
 
+!!! tip "In a nutshell"
+    Symfony's calendar is fixed and public: a minor every **May and November**, a
+    major plus its LTS every **two years**. Highest-yield for 8.x: `8.4` is the
+    **LTS** and ships alongside `9.0` in **November 2027**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,10 @@
 # Release Management
 
+!!! tip "In a nutshell"
+    Symfony uses Semantic Versioning on a time-based schedule: minors in
+    May/November, majors every two years. Highest-yield: minors **never break BC**
+    (only majors do, by removing deprecated code), and `8.4` is the 8.x **LTS**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

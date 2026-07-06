@@ -1,5 +1,12 @@
 # Configuration (security.yaml)
 
+!!! tip "In a nutshell"
+    `security.yaml` is the single declarative surface — `providers`, `firewalls`,
+    `access_control`, `password_hashers`, `role_hierarchy` — compiled into a
+    `FirewallMap` and per-firewall services.
+    Exam hook: Symfony 8 **removed** `enable_authenticator_manager`; the
+    authenticator system is the only one.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

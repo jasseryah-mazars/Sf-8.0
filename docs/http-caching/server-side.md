@@ -104,7 +104,7 @@ public function __construct(
 | `stale_while_revalidate` | `2` | Default background-revalidation window |
 | `stale_if_error` | `60` | Default serve-stale-on-error window |
 | `trace_header` | `X-Symfony-Cache` | Header carrying the hit/miss trace |
-| `trace_level` | `full`/`none` | Verbosity of the trace |
+| `trace_level` | `full` (debug) / `short` | Verbosity of the trace (`none`, `short`, `full`) |
 
 ### The `X-Symfony-Cache` trace
 

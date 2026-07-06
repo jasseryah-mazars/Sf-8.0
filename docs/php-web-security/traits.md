@@ -1,5 +1,10 @@
 # Traits
 
+!!! tip "In a nutshell"
+    Traits copy methods into a class at compile time for horizontal reuse — but
+    they are **not types**, so you cannot type-hint against one. Precedence to
+    memorise: class > trait > inherited parent.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

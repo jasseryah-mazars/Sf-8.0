@@ -1,5 +1,10 @@
 # String Interpolation
 
+!!! tip "In a nutshell"
+    Build strings three ways: `#{expr}` interpolation (double quotes only), `~`
+    concatenation, and the `format` (sprintf) filter. Exam hook: `~` joins as strings
+    while `+` adds numbers, and `~` has lower precedence than arithmetic.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

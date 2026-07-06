@@ -1,5 +1,10 @@
 # Debugging Variables
 
+!!! tip "In a nutshell"
+    `{{ dump(x) }}` prints a rich VarDumper view inline; `{% dump x %}` sends it to the
+    toolbar without page markup. Exam hook: dump tooling exists only in debug/dev — a
+    stray `dump()` errors in prod.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,10 @@
 # Interfaces & Type Declarations
 
+!!! tip "In a nutshell"
+    Interfaces are pure contracts, and one class can implement many of them. The
+    exam hinge: when overriding, **return types are covariant** (may narrow) and
+    **parameter types are contravariant** (may widen) — reverse them and PHP fatals.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

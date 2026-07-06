@@ -1,5 +1,12 @@
 # Roles
 
+!!! tip "In a nutshell"
+    A role is a `ROLE_`-prefixed string carried on the token and expanded by
+    `role_hierarchy` before voting.
+    Exam hook: `IS_AUTHENTICATED_*` and `PUBLIC_ACCESS` are **not** roles (handled
+    by `AuthenticatedVoter`), and `IS_AUTHENTICATED_ANONYMOUSLY` was replaced by
+    `PUBLIC_ACCESS`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,10 @@
 # Assets Management
 
+!!! tip "In a nutshell"
+    `asset('css/app.css')` turns a path relative to `public/` into a public URL with
+    base path and version applied. Exam hook: `asset()` is for static files (versioning
+    = cache busting) while `path()`/`url()` are for routes; AssetMapper/Encore are out of scope.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

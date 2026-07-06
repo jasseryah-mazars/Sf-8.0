@@ -1,5 +1,10 @@
 # Namespaces & Autoloading
 
+!!! tip "In a nutshell"
+    Namespaces prevent name clashes; PSR-4 maps a prefix to a directory so
+    Composer autoloads classes. The trap: unqualified **function/constant** calls
+    fall back to the global namespace, but **class names do not**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

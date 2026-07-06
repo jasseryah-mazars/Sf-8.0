@@ -1,5 +1,11 @@
 # Deprecations Best Practices
 
+!!! tip "In a nutshell"
+    A deprecation says an API still works now but will be removed in the next major,
+    giving you a full cycle to migrate. Highest-yield: raise them with
+    `trigger_deprecation(package, version, message, ...args)` — an
+    `E_USER_DEPRECATED` notice from `symfony/deprecation-contracts`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

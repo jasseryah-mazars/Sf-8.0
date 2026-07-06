@@ -76,8 +76,9 @@ sequenceDiagram
   `render_esi` Twig function delegates to the fragment handler
   (`Symfony\Component\HttpKernel\Fragment\FragmentHandler`).
 - Fragment URLs are signed by
-  `Symfony\Component\HttpKernel\Fragment\UriSigner` (via `framework.fragments`
-  and the app secret) so arbitrary `_fragment` calls cannot be forged.
+  `Symfony\Component\HttpFoundation\UriSigner` (via `framework.fragments`
+  and the app secret) so arbitrary `_fragment` calls cannot be forged. (The URI
+  is built by `Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator`.)
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\HttpCache\Esi` and

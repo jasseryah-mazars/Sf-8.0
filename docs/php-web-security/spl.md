@@ -1,5 +1,10 @@
 # SPL — Standard PHP Library
 
+!!! tip "In a nutshell"
+    The SPL makes your objects behave natively — indexable, countable, iterable —
+    and ships ready-made stacks, queues and heaps. Exam hook: a **generator is a
+    single-use, lazy `Iterator`** you cannot rewind once consumed.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

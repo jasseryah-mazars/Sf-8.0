@@ -1,5 +1,11 @@
 # License & Trademark
 
+!!! tip "In a nutshell"
+    Symfony's code is **MIT-licensed** (permissive, non-copyleft), so you can use it
+    even in closed-source products. Highest-yield: the only obligation is keeping the
+    copyright/permission notice, and the **"Symfony" name/logo is a separate
+    trademark**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

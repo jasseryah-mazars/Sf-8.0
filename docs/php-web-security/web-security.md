@@ -1,5 +1,10 @@
 # Web Security Fundamentals
 
+!!! tip "In a nutshell"
+    Every Symfony security feature defends one concrete web threat — learn the
+    pairing (XSS→Twig escaping, CSRF→token+SameSite, SQLi→prepared statements).
+    Store passwords only with `password_hash()` (bcrypt/argon2id), never plain hashes.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

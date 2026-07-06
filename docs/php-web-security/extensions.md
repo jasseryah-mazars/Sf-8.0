@@ -1,5 +1,10 @@
 # PHP Extensions
 
+!!! tip "In a nutshell"
+    Most PHP capability lives in compiled **extensions**; Symfony declares the
+    ones it needs as Composer `ext-*` requirements. Remember `strlen()` counts
+    **bytes** while `mb_strlen()` counts **characters** — the UTF-8 length trap.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

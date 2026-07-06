@@ -1,5 +1,10 @@
 # PHP API (up to 8.4)
 
+!!! tip "In a nutshell"
+    A version-by-version tour of the modern PHP syntax you must recognise on
+    sight. Remember which release added what — the PHP 8.4 headliners are
+    **property hooks** and **asymmetric visibility** (`public private(set)`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

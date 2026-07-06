@@ -1,5 +1,11 @@
 # Components
 
+!!! tip "In a nutshell"
+    Symfony is both a set of standalone **components** (independent Composer
+    packages) and a **framework** that wires them together. Highest-yield:
+    components are usable without the framework, and contracts (`symfony/*-contracts`)
+    are interface-only packages you type-hint against.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

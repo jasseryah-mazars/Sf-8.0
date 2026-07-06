@@ -1,5 +1,11 @@
 # Interoperability & PSRs
 
+!!! tip "In a nutshell"
+    PSRs are PHP-FIG standards that let independent libraries interoperate; Symfony
+    **implements** some and **consumes** others. Highest-yield: it implements
+    PSR-6/11/14/16/20 and consumes PSR-3, and **HttpFoundation is not PSR-7** (a
+    bridge converts between them).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

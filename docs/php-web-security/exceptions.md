@@ -1,5 +1,10 @@
 # Exception & Error Handling
 
+!!! tip "In a nutshell"
+    Since PHP 7, both `Error` and `Exception` implement `Throwable`. Highest-yield
+    fact: `catch (\Exception)` misses engine faults like `TypeError` — catch
+    `\Throwable` to get both, and remember `finally` always runs.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

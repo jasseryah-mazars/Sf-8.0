@@ -1,5 +1,11 @@
 # Bridges
 
+!!! tip "In a nutshell"
+    A bridge is the glue that lets a Symfony component work with one specific
+    third-party library, kept in its own package so the component stays
+    dependency-free. Highest-yield: bridges live in `src/Symfony/Bridge/`, provide
+    classes, and are wired into an app by a **bundle**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
