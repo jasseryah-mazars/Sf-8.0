@@ -239,11 +239,27 @@ not for heavy computation — it is interpreted.
     - `debug:dotenv`, `debug:config <bundle>`, `composer dump-env prod`.
     - Providers implement `ExpressionFunctionProviderInterface`.
 
+## Connections
+
+- **Depends on:** [DI: Parameters](../dependency-injection/parameters.md) — validated config becomes container parameters and service arguments.
+- **Reused in:** [Deployment](deployment.md) — `dump-env prod` compiles the cascade; [Runtime](runtime.md) reads `APP_ENV`/`APP_DEBUG` from `$context`.
+- **Confused with:** app-level env vars — the Config component defines **bundle** schemas, not per-app settings.
+
 ## Official References
 - [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
 - [Official docs — Config component](https://symfony.com/doc/current/components/config.html)
 - [Official docs — ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html)
 - [Symfony source — Dotenv](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Dotenv/Dotenv.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a `TreeBuilder` schema beats reading raw config arrays
+- [ ] build/validate a config tree and evaluate an expression in Symfony 8
+- [ ] debug env precedence (real env > `.env.<env>.local` > … > `.env`)
+- [ ] spot the trick: `.env.local` is skipped in `test`; `.env.local.php` bypasses parsing
+- [ ] describe how `Processor::processConfiguration()` merges and validates
 
 ---
 

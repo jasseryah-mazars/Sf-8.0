@@ -38,6 +38,15 @@ Conventions here are strong but not magic — they are wired by the `Kernel` and
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Your skeleton `App\Kernel` is almost empty — no `registerBundles()` body. How
+    does Symfony still know which bundles to load and where config lives?
+
+??? note "Reveal"
+    `MicroKernelTrait` supplies `registerBundles()` (reads `config/bundles.php`) and
+    `registerContainerConfiguration()` (loads `config/packages/*` and
+    `services.yaml`). The trait is why the class needs almost no code.
+
 ### The application skeleton
 
 | Path | Purpose |
@@ -253,10 +262,26 @@ code.
     - Env overrides → `config/packages/<env>/`.
     - Kernel = `MicroKernelTrait`.
 
+## Connections
+
+- **Depends on:** [Flex](flex.md) — recipes create and maintain the conventional files this layout expects.
+- **Reused in:** [Dependency Injection](../dependency-injection/index.md) — `config/` is compiled into the container; [Controllers](../controllers/index.md) live under `src/Controller/`.
+- **Confused with:** [Framework Overloading](overloading.md) — app config in `config/` vs overriding a bundle's shipped config are different concerns.
+
 ## Official References
 - [Official docs — Configuration & structure](https://symfony.com/doc/current/configuration.html)
 - [Official docs — Best practices](https://symfony.com/doc/current/best_practices.html)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a conventional layout lets tools and recipes work without config
+- [ ] place a controller, template, translation and env-config file correctly
+- [ ] debug a template Twig can't find because it sits outside `templates/`
+- [ ] spot that bundles are enabled in `config/bundles.php`, not `services.yaml`
+- [ ] explain how `MicroKernelTrait` keeps `App\Kernel` nearly empty
 
 ---
 

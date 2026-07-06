@@ -37,6 +37,16 @@ parameters, the bundle defines a **schema** (`Configuration`) and an
 **extension** (`Extension`) that reads validated values and registers the right
 services and parameters. This is how bundle options become working services.
 
+!!! question "Predict first"
+    Your bundle needs to set a default for *another* bundle (say a `framework`
+    option). In which method do you do it, and does it run before or after the other
+    bundle's `load()`?
+
+??? note "Reveal"
+    Use `prepend()` (`PrependExtensionInterface`) and
+    `prependExtensionConfig('framework', [...])`. It runs **before** all `load()`
+    calls, so the target bundle loads with your defaults merged in.
+
 ## Deep Dive — how it works internally
 
 ### Two collaborating classes
@@ -246,10 +256,30 @@ to set sane defaults for another bundle, not to override user intent.
     - `prependExtensionConfig('other_bundle', [...])`.
     - `config:dump-reference` (schema) vs `debug:config` (values).
 
+## Connections
+
+- **Depends on:** [Service Registration](registration.md) — `load()` registers the
+  services the config describes.
+- **Reused in:** [Architecture — Flex & bundles](../architecture/flex.md),
+  [Security](../security/configuration.md) — every bundle exposes semantic config
+  this way.
+- **Confused with:** [Parameters](parameters.md) — a parameter is a raw value;
+  semantic config is a *validated schema* that produces parameters/services.
+
 ## Official References
 - [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/current/bundles/configuration.html)
 - [Official Symfony docs — Prepend Extension](https://symfony.com/doc/current/bundles/prepend_extension.html)
 - [Symfony source — Extension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** bundles use a validated schema instead of raw parameters
+- [ ] build a `Configuration` tree and a `loadExtension()` in Symfony 8
+- [ ] debug an optional config key that arrives as `null`
+- [ ] spot that `prepend()` runs before all `load()` calls
+- [ ] explain the split between `Configuration` (validates) and `Extension` (acts)
 
 ---
 

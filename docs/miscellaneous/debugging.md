@@ -29,6 +29,15 @@ time and memory for named **events**, powering the profiler's timeline.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You call `dd($order)` inside a controller that returns JSON. What does the
+    client receive, and does the rest of the action run?
+
+??? note "Reveal"
+    `dd()` dumps then `exit`s — the action stops, so the JSON is never returned and
+    the client gets the dump output (corrupting a real API response). Use `dump()`
+    (which continues) and read it in the toolbar's Debug panel instead.
+
 ### The VarDumper pipeline: clone → dump
 
 `dump()` calls `Symfony\Component\VarDumper\VarDumper::dump()`, which uses a
