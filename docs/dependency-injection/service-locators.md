@@ -7,6 +7,14 @@
     `#[AutowireLocator]`, or subscribe via `ServiceSubscriberInterface` +
     `ServiceMethodsSubscriberTrait` (not the deprecated `ServiceSubscriberTrait`).
 
+!!! example "Real-world analogy"
+    A service locator is the specials board: a short, fixed list of dishes the
+    kitchen *can* make on request. Nothing is cooked until you point at one
+    (`get('stripe')`) — order the Stripe special and only that pan is lit; the
+    PayPal one stays cold. Point at a dish that isn't chalked up and the kitchen
+    tells you it doesn't exist (a not-found error), because the board is finalised
+    ahead of service.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

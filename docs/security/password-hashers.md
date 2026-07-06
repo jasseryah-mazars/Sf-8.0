@@ -6,6 +6,12 @@
     Exam hook: use `auto` (currently bcrypt) as the default, and transparent rehash
     needs **both** `migrate_from` *and* a `PasswordUpgraderInterface` provider.
 
+!!! example "Real-world analogy"
+    A password hasher is a one-way shredder. You never keep the original slip —
+    only its unique shredded pattern. When someone claims a password, you shred
+    their attempt the same way and compare patterns (`verify()`). A better
+    shredder arrives? `needsRehash()` re-shreds the slip next time they sign in.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
