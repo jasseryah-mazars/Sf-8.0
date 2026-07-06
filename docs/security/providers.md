@@ -91,6 +91,28 @@ If a provider also implements
 the `PasswordMigratingListener` can transparently rehash a password on
 successful login (see [Password Hashers](password-hashers.md)).
 
+### Null behavior
+
+`loadUserByIdentifier()` returns a `UserInterface` — its return type is **not
+nullable**. When no user matches, you **throw `UserNotFoundException`**; you never
+`return null`. Returning `null` would break the contract (a `TypeError`) and hide
+a "no such user" behind a broken type.
+
+```php
+$data = $this->client->findByEmail($id)
+    ?? throw new UserNotFoundException();   // never: return null
+```
+
+For security, `UserNotFoundException` is caught and normalised to a generic
+`BadCredentialsException`, so an attacker cannot tell "wrong password" from
+"unknown user". In `refreshUser()`, a now-missing user (account deleted
+mid-session) should also throw — the `ContextListener` then discards the token,
+effectively logging the user out.
+
+!!! note "Null in real life"
+    Asking the records office for a file that does not exist: the clerk says "no
+    such person" (an exception), they do not hand you an empty folder (`null`).
+
 ## Configuration & code
 
 === "PHP Attributes"

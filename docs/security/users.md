@@ -6,6 +6,13 @@
     Exam hook: `eraseCredentials()` was **removed** in 8.0 — strip secrets in
     `__serialize()` instead.
 
+!!! example "Real-world analogy"
+    A user is the identity record on file: a name that never changes
+    (`getUserIdentifier()`) and a list of clearances (`getRoles()`). It says *who
+    you are and what you may reach* — not *how* you proved it at the gate.
+    Sensitive notes (the password) are shredded before the file is stored
+    (`__serialize()`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -98,6 +98,24 @@ of the tag with its attributes. You then mutate a collector definition, e.g.
     order —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php).
 
+### Null behavior
+
+Passes work on `Definition`s, so the null questions are build-time ones.
+`findDefinition($id)` / `getDefinition($id)` **throw** `ServiceNotFoundException` if
+the id is absent — always `has($id)` / `hasDefinition($id)` first and `return`
+early, otherwise a missing bundle crashes compilation. `findTaggedServiceIds($tag)`
+returns an **empty array** when nothing carries the tag (never `null`), so a plain
+`foreach` is safe. When you wire an *optional* collaborator inside a pass, build the
+reference with `new Reference($id, ContainerInterface::NULL_ON_INVALID_REFERENCE)`
+so a missing target resolves to `null` at runtime instead of throwing. The common
+bug is skipping the `has()` guard and letting the pass explode whenever the target
+service isn't registered.
+
+!!! note "Null in real life"
+    Reaching for a recipe card that isn't on the board throws (get with no guard);
+    checking the board first (`has()`) and shrugging if it's missing is the safe
+    prep habit.
+
 ## Configuration & code
 
 === "PHP Attributes"
