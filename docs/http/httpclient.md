@@ -1,5 +1,11 @@
 # HttpClient Component
 
+!!! tip "In a nutshell"
+    HttpClient is Symfony's *outgoing* HTTP layer — your app calling other APIs.
+    Type-hint `HttpClientInterface`, never a concrete transport. Exam hook:
+    `request()` is **lazy/async**; the transfer runs only on first read of the
+    response (which makes concurrency free).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

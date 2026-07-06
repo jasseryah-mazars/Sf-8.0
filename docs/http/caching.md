@@ -1,5 +1,11 @@
 # Caching Overview
 
+!!! tip "In a nutshell"
+    HTTP caching lets browsers/proxies reuse a response via two models:
+    **freshness** (skip the request while fresh) and **validation** (ask, but maybe
+    get a bodyless **304**). Exam hook: `max-age`/`s-maxage` are freshness;
+    `ETag`/`Last-Modified` are validation.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

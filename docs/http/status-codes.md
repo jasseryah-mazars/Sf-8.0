@@ -1,5 +1,11 @@
 # Status Codes
 
+!!! tip "In a nutshell"
+    A status code tells the client the fate of its request; the first digit sets
+    the family (2xx success, 3xx redirect, 4xx client error, 5xx server error).
+    Exam hook: 307/308 preserve the method, 303 forces GET; **401 = not
+    authenticated, 403 = not authorized**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

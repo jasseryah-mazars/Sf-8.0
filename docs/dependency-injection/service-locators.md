@@ -1,5 +1,12 @@
 # Service Locators
 
+!!! tip "In a nutshell"
+    A service locator is a small PSR-11 container holding a fixed, declared set of
+    services it builds **lazily** on `get()` — the sanctioned alternative to
+    injecting the whole container. Highest-yield fact: build one with
+    `#[AutowireLocator]`, or subscribe via `ServiceSubscriberInterface` +
+    `ServiceMethodsSubscriberTrait` (not the deprecated `ServiceSubscriberTrait`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

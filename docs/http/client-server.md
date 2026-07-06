@@ -1,5 +1,10 @@
 # Client / Server Interaction
 
+!!! tip "In a nutshell"
+    HTTP is a stateless request/response protocol riding on DNS → TCP → TLS, and a
+    single page load is many independent exchanges. Exam hook: the web server /
+    reverse proxy (not PHP) picks the HTTP version and terminates TLS.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

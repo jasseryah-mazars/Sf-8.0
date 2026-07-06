@@ -1,5 +1,11 @@
 # Content Negotiation
 
+!!! tip "In a nutshell"
+    Content negotiation serves different representations of one URL based on the
+    client's `Accept*` headers and their `q` weights. Exam hook:
+    `getPreferredFormat()` returns a Symfony *format* (not a raw MIME type), and you
+    must set `Vary` so shared caches don't mis-serve variants.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

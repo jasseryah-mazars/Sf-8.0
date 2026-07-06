@@ -1,5 +1,12 @@
 # The Service Container
 
+!!! tip "In a nutshell"
+    The container builds your objects, injects their dependencies, and hands them
+    back — you describe *how* to build a service, it does the rest. Remember the
+    split: a `ContainerBuilder` compiles everything once into a dumped PHP class
+    that serves instances at runtime. Highest-yield fact: services are **private
+    and shared by default**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

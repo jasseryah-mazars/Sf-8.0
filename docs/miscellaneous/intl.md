@@ -1,5 +1,11 @@
 # Internationalization (Translation & Intl)
 
+!!! tip "In a nutshell"
+    Translation maps message ids to localized strings per locale and domain;
+    Intl exposes the bundled ICU dataset (country, currency, locale names).
+    Exam gold: Symfony 8 uses ICU MessageFormat (`{count, plural, ...}`) for
+    plurals, and a missing translation returns the message id, not an error.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

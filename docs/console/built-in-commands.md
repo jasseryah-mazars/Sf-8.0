@@ -1,5 +1,11 @@
 # Built-in Commands & the Application
 
+!!! tip "In a nutshell"
+    Every Symfony app ships commands you never wrote: `list` (the default), `help`,
+    `about`, `completion`, plus FrameworkBundle's `cache:clear` and the `debug:*`
+    family. Remember for the exam: the default command is `list` (not `help`), and
+    `make:*` comes from the optional MakerBundle — not core.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,11 @@
 # Language Detection
 
+!!! tip "In a nutshell"
+    Detecting the locale means picking the best language from the URL (`_locale`),
+    a user preference, `Accept-Language`, or the default — bounded to the locales
+    you support. Exam hook: `getPreferredLanguage($whitelist)` is the safe API (the
+    no-argument form can return an unsupported locale).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

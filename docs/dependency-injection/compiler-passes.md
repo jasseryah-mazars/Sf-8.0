@@ -1,5 +1,12 @@
 # Compiler Passes
 
+!!! tip "In a nutshell"
+    A compiler pass is a hook that rewrites service definitions during
+    compilation — Symfony's own autowiring and tag-collection are passes. You
+    register one in `Kernel::build()` or a bundle's `build()`. Highest-yield fact:
+    there is **no `#[CompilerPass]` attribute**, and higher `priority` runs
+    *earlier* within a phase.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

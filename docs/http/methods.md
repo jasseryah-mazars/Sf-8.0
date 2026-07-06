@@ -1,5 +1,10 @@
 # HTTP Methods
 
+!!! tip "In a nutshell"
+    The method (verb) states the client's intent and carries safe / idempotent /
+    cacheable properties. Exam hook: PUT and DELETE are idempotent but not safe,
+    POST and PATCH are neither, and `_method` override is **off by default**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

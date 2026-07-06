@@ -1,5 +1,11 @@
 # Configuration (Config, DotEnv, ExpressionLanguage)
 
+!!! tip "In a nutshell"
+    Three components hide here: Config validates structured options against a
+    `TreeBuilder` schema, DotEnv loads `.env*` files, ExpressionLanguage
+    evaluates dynamic rules. Exam gold: `.env.local` is skipped in the `test`
+    environment, and real OS environment variables always win.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

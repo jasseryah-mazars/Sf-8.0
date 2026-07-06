@@ -1,5 +1,11 @@
 # Cookies
 
+!!! tip "In a nutshell"
+    A cookie is a small value the server asks the browser to store and resend,
+    adding state to stateless HTTP. Build it with the **immutable** `Cookie` object
+    (each `with*` returns a *new* instance). Exam hook: `SameSite=None` is rejected
+    unless the cookie is also `Secure`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

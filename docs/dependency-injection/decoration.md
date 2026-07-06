@@ -1,5 +1,12 @@
 # Service Decoration
 
+!!! tip "In a nutshell"
+    Decoration wraps an existing service in a new one with the same interface,
+    adding behaviour (logging, caching) without touching the original — the
+    decorator takes over the id and receives the original as `.inner`.
+    Highest-yield fact: **higher `decoration_priority` = applied first = innermost**
+    (closest to the original).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
