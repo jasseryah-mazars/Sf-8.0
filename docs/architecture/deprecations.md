@@ -30,6 +30,16 @@ the `symfony/deprecation-contracts` package.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You call `trigger_deprecation('app/foo', '8.1', 'msg')` from code under a normal
+    request. Does anything throw? And what version string goes in the second
+    argument?
+
+??? note "Reveal"
+    Nothing throws — it emits an `E_USER_DEPRECATED` notice (unless CI is configured
+    to fail on deprecations). The version is the one it was **deprecated in** (`8.1`),
+    not the current running version.
+
 ### `trigger_deprecation()`
 
 The canonical way to raise a deprecation is the global function from
@@ -225,10 +235,26 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
     - Detect: toolbar/profiler, `deprecation` log channel, phpunit-bridge.
     - DI: `deprecated:` key / `Definition::setDeprecated()`.
 
+## Connections
+
+- **Depends on:** [BC Promise](bc-promise.md) — deprecations are the mechanism that lets a major remove covered API without surprise.
+- **Reused in:** [Release Management](release-management.md) — deprecations are added in minors and removed in the next major; [Dependency Injection](../dependency-injection/index.md) can deprecate services via `Definition::setDeprecated()`.
+- **Confused with:** [Roadmap & Schedule](roadmap-schedule.md) — the schedule says *when* a major lands; deprecations say *what* gets removed then.
+
 ## Official References
 - [Official docs — deprecations](https://symfony.com/doc/current/setup/upgrade_minor.html)
 - [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
 - [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** deprecations exist and how they tie into the BC promise
+- [ ] emit one correctly with `trigger_deprecation(package, version, message, ...args)`
+- [ ] debug a deprecation notice and find its call site via the profiler or logs
+- [ ] spot the trap of passing the current version instead of the deprecated-in version
+- [ ] gate CI on deprecations with `SYMFONY_DEPRECATIONS_HELPER`
 
 ---
 

@@ -187,10 +187,26 @@ image build so the running container does zero setup.
     - Preload file: `var/cache/prod/*.preload.php`.
     - Make `var/cache` warmed at build, web user read-only.
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — `dump-env prod` and `APP_ENV`/`APP_DEBUG` drive prod behaviour; [Runtime](runtime.md) boots the kernel.
+- **Reused in:** [Cache](cache.md) — cache warmers pre-build pools and metadata during the deploy.
+- **Confused with:** dev's auto-rebuild — prod never auto-detects config changes.
+
 ## Official References
 - [Official docs — Deploying Symfony](https://symfony.com/doc/current/deployment.html)
 - [Official docs — Performance](https://symfony.com/doc/current/performance.html)
 - [Symfony source — CacheWarmerInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/CacheWarmer/CacheWarmerInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** prod loads the compiled container without freshness checks
+- [ ] order a prod deploy: `--no-dev`, `dump-env prod`, `cache:warmup`, opcache reset
+- [ ] debug "old behaviour after deploy" (stale cache / opcache not reset)
+- [ ] spot the trick: `APP_DEBUG=1` in prod leaks traces and slows everything
+- [ ] describe what cache warmers pre-build and why
 
 ---
 

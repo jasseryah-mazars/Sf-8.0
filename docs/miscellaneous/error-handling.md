@@ -32,6 +32,15 @@ covered in [Exception Handling](../architecture/exception-handling.md).
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A service throws a plain `\RuntimeException` that escapes the controller. What
+    HTTP status does the client see — and would a `NotFoundHttpException` differ?
+
+??? note "Reveal"
+    `\RuntimeException` becomes a **500**: only throwables implementing
+    `HttpExceptionInterface` carry a custom status. `NotFoundHttpException` *does*
+    implement it, so `getStatusCode()` returns **404**.
+
 ### The ErrorHandler component
 
 `Symfony\Component\ErrorHandler\ErrorHandler` is registered early (via the
