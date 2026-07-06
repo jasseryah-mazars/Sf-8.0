@@ -5,24 +5,24 @@ Active-recall decks generated from the practice-question bank — one per topic 
 !!! abstract "Why flashcards"
     Testing yourself (active recall) beats re-reading. Spacing the reviews beats cramming. These decks turn the 534-question bank into that workflow.
 
-**Total cards:** 553
+**Total cards:** 1179
 
 ## Decks
 
-- [PHP & Web Security](php-web-security.md) — 46 cards
-- [HTTP](http.md) — 35 cards
-- [Symfony Architecture](architecture.md) — 57 cards
-- [Controllers](controllers.md) — 46 cards
-- [Routing](routing.md) — 43 cards
-- [Templating (Twig)](twig.md) — 43 cards
-- [Forms](forms.md) — 38 cards
-- [Data Validation](validation.md) — 32 cards
-- [Dependency Injection](dependency-injection.md) — 38 cards
-- [Security](security.md) — 41 cards
-- [HTTP Caching](http-caching.md) — 26 cards
-- [Console](console.md) — 32 cards
-- [Automated Tests](testing.md) — 31 cards
-- [Miscellaneous](miscellaneous.md) — 45 cards
+- [PHP & Web Security](php-web-security.md) — 112 cards
+- [HTTP](http.md) — 76 cards
+- [Symfony Architecture](architecture.md) — 116 cards
+- [Controllers](controllers.md) — 94 cards
+- [Routing](routing.md) — 87 cards
+- [Templating (Twig)](twig.md) — 104 cards
+- [Forms](forms.md) — 72 cards
+- [Data Validation](validation.md) — 74 cards
+- [Dependency Injection](dependency-injection.md) — 81 cards
+- [Security](security.md) — 78 cards
+- [HTTP Caching](http-caching.md) — 52 cards
+- [Console](console.md) — 66 cards
+- [Automated Tests](testing.md) — 71 cards
+- [Miscellaneous](miscellaneous.md) — 96 cards
 
 ## Anki import
 

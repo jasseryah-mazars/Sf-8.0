@@ -319,6 +319,22 @@ nav:
       - Console — CommandTester: labs/console.md
       - Automated Tests — Kernel/Web Tests: labs/testing.md
       - Miscellaneous — Messenger Middleware: labs/miscellaneous.md
+  - Chapter Exams:
+      - exams/index.md
+      - PHP & Web Security: exams/php-web-security.md
+      - HTTP: exams/http.md
+      - Symfony Architecture: exams/architecture.md
+      - Controllers: exams/controllers.md
+      - Routing: exams/routing.md
+      - Templating (Twig): exams/twig.md
+      - Forms: exams/forms.md
+      - Data Validation: exams/validation.md
+      - Dependency Injection: exams/dependency-injection.md
+      - Security: exams/security.md
+      - HTTP Caching: exams/http-caching.md
+      - Console: exams/console.md
+      - Automated Tests: exams/testing.md
+      - Miscellaneous: exams/miscellaneous.md
   - Revision Hub:
       - revision/index.md
       - Revision Modes: revision/modes.md
