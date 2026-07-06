@@ -1,5 +1,11 @@
 # Argument Value Resolvers
 
+!!! tip "In a nutshell"
+    Value resolvers are how Symfony fills each controller argument — the `Request`,
+    a route `int $id`, a `#[MapRequestPayload]` DTO. They form a priority-ordered
+    chain (`Request`/`Session` at 120) plus attribute-only "targeted" resolvers.
+    Remember the order, and that a resolver declines by **yielding nothing**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

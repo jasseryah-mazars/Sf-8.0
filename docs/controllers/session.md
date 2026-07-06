@@ -1,5 +1,11 @@
 # The Session
 
+!!! tip "In a nutshell"
+    The session is per-visitor server state; reach it via
+    `RequestStack::getSession()` (or a `SessionInterface` action type-hint), never a
+    service constructor. It is **lazy** — no cookie until you touch it — and
+    `migrate()` after login defeats session fixation.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

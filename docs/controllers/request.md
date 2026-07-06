@@ -1,5 +1,11 @@
 # The Request in a Controller
 
+!!! tip "In a nutshell"
+    The `Request` wraps PHP's superglobals into typed parameter bags. Type-hint
+    `Request` in an action (or inject `RequestStack` in a service) — never autowire
+    `Request` directly. Exam hook: `$request->request` is the POST body, while route
+    params live in `$request->attributes`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

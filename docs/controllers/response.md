@@ -1,5 +1,10 @@
 # Returning Responses
 
+!!! tip "In a nutshell"
+    Every controller must return a `Response` — otherwise `kernel.view` must build
+    one, or the kernel throws a `LogicException`. Pick the subclass by payload:
+    `JsonResponse`, `StreamedResponse`, or `BinaryFileResponse`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

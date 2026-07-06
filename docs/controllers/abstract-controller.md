@@ -1,5 +1,11 @@
 # AbstractController
 
+!!! tip "In a nutshell"
+    `AbstractController` is optional convenience: a base class giving you
+    `render()`, `redirectToRoute()`, `getUser()` and friends. It receives those
+    services from a **lazy service locator** driven by `getSubscribedServices()` —
+    not the constructor. That single fact is the exam's favourite.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

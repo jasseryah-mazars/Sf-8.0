@@ -1,5 +1,10 @@
 # HTTP Redirects
 
+!!! tip "In a nutshell"
+    A redirect sends a `3xx` + `Location` header so the browser makes a fresh
+    request. Use `redirectToRoute()` (route name) or `redirect()` (URL); the default
+    status is **302**, 307/308 preserve the method, and 301/308 are cached.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
