@@ -1,5 +1,8 @@
 # Automated Tests
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Kernel/Web Tests](../labs/testing.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 Symfony ships a complete testing stack on top of **PHPUnit**: unit tests for
 services in isolation, and *functional* (HTTP-level) tests that boot the real
 kernel, send requests through a synthetic browser, and assert on the response,

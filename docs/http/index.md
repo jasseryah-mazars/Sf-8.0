@@ -1,5 +1,8 @@
 # HTTP
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[API Client (MockHttpClient)](../labs/http.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The Hypertext Transfer Protocol is the contract every Symfony application speaks.
 Before you can reason about the kernel, controllers, security, or caching you must
 have an exact mental model of how a **request** becomes a **response** — and how

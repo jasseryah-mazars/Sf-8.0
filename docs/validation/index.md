@@ -1,5 +1,8 @@
 # Data Validation
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Custom Constraint](../labs/validation.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 Symfony's `Symfony\Component\Validator` component decides whether a PHP value is
 *acceptable* — a `NotBlank` name, a well-formed `Email`, an `IsTrue` terms
 checkbox — and, when it is not, produces a structured

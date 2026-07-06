@@ -1,5 +1,8 @@
 # Symfony Architecture
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Event Subscriber](../labs/architecture.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The kernel, the event-driven request lifecycle, the service container, and the
 release/BC machinery that keeps it all stable. This is the **mental model** the
 rest of the certification builds on: once you can trace a request from

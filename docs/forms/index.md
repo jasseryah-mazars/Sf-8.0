@@ -1,5 +1,8 @@
 # Forms
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Data Transformer](../labs/forms.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The **Form component** is where three earlier stages meet: it renders through
 **Twig**, checks input through **Validation**, and is wired through the
 **service container** and the **EventDispatcher**. A Symfony form is not an HTML

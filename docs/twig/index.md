@@ -1,5 +1,8 @@
 # Templating (Twig)
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Custom Extension](../labs/twig.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 Twig is Symfony's default template engine: a compiled, sandboxed, auto-escaping
 language that turns `.html.twig` files into optimised PHP classes. This stage
 covers the syntax, the security model (auto-escaping), inheritance and reuse, the

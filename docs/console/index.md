@@ -1,5 +1,8 @@
 # Console
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[CommandTester](../labs/console.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The **Console** component turns a PHP class into a first-class command-line
 application. In a Symfony app every `php bin/console …` invocation runs through it:
 it parses the input, resolves a `Command`, drives the

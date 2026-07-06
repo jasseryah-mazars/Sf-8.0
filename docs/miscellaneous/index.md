@@ -1,5 +1,8 @@
 # Miscellaneous Components
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Messenger Middleware](../labs/miscellaneous.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The advanced components that round out an Expert-level Symfony toolkit:
 **Messenger** (asynchronous message handling — the up-weighted headliner),
 Serializer, Mailer & Mime, Cache, Process, Lock, Intl/Translation, Runtime,

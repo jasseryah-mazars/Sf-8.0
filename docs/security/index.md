@@ -1,5 +1,8 @@
 # Security
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Voter](../labs/security.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 Symfony Security is two cooperating subsystems: **authentication** (who are
 you?) driven by the authenticator manager, firewalls and passports, and
 **authorization** (are you allowed?) driven by the access-decision manager and

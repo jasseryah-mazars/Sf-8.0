@@ -1,5 +1,8 @@
 # PHP & Web Security
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[SPL Collection](../labs/php-web-security.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The **language baseline** for the whole certification plus the **threat model**
 that every Symfony security feature is built to defend. Symfony 8 requires
 **PHP 8.4+**, and the exam expects fluency in modern PHP — enums, readonly

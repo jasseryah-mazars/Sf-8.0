@@ -1,5 +1,8 @@
 # Dependency Injection
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Compiler Pass Registry](../labs/dependency-injection.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The **DependencyInjection** component is the backbone of Symfony: it builds and
 wires the *service container* that every other component pulls from. Understanding
 it — especially the split between **compilation (build time)** and **runtime**, and

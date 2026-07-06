@@ -1,5 +1,8 @@
 # Controllers
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Value Resolver](../labs/controllers.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 A **controller** is the PHP callable Symfony runs to turn a `Request` into a
 `Response`. It is the first *feature layer* you write on top of the kernel and
 the container: everything from the [request lifecycle](../architecture/index.md)

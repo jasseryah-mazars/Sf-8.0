@@ -1,5 +1,8 @@
 # Routing
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Match & Debug](../labs/routing.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 The **Routing** component turns an incoming URL into a controller and, in
 reverse, turns a route name back into a URL. It is the layer that sits between
 the [Controllers](../controllers/index.md) stage and the HTTP request lifecycle:

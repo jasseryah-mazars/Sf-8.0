@@ -1,5 +1,8 @@
 # HTTP Caching
 
+!!! tip "🧪 Practice this area"
+    Ready to build it yourself? Do the hands-on lab: **[Cache Headers](../labs/http-caching.md)** — a step-by-step TD with test-first guidance and a reference solution.
+
 HTTP caching is how Symfony makes an application *faster* without touching the
 domain logic: instead of regenerating a response, a **cache** returns a stored
 copy. Symfony speaks the HTTP caching model natively — the `Response` object
