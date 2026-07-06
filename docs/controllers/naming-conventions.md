@@ -1,5 +1,11 @@
 # Controller Naming Conventions
 
+!!! tip "In a nutshell"
+    A controller is *any PHP callable*; Symfony imposes no naming rules, so the old
+    `Action` method suffix is dead. Use `Controller`-suffixed classes with `public`
+    `camelCase` methods, or a single-action **invokable** class referenced by its
+    class name alone.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

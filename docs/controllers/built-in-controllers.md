@@ -1,5 +1,10 @@
 # Built-in Internal Controllers
 
+!!! tip "In a nutshell"
+    `TemplateController` and `RedirectController` let a route render a template or
+    redirect with **no PHP class** — pure route config. `permanent: true` makes a
+    redirect 301/308; an empty target returns 410 Gone.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
