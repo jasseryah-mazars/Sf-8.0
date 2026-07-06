@@ -27,7 +27,7 @@ categories:
       - id: "VAL-OBJVAL-02"
         question: "Which method validates a hypothetical value without changing the object?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/object-validation"
         concepts: ["validatePropertyValue", "validateProperty", "hypothetical-value"]
         syllabus: "Data Validation → Validating PHP objects"
