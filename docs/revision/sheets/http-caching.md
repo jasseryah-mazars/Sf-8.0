@@ -54,7 +54,7 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
   by default.
 - Varnish/CDN are drop-in alternatives driven by the same headers.
 
-**Cheat:** Class: `Symfony\Component\HttpKernel\HttpCache\HttpCache` (impl. `HttpKernelInterface` + `TerminableInterface`). Enable: `framework.http_cache: true` **or** wrap kernel with `Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache`. Ctor: `(kernel, store, ?surrogate, options)`; default `Store` = filesystem. Trace header `X-Symfony-Cache`; `private_headers` = Cookie, Authorization. Shared cache → honours `s-maxage`; supports [ESI](esi.md).
+**Cheat:** Class: `Symfony\Component\HttpKernel\HttpCache\HttpCache` (impl. `HttpKernelInterface` + `TerminableInterface`). Enable: `framework.http_cache: true` **or** wrap kernel with `Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache`. Ctor: `(kernel, store, ?surrogate, options)`; default `Store` = filesystem. Trace header `X-Symfony-Cache`; `private_headers` = Cookie, Authorization. Shared cache → honours `s-maxage`; supports ESI.
 
 ## Validation (ETag, Last-Modified)
 - Validation carries a fingerprint (`ETag`/`Last-Modified`) so caches ask "changed?"

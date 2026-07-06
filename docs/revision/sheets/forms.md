@@ -53,7 +53,7 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Validate with `File`/`Image` constraints (content-based checks).
 - `form_start` sets multipart automatically when a file field is present.
 
-**Cheat:** `UploadedFile`: `move($dir, $name)`, `guessExtension()`, `getMimeType()`. Untrusted: `getClientOriginalName()`, `getClientMimeType()`. `mapped => false` → still validated; fetch via `->getData()`. `File(maxSize: '5m', mimeTypes: [...])` / `Image(...)`. See also [controllers/file-upload](../controllers/file-upload.md).
+**Cheat:** `UploadedFile`: `move($dir, $name)`, `guessExtension()`, `getMimeType()`. Untrusted: `getClientOriginalName()`, `getClientMimeType()`. `mapped => false` → still validated; fetch via `->getData()`. `File(maxSize: '5m', mimeTypes: [...])` / `Image(...)`. See also controllers/file-upload.
 
 ## Handling Submissions
 - Canonical flow: `handleRequest` → `isSubmitted() && isValid()` → `getData()` →

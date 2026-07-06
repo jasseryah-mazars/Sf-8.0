@@ -20,10 +20,15 @@ AREAS = {
  "http-caching":"HTTP Caching","console":"Console","testing":"Automated Tests","miscellaneous":"Miscellaneous",
 }
 
+def strip_links(text):
+    """Convert [label](target) -> label so relative links don't break when the
+    content is relocated into revision/sheets/."""
+    return re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
+
 def section(text, header):
     """Return the body of a '## header' section up to the next '## '."""
     m = re.search(rf"(?ms)^##\s+{re.escape(header)}\s*$(.*?)(?=^##\s|\Z)", text)
-    return m.group(1).strip() if m else ""
+    return strip_links(m.group(1).strip()) if m else ""
 
 def title(text):
     m = re.search(r"(?m)^#\s+(.+)$", text)

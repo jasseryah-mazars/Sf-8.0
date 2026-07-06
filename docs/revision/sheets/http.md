@@ -6,7 +6,7 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Two models: expiration (freshness) and validation.
 - Freshness = `Cache-Control`/`Expires`; validation = `ETag`/`Last-Modified`.
 - `public`/`private` and `s-maxage` control shared caches.
-- Depth lives in the [HTTP Caching](../http-caching/index.md) stage.
+- Depth lives in the HTTP Caching stage.
 
 **Cheat:** Fresh → no request. Validate → conditional GET → maybe **304**. `setMaxAge` (browser), `setSharedMaxAge` (CDN), `setPublic/Private`. `setEtag` + `isNotModified($request)` → 304. Full stage: `../http-caching/`.
 
