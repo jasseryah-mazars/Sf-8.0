@@ -57,14 +57,14 @@ jobs:
         run: mkdocs build --strict
 
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
-    # Only deploy from the default branch.
-    if: github.ref == 'refs/heads/main'
+    # Deploy from main (future default) or the current working branch.
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr'
     needs: build
     runs-on: ubuntu-latest
     environment:
