@@ -1416,10 +1416,10 @@ categories:
           Declaring HEAD explicitly is redundant.
         documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
       - id: "ROUT-METHOD-03"
-        type: "single"
+        type: "internals"
         difficulty: "hard"
         subchapter: "routing/methods"
-        concepts: ["schemes", "redirect", "https"]
+        concepts: ["schemes", "RedirectableUrlMatcher", "https"]
         syllabus: "Routing → HTTP methods matching"
         question: "An http request hits a route restricted with schemes: ['https']. What happens?"
         answers:

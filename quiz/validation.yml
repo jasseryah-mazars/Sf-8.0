@@ -2,7 +2,13 @@ categories:
   - name: "Data Validation"
     questions:
       # ---- object-validation.md ----
-      - question: "What does ValidatorInterface::validate() return when the value is invalid?"
+      - id: "VAL-OBJVAL-01"
+        question: "What does ValidatorInterface::validate() return when the value is invalid?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/object-validation"
+        concepts: ["validator-interface", "violation-list", "return-type"]
+        syllabus: "Data Validation → Validating PHP objects"
         answers:
           - value: "A ConstraintViolationListInterface containing the violations"
             correct: true
@@ -18,7 +24,13 @@ categories:
           count() and by iterating it.
         documentation: "https://symfony.com/doc/current/validation.html"
 
-      - question: "Which method validates a hypothetical value without changing the object?"
+      - id: "VAL-OBJVAL-02"
+        question: "Which method validates a hypothetical value without changing the object?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/object-validation"
+        concepts: ["validatePropertyValue", "validateProperty", "hypothetical-value"]
+        syllabus: "Data Validation → Validating PHP objects"
         answers:
           - value: "validatePropertyValue($objectOrClass, $property, $value)"
             correct: true
@@ -34,7 +46,13 @@ categories:
           uses the object's current value instead.
         documentation: "https://symfony.com/doc/current/validation.html"
 
-      - question: "How is #[Assert\\...] attribute metadata turned into constraints at runtime?"
+      - id: "VAL-OBJVAL-03"
+        question: "How is #[Assert\\...] attribute metadata turned into constraints at runtime?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "validation/object-validation"
+        concepts: ["attribute-loader", "class-metadata", "metadata-cache"]
+        syllabus: "Data Validation → Validating PHP objects"
         answers:
           - value: "AttributeLoader builds ClassMetadata once, cached in a PSR-6 pool"
             correct: true
@@ -50,8 +68,177 @@ categories:
           reflection cost is paid once per class.
         documentation: "https://symfony.com/doc/current/validation.html"
 
+      - id: "VAL-OBJVAL-04"
+        question: "You call $validator->validate(null). What happens?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "validation/object-validation"
+        concepts: ["null-handling", "violation-list", "values-vs-constraints"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "You get back an empty ConstraintViolationListInterface — no error, no TypeError"
+            correct: true
+          - value: "A TypeError, because null is not an object"
+            correct: false
+          - value: "A ValidationFailedException is thrown"
+            correct: false
+          - value: "It returns null"
+            correct: false
+        explanation: >-
+          Passing null is legal: the value is wrapped in a node, no class metadata is
+          found, and an empty violation list comes back. Validation is values against
+          constraints, and a bare null carries none. The trap is that a null object
+          silently passes when you expected a required value.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-OBJVAL-05"
+        question: |
+          Given:
+          ```php
+          class Author { #[Assert\Email] public ?string $email = null; }
+          $violations = $validator->validate(new Author());
+          ```
+          What is count($violations)?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "validation/object-validation"
+        concepts: ["null-handling", "email-constraint", "skip-null"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "0 — Email skips null, so the unset property produces no violation"
+            correct: true
+          - value: "1 — the email is required and missing"
+            correct: false
+          - value: "1 — null is not a valid email"
+            correct: false
+          - value: "A TypeError is thrown"
+            correct: false
+        explanation: >-
+          Most value constraints, Email included, skip null/empty and return no
+          violation; only NotBlank/NotNull enforce presence. Stack NotBlank with
+          Email when a missing value must be rejected.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Email.html"
+
+      - id: "VAL-OBJVAL-06"
+        question: >-
+          A developer writes `if ($validator->validate($dto)) { throw ...; }` and it
+          throws even for valid objects. What is the cause?
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "validation/object-validation"
+        concepts: ["violation-list", "count", "truthiness"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "validate() returns a ConstraintViolationList object, which is always truthy; you must check count() > 0"
+            correct: true
+          - value: "validate() returns true on success"
+            correct: false
+          - value: "The DTO has a hidden constraint that always fails"
+            correct: false
+          - value: "You must always pass groups explicitly"
+            correct: false
+        explanation: >-
+          The returned list is a non-null object, so it is truthy even when empty.
+          Test count($violations) > 0 (or iterate); treating the list itself as a
+          boolean is the classic mistake.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-OBJVAL-07"
+        question: "In framework.yaml, what is the default of framework.validation.enable_attributes?"
+        type: "config"
+        difficulty: "easy"
+        subchapter: "validation/object-validation"
+        concepts: ["enable_attributes", "attribute-mapping", "configuration"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "true — #[Assert\\...] attribute mapping is enabled by default"
+            correct: true
+          - value: "false — you must enable it manually"
+            correct: false
+          - value: "It does not exist; mapping is always on"
+            correct: false
+          - value: "auto"
+            correct: false
+        explanation: >-
+          enable_attributes defaults to true, and YAML/XML files under
+          config/validator/ are also auto-loaded. All active loaders are merged for
+          the same class.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-OBJVAL-08"
+        question: >-
+          A class has a #[Assert\NotBlank] attribute on $name, and a YAML mapping file
+          adds Length to the same $name. Which constraints apply?
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "validation/object-validation"
+        concepts: ["loaders", "metadata-merge", "mapping"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "Both — all enabled loaders are merged; attributes do not override YAML, the constraints accumulate"
+            correct: true
+          - value: "Only the attribute; attributes take precedence"
+            correct: false
+          - value: "Only the YAML; file mapping wins"
+            correct: false
+          - value: "A MappingException is thrown for the conflict"
+            correct: false
+        explanation: >-
+          LazyLoadingMetadataFactory merges every active loader's constraints for a
+          class, so attribute and YAML constraints add up rather than one silently
+          overriding the other.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-OBJVAL-09"
+        question: "True or False: ValidatorInterface::validate() throws a ValidationFailedException when the object is invalid."
+        type: "true-false"
+        difficulty: "easy"
+        subchapter: "validation/object-validation"
+        concepts: ["violation-list", "no-throw", "return-type"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "False"
+            correct: true
+          - value: "True"
+            correct: false
+        explanation: >-
+          validate() never throws on failure and never returns a bool — it returns a
+          ConstraintViolationListInterface. ValidationFailedException is thrown by
+          higher-level helpers (e.g. the MapRequestPayload resolver), not by
+          validate() itself.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-OBJVAL-10"
+        question: "What does the #[MapRequestPayload] argument resolver do regarding validation?"
+        type: "scenario"
+        difficulty: "medium"
+        subchapter: "validation/object-validation"
+        concepts: ["map-request-payload", "dto", "auto-validation"]
+        syllabus: "Data Validation → Validating PHP objects"
+        answers:
+          - value: "It deserializes the request into the DTO and automatically validates it, producing a 422 on violations"
+            correct: true
+          - value: "It only deserializes; you must call the validator yourself"
+            correct: false
+          - value: "It validates but does not deserialize"
+            correct: false
+          - value: "It requires a Form to be defined"
+            correct: false
+        explanation: >-
+          The argument resolver maps the request into the typed DTO and runs the
+          validator, returning a 422 automatically when there are violations. In a
+          controller you rarely call the validator directly; Forms invoke it during
+          handleRequest() too.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
       # ---- built-in-constraints.md ----
-      - question: "Which statement about NotBlank and NotNull is correct?"
+      - id: "VAL-CONSTRAINTS-01"
+        question: "Which statement about NotBlank and NotNull is correct?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["NotBlank", "NotNull", "empty-string"]
+        syllabus: "Data Validation → Built-in constraints"
         answers:
           - value: "NotBlank rejects an empty string; NotNull accepts an empty string"
             correct: true
@@ -66,7 +253,13 @@ categories:
           strict null, so '' and 0 pass NotNull. This is a classic exam distinction.
         documentation: "https://symfony.com/doc/current/reference/constraints/NotBlank.html"
 
-      - question: "To apply constraints to every element of an indexed array, which constraint do you use?"
+      - id: "VAL-CONSTRAINTS-02"
+        question: "To apply constraints to every element of an indexed array, which constraint do you use?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["All", "Collection", "iterable"]
+        syllabus: "Data Validation → Built-in constraints"
         answers:
           - value: "All"
             correct: true
@@ -82,7 +275,13 @@ categories:
           interchangeable.
         documentation: "https://symfony.com/doc/current/reference/constraints/All.html"
 
-      - question: "A nested object's own constraints never run during validation. Why?"
+      - id: "VAL-CONSTRAINTS-03"
+        question: "A nested object's own constraints never run during validation. Why?"
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["Valid", "cascade", "nested-object"]
+        syllabus: "Data Validation → Built-in constraints"
         answers:
           - value: "The property is missing #[Assert\\Valid] to cascade into it"
             correct: true
@@ -98,7 +297,13 @@ categories:
           are skipped.
         documentation: "https://symfony.com/doc/current/reference/constraints/Valid.html"
 
-      - question: "What does #[Assert\\Email] report for an empty string value?"
+      - id: "VAL-CONSTRAINTS-04"
+        question: "What does #[Assert\\Email] report for an empty string value?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["Email", "skip-empty", "NotBlank"]
+        syllabus: "Data Validation → Built-in constraints"
         answers:
           - value: "No violation — empty and null values pass most constraints"
             correct: true
@@ -113,8 +318,202 @@ categories:
           Combine it with NotBlank when an empty value must be rejected.
         documentation: "https://symfony.com/doc/current/reference/constraints/Email.html"
 
+      - id: "VAL-CONSTRAINTS-06"
+        question: "What does #[Assert\\Length(max: 10)] count by default?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["Length", "characters", "charset"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "Characters (respecting the charset), not bytes"
+            correct: true
+          - value: "Bytes"
+            correct: false
+          - value: "Words"
+            correct: false
+          - value: "Array elements"
+            correct: false
+        explanation: >-
+          Length counts characters using its charset (UTF-8 by default) with
+          min/max/charset/countUnit options. To constrain the number of elements in
+          an array use Count instead.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Length.html"
+
+      - id: "VAL-CONSTRAINTS-07"
+        question: "How do you make GreaterThan compare against another property of the same object (e.g. endDate > startDate)?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["comparison", "propertyPath", "cross-field"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "Use the propertyPath option: #[Assert\\GreaterThan(propertyPath: 'startDate')]"
+            correct: true
+          - value: "Pass the other property as the first constructor argument"
+            correct: false
+          - value: "It is impossible; you must use a Callback"
+            correct: false
+          - value: "Use a compareField: 'startDate' option"
+            correct: false
+        explanation: >-
+          All comparison constraints (GreaterThan, LessThan, EqualTo, IdenticalTo…)
+          accept a propertyPath option to compare against another field of the same
+          object instead of a fixed value.
+        documentation: "https://symfony.com/doc/current/reference/constraints/GreaterThan.html"
+
+      - id: "VAL-CONSTRAINTS-08"
+        question: "You have an indexed array of email strings and place #[Assert\\Collection([...])] on it. Why is that wrong?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["Collection", "All", "keys-vs-elements"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "Collection validates the KEYS of an associative array; to validate every element of an indexed array use All"
+            correct: true
+          - value: "Nothing is wrong; Collection validates each element"
+            correct: false
+          - value: "Collection only works on objects"
+            correct: false
+          - value: "You must also add Valid"
+            correct: false
+        explanation: >-
+          Collection maps per-key constraints for associative arrays (with
+          Required/Optional wrappers), whereas All applies constraints to every
+          element of an indexed collection. They are not interchangeable.
+        documentation: "https://symfony.com/doc/current/reference/constraints/All.html"
+
+      - id: "VAL-CONSTRAINTS-09"
+        question: |
+          Given:
+          ```php
+          #[Assert\When(
+              expression: 'this.getType() === "premium"',
+              constraints: [new Assert\NotBlank()],
+          )]
+          public ?string $vatNumber = null;
+          ```
+          For a non-premium object with $vatNumber = null, what happens?
+        type: "code"
+        difficulty: "hard"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["When", "expression-language", "conditional"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "No violation — the inner NotBlank runs only when the expression is true"
+            correct: true
+          - value: "A violation, because NotBlank always runs"
+            correct: false
+          - value: "A syntax error; When cannot wrap NotBlank"
+            correct: false
+          - value: "The expression is ignored for null values"
+            correct: false
+        explanation: >-
+          When applies its inner constraints only if the ExpressionLanguage
+          expression evaluates to true. Here getType() is not 'premium', so NotBlank
+          is skipped and null passes.
+        documentation: "https://symfony.com/doc/current/reference/constraints/When.html"
+
+      - id: "VAL-CONSTRAINTS-10"
+        question: "#[Assert\\Choice(choices: ['a','b','c'])] is placed on an array property $roles, and elements outside the list are NOT rejected. Why?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["Choice", "multiple", "array"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "Choice validates the whole value as one choice unless multiple: true is set"
+            correct: true
+          - value: "Choice never works on arrays"
+            correct: false
+          - value: "You must use All instead of Choice"
+            correct: false
+          - value: "The choices array is malformed"
+            correct: false
+        explanation: >-
+          Without multiple: true, Choice checks that the value itself is one of the
+          allowed choices. Setting multiple: true validates each element of the array
+          (with optional min/max counts).
+        documentation: "https://symfony.com/doc/current/reference/constraints/Choice.html"
+
+      - id: "VAL-CONSTRAINTS-11"
+        question: "Which of these constraints return NO violation for a null value? (choose three)"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["skip-null", "presence-constraints", "composition"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "Email"
+            correct: true
+          - value: "Length"
+            correct: true
+          - value: "Range"
+            correct: true
+          - value: "NotNull"
+            correct: false
+          - value: "NotBlank"
+            correct: false
+        explanation: >-
+          Email, Length, Range (and virtually all value constraints) bail out on
+          null/empty and add no violation. NotNull fails on null; NotBlank fails on
+          null/''/[]. To require and validate a value, stack the presence check with
+          the shape check.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-CONSTRAINTS-12"
+        question: |
+          What are the defaults for allowExtraFields and allowMissingFields in:
+          ```php
+          #[Assert\Collection(fields: [ 'street' => new Assert\NotBlank() ])]
+          public array $address = [];
+          ```
+        type: "config"
+        difficulty: "medium"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["Collection", "allowExtraFields", "allowMissingFields"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "Both default to false — extra keys and missing keys both cause violations"
+            correct: true
+          - value: "Both default to true"
+            correct: false
+          - value: "allowExtraFields true, allowMissingFields false"
+            correct: false
+          - value: "They default to null and are ignored"
+            correct: false
+        explanation: >-
+          allowExtraFields and allowMissingFields both default to false, so Collection
+          rejects partial or extra arrays unless you opt in. Per-field Required/Optional
+          wrappers control whether a specific key may be absent.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Collection.html"
+
+      - id: "VAL-CONSTRAINTS-13"
+        question: "True or False: #[Assert\\IsTrue] considers the integer 1 and the string '1' as passing."
+        type: "true-false"
+        difficulty: "easy"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["IsTrue", "loose-comparison", "getters"]
+        syllabus: "Data Validation → Built-in constraints"
+        answers:
+          - value: "True"
+            correct: true
+          - value: "False"
+            correct: false
+        explanation: >-
+          IsTrue passes for true, 1 and '1' (a loose truthy check); IsFalse likewise
+          passes for false, 0 and '0'. Both are commonly placed on getters.
+        documentation: "https://symfony.com/doc/current/reference/constraints/IsTrue.html"
+
       # ---- scopes.md ----
-      - question: "What causes the validator to recurse into a nested object property?"
+      - id: "VAL-SCOPES-01"
+        question: "What causes the validator to recurse into a nested object property?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/scopes"
+        concepts: ["Valid", "cascade", "nested-object"]
+        syllabus: "Data Validation → Validation scopes & cascading"
         answers:
           - value: "#[Assert\\Valid] on the property holding the nested object"
             correct: true
@@ -130,7 +529,13 @@ categories:
           each element's) are validated.
         documentation: "https://symfony.com/doc/current/reference/constraints/Valid.html"
 
-      - question: "A rule must compare two properties of the same object. Which scope fits best?"
+      - id: "VAL-SCOPES-02"
+        question: "A rule must compare two properties of the same object. Which scope fits best?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/scopes"
+        concepts: ["class-scope", "cross-field", "Callback"]
+        syllabus: "Data Validation → Validation scopes & cascading"
         answers:
           - value: "Class scope (e.g. a Callback or Expression constraint)"
             correct: true
@@ -145,7 +550,13 @@ categories:
           class-target constraint such as Callback or Expression.
         documentation: "https://symfony.com/doc/current/reference/constraints/Expression.html"
 
-      - question: "A constraint on the getter isActive() reports a violation under which property path?"
+      - id: "VAL-SCOPES-03"
+        question: "A constraint on the getter isActive() reports a violation under which property path?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/scopes"
+        concepts: ["getter-scope", "property-path", "return-value"]
+        syllabus: "Data Validation → Validation scopes & cascading"
         answers:
           - value: "active"
             correct: true
@@ -160,8 +571,110 @@ categories:
           under the property-ised name, so isActive() maps to 'active'.
         documentation: "https://symfony.com/doc/current/validation.html"
 
+      - id: "VAL-SCOPES-05"
+        question: "You place a property-target-only constraint at class scope. What happens?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "validation/scopes"
+        concepts: ["getTargets", "class-scope", "ConstraintDefinitionException"]
+        syllabus: "Data Validation → Validation scopes & cascading"
+        answers:
+          - value: "A ConstraintDefinitionException is thrown — its getTargets() does not allow CLASS_CONSTRAINT"
+            correct: true
+          - value: "It silently validates the first property"
+            correct: false
+          - value: "It validates every property"
+            correct: false
+          - value: "Nothing happens; it is ignored"
+            correct: false
+        explanation: >-
+          A class-scope constraint must target the class (getTargets() returns
+          CLASS_CONSTRAINT). Placing a property-target constraint at class scope
+          raises a ConstraintDefinitionException.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-SCOPES-06"
+        question: "When a #[Assert\\Valid] property is cascaded, which validation group is used for the nested object?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "validation/scopes"
+        concepts: ["cascade", "group-propagation", "Valid"]
+        syllabus: "Data Validation → Validation scopes & cascading"
+        answers:
+          - value: "The current group being validated is passed down to the nested object"
+            correct: true
+          - value: "Always the nested object's own Default group"
+            correct: false
+          - value: "All groups defined on the nested object"
+            correct: false
+          - value: "No group; cascading disables groups"
+            correct: false
+        explanation: >-
+          Cascading passes the current group down. A custom group propagates as-is,
+          so a nested object only validates its custom-group constraints if that group
+          actually reaches it. Valid never changes groups.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
+      - id: "VAL-SCOPES-07"
+        question: "For a property holding a collection of Address OBJECTS, how do you validate each element's own constraints?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/scopes"
+        concepts: ["Valid", "collection-cascade", "anti-pattern"]
+        syllabus: "Data Validation → Validation scopes & cascading"
+        answers:
+          - value: "Put #[Assert\\Valid] on the property; it cascades into every element"
+            correct: true
+          - value: "Use #[Assert\\All([new Assert\\Valid()])]"
+            correct: false
+          - value: "Use #[Assert\\Collection]"
+            correct: false
+          - value: "Nothing is needed; object collections cascade automatically"
+            correct: false
+        explanation: >-
+          For a collection of objects, a single #[Assert\\Valid] on the property
+          cascades into each element. All([new Valid()]) is a redundant anti-pattern;
+          All is for applying scalar constraints to elements.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Valid.html"
+
+      - id: "VAL-SCOPES-08"
+        question: |
+          Given:
+          ```php
+          class Order {
+              #[Assert\Valid]
+              /** @var list<OrderLine> */
+              public array $lines = [];
+          }
+          ```
+          lines[2] has an invalid price. What property path does the violation carry?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "validation/scopes"
+        concepts: ["property-path", "collection-cascade", "execution-context"]
+        syllabus: "Data Validation → Validation scopes & cascading"
+        answers:
+          - value: "lines[2].price"
+            correct: true
+          - value: "price"
+            correct: false
+          - value: "lines.price"
+            correct: false
+          - value: "Order.lines.2.price"
+            correct: false
+        explanation: >-
+          The ExecutionContext builds the property path from the traversed nodes; a
+          cascaded collection element uses index notation, giving lines[2].price.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
       # ---- groups.md ----
-      - question: "You call validate($obj, groups: ['edit']). Which constraints run?"
+      - id: "VAL-GROUPS-01"
+        question: "You call validate($obj, groups: ['edit']). Which constraints run?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/groups"
+        concepts: ["groups", "Default", "explicit-groups"]
+        syllabus: "Data Validation → Validation groups"
         answers:
           - value: "Only constraints assigned to the 'edit' group"
             correct: true
@@ -176,7 +689,13 @@ categories:
           include Default; list ['Default', 'edit'] if you need both.
         documentation: "https://symfony.com/doc/current/validation/groups.html"
 
-      - question: "For a class that defines a GroupSequence, validating the 'Default' group will…"
+      - id: "VAL-GROUPS-02"
+        question: "For a class that defines a GroupSequence, validating the 'Default' group will…"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "validation/groups"
+        concepts: ["group-sequence", "Default", "remapping"]
+        syllabus: "Data Validation → Validation groups"
         answers:
           - value: "Trigger the group sequence (stepwise, stop on first failing group)"
             correct: true
@@ -192,7 +711,13 @@ categories:
           validate the {ClassName} group instead.
         documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
 
-      - question: "For class App\\Entity\\User with no group sequence, what is the {ClassName} group?"
+      - id: "VAL-GROUPS-03"
+        question: "For class App\\Entity\\User with no group sequence, what is the {ClassName} group?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/groups"
+        concepts: ["ClassName-group", "short-name", "Default"]
+        syllabus: "Data Validation → Validation groups"
         answers:
           - value: "'User' (the short class name), equivalent to 'Default' here"
             correct: true
@@ -208,7 +733,13 @@ categories:
           equivalent.
         documentation: "https://symfony.com/doc/current/validation/groups.html"
 
-      - question: "Which default group name does an unqualified constraint belong to?"
+      - id: "VAL-GROUPS-04"
+        question: "Which default group name does an unqualified constraint belong to?"
+        type: "trap"
+        difficulty: "easy"
+        subchapter: "validation/groups"
+        concepts: ["Default", "case-sensitive", "group-name"]
+        syllabus: "Data Validation → Validation groups"
         answers:
           - value: "Default (capital D)"
             correct: true
@@ -223,8 +754,109 @@ categories:
           case-sensitive, so 'default' would be a different (empty) group.
         documentation: "https://symfony.com/doc/current/validation/groups.html"
 
+      - id: "VAL-GROUPS-06"
+        question: "In a Symfony form, how do you tell the validator to validate the bound object with the 'registration' group?"
+        type: "scenario"
+        difficulty: "medium"
+        subchapter: "validation/groups"
+        concepts: ["validation_groups", "forms", "groups"]
+        syllabus: "Data Validation → Validation groups"
+        answers:
+          - value: "Set the form's 'validation_groups' option to ['registration']"
+            correct: true
+          - value: "Pass the groups to $form->handleRequest()"
+            correct: false
+          - value: "Call $validator->validate() manually in the controller"
+            correct: false
+          - value: "Set 'groups' on the form type's constructor"
+            correct: false
+        explanation: >-
+          Forms invoke the validator during handleRequest(); the validation_groups
+          option selects which groups run (default ['Default']). It can also be a
+          callback for dynamic group selection.
+        documentation: "https://symfony.com/doc/current/forms.html"
+
+      - id: "VAL-GROUPS-07"
+        question: |
+          Given:
+          ```php
+          class User {
+              #[Assert\NotBlank] public string $email = '';                 // ''
+              #[Assert\NotBlank(groups: ['registration'])] public ?string $password = null; // null
+          }
+          $validator->validate($user, groups: ['registration']);
+          ```
+          How many violations are returned?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "validation/groups"
+        concepts: ["groups", "Default-excluded", "explicit-groups"]
+        syllabus: "Data Validation → Validation groups"
+        answers:
+          - value: "1 — only the 'registration' group runs, so only $password's NotBlank fires; $email's Default NotBlank is skipped"
+            correct: true
+          - value: "2 — both NotBlank constraints fire"
+            correct: false
+          - value: "0 — Default must be requested for any violation"
+            correct: false
+          - value: "1 — only $email fires"
+            correct: false
+        explanation: >-
+          Passing a custom group does not include Default. Only registration-group
+          constraints run, so $password fails but the blank $email (Default) is
+          skipped. List ['Default','registration'] to get both.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
+      - id: "VAL-GROUPS-08"
+        question: "A parent cascades into a child with #[Assert\\Valid] and validate() is called with the Default group. The child has a constraint only in a custom 'strict' group. Does it run?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "validation/groups"
+        concepts: ["cascade", "group-propagation", "custom-group"]
+        syllabus: "Data Validation → Validation groups"
+        answers:
+          - value: "No — only the Default group reaches the child, so its 'strict'-only constraint is skipped"
+            correct: true
+          - value: "Yes — Valid runs all of the child's groups"
+            correct: false
+          - value: "Yes — custom groups always run on cascade"
+            correct: false
+          - value: "Only if the child defines a group sequence"
+            correct: false
+        explanation: >-
+          The cascaded group is the current one (Default). A child's custom-group
+          constraint runs only if that custom group actually propagates to it.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
+      - id: "VAL-GROUPS-09"
+        question: "You call validate($user, groups: ['Default', 'edit']). Which constraints run? (choose two)"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "validation/groups"
+        concepts: ["groups", "Default", "explicit-groups"]
+        syllabus: "Data Validation → Validation groups"
+        answers:
+          - value: "Constraints in the Default group"
+            correct: true
+          - value: "Constraints in the 'edit' group"
+            correct: true
+          - value: "Constraints in every group defined on the class"
+            correct: false
+          - value: "Only constraints in whichever group is listed first"
+            correct: false
+        explanation: >-
+          Listing both groups runs both sets. A custom group never implies Default,
+          which is exactly why you list Default explicitly when you also need it.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
       # ---- group-sequence.md ----
-      - question: "When does a group sequence stop early?"
+      - id: "VAL-GROUPSEQ-01"
+        question: "When does a group sequence stop early?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/group-sequence"
+        concepts: ["group-sequence", "stop-on-first-fail", "gate"]
+        syllabus: "Data Validation → Group sequences"
         answers:
           - value: "After the first group in the sequence that produces any violation"
             correct: true
@@ -239,7 +871,13 @@ categories:
           yields a violation, so later (often more expensive) groups are skipped.
         documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
 
-      - question: "Inside a class's #[Assert\\GroupSequence], how do you reference the class's own basic constraints?"
+      - id: "VAL-GROUPSEQ-02"
+        question: "Inside a class's #[Assert\\GroupSequence], how do you reference the class's own basic constraints?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "validation/group-sequence"
+        concepts: ["ClassName-group", "Default-loop", "sequence"]
+        syllabus: "Data Validation → Group sequences"
         answers:
           - value: "Use the short class-name group (e.g. 'User')"
             correct: true
@@ -255,7 +893,13 @@ categories:
           Default-group constraints run flat.
         documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
 
-      - question: "What must a class annotated with #[Assert\\GroupSequenceProvider] provide?"
+      - id: "VAL-GROUPSEQ-03"
+        question: "What must a class annotated with #[Assert\\GroupSequenceProvider] provide?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/group-sequence"
+        concepts: ["GroupSequenceProvider", "interface", "getGroupSequence"]
+        syllabus: "Data Validation → Group sequences"
         answers:
           - value: "An implementation of GroupSequenceProviderInterface::getGroupSequence()"
             correct: true
@@ -271,8 +915,119 @@ categories:
           sequence can depend on the object's state.
         documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
 
+      - id: "VAL-GROUPSEQ-05"
+        question: "A class defines #[Assert\\GroupSequence(['User','Strong'])]. You call validate($user, groups: ['User']). What runs?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "validation/group-sequence"
+        concepts: ["ClassName-group", "bypass-sequence", "flat-run"]
+        syllabus: "Data Validation → Group sequences"
+        answers:
+          - value: "The class's Default-group constraints flat, WITHOUT the sequence (bypassing stop-on-first-fail)"
+            correct: true
+          - value: "The full sequence, stopping on the first failing group"
+            correct: false
+          - value: "Nothing, because 'User' is remapped to the sequence"
+            correct: false
+          - value: "Only the 'Strong' group"
+            correct: false
+        explanation: >-
+          Validating the {ClassName} group ('User') runs the class's Default
+          constraints flat, bypassing the sequence. Only validating 'Default'
+          triggers the sequence.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      - id: "VAL-GROUPSEQ-06"
+        question: |
+          What does this YAML configure?
+          ```yaml
+          App\Entity\Registration:
+              group_sequence:
+                  - Registration
+                  - Strict
+          ```
+        type: "config"
+        difficulty: "medium"
+        subchapter: "validation/group-sequence"
+        concepts: ["group_sequence", "yaml", "ClassName-group"]
+        syllabus: "Data Validation → Group sequences"
+        answers:
+          - value: "A group sequence: validate the Registration (class-name) group first, then Strict, stopping at the first failing group"
+            correct: true
+          - value: "Two independent validation runs whose violations are merged"
+            correct: false
+          - value: "A GroupSequenceProvider"
+            correct: false
+          - value: "It disables the Default group"
+            correct: false
+        explanation: >-
+          group_sequence declares the ordered sequence used when validating Default.
+          The class-name group (Registration) means the class's own Default
+          constraints; Strict runs only if the first step passes.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      - id: "VAL-GROUPSEQ-07"
+        question: "When is a #[Assert\\GroupSequenceProvider] class's getGroupSequence() called?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "validation/group-sequence"
+        concepts: ["GroupSequenceProvider", "runtime", "state-dependent"]
+        syllabus: "Data Validation → Group sequences"
+        answers:
+          - value: "Each time the object is validated, so the sequence can depend on the object's state"
+            correct: true
+          - value: "Once, then cached in ClassMetadata"
+            correct: false
+          - value: "At container compile time"
+            correct: false
+          - value: "Only when invoked from the console"
+            correct: false
+        explanation: >-
+          The provider is evaluated per validation, letting the returned array or
+          GroupSequence adapt to runtime state (e.g. premium vs free account).
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      - id: "VAL-GROUPSEQ-08"
+        question: |
+          Given:
+          ```php
+          #[Assert\GroupSequence(['Login', 'Strict'])]
+          class Login {
+              #[Assert\NotBlank] public string $email = '';    // ''
+              #[Assert\NotBlank] public string $password = '';  // ''
+              #[Assert\Email(groups: ['Strict'])] public string $email2 = 'bad';
+          }
+          $validator->validate($login); // Default
+          ```
+          Which violations are returned?
+        type: "code"
+        difficulty: "hard"
+        subchapter: "validation/group-sequence"
+        concepts: ["stop-on-first-fail", "sequence-steps", "ClassName-group"]
+        syllabus: "Data Validation → Group sequences"
+        answers:
+          - value: "Only the two NotBlank violations from step 1 (Login); the Strict Email check never runs"
+            correct: true
+          - value: "All three violations"
+            correct: false
+          - value: "Only the Email violation"
+            correct: false
+          - value: "None; the sequence stops immediately"
+            correct: false
+        explanation: >-
+          Step 1 is 'Login' (the class's Default constraints). Both NotBlank checks
+          fail, so the sequence halts before the 'Strict' step and the Email check on
+          $email2 is skipped.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
       # ---- callbacks.md ----
-      - question: "What is the signature of an instance-method #[Assert\\Callback]?"
+      - id: "VAL-CALLBACK-01"
+        question: "What is the signature of an instance-method #[Assert\\Callback]?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["Callback", "signature", "ExecutionContext"]
+        syllabus: "Data Validation → Callback validators"
         answers:
           - value: "public function m(ExecutionContextInterface $context, mixed $payload): void"
             correct: true
@@ -288,7 +1043,13 @@ categories:
           static form additionally receives the object as the first argument.
         documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
 
-      - question: "How does a callback validator register an error?"
+      - id: "VAL-CALLBACK-02"
+        question: "How does a callback validator register an error?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/callbacks"
+        concepts: ["Callback", "buildViolation", "return-ignored"]
+        syllabus: "Data Validation → Callback validators"
         answers:
           - value: "$context->buildViolation('...')->addViolation();"
             correct: true
@@ -303,7 +1064,13 @@ categories:
           callback's return value is ignored.
         documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
 
-      - question: "#[Assert\\Callback] is which kind of constraint?"
+      - id: "VAL-CALLBACK-03"
+        question: "#[Assert\\Callback] is which kind of constraint?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["Callback", "class-scope", "whole-object"]
+        syllabus: "Data Validation → Callback validators"
         answers:
           - value: "A class-level constraint; the callback reads the whole object"
             correct: true
@@ -319,8 +1086,135 @@ categories:
           report on any path with atPath().
         documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
 
+      - id: "VAL-CALLBACK-04"
+        question: "A static #[Assert\\Callback] method (referenced via the callback: option) receives what as its first argument?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["Callback", "static", "object-first-arg"]
+        syllabus: "Data Validation → Callback validators"
+        answers:
+          - value: "The object being validated (then the ExecutionContext, then the payload)"
+            correct: true
+          - value: "The ExecutionContext"
+            correct: false
+          - value: "The property value"
+            correct: false
+          - value: "The payload"
+            correct: false
+        explanation: >-
+          The static form has no $this, so its signature is (object $object,
+          ExecutionContextInterface $context, mixed $payload). The instance form is
+          (context, payload).
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      - id: "VAL-CALLBACK-05"
+        question: "A callback compares $this->start >= $this->end and occasionally throws a TypeError in production. What is the most likely cause?"
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["null-handling", "callback-bug", "guard"]
+        syllabus: "Data Validation → Callback validators"
+        answers:
+          - value: "One of the properties is null; callbacks run even when fields are unset, so you must guard against null first"
+            correct: true
+          - value: "Callbacks cannot compare dates"
+            correct: false
+          - value: "The callback is missing a return value"
+            correct: false
+          - value: "The ExecutionContext is null"
+            correct: false
+        explanation: >-
+          Callbacks always run regardless of field state, so nullable properties are
+          the classic callback bug. Guard with null checks (or ?-> / ??) and let each
+          field's own NotNull enforce presence.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      - id: "VAL-CALLBACK-06"
+        question: "A #[Assert\\Callback(groups: ['checkout'])] never fires during a plain validate($obj). Why, and does it join sequences?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["Callback", "groups", "sequence"]
+        syllabus: "Data Validation → Callback validators"
+        answers:
+          - value: "It runs only when the 'checkout' group is validated; being class-scoped, it also participates in group sequences like any constraint"
+            correct: true
+          - value: "Callbacks ignore groups; the attribute is malformed"
+            correct: false
+          - value: "Callbacks can never run inside groups"
+            correct: false
+          - value: "It runs only in the Default group regardless of the option"
+            correct: false
+        explanation: >-
+          Callback honours its groups option (default Default). A non-Default callback
+          runs only when that group is validated, and it participates in group
+          sequences exactly like any other constraint.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      - id: "VAL-CALLBACK-07"
+        question: |
+          Given:
+          ```php
+          #[Assert\Callback]
+          public function check(ExecutionContextInterface $context, mixed $payload): void {
+              if ($this->percent > 50 && $this->stackable) {
+                  $context->buildViolation('Large discounts cannot stack.')
+                      ->atPath('stackable')
+                      ->addViolation();
+              }
+          }
+          ```
+          Where is the violation reported?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["atPath", "buildViolation", "property-path"]
+        syllabus: "Data Validation → Callback validators"
+        answers:
+          - value: "On the 'stackable' property path"
+            correct: true
+          - value: "On the class root"
+            correct: false
+          - value: "On 'percent'"
+            correct: false
+          - value: "Nowhere; the method returns void"
+            correct: false
+        explanation: >-
+          atPath('stackable') relocates the violation to that field. The void return
+          is normal — the error is committed by addViolation(), not by returning a
+          value.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      - id: "VAL-CALLBACK-08"
+        question: "Where must #[Assert\\Callback] be placed?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/callbacks"
+        concepts: ["Callback", "placement", "method"]
+        syllabus: "Data Validation → Callback validators"
+        answers:
+          - value: "On a method (or on the class via the callback: option) — never on a property"
+            correct: true
+          - value: "On any property"
+            correct: false
+          - value: "Only on a getter"
+            correct: false
+          - value: "On the constructor"
+            correct: false
+        explanation: >-
+          Callback is a class-level constraint attached to a method; placing it on a
+          property is a mistake. Read the object via $this or $context->getObject().
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
       # ---- custom-constraints.md ----
-      - question: "By default, which validator class validates the constraint App\\Validator\\Foo?"
+      - id: "VAL-CUSTOM-01"
+        question: "By default, which validator class validates the constraint App\\Validator\\Foo?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["validatedBy", "naming-convention", "ConstraintValidator"]
+        syllabus: "Data Validation → Custom constraints"
         answers:
           - value: "App\\Validator\\FooValidator (constraint name + 'Validator')"
             correct: true
@@ -335,7 +1229,13 @@ categories:
           Override it only when the validator service id differs from that name.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
 
-      - question: "How do you make a custom constraint apply at class scope?"
+      - id: "VAL-CUSTOM-02"
+        question: "How do you make a custom constraint apply at class scope?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["getTargets", "CLASS_CONSTRAINT", "class-scope"]
+        syllabus: "Data Validation → Custom constraints"
         answers:
           - value: "Override getTargets() to return Constraint::CLASS_CONSTRAINT"
             correct: true
@@ -351,7 +1251,13 @@ categories:
           the whole object as $value.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
 
-      - question: "What is the recommended first step in ConstraintValidator::validate()?"
+      - id: "VAL-CUSTOM-03"
+        question: "What is the recommended first step in ConstraintValidator::validate()?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["instanceof-guard", "UnexpectedTypeException", "fail-fast"]
+        syllabus: "Data Validation → Custom constraints"
         answers:
           - value: "Check $constraint instanceof YourConstraint and throw UnexpectedTypeException otherwise"
             correct: true
@@ -367,7 +1273,13 @@ categories:
           examples.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
 
-      - question: "What does #[HasNamedArguments] do on a custom Constraint constructor?"
+      - id: "VAL-CUSTOM-04"
+        question: "What does #[HasNamedArguments] do on a custom Constraint constructor?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["HasNamedArguments", "named-arguments", "typed-options"]
+        syllabus: "Data Validation → Custom constraints"
         answers:
           - value: "Passes attribute arguments as named constructor arguments (typed options)"
             correct: true
@@ -383,8 +1295,138 @@ categories:
           style; remember to forward $groups and $payload to parent::__construct().
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
 
+      - id: "VAL-CUSTOM-06"
+        question: "How is a ConstraintValidator subclass wired so you can inject dependencies (e.g. a repository) into it?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "validation/custom-constraints"
+        concepts: ["autoconfigure", "validator.constraint_validator", "service"]
+        syllabus: "Data Validation → Custom constraints"
+        answers:
+          - value: "It is autoconfigured as a service tagged validator.constraint_validator (via ConstraintValidatorInterface), so normal autowiring applies"
+            correct: true
+          - value: "You must register it manually in services.yaml with a factory"
+            correct: false
+          - value: "Validators cannot have dependencies"
+            correct: false
+          - value: "You register a compiler pass for each validator"
+            correct: false
+        explanation: >-
+          Implementing ConstraintValidatorInterface (via ConstraintValidator)
+          triggers autoconfiguration with the validator.constraint_validator tag, so
+          validators are services and can have dependencies autowired.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - id: "VAL-CUSTOM-07"
+        question: "In a custom Constraint with #[HasNamedArguments], why forward $groups and $payload to parent::__construct()?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "validation/custom-constraints"
+        concepts: ["HasNamedArguments", "groups", "parent-constructor"]
+        syllabus: "Data Validation → Custom constraints"
+        answers:
+          - value: "Otherwise the constraint ignores its groups/payload, so group assignment silently stops working"
+            correct: true
+          - value: "It is optional decoration with no effect"
+            correct: false
+          - value: "It registers the validator service"
+            correct: false
+          - value: "It makes the constraint repeatable"
+            correct: false
+        explanation: >-
+          The base Constraint stores groups and payload. Forgetting to forward them
+          means the constraint always lands in Default and the payload is lost.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - id: "VAL-CUSTOM-08"
+        question: |
+          What do the first two statements accomplish?
+          ```php
+          public function validate(mixed $value, Constraint $constraint): void {
+              if (!$constraint instanceof ContainsAlphanumeric) {
+                  throw new UnexpectedTypeException($constraint, ContainsAlphanumeric::class);
+              }
+              if (null === $value || '' === $value) { return; }
+              // ...
+          }
+          ```
+        type: "code"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["instanceof-guard", "skip-null", "composition"]
+        syllabus: "Data Validation → Custom constraints"
+        answers:
+          - value: "Guard the constraint type (fail fast if mis-wired) and skip null/empty so the rule composes with NotBlank"
+            correct: true
+          - value: "They are optional boilerplate with no effect"
+            correct: false
+          - value: "They register the violation"
+            correct: false
+          - value: "They enable group sequences"
+            correct: false
+        explanation: >-
+          The instanceof guard documents intent and throws UnexpectedTypeException if
+          mis-wired; the null/empty early return keeps the constraint composable with
+          presence checks like NotBlank.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - id: "VAL-CUSTOM-09"
+        question: |
+          What does IS_REPEATABLE enable here?
+          ```php
+          #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::IS_REPEATABLE)]
+          final class ContainsAlphanumeric extends Constraint { /* ... */ }
+          ```
+        type: "config"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["IS_REPEATABLE", "attribute-flags", "targets"]
+        syllabus: "Data Validation → Custom constraints"
+        answers:
+          - value: "The same constraint attribute can be applied more than once on the same property"
+            correct: true
+          - value: "It makes the validator re-run until it passes"
+            correct: false
+          - value: "It registers the constraint in every group"
+            correct: false
+          - value: "It allows the constraint on both properties and classes"
+            correct: false
+        explanation: >-
+          IS_REPEATABLE is a native PHP attribute flag allowing multiple instances on
+          one target. Allowing both property and class placement instead needs
+          TARGET_CLASS in the flags AND getTargets() returning both.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - id: "VAL-CUSTOM-10"
+        question: "How does a ConstraintValidator obtain $this->context (the ExecutionContext)?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "validation/custom-constraints"
+        concepts: ["initialize", "ExecutionContext", "ConstraintValidator"]
+        syllabus: "Data Validation → Custom constraints"
+        answers:
+          - value: "The validator calls initialize($context) before validate(); ConstraintValidator stores it as $this->context"
+            correct: true
+          - value: "It is passed as a third argument to validate()"
+            correct: false
+          - value: "You must autowire ExecutionContextInterface"
+            correct: false
+          - value: "It is a static property on ConstraintValidator"
+            correct: false
+        explanation: >-
+          For each constraint the validator resolves its ConstraintValidator, calls
+          initialize($context) (which sets $this->context on the base class) and then
+          validate($value, $constraint).
+        documentation: "https://symfony.com/doc/current/validation.html"
+
       # ---- violations-builder.md ----
-      - question: "When is a violation built with buildViolation() actually recorded?"
+      - id: "VAL-VIOLATIONS-01"
+        question: "When is a violation built with buildViolation() actually recorded?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["buildViolation", "addViolation", "fluent-builder"]
+        syllabus: "Data Validation → Violations & the execution context"
         answers:
           - value: "Only when addViolation() is called on the builder"
             correct: true
@@ -400,7 +1442,13 @@ categories:
           silently.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
 
-      - question: "Which method returns the message with its {{ placeholders }} still unresolved?"
+      - id: "VAL-VIOLATIONS-02"
+        question: "Which method returns the message with its {{ placeholders }} still unresolved?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["getMessageTemplate", "getMessage", "interpolation"]
+        syllabus: "Data Validation → Violations & the execution context"
         answers:
           - value: "getMessageTemplate()"
             correct: true
@@ -416,7 +1464,13 @@ categories:
           substitution map.
         documentation: "https://symfony.com/doc/current/validation.html"
 
-      - question: "On the violation builder, which method attaches the error to a different property?"
+      - id: "VAL-VIOLATIONS-03"
+        question: "On the violation builder, which method attaches the error to a different property?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["atPath", "property-path", "builder"]
+        syllabus: "Data Validation → Violations & the execution context"
         answers:
           - value: "atPath('otherField')"
             correct: true
@@ -431,9 +1485,131 @@ categories:
           commonly used in class-level constraints to blame a specific field.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
 
+      - id: "VAL-VIOLATIONS-04"
+        question: "What is $this->context->addViolation($message, $params) a shortcut for?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/violations-builder"
+        concepts: ["addViolation", "shortcut", "ExecutionContext"]
+        syllabus: "Data Validation → Violations & the execution context"
+        answers:
+          - value: "buildViolation($message, $params)->addViolation() — the common case with no extra setters"
+            correct: true
+          - value: "Resetting the violation list"
+            correct: false
+          - value: "Reading the existing violations"
+            correct: false
+          - value: "Throwing a ValidationFailedException"
+            correct: false
+        explanation: >-
+          The context's addViolation() is a convenience for the simple case; use
+          buildViolation() when you need atPath/setCode/setInvalidValue before
+          committing.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - id: "VAL-VIOLATIONS-05"
+        question: "Why use setParameter('{{ value }}', ...) instead of concatenating the value into the message string?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["setParameter", "placeholders", "translation"]
+        syllabus: "Data Validation → Violations & the execution context"
+        answers:
+          - value: "Placeholders keep the message translatable; the {{ x }} template is interpolated later and preserved by getMessageTemplate()"
+            correct: true
+          - value: "Concatenation is faster and preferred"
+            correct: false
+          - value: "setParameter is required to commit the violation"
+            correct: false
+          - value: "Messages cannot contain any variables otherwise"
+            correct: false
+        explanation: >-
+          {{ }} placeholders filled by setParameter keep the raw template
+          translatable and available via getMessageTemplate(); inlining values into
+          the string breaks translation.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - id: "VAL-VIOLATIONS-06"
+        question: |
+          Given:
+          ```php
+          foreach ($violations as $v) {
+              $errors[$v->getPropertyPath()][] = $v->getMessage();
+          }
+          ```
+          What does $v->getMessage() return here?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["getMessage", "interpolation", "reading-list"]
+        syllabus: "Data Validation → Violations & the execution context"
+        answers:
+          - value: "The fully interpolated message (placeholders resolved)"
+            correct: true
+          - value: "The raw template with {{ }} placeholders"
+            correct: false
+          - value: "The violation code"
+            correct: false
+          - value: "The invalid value"
+            correct: false
+        explanation: >-
+          getMessage() is interpolated; getMessageTemplate() keeps the raw {{ x }}
+          template. getPropertyPath() returns the path (e.g. 'code').
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-VIOLATIONS-07"
+        question: "A developer uses $violations[0] (works) but array_map(..., $violations) (fails). Why?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["ConstraintViolationList", "Countable", "not-array"]
+        syllabus: "Data Validation → Violations & the execution context"
+        answers:
+          - value: "The list is a Countable/IteratorAggregate/ArrayAccess object, not a plain array; use foreach/count() or iterator_to_array()"
+            correct: true
+          - value: "The list is null when empty"
+            correct: false
+          - value: "array_map only works on associative arrays"
+            correct: false
+          - value: "Violations are stored as strings"
+            correct: false
+        explanation: >-
+          ConstraintViolationList implements ArrayAccess (so [0] works) but is not an
+          array. Iterate it, call count(), use findByCodes(), or convert via
+          iterator_to_array() for array functions.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - id: "VAL-VIOLATIONS-08"
+        question: "What is the purpose of the builder's setCode() value?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/violations-builder"
+        concepts: ["setCode", "findByCodes", "stable-code"]
+        syllabus: "Data Validation → Violations & the execution context"
+        answers:
+          - value: "A stable machine-readable code for the violation, usable via findByCodes() and independent of translated text"
+            correct: true
+          - value: "The HTTP status code returned to the client"
+            correct: false
+          - value: "The translation domain"
+            correct: false
+          - value: "The property path"
+            correct: false
+        explanation: >-
+          setCode() attaches a stable code (often a constant) so application code can
+          branch on it without depending on translated message text; the list's
+          findByCodes() filters by it.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
   - name: "Data Validation — Constraints & Cascade"
     questions:
-      - question: "Which constraint passes only when the value IS strictly null?"
+      - id: "VAL-CONSTRAINTS-05"
+        question: "Which constraint passes only when the value IS strictly null?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/built-in-constraints"
+        concepts: ["IsNull", "NotNull", "null-handling"]
+        syllabus: "Data Validation → Built-in constraints"
         answers:
           - value: "IsNull"
             correct: true
@@ -447,7 +1623,13 @@ categories:
           IsNull requires the value to be exactly null (fails otherwise). It is the
           inverse of NotNull. Blank (its cousin) passes for null or ''.
         documentation: "https://symfony.com/doc/current/reference/constraints/IsNull.html"
-      - question: "In #[Assert\\GroupSequence(['A', 'B'])], if a constraint in group 'A' fails, group 'B' is…"
+      - id: "VAL-GROUPSEQ-04"
+        question: "In #[Assert\\GroupSequence(['A', 'B'])], if a constraint in group 'A' fails, group 'B' is…"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/group-sequence"
+        concepts: ["group-sequence", "stop-on-first-fail", "ordering"]
+        syllabus: "Data Validation → Group sequences"
         answers:
           - value: "Not validated — the sequence stops at the first group that produces a violation"
             correct: true
@@ -461,7 +1643,13 @@ categories:
           A GroupSequence validates groups in order and stops as soon as one group
           yields a violation, so later groups (and their expensive checks) never run.
         documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
-      - question: "A constraint declared without any explicit 'groups' option belongs to which validation group?"
+      - id: "VAL-GROUPS-05"
+        question: "A constraint declared without any explicit 'groups' option belongs to which validation group?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "validation/groups"
+        concepts: ["Default", "implicit-group", "groups"]
+        syllabus: "Data Validation → Validation groups"
         answers:
           - value: "The special 'Default' group"
             correct: true
@@ -475,7 +1663,13 @@ categories:
           Every constraint with no explicit groups is placed in the Default group,
           which is the group used when you call validate() without specifying groups.
         documentation: "https://symfony.com/doc/current/validation/groups.html"
-      - question: "To make a single custom constraint usable on BOTH a property and a class, getTargets() should return…"
+      - id: "VAL-CUSTOM-05"
+        question: "To make a single custom constraint usable on BOTH a property and a class, getTargets() should return…"
+        type: "single"
+        difficulty: "hard"
+        subchapter: "validation/custom-constraints"
+        concepts: ["getTargets", "PROPERTY_CONSTRAINT", "CLASS_CONSTRAINT"]
+        syllabus: "Data Validation → Custom constraints"
         answers:
           - value: "[self::PROPERTY_CONSTRAINT, self::CLASS_CONSTRAINT]"
             correct: true
@@ -490,7 +1684,13 @@ categories:
           both PROPERTY_CONSTRAINT and CLASS_CONSTRAINT lets the same constraint be
           placed on a property and on a class.
         documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
-      - question: "You put #[Assert\\Valid] on a property holding a Collection/array of Address objects. What happens on validate()?"
+      - id: "VAL-SCOPES-04"
+        question: "You put #[Assert\\Valid] on a property holding a Collection/array of Address objects. What happens on validate()?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "validation/scopes"
+        concepts: ["Valid", "collection-cascade", "traverse"]
+        syllabus: "Data Validation → Validation scopes & cascading"
         answers:
           - value: "Each element is traversed and its own constraints are validated (cascade)"
             correct: true
