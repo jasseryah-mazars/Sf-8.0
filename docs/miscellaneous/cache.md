@@ -1,5 +1,11 @@
 # Cache Component
 
+!!! tip "In a nutshell"
+    Symfony Cache stores expensive results so you compute them once. Prefer the
+    contracts `CacheInterface::get($key, $callback)` — it computes on miss and
+    adds built-in stampede protection. Remember: only PSR-6 (via a
+    `TagAwareAdapter`) supports tags; PSR-16 does not.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

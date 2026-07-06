@@ -1,5 +1,10 @@
 # HTTP Request
 
+!!! tip "In a nutshell"
+    `Request` is an object-oriented wrapper around PHP's superglobals: read data
+    from typed *bags* instead of `$_GET`/`$_POST`. Exam hook: route parameters live
+    in **`attributes`** (a `ParameterBag`), not in `query`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

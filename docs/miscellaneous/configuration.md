@@ -220,7 +220,7 @@ not for heavy computation — it is interpreted.
 
 !!! tip "Cheat sheet"
     - Node types: `scalarNode`, `integerNode`, `booleanNode`, `enumNode`, `arrayNode`; `->isRequired()`, `->defaultValue()`.
-    - Env precedence: real env > `.env.<env>.local` > `.env.local` > `.env.<env>` > `.env`.
+    - Env precedence: real env > `.env.<env>.local` > `.env.<env>` > `.env.local` > `.env`.
     - `debug:dotenv`, `debug:config <bundle>`, `composer dump-env prod`.
     - Providers implement `ExpressionFunctionProviderInterface`.
 

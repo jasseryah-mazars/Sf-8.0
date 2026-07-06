@@ -1,5 +1,11 @@
 # Lock Component
 
+!!! tip "In a nutshell"
+    Lock stops two processes doing the same critical work at once: get a
+    `LockInterface` from `LockFactory`, `acquire()`, work, `release()`. Exam
+    gold: `acquire()` is **non-blocking** by default (returns `false` if held),
+    and local stores (Flock/Semaphore) only guard a single machine.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

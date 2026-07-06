@@ -1,5 +1,10 @@
 # HTTP Method Matching
 
+!!! tip "In a nutshell"
+    The `methods` option limits which HTTP verbs a route accepts, so one path can serve
+    different actions per verb; pair it with `schemes` for HTTPS-only endpoints.
+    Exam hook: a matching path with the wrong verb is a 405 (with `Allow`), not a 404 — and `GET` also matches `HEAD`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

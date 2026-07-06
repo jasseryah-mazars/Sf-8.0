@@ -1,5 +1,10 @@
 # Triggering Redirects from Routing
 
+!!! tip "In a nutshell"
+    Use the built-in `RedirectController` to define config-only redirects: `redirectAction`
+    targets a route name, `urlRedirectAction` a literal path, and `permanent: true` makes it a 301.
+    Exam hook: a trailing-slash mismatch auto-redirects (301) only for GET/HEAD — a POST to the non-canonical form is a 405.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

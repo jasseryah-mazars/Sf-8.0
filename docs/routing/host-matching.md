@@ -1,5 +1,10 @@
 # Domain Name (Host) Matching
 
+!!! tip "In a nutshell"
+    The `host` option constrains a route to a domain and can capture subdomains as
+    parameters (`{tenant}.example.com`), enabling multi-tenant and admin-subdomain apps.
+    Exam hook: host tokens default to `[^.]+` (dot separator), the host is checked before the path, and cross-host generation forces an absolute URL.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

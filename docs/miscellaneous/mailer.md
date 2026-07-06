@@ -1,5 +1,11 @@
 # Mime & Mailer Components
 
+!!! tip "In a nutshell"
+    Mime builds an email as a tree of parts; Mailer sends it through a transport
+    chosen by `MAILER_DSN`. Build an `Email`/`TemplatedEmail`, call
+    `MailerInterface::send()`. Exam gold: once `SendEmailMessage` is routed via
+    Messenger, `send()` queues the mail instead of delivering it inline.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -31,8 +37,9 @@ sends that message through a **transport** chosen by a DSN. You build a message
 
 - `TextPart` — a body (text or html) with a media type.
 - `DataPart` — an attachment or embedded resource.
-- `MultipartAlternative` / `MultipartMixed` / `MultipartRelated` — containers
-  that combine parts (alternative bodies, mixed attachments, related/embedded).
+- `Multipart\AlternativePart` / `Multipart\MixedPart` / `Multipart\RelatedPart`
+  — containers that combine parts (alternative bodies, mixed attachments,
+  related/embedded), all under `Symfony\Component\Mime\Part\Multipart\`.
 
 `Email::text()`/`html()`/`addPart()` assemble this tree; `attachFromPath()` and
 `embedFromPath()` add `DataPart`s. Embedded images are referenced via `cid:`.

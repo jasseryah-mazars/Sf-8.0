@@ -1,5 +1,10 @@
 # Default Values & Optional Parameters
 
+!!! tip "In a nutshell"
+    A default value makes a placeholder optional, written inline as `{page<\d+>?1}` or via
+    the `defaults` array, so `/blog` and `/blog/2` both match.
+    Exam hook: only trailing placeholders can be optional, and generation omits a segment whose value equals its default.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

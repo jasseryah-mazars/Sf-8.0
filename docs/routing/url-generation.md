@@ -1,5 +1,10 @@
 # Generating URLs
 
+!!! tip "In a nutshell"
+    Generation turns a route name plus parameters back into a URL — always generate from
+    names, never hard-code paths, and pick a reference type for how much of the URL to emit.
+    Exam hook: the constants live on `UrlGeneratorInterface`, the default is `ABSOLUTE_PATH`, and extra (non-placeholder) params become the query string.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

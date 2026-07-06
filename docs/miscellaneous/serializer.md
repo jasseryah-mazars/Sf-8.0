@@ -1,5 +1,11 @@
 # Serializer Component
 
+!!! tip "In a nutshell"
+    The Serializer turns objects into JSON/XML/CSV and back in two stages:
+    normalizers (object ↔ array) then encoders (array ↔ string). Exam gold:
+    `serialize()` = normalize then encode, and `#[Groups]` only filters fields
+    when you pass `['groups' => [...]]` in the context.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

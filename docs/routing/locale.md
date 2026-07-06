@@ -1,5 +1,10 @@
 # Locale Guessing & Localized Routes
 
+!!! tip "In a nutshell"
+    Give one action per-language paths by making `path` a locale→path map; the matched
+    `_locale` then drives translations and formatting for the whole request.
+    Exam hook: Symfony does not guess the locale from `Accept-Language` by default — it is opt-in via `set_locale_from_accept_language`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

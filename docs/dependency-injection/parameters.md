@@ -135,7 +135,7 @@ Three ways, all resolved at compile time into the definition:
 
     ```console
     $ php bin/console debug:container --parameters
-    $ php bin/console debug:container --param kernel.debug
+    $ php bin/console debug:container --parameter=kernel.debug
     ```
 
 ## Best practices & anti-patterns

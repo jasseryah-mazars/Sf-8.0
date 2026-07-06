@@ -1,5 +1,11 @@
 # HTTP Response
 
+!!! tip "In a nutshell"
+    `Response` models what your app sends back — status line, headers and body —
+    with subclasses like `JsonResponse` for common payloads. Exam hook:
+    `$response->headers` is a **`ResponseHeaderBag`**, and `prepare()` makes the
+    response compliant with the request before `send()` transmits it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

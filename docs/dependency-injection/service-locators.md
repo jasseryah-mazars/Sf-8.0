@@ -53,7 +53,9 @@ flowchart LR
 A **service subscriber** declares the services it *may* need via
 `Symfony\Contracts\Service\ServiceSubscriberInterface::getSubscribedServices()`,
 and the container injects a locator into a `$container` property (via
-`ServiceSubscriberTrait` or a constructor arg). In Symfony 8 you annotate methods
+`ServiceMethodsSubscriberTrait` or a constructor arg — the older
+`ServiceSubscriberTrait` was **deprecated in 6.4**, use
+`ServiceMethodsSubscriberTrait`). In Symfony 8 you annotate methods
 with `#[SubscribedService]` and use the trait — the return type of the method is
 the service type. This is how the base `AbstractController` gets `twig`, `router`,
 etc. lazily.

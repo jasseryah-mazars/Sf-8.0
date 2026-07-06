@@ -1,5 +1,10 @@
 # Router Debugging
 
+!!! tip "In a nutshell"
+    `debug:router` lists/inspects routes; `router:match <path>` simulates a request and
+    (via `TraceableUrlMatcher`) explains why each route matched or was rejected.
+    Exam hook: in prod the compiled router is not auto-refreshed — after changing routes you must clear/warm the cache.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

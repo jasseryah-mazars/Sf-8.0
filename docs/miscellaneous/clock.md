@@ -1,5 +1,11 @@
 # Clock Component
 
+!!! tip "In a nutshell"
+    The Clock component replaces `new \DateTime()` with an injectable clock so
+    time-dependent code becomes testable: prod uses `NativeClock`, tests freeze
+    or advance a `MockClock`. Remember `ClockInterface::now()` always returns an
+    immutable `DatePoint` (a `\DateTimeImmutable`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

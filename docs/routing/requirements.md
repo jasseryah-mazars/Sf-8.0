@@ -1,5 +1,10 @@
 # Restricting URL Parameters (Requirements)
 
+!!! tip "In a nutshell"
+    A requirement narrows a placeholder's default `[^/]+` pattern to a specific regex,
+    written inline as `{id<\d+>}` or via the `requirements` array (the two are equivalent).
+    Exam hook: it's compiled into the route regex, so a violating value simply fails to match (a 404), never a 400.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

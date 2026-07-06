@@ -1,5 +1,10 @@
 # Special Internal Routing Attributes
 
+!!! tip "In a nutshell"
+    Underscore-prefixed parameters are reserved: `_controller`, `_format`, `_locale`,
+    `_fragment` configure the request, while `_route` and `_route_params` are read-only outputs the matcher injects.
+    Exam hook: `RouterListener` copies matcher output into request attributes, and `_format` sets the request format (driving `Content-Type`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

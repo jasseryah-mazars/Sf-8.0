@@ -1,5 +1,12 @@
 # Messenger Component
 
+!!! tip "In a nutshell"
+    Messenger sends plain PHP objects (messages) through a bus to handlers, so
+    slow work runs later in a background worker instead of during the request.
+    Exam gold: `dispatch()` returns an **`Envelope`** (never the handler's value),
+    and once a message is routed to a transport `SendMessageMiddleware` **stops**
+    the bus so the handler runs in the worker, not in-process.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

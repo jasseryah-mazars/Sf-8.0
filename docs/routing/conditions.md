@@ -1,5 +1,10 @@
 # Conditional Request Matching
 
+!!! tip "In a nutshell"
+    A `condition` is an ExpressionLanguage boolean (over `context`/`request`, with
+    `env()`/`service()`) that acts as a last-mile match filter when path, host, method and scheme aren't enough.
+    Exam hook: conditions affect matching only (a false one is a 404, never affects `generateUrl()`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

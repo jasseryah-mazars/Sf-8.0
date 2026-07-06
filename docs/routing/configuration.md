@@ -1,5 +1,10 @@
 # Configuring Routes
 
+!!! tip "In a nutshell"
+    A route maps a URL path to a controller under a unique name; declare it with the
+    `#[Route]` attribute (or YAML) and everything compiles into one `RouteCollection`.
+    Exam hook: the attribute is `Symfony\Component\Routing\Attribute\Route` and matching is first-match-wins in declaration order.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
