@@ -13,6 +13,10 @@ copyright: >-
   Content licensed under MIT. Symfony is a trademark of Symfony SAS.
   This is an independent community project and is not affiliated with Symfony SAS.
 
+# Authoring templates & internal notes — not part of the published site.
+exclude_docs: |
+  _meta/
+
 theme:
   name: material
   language: en

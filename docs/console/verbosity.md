@@ -112,7 +112,7 @@ flowchart LR
 
     use Symfony\Component\Console\Output\OutputInterface;
 
-    function log(OutputInterface $output): void
+    function report(OutputInterface $output): void
     {
         $output->writeln('always');                                   // normal+
         $output->writeln('more', OutputInterface::VERBOSITY_VERBOSE); // -v+
