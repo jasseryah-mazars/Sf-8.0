@@ -1,6 +1,6 @@
 # Documentation build toolchain for the Symfony 8 Certification Prep Platform.
 # Pinned for reproducible builds in CI and local development.
-mkdocs-material==9.5.44
+mkdocs-material==9.7.6
 mkdocs==1.6.1
 pymdown-extensions==10.12
 # Pygments >=2.19 changed HtmlFormatter to call html.escape(filename); with
