@@ -46,6 +46,15 @@ and transform.
 | Env var | `%env(APP_SECRET)%` | Runtime |
 | Processed env | `%env(int:MAX)%` | Runtime |
 
+!!! question "Predict first"
+    You change `%env(DATABASE_URL)%` in production. Must you rebuild the compiled
+    container for the new value to take effect? What about changing a `%parameter%`?
+
+??? note "Reveal"
+    Env vars resolve at **runtime**, so no rebuild is needed. A `%parameter%` is
+    frozen into the compiled container at build time — changing it *does* require a
+    cache rebuild.
+
 ## Deep Dive — how it works internally
 
 ### The parameter bag

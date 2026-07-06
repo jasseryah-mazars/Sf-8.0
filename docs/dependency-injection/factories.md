@@ -272,9 +272,29 @@ a service, use [decoration](decoration.md).
     - Args → factory method, not constructor.
     - Attribute: `#[Autowire(factory: [F::class, 'create'])]`.
 
+## Connections
+
+- **Depends on:** [Service Registration](registration.md) — a factory is a flag on
+  the service `Definition`.
+- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+  [Miscellaneous — Cache](../miscellaneous/cache.md) — transports and pools are
+  often built by factories.
+- **Confused with:** [Decoration](decoration.md) — a factory *builds* a service; a
+  decorator *wraps* an existing one.
+
 ## Official References
 - [Official Symfony docs — Using a Factory](https://symfony.com/doc/current/service_container/factories.html)
 - [Symfony source — Definition](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** some services need a factory instead of `new`
+- [ ] configure static, instance and invokable factories in Symfony 8
+- [ ] debug a factory that returns `null` into a non-nullable argument
+- [ ] spot that `arguments:` feed the factory method and there is no `#[Factory]`
+- [ ] explain how `Definition::setFactory()` changes what the dumped container calls
 
 ---
 

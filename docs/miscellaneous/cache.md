@@ -294,10 +294,26 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
     - Stampede = early expiration; `$beta=INF` forces recompute.
     - `cache:pool:clear`, `pools:` with `tags: true`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — pools are configured as services and autowired by pool name.
+- **Reused in:** [Deployment](deployment.md) — cache warmers pre-build pools/metadata; [HTTP Caching](../http-caching/index.md) caches whole responses instead of values.
+- **Confused with:** [Lock](lock.md) — both touch concurrency, but Lock enforces mutual exclusion while stampede protection only *reduces* duplicate recompute.
+
 ## Official References
 - [Official docs — Cache](https://symfony.com/doc/current/cache.html)
 - [Official docs — Cache contracts](https://symfony.com/doc/current/components/cache.html)
 - [Symfony source — CacheInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/Cache/CacheInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the callback `get()` API beats manual `isHit()`/`save()`
+- [ ] cache and tag a value, then `invalidateTags()` in Symfony 8
+- [ ] debug tags that don't invalidate (pool not tag-aware) and a null "miss" that never recomputes
+- [ ] spot the trick: a stored `null` is a hit; PSR-16 has no tags
+- [ ] describe how `$beta` drives probabilistic early expiration internally
 
 ---
 

@@ -301,9 +301,25 @@ code.
     - Lazy: no `Set-Cookie` until touched ⇒ don't touch on cacheable pages.
     - `migrate()` after login; `invalidate()` on logout.
 
+## Connections
+
+- **Depends on:** [The Request](request.md) — `RequestStack`/`Request::getSession()` is the entry point.
+- **Reused in:** [Flash Messages](flash-messages.md) — the flash bag is a bag inside the session.
+- **Confused with:** [Cookies](cookies.md) — the session keeps state server-side; only its id rides in a cookie.
+
 ## Official References
 - [Official Symfony docs — Sessions](https://symfony.com/doc/current/session.html)
 - [Symfony source — Session](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** sessions are lazy and request-scoped
+- [ ] read/write session attributes and configure the handler in Symfony 8
+- [ ] debug a `SessionNotFoundException` from calling `getSession()` on the CLI
+- [ ] spot `migrate()` (keep data, new id) vs `invalidate()` (wipe + new id)
+- [ ] explain how touching the session emits `Set-Cookie` and defeats shared caches
 
 ---
 

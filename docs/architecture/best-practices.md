@@ -216,10 +216,26 @@ clear reason, and document it.
     - Infra → env vars · secrets → vault · behaviour → parameters.
     - Smoke-test every public URL.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — thin controllers plus private autowired services are what let the compiler optimise; [Code Organization](code-organization.md) sets where each file lives.
+- **Reused in:** [Controllers](../controllers/index.md) — the "thin controller" rule shapes every action you write.
+- **Confused with:** [Naming Conventions](naming-conventions.md) — conventions are mechanical rules; best practices are the *why* behind idiomatic apps.
+
 ## Official References
 - [Official Symfony Best Practices](https://symfony.com/doc/current/best_practices.html)
 - [Service container](https://symfony.com/doc/current/service_container.html)
 - [Secrets management](https://symfony.com/doc/current/configuration/secrets.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** each best practice falls out of Symfony's architecture
+- [ ] implement a thin controller delegating to a private, autowired service
+- [ ] debug a service-location smell introduced by making services public
+- [ ] spot where a value belongs: env var vs parameter vs secrets vault
+- [ ] justify attributes for routing/validation in a code review
 
 ---
 

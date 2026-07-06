@@ -45,6 +45,15 @@ A resolver inspects the argument's metadata (name, type, attributes, variadic,
 default) and **yields** zero or more values. The first resolver that yields wins
 for that argument.
 
+!!! question "Predict first"
+    Your custom resolver does not handle the current argument. Do you return `null`,
+    return `false`, or do something else?
+
+??? note "Reveal"
+    Yield **nothing** — `return [];` — so `ArgumentResolver` tries the next
+    resolver. `return null;` is a `TypeError` (`resolve()` is `: iterable`), while
+    `yield null;` binds a real `null`. The first resolver that yields wins.
+
 ## Deep Dive — how it works internally
 
 `Symfony\Component\HttpKernel\Controller\ArgumentResolver::getArguments()` builds
