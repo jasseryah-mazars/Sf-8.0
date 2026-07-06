@@ -1,0 +1,328 @@
+# Client Configuration
+
+!!! abstract "Learning objectives"
+    By the end of this chapter you can:
+
+    - [ ] Pass kernel options (environment/debug) and default server parameters to `createClient()`
+    - [ ] Set request headers and HTTP Basic auth via server parameters
+    - [ ] Authenticate a user with `loginUser()`
+    - [ ] Run insulated requests in a separate process with `insulate()`
+
+    **Syllabus:** `Automated Tests → Client configuration` ·
+    **Level:** Expert ·
+    **Est. time:** 25 min ·
+    **Prerequisites:** [The Client](client.md), [Functional Tests](functional-tests.md)
+
+---
+
+## Theory
+
+`static::createClient(array $options = [], array $server = [])` takes two arrays:
+
+- **`$options`** — kernel boot options: `environment` (default `test`) and `debug`.
+- **`$server`** — default **server parameters** (the PHP `$_SERVER` bag) applied to
+  every request: HTTP headers (`HTTP_*`), `HTTPS`, host, and HTTP auth credentials.
+
+Server parameters model what a web server would set, so this is how you simulate
+headers, HTTPS, a custom host, or Basic auth without touching the controller.
+
+## Deep Dive — how it works internally
+
+Server parameters follow CGI conventions: request headers become
+`HTTP_<UPPER_SNAKE>` (`HTTP_ACCEPT`, `HTTP_X_REQUESTED_WITH`), while
+`CONTENT_TYPE`, `HTTPS`, `PHP_AUTH_USER`, and `PHP_AUTH_PW` have no prefix.
+`AbstractBrowser` merges the per-client defaults from `createClient()` with the
+per-request `$server` array passed to `request()`, then
+`HttpFoundation\Request::create()` turns them into request headers/attributes.
+
+`$client->setServerParameter($key, $value)` sets a default for **subsequent**
+requests; the sixth argument of `request()` overrides for **one** request.
+
+### Insulated requests
+
+Normally each request runs in the **same** PHP process as the test — fast, and you
+can inspect the profiler and container. `$client->insulate()` runs each request in
+a **fresh subprocess** (serialized in, serialized out). This guarantees clean
+global state per request but you **lose** in-process access to the container and
+profiler objects. Use it only to catch state leakage.
+
+```mermaid
+flowchart LR
+    A["createClient(options, server)"] --> B[default server params]
+    B --> C["request(..., server)"]
+    C -->|merge| D[HttpFoundation Request]
+    A -.insulate().-> E[subprocess per request]
+```
+
+!!! note "Source reference"
+    `AbstractBrowser::request()` merges default and per-request server params;
+    `insulate()` toggles subprocess execution
+    ([symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)).
+
+## Configuration & code
+
+=== "Options + server defaults"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Tests\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+    final class ApiClientTest extends WebTestCase
+    {
+        public function testJsonOverHttps(): void
+        {
+            $client = static::createClient(
+                ['environment' => 'test', 'debug' => false],
+                [
+                    'HTTPS' => true,
+                    'HTTP_HOST' => 'api.example.com',
+                    'HTTP_ACCEPT' => 'application/json',
+                ],
+            );
+
+            $client->request('GET', '/api/status');
+            self::assertResponseIsSuccessful();
+        }
+    }
+    ```
+
+=== "Headers & HTTP Basic auth"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Tests\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+    final class AuthHeaderTest extends WebTestCase
+    {
+        public function testBasicAuth(): void
+        {
+            $client = static::createClient();
+
+            // Per-request server params (6th arg of request()).
+            $client->request('GET', '/admin', [], [], [
+                'PHP_AUTH_USER' => 'admin',
+                'PHP_AUTH_PW' => 'secret',
+                'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest',
+            ]);
+
+            self::assertResponseIsSuccessful();
+        }
+    }
+    ```
+
+=== "loginUser()"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Tests\Controller;
+
+    use App\Repository\UserRepository;
+    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+    final class DashboardTest extends WebTestCase
+    {
+        public function testLoggedInAccess(): void
+        {
+            $client = static::createClient();
+            $user = self::getContainer()->get(UserRepository::class)
+                ->findOneByEmail('ada@example.com');
+
+            $client->loginUser($user);          // sets the security token
+            $client->request('GET', '/dashboard');
+
+            self::assertResponseIsSuccessful();
+        }
+    }
+    ```
+
+=== "Insulated"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Tests\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+    final class InsulatedTest extends WebTestCase
+    {
+        public function testFreshProcess(): void
+        {
+            $client = static::createClient();
+            $client->insulate();                // each request in its own PHP process
+            $client->request('GET', '/');
+
+            self::assertResponseIsSuccessful(); // NB: no in-process profiler access now
+        }
+    }
+    ```
+
+## Best practices & anti-patterns
+
+| ✅ Do | ❌ Avoid |
+|---|---|
+| `loginUser()` for authenticated flows | Simulating full login forms every test |
+| `HTTP_*` naming for header params | Passing raw header strings |
+| Per-request `$server` for one-off headers | Rebuilding the client to change one header |
+| Use `insulate()` sparingly | Insulating when you need profiler/container |
+
+## When (not) to use it / alternatives
+
+Use `$server` defaults for cross-cutting concerns (HTTPS, host, Accept). Use
+`loginUser()` to skip the login form and test *authorized* behaviour directly. Use
+`insulate()` only to hunt state leakage — it disables the in-process access to the
+[profiler](profiler.md) and [container](framework-objects.md) that most tests rely
+on.
+
+!!! danger "Certification traps"
+    - Request headers become **`HTTP_`-prefixed** server params
+      (`HTTP_ACCEPT`); `CONTENT_TYPE`, `HTTPS`, `PHP_AUTH_USER`/`PHP_AUTH_PW` are
+      unprefixed.
+    - `createClient()` takes `($options, $server)` — server params are the
+      **second** argument, not headers.
+    - `loginUser()` sets the token **without** the login form; it needs a real
+      `UserInterface` instance.
+    - `insulate()` forfeits in-process profiler/container access.
+
+!!! warning "Common mistakes"
+    - Passing headers to the wrong argument position of `request()` (server params
+      are the **5th/6th** arg, after parameters and files).
+    - Expecting `loginUser()` to work without a configured firewall.
+
+## Exercises
+
+1. **(Basic)** Create a client that sends every request as JSON over HTTPS to host
+   `api.local`, then request `/api/ping`.
+2. **(Intermediate)** Log in a fetched user and assert `/profile` shows their
+   email in an `h1`.
+
+??? success "Solutions"
+
+    **1.**
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Tests\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+    final class PingTest extends WebTestCase
+    {
+        public function testPing(): void
+        {
+            $client = static::createClient([], [
+                'HTTPS' => true,
+                'HTTP_HOST' => 'api.local',
+                'HTTP_ACCEPT' => 'application/json',
+            ]);
+            $client->request('GET', '/api/ping');
+
+            self::assertResponseIsSuccessful();
+        }
+    }
+    ```
+
+    **2.**
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Tests\Controller;
+
+    use App\Repository\UserRepository;
+    use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+    final class ProfileTest extends WebTestCase
+    {
+        public function testProfile(): void
+        {
+            $client = static::createClient();
+            $user = self::getContainer()->get(UserRepository::class)
+                ->findOneByEmail('ada@example.com');
+
+            $client->loginUser($user);
+            $client->request('GET', '/profile');
+
+            self::assertResponseIsSuccessful();
+            self::assertSelectorTextContains('h1', 'ada@example.com');
+        }
+    }
+    ```
+
+## Certification questions
+
+??? question "Q1. `createClient()`'s second argument is…"
+    - [x] A. An array of default server parameters ✅
+    - [ ] B. An array of request headers as strings
+    - [ ] C. The environment name
+    - [ ] D. A list of routes
+
+    **Why:** `createClient(array $options, array $server)` — server params model
+    `$_SERVER`. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#configuring-the-test-client).
+
+??? question "Q2. To send an `Accept: application/json` header you set…"
+    - [x] A. `HTTP_ACCEPT => 'application/json'` ✅
+    - [ ] B. `ACCEPT => 'application/json'`
+    - [ ] C. `HEADER_ACCEPT => 'application/json'`
+    - [ ] D. `CONTENT_TYPE => 'application/json'`
+
+    **Why:** request headers use the `HTTP_` prefix in server params.
+    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#configuring-the-test-client).
+
+??? question "Q3. `$client->loginUser($user)` does what?"
+    - [x] A. Authenticates the session with `$user`, skipping the login form ✅
+    - [ ] B. Submits the login form
+    - [ ] C. Creates the user in the database
+    - [ ] D. Returns a JWT
+
+    **Why:** it injects a security token for the given `UserInterface`.
+    **Ref:** [Testing — login](https://symfony.com/doc/current/testing.html#logging-in-users-authentication).
+
+??? question "Q4. `$client->insulate()` means each request…"
+    - [x] A. Runs in a separate PHP subprocess (no in-process profiler) ✅
+    - [ ] B. Follows redirects automatically
+    - [ ] C. Reuses the same kernel forever
+    - [ ] D. Is cached
+
+    **Why:** insulation isolates global state at the cost of losing in-process
+    access. **Ref:** [BrowserKit](https://symfony.com/doc/current/components/browser_kit.html).
+
+## Key takeaways
+
+- `createClient($options, $server)`: kernel options + default server parameters.
+- Headers = `HTTP_*`; `HTTPS`, `PHP_AUTH_USER`, `PHP_AUTH_PW` are unprefixed.
+- `loginUser($user)` authenticates without the login form.
+- `insulate()` = subprocess per request; you lose profiler/container access.
+
+## Last-minute revision
+
+!!! tip "Cheat sheet"
+    - `createClient(['environment'=>'test','debug'=>false], ['HTTPS'=>true])`.
+    - Per-request server params: 5th arg of `request($m,$u,$p,$files,$server)`.
+    - `setServerParameter($k,$v)` for subsequent requests.
+    - Auth: `loginUser($user)` or `PHP_AUTH_USER`/`PHP_AUTH_PW`.
+    - `insulate(true)` / `insulate(false)`.
+
+## References
+
+- [Official Symfony docs — Configuring the test client](https://symfony.com/doc/current/testing.html#configuring-the-test-client)
+- [Official Symfony docs — Logging in users](https://symfony.com/doc/current/testing.html#logging-in-users-authentication)
+- [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
+
+---
+
+<small>Related: [The Client](client.md) · [Framework Objects](framework-objects.md) · [Security](../security/index.md)</small>

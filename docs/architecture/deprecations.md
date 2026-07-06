@@ -1,0 +1,230 @@
+# Deprecations Best Practices
+
+!!! abstract "Learning objectives"
+    By the end of this chapter you can:
+
+    - [ ] Trigger a deprecation correctly with `trigger_deprecation()`.
+    - [ ] Detect deprecations at runtime, in the profiler, and in tests.
+    - [ ] Explain how the deprecation contract ties into the BC promise.
+    - [ ] Fix deprecations methodically before a major upgrade.
+
+    **Syllabus:** `Symfony Architecture → Deprecations` ·
+    **Level:** Expert ·
+    **Est. time:** 25 min ·
+    **Prerequisites:** [BC Promise](bc-promise.md)
+
+---
+
+## Theory
+
+A **deprecation** is a promise that an API still works *now* but will be **removed
+in the next major**. It gives you a whole major cycle to migrate. Symfony emits
+deprecations as `E_USER_DEPRECATED` notices via a tiny, dependency-free helper from
+the `symfony/deprecation-contracts` package.
+
+## Deep Dive — how it works internally
+
+### `trigger_deprecation()`
+
+The canonical way to raise a deprecation is the global function from
+`symfony/deprecation-contracts`:
+
+```php
+trigger_deprecation(
+    string $package,   // e.g. 'symfony/http-kernel'
+    string $version,   // version it was deprecated in, e.g. '8.1'
+    string $message,   // sprintf-style message
+    mixed ...$args     // sprintf arguments
+): void
+```
+
+Internally it simply calls `@trigger_error(sprintf(...), E_USER_DEPRECATED)` with a
+formatted string, but only if the function exists (the contracts package provides
+it). Using it — rather than `trigger_error` directly — gives a consistent
+`Since <package> <version>: <message>` format that tooling can parse.
+
+### The deprecation contract
+
+The **contract** is: deprecations are introduced only in **minor** releases, are
+never removed *before* the next major, and every deprecation ships with a migration
+message pointing to the replacement. This is the mechanism that lets the
+[BC promise](bc-promise.md) allow removals in majors without surprising anyone.
+
+```mermaid
+flowchart LR
+    A[8.x minor: mark @deprecated + trigger_deprecation] --> B[Notices logged]
+    B --> C[You migrate to replacement]
+    C --> D[9.0 major: code removed]
+```
+
+### Detecting deprecations
+
+| Where | How |
+|---|---|
+| **Profiler** | Web Debug Toolbar shows a deprecation count; the profiler lists them |
+| **Logs** | Logged on the `deprecation` channel in `dev` |
+| **Tests** | `symfony/phpunit-bridge` collects them and prints a summary |
+| **Static** | IDE/`@deprecated` docblocks flag call sites |
+
+The **PHPUnit bridge** installs a `DeprecationErrorHandler`. Its behaviour is tuned
+by the `SYMFONY_DEPRECATIONS_HELPER` environment variable — you can set thresholds
+(e.g. `max[total]=0`), make the suite **fail** on deprecations, or ignore specific
+ones via a regex/baseline file. This is the standard CI gate for a clean upgrade.
+
+### Marking your own deprecations
+
+Combine the `@deprecated` docblock (and, in PHP 8.4, the native `#[\Deprecated]`
+attribute where appropriate) with a runtime `trigger_deprecation()` so both static
+analysis and runtime tooling see it.
+
+!!! note "Source reference"
+    `trigger_deprecation()` —
+    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php);
+    PHPUnit bridge `DeprecationErrorHandler` —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge/PhpUnit).
+
+### Compilation vs runtime
+
+Some deprecations fire at **container compile time** (e.g. a deprecated config key
+or service alias marked with `Definition::setDeprecated()`); others at **runtime**
+(a deprecated method call). Config-level deprecations surface during `cache:clear`;
+runtime ones during actual execution and tests.
+
+## Configuration & code
+
+=== "Emitting a deprecation"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Legacy;
+
+    final class ReportBuilder
+    {
+        /**
+         * @deprecated since app 8.1, use build() instead.
+         */
+        public function generate(): string
+        {
+            trigger_deprecation('app/reports', '8.1', 'Using "%s::generate()" is deprecated, use "build()".', self::class);
+
+            return $this->build();
+        }
+
+        public function build(): string
+        {
+            return 'report';
+        }
+    }
+    ```
+
+=== "Deprecated service (DI)"
+
+    ```yaml
+    # config/services.yaml
+    services:
+        App\Legacy\ReportBuilder:
+            deprecated:
+                package: 'app/reports'
+                version: '8.1'
+                message: 'The "%service_id%" service is deprecated.'
+    ```
+
+=== "Fail tests on deprecations"
+
+    ```console
+    $ SYMFONY_DEPRECATIONS_HELPER="max[total]=0" php bin/phpunit
+    ```
+
+## Best practices & anti-patterns
+
+| ✅ Do | ❌ Avoid |
+|---|---|
+| Use `trigger_deprecation()` for runtime notices | Calling `trigger_error()` ad hoc |
+| Pair `@deprecated` docblock + runtime notice | Only a docblock (tooling misses it) |
+| Gate CI with `SYMFONY_DEPRECATIONS_HELPER` | Ignoring the toolbar's deprecation count |
+| Fix deprecations each minor | Batching them all at the major boundary |
+
+## When (not) to use it / alternatives
+
+Deprecate (never hard-remove in a minor) whenever you must change a public API in
+your own bundle/app. For truly internal code marked `@internal`, you can change it
+without a deprecation because it is outside the [BC promise](bc-promise.md).
+
+!!! danger "Certification traps"
+    - `trigger_deprecation()` comes from **`symfony/deprecation-contracts`**, not core.
+    - Signature order is **package, version, message, ...args** (`sprintf` style).
+    - Deprecations use the **`E_USER_DEPRECATED`** level.
+    - Deprecated code is removed in the **next major**, never in a minor/patch.
+
+!!! warning "Common mistakes"
+    - Passing the *current* version instead of the version it was **deprecated in**.
+    - Expecting deprecations to throw — they are notices, not exceptions (unless CI is configured to fail).
+
+## Exercises
+
+1. **(Advanced)** Add a runtime deprecation to a method being replaced, with a
+   correct migration message.
+2. **(Expert)** Configure the test suite so any new deprecation fails CI.
+
+??? success "Solutions"
+
+    **1.** Call
+    `trigger_deprecation('app/foo', '8.1', 'Method "%s::old()" is deprecated, use "new()".', self::class);`
+    at the top of the old method and add a matching `@deprecated` docblock.
+
+    **2.** Set `SYMFONY_DEPRECATIONS_HELPER="max[total]=0"` (via `phpunit.xml.dist`
+    `<env>` or the CI environment) with `symfony/phpunit-bridge` installed; any
+    deprecation then fails the run.
+
+## Certification questions
+
+??? question "Q1. Which function emits a Symfony deprecation notice?"
+    - [x] A. `trigger_deprecation($package, $version, $message, ...$args)` ✅
+    - [ ] B. `deprecate($message)`
+    - [ ] C. `@trigger_error()` is the only supported way
+
+    **Why:** `symfony/deprecation-contracts` provides `trigger_deprecation()`.
+    **Ref:** [Deprecation contracts](https://github.com/symfony/deprecation-contracts).
+
+??? question "Q2. When is deprecated code removed?"
+    - [x] A. In the next major release ✅
+    - [ ] B. In the next patch
+    - [ ] C. Immediately
+
+    **Why:** Deprecations survive until a major, per the BC promise. **Ref:**
+    [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+
+??? question "Q3. What tool makes tests fail on deprecations?"
+    - [x] A. `symfony/phpunit-bridge` + `SYMFONY_DEPRECATIONS_HELPER` ✅
+    - [ ] B. `symfony/console`
+    - [ ] C. `symfony/flex`
+
+    **Why:** The PHPUnit bridge collects deprecations and applies thresholds.
+    **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html).
+
+## Key takeaways
+
+- Use `trigger_deprecation(package, version, message, ...args)` from the contracts package.
+- Deprecations are `E_USER_DEPRECATED` notices, removed only in the next major.
+- Detect via profiler, logs, and the PHPUnit bridge.
+- Gate CI with `SYMFONY_DEPRECATIONS_HELPER` to keep the codebase upgrade-ready.
+
+## Last-minute revision
+
+!!! tip "Cheat sheet"
+    - `trigger_deprecation('pkg', 'X.Y', 'msg %s', $arg)` — package, version, msg, args.
+    - Level: `E_USER_DEPRECATED`. Removed: next major.
+    - Detect: toolbar/profiler, `deprecation` log channel, phpunit-bridge.
+    - DI: `deprecated:` key / `Definition::setDeprecated()`.
+
+## References
+
+- [Official docs — deprecations](https://symfony.com/doc/current/setup/upgrade_minor.html)
+- [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
+- [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
+
+---
+
+<small>Related: [BC Promise](bc-promise.md) · [Release Management](release-management.md) · [Roadmap & Schedule](roadmap-schedule.md)</small>

@@ -1,0 +1,274 @@
+# Special Internal Routing Attributes
+
+!!! abstract "Learning objectives"
+    By the end of this chapter you can:
+
+    - [ ] Name the special routing attributes and what each controls
+    - [ ] Use `_format`, `_locale`, `_fragment` and read `_route`/`_route_params`
+    - [ ] Explain how `_controller` connects a route to code
+    - [ ] Mark a route `stateless` and know what that enforces
+
+    **Syllabus:** `Routing → Special internal attributes` ·
+    **Level:** Expert ·
+    **Est. time:** 20 min ·
+    **Prerequisites:** [Defaults](defaults.md)
+
+---
+
+## Theory
+
+Some parameters that appear in a route's `defaults`/placeholders are **reserved**:
+Symfony reads them to configure the request rather than passing them as ordinary
+controller arguments. They are conventionally prefixed with an underscore.
+
+| Attribute | Purpose |
+|---|---|
+| `_controller` | The controller callable to run |
+| `_format` | Request format → `Content-Type` (e.g. `json`) |
+| `_locale` | The request locale |
+| `_fragment` | The URL fragment (`#...`) when generating |
+| `_route` | Name of the matched route (read-only) |
+| `_route_params` | The matched route's parameters (read-only) |
+
+## Deep Dive — how it works internally
+
+When `UrlMatcher::match()` succeeds it returns an **array of parameters** merged
+from the route defaults and captured placeholders, and it injects `_route` (the
+matched name) and `_route_params` (the placeholder values). The framework's
+`RouterListener` (a `kernel.request` subscriber) copies every returned parameter
+into the `Request`'s attribute bag (`$request->attributes`).
+
+From there:
+
+- `_controller` is resolved by `ControllerResolver` into a callable.
+- `_format` is applied via `Request::setRequestFormat()`, influencing content
+  negotiation and the default `Content-Type` of a `Response`.
+- `_locale` is applied via `Request::setLocale()` and stored so the
+  `LocaleListener` can also set it as a default for subsequent requests
+  (see [Locale](locale.md)).
+- `_fragment` is honoured by the **generator**, appended as `#fragment`.
+
+`_route` and `_route_params` are **outputs** — never set them yourself; read them
+(e.g. in logging or a subscriber) via `$request->attributes->get('_route')`.
+
+```mermaid
+flowchart LR
+    A[UrlMatcher.match] --> B["params + _route + _route_params"]
+    B --> C[RouterListener]
+    C --> D["request->attributes"]
+    D --> E[_controller resolved]
+    D --> F["_format -> setRequestFormat"]
+    D --> G["_locale -> setLocale"]
+```
+
+!!! note "Source reference"
+    `Symfony\Component\HttpKernel\EventListener\RouterListener` copies matcher
+    output into request attributes —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php).
+
+### Stateless routes
+
+`#[Route(stateless: true)]` declares that handling the route must **not start or
+use the session**. In `kernel.dev`/debug, if the session is nonetheless used, a
+`Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException` warning is
+raised so you catch accidental statefulness — important for cacheable and API
+endpoints. It is a contract/assertion, not silent enforcement in prod.
+
+## Configuration & code
+
+=== "PHP Attributes"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\Routing\Attribute\Route;
+
+    final class ApiController extends AbstractController
+    {
+        // _format from the extension; stateless API endpoint.
+        #[Route(
+            '/api/items.{_format}',
+            name: 'api_items',
+            defaults: ['_format' => 'json'],
+            requirements: ['_format' => 'json|xml'],
+            methods: ['GET'],
+            stateless: true,
+        )]
+        public function items(Request $request): Response
+        {
+            // Read-only routing outputs:
+            $routeName = $request->attributes->get('_route');       // 'api_items'
+            $params = $request->attributes->get('_route_params');   // ['_format' => ...]
+
+            return $this->json([
+                'route' => $routeName,
+                'format' => $request->getRequestFormat(), // json|xml
+                'params' => $params,
+            ]);
+        }
+    }
+    ```
+
+=== "YAML"
+
+    ```yaml
+    # config/routes/api.yaml
+    api_items:
+        path: /api/items.{_format}
+        controller: App\Controller\ApiController::items
+        defaults:
+            _format: json
+        requirements:
+            _format: json|xml
+        methods: [GET]
+        stateless: true
+    ```
+
+=== "Fragment on generation"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    // _fragment is added as #section2 by the generator.
+    $url = $this->generateUrl('blog_show', ['id' => 42, '_fragment' => 'comments']);
+    // => /blog/42#comments
+    ```
+
+## Best practices & anti-patterns
+
+| ✅ Do | ❌ Avoid |
+|---|---|
+| Constrain `_format` with a requirement | Leaving `_format` open to anything |
+| Mark API/cacheable routes `stateless` | Reading the session in stateless routes |
+| Read `_route`/`_route_params` for logging | Setting `_route` yourself |
+| Use `_locale` for i18n routes | Hand-parsing the locale from the path |
+
+## When (not) to use it / alternatives
+
+Set `_format` when the same action serves multiple representations; otherwise
+negotiate in the controller. Use `stateless: true` for APIs and pages you intend to
+HTTP-cache. `_fragment` is only meaningful at generation time; for in-page anchors
+in templates you can just append `#anchor` in the href.
+
+!!! danger "Certification traps"
+    - `_route` and `_route_params` are **read-only outputs** set by the matcher.
+    - `_format` sets the **request format**, driving `Content-Type` — not just a
+      URL suffix.
+    - `stateless: true` triggers a warning **only in debug** when the session is
+      used; it is an assertion, not a hard prod block.
+    - These live in request **attributes**, populated by `RouterListener`.
+
+!!! warning "Common mistakes"
+    - Treating `_locale`/`_format` as normal controller args and mis-typing them.
+    - Expecting `_fragment` to affect matching — it only affects generation.
+    - Forgetting a `_format` requirement, letting `items.exe` match.
+
+## Exercises
+
+1. **(Basic)** Add `_format` (json|xml, default json) to an API list route.
+2. **(Intermediate)** In a `kernel.request` context, log the matched `_route` and
+   its `_route_params` for every request.
+
+??? success "Solutions"
+
+    **1.** See the `api_items` example above — `_format` in `defaults` +
+    `requirements`, with `.{_format}` in the path.
+
+    **2.**
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\EventListener;
+
+    use Psr\Log\LoggerInterface;
+    use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+    use Symfony\Component\HttpKernel\Event\ControllerEvent;
+
+    #[AsEventListener]
+    final readonly class RouteLogger
+    {
+        public function __construct(private LoggerInterface $logger) {}
+
+        public function __invoke(ControllerEvent $event): void
+        {
+            $request = $event->getRequest();
+            $this->logger->info('matched route', [
+                'route' => $request->attributes->get('_route'),
+                'params' => $request->attributes->get('_route_params'),
+            ]);
+        }
+    }
+    ```
+
+## Certification questions
+
+??? question "Q1. Which attribute holds the name of the matched route?"
+    - [ ] A. `_controller`
+    - [x] B. `_route` ✅
+    - [ ] C. `_route_name`
+    - [ ] D. `_name`
+
+    **Why:** the matcher injects `_route` with the matched route's name.
+    **Ref:** [Special parameters](https://symfony.com/doc/current/routing.html#special-parameters).
+
+??? question "Q2. What does `_format` do when matched?"
+    - [x] A. Sets the request format (affects `Content-Type`) ✅
+    - [ ] B. Only appears in the URL, no effect
+    - [ ] C. Selects the controller
+    - [ ] D. Sets the HTTP method
+
+    **Why:** `RouterListener`/`Request::setRequestFormat()` uses it for content
+    negotiation. **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+
+??? question "Q3. `stateless: true` primarily does what?"
+    - [x] A. Asserts the route must not use the session (warns in debug) ✅
+    - [ ] B. Disables routing cache
+    - [ ] C. Forces HTTPS
+    - [ ] D. Makes the route match any method
+
+    **Why:** it flags accidental session usage during development.
+    **Ref:** [Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes).
+
+??? question "Q4. Where does `_fragment` take effect?"
+    - [ ] A. During matching
+    - [x] B. During URL generation (appends `#fragment`) ✅
+    - [ ] C. In the response body
+    - [ ] D. In the session
+
+    **Why:** the generator appends it as the URL fragment; it is ignored by the
+    matcher. **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+
+## Key takeaways
+
+- Reserved attributes: `_controller`, `_format`, `_locale`, `_fragment` (inputs);
+  `_route`, `_route_params` (outputs).
+- `RouterListener` copies matcher output into request attributes.
+- `_format` drives content negotiation; `_locale` sets the request locale.
+- `stateless: true` asserts no session use (debug-time warning).
+
+## Last-minute revision
+
+!!! tip "Cheat sheet"
+    - Inputs: `_controller`, `_format`, `_locale`, `_fragment`.
+    - Outputs: `_route`, `_route_params` (read via `request->attributes`).
+    - `stateless: true` = no session (debug assertion).
+    - Populated by `RouterListener` on `kernel.request`.
+
+## References
+
+- [Official Symfony docs — Special parameters](https://symfony.com/doc/current/routing.html#special-parameters)
+- [Official Symfony docs — Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes)
+- [Symfony source — RouterListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
+
+---
+
+<small>Related: [Defaults](defaults.md) · [Locale](locale.md) · [Conditions](conditions.md) · [Controllers](../controllers/index.md)</small>

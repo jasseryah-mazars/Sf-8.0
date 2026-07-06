@@ -69,8 +69,8 @@ class Order
 ```mermaid
 flowchart TD
     O[Order node] --> R[reference: NotBlank]
-    O -->|Assert\\Valid| A[Address node]
-    O -->|Assert\\Valid| L["lines[] each OrderLine node"]
+    O -->|Valid cascade| A[Address node]
+    O -->|Valid cascade| L["lines[] each OrderLine node"]
     A --> AZ["address.zip violation path"]
     L --> LP["lines[2].price violation path"]
 ```

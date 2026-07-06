@@ -1,0 +1,707 @@
+categories:
+  - name: "PHP API (up to 8.4)"
+    questions:
+      - question: "What does the backed-enum method `Suit::tryFrom('X')` return when 'X' is not a valid case?"
+        answers:
+          - value: "null"
+            correct: true
+          - value: "Throws \\ValueError"
+            correct: false
+          - value: "false"
+            correct: false
+          - value: "The first case"
+            correct: false
+        explanation: >-
+          tryFrom() returns null for an unknown value; only from() throws a
+          \ValueError. This distinction is a frequent exam trap.
+        documentation: "https://www.php.net/manual/en/language.enumerations.backed.php"
+
+      - question: "Which statement about the `match` expression is correct?"
+        answers:
+          - value: "It compares with === and throws \\UnhandledMatchError when nothing matches and there is no default"
+            correct: true
+          - value: "It falls through arms like switch"
+            correct: false
+          - value: "It uses loose == comparison"
+            correct: false
+          - value: "It cannot return a value"
+            correct: false
+        explanation: >-
+          match is strict (===), returns a value, has no fall-through, and errors
+          with \UnhandledMatchError when unmatched without a default arm.
+        documentation: "https://www.php.net/manual/en/control-structures.match.php"
+
+      - question: "In PHP 8.4, what does `public private(set) int $n;` mean?"
+        answers:
+          - value: "n can be read from anywhere but written only inside the class"
+            correct: true
+          - value: "n is readonly"
+            correct: false
+          - value: "n is invisible outside the class"
+            correct: false
+          - value: "n is static"
+            correct: false
+        explanation: >-
+          Asymmetric visibility (8.4) sets a stricter write scope than read scope;
+          public read, private write.
+        documentation: "https://www.php.net/manual/en/language.oop5.visibility.php"
+
+      - question: "Which is a syntactically valid DNF type declaration?"
+        answers:
+          - value: "(Countable&Traversable)|null"
+            correct: true
+          - value: "Countable|Traversable&null"
+            correct: false
+          - value: "?Countable&Traversable"
+            correct: false
+          - value: "Countable&?Traversable"
+            correct: false
+        explanation: >-
+          Disjunctive Normal Form requires each intersection group to be
+          parenthesised and then OR-ed together.
+        documentation: "https://www.php.net/manual/en/language.types.declarations.php"
+
+      - question: "What does `json_validate($string)` return?"
+        answers:
+          - value: "A bool indicating whether the string is valid JSON"
+            correct: true
+          - value: "The decoded associative array"
+            correct: false
+          - value: "A stdClass object"
+            correct: false
+          - value: "null on success"
+            correct: false
+        explanation: >-
+          json_validate() (8.3) only reports validity as a bool, using less memory
+          than json_decode() for large payloads.
+        documentation: "https://www.php.net/manual/en/function.json-validate.php"
+
+  - name: "Object-Oriented Programming"
+    questions:
+      - question: "Inside a parent factory method, how do `new static()` and `new self()` differ?"
+        answers:
+          - value: "static respects the called subclass (late static binding); self is fixed to the defining class"
+            correct: true
+          - value: "They are identical"
+            correct: false
+          - value: "self respects the subclass"
+            correct: false
+          - value: "Both resolve only at compile time"
+            correct: false
+        explanation: >-
+          Late static binding makes static:: resolve to the runtime class, so
+          new static() returns a subclass instance where new self() would not.
+        documentation: "https://www.php.net/manual/en/language.oop5.late-static-bindings.php"
+
+      - question: "After `$b = clone $a;` where `$a->list` is an object, what is `$b->list`?"
+        answers:
+          - value: "The same object as $a->list unless __clone() copies it"
+            correct: true
+          - value: "Always an independent deep copy"
+            correct: false
+          - value: "null"
+            correct: false
+          - value: "A fatal error"
+            correct: false
+        explanation: >-
+          clone performs a shallow copy; object-typed properties remain shared
+          until __clone() deep-copies them.
+        documentation: "https://www.php.net/manual/en/language.oop5.cloning.php"
+
+      - question: "When is the magic method `__get()` invoked?"
+        answers:
+          - value: "Only when reading an inaccessible or undefined property"
+            correct: true
+          - value: "On every property read"
+            correct: false
+          - value: "On property writes"
+            correct: false
+          - value: "On isset() calls"
+            correct: false
+        explanation: >-
+          __get() fires only for inaccessible/undefined properties; accessible
+          ones are read directly and isset() uses __isset().
+        documentation: "https://www.php.net/manual/en/language.oop5.overloading.php"
+
+      - question: "Which cannot be used as a promoted constructor parameter?"
+        answers:
+          - value: "private callable $fn"
+            correct: true
+          - value: "public readonly int $x"
+            correct: false
+          - value: "private ?string $s = null"
+            correct: false
+          - value: "protected array $items = []"
+            correct: false
+        explanation: >-
+          callable is not a valid property type, so it cannot be a promoted
+          property.
+        documentation: "https://www.php.net/manual/en/language.oop5.decon.php"
+
+  - name: "Namespaces & Autoloading"
+    questions:
+      - question: "Inside `namespace App;`, an unqualified function call `count($x)` resolves to…"
+        answers:
+          - value: "App\\count if it exists, otherwise the global \\count"
+            correct: true
+          - value: "Always App\\count"
+            correct: false
+          - value: "A fatal error"
+            correct: false
+          - value: "\\count only, never App\\count"
+            correct: false
+        explanation: >-
+          Function and constant calls fall back to the global namespace; class
+          names do not.
+        documentation: "https://www.php.net/manual/en/language.namespaces.rules.php"
+
+      - question: "What does the statement `use App\\Service\\Mailer;` do?"
+        answers:
+          - value: "Creates a compile-time alias so `Mailer` refers to the FQCN"
+            correct: true
+          - value: "Loads the class file immediately"
+            correct: false
+          - value: "Instantiates the class"
+            correct: false
+          - value: "Registers an autoloader"
+            correct: false
+        explanation: >-
+          use is a compile-time alias only; the file is loaded later by the
+          autoloader when the class is first used.
+        documentation: "https://www.php.net/manual/en/language.namespaces.importing.php"
+
+      - question: "Under PSR-4 rule `\"App\\\\\": \"src/\"`, where does `App\\Foo\\Bar` live?"
+        answers:
+          - value: "src/Foo/Bar.php"
+            correct: true
+          - value: "src/App/Foo/Bar.php"
+            correct: false
+          - value: "src/foo/bar.php"
+            correct: false
+          - value: "App/Foo/Bar.php"
+            correct: false
+        explanation: >-
+          The prefix App\\ maps to src/, so only the remaining segments form the
+          path; PSR-4 is case-sensitive on Linux.
+        documentation: "https://www.php-fig.org/psr/psr-4/"
+
+      - question: "Inside `namespace App;`, which correctly references the global DateTimeImmutable class?"
+        answers:
+          - value: "new \\DateTimeImmutable()"
+            correct: true
+          - value: "new DateTimeImmutable()"
+            correct: false
+          - value: "new App\\DateTimeImmutable()"
+            correct: false
+          - value: "new global\\DateTimeImmutable()"
+            correct: false
+        explanation: >-
+          Class names do not fall back to the global namespace, so a leading
+          backslash or a use import is required.
+        documentation: "https://www.php.net/manual/en/language.namespaces.rules.php"
+
+  - name: "Interfaces & Type Declarations"
+    questions:
+      - question: "A child overrides a method whose parent return type is `Animal`. Which return type is legal?"
+        answers:
+          - value: "Cat, a subclass of Animal (covariant return)"
+            correct: true
+          - value: "object (wider than Animal)"
+            correct: false
+          - value: "mixed"
+            correct: false
+          - value: "A union that adds an unrelated type"
+            correct: false
+        explanation: >-
+          Return types are covariant, so a child may return a more specific type
+          but never a wider one.
+        documentation: "https://www.php.net/manual/en/language.oop5.variance.php"
+
+      - question: "Intersection types such as `A&B` may combine…"
+        answers:
+          - value: "Only class or interface types"
+            correct: true
+          - value: "Any mix of scalars and classes"
+            correct: false
+          - value: "Only scalar types"
+            correct: false
+          - value: "Only enums"
+            correct: false
+        explanation: >-
+          Intersection types require object (class/interface) types; scalars are
+          not permitted.
+        documentation: "https://www.php.net/manual/en/language.types.declarations.php"
+
+      - question: "What does `'text' instanceof SomeClass` evaluate to?"
+        answers:
+          - value: "false"
+            correct: true
+          - value: "A TypeError"
+            correct: false
+          - value: "true"
+            correct: false
+          - value: "null"
+            correct: false
+        explanation: >-
+          instanceof on a non-object simply returns false; it does not throw.
+        documentation: "https://www.php.net/manual/en/language.operators.type.php"
+
+      - question: "Can a single class implement two interfaces that declare the same method signature?"
+        answers:
+          - value: "Yes, one compatible implementation satisfies both"
+            correct: true
+          - value: "No, it is always a conflict"
+            correct: false
+          - value: "Only using insteadof"
+            correct: false
+          - value: "Only for static methods"
+            correct: false
+        explanation: >-
+          Identical/compatible signatures are not a conflict; a single method
+          implementation fulfils both contracts.
+        documentation: "https://www.php.net/manual/en/language.oop5.interfaces.php"
+
+  - name: "Anonymous Functions & Closures"
+    questions:
+      - question: "When does `function () use ($x) {}` capture the value of `$x`?"
+        answers:
+          - value: "At definition time, by value"
+            correct: true
+          - value: "At call time"
+            correct: false
+          - value: "Always by reference"
+            correct: false
+          - value: "It reads the live variable"
+            correct: false
+        explanation: >-
+          use captures by value at the moment the closure is defined; prefix with
+          & to capture by reference instead.
+        documentation: "https://www.php.net/manual/en/functions.anonymous.php"
+
+      - question: "Which statement about arrow functions (fn) is true?"
+        answers:
+          - value: "They auto-capture the enclosing scope by value"
+            correct: true
+          - value: "They require an explicit use list"
+            correct: false
+          - value: "They can capture by reference"
+            correct: false
+          - value: "They may contain multiple statements"
+            correct: false
+        explanation: >-
+          Arrow functions auto-capture by value and consist of a single
+          expression; they have no use list and cannot capture by reference.
+        documentation: "https://www.php.net/manual/en/functions.arrow.php"
+
+      - question: "What does `Closure::bind($c, $obj, Foo::class)` return?"
+        answers:
+          - value: "A new closure bound to $obj with Foo's scope"
+            correct: true
+          - value: "void; it mutates $c in place"
+            correct: false
+          - value: "The result of invoking $c"
+            correct: false
+          - value: "A callable string"
+            correct: false
+        explanation: >-
+          Closure::bind is static and returns a new closure; the scope argument
+          grants access to Foo's private/protected members.
+        documentation: "https://www.php.net/manual/en/closure.bind.php"
+
+      - question: "What does the expression `trim(...)` produce?"
+        answers:
+          - value: "A Closure wrapping the trim function"
+            correct: true
+          - value: "The string 'trim'"
+            correct: false
+          - value: "The trimmed result"
+            correct: false
+          - value: "A parse error in PHP 8.4"
+            correct: false
+        explanation: >-
+          First-class callable syntax (8.1+) creates a Closure from any callable.
+        documentation: "https://www.php.net/manual/en/functions.first_class_callable_syntax.php"
+
+  - name: "Abstract Classes"
+    questions:
+      - question: "A concrete class inherits an abstract method but does not implement it. What happens?"
+        answers:
+          - value: "Fatal error unless the class itself is declared abstract"
+            correct: true
+          - value: "It silently returns null"
+            correct: false
+          - value: "It runs normally"
+            correct: false
+          - value: "A deprecation notice"
+            correct: false
+        explanation: >-
+          Any unimplemented abstract method forces the class to be abstract too.
+        documentation: "https://www.php.net/manual/en/language.oop5.abstract.php"
+
+      - question: "Which feature can an abstract class have that an interface cannot?"
+        answers:
+          - value: "Properties and a constructor"
+            correct: true
+          - value: "Multiple parents"
+            correct: false
+          - value: "Public method signatures"
+            correct: false
+          - value: "Constants"
+            correct: false
+        explanation: >-
+          Abstract classes can hold state and a constructor; interfaces are pure
+          contracts (constants only).
+        documentation: "https://www.php.net/manual/en/language.oop5.interfaces.php"
+
+      - question: "How many abstract classes can a class extend?"
+        answers:
+          - value: "Exactly one"
+            correct: true
+          - value: "Any number"
+            correct: false
+          - value: "Zero"
+            correct: false
+          - value: "Two"
+            correct: false
+        explanation: >-
+          PHP has single class inheritance; interfaces provide multiple type
+          inheritance.
+        documentation: "https://www.php.net/manual/en/language.oop5.inheritance.php"
+
+  - name: "Traits"
+    questions:
+      - question: "A class, its parent, and a used trait all define `run()`. Which implementation is used?"
+        answers:
+          - value: "The class's own run()"
+            correct: true
+          - value: "The trait's run()"
+            correct: false
+          - value: "The parent's run()"
+            correct: false
+          - value: "It is a fatal error"
+            correct: false
+        explanation: >-
+          Precedence is class method > trait method > inherited parent method.
+        documentation: "https://www.php.net/manual/en/language.oop5.traits.php"
+
+      - question: "Two used traits define the same method and you add no resolution. Result?"
+        answers:
+          - value: "Fatal error"
+            correct: true
+          - value: "The first trait wins"
+            correct: false
+          - value: "The last trait wins"
+            correct: false
+          - value: "Both run in sequence"
+            correct: false
+        explanation: >-
+          Unresolved trait method conflicts are a fatal error; resolve them with
+          insteadof and/or as.
+        documentation: "https://www.php.net/manual/en/language.oop5.traits.php"
+
+      - question: "A `static` property declared in a trait, used by classes X and Y, is…"
+        answers:
+          - value: "Separate per using class (X and Y have independent copies)"
+            correct: true
+          - value: "Shared across X and Y"
+            correct: false
+          - value: "Illegal"
+            correct: false
+          - value: "Automatically read-only"
+            correct: false
+        explanation: >-
+          Static trait state is bound to each using class independently, not
+          shared across all of them.
+        documentation: "https://www.php.net/manual/en/language.oop5.traits.php"
+
+      - question: "What does `LoggerTrait::log as protected writeLog;` do?"
+        answers:
+          - value: "Aliases the method to writeLog with protected visibility"
+            correct: true
+          - value: "Deletes the log method"
+            correct: false
+          - value: "Makes log abstract"
+            correct: false
+          - value: "Makes log static"
+            correct: false
+        explanation: >-
+          The as operator can rename a trait method and change its visibility at
+          the same time.
+        documentation: "https://www.php.net/manual/en/language.oop5.traits.php"
+
+  - name: "Exception & Error Handling"
+    questions:
+      - question: "Which catch clause catches BOTH a TypeError and a RuntimeException?"
+        answers:
+          - value: "catch (\\Throwable $e)"
+            correct: true
+          - value: "catch (\\Exception $e)"
+            correct: false
+          - value: "catch (\\Error $e)"
+            correct: false
+          - value: "catch (\\LogicException $e)"
+            correct: false
+        explanation: >-
+          Throwable is the only common ancestor of both Error (TypeError) and
+          Exception (RuntimeException).
+        documentation: "https://www.php.net/manual/en/class.throwable.php"
+
+      - question: "A `return` inside a `finally` block…"
+        answers:
+          - value: "Overrides any return or throw from the try block"
+            correct: true
+          - value: "Is a syntax error"
+            correct: false
+          - value: "Is ignored"
+            correct: false
+          - value: "Runs before the try block"
+            correct: false
+        explanation: >-
+          finally always runs last and a return there wins, which is why it is
+          discouraged (it can swallow exceptions).
+        documentation: "https://www.php.net/manual/en/language.exceptions.php"
+
+      - question: "What can `set_error_handler()` intercept?"
+        answers:
+          - value: "Traditional warnings, notices and deprecations"
+            correct: true
+          - value: "Uncaught exceptions"
+            correct: false
+          - value: "Fatal E_ERROR conditions"
+            correct: false
+          - value: "Parse errors"
+            correct: false
+        explanation: >-
+          It handles traditional (non-fatal) errors; use set_exception_handler
+          for uncaught exceptions and shutdown functions for fatals.
+        documentation: "https://www.php.net/manual/en/function.set-error-handler.php"
+
+      - question: "Under `declare(strict_types=1)`, passing a string to an int parameter throws…"
+        answers:
+          - value: "TypeError (a subclass of Error)"
+            correct: true
+          - value: "InvalidArgumentException"
+            correct: false
+          - value: "Only a warning"
+            correct: false
+          - value: "ValueError"
+            correct: false
+        explanation: >-
+          Strict typing rejects the wrong scalar type with a TypeError, which is
+          an Error, not an Exception.
+        documentation: "https://www.php.net/manual/en/language.types.declarations.php"
+
+  - name: "PHP Extensions"
+    questions:
+      - question: "Which call reliably reports whether an extension is loaded?"
+        answers:
+          - value: "extension_loaded('intl')"
+            correct: true
+          - value: "include 'intl'"
+            correct: false
+          - value: "require_extension('intl')"
+            correct: false
+          - value: "ini_get('intl')"
+            correct: false
+        explanation: >-
+          extension_loaded() returns a boolean indicating whether the named
+          module is loaded.
+        documentation: "https://www.php.net/manual/en/function.extension-loaded.php"
+
+      - question: "For a UTF-8 string, `strlen('é')` returns…"
+        answers:
+          - value: "2 (it counts bytes)"
+            correct: true
+          - value: "1"
+            correct: false
+          - value: "0"
+            correct: false
+          - value: "4"
+            correct: false
+        explanation: >-
+          strlen counts bytes and 'é' is two bytes in UTF-8; use mb_strlen for a
+          character count.
+        documentation: "https://www.php.net/manual/en/book.mbstring.php"
+
+      - question: "What does the opcache extension cache?"
+        answers:
+          - value: "Compiled PHP bytecode in shared memory"
+            correct: true
+          - value: "Database query results"
+            correct: false
+          - value: "HTTP responses"
+            correct: false
+          - value: "Rendered Twig templates"
+            correct: false
+        explanation: >-
+          OPcache stores precompiled script bytecode to skip recompilation on
+          each request; it is not an application data cache.
+        documentation: "https://www.php.net/manual/en/book.opcache.php"
+
+      - question: "How do you make `composer install` fail on a host lacking the intl extension?"
+        answers:
+          - value: "Add \"ext-intl\": \"*\" to the require section"
+            correct: true
+          - value: "Add it to the autoload section"
+            correct: false
+          - value: "Set an environment variable"
+            correct: false
+          - value: "Nothing; Composer detects it automatically"
+            correct: false
+        explanation: >-
+          ext-* platform requirements are verified at install time and fail fast
+          when missing.
+        documentation: "https://getcomposer.org/doc/articles/composer-platform-dependencies.md"
+
+  - name: "SPL"
+    questions:
+      - question: "Which methods must a class implement to satisfy the Iterator interface?"
+        answers:
+          - value: "current, key, next, rewind, valid"
+            correct: true
+          - value: "getIterator only"
+            correct: false
+          - value: "count and offsetGet"
+            correct: false
+          - value: "next and prev"
+            correct: false
+        explanation: >-
+          Iterator defines exactly those five methods; IteratorAggregate needs
+          only getIterator().
+        documentation: "https://www.php.net/manual/en/class.iterator.php"
+
+      - question: "Which statement about a generator is true?"
+        answers:
+          - value: "It is a single-use Iterator that produces values lazily"
+            correct: true
+          - value: "It builds the full array before returning"
+            correct: false
+          - value: "It can be rewound freely after iteration"
+            correct: false
+          - value: "It implements ArrayAccess"
+            correct: false
+        explanation: >-
+          Generators yield lazily and are consumed once; they cannot be rewound
+          after being iterated.
+        documentation: "https://www.php.net/manual/en/language.generators.php"
+
+      - question: "Which SPL structure maps data keyed by an object instance?"
+        answers:
+          - value: "SplObjectStorage"
+            correct: true
+          - value: "SplStack"
+            correct: false
+          - value: "SplFixedArray"
+            correct: false
+          - value: "SplQueue"
+            correct: false
+        explanation: >-
+          SplObjectStorage keys by object identity and can attach arbitrary data
+          per object.
+        documentation: "https://www.php.net/manual/en/class.splobjectstorage.php"
+
+      - question: "Enabling `$obj[$key]` array-style access on an object requires implementing…"
+        answers:
+          - value: "ArrayAccess"
+            correct: true
+          - value: "Countable"
+            correct: false
+          - value: "Iterator"
+            correct: false
+          - value: "Stringable"
+            correct: false
+        explanation: >-
+          ArrayAccess provides offsetGet/Set/Exists/Unset for bracket syntax.
+        documentation: "https://www.php.net/manual/en/class.arrayaccess.php"
+
+      - question: "For SplPriorityQueue, the ordering among elements of equal priority is…"
+        answers:
+          - value: "Unspecified / not stable"
+            correct: true
+          - value: "Guaranteed FIFO"
+            correct: false
+          - value: "Always LIFO"
+            correct: false
+          - value: "Alphabetical"
+            correct: false
+        explanation: >-
+          Equal-priority ordering in SplPriorityQueue is implementation-defined
+          and not stable.
+        documentation: "https://www.php.net/manual/en/class.splpriorityqueue.php"
+
+  - name: "Web Security Fundamentals"
+    questions:
+      - question: "What is Twig's default defence against XSS?"
+        answers:
+          - value: "Context-aware auto-escaping of output variables"
+            correct: true
+          - value: "Stripping all HTML tags"
+            correct: false
+          - value: "Sending a CSP header"
+            correct: false
+          - value: "Encrypting the output"
+            correct: false
+        explanation: >-
+          Twig HTML-escapes variables by default; the |raw filter opts out and
+          reintroduces the risk.
+        documentation: "https://symfony.com/doc/current/templates.html"
+
+      - question: "Which technique best prevents SQL injection?"
+        answers:
+          - value: "Prepared statements with bound parameters"
+            correct: true
+          - value: "Escaping quotes with addslashes"
+            correct: false
+          - value: "Relying on a WAF alone"
+            correct: false
+          - value: "HTML-escaping the input"
+            correct: false
+        explanation: >-
+          Binding sends data separately from the SQL text, so input can never
+          alter the query structure.
+        documentation: "https://symfony.com/doc/current/security.html"
+
+      - question: "Session fixation is primarily mitigated by…"
+        answers:
+          - value: "Regenerating the session id on login"
+            correct: true
+          - value: "Using longer session ids"
+            correct: false
+          - value: "Deleting cookies only on logout"
+            correct: false
+          - value: "Base64-encoding the session id"
+            correct: false
+        explanation: >-
+          Migrating to a new session id at authentication invalidates any
+          attacker-planted id. Symfony does this automatically.
+        documentation: "https://symfony.com/doc/current/security.html"
+
+      - question: "Which response header defends against clickjacking?"
+        answers:
+          - value: "X-Frame-Options: DENY (or CSP frame-ancestors)"
+            correct: true
+          - value: "X-Content-Type-Options"
+            correct: false
+          - value: "Referrer-Policy"
+            correct: false
+          - value: "Accept-Language"
+            correct: false
+        explanation: >-
+          X-Frame-Options / CSP frame-ancestors forbid the page from being framed
+          by another site.
+        documentation: "https://symfony.com/doc/current/security.html"
+
+      - question: "What is the correct way to store user passwords?"
+        answers:
+          - value: "password_hash() with bcrypt or argon2id"
+            correct: true
+          - value: "SHA-256 with a single static salt"
+            correct: false
+          - value: "MD5"
+            correct: false
+          - value: "Reversible encryption"
+            correct: false
+        explanation: >-
+          Adaptive, salted hashing (bcrypt/argon2id) resists brute-force; the
+          salt is embedded in the hash and verified with password_verify().
+        documentation: "https://www.php.net/manual/en/function.password-hash.php"

@@ -1,0 +1,432 @@
+categories:
+  - name: "Data Validation"
+    questions:
+      # ---- object-validation.md ----
+      - question: "What does ValidatorInterface::validate() return when the value is invalid?"
+        answers:
+          - value: "A ConstraintViolationListInterface containing the violations"
+            correct: true
+          - value: "false"
+            correct: false
+          - value: "It throws a ValidationFailedException"
+            correct: false
+          - value: "An array of error message strings"
+            correct: false
+        explanation: >-
+          validate() always returns a ConstraintViolationListInterface. It never
+          returns a bool and never throws on failure; you inspect the result with
+          count() and by iterating it.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - question: "Which method validates a hypothetical value without changing the object?"
+        answers:
+          - value: "validatePropertyValue($objectOrClass, $property, $value)"
+            correct: true
+          - value: "validateProperty($object, $property)"
+            correct: false
+          - value: "validate($object)"
+            correct: false
+          - value: "startContext()"
+            correct: false
+        explanation: >-
+          validatePropertyValue() takes an explicit value and validates it against
+          the property's constraints without touching the object. validateProperty()
+          uses the object's current value instead.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - question: "How is #[Assert\\...] attribute metadata turned into constraints at runtime?"
+        answers:
+          - value: "AttributeLoader builds ClassMetadata once, cached in a PSR-6 pool"
+            correct: true
+          - value: "It is re-parsed by reflection on every validate() call"
+            correct: false
+          - value: "It is compiled into the DI container and never changes"
+            correct: false
+          - value: "It is read from a database mapping table"
+            correct: false
+        explanation: >-
+          LazyLoadingMetadataFactory uses AttributeLoader to reflect over the class
+          and build ClassMetadata, which is cached (validator.mapping.cache) so the
+          reflection cost is paid once per class.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      # ---- built-in-constraints.md ----
+      - question: "Which statement about NotBlank and NotNull is correct?"
+        answers:
+          - value: "NotBlank rejects an empty string; NotNull accepts an empty string"
+            correct: true
+          - value: "They are aliases for the same check"
+            correct: false
+          - value: "NotNull rejects an empty string; NotBlank accepts it"
+            correct: false
+          - value: "Both reject the integer 0"
+            correct: false
+        explanation: >-
+          NotBlank fails on '', [], and blank strings; NotNull only fails on a
+          strict null, so '' and 0 pass NotNull. This is a classic exam distinction.
+        documentation: "https://symfony.com/doc/current/reference/constraints/NotBlank.html"
+
+      - question: "To apply constraints to every element of an indexed array, which constraint do you use?"
+        answers:
+          - value: "All"
+            correct: true
+          - value: "Collection"
+            correct: false
+          - value: "Count"
+            correct: false
+          - value: "Unique"
+            correct: false
+        explanation: >-
+          All applies the given constraints to each element of a collection.
+          Collection validates the keys of an associative array; they are not
+          interchangeable.
+        documentation: "https://symfony.com/doc/current/reference/constraints/All.html"
+
+      - question: "A nested object's own constraints never run during validation. Why?"
+        answers:
+          - value: "The property is missing #[Assert\\Valid] to cascade into it"
+            correct: true
+          - value: "The validator cannot handle nested objects"
+            correct: false
+          - value: "You must call validateProperty() for nested objects"
+            correct: false
+          - value: "Nested objects need their own validator service"
+            correct: false
+        explanation: >-
+          Cascading is opt-in: without #[Assert\\Valid] on the property, the
+          validator does not descend into the related object, so its constraints
+          are skipped.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Valid.html"
+
+      - question: "What does #[Assert\\Email] report for an empty string value?"
+        answers:
+          - value: "No violation — empty and null values pass most constraints"
+            correct: true
+          - value: "A violation, because '' is not a valid email"
+            correct: false
+          - value: "A PHP TypeError"
+            correct: false
+          - value: "It depends on the charset option"
+            correct: false
+        explanation: >-
+          Like Url, Regex and most value constraints, Email skips empty/null values.
+          Combine it with NotBlank when an empty value must be rejected.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Email.html"
+
+      # ---- scopes.md ----
+      - question: "What causes the validator to recurse into a nested object property?"
+        answers:
+          - value: "#[Assert\\Valid] on the property holding the nested object"
+            correct: true
+          - value: "Nothing — it always recurses automatically"
+            correct: false
+          - value: "Calling validateProperty() on the nested object"
+            correct: false
+          - value: "A class-level Valid constraint on the parent"
+            correct: false
+        explanation: >-
+          Valid marks a property for cascading; the ValidValidator tells the context
+          to descend so the nested object's own constraints (and, for collections,
+          each element's) are validated.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Valid.html"
+
+      - question: "A rule must compare two properties of the same object. Which scope fits best?"
+        answers:
+          - value: "Class scope (e.g. a Callback or Expression constraint)"
+            correct: true
+          - value: "A property constraint on each of the two fields"
+            correct: false
+          - value: "A getter constraint"
+            correct: false
+          - value: "It cannot be expressed with the Validator component"
+            correct: false
+        explanation: >-
+          Cross-field rules need access to the whole object, so they belong on a
+          class-target constraint such as Callback or Expression.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Expression.html"
+
+      - question: "A constraint on the getter isActive() reports a violation under which property path?"
+        answers:
+          - value: "active"
+            correct: true
+          - value: "isActive"
+            correct: false
+          - value: "getActive"
+            correct: false
+          - value: "isActive()"
+            correct: false
+        explanation: >-
+          Getter constraints validate the return value of isX/getX/hasX and report
+          under the property-ised name, so isActive() maps to 'active'.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      # ---- groups.md ----
+      - question: "You call validate($obj, groups: ['edit']). Which constraints run?"
+        answers:
+          - value: "Only constraints assigned to the 'edit' group"
+            correct: true
+          - value: "The 'Default' group plus the 'edit' group"
+            correct: false
+          - value: "All constraints, regardless of group"
+            correct: false
+          - value: "Only the 'Default' group"
+            correct: false
+        explanation: >-
+          Only the requested groups run. Passing a custom group does NOT implicitly
+          include Default; list ['Default', 'edit'] if you need both.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
+      - question: "For a class that defines a GroupSequence, validating the 'Default' group will…"
+        answers:
+          - value: "Trigger the group sequence (stepwise, stop on first failing group)"
+            correct: true
+          - value: "Run every constraint flat, ignoring the sequence"
+            correct: false
+          - value: "Run no constraints at all"
+            correct: false
+          - value: "Throw an exception"
+            correct: false
+        explanation: >-
+          On a sequenced class, the special Default group is remapped to the
+          sequence. To run the same constraints flat (bypassing the sequence),
+          validate the {ClassName} group instead.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      - question: "For class App\\Entity\\User with no group sequence, what is the {ClassName} group?"
+        answers:
+          - value: "'User' (the short class name), equivalent to 'Default' here"
+            correct: true
+          - value: "'App\\Entity\\User' (the FQCN)"
+            correct: false
+          - value: "'app_entity_user'"
+            correct: false
+          - value: "There is no such group"
+            correct: false
+        explanation: >-
+          The {ClassName} group uses the short class name. Every Default-group
+          constraint is also in it, so with no sequence 'User' and 'Default' are
+          equivalent.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
+      - question: "Which default group name does an unqualified constraint belong to?"
+        answers:
+          - value: "Default (capital D)"
+            correct: true
+          - value: "default (lowercase)"
+            correct: false
+          - value: "the fully qualified class name"
+            correct: false
+          - value: "Base"
+            correct: false
+        explanation: >-
+          The implicit group is 'Default' with a capital D; group names are
+          case-sensitive, so 'default' would be a different (empty) group.
+        documentation: "https://symfony.com/doc/current/validation/groups.html"
+
+      # ---- group-sequence.md ----
+      - question: "When does a group sequence stop early?"
+        answers:
+          - value: "After the first group in the sequence that produces any violation"
+            correct: true
+          - value: "After the first individual constraint that fails"
+            correct: false
+          - value: "Only after all groups have run"
+            correct: false
+          - value: "It never stops early"
+            correct: false
+        explanation: >-
+          Each group runs fully, but the sequence halts after the first group that
+          yields a violation, so later (often more expensive) groups are skipped.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      - question: "Inside a class's #[Assert\\GroupSequence], how do you reference the class's own basic constraints?"
+        answers:
+          - value: "Use the short class-name group (e.g. 'User')"
+            correct: true
+          - value: "Use 'Default'"
+            correct: false
+          - value: "Use 'self'"
+            correct: false
+          - value: "Use 'Basic'"
+            correct: false
+        explanation: >-
+          Referencing 'Default' inside its own sequence would loop, because Default
+          is remapped to the sequence. Use the {ClassName} group to mean the class's
+          Default-group constraints run flat.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      - question: "What must a class annotated with #[Assert\\GroupSequenceProvider] provide?"
+        answers:
+          - value: "An implementation of GroupSequenceProviderInterface::getGroupSequence()"
+            correct: true
+          - value: "A static groupSequence() method"
+            correct: false
+          - value: "It must extend the GroupSequence class"
+            correct: false
+          - value: "A compiler pass registration"
+            correct: false
+        explanation: >-
+          The provider attribute delegates to getGroupSequence() from
+          GroupSequenceProviderInterface, evaluated on each validation so the
+          sequence can depend on the object's state.
+        documentation: "https://symfony.com/doc/current/validation/sequence_provider.html"
+
+      # ---- callbacks.md ----
+      - question: "What is the signature of an instance-method #[Assert\\Callback]?"
+        answers:
+          - value: "public function m(ExecutionContextInterface $context, mixed $payload): void"
+            correct: true
+          - value: "public function m(mixed $value): bool"
+            correct: false
+          - value: "public function m(ExecutionContextInterface $context): string"
+            correct: false
+          - value: "public function m(object $object, mixed $payload): void"
+            correct: false
+        explanation: >-
+          An instance callback receives the ExecutionContext and the optional
+          payload and returns void; violations are added through the context. The
+          static form additionally receives the object as the first argument.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      - question: "How does a callback validator register an error?"
+        answers:
+          - value: "$context->buildViolation('...')->addViolation();"
+            correct: true
+          - value: "return 'the error message';"
+            correct: false
+          - value: "return false;"
+            correct: false
+          - value: "throw new ValidationException('...');"
+            correct: false
+        explanation: >-
+          Violations are built and committed through the execution context. The
+          callback's return value is ignored.
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      - question: "#[Assert\\Callback] is which kind of constraint?"
+        answers:
+          - value: "A class-level constraint; the callback reads the whole object"
+            correct: true
+          - value: "A property constraint that receives the property value"
+            correct: false
+          - value: "A getter-only constraint"
+            correct: false
+          - value: "A collection constraint"
+            correct: false
+        explanation: >-
+          Callback targets the class, so it does not receive a single property
+          value; you read the object from $this or $context->getObject() and can
+          report on any path with atPath().
+        documentation: "https://symfony.com/doc/current/reference/constraints/Callback.html"
+
+      # ---- custom-constraints.md ----
+      - question: "By default, which validator class validates the constraint App\\Validator\\Foo?"
+        answers:
+          - value: "App\\Validator\\FooValidator (constraint name + 'Validator')"
+            correct: true
+          - value: "FooConstraintValidator"
+            correct: false
+          - value: "Any service implementing ConstraintValidatorInterface"
+            correct: false
+          - value: "You must always override validatedBy()"
+            correct: false
+        explanation: >-
+          Constraint::validatedBy() returns static::class.'Validator' by convention.
+          Override it only when the validator service id differs from that name.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - question: "How do you make a custom constraint apply at class scope?"
+        answers:
+          - value: "Override getTargets() to return Constraint::CLASS_CONSTRAINT"
+            correct: true
+          - value: "Set only #[\\Attribute(\\Attribute::TARGET_CLASS)]"
+            correct: false
+          - value: "Rename the class with a 'Class' suffix"
+            correct: false
+          - value: "Register a compiler pass"
+            correct: false
+        explanation: >-
+          The validator uses getTargets() (defaulting to PROPERTY_CONSTRAINT) to
+          decide placement. Returning CLASS_CONSTRAINT makes the validator receive
+          the whole object as $value.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - question: "What is the recommended first step in ConstraintValidator::validate()?"
+        answers:
+          - value: "Check $constraint instanceof YourConstraint and throw UnexpectedTypeException otherwise"
+            correct: true
+          - value: "Add a violation unconditionally"
+            correct: false
+          - value: "Call initialize() manually"
+            correct: false
+          - value: "Read $this->context->getRoot()"
+            correct: false
+        explanation: >-
+          Guarding the constraint type documents intent and fails fast if the
+          validator is mis-wired. It is the documented convention in the Symfony
+          examples.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - question: "What does #[HasNamedArguments] do on a custom Constraint constructor?"
+        answers:
+          - value: "Passes attribute arguments as named constructor arguments (typed options)"
+            correct: true
+          - value: "Marks the constraint as repeatable"
+            correct: false
+          - value: "Automatically registers the validator service"
+            correct: false
+          - value: "Enables group sequences for the constraint"
+            correct: false
+        explanation: >-
+          #[HasNamedArguments] (Symfony\\Component\\Validator\\Attribute) opts into
+          typed, named-argument construction instead of the legacy options-array
+          style; remember to forward $groups and $payload to parent::__construct().
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      # ---- violations-builder.md ----
+      - question: "When is a violation built with buildViolation() actually recorded?"
+        answers:
+          - value: "Only when addViolation() is called on the builder"
+            correct: true
+          - value: "Immediately when buildViolation() is called"
+            correct: false
+          - value: "When the validator method returns"
+            correct: false
+          - value: "When setParameter() is called"
+            correct: false
+        explanation: >-
+          buildViolation() returns a fluent builder; nothing is added to the list
+          until addViolation() commits it. Forgetting it makes the validator pass
+          silently.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
+
+      - question: "Which method returns the message with its {{ placeholders }} still unresolved?"
+        answers:
+          - value: "getMessageTemplate()"
+            correct: true
+          - value: "getMessage()"
+            correct: false
+          - value: "getParameters()"
+            correct: false
+          - value: "getCode()"
+            correct: false
+        explanation: >-
+          getMessage() returns the interpolated message; getMessageTemplate() keeps
+          the raw template with {{ x }} placeholders, and getParameters() holds the
+          substitution map.
+        documentation: "https://symfony.com/doc/current/validation.html"
+
+      - question: "On the violation builder, which method attaches the error to a different property?"
+        answers:
+          - value: "atPath('otherField')"
+            correct: true
+          - value: "setPropertyPath('otherField')"
+            correct: false
+          - value: "setInvalidValue('otherField')"
+            correct: false
+          - value: "setCode('otherField')"
+            correct: false
+        explanation: >-
+          atPath() relocates the violation to a path relative to the current node,
+          commonly used in class-level constraints to blame a specific field.
+        documentation: "https://symfony.com/doc/current/validation/custom_constraint.html"
