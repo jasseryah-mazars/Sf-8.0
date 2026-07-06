@@ -29,6 +29,13 @@ that finds files and directories matching criteria and yields them as
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You point `Finder::in()` at a single **file** path and iterate. What happens?
+
+??? note "Reveal"
+    It throws — `Finder` searches **directories**, not one file. Give it a directory
+    and narrow with `name()`/`path()`; there is no "search a single file" mode.
+
 ### Filesystem
 
 `Symfony\Component\Filesystem\Filesystem` methods throw
@@ -200,10 +207,26 @@ file — it needs directories via `in()`.
     - Finder: `files()->in()->name()->size('> 1K')->date('since yesterday')->sortByModifiedTime()`.
     - `count()`, `hasResults()`, `getRelativePathname()`.
 
+## Connections
+
+- **Depends on:** PHP file functions — `Filesystem` wraps them with exceptions instead of `false` returns.
+- **Reused in:** [Deployment](deployment.md) — build/scan steps; [Process](process.md) — often paired to shell out over discovered files.
+- **Confused with:** raw `glob()`/`scandir()` — Finder adds fluent filters and yields `SplFileInfo`.
+
 ## Official References
 - [Official docs — Filesystem](https://symfony.com/doc/current/components/filesystem.html)
 - [Official docs — Finder](https://symfony.com/doc/current/components/finder.html)
 - [Symfony source — Finder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Finder/Finder.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `dumpFile()` is atomic (temp + rename)
+- [ ] write files safely and build a `Finder` query in Symfony 8
+- [ ] debug a `Finder` that found nothing (missing `in()`, wrong `files()`/`directories()`)
+- [ ] spot the trick: `Filesystem` throws, it doesn't return `false`; `Path` never touches disk
+- [ ] describe how Finder yields its own `SplFileInfo` with `getRelativePathname()`
 
 ---
 

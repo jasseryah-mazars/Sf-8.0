@@ -207,10 +207,26 @@ custom `error_controller` for full control over rendering.
     - Status: `HttpExceptionInterface::getStatusCode()` else 500.
     - Prod templates: `templates/bundles/TwigBundle/Exception/error{404,500}.html.twig`.
 
+## Connections
+
+- **Depends on:** [Request Handling](../architecture/request-handling.md) — an exception escaping a request triggers `kernel.exception`.
+- **Reused in:** [Debugging](debugging.md) — `Debug::enable()` wires the ErrorHandler; [Exception Handling](../architecture/exception-handling.md) covers the kernel event flow.
+- **Confused with:** the `kernel.exception` event — the component converts/renders errors; the event flow turns an exception into a `Response`.
+
 ## Official References
 - [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
 - [Official docs — ErrorHandler component](https://symfony.com/doc/current/components/error_handler.html)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** PHP errors are turned into catchable exceptions
+- [ ] throw an `HttpException` subclass to control the status in Symfony 8
+- [ ] debug a wrong status (non-HTTP throwable defaulting to 500)
+- [ ] spot the trick: only `HttpExceptionInterface` carries a custom status
+- [ ] describe `FlattenException` + `ErrorRendererInterface` rendering
 
 ---
 

@@ -29,6 +29,15 @@ the MIT license governs the **code**; the trademark governs the **name and logo*
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A company ships a closed-source SaaS built on Symfony and names it
+    "SymfonyCloud". Which part is fine under MIT, and which part is risky?
+
+??? note "Reveal"
+    Building and *not* open-sourcing the SaaS is fine — MIT is permissive and
+    non-copyleft. Naming it "SymfonyCloud" risks **trademark** infringement, governed
+    separately by Symfony SAS's trademark policy, not the code license.
+
 ### What the MIT license grants
 
 MIT is a **permissive** license. It lets anyone, free of charge:
@@ -167,11 +176,27 @@ trademark when marketing.
     - Obligation = keep the notice.
     - Trademark ≠ license — name/logo need the trademark policy.
 
+## Connections
+
+- **Depends on:** [Components](components.md) — each component ships its own MIT `LICENSE` file.
+- **Reused in:** [Release Management](release-management.md) — the licence stays MIT across every release; [Best Practices](best-practices.md) touches keeping notices when redistributing.
+- **Confused with:** [BC Promise](bc-promise.md) — a *legal* guarantee about the code licence, not a *technical* guarantee about API stability.
+
 ## Official References
 - [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/current/contributing/code/bc.html)
 - [Symfony source — LICENSE (MIT)](https://github.com/symfony/symfony/blob/8.0/LICENSE)
 - [MIT License text](https://opensource.org/license/mit)
 - [Symfony trademark policy](https://symfony.com/trademark)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** MIT permits closed-source and commercial use
+- [ ] state the single obligation MIT imposes when redistributing
+- [ ] debug a compliance gap where the copyright/permission notice was stripped
+- [ ] spot that the Symfony name/logo is a trademark, not covered by MIT
+- [ ] explain how "built with Symfony" differs from branding a product "Symfony X"
 
 ---
 
