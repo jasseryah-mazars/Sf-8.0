@@ -36,6 +36,16 @@ same abstraction.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    In a test you freeze `new MockClock('2026-07-06 12:00')` and inject it, but the
+    service under test compares its result to `new \DateTimeImmutable()`. Will the
+    assertion be stable across runs?
+
+??? note "Reveal"
+    No. The `MockClock` is frozen at noon while `new \DateTimeImmutable()` reads the
+    real wall clock — they drift apart every run. Read time from the **clock** on
+    both sides; never mix mocked and real time.
+
 ### The contract and implementations
 
 `Psr\Clock\ClockInterface::now(): \DateTimeImmutable` is the PSR-20 base;
@@ -236,10 +246,26 @@ clock. Trivial scripts with no time-dependent logic don't need it.
     - `Clock::set(new MockClock(...))`; `now()` reads the facade.
     - `DatePoint` extends `\DateTimeImmutable`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — the `clock` service (`NativeClock`) is autowired via `ClockInterface`.
+- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` swaps in a `MockClock`; [Messenger](messenger.md) delays/retries reason about "now".
+- **Confused with:** `MonotonicClock` — that one is for measuring *durations*, not reading wall-clock "now".
+
 ## Official References
 - [Official docs — Clock](https://symfony.com/doc/current/components/clock.html)
 - [Symfony source — ClockInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/ClockInterface.php)
 - [Symfony source — MockClock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/MockClock.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** injecting a clock makes time-dependent code testable
+- [ ] inject `ClockInterface` and freeze time with `MockClock` in Symfony 8
+- [ ] debug a flaky time assertion (mixing `MockClock` with `new \DateTime()`)
+- [ ] spot the trick: `now()` returns an immutable `DatePoint`, never null
+- [ ] describe how the `Clock` facade holds the global clock swapped in tests
 
 ---
 

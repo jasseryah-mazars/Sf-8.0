@@ -276,10 +276,30 @@ anything that changes per environment or must stay secret. Prefer injecting the
     - `#[Autowire(param: 'x')]`, `#[Autowire(env: 'X')]`, `#[Autowire('%env(int:X)%')]`.
     - `FrozenParameterBag` = read-only after `compile()`.
 
+## Connections
+
+- **Depends on:** [The Service Container](container.md) — parameters live in the
+  (frozen) parameter bag.
+- **Reused in:** [Autowiring](autowiring.md),
+  [Miscellaneous — Configuration](../miscellaneous/configuration.md) — values are
+  injected via `#[Autowire]` / `bind`.
+- **Confused with:** [Semantic Configuration](semantic-config.md) — bundle config is
+  validated then *turned into* parameters.
+
 ## Official References
 - [Official Symfony docs — Configuration & Parameters](https://symfony.com/doc/current/configuration.html)
 - [Official Symfony docs — Env Var Processors](https://symfony.com/doc/current/configuration/env_var_processors.html)
 - [Symfony source — EnvVarProcessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** env vars resolve at runtime but parameters are frozen
+- [ ] read and cast env vars with processors (`%env(int:default:p:VAR)%`)
+- [ ] debug an unset env var that errors instead of becoming `null`
+- [ ] spot that `%env(MAX)%` is a string until `int:` and `%%` escapes a percent
+- [ ] explain the `FrozenParameterBag` and where `%env()%` is resolved
 
 ---
 

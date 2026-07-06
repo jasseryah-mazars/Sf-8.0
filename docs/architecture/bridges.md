@@ -36,6 +36,15 @@ decoupled.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A class from a Symfony bridge isn't available in your app even though the bridge
+    package is installed. What is the most likely reason?
+
+??? note "Reveal"
+    A bridge only *provides* classes — a **bundle** registers them as services and
+    exposes config. Without the integrating bundle enabled, the bridge's classes are
+    on the autoloader but never wired into the container.
+
 ### Where bridges live
 
 Bridges live under `src/Symfony/Bridge/` in the monorepo and ship as packages
@@ -177,10 +186,26 @@ building your **own** integration package or debugging why a class from a bridge
     - Package name: `symfony/<name>-bridge`; dir `src/Symfony/Bridge/`.
     - Classes come from the bridge, services from a bundle.
 
+## Connections
+
+- **Depends on:** [Components](components.md) — a bridge couples one component to a specific third-party library.
+- **Reused in:** [Code Organization](code-organization.md) — a bundle wires a bridge's classes into the app; [Dependency Injection](../dependency-injection/index.md) is where that registration happens.
+- **Confused with:** [Framework Overloading](overloading.md) — overriding customises a bundle, not gluing a component to an external library.
+
 ## Official References
 - [Symfony source — Bridge](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge)
 - [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
 - [Official docs — Bundles](https://symfony.com/doc/current/bundles.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** glue lives in a bridge rather than inside the component
+- [ ] locate bridges in the source tree (`src/Symfony/Bridge/`)
+- [ ] debug a missing bridge class caused by the integrating bundle not being enabled
+- [ ] spot the distinction between a bridge and a bundle
+- [ ] explain why the external library is optional for the component but required for the bridge
 
 ---
 

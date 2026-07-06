@@ -37,6 +37,15 @@ glob registers a whole directory, `autowire` supplies constructor arguments by
 type, and `autoconfigure` applies tags by implemented interface. You drop to
 manual definitions only when the conventions cannot express something.
 
+!!! question "Predict first"
+    Using the `App\:` resource glob, what is a service's id — a short name or
+    something else? And are `autowire` and `autoconfigure` the same switch?
+
+??? note "Reveal"
+    The id **is the FQCN**. `autowire` (fill arguments by type) and `autoconfigure`
+    (apply tags by interface/attribute) are **independent** flags — you can enable
+    either without the other.
+
 ## Deep Dive — how it works internally
 
 ### `_defaults` and PSR-4 resource loading
@@ -274,10 +283,29 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
     - `arguments`, `calls` (setters), `aliases` (`Interface: '@Class'`).
     - `#[Autoconfigure(lazy:, public:, tags:, bind:)]`.
 
+## Connections
+
+- **Depends on:** [The Service Container](container.md) — registration produces the
+  `Definition`s the container compiles.
+- **Reused in:** [Autowiring](autowiring.md), [Tags](tags.md),
+  [Factories](factories.md) — all build on registered definitions.
+- **Confused with:** [Semantic Configuration](semantic-config.md) — app-level
+  `services.yaml` vs a reusable bundle's typed config.
+
 ## Official References
 - [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
 - [Official Symfony docs — Aliasing & private services](https://symfony.com/doc/current/service_container/alias_private.html)
 - [Symfony source — Autoconfigure attribute](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Attribute/Autoconfigure.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** convention-over-configuration (`App\:` glob) covers most cases
+- [ ] register services with `_defaults`, `resource`/`exclude` and an alias
+- [ ] debug an interface type-hint that fails for lack of an alias
+- [ ] spot that the id is the FQCN and `autowire` ≠ `autoconfigure`
+- [ ] explain how a later, more specific block overrides the glob for one id
 
 ---
 

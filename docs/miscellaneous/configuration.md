@@ -32,6 +32,15 @@ Three distinct components sit under "configuration":
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    `.env.local` sets `APP_ENV=dev`, but the OS already exports `APP_ENV=prod`.
+    Which wins — and does `.env.local` even load under the `test` environment?
+
+??? note "Reveal"
+    The **real OS variable wins**: `.env*` never overrides an already-set env var.
+    And `.env.local` is deliberately **skipped in `test`** so tests stay
+    reproducible regardless of a developer's machine.
+
 ### Config: TreeBuilder + Processor
 
 A bundle exposes a `ConfigurationInterface::getConfigTreeBuilder()` returning a

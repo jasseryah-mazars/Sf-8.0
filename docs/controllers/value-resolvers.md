@@ -357,10 +357,26 @@ returned nothing.
     - `#[MapRequestPayload]`→body DTO (422/400) · `#[MapQueryString]`→query DTO ·
       `#[MapQueryParameter]`→one param · `#[CurrentUser]`→user.
 
+## Connections
+
+- **Depends on:** [Architecture → Request handling](../architecture/request-handling.md) — the kernel runs `ArgumentResolver` before invoking your controller.
+- **Reused in:** [File Upload](file-upload.md) — `#[MapUploadedFile]` is one of the targeted resolvers.
+- **Confused with:** [The Request](request.md) — `RequestValueResolver` fills the `Request` arg; the map-attributes build DTOs.
+
 ## Official References
 - [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
 - [Symfony source — ArgumentResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 - [Symfony source — value resolver services (web.php)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Resources/config/web.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the resolver chain exists and how "first to yield wins" works
+- [ ] write a `ValueResolverInterface` and target it in Symfony 8
+- [ ] debug an unresolved argument (`RuntimeException`) or a `TypeError` from `return null`
+- [ ] spot chain vs targeted resolvers and the 120/100/-50/-100/-150 priorities
+- [ ] explain how `ArgumentMetadata` drives resolution and 422/400 for payloads
 
 ---
 
