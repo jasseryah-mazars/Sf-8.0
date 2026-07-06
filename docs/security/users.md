@@ -107,6 +107,29 @@ flowchart LR
 `AccountStatusException` (e.g. `DisabledException`, `AccountExpiredException`) to
 block a load-valid user. Configure per firewall with `user_checker:`.
 
+### Null behavior
+
+Two nullables live on the user side. `getPassword()` from
+`PasswordAuthenticatedUserInterface` returns **`?string`**: a user authenticated
+without a local password (OAuth, LDAP, a token-only API user) legitimately has
+**`null`** here, and the `CheckCredentialsListener` treats a `null` hash as
+non-verifiable — password login for such a user simply cannot succeed, which is
+correct.
+
+Separately, `Security::getUser()` (and Twig's `app.user`) is **`null`** whenever
+no one is logged in. Read it defensively:
+
+```twig
+{{ app.user?.userIdentifier ?? 'guest' }}
+```
+
+Do not declare a non-nullable `getPassword(): string` on a user that may have no
+password — you will hit a `TypeError` the moment it is verified or serialised.
+
+!!! note "Null in real life"
+    A `null` password is a visitor badge with no PIN pad: you cannot "check the
+    PIN", so PIN-based entry is simply not an option for them.
+
 ## Configuration & code
 
 === "PHP Attributes"

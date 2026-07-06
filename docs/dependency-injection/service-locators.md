@@ -78,6 +78,23 @@ optionally keyed by an index. No interface to implement.
     `Symfony\Contracts\Service\ServiceSubscriberInterface` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ServiceLocator.php).
 
+### Null behavior
+
+A locator's set is fixed at compile time, so asking for an id it does not hold
+**throws**
+`Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException` — it never
+returns `null`. Guard first: `has($id)` returns a bool, so the safe pattern is
+`$this->locator->has($id) ? $this->locator->get($id) : $fallback`. `get()` only
+builds and returns a *declared* service; there is no "null on miss" mode as there is
+on the main container. The common bug is calling `get($userSuppliedKey)` on an
+untrusted value and getting an exception for keys outside the whitelist — validate
+against `has()` (or the known key list) before fetching.
+
+!!! note "Null in real life"
+    Asking the specials board for a dish that was never chalked up gets you "no such
+    thing" (exception), not an empty plate (null) — so read the board (`has()`)
+    before you order.
+
 ## Configuration & code
 
 === "AutowireLocator"
