@@ -4,6 +4,11 @@
 
 [![Build & Deploy Docs](https://github.com/jasseryah-mazars/Sf-8.0/actions/workflows/deploy.yml/badge.svg)](https://github.com/jasseryah-mazars/Sf-8.0/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Live site](https://img.shields.io/badge/docs-live-brightgreen.svg)](https://jasseryah-mazars.github.io/Sf-8.0/)
+
+## 🌐 Live site
+
+**👉 [jasseryah-mazars.github.io/Sf-8.0](https://jasseryah-mazars.github.io/Sf-8.0/)** — the full, searchable platform (works great on mobile).
 
 This repository is a complete, exam-focused learning platform built around the
 **[official Symfony Certification syllabus](https://certification.symfony.com/exams/symfony.html)**.
@@ -29,7 +34,8 @@ study resource.
 
 ## 📖 Read the docs
 
-The content is published as a searchable [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) site.
+The content is published as a searchable [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) site,
+live at **<https://jasseryah-mazars.github.io/Sf-8.0/>**.
 
 ```bash
 # Local preview
