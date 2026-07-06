@@ -204,8 +204,7 @@ data. For prod observability use proper metrics/tracing.
     - Tag `data_collector` + `template:`; profiler UI at `/_profiler`.
     - `LateDataCollectorInterface::lateCollect()` for post-response data.
 
-## References
-
+## Official References
 - [Official docs — Profiler](https://symfony.com/doc/current/profiler.html)
 - [Official docs — Custom data collector](https://symfony.com/doc/current/profiler/data_collector.html)
 - [Symfony source — DataCollectorInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DataCollector/DataCollectorInterface.php)

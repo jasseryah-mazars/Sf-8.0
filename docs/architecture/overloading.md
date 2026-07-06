@@ -207,8 +207,7 @@ third-party resources.
     - Config override: `config/packages/<alias>.yaml`.
     - No `getParent()` in Symfony 8.
 
-## References
-
+## Official References
 - [Official docs — Overriding bundles](https://symfony.com/doc/current/bundles/override.html)
 - [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
 - [Symfony source — bundles](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bundle)

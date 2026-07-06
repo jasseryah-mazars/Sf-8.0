@@ -68,3 +68,9 @@ first for the mental model, then [Configuration](configuration.md) to see it in
 [Access Control Rules](access-control.md), which are dense with exam traps.
 </content>
 </invoke>
+
+## Official References
+
+- [Symfony documentation — Security](https://symfony.com/doc/current/security.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

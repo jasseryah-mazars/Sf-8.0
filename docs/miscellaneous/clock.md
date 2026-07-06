@@ -208,8 +208,7 @@ clock. Trivial scripts with no time-dependent logic don't need it.
     - `Clock::set(new MockClock(...))`; `now()` reads the facade.
     - `DatePoint` extends `\DateTimeImmutable`.
 
-## References
-
+## Official References
 - [Official docs — Clock](https://symfony.com/doc/current/components/clock.html)
 - [Symfony source — ClockInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/ClockInterface.php)
 - [Symfony source — MockClock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/MockClock.php)

@@ -267,8 +267,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
     - `TokenInterface` in `TokenStorageInterface` = "logged in".
     - `stateless: true` ⇒ no `ContextListener`, no session token.
 
-## References
-
+## Official References
 - [Symfony docs — Security](https://symfony.com/doc/current/security.html)
 - [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
 - [Symfony source — AuthenticatorManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)

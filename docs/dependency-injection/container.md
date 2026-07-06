@@ -271,8 +271,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
     - `get()` on private id → `ServiceNotFoundException`.
     - `Definition`/`Reference`/`Alias`/`Parameter` = build-time metadata only.
 
-## References
-
+## Official References
 - [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
 - [Official Symfony docs — Compiling the Container](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
 - [Symfony source — ContainerBuilder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ContainerBuilder.php)

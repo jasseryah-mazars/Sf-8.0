@@ -229,8 +229,7 @@ control flow.
     - `ErrorListener` priority **-128**; `error_controller` = `ErrorController`.
     - No response set → re-thrown → 500.
 
-## References
-
+## Official References
 - [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
 - [Official docs — kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)

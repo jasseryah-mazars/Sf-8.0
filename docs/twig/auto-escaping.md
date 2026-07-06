@@ -222,8 +222,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
     - `|raw` = trust me. `{% autoescape 's' %}…{% endautoescape %}`.
     - Escape at `{{ }}`, not at `{% set %}`.
 
-## References
-
+## Official References
 - [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
 - [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
 - [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)

@@ -173,3 +173,8 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 ---
 
 <small>Related: [Top Certification Traps](traps.md) · [Memory Aids](memory-aids.md) · [Revision Hub](index.md)</small>
+
+## Official References
+
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)

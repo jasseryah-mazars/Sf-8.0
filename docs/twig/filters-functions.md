@@ -251,8 +251,7 @@ transforms an existing value (`value|price`).
     - Register: `getFilters()`/`getFunctions()` or `#[AsTwigFilter/Function]`.
     - `default` covers undefined **and** empty; `json_encode` is escaped.
 
-## References
-
+## Official References
 - [Official — Twig extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
 - [Twig — filters & functions reference](https://twig.symfony.com/doc/3.x/#reference)
 - [Twig source — CoreExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/CoreExtension.php)

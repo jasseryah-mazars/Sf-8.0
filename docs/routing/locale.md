@@ -271,8 +271,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     - `generateUrl(name, {_locale: 'fr'})`.
     - `framework.default_locale`; guess via `set_locale_from_accept_language`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 

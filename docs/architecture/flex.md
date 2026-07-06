@@ -204,8 +204,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - `symfony.lock` = recipes; `composer.lock` = versions.
     - `composer recipes` / `recipes:update`.
 
-## References
-
+## Official References
 - [Official docs — Setup & Flex](https://symfony.com/doc/current/setup.html)
 - [Symfony Flex source](https://github.com/symfony/flex)
 - [Symfony recipes](https://github.com/symfony/recipes)

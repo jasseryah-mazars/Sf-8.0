@@ -51,6 +51,9 @@ Shared rules so every chapter reads as one voice. Read this before writing.
   built site and on GitHub.
 - Every major concept links to official docs. Add a Symfony **source** link in a
   `!!! note "Source reference"` when explaining internals.
+- **Mandatory `## Official References` section** at the end of every chapter:
+  official Symfony docs (`doc/current`) for Symfony concepts, `php.net` for PHP
+  concepts, plus source/RFC links when relevant. A chapter without it is invalid.
 - End each chapter with a `Related:` line of 2–4 cross-links.
 
 ## Tone

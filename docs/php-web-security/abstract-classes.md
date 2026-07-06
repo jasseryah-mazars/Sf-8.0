@@ -233,8 +233,7 @@ abstract classes providing shared helpers while forcing you to fill in specifics
     - Template method: `final` skeleton → abstract hooks.
     - `extends` one class, `implements` many interfaces.
 
-## References
-
+## Official References
 - [PHP: Class Abstraction](https://www.php.net/manual/en/language.oop5.abstract.php)
 - [PHP: Object Inheritance](https://www.php.net/manual/en/language.oop5.inheritance.php)
 - [Symfony source — AbstractController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php)

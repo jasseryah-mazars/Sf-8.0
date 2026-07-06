@@ -64,3 +64,9 @@ actually drives and asserts. Finish with the framework-integration and
 diagnostics cluster: [Framework Objects](framework-objects.md),
 [Client Configuration](client-configuration.md), [Profiler](profiler.md),
 [PHPUnit Bridge](phpunit-bridge.md) and [Deprecations](deprecations.md).
+
+## Official References
+
+- [Symfony documentation — Testing](https://symfony.com/doc/current/testing.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

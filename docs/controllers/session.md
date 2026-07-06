@@ -252,8 +252,7 @@ cookie — important for HTTP caching and privacy.
     - Lazy: no `Set-Cookie` until touched ⇒ don't touch on cacheable pages.
     - `migrate()` after login; `invalidate()` on logout.
 
-## References
-
+## Official References
 - [Official Symfony docs — Sessions](https://symfony.com/doc/current/session.html)
 - [Symfony source — Session](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php)
 

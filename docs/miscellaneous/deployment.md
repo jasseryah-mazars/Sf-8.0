@@ -172,8 +172,7 @@ image build so the running container does zero setup.
     - Preload file: `var/cache/prod/*.preload.php`.
     - Make `var/cache` warmed at build, web user read-only.
 
-## References
-
+## Official References
 - [Official docs — Deploying Symfony](https://symfony.com/doc/current/deployment.html)
 - [Official docs — Performance](https://symfony.com/doc/current/performance.html)
 - [Symfony source — CacheWarmerInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/CacheWarmer/CacheWarmerInterface.php)

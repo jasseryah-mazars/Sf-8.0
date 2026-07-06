@@ -216,8 +216,7 @@ flowchart LR
     - `mb_*` for text; `ctype_*` beware integer-as-ASCII gotcha.
     - Prefer native ext over Symfony polyfill.
 
-## References
-
+## Official References
 - [PHP: Extensions overview](https://www.php.net/manual/en/extensions.php)
 - [PHP: mbstring](https://www.php.net/manual/en/book.mbstring.php)
 - [PHP: Intl](https://www.php.net/manual/en/book.intl.php)

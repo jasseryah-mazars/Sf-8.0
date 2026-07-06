@@ -55,3 +55,8 @@ flowchart LR
 ---
 
 <small>Related: [Master Cheat Sheet](cheat-sheet.md) · [Top Certification Traps](traps.md) · [Exam Guide](../exam-guide/index.md)</small>
+
+## Official References
+
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)

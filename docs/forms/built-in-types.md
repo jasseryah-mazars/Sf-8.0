@@ -271,8 +271,7 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
     - `Collection`: `entry_type`, `allow_add/delete`, `by_reference:false`, `prototype`.
     - `Repeated`: `type`, `first_options`/`second_options`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Form types reference](https://symfony.com/doc/current/reference/forms/types.html)
 - [Official Symfony docs — CollectionType](https://symfony.com/doc/current/reference/forms/types/collection.html)
 - [Symfony source — Core form types](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Form/Extension/Core/Type)

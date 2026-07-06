@@ -195,8 +195,7 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
     - Extras → `?query`. Missing required → exception.
     - `app.current_route` + `app.current_route_parameters` to rebuild.
 
-## References
-
+## Official References
 - [Official — Linking to pages](https://symfony.com/doc/current/templates.html#linking-to-pages)
 - [Official — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
 - [Symfony source — RoutingExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php)

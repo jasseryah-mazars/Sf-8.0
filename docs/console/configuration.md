@@ -262,8 +262,7 @@ nothing to share between `interact()` and `execute()`.
     - `execute()` = returns `int`.
     - `hidden` hides from `list`, still runnable.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
 - [Official Symfony docs — Commands as services (lazy)](https://symfony.com/doc/current/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)

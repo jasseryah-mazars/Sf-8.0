@@ -210,8 +210,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - ICU: `messages+intl-icu.en.yaml`, `{n, plural, =0{} one{} other{#}}`.
     - `transchoice` = removed.
 
-## References
-
+## Official References
 - [Official — Translations in templates](https://symfony.com/doc/current/translation.html#translations-in-templates)
 - [Official — Message format (ICU)](https://symfony.com/doc/current/translation/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)

@@ -67,3 +67,9 @@ comprehension rather than discovery.
 ---
 
 <small>Next stage: [HTTP](../http/index.md) · Related: [Security](../security/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — PHP Manual](https://www.php.net/manual/en/)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -107,3 +107,8 @@ flowchart LR
 ---
 
 <small>Related: [Revision Hub](index.md) · [Master Cheat Sheet](cheat-sheet.md) · [How to Use This Platform](../exam-guide/how-to-use.md)</small>
+
+## Official References
+
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)

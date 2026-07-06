@@ -264,8 +264,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
     - Clickjacking→`X-Frame-Options`/CSP `frame-ancestors`.
     - Passwords→`PASSWORD_ARGON2ID`/`BCRYPT`; verify with `password_verify`.
 
-## References
-
+## Official References
 - [Symfony — Security](https://symfony.com/doc/current/security.html)
 - [Symfony — CSRF](https://symfony.com/doc/current/security/csrf.html)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)

@@ -208,8 +208,7 @@ collections, paginate rather than looping thousands of rows in Twig.
     - `for … else … endfor` = empty state.
     - Tests: `is defined/null/empty/even/odd/iterable/same as/divisible by`.
 
-## References
-
+## Official References
 - [Official — Loops in templates](https://symfony.com/doc/current/templates.html)
 - [Twig — for / if tags](https://twig.symfony.com/doc/3.x/tags/for.html)
 - [Twig source — ForNode](https://github.com/twigphp/Twig/blob/3.x/src/Node/ForNode.php)

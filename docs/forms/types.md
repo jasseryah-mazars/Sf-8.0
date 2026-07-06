@@ -259,8 +259,7 @@ For a one-off, just configure options at `->add()`.
     - No `getName()`; `getBlockPrefix()` for theming; FQCN is the id.
     - `form.type` tag autoconfigured → inject services into types.
 
-## References
-
+## Official References
 - [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
 - [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
 - [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)

@@ -260,8 +260,7 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
     - Strategy config: `security.access_decision_manager.strategy`.
     - Voters autoconfigured via `security.voter` tag.
 
-## References
-
+## Official References
 - [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
 - [Symfony source — Voter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/Voter.php)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)

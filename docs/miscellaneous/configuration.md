@@ -224,8 +224,7 @@ not for heavy computation — it is interpreted.
     - `debug:dotenv`, `debug:config <bundle>`, `composer dump-env prod`.
     - Providers implement `ExpressionFunctionProviderInterface`.
 
-## References
-
+## Official References
 - [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
 - [Official docs — Config component](https://symfony.com/doc/current/components/config.html)
 - [Official docs — ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html)

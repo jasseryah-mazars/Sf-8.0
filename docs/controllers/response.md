@@ -244,8 +244,7 @@ sequenceDiagram
     - Non-Response return ⇒ ViewEvent ⇒ else LogicException.
     - `JsonResponse::fromJsonString($json)` for pre-encoded JSON.
 
-## References
-
+## Official References
 - [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 

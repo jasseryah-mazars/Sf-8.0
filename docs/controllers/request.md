@@ -219,8 +219,7 @@ attributes — `#[MapQueryParameter]`, `#[MapQueryString]`, `#[MapRequestPayload
     - `getInt/getString/getEnum/getBoolean` on `query` & `request`.
     - Services: `RequestStack::getCurrentRequest()`. Never autowire `Request`.
 
-## References
-
+## Official References
 - [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html)
 - [Official Symfony docs — Request as controller argument](https://symfony.com/doc/current/controller.html)
 - [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)

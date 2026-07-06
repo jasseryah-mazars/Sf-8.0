@@ -91,3 +91,8 @@ the exam.
 ---
 
 <small>Related: [Exam Format & Scoring](format.md) · [Top Certification Traps](../revision/traps.md) · [Memory Aids](../revision/memory-aids.md)</small>
+
+## Official References
+
+- [Official Symfony Certification](https://certification.symfony.com/)
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

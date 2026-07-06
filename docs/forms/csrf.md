@@ -254,8 +254,7 @@ mutates state under cookie auth **must** keep CSRF.
     - Manual: `csrf_token('intention')` in Twig · `isCsrfTokenValid('intention', $t)`.
     - Never disable CSRF for cookie-authenticated state changes.
 
-## References
-
+## Official References
 - [Official Symfony docs — CSRF protection](https://symfony.com/doc/current/security/csrf.html)
 - [Official Symfony docs — Form type CSRF options](https://symfony.com/doc/current/reference/forms/types/form.html)
 - [Symfony source — FormTypeCsrfExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Csrf/Type/FormTypeCsrfExtension.php)

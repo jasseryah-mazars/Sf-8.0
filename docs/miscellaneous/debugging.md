@@ -194,8 +194,7 @@ proper observability, not Stopwatch.
     - `dump()` / `dd()`; `server:dump` to a TCP server.
     - `Stopwatch::start()/stop()` → `StopwatchEvent::getDuration()` (ms).
 
-## References
-
+## Official References
 - [Official docs — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
 - [Official docs — Stopwatch](https://symfony.com/doc/current/components/stopwatch.html)
 - [Symfony source — VarCloner](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/VarDumper/Cloner/VarCloner.php)

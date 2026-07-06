@@ -293,8 +293,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
     - `followRedirect()` = once; `followRedirects(true|false)` = toggle.
     - `disableReboot()`, `getCookieJar()`, `getHistory()`, `back()`, `restart()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Making requests](https://symfony.com/doc/current/testing.html#making-requests)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
 - [Symfony source — KernelBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/KernelBrowser.php)

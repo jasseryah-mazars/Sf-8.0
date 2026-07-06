@@ -285,8 +285,7 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
       `extended_type`.
     - No `#[AsFormTypeExtension]`; `getExtendedType()` (singular) is gone.
 
-## References
-
+## Official References
 - [Official Symfony docs — Create a form type extension](https://symfony.com/doc/current/form/create_form_type_extension.html)
 - [Symfony source — AbstractTypeExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/AbstractTypeExtension.php)
 

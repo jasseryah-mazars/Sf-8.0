@@ -227,8 +227,7 @@ When a decision depends on the target object or runtime state, use a
     - `PUBLIC_ACCESS` = everyone; `IS_AUTHENTICATED_FULLY` = strict; `_REMEMBERED` = looser.
     - `IS_IMPERSONATOR` on a `SwitchUserToken`.
 
-## References
-
+## Official References
 - [Symfony docs — Roles](https://symfony.com/doc/current/security.html#roles)
 - [Symfony docs — Role hierarchy](https://symfony.com/doc/current/security.html#hierarchical-roles)
 - [Symfony source — RoleHierarchy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Role/RoleHierarchy.php)

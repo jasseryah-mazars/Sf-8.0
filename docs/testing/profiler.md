@@ -284,8 +284,7 @@ only in the tests that need it.
     - Emails: `assertEmailCount()`, `getMailerMessage()`, `assertEmailHtmlBodyContains()`.
     - Test default: `framework.profiler.collect: false`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Profiling tests](https://symfony.com/doc/current/testing/profiling.html)
 - [Official Symfony docs — Testing emails](https://symfony.com/doc/current/mailer.html#testing-emails)
 - [Symfony source — Profiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Profiler/Profiler.php)

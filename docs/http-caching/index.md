@@ -81,3 +81,9 @@ Work through them in order:
 [Caching Overview](../http/caching.md) ·
 [Controllers](../controllers/index.md) ·
 [Controller Rendering (Twig)](../twig/controller-rendering.md)</small>
+
+## Official References
+
+- [Symfony documentation — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

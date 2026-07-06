@@ -293,8 +293,7 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
     - ETag wins over Last-Modified when both present.
     - `#[Cache(etag:, lastModified:)]` → 304 before controller; ETag is SHA-256'd.
 
-## References
-
+## Official References
 - [Symfony docs — Validation](https://symfony.com/doc/current/http_cache/validation.html)
 - [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
 - [MDN — Conditional requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests)

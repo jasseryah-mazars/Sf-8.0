@@ -70,3 +70,9 @@ data-shaping components — [Serializer](serializer.md) and
 [Intl](intl.md), and finish with the operational trio
 [Error Handling](error-handling.md), [Debugging](debugging.md),
 [Profiler](profiler.md) and [Deployment](deployment.md).
+
+## Official References
+
+- [Symfony documentation — Symfony Components](https://symfony.com/doc/current/components/index.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

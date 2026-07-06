@@ -310,8 +310,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
     - DOM: `assertSelectorExists`, `assertSelectorTextContains/Same`,
       `assertPageTitleContains`, `assertRouteSame`.
 
-## References
-
+## Official References
 - [Official Symfony docs — The assertions](https://symfony.com/doc/current/testing.html#the-assertions)
 - [Symfony source — HttpFoundation test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpFoundation/Test/Constraint)
 - [Symfony source — DomCrawler test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/DomCrawler/Test/Constraint)

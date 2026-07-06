@@ -23,7 +23,10 @@ applicable item below is true. This is the gate referenced by every task.
 - [ ] **Exercises** with hidden **solutions**.
 - [ ] **Certification questions** (inline, collapsible) with explanations + refs.
 - [ ] **Key takeaways** + **Last-minute revision** cheat sheet.
-- [ ] **References** to official docs; **source** links where internals are discussed.
+- [ ] **`## Official References`** section (mandatory): official Symfony docs
+      (`doc/current`) for Symfony concepts, **php.net** for PHP concepts, plus
+      **source**/RFC links where internals are discussed. A chapter is invalid
+      without it.
 - [ ] **Related** cross-links (2–4), all resolving.
 - [ ] Added to `mkdocs.yml` `nav:`.
 - [ ] 3–6 matching questions added to `quiz/<area>.yml`.

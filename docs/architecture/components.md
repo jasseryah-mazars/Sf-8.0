@@ -191,8 +191,7 @@ services and configuration, not by instantiating them.
     - Type-hint contracts/interfaces for swap-ability.
     - `composer require symfony/<name>` — no full framework needed.
 
-## References
-
+## Official References
 - [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
 - [Symfony Contracts](https://github.com/symfony/contracts)
 - [Symfony source — components](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component)

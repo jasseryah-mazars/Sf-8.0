@@ -223,8 +223,7 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
     - Multiple providers ⇒ each firewall needs `provider:`.
     - `debug:config security`, `debug:firewall`, `security:hash-password`.
 
-## References
-
+## Official References
 - [Symfony docs — Security configuration](https://symfony.com/doc/current/security.html)
 - [Symfony docs — SecurityBundle config reference](https://symfony.com/doc/current/reference/configuration/security.html)
 - [Symfony source — SecurityExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/DependencyInjection/SecurityExtension.php)

@@ -239,8 +239,7 @@ code.
     - Env overrides → `config/packages/<env>/`.
     - Kernel = `MicroKernelTrait`.
 
-## References
-
+## Official References
 - [Official docs — Configuration & structure](https://symfony.com/doc/current/configuration.html)
 - [Official docs — Best practices](https://symfony.com/doc/current/best_practices.html)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)

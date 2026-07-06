@@ -320,8 +320,7 @@ with a cheap 304.
     - Shared freshness: `s-maxage` > `max-age` > `Expires`. `Age` counts elapsed.
     - `#[Cache]` listener: CONTROLLER_ARGUMENTS (304 short-circuit) + RESPONSE −10.
 
-## References
-
+## Official References
 - [Symfony docs — Expiration](https://symfony.com/doc/current/http_cache/expiration.html)
 - [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
 - [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)

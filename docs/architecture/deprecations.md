@@ -219,8 +219,7 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
     - Detect: toolbar/profiler, `deprecation` log channel, phpunit-bridge.
     - DI: `deprecated:` key / `Definition::setDeprecated()`.
 
-## References
-
+## Official References
 - [Official docs — deprecations](https://symfony.com/doc/current/setup/upgrade_minor.html)
 - [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
 - [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)

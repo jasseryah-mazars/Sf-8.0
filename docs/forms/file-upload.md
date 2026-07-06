@@ -260,8 +260,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
     - `File(maxSize: '5m', mimeTypes: [...])` / `Image(...)`.
     - See also [controllers/file-upload](../controllers/file-upload.md).
 
-## References
-
+## Official References
 - [Official Symfony docs — Uploading files](https://symfony.com/doc/current/controller/upload_file.html)
 - [Official Symfony docs — File field type](https://symfony.com/doc/current/reference/forms/types/file.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)

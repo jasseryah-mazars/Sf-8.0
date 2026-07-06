@@ -248,8 +248,7 @@ expresses.
     - `PassConfig::TYPE_*`; default = `TYPE_BEFORE_OPTIMIZATION`.
     - `findTaggedServiceIds()`, `findDefinition()`, `new Reference($id)`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Compiler Passes](https://symfony.com/doc/current/service_container/compiler_passes.html)
 - [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/current/service_container/tags.html)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)

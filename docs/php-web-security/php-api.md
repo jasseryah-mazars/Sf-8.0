@@ -443,8 +443,7 @@ flowchart TD
     - 8.4: property hooks, asymmetric visibility (`private(set)`), `new` w/o `()`.
     - `match`===strict + throws; `tryFrom`=null, `from`=`\ValueError`.
 
-## References
-
+## Official References
 - [PHP: Enumerations](https://www.php.net/manual/en/language.enumerations.php)
 - [PHP: Property hooks](https://www.php.net/manual/en/language.oop5.property-hooks.php)
 - [PHP: Asymmetric visibility](https://www.php.net/manual/en/language.oop5.visibility.php)

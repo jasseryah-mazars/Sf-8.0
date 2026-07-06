@@ -245,8 +245,7 @@ and lets `AbstractController` receive its service locator.
     - Invokable = `#[Route]` on class + `public function __invoke()`.
     - No `Action` suffix. Methods `public`. Classes usually `final`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html)
 - [Symfony source — ControllerResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/ControllerResolver.php)
 

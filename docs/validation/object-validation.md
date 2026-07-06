@@ -297,8 +297,7 @@ automatically.
     - Metadata: `AttributeLoader` → `ClassMetadata`, PSR-6 cached.
     - `debug:validator "App\Entity\X"` lists the mapped constraints.
 
-## References
-
+## Official References
 - [Official Symfony docs — Validation](https://symfony.com/doc/current/validation.html)
 - [Symfony source — RecursiveValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveValidator.php)
 

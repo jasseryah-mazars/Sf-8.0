@@ -231,8 +231,7 @@ a service, use [decoration](decoration.md).
     - Args → factory method, not constructor.
     - Attribute: `#[Autowire(factory: [F::class, 'create'])]`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Using a Factory](https://symfony.com/doc/current/service_container/factories.html)
 - [Symfony source — Definition](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php)
 

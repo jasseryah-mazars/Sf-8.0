@@ -232,8 +232,7 @@ formats. In `-vvv` (debug), Symfony also shows full exception traces on errors.
     - `$output->isVerbose()`, `isVeryVerbose()`, `isDebug()`, `isQuiet()`.
     - `-vvv` also prints full exception traces.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console verbosity](https://symfony.com/doc/current/console/verbosity.html)
 - [Symfony source — OutputInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Output/OutputInterface.php)
 

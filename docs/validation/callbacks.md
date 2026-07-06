@@ -261,8 +261,7 @@ without gating it behind a group/sequence.
     - Class-scoped: read object via `$this` / `$context->getObject()`.
     - `atPath('field')` to attribute the error to a property.
 
-## References
-
+## Official References
 - [Official Symfony docs — Callback](https://symfony.com/doc/current/reference/constraints/Callback.html)
 - [Symfony source — CallbackValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/CallbackValidator.php)
 

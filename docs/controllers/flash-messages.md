@@ -221,8 +221,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - `get/all` consume; `peek/peekAll` don't.
     - Needs a session ⇒ not for shared-cached pages.
 
-## References
-
+## Official References
 - [Official Symfony docs — Flash Messages](https://symfony.com/doc/current/controller.html#flash-messages)
 - [Symfony source — FlashBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php)
 

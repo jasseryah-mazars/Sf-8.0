@@ -263,8 +263,7 @@ in templates you can just append `#anchor` in the href.
     - `stateless: true` = no session (debug assertion).
     - Populated by `RouterListener` on `kernel.request`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Special parameters](https://symfony.com/doc/current/routing.html#special-parameters)
 - [Official Symfony docs — Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes)
 - [Symfony source — RouterListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)

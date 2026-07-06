@@ -207,8 +207,7 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
     - `requires_channel: https` = pre-auth redirect.
     - `ips` + `PUBLIC_ACCESS` = LAN allowlist; no match = allowed.
 
-## References
-
+## Official References
 - [Symfony docs — access_control](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
 - [Symfony docs — Security expressions](https://symfony.com/doc/current/security/expressions.html)
 - [Symfony source — AccessListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/AccessListener.php)

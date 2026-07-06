@@ -70,3 +70,9 @@ Work through them in order:
 <small>Related: [Dependency Injection](../dependency-injection/index.md) ·
 [Symfony Architecture](../architecture/index.md) ·
 [Automated Tests](../testing/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — Console](https://symfony.com/doc/current/console.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -194,8 +194,7 @@ file — it needs directories via `in()`.
     - Finder: `files()->in()->name()->size('> 1K')->date('since yesterday')->sortByModifiedTime()`.
     - `count()`, `hasResults()`, `getRelativePathname()`.
 
-## References
-
+## Official References
 - [Official docs — Filesystem](https://symfony.com/doc/current/components/filesystem.html)
 - [Official docs — Finder](https://symfony.com/doc/current/components/finder.html)
 - [Symfony source — Finder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Finder/Finder.php)

@@ -67,3 +67,9 @@ that Twig **compiles to PHP** (via `Twig\Environment`, cached under
 ---
 
 <small>Previous stage: [Routing](../routing/index.md) · Next stage: [Forms](../forms/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — Creating and Using Templates (Twig)](https://symfony.com/doc/current/templates.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

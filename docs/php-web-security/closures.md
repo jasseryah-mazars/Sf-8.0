@@ -227,8 +227,7 @@ flowchart LR
     - `bindTo($obj, $scope)` / `bind()` (static) / `call($obj)`.
     - `strlen(...)` == `Closure::fromCallable('strlen')`.
 
-## References
-
+## Official References
 - [PHP: Anonymous functions](https://www.php.net/manual/en/functions.anonymous.php)
 - [PHP: Arrow functions](https://www.php.net/manual/en/functions.arrow.php)
 - [PHP: Closure class](https://www.php.net/manual/en/class.closure.php)

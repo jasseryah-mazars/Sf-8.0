@@ -82,3 +82,9 @@ flowchart LR
 
 <small>MIT-licensed. Symfony is a trademark of Symfony SAS. This is an independent
 community project, not affiliated with or endorsed by Symfony SAS.</small>
+
+## Official References
+
+- [Official Symfony Certification](https://certification.symfony.com/)
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)

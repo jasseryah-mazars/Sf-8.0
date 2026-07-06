@@ -268,8 +268,7 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
     - Baseline: `baselineFile=…&generateBaseline=true`, then `baselineFile=…`.
     - Attributes/traits: `#[IgnoreDeprecations]`, `ExpectUserDeprecationMessageTrait`.
 
-## References
-
+## Official References
 - [Official Symfony docs — PHPUnit bridge deprecations](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail)
 - [Symfony source — DeprecationErrorHandler Configuration](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/DeprecationErrorHandler/Configuration.php)
 - [Architecture — Deprecations Best Practices](../architecture/deprecations.md)

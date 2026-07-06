@@ -200,8 +200,7 @@ clear reason, and document it.
     - Infra → env vars · secrets → vault · behaviour → parameters.
     - Smoke-test every public URL.
 
-## References
-
+## Official References
 - [Official Symfony Best Practices](https://symfony.com/doc/current/best_practices.html)
 - [Service container](https://symfony.com/doc/current/service_container.html)
 - [Secrets management](https://symfony.com/doc/current/configuration/secrets.html)

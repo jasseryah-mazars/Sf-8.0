@@ -249,8 +249,7 @@ vs HTML).
     - Non-Http exception → 500. Status from `getStatusCode()`.
     - Prod templates: `templates/bundles/TwigBundle/Exception/errorXXX.html.twig`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Errors & 404 pages](https://symfony.com/doc/current/controller/error_pages.html)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 

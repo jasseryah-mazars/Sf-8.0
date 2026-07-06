@@ -264,8 +264,7 @@ reserve `ClockMock` for legacy code calling global `time()`/`sleep()` directly.
     - Groups: `#[Group('time-sensitive')]`, `#[Group('dns-sensitive')]`.
     - Env: `SYMFONY_DEPRECATIONS_HELPER=max[direct]=0` / `weak` / `disabled=1`.
 
-## References
-
+## Official References
 - [Official Symfony docs — PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
 - [Symfony source — DeprecationErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/DeprecationErrorHandler.php)
 - [Symfony source — ClockMock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/ClockMock.php)

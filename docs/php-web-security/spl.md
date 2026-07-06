@@ -301,8 +301,7 @@ function readLines(string $path): \Generator
     - `yield` → Generator (Iterator); `yield from` delegates.
     - Stack=LIFO, Queue=FIFO, Heap=ordered, PriorityQueue=value+priority (unstable).
 
-## References
-
+## Official References
 - [PHP: SPL](https://www.php.net/manual/en/book.spl.php)
 - [PHP: Predefined Interfaces](https://www.php.net/manual/en/reserved.interfaces.php)
 - [PHP: Generators](https://www.php.net/manual/en/language.generators.php)

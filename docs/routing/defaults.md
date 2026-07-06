@@ -248,8 +248,7 @@ over defaulting.
     - Matches with & without the trailing segment.
     - `generateUrl(default value)` ⇒ segment omitted.
 
-## References
-
+## Official References
 - [Official Symfony docs — Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 

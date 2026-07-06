@@ -310,8 +310,7 @@ use [`KernelTestCase`](framework-objects.md).
     - Doubles: `createStub()` (values) vs `createMock()` + `expects()`.
     - Matchers: `self::once()`, `self::never()`, `self::exactly(n)`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
 - [PHPUnit — Writing tests](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)

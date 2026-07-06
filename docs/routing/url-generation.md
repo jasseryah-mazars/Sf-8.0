@@ -305,8 +305,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
       `RELATIVE_PATH`.
     - CLI links → set `framework.router.default_uri`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
 - [Symfony source — UrlGenerator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Generator/UrlGenerator.php)
 - [Symfony source — RequestContext](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RequestContext.php)

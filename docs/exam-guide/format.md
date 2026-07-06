@@ -89,3 +89,8 @@ buffer. How to position for each is covered in [Advanced vs Expert](levels.md).
 ---
 
 <small>Related: [Advanced vs Expert](levels.md) · [Exam-Day Strategy](strategy.md) · [How to Use This Platform](how-to-use.md)</small>
+
+## Official References
+
+- [Official Symfony Certification](https://certification.symfony.com/)
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

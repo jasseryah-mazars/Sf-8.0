@@ -244,8 +244,7 @@ resource — you change its **URL** instead (cache busting).
     - Fingerprinted asset → `public, max-age=31536000, immutable`.
     - Cache busting = new URL, not "clearing" the browser cache.
 
-## References
-
+## Official References
 - [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
 - [MDN — Cache-Control (request directives)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)

@@ -210,8 +210,7 @@ builds a static classmap so no filesystem stat per class is needed.
     - Grouped: `use App\{A, B, C};` · function: `use function`; const: `use const`.
     - PSR-4: `App\ → src/`, case-sensitive on Linux.
 
-## References
-
+## Official References
 - [PHP: Namespaces](https://www.php.net/manual/en/language.namespaces.php)
 - [PHP: Name resolution rules](https://www.php.net/manual/en/language.namespaces.rules.php)
 - [PSR-4 Autoloader](https://www.php-fig.org/psr/psr-4/)

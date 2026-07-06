@@ -218,8 +218,7 @@ clearer, and never in a way that breaks autowiring.
     - Service id = FQCN; params snake_case; routes snake_case.
     - Env vars: `APP_*` UPPER_SNAKE; read via `%env(...)%`.
 
-## References
-
+## Official References
 - [Official docs — Coding standards](https://symfony.com/doc/current/contributing/code/standards.html)
 - [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
 - [Official docs — Routing](https://symfony.com/doc/current/routing.html)

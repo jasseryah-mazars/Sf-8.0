@@ -64,3 +64,9 @@ explains every performance and precedence question the exam asks.
 ---
 
 <small>Prev: [Controllers](../controllers/index.md) · Next: [Twig](../twig/index.md) · Related: [Locale & Intl](../miscellaneous/intl.md)</small>
+
+## Official References
+
+- [Symfony documentation — Routing](https://symfony.com/doc/current/routing.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

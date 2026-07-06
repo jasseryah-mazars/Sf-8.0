@@ -219,8 +219,7 @@ definitions — no `extends`, no surrounding HTML.
     - `{{ parent() }}` parent block · `{{ block('x') }}` any block.
     - `{% use '_t.html.twig' with x as y %}` horizontal, blocks only.
 
-## References
-
+## Official References
 - [Official — Template inheritance](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts)
 - [Twig — extends / use / block](https://twig.symfony.com/doc/3.x/tags/extends.html)
 - [Twig source — Template.php](https://github.com/twigphp/Twig/blob/3.x/src/Template.php)

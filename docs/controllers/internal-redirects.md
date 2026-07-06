@@ -223,8 +223,7 @@ controller output in a template.
     - Kernel: `SUB_REQUEST`, pushed on `RequestStack`.
     - forward ≠ redirect (no 3xx, no URL change).
 
-## References
-
+## Official References
 - [Official Symfony docs — Forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
 - [Symfony source — HttpKernelInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernelInterface.php)
 

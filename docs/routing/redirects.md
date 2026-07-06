@@ -241,8 +241,7 @@ cached by browsers — prefer 302 while a target is still in flux.
     - `permanent`, `keepQueryParams`, `keepRequestMethod`, `scheme`.
     - Slash mismatch: 301 (safe) / 405 (POST).
 
-## References
-
+## Official References
 - [Official Symfony docs — Redirecting URLs](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
 

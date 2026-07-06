@@ -225,8 +225,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
     - `#[Autowire(service:/value:/env:/param:/expression:)]`.
     - Debug: `debug:autowiring [--all]`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Autowiring](https://symfony.com/doc/current/service_container/autowiring.html)
 - [Symfony source — AutowirePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/AutowirePass.php)
 

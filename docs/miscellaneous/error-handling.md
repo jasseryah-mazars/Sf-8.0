@@ -191,8 +191,7 @@ custom `error_controller` for full control over rendering.
     - Status: `HttpExceptionInterface::getStatusCode()` else 500.
     - Prod templates: `templates/bundles/TwigBundle/Exception/error{404,500}.html.twig`.
 
-## References
-
+## Official References
 - [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
 - [Official docs — ErrorHandler component](https://symfony.com/doc/current/components/error_handler.html)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)

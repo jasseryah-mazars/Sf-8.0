@@ -281,8 +281,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
     - `addEventListener` / `addEventSubscriber` on the builder.
     - No `PRE_VALIDATE`; validation = POST_SUBMIT listener.
 
-## References
-
+## Official References
 - [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
 - [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html)
 - [Symfony source — FormEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php)

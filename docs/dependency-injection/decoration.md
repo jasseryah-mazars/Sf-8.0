@@ -226,8 +226,7 @@ run *many* handlers, use [tags](tags.md) instead.
     - `DecoratorServicePass` renames original → `.inner`, decorator → public id.
     - Higher priority = innermost.
 
-## References
-
+## Official References
 - [Official Symfony docs — Service Decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
 - [Symfony source — DecoratorServicePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/DecoratorServicePass.php)
 

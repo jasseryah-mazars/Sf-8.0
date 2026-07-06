@@ -247,8 +247,7 @@ changes to invalidate existing sessions immediately.
     - No `eraseCredentials()` in 8.0 → use `__serialize()`.
     - `isEqualTo() === false` on refresh ⇒ logout.
 
-## References
-
+## Official References
 - [Symfony docs — The User](https://symfony.com/doc/current/security.html#the-user)
 - [Symfony source — UserInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/UserInterface.php)
 - [Symfony UPGRADE-8.0 (Security)](https://github.com/symfony/symfony/blob/8.0/UPGRADE-8.0.md)

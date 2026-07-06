@@ -325,8 +325,7 @@ itself.
     - `MAIN_REQUEST=1`, `SUB_REQUEST=2`; no `MASTER_REQUEST`.
     - `KernelEvents` constants = event-name strings (`kernel.request`, …).
 
-## References
-
+## Official References
 - [Official docs — HttpKernel workflow](https://symfony.com/doc/current/components/http_kernel.html)
 - [Official docs — Built-in events](https://symfony.com/doc/current/reference/events.html)
 - [Symfony source — HttpKernel](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernel.php)

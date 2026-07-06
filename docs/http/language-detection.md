@@ -241,8 +241,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
       `set_locale_from_accept_language`.
     - Different languages at one URL ⇒ `Vary: Accept-Language`.
 
-## References
-
+## Official References
 - [Symfony docs — Translations & locale](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)

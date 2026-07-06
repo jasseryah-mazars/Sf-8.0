@@ -38,3 +38,8 @@ study and sit it efficiently.
 ---
 
 <small>Related: [How to Use This Platform](how-to-use.md) · [Roadmap](../roadmap.md) · [Revision Hub](../revision/index.md)</small>
+
+## Official References
+
+- [Official Symfony Certification](https://certification.symfony.com/)
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

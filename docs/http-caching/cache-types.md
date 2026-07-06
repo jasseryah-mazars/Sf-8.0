@@ -278,8 +278,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
     - `Vary` = extra cache-key headers. `Vary: *`/`Cookie` ≈ no shared caching.
     - Reverse proxy = gateway cache = `HttpCache`/Varnish (a shared cache).
 
-## References
-
+## Official References
 - [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
 - [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 - [MDN — Vary](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary)

@@ -294,8 +294,7 @@ CSRF for you).
     - Ad-hoc: `$this->createFormBuilder($data)->add(...)->getForm()`
     - Pass `$form` (the `FormInterface`) to Twig; `createView()` is implicit.
 
-## References
-
+## Official References
 - [Official Symfony docs — Forms](https://symfony.com/doc/current/forms.html)
 - [Official Symfony docs — How to define the data_class](https://symfony.com/doc/current/form/data_class.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)

@@ -307,8 +307,7 @@ activate on their attribute — so the cost is small and predictable.
     - `#[MapRequestPayload]`→body DTO (422/400) · `#[MapQueryString]`→query DTO ·
       `#[MapQueryParameter]`→one param · `#[CurrentUser]`→user.
 
-## References
-
+## Official References
 - [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
 - [Symfony source — ArgumentResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 - [Symfony source — value resolver services (web.php)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Resources/config/web.php)

@@ -208,8 +208,7 @@ the app object is created/run. The component is transparent for standard apps.
     - `RuntimeInterface::getResolver()` + `getRunner()`; `RunnerInterface::run(): int`.
     - `APP_RUNTIME` env / `extra.runtime.class`. Default `SymfonyRuntime`.
 
-## References
-
+## Official References
 - [Official docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
 - [Symfony source — RuntimeInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php)
 - [Symfony source — SymfonyRuntime](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/SymfonyRuntime.php)

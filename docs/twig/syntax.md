@@ -231,8 +231,7 @@ prod so a missing optional variable renders as empty rather than erroring.
     - Precedence high→low: `**` > `* / // %` > `+ -` > `~` > compare > `and`/`or` > `?:`.
     - Trim: `{{- -}}`. `{% apply spaceless %}`.
 
-## References
-
+## Official References
 - [Official — Twig for template designers](https://twig.symfony.com/doc/3.x/templates.html)
 - [Official — Creating templates (Symfony)](https://symfony.com/doc/current/templates.html)
 - [Twig source — Environment/Compiler](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php)

@@ -203,8 +203,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
     - 302 default · 303 force GET (PRG) · 307/308 keep method · 301/308 cached.
     - Internal target ⇒ `redirectToRoute`. External input ⇒ validate.
 
-## References
-
+## Official References
 - [Official Symfony docs — Redirecting](https://symfony.com/doc/current/controller.html#redirecting)
 - [Symfony source — RedirectResponse](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/RedirectResponse.php)
 

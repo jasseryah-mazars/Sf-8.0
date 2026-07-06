@@ -290,8 +290,7 @@ return `$this->render()` which produces a `Response`.
       `StreamedResponse` = generated output.
     - Disposition via `HeaderUtils::makeDisposition()`.
 
-## References
-
+## Official References
 - [Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html#response)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 - [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)

@@ -243,8 +243,7 @@ also cannot show a login page).
     - False condition ⇒ 404. Generation ignores it.
     - Tag: `#[AsRoutingConditionService(alias: '...')]`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Matching expressions](https://symfony.com/doc/current/routing.html#matching-expressions)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 

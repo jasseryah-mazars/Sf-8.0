@@ -75,3 +75,8 @@ are automatic.
 ---
 
 <small>Related: [Roadmap](../roadmap.md) · [Exam-Day Strategy](strategy.md) · [Revision Hub](../revision/index.md)</small>
+
+## Official References
+
+- [Official Symfony Certification](https://certification.symfony.com/)
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -228,8 +228,7 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
     - Stampede = early expiration; `$beta=INF` forces recompute.
     - `cache:pool:clear`, `pools:` with `tags: true`.
 
-## References
-
+## Official References
 - [Official docs — Cache](https://symfony.com/doc/current/cache.html)
 - [Official docs — Cache contracts](https://symfony.com/doc/current/components/cache.html)
 - [Symfony source — CacheInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/Cache/CacheInterface.php)

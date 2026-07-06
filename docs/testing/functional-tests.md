@@ -282,8 +282,7 @@ you to know. Do **not** functional-test pure logic that a fast
     - Test container id: `test.service_container` (`TestContainer`).
     - Enable via `framework.test: true` in `config/packages/test/`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
 - [Symfony source — WebTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)

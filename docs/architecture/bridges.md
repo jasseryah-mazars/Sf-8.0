@@ -171,8 +171,7 @@ building your **own** integration package or debugging why a class from a bridge
     - Package name: `symfony/<name>-bridge`; dir `src/Symfony/Bridge/`.
     - Classes come from the bridge, services from a bundle.
 
-## References
-
+## Official References
 - [Symfony source — Bridge](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge)
 - [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
 - [Official docs — Bundles](https://symfony.com/doc/current/bundles.html)

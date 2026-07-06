@@ -270,8 +270,7 @@ scope) instead of polling.
     - HTTP/2 = binary + multiplex + HPACK; HTTP/3 = QUIC/UDP; push deprecated.
     - Client IP behind a proxy → `setTrustedProxies()` + `getClientIp()`.
 
-## References
-
+## Official References
 - [MDN — HTTP overview](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)

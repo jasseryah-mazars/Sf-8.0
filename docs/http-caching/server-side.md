@@ -286,8 +286,7 @@ Varnish).
     - Trace header `X-Symfony-Cache`; `private_headers` = Cookie, Authorization.
     - Shared cache → honours `s-maxage`; supports [ESI](esi.md).
 
-## References
-
+## Official References
 - [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
 - [Symfony source — HttpCache](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php)
 - [Symfony source — Store](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Store.php)

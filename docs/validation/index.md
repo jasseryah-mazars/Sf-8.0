@@ -69,3 +69,9 @@ Work through them in order:
 
 <small>Related: [Dependency Injection](../dependency-injection/index.md) ·
 [Forms](../forms/index.md) · [Twig](../twig/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — Validation](https://symfony.com/doc/current/validation.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

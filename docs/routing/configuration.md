@@ -279,8 +279,7 @@ is no runtime performance difference.
     - Import types: `attribute`, `yaml`, `directory`; keys `prefix`, `name_prefix`.
     - `debug:router` / `debug:router <name>` to inspect.
 
-## References
-
+## Official References
 - [Official Symfony docs — Routing](https://symfony.com/doc/current/routing.html)
 - [Symfony source — Router](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Router.php)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)

@@ -268,8 +268,7 @@ only when you render errors yourself.
     - Read: `getPropertyPath()`, `getMessage()`, `getCode()`, `getInvalidValue()`.
     - List: `count()`, `foreach`, `findByCodes()`, `__toString()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Custom constraint (violations)](https://symfony.com/doc/current/validation/custom_constraint.html)
 - [Symfony source — ConstraintViolationBuilderInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Violation/ConstraintViolationBuilderInterface.php)
 

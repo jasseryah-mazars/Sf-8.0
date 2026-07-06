@@ -235,8 +235,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
     - `memory` for tests; `chain` tries providers in order.
     - Stateless firewall ⇒ no `refreshUser()`.
 
-## References
-
+## Official References
 - [Symfony docs — User providers](https://symfony.com/doc/current/security/user_providers.html)
 - [Symfony source — InMemoryUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/InMemoryUserProvider.php)
 - [Symfony source — ChainUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/ChainUserProvider.php)

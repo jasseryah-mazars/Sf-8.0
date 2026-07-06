@@ -113,3 +113,8 @@ block; this page seeds the well-known ones and links to the full area.
 ---
 
 <small>Related: [Master Cheat Sheet](cheat-sheet.md) · [Memory Aids](memory-aids.md) · [Exam-Day Strategy](../exam-guide/strategy.md)</small>
+
+## Official References
+
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)

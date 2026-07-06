@@ -249,8 +249,7 @@ a classic exam distractor.
     - Cannot type-hint a trait; pair it with an interface.
     - Abstract trait methods force the using class to implement them.
 
-## References
-
+## Official References
 - [PHP: Traits](https://www.php.net/manual/en/language.oop5.traits.php)
 - [PHP: Trait conflict resolution](https://www.php.net/manual/en/language.oop5.traits.php#language.oop5.traits.conflict)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)

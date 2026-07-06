@@ -58,3 +58,9 @@ picture. Finish with the policy cluster —
 [Release Management](release-management.md),
 [BC Promise](bc-promise.md), [Deprecations](deprecations.md),
 [Roadmap](roadmap-schedule.md) — which is pure exam scoring.
+
+## Official References
+
+- [Symfony documentation — Symfony Architecture (HttpKernel)](https://symfony.com/doc/current/components/http_kernel.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

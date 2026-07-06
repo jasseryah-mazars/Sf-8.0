@@ -257,8 +257,7 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
     - `getErrors(true)` = deep error iterator.
     - Always **redirect** after a successful POST.
 
-## References
-
+## Official References
 - [Official Symfony docs — Processing forms](https://symfony.com/doc/current/forms.html)
 - [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
 - [Symfony source — HttpFoundationRequestHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php)

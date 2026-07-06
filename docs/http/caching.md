@@ -201,8 +201,7 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
     - `setEtag` + `isNotModified($request)` → 304.
     - Full stage: `../http-caching/`.
 
-## References
-
+## Official References
 - [Symfony docs — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)

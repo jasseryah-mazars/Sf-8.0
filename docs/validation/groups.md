@@ -239,8 +239,7 @@ context** is often clearer than many groups. In forms, set the group via the
     - Sequenced class: `Default` → sequence; `{ShortClassName}` → no sequence.
     - Case-sensitive; capital-D `Default`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Validation groups](https://symfony.com/doc/current/validation/groups.html)
 - [Symfony source — Constraint::DEFAULT_GROUP](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 

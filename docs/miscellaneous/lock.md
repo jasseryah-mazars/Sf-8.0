@@ -218,8 +218,7 @@ scaled app.
     - Shared: `SharedLockInterface::acquireRead()`.
     - DSN: `flock`, `semaphore`, `redis://…`, `%env(LOCK_DSN)%`.
 
-## References
-
+## Official References
 - [Official docs — Lock](https://symfony.com/doc/current/lock.html)
 - [Official docs — Lock component](https://symfony.com/doc/current/components/lock.html)
 - [Symfony source — Lock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Lock/Lock.php)

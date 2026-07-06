@@ -282,8 +282,7 @@ but you lose `HttpOnly` protection — trade-offs apply).
     - `clearCookie(name, path, domain)` must match the original scope.
     - Read incoming: `$request->cookies->get('name')`.
 
-## References
-
+## Official References
 - [MDN — Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
 - [Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)

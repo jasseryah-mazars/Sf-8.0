@@ -200,8 +200,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - Find a type: `debug:autowiring <needle>`; inspect: `debug:container <id>`.
     - `--show-private` reveals hidden services.
 
-## References
-
+## Official References
 - [Official Symfony docs — Debugging services](https://symfony.com/doc/current/service_container/debug.html)
 - [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
 - [Symfony source — FrameworkExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/FrameworkExtension.php)

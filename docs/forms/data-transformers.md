@@ -283,8 +283,7 @@ rules belong to the Validator.
     - Empty/null handling first, always.
     - Failure: `throw new TransformationFailedException(...)`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Data transformers](https://symfony.com/doc/current/form/data_transformers.html)
 - [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/current/form/data_transformers.html#example-1-transforming-string-to-datetime)
 - [Symfony source — Form.php](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)

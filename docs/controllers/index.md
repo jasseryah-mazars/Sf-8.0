@@ -69,3 +69,9 @@ routing, forms, and security become straightforward.
 ---
 
 <small>Prev stage: [Dependency Injection](../dependency-injection/index.md) · Next stage: [Routing](../routing/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — Controllers](https://symfony.com/doc/current/controller.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -252,8 +252,7 @@ use the `SIGNAL` event for app-wide concerns.
     - `getSubscribedSignals()` + `handleSignal($sig, $prevExit)`.
     - Signal-terminated convention: exit `128 + signal`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console events](https://symfony.com/doc/current/components/console/events.html)
 - [Official Symfony docs — Handling signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals)
 - [Symfony source — ConsoleEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/ConsoleEvents.php)

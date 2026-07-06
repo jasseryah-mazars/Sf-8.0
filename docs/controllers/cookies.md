@@ -207,8 +207,7 @@ server-side state.
     - Delete: `$response->headers->clearCookie('x', path, domain)`.
     - `SameSite=None` ⇒ must be `Secure`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
 

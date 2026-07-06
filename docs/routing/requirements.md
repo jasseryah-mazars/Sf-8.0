@@ -256,8 +256,7 @@ complex business logic in a route regex.
     - Fail = 404 (no match), not 400.
     - Order numeric routes before slug routes.
 
-## References
-
+## Official References
 - [Official Symfony docs — Parameter validation](https://symfony.com/doc/current/routing.html#parameters-validation)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 

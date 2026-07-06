@@ -208,8 +208,7 @@ switch off CSRF explicitly.
     - Override label: `form_label(field, 'Text')`.
     - Pass the `FormInterface`; Twig calls `createView()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Form customization](https://symfony.com/doc/current/form/form_customization.html)
 - [Official Symfony docs — Rendering forms](https://symfony.com/doc/current/forms.html)
 - [Symfony source — Twig FormExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php)

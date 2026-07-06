@@ -317,8 +317,7 @@ on.
     - Auth: `loginUser($user)` or `PHP_AUTH_USER`/`PHP_AUTH_PW`.
     - `insulate(true)` / `insulate(false)`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Configuring the test client](https://symfony.com/doc/current/testing.html#configuring-the-test-client)
 - [Official Symfony docs — Logging in users](https://symfony.com/doc/current/testing.html#logging-in-users-authentication)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)

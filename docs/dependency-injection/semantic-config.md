@@ -213,8 +213,7 @@ to set sane defaults for another bundle, not to override user intent.
     - `prependExtensionConfig('other_bundle', [...])`.
     - `config:dump-reference` (schema) vs `debug:config` (values).
 
-## References
-
+## Official References
 - [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/current/bundles/configuration.html)
 - [Official Symfony docs — Prepend Extension](https://symfony.com/doc/current/bundles/prepend_extension.html)
 - [Symfony source — Extension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php)

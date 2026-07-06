@@ -210,8 +210,7 @@ includes unless the fragment genuinely needs isolated logic.
     - Enable via `framework.fragments` / `framework.esi`.
     - `include` for cheap fragments; embed for isolated logic.
 
-## References
-
+## Official References
 - [Official — Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers)
 - [Official — ESI](https://symfony.com/doc/current/http_cache/esi.html)
 - [Symfony source — FragmentHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php)

@@ -270,8 +270,7 @@ may fit better.
     - Classes: `HttpCache\Esi` (SurrogateInterface), `Fragment\EsiFragmentRenderer`.
     - Without ESI, the shortest embedded TTL caps the whole page.
 
-## References
-
+## Official References
 - [Symfony docs — ESI](https://symfony.com/doc/current/http_cache/esi.html)
 - [Symfony source — Esi](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Esi.php)
 - [Symfony source — EsiFragmentRenderer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/EsiFragmentRenderer.php)

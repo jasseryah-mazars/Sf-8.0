@@ -161,8 +161,8 @@ trademark when marketing.
     - Obligation = keep the notice.
     - Trademark ≠ license — name/logo need the trademark policy.
 
-## References
-
+## Official References
+- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/current/contributing/code/bc.html)
 - [Symfony source — LICENSE (MIT)](https://github.com/symfony/symfony/blob/8.0/LICENSE)
 - [MIT License text](https://opensource.org/license/mit)
 - [Symfony trademark policy](https://symfony.com/trademark)

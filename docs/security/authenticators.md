@@ -300,8 +300,7 @@ a full authenticator.
     - `authenticate()` builds; `CheckPassportEvent` verifies.
     - `access_token` needs a `token_handler` → `UserBadge`.
 
-## References
-
+## Official References
 - [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
 - [Symfony docs — Access token authentication](https://symfony.com/doc/current/security/access_token.html)
 - [Symfony source — Passport](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Security/Http/Authenticator/Passport)

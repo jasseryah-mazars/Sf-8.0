@@ -246,8 +246,7 @@ $r instanceof \Stringable;                    // false (Response isn't)
     - Interface: constants only (typed 8.3), no properties, multiple `extends`.
     - `instanceof` never throws on non-objects.
 
-## References
-
+## Official References
 - [PHP: Interfaces](https://www.php.net/manual/en/language.oop5.interfaces.php)
 - [PHP: Variance](https://www.php.net/manual/en/language.oop5.variance.php)
 - [PHP: Type declarations](https://www.php.net/manual/en/language.types.declarations.php)

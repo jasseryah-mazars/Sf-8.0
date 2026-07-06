@@ -307,8 +307,7 @@ list — a clean pattern for a shared service across many controllers.
     - Helpers return: `render`→Response, `json`→JsonResponse, `redirectToRoute`→
       RedirectResponse, `createNotFoundException`→exception (you `throw` it).
 
-## References
-
+## Official References
 - [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html#the-base-controller-class-services)
 - [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 - [Symfony source — AbstractController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php)

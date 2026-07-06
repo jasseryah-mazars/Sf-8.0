@@ -296,8 +296,7 @@ call from HTTP.
     - `SUCCESS=0`, `FAILURE=1`, `INVALID=2`.
     - Tag `console.command` is applied automatically.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console commands](https://symfony.com/doc/current/console.html)
 - [Official Symfony docs — Commands as services](https://symfony.com/doc/current/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)

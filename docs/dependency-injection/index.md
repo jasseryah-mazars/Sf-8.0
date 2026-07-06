@@ -75,3 +75,9 @@ Work through them in order:
 
 <small>Related: [Symfony Architecture](../architecture/index.md) ·
 [Controllers](../controllers/index.md) · [Console](../console/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — Service Container](https://symfony.com/doc/current/service_container.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

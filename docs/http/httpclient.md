@@ -328,8 +328,7 @@ PSR-18-compatible if a library needs it.
     - Concurrency: loop `request()`, then `$client->stream($responses)`.
     - Test: `MockHttpClient` + `MockResponse`. Resilience: `RetryableHttpClient`.
 
-## References
-
+## Official References
 - [Symfony docs — HttpClient](https://symfony.com/doc/current/http_client.html)
 - [Symfony source — HttpClient](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpClient/HttpClient.php)
 - [Symfony source — HttpClientInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/HttpClient/HttpClientInterface.php)

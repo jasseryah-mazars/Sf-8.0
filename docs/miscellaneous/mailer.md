@@ -208,8 +208,7 @@ production unless the email must be confirmed before responding.
     - `MailerInterface::send($email)`; DSN via `MAILER_DSN`.
     - Async: route `SendEmailMessage` → transport; run `messenger:consume`.
 
-## References
-
+## Official References
 - [Official docs — Mailer](https://symfony.com/doc/current/mailer.html)
 - [Official docs — Mime](https://symfony.com/doc/current/components/mime.html)
 - [Symfony source — Mailer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Mailer/Mailer.php)

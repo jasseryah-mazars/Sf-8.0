@@ -279,8 +279,7 @@ Symfony's security layer picks the code for you.
     - **API:** 422 validation, 429 rate-limit (+`Retry-After`), 405 (+`Allow`).
     - `Response::$statusTexts[$code]` → reason phrase; `Response::HTTP_*` constants.
 
-## References
-
+## Official References
 - [MDN — HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)

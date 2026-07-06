@@ -237,8 +237,7 @@ groups + max-depth to keep payloads bounded.
     - Attributes namespace: `Symfony\Component\Serializer\Attribute`.
     - Encoders: `JsonEncoder`, `XmlEncoder`, `CsvEncoder`, `YamlEncoder`.
 
-## References
-
+## Official References
 - [Official docs — Serializer](https://symfony.com/doc/current/serializer.html)
 - [Official docs — Serializer component](https://symfony.com/doc/current/components/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)

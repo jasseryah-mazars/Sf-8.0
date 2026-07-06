@@ -248,8 +248,7 @@ graph on every request has a cost. For collections of scalars use `All`
     - `Valid` = cascade; `traverse` (default true) controls iterating a collection.
     - Object collection → `#[Assert\Valid]`; scalar collection → `All`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/current/validation.html)
 - [Symfony source — RecursiveContextualValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveContextualValidator.php)
 

@@ -66,3 +66,9 @@ Work through them in order:
 <small>Related: [PHP & Web Security](../php-web-security/index.md) ·
 [Symfony Architecture](../architecture/index.md) ·
 [Controllers](../controllers/index.md) · [HTTP Caching](../http-caching/index.md)</small>
+
+## Official References
+
+- [Symfony documentation — HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

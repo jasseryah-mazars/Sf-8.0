@@ -235,8 +235,7 @@ anything that changes per environment or must stay secret. Prefer injecting the
     - `#[Autowire(param: 'x')]`, `#[Autowire(env: 'X')]`, `#[Autowire('%env(int:X)%')]`.
     - `FrozenParameterBag` = read-only after `compile()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Configuration & Parameters](https://symfony.com/doc/current/configuration.html)
 - [Official Symfony docs — Env Var Processors](https://symfony.com/doc/current/configuration/env_var_processors.html)
 - [Symfony source — EnvVarProcessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php)

@@ -261,8 +261,7 @@ messages.
     - `write()` no newline, `writeln()` newline.
     - STDERR: `$output->getErrorOutput()` (ConsoleOutputInterface only).
 
-## References
-
+## Official References
 - [Official Symfony docs — Console style](https://symfony.com/doc/current/console/style.html)
 - [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/current/console/verbosity.html)
 - [Symfony source — SymfonyStyle](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Style/SymfonyStyle.php)

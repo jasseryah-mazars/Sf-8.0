@@ -286,8 +286,7 @@ stages depend on runtime state.
     - Provider: `#[Assert\GroupSequenceProvider]` + `implements GroupSequenceProviderInterface`.
     - `getGroupSequence(): array|GroupSequence`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Group sequence & provider](https://symfony.com/doc/current/validation/sequence_provider.html)
 - [Symfony source — GroupSequence](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/GroupSequence.php)
 

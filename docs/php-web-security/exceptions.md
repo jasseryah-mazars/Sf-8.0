@@ -245,8 +245,7 @@ set_error_handler(static function (int $level, string $msg, string $file, int $l
     - Multi-catch: `catch (A | B $e)`; variable optional (8.0+).
     - `set_error_handler` → warnings; `set_exception_handler` → uncaught throws.
 
-## References
-
+## Official References
 - [PHP: Exceptions](https://www.php.net/manual/en/language.exceptions.php)
 - [PHP: Predefined Exceptions](https://www.php.net/manual/en/reserved.exceptions.php)
 - [PHP: Errors in PHP 7+](https://www.php.net/manual/en/language.errors.php7.php)

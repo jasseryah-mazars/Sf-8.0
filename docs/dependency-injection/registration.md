@@ -244,8 +244,7 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
     - `arguments`, `calls` (setters), `aliases` (`Interface: '@Class'`).
     - `#[Autoconfigure(lazy:, public:, tags:, bind:)]`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
 - [Official Symfony docs — Aliasing & private services](https://symfony.com/doc/current/service_container/alias_private.html)
 - [Symfony source — Autoconfigure attribute](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Attribute/Autoconfigure.php)

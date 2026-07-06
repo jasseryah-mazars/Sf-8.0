@@ -177,8 +177,7 @@ alternative cadence to opt into.
     - LTS = `X.4` (3 yr bug + 4 yr sec) · Standard = 8 mo bug + 14 mo sec.
     - Patch: bugs only · Minor: features+deprecations, BC-safe · Major: removals.
 
-## References
-
+## Official References
 - [Symfony releases](https://symfony.com/releases)
 - [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
 - [Backward compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)

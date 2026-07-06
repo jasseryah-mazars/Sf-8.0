@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Completeness & references audit
+        run: python tools/audit.py
+
       - name: Build site (strict)
         run: mkdocs build --strict
 

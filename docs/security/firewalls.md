@@ -220,8 +220,7 @@ differs per path.
     - `lazy: true` = auth on token read; `stateless: true` = no session token.
     - Same `context:` ⇒ shared login.
 
-## References
-
+## Official References
 - [Symfony docs — The firewall](https://symfony.com/doc/current/security.html#the-firewall)
 - [Symfony docs — Security config reference](https://symfony.com/doc/current/reference/configuration/security.html)
 - [Symfony source — Firewall](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)

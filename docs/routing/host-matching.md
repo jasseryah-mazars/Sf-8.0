@@ -234,8 +234,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     - Cross-host `generateUrl` → absolute URL.
     - Import-level `host:` groups routes.
 
-## References
-
+## Official References
 - [Official Symfony docs — Sub-domain routing](https://symfony.com/doc/current/routing.html#sub-domain-routing)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 

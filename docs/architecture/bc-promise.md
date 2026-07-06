@@ -208,8 +208,7 @@ inheritance of framework classes.
     - Breaks: major only, post-deprecation.
     - Users vs extenders: extenders have fewer guarantees.
 
-## References
-
+## Official References
 - [Backward Compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
 - [Conventions — @internal / @final](https://symfony.com/doc/current/contributing/code/conventions.html)
 - [Experimental features](https://symfony.com/doc/current/contributing/code/experimental.html)

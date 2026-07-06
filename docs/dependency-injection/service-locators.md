@@ -246,8 +246,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
       `#[SubscribedService]`.
     - Lazy, whitelisted, not the whole container.
 
-## References
-
+## Official References
 - [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 - [Symfony source — ServiceLocator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ServiceLocator.php)
 

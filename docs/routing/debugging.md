@@ -204,8 +204,7 @@ instead of scraping HTML.
     - Prod: `cache:clear` after route edits.
     - Profiler → Routing panel shows `_route`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Debugging routes](https://symfony.com/doc/current/routing.html#debugging-routes)
 - [Symfony source — RouterMatchCommand](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Command/RouterMatchCommand.php)
 

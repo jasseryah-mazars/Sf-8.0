@@ -345,8 +345,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
     - `extends ConstraintValidator` → `validate($value, Constraint $c): void`, use `$this->context`.
     - Class validator: `$value` is the object.
 
-## References
-
+## Official References
 - [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/current/validation/custom_constraint.html)
 - [Symfony source — Constraint](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 

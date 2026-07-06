@@ -270,8 +270,7 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     - `ProgressBar`: `start($max)`, `advance()`, `finish()`.
     - `Table`: `setHeaders()`, `setRows()`, `render()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console helpers](https://symfony.com/doc/current/components/console/helpers/index.html)
 - [Official Symfony docs — QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html)
 - [Symfony source — Console helpers](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper)

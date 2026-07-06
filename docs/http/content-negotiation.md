@@ -265,8 +265,7 @@ multiple clients transparently.
       `getMimeTypes`.
     - Negotiate → set `Vary`.
 
-## References
-
+## Official References
 - [MDN — Content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — AcceptHeader](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/AcceptHeader.php)

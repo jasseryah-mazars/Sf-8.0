@@ -236,8 +236,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - GET ⇒ HEAD. Wrong verb ⇒ 405. Wrong scheme ⇒ redirect.
     - Override: `Request::enableHttpMethodParameterOverride()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 

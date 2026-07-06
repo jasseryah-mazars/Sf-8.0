@@ -327,8 +327,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
     - Collection: `Collection`, `Count`, `Unique`, `All`, `Valid`.
     - Conditional: `When(expression, constraints)`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Constraints reference](https://symfony.com/doc/current/reference/constraints.html)
 - [Symfony source — Constraints/](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Validator/Constraints)
 

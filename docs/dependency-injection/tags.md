@@ -222,8 +222,7 @@ simpler. If you must *transform* definitions (not just collect), you need a
     - YAML: `!tagged_iterator`, `!tagged_locator`, `_instanceof`.
     - Inspect: `debug:container --tag <name>`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Service Tags](https://symfony.com/doc/current/service_container/tags.html)
 - [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 - [Symfony source — PriorityTaggedServiceTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PriorityTaggedServiceTrait.php)

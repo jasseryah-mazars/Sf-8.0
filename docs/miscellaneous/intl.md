@@ -207,8 +207,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
     - ICU: `{count, plural, one {…} other {# …}}`, `{v, select, …}`.
     - Intl: `Countries`, `Languages`, `Locales`, `Currencies`, `Timezones`.
 
-## References
-
+## Official References
 - [Official docs — Translations](https://symfony.com/doc/current/translation.html)
 - [Official docs — Message format](https://symfony.com/doc/current/translation/message_format.html)
 - [Official docs — Intl](https://symfony.com/doc/current/components/intl.html)

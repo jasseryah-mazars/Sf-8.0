@@ -30,6 +30,8 @@ Reviewer records pass/fail per item.
 - [ ] Diagrams render and are legible on mobile.
 - [ ] Tables ≤4 columns; paragraphs short.
 - [ ] Cross-links and doc links resolve (checked by `--strict` build + spot check).
+- [ ] Mandatory `## Official References` section present with official Symfony
+      (`doc/current`) and/or php.net links appropriate to the topic.
 
 ## Scope
 

@@ -242,8 +242,7 @@ apps — JS clients (fetch) can send any verb directly and don't need it.
       PUT/PATCH/DELETE.
     - Route match: `#[Route('/x', methods: ['POST'])]`.
 
-## References
-
+## Official References
 - [MDN — HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
 - [Symfony docs — Routing (method matching)](https://symfony.com/doc/current/routing.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)

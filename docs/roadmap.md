@@ -89,3 +89,9 @@ flowchart TD
 ---
 
 <small>Related: [Exam Guide](exam-guide/index.md) · [Revision Hub](revision/index.md) · [Home](index.md)</small>
+
+## Official References
+
+- [Official Symfony Certification](https://certification.symfony.com/)
+- [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)

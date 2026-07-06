@@ -222,8 +222,7 @@ verification usually lives in a `token_handler`, not the password hasher.
     - Rehash triggered by `PasswordUpgradeBadge` → `PasswordMigratingListener`.
     - bcrypt: 72-byte limit; sodium: Argon2id, memory-hard.
 
-## References
-
+## Official References
 - [Symfony docs — Passwords](https://symfony.com/doc/current/security/passwords.html)
 - [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
 - [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)

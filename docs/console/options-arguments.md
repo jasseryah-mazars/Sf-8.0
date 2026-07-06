@@ -272,8 +272,7 @@ are self-documenting and order-free. Interactive prompting (see
     - Array argument = last; only one.
     - Read via `$input->getArgument()` / `$input->getOption()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console input](https://symfony.com/doc/current/console/input.html)
 - [Symfony source — InputOption](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputOption.php)
 - [Symfony source — InputArgument](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputArgument.php)

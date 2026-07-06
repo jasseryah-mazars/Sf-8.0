@@ -208,8 +208,7 @@ For work that should be deferred/retried, dispatch a
     - `getOutput()`, `getErrorOutput()`, `getExitCode()`, `isSuccessful()`, `getIterator()`.
     - `setTimeout(120)` / `setIdleTimeout()` / default 60 s.
 
-## References
-
+## Official References
 - [Official docs — Process](https://symfony.com/doc/current/components/process.html)
 - [Symfony source — Process](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Process/Process.php)
 

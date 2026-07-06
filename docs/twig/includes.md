@@ -199,8 +199,7 @@ components (modals, cards with slots).
     - `ignore missing` · list `['a','b']` → first existing.
     - `{% embed 'x' %}{% block y %}…{% endblock %}{% endembed %}`.
 
-## References
-
+## Official References
 - [Official — Including templates](https://symfony.com/doc/current/templates.html#including-templates)
 - [Twig — include / embed](https://twig.symfony.com/doc/3.x/tags/include.html)
 - [Twig source — FilesystemLoader](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)

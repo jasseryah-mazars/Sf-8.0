@@ -179,8 +179,7 @@ production issues, use logging — never `dump()`.
     - Debug/dev only; unavailable in prod.
     - Backed by VarDumper (`VarCloner` + `HtmlDumper`).
 
-## References
-
+## Official References
 - [Official — The dump Twig utilities](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
 - [Official — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
 - [Symfony source — DumpExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/DumpExtension.php)

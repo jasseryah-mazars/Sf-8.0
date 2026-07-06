@@ -304,8 +304,7 @@ express the query (axes, text predicates).
     - Read: `text($default)`, `attr('href')`, `html()`, `each(fn)`, `extract([...])`.
     - Derive: `->link()`, `->form([$overrides])`, `->image()`.
 
-## References
-
+## Official References
 - [Official Symfony docs — DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html)
 - [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/current/testing.html#the-crawler)
 - [Symfony source — Crawler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DomCrawler/Crawler.php)

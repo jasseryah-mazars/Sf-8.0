@@ -224,8 +224,7 @@ flowchart LR
     - Redirect URL: `RedirectController::urlRedirectAction`, `defaults.path`.
     - `permanent`→301/308 · empty target→410 · `keepRequestMethod`/`keepQueryParams`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Render a template from a route](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
 - [Official Symfony docs — Redirect directly from a route](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)

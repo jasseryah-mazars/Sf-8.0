@@ -79,3 +79,9 @@ Work through them roughly in order:
 [Controllers](../controllers/index.md)</small>
 </content>
 </invoke>
+
+## Official References
+
+- [Symfony documentation — Forms](https://symfony.com/doc/current/forms.html)
+- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

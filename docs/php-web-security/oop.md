@@ -272,8 +272,7 @@ flowchart TD
     - `callable` cannot be promoted; readonly needs a type + no default.
     - Visibility: private = declaring class only; protected = + subclasses.
 
-## References
-
+## Official References
 - [PHP: Classes and Objects](https://www.php.net/manual/en/language.oop5.php)
 - [PHP: Late Static Bindings](https://www.php.net/manual/en/language.oop5.late-static-bindings.php)
 - [PHP: Object cloning](https://www.php.net/manual/en/language.oop5.cloning.php)

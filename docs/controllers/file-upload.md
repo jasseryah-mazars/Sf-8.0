@@ -234,8 +234,7 @@ For form-driven uploads, use the `FileType` field — see
     - `move($dir, $safeName)` (throws `FileException`).
     - `#[MapUploadedFile([new File(...)])] UploadedFile $x`.
 
-## References
-
+## Official References
 - [Official Symfony docs — Uploading Files](https://symfony.com/doc/current/controller/upload_file.html)
 - [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)

@@ -214,8 +214,7 @@ crossing library boundaries.
     - Consumes: PSR-3 (Logger). Autoload: PSR-4.
     - PSR-7/15/17 → via psr-http-message **bridge**.
 
-## References
-
+## Official References
 - [PHP-FIG PSRs](https://www.php-fig.org/psr/)
 - [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html)
 - [Clock component](https://symfony.com/doc/current/components/clock.html)

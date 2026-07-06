@@ -404,8 +404,7 @@ after-response hook when you don't need durability or retries.
     - Failure: `messenger:failed:show|retry|remove`; `UnrecoverableMessageHandlingException` = no retry.
     - Events: `WorkerStarted/MessageReceived/MessageHandled/MessageFailed/Running/Stopped`.
 
-## References
-
+## Official References
 - [Official docs — Messenger](https://symfony.com/doc/current/messenger.html)
 - [Official docs — Messenger: sync & queued](https://symfony.com/doc/current/messenger.html#transports-async-queued-messages)
 - [Symfony source — MessageBus](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/MessageBus.php)

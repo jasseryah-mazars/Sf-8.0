@@ -232,8 +232,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
     - Twig: `is_granted(attr, subject)`.
     - Voter votes: GRANTED 1 / ABSTAIN 0 / DENIED -1.
 
-## References
-
+## Official References
 - [Symfony docs — Authorization](https://symfony.com/doc/current/security.html#access-control-authorization)
 - [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
 - [Symfony source — AuthorizationChecker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AuthorizationChecker.php)

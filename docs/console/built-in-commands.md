@@ -227,8 +227,7 @@ request — it is a CLI/deploy step.
     - Framework: `cache:clear`, `cache:warmup`, `debug:container|router|autowiring|config|event-dispatcher`.
     - `Application` = `Symfony\Component\Console\Application`; framework subclass boots the kernel.
 
-## References
-
+## Official References
 - [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
 - [Official Symfony docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
 - [Symfony source — Application](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Application.php)

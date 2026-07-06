@@ -215,8 +215,7 @@ global namespace.
     - `app.environment` = dev/prod · `app.debug` = bool · `app.locale`.
     - Custom: `twig.globals.X: value` or `implements GlobalsInterface`.
 
-## References
-
+## Official References
 - [Official — The app global variable](https://symfony.com/doc/current/templates.html#the-app-global-variable)
 - [Official — Global variables](https://symfony.com/doc/current/templates.html#global-variables)
 - [Symfony source — AppVariable](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php)

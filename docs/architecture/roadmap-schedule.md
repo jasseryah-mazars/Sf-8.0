@@ -167,8 +167,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
     - LTS = `X.4`, ships with `(X+1).0`.
     - `php bin/console about` shows EOL dates.
 
-## References
-
+## Official References
 - [Symfony releases & schedule](https://symfony.com/releases)
 - [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
 

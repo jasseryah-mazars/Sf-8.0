@@ -211,8 +211,7 @@ than a block override. Reach for a full custom theme only when the default
     - `{% use 'base' %}` to inherit blocks, override deltas.
     - Bootstrap layout = markup, not CSS.
 
-## References
-
+## Official References
 - [Official Symfony docs — Form themes](https://symfony.com/doc/current/form/form_themes.html)
 - [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/current/form/bootstrap5.html)
 - [Symfony source — form_div_layout.html.twig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig)

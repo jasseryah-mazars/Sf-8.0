@@ -191,8 +191,7 @@ here**; `asset()` merely resolves the final public path/version.
     - `framework.assets.version` / `json_manifest_path` / `packages`.
     - `asset()` = static files; `path()`/`url()` = routes.
 
-## References
-
+## Official References
 - [Official — Linking to CSS/JS assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
 - [Official — Asset component](https://symfony.com/doc/current/components/asset.html)
 - [Symfony source — Packages](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Asset/Packages.php)

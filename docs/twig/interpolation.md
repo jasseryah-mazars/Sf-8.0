@@ -168,8 +168,7 @@ placeholders (translation strings use `%name%` placeholders — see
     - `a ~ b` join · `a + b` add.
     - `"%s %d"|format(a, b)` · `"%x%"|replace({'%x%': v})`.
 
-## References
-
+## Official References
 - [Twig — string interpolation](https://twig.symfony.com/doc/3.x/templates.html#string-interpolation)
 - [Twig — format filter](https://twig.symfony.com/doc/3.x/filters/format.html)
 - [Twig source — Lexer](https://github.com/twigphp/Twig/blob/3.x/src/Lexer.php)

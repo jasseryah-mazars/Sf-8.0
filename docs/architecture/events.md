@@ -241,8 +241,7 @@ clearer than an event.
     - Default priority `0`; higher first.
     - Compiled by `RegisterListenersPass`.
 
-## References
-
+## Official References
 - [Official docs — EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html)
 - [Official docs — Events reference](https://symfony.com/doc/current/reference/events.html)
 - [Symfony source — EventDispatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/EventDispatcher/EventDispatcher.php)

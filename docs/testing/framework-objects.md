@@ -277,8 +277,7 @@ and swapping a `MockClock` over global clock mocking.
     - Persist replacement: `$client->disableReboot()` first.
     - Container id: `test.service_container` (`TestContainer`).
 
-## References
-
+## Official References
 - [Official Symfony docs — Accessing the container](https://symfony.com/doc/current/testing.html#accessing-the-container)
 - [Official Symfony docs — Mocking services](https://symfony.com/doc/current/testing.html#mocking-services)
 - [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)

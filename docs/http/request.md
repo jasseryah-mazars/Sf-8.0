@@ -260,8 +260,7 @@ for the raw `Request` when you need low-level access (headers, IP, raw body).
     - `getMethod()` vs `getRealMethod()`; `getPathInfo()` vs `getRequestUri()`.
     - `getPayload()` reads JSON or form body uniformly; `getContent()` is raw.
 
-## References
-
+## Official References
 - [Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 - [Symfony source — InputBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
