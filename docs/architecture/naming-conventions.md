@@ -29,6 +29,15 @@ PSR-1/PSR-12 and add a few Symfony-specific rules.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You register a service under a custom dotted id `app.importer` and type-hint
+    `App\Service\Importer` in a controller. Does autowiring inject it?
+
+??? note "Reveal"
+    Not by that type-hint. Autowiring matches by **type = the FQCN service id**. A
+    custom dotted id isn't matched by the class type-hint unless you add an alias from
+    the FQCN. Idiomatic Symfony uses the FQCN as the id.
+
 ### PHP identifiers
 
 | Element | Convention | Example |
@@ -224,10 +233,26 @@ clearer, and never in a way that breaks autowiring.
     - Service id = FQCN; params snake_case; routes snake_case.
     - Env vars: `APP_*` UPPER_SNAKE; read via `%env(...)%`.
 
+## Connections
+
+- **Depends on:** [Code Organization](code-organization.md) — the `App\` → `src/` PSR-4 mapping is what makes FQCN service ids work.
+- **Reused in:** [Dependency Injection](../dependency-injection/index.md) — autowiring/autoconfiguration key off interface suffixes and FQCN ids; [Controllers](../controllers/index.md) rely on snake_case route names.
+- **Confused with:** [Best Practices](best-practices.md) — naming is the mechanical rule set; best practices explain the design choices.
+
 ## Official References
 - [Official docs — Coding standards](https://symfony.com/doc/current/contributing/code/standards.html)
 - [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
 - [Official docs — Routing](https://symfony.com/doc/current/routing.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** naming is functional (autoconfiguration, routing), not cosmetic
+- [ ] apply the affix rules to classes, interfaces, traits, abstracts and exceptions
+- [ ] name services, parameters, routes, config keys and env vars correctly
+- [ ] debug autowiring that fails because a service uses a custom dotted id
+- [ ] explain how the `Interface` suffix interacts with autoconfiguration
 
 ---
 

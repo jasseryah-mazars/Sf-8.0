@@ -29,6 +29,15 @@ ship your own lists.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You call `trans('welcome_msg')` but no catalogue defines that key for the active
+    locale or any fallback. Exception, empty string, or something else?
+
+??? note "Reveal"
+    You get the **message id itself** (`"welcome_msg"`) — never an exception. Missing
+    translations are returned verbatim (and logged in dev), so the page still
+    renders while surfacing the gap.
+
 ### Translator
 
 `Symfony\Contracts\Translation\TranslatorInterface::trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string`.
@@ -213,11 +222,27 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
     - ICU: `{count, plural, one {…} other {# …}}`, `{v, select, …}`.
     - Intl: `Countries`, `Languages`, `Locales`, `Currencies`, `Timezones`.
 
+## Connections
+
+- **Depends on:** [Routing locale](../routing/locale.md) — the active locale drives which catalogue is selected.
+- **Reused in:** [Twig translations](../twig/translations.md) — `trans` in templates; [Serializer](serializer.md) — Intl formats currency/country names in payloads.
+- **Confused with:** the legacy `apples|apple` pipe syntax — Symfony 8 uses ICU MessageFormat.
+
 ## Official References
 - [Official docs — Translations](https://symfony.com/doc/current/translation.html)
 - [Official docs — Message format](https://symfony.com/doc/current/translation/message_format.html)
 - [Official docs — Intl](https://symfony.com/doc/current/components/intl.html)
 - [Symfony source — Translator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** ICU MessageFormat replaces the old pipe pluralization
+- [ ] translate with parameters/domains and write an ICU plural in Symfony 8
+- [ ] debug a "translation shows the id" case (missing key/fallback/`+intl-icu`)
+- [ ] spot the trick: missing key returns the id; plural categories are locale-dependent
+- [ ] describe locale resolution + fallback and the `Intl` data classes
 
 ---
 
