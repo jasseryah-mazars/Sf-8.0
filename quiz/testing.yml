@@ -1,0 +1,390 @@
+categories:
+  - name: "Testing — Unit Tests"
+    questions:
+      - question: "Which base class do Symfony unit tests extend for pure, kernel-free logic?"
+        answers:
+          - value: "PHPUnit\\Framework\\TestCase"
+            correct: true
+          - value: "Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase"
+            correct: false
+          - value: "Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase"
+            correct: false
+          - value: "Symfony\\Component\\Test\\UnitTestCase"
+            correct: false
+        explanation: >-
+          Symfony ships no unit-test base class; pure unit tests extend PHPUnit's
+          TestCase directly. No kernel is booted and no container is built.
+        documentation: "https://symfony.com/doc/current/testing.html#unit-tests"
+
+      - question: "In PHPUnit 11/12, how do you bind a test to a data provider?"
+        answers:
+          - value: "#[DataProvider('methodName')] naming a public static method"
+            correct: true
+          - value: "@dataProvider methodName in the docblock"
+            correct: false
+          - value: "#[Provider('methodName')] naming a private method"
+            correct: false
+          - value: "$this->provide('methodName') inside the test"
+            correct: false
+        explanation: >-
+          The @dataProvider annotation is removed; use the
+          PHPUnit\Framework\Attributes\DataProvider attribute pointing at a
+          public static iterable-returning method.
+        documentation: "https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html#data-providers"
+
+      - question: "You need only canned return values, with no verification of how a collaborator is called. Which double do you create?"
+        answers:
+          - value: "A stub via $this->createStub(Foo::class)"
+            correct: true
+          - value: "A mock via $this->createMock(Foo::class) with expects()"
+            correct: false
+          - value: "A spy via $this->createSpy(Foo::class)"
+            correct: false
+          - value: "A partial mock via getMockForTrait()"
+            correct: false
+        explanation: >-
+          A stub supplies return values but never asserts interactions. A mock
+          adds verifiable expectations you do not need here.
+        documentation: "https://docs.phpunit.de/en/11.0/test-doubles.html"
+
+      - question: "What does assertSame(1, '1') do?"
+        answers:
+          - value: "Fails, because the types differ (strict === comparison)"
+            correct: true
+          - value: "Passes, because the values are loosely equal"
+            correct: false
+          - value: "Emits a deprecation"
+            correct: false
+          - value: "Throws a TypeError"
+            correct: false
+        explanation: >-
+          assertSame uses ===, so int 1 and string '1' are not the same. Use
+          assertEquals for loose (==) comparison.
+        documentation: "https://docs.phpunit.de/en/11.0/assertions.html#assertsame"
+
+  - name: "Testing — Functional Tests & Framework Objects"
+    questions:
+      - question: "Why can self::getContainer()->get() return a private service in a test?"
+        answers:
+          - value: "It returns the special test container (test.service_container) that exposes private/non-shared services"
+            correct: true
+          - value: "All services become public in the test environment"
+            correct: false
+          - value: "It uses reflection to bypass service visibility"
+            correct: false
+          - value: "Private services are compiled as public only for WebTestCase"
+            correct: false
+        explanation: >-
+          The test environment (framework.test: true) compiles a TestContainer
+          that keeps references to used private/non-shared services so tests can
+          fetch and replace them. static::$kernel->getContainer() does not.
+        documentation: "https://symfony.com/doc/current/testing.html#accessing-the-container"
+
+      - question: "How are WebTestCase and KernelTestCase related?"
+        answers:
+          - value: "WebTestCase extends KernelTestCase, adding the HTTP client (createClient())"
+            correct: true
+          - value: "KernelTestCase extends WebTestCase"
+            correct: false
+          - value: "They are unrelated base classes"
+            correct: false
+          - value: "Both extend BrowserTestCase"
+            correct: false
+        explanation: >-
+          WebTestCase adds the KernelBrowser client on top of the kernel-booting
+          KernelTestCase. Use KernelTestCase when you need only the container.
+        documentation: "https://symfony.com/doc/current/testing.html#application-tests"
+
+      - question: "A private service is never injected anywhere. In the test environment it is…"
+        answers:
+          - value: "Still removed — the test container only keeps services that are actually used"
+            correct: true
+          - value: "Always available via getContainer()"
+            correct: false
+          - value: "Automatically made public"
+            correct: false
+          - value: "Available only after calling bootKernel(['debug' => true])"
+            correct: false
+        explanation: >-
+          Unused private services are optimised away even in the test container;
+          only used private/non-shared services remain reachable.
+        documentation: "https://symfony.com/doc/current/testing.html#accessing-the-container"
+
+      - question: "How many times may createClient() be called within a single test?"
+        answers:
+          - value: "Once — a second call throws"
+            correct: true
+          - value: "Twice"
+            correct: false
+          - value: "Any number of times"
+            correct: false
+          - value: "Once per HTTP request"
+            correct: false
+        explanation: >-
+          Only one kernel/client may be booted per test; calling createClient()
+          again throws a LogicException.
+        documentation: "https://symfony.com/doc/current/testing.html#your-first-application-test"
+
+  - name: "Testing — Client & Crawler"
+    questions:
+      - question: "What does $client->request('GET', '/') return?"
+        answers:
+          - value: "A Symfony\\Component\\DomCrawler\\Crawler"
+            correct: true
+          - value: "A Symfony\\Component\\HttpFoundation\\Response"
+            correct: false
+          - value: "A Symfony\\Component\\HttpFoundation\\Request"
+            correct: false
+          - value: "void"
+            correct: false
+        explanation: >-
+          Navigation methods return a Crawler over the response DOM. Fetch the
+          response object with $client->getResponse().
+        documentation: "https://symfony.com/doc/current/testing.html#making-requests"
+
+      - question: "By default, after a controller returns a 302 redirect, the test client…"
+        answers:
+          - value: "Stops on the redirect so you can assert the Location, until you call followRedirect()"
+            correct: true
+          - value: "Follows the redirect automatically"
+            correct: false
+          - value: "Throws an exception"
+            correct: false
+          - value: "Retries the original request"
+            correct: false
+        explanation: >-
+          Auto-follow is off by default. Use followRedirect() to follow the last
+          redirect once, or followRedirects() to toggle auto-following.
+        documentation: "https://symfony.com/doc/current/testing.html#redirecting"
+
+      - question: "Which method keeps a service replaced via getContainer()->set() alive across multiple requests?"
+        answers:
+          - value: "$client->disableReboot()"
+            correct: true
+          - value: "$client->followRedirects()"
+            correct: false
+          - value: "$client->insulate()"
+            correct: false
+          - value: "$client->restart()"
+            correct: false
+        explanation: >-
+          By default the kernel reboots after each request, discarding
+          replacements. disableReboot() preserves the container between requests.
+        documentation: "https://symfony.com/doc/current/testing.html#mocking-services"
+
+      - question: "$crawler->filter('div.item') requires which component to be installed?"
+        answers:
+          - value: "symfony/css-selector"
+            correct: true
+          - value: "symfony/browser-kit"
+            correct: false
+          - value: "symfony/http-client"
+            correct: false
+          - value: "None — CSS support is built into DomCrawler"
+            correct: false
+        explanation: >-
+          filter() converts the CSS selector to XPath via CssSelectorConverter, so
+          the css-selector component is required. filterXPath() works without it.
+        documentation: "https://symfony.com/doc/current/components/dom_crawler.html"
+
+  - name: "Testing — Introspection & Profiler"
+    questions:
+      - question: "For which HTTP status codes does assertResponseIsSuccessful() pass?"
+        answers:
+          - value: "Any 2xx status"
+            correct: true
+          - value: "Only 200"
+            correct: false
+          - value: "2xx and 3xx"
+            correct: false
+          - value: "Only 200 and 204"
+            correct: false
+        explanation: >-
+          It asserts the response is in the successful (2xx) range. Use
+          assertResponseStatusCodeSame(n) to check an exact code.
+        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+
+      - question: "Which assertion checks that an element's text is exactly equal (not a substring)?"
+        answers:
+          - value: "assertSelectorTextSame('h1', 'Hi')"
+            correct: true
+          - value: "assertSelectorTextContains('h1', 'Hi')"
+            correct: false
+          - value: "assertSelectorExists('h1')"
+            correct: false
+          - value: "assertPageTitleContains('Hi')"
+            correct: false
+        explanation: >-
+          The ...Same variant requires an exact match; ...Contains checks a
+          substring.
+        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+
+      - question: "When must $client->enableProfiler() be called?"
+        answers:
+          - value: "Before the request whose profile you want to read"
+            correct: true
+          - value: "After the request, before getProfile()"
+            correct: false
+          - value: "Only inside setUp()"
+            correct: false
+          - value: "Never — profiling is always on in the test environment"
+            correct: false
+        explanation: >-
+          enableProfiler() opts the next request into profiling; calling it after
+          the request collects nothing and getProfile() returns false.
+        documentation: "https://symfony.com/doc/current/testing/profiling.html"
+
+      - question: "The recommended way to assert that an email was sent in a functional test is…"
+        answers:
+          - value: "assertEmailCount() / getMailerMessage() from MailerAssertionsTrait"
+            correct: true
+          - value: "Reading Doctrine's db data collector"
+            correct: false
+          - value: "Parsing the response HTML for the email body"
+            correct: false
+          - value: "Inspecting the SMTP server logs"
+            correct: false
+        explanation: >-
+          WebTestCase provides mailer assertions backed by the mailer data
+          collector, so you rarely touch the raw collector.
+        documentation: "https://symfony.com/doc/current/mailer.html#testing-emails"
+
+  - name: "Testing — Client Configuration"
+    questions:
+      - question: "What is the second argument of static::createClient()?"
+        answers:
+          - value: "An array of default server parameters (the $_SERVER bag)"
+            correct: true
+          - value: "An array of request headers as raw strings"
+            correct: false
+          - value: "The environment name"
+            correct: false
+          - value: "A list of routes to register"
+            correct: false
+        explanation: >-
+          createClient(array $options, array $server) — the second array models
+          server parameters (HTTP_* headers, HTTPS, PHP_AUTH_USER, etc.).
+        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+
+      - question: "To simulate an 'Accept: application/json' request header via server parameters you set…"
+        answers:
+          - value: "'HTTP_ACCEPT' => 'application/json'"
+            correct: true
+          - value: "'ACCEPT' => 'application/json'"
+            correct: false
+          - value: "'HEADER_ACCEPT' => 'application/json'"
+            correct: false
+          - value: "'CONTENT_TYPE' => 'application/json'"
+            correct: false
+        explanation: >-
+          Request headers become HTTP_-prefixed server parameters. CONTENT_TYPE,
+          HTTPS, PHP_AUTH_USER and PHP_AUTH_PW are the unprefixed exceptions.
+        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+
+      - question: "What does $client->loginUser($user) do?"
+        answers:
+          - value: "Authenticates the session with the given UserInterface, skipping the login form"
+            correct: true
+          - value: "Submits the login form with the user's credentials"
+            correct: false
+          - value: "Creates the user record in the database"
+            correct: false
+          - value: "Returns a signed JWT for the user"
+            correct: false
+        explanation: >-
+          loginUser() injects a security token for a real user object so you can
+          test authorized behaviour without driving the login form.
+        documentation: "https://symfony.com/doc/current/testing.html#logging-in-users-authentication"
+
+      - question: "What is the effect of $client->insulate()?"
+        answers:
+          - value: "Each request runs in a separate PHP subprocess, so in-process profiler/container access is lost"
+            correct: true
+          - value: "Redirects are followed automatically"
+            correct: false
+          - value: "The same kernel instance is reused forever"
+            correct: false
+          - value: "Responses are cached between tests"
+            correct: false
+        explanation: >-
+          Insulated requests run in a fresh subprocess to isolate global state, at
+          the cost of losing in-process access to the profiler and container.
+        documentation: "https://symfony.com/doc/current/components/browser_kit.html"
+
+  - name: "Testing — PHPUnit Bridge & Deprecations"
+    questions:
+      - question: "Which class must be registered to enable the PHPUnit bridge's deprecation collection and clock/DNS mocking?"
+        answers:
+          - value: "Symfony\\Bridge\\PhpUnit\\SymfonyExtension"
+            correct: true
+          - value: "Symfony\\Bridge\\PhpUnit\\PhpUnitBundle"
+            correct: false
+          - value: "Symfony\\Component\\PhpUnit\\Extension"
+            correct: false
+          - value: "PHPUnit\\Bridge\\SymfonyExtension"
+            correct: false
+        explanation: >-
+          The bridge's PHPUnit extension (registered under <extensions><bootstrap
+          .../>) wires the DeprecationErrorHandler, ClockMock and DnsMock.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+
+      - question: "A deprecation triggered deep inside a vendor library's own internals is classified as…"
+        answers:
+          - value: "indirect"
+            correct: true
+          - value: "self"
+            correct: false
+          - value: "direct"
+            correct: false
+          - value: "legacy"
+            correct: false
+        explanation: >-
+          self = your code, direct = a dependency you call directly, indirect =
+          deep inside a dependency's internals, legacy = tests excluded from
+          thresholds.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail"
+
+      - question: "What does SYMFONY_DEPRECATIONS_HELPER=weak do?"
+        answers:
+          - value: "Reports deprecations but never fails the build"
+            correct: true
+          - value: "Hides deprecations entirely and collects nothing"
+            correct: false
+          - value: "Fails the build on the first deprecation"
+            correct: false
+          - value: "Counts only self deprecations"
+            correct: false
+        explanation: >-
+          weak collects and prints deprecations without enforcing thresholds.
+          disabled=1 turns collection off; max[...] enforces limits.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+
+      - question: "The modern way to silence a single test's expected deprecations is…"
+        answers:
+          - value: "The #[IgnoreDeprecations] attribute"
+            correct: true
+          - value: "The @group legacy docblock"
+            correct: false
+          - value: "Calling error_reporting(0)"
+            correct: false
+          - value: "Setting SYMFONY_DEPRECATIONS_HELPER=disabled globally"
+            correct: false
+        explanation: >-
+          Symfony\Bridge\PhpUnit\Attribute\IgnoreDeprecations replaces the old
+          @group legacy for excluding a test's deprecations from the report.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+
+      - question: "How is SYMFONY_DEPRECATIONS_HELPER supplied to PHPUnit?"
+        answers:
+          - value: "As an environment/server variable (e.g. in phpunit.dist.xml <php>)"
+            correct: true
+          - value: "As a PHPUnit command-line flag"
+            correct: false
+          - value: "As a composer.json script key"
+            correct: false
+          - value: "As a php.ini directive"
+            correct: false
+        explanation: >-
+          It is read from the environment; commonly set via <php><server
+          name="SYMFONY_DEPRECATIONS_HELPER" .../></php> or the shell.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
