@@ -90,15 +90,15 @@ components.
 
 ```mermaid
 flowchart TD
-    C[Compiler: RegisterControllerArgumentLocatorsPass] --> L[Per-controller<br>service locator]
+    C[Compiler: RegisterServiceSubscribersPass] --> L[Subscribed-services<br>service locator]
     L -->|setContainer| A[AbstractController]
     A -->|"container->get('twig')"| T[Twig Environment]
     A -->|"container->get('router')"| R[Router]
 ```
 
-At compile time, `Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\ControllerArgumentValueResolverPass`
-and the controller-service machinery build a locator containing exactly the
-subscribed services and wire it into the controller. Because the locator is
+At compile time, `Symfony\Component\DependencyInjection\Compiler\RegisterServiceSubscribersPass`
+(the service-subscriber machinery) builds a locator containing exactly the
+subscribed services and wires it into the controller via `setContainer()`. Because the locator is
 **lazy**, none of those services is instantiated until you actually call the
 helper — extending `AbstractController` costs almost nothing at runtime.
 
