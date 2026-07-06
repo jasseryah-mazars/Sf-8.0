@@ -1,7 +1,13 @@
 categories:
   - name: "HTTP Caching — Cache Types"
     questions:
-      - question: "Which Cache-Control value does a Symfony Response emit when you set no caching information at all?"
+      - id: "CACHE-TYPES-01"
+        question: "Which Cache-Control value does a Symfony Response emit when you set no caching information at all?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "http-caching/cache-types"
+        concepts: ["cache-control", "defaults", "private"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
         answers:
           - value: "no-cache, private"
             correct: true
@@ -15,9 +21,16 @@ categories:
           ResponseHeaderBag::computeCacheControlValue() defaults to
           "no-cache, private" when nothing is configured. It is safe (shared
           caches will not store it) but gives no caching benefit — you must opt
-          in with public/max-age.
+          in with public/max-age. It is not "no-store" (that forbids storage
+          entirely) nor an empty header (Symfony always renders a value).
         documentation: "https://symfony.com/doc/current/http_cache.html"
-      - question: "Which caches honour the s-maxage directive?"
+      - id: "CACHE-TYPES-02"
+        question: "Which caches honour the s-maxage directive?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/cache-types"
+        concepts: ["s-maxage", "shared-cache", "browser"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
         answers:
           - value: "Shared caches only (proxies and the reverse proxy)"
             correct: true
@@ -29,9 +42,17 @@ categories:
             correct: false
         explanation: >-
           s-maxage sets freshness for shared caches. Browsers (private caches)
-          ignore it and fall back to max-age / Expires.
+          ignore it and fall back to max-age / Expires. It is a response
+          directive, not a request one, and every cache honouring it would be
+          max-age, not s-maxage.
         documentation: "https://symfony.com/doc/current/http_cache/expiration.html"
-      - question: "You call $response->setPublic() and then $response->setPrivate(). What is emitted?"
+      - id: "CACHE-TYPES-03"
+        question: "You call $response->setPublic() and then $response->setPrivate(). What is emitted?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/cache-types"
+        concepts: ["public", "private", "mutual-exclusion"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
         answers:
           - value: "Cache-Control: private (public is removed)"
             correct: true
@@ -44,9 +65,16 @@ categories:
         explanation: >-
           public and private are mutually exclusive; setPrivate() removes the
           public flag, so the later call wins. You can never emit
-          "public, private".
+          "public, private", and no exception is thrown — the header bag simply
+          keeps the last intent.
         documentation: "https://symfony.com/doc/current/http_cache.html"
-      - question: "What does the response header 'Vary: Accept-Language' instruct a cache to do?"
+      - id: "CACHE-TYPES-04"
+        question: "What does the response header 'Vary: Accept-Language' instruct a cache to do?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/cache-types"
+        concepts: ["vary", "cache-key", "content-negotiation"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
         answers:
           - value: "Store a separate copy keyed by each distinct Accept-Language value"
             correct: true
@@ -58,13 +86,106 @@ categories:
             correct: false
         explanation: >-
           Vary adds the named request header(s) to the cache key, so each variant
-          is stored and served independently. Vary:* or Vary:Cookie effectively
-          disables shared caching.
+          is stored and served independently. It never rejects requests or
+          translates content. Vary:* or Vary:Cookie effectively disables shared
+          caching by exploding the key space.
         documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary"
+      - id: "CACHE-TYPES-05"
+        question: "Given #[Cache(public: true, maxage: 3600, vary: ['Accept-Language', 'Accept-Encoding'])] on an action, which raw headers result?"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "http-caching/cache-types"
+        concepts: ["cache-attribute", "vary", "max-age"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
+        answers:
+          - value: "Cache-Control: public, max-age=3600 and Vary: Accept-Language, Accept-Encoding"
+            correct: true
+          - value: "Cache-Control: private, s-maxage=3600 and Vary: *"
+            correct: false
+          - value: "Cache-Control: public, s-maxage=3600 only (Vary is ignored by the attribute)"
+            correct: false
+          - value: "Only Vary is set; maxage on the attribute is dev-only"
+            correct: false
+        explanation: >-
+          maxage maps to max-age (all caches), public opts into shared caching,
+          and vary is emitted verbatim as a comma-separated Vary header. maxage
+          is not s-maxage (that is the smaxage option), the response stays public
+          not private, and the attribute fully supports vary.
+        documentation: "https://symfony.com/doc/current/http_cache.html#the-cache-attribute"
+      - id: "CACHE-TYPES-06"
+        question: "Why is Vary: Cookie on a shared-cacheable response almost always a mistake? (choose 2)"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/cache-types"
+        concepts: ["vary", "cookie", "cache-key"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
+        answers:
+          - value: "Each distinct cookie value becomes its own cache entry, so session cookies yield near-zero shared hits"
+            correct: true
+          - value: "It explodes the cache key space, defeating the purpose of a shared cache"
+            correct: true
+          - value: "It causes the reverse proxy to throw an InvalidArgumentException"
+            correct: false
+          - value: "It automatically strips the Set-Cookie header"
+            correct: false
+        explanation: >-
+          Vary:Cookie adds the cookie value to the cache key; with per-user
+          session cookies almost every request is unique, so the shared cache
+          stores one entry per user and reuses nothing. It neither throws nor
+          strips Set-Cookie. The right fix is to keep the shell public and
+          isolate the per-user part with ESI.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary"
+      - id: "CACHE-TYPES-07"
+        question: "A reverse proxy (gateway cache) such as Symfony HttpCache or Varnish is a shared cache."
+        type: "true-false"
+        difficulty: "easy"
+        subchapter: "http-caching/cache-types"
+        concepts: ["reverse-proxy", "shared-cache", "gateway"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
+        answers:
+          - value: "True"
+            correct: true
+          - value: "False"
+            correct: false
+        explanation: >-
+          A reverse proxy / gateway cache serves many users, so it is a shared
+          cache you own and deploy in front of the app — it therefore honours
+          s-maxage. Only the browser is a private cache.
+        documentation: "https://symfony.com/doc/current/http_cache.html"
+      - id: "CACHE-TYPES-08"
+        question: "A page is marked public with s-maxage=60 but still calls $request->getSession() and reads a cookie. What is the risk behind a CDN?"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "http-caching/cache-types"
+        concepts: ["public", "session", "cache-poisoning"]
+        syllabus: "HTTP Caching → Cache types & Cache-Control"
+        answers:
+          - value: "The CDN may store one user's personalized page and serve it to other users"
+            correct: true
+          - value: "Nothing — sessions automatically add Vary: Cookie"
+            correct: false
+          - value: "The response is silently downgraded to private by Symfony"
+            correct: false
+          - value: "The CDN refuses to cache any response that touched the session"
+            correct: false
+        explanation: >-
+          A public response with a shared TTL is storable by any shared cache
+          regardless of the session it read; the CDN can leak one user's page to
+          another. Symfony does not auto-add Vary:Cookie nor auto-downgrade to
+          private. The Symfony reverse proxy protects you only because its
+          private_headers default includes Cookie — a generic CDN does not.
+          Keep such pages private/uncached or pull the personal part via ESI.
+        documentation: "https://symfony.com/doc/current/http_cache.html"
 
   - name: "HTTP Caching — Expiration"
     questions:
-      - question: "What does the Cache-Control directive 'no-cache' mean?"
+      - id: "CACHE-EXPIRATION-01"
+        question: "What does the Cache-Control directive 'no-cache' mean?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/expiration"
+        concepts: ["no-cache", "revalidation", "no-store"]
+        syllabus: "HTTP Caching → Expiration model"
         answers:
           - value: "The response may be stored but must be revalidated before every reuse"
             correct: true
@@ -76,9 +197,16 @@ categories:
             correct: false
         explanation: >-
           no-cache permits storage but forces revalidation on each reuse. The
-          directive that forbids storing at all is no-store.
+          directive that forbids storing at all is no-store. It says nothing
+          about freshness duration or private/shared scope.
         documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
-      - question: "Besides setting s-maxage, what side effect does $response->setSharedMaxAge(600) have?"
+      - id: "CACHE-EXPIRATION-02"
+        question: "Besides setting s-maxage, what side effect does $response->setSharedMaxAge(600) have?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "http-caching/expiration"
+        concepts: ["s-maxage", "public", "setSharedMaxAge"]
+        syllabus: "HTTP Caching → Expiration model"
         answers:
           - value: "It marks the response public"
             correct: true
@@ -90,9 +218,16 @@ categories:
             correct: false
         explanation: >-
           A shared TTL is meaningless on a private response, so setSharedMaxAge()
-          sets the public flag as well.
+          sets the public flag as well. It does not touch max-age (browsers still
+          have no freshness), adds no must-revalidate, and sets no Expires.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php"
-      - question: "For a shared cache, which freshness source takes precedence?"
+      - id: "CACHE-EXPIRATION-03"
+        question: "For a shared cache, which freshness source takes precedence?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "http-caching/expiration"
+        concepts: ["precedence", "s-maxage", "expires"]
+        syllabus: "HTTP Caching → Expiration model"
         answers:
           - value: "s-maxage, then max-age, then Expires"
             correct: true
@@ -104,9 +239,16 @@ categories:
             correct: false
         explanation: >-
           Shared caches resolve freshness as s-maxage > max-age > Expires. A
-          private cache starts at max-age since it ignores s-maxage.
+          private cache starts at max-age since it ignores s-maxage. Expires is
+          the lowest-priority HTTP/1.0 fallback, and header order is irrelevant.
         documentation: "https://symfony.com/doc/current/http_cache/expiration.html"
-      - question: "How do you emit a must-revalidate directive from a Response object?"
+      - id: "CACHE-EXPIRATION-04"
+        question: "How do you emit a must-revalidate directive from a Response object?"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "http-caching/expiration"
+        concepts: ["must-revalidate", "setCache", "getter"]
+        syllabus: "HTTP Caching → Expiration model"
         answers:
           - value: "$response->setCache(['must_revalidate' => true])"
             correct: true
@@ -118,10 +260,17 @@ categories:
             correct: false
         explanation: >-
           There is no dedicated setter; Response::mustRevalidate() is a getter
-          returning bool. Use setCache(['must_revalidate' => true]) or
-          #[Cache(mustRevalidate: true)].
+          returning bool (calling it with an argument is a type error, and it
+          never mutates state). Use setCache(['must_revalidate' => true]) or
+          #[Cache(mustRevalidate: true)]. no-cache does not imply must-revalidate.
         documentation: "https://symfony.com/doc/current/http_cache.html"
-      - question: "Which #[Cache] options accept a relative date string like '1 hour' as well as an integer?"
+      - id: "CACHE-EXPIRATION-05"
+        question: "Which #[Cache] options accept a relative date string like '1 hour' as well as an integer?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "http-caching/expiration"
+        concepts: ["cache-attribute", "duration", "DateTimeImmutable"]
+        syllabus: "HTTP Caching → Expiration model"
         answers:
           - value: "maxage, smaxage, staleWhileRevalidate, staleIfError"
             correct: true
@@ -133,12 +282,105 @@ categories:
             correct: false
         explanation: >-
           Those numeric-duration options accept an int (seconds) or a relative
-          date string parsed via DateTimeImmutable. expires is a date string.
+          date string parsed via DateTimeImmutable. expires is a date string (an
+          absolute moment), while public/private are booleans, not durations.
         documentation: "https://symfony.com/doc/current/http_cache.html#the-cache-attribute"
+      - id: "CACHE-EXPIRATION-06"
+        question: "What happens when you call $response->setCache(['s_maxage' => 300, 'foo' => true])?"
+        type: "code"
+        difficulty: "hard"
+        subchapter: "http-caching/expiration"
+        concepts: ["setCache", "validation", "InvalidArgumentException"]
+        syllabus: "HTTP Caching → Expiration model"
+        answers:
+          - value: "An InvalidArgumentException is thrown because 'foo' is not an allowed key"
+            correct: true
+          - value: "s-maxage=300 is set and 'foo' is silently ignored"
+            correct: false
+          - value: "A custom header Foo: true is added"
+            correct: false
+          - value: "A deprecation is triggered but the call succeeds"
+            correct: false
+        explanation: >-
+          setCache() validates its keys against a fixed whitelist (etag,
+          last_modified, max_age, s_maxage, public, private, immutable,
+          must_revalidate, no_cache, no_store, no_transform, proxy_revalidate,
+          stale_while_revalidate, stale_if_error). An unknown key throws
+          InvalidArgumentException immediately — nothing is set and no header is
+          added. This is unlike setting a raw stray header string.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php"
+      - id: "CACHE-EXPIRATION-07"
+        question: "A controller explicitly calls $response->setMaxAge(0) and the action also has #[Cache(maxage: 3600)]. Which wins, and why?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "http-caching/expiration"
+        concepts: ["cache-attribute", "response-event", "priority"]
+        syllabus: "HTTP Caching → Expiration model"
+        answers:
+          - value: "max-age=0 wins — CacheAttributeListener runs late on RESPONSE (prio -10) and does not override headers already set explicitly"
+            correct: true
+          - value: "max-age=3600 wins — the attribute always overrides controller code"
+            correct: false
+          - value: "An exception is thrown for the conflict"
+            correct: false
+          - value: "Both are emitted as max-age=0, max-age=3600"
+            correct: false
+        explanation: >-
+          CacheAttributeListener applies expiration directives on
+          KernelEvents::RESPONSE at priority -10 (late) but only fills in values
+          the controller has not already set, so an explicit setMaxAge(0) stays.
+          The attribute never blindly overrides, never throws for this, and
+          Cache-Control cannot carry two max-age values.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php"
+      - id: "CACHE-EXPIRATION-08"
+        question: "Cache-Control: no-cache tells caches never to store the response."
+        type: "true-false"
+        difficulty: "easy"
+        subchapter: "http-caching/expiration"
+        concepts: ["no-cache", "no-store", "misconception"]
+        syllabus: "HTTP Caching → Expiration model"
+        answers:
+          - value: "True"
+            correct: false
+          - value: "False"
+            correct: true
+        explanation: >-
+          False. no-cache permits storing but requires revalidation before every
+          reuse. The directive that forbids storage entirely is no-store — the
+          single most common Cache-Control misconception.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
+      - id: "CACHE-EXPIRATION-09"
+        question: "What does Cache-Control: stale-while-revalidate=30 let a cache do?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "http-caching/expiration"
+        concepts: ["stale-while-revalidate", "graceful-staleness", "latency"]
+        syllabus: "HTTP Caching → Expiration model"
+        answers:
+          - value: "Serve the stale response for up to 30 s while it revalidates in the background"
+            correct: true
+          - value: "Extend the fresh lifetime by 30 s"
+            correct: false
+          - value: "Serve stale for 30 s only if the origin returns an error"
+            correct: false
+          - value: "Force revalidation every 30 s regardless of freshness"
+            correct: false
+        explanation: >-
+          stale-while-revalidate lets a cache immediately answer with a stale
+          copy while it refreshes asynchronously, hiding origin latency. Serving
+          stale only on origin errors is stale-if-error; it does not extend
+          freshness nor schedule periodic revalidation.
+        documentation: "https://symfony.com/doc/current/http_cache/expiration.html"
 
   - name: "HTTP Caching — Validation"
     questions:
-      - question: "When Response::isNotModified() returns true, what has it done to the response?"
+      - id: "CACHE-VALIDATION-01"
+        question: "When Response::isNotModified() returns true, what has it done to the response?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "http-caching/validation"
+        concepts: ["isNotModified", "304", "mutation"]
+        syllabus: "HTTP Caching → Validation model"
         answers:
           - value: "Set the status to 304 and removed the body and content headers"
             correct: true
@@ -150,9 +392,17 @@ categories:
             correct: false
         explanation: >-
           isNotModified() mutates the response in place (status 304, strips the
-          body and content-related headers). You still return the response yourself.
+          body and content-related headers like Content-Type/Length) and returns
+          a bool. It never throws or sends the response — you still return it
+          yourself. Assuming it is pure (returns bool only) is the classic trap.
         documentation: "https://symfony.com/doc/current/http_cache/validation.html"
-      - question: "A request carries both If-None-Match and If-Modified-Since. Which one decides the 304?"
+      - id: "CACHE-VALIDATION-02"
+        question: "A request carries both If-None-Match and If-Modified-Since. Which one decides the 304?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/validation"
+        concepts: ["etag", "last-modified", "precedence"]
+        syllabus: "HTTP Caching → Validation model"
         answers:
           - value: "The ETag (If-None-Match) takes precedence"
             correct: true
@@ -164,9 +414,16 @@ categories:
             correct: false
         explanation: >-
           When an ETag is supplied it governs the comparison; Last-Modified alone
-          only decides when no ETag is present.
+          only decides when no ETag is present. The two are not compared by
+          magnitude, and a 200 is not forced.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php"
-      - question: "Using #[Cache(etag: 'post.getContent()')], what value is actually sent as the ETag?"
+      - id: "CACHE-VALIDATION-03"
+        question: "Using #[Cache(etag: 'post.getContent()')], what value is actually sent as the ETag?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "http-caching/validation"
+        concepts: ["cache-attribute", "etag", "hashing"]
+        syllabus: "HTTP Caching → Validation model"
         answers:
           - value: "The SHA-256 hash of the evaluated expression"
             correct: true
@@ -179,9 +436,16 @@ categories:
         explanation: >-
           CacheAttributeListener evaluates the expression on
           kernel.controller_arguments and SHA-256-hashes the result before using
-          it as the ETag, so it can point at large content safely.
+          it as the ETag, so it can point at large content safely. The string is
+          an expression (not a literal), and the raw value is never sent verbatim.
         documentation: "https://symfony.com/doc/current/http_cache.html#the-cache-attribute"
-      - question: "How do you produce a weak ETag with the Response API?"
+      - id: "CACHE-VALIDATION-04"
+        question: "How do you produce a weak ETag with the Response API?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/validation"
+        concepts: ["weak-etag", "setEtag", "weak-comparison"]
+        syllabus: "HTTP Caching → Validation model"
         answers:
           - value: "$response->setEtag('abc', weak: true)"
             correct: true
@@ -193,9 +457,17 @@ categories:
             correct: false
         explanation: >-
           The second boolean argument to setEtag() prefixes the value with W/.
-          Conditional GET uses weak comparison regardless.
+          There is no setWeakEtag() method and no weak_etag setCache key; passing
+          'W/abc' yourself would double the prefix. Conditional GET uses weak
+          comparison regardless of which form you emit.
         documentation: "https://symfony.com/doc/current/http_cache/validation.html"
-      - question: "With #[Cache(lastModified: 'post.getUpdatedAt()')], when can a 304 be returned?"
+      - id: "CACHE-VALIDATION-05"
+        question: "With #[Cache(lastModified: 'post.getUpdatedAt()')], when can a 304 be returned?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "http-caching/validation"
+        concepts: ["cache-attribute", "controller-arguments", "short-circuit"]
+        syllabus: "HTTP Caching → Validation model"
         answers:
           - value: "Before the controller body runs, during kernel.controller_arguments"
             correct: true
@@ -209,11 +481,107 @@ categories:
           CacheAttributeListener evaluates the expression on
           CONTROLLER_ARGUMENTS (priority 10) and, if the request is up to date,
           replaces the controller so a 304 is returned without running the body.
+          That is precisely the CPU/render saving the model exists for; it does
+          not wait for RESPONSE or terminate.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php"
+      - id: "CACHE-VALIDATION-06"
+        question: >-
+          Consider: $response->setEtag(sha1($post->getContent())); if
+          ($response->isNotModified($request)) { return $response; } return
+          $this->render('post.html.twig', ['post' => $post], $response); — what
+          is the benefit when If-None-Match matches?
+        type: "code"
+        difficulty: "hard"
+        subchapter: "http-caching/validation"
+        concepts: ["isNotModified", "304", "render-savings"]
+        syllabus: "HTTP Caching → Validation model"
+        answers:
+          - value: "A bodyless 304 is returned and the template is never rendered"
+            correct: true
+          - value: "The template is rendered, then discarded, and a 304 is sent"
+            correct: false
+          - value: "A 200 with the full body is always returned"
+            correct: false
+          - value: "The response is sent twice"
+            correct: false
+        explanation: >-
+          isNotModified() sets 304 and strips the body when the ETag matches, and
+          the early return short-circuits before render() runs — so no template
+          work happens at all. If you called render() first you would lose that
+          saving. It never sends twice; you return the response once.
+        documentation: "https://symfony.com/doc/current/http_cache/validation.html"
+      - id: "CACHE-VALIDATION-07"
+        question: "A developer sets $response->setLastModified(new \\DateTimeImmutable()) but 304s never happen. Why?"
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "http-caching/validation"
+        concepts: ["last-modified", "validator", "pitfall"]
+        syllabus: "HTTP Caching → Validation model"
+        answers:
+          - value: "The validator is the current time, so it never equals the client's If-Modified-Since value"
+            correct: true
+          - value: "setLastModified() requires a string, not a DateTimeImmutable"
+            correct: false
+          - value: "Last-Modified is ignored unless an ETag is also set"
+            correct: false
+          - value: "DateTimeImmutable is not supported; only DateTime works"
+            correct: false
+        explanation: >-
+          Using now() as the validator means every response looks freshly
+          modified, so If-Modified-Since can never match and you always get 200.
+          Use the resource's real modification time (e.g. an entity's updatedAt).
+          setLastModified() accepts any \\DateTimeInterface (immutable included),
+          and Last-Modified works without an ETag.
+        documentation: "https://symfony.com/doc/current/http_cache/validation.html"
+      - id: "CACHE-VALIDATION-08"
+        question: "A 304 Not Modified response must be sent without a message body."
+        type: "true-false"
+        difficulty: "easy"
+        subchapter: "http-caching/validation"
+        concepts: ["304", "body", "spec"]
+        syllabus: "HTTP Caching → Validation model"
+        answers:
+          - value: "True"
+            correct: true
+          - value: "False"
+            correct: false
+        explanation: >-
+          True. A 304 carries no message body — the client already holds the
+          bytes. Symfony enforces this: isNotModified() strips the body and
+          content headers when it sets the 304 status.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests"
+      - id: "CACHE-VALIDATION-09"
+        question: "Which conditional request header does a client send to revalidate an ETag?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/validation"
+        concepts: ["etag", "if-none-match", "conditional-request"]
+        syllabus: "HTTP Caching → Validation model"
+        answers:
+          - value: "If-None-Match"
+            correct: true
+          - value: "If-Modified-Since"
+            correct: false
+          - value: "If-Match"
+            correct: false
+          - value: "If-Range"
+            correct: false
+        explanation: >-
+          ETags round-trip via If-None-Match for a conditional GET.
+          If-Modified-Since pairs with Last-Modified (a date), while If-Match and
+          If-Range serve write concurrency and range requests, not cache
+          revalidation of a GET.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests"
 
   - name: "HTTP Caching — Client-Side"
     questions:
-      - question: "Which directive does a browser ignore when managing its own private cache?"
+      - id: "CACHE-CLIENT-01"
+        question: "Which directive does a browser ignore when managing its own private cache?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/client-side"
+        concepts: ["s-maxage", "private-cache", "browser"]
+        syllabus: "HTTP Caching → Client-side caching"
         answers:
           - value: "s-maxage"
             correct: true
@@ -224,10 +592,16 @@ categories:
           - value: "immutable"
             correct: false
         explanation: >-
-          The browser is a private cache; it honours max-age/Expires and ignores
-          s-maxage, which targets shared caches.
+          The browser is a private cache; it honours max-age/Expires, no-store
+          and immutable, but ignores s-maxage, which targets shared caches only.
         documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
-      - question: "A normal browser reload (not hard reload) typically sends which request directive?"
+      - id: "CACHE-CLIENT-02"
+        question: "A normal browser reload (not hard reload) typically sends which request directive?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/client-side"
+        concepts: ["reload", "max-age", "request-directive"]
+        syllabus: "HTTP Caching → Client-side caching"
         answers:
           - value: "Cache-Control: max-age=0 (revalidate)"
             correct: true
@@ -239,9 +613,17 @@ categories:
             correct: false
         explanation: >-
           A reload asks caches to revalidate via max-age=0 (a 304 is possible),
-          whereas a hard reload sends no-cache to force a full refetch.
+          whereas a hard reload sends no-cache to force a full refetch. no-store
+          and only-if-cached are unrelated to reload behaviour. Confusing reload
+          with hard reload is a common exam trap.
         documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives"
-      - question: "What is the recommended header combination for a fingerprinted (content-hashed) asset?"
+      - id: "CACHE-CLIENT-03"
+        question: "What is the recommended header combination for a fingerprinted (content-hashed) asset?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "http-caching/client-side"
+        concepts: ["immutable", "max-age", "fingerprint"]
+        syllabus: "HTTP Caching → Client-side caching"
         answers:
           - value: "public, max-age=31536000, immutable"
             correct: true
@@ -254,9 +636,16 @@ categories:
         explanation: >-
           A fingerprinted URL never changes content, so cache it long-term in
           every cache and skip revalidation with immutable. A new build yields a
-          new URL.
+          new URL. no-store/no-cache would defeat caching, and s-maxage alone
+          would leave the browser uncached.
         documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
-      - question: "Which request is eligible to be served from the browser cache?"
+      - id: "CACHE-CLIENT-04"
+        question: "Which request is eligible to be served from the browser cache?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/client-side"
+        concepts: ["safe-methods", "GET", "cacheability"]
+        syllabus: "HTTP Caching → Client-side caching"
         answers:
           - value: "GET /page"
             correct: true
@@ -267,13 +656,110 @@ categories:
           - value: "PATCH /orders/5"
             correct: false
         explanation: >-
-          Only safe methods (GET, HEAD) are cacheable; unsafe methods always hit
-          the origin and may invalidate cached entries.
+          Only safe methods (GET, HEAD) are cacheable; unsafe methods (POST,
+          PUT, PATCH, DELETE) always hit the origin and may invalidate cached
+          entries for the target URL.
         documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"
+      - id: "CACHE-CLIENT-05"
+        question: >-
+          To detect whether a client forced a revalidation, which reads the
+          request's Cache-Control correctly?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "http-caching/client-side"
+        concepts: ["request-headers", "hasCacheControlDirective", "max-age"]
+        syllabus: "HTTP Caching → Client-side caching"
+        answers:
+          - value: "$request->headers->hasCacheControlDirective('no-cache') || '0' === $request->headers->getCacheControlDirective('max-age')"
+            correct: true
+          - value: "$request->isNoCache()"
+            correct: false
+          - value: "$request->getCacheControl() === 'no-cache'"
+            correct: false
+          - value: "$request->headers->get('Cache-Control')->noCache"
+            correct: false
+        explanation: >-
+          HeaderBag exposes hasCacheControlDirective()/getCacheControlDirective()
+          on request headers; the directive value is a string, so max-age is
+          compared to '0'. There is no Request::isNoCache() or getCacheControl(),
+          and get('Cache-Control') returns a plain string, not an object.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives"
+      - id: "CACHE-CLIENT-06"
+        question: "What does the immutable directive buy for a fresh, fingerprinted asset in the browser?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/client-side"
+        concepts: ["immutable", "revalidation", "reload"]
+        syllabus: "HTTP Caching → Client-side caching"
+        answers:
+          - value: "The browser skips revalidation while the response is still fresh, even on a normal reload"
+            correct: true
+          - value: "The asset is cached forever regardless of max-age"
+            correct: false
+          - value: "Shared caches refuse to store it"
+            correct: false
+          - value: "It forces the connection to HTTPS"
+            correct: false
+        explanation: >-
+          immutable tells the browser the body will not change during its
+          freshness window, so even F5 (which normally sends max-age=0) will not
+          revalidate. It does not extend caching beyond max-age, does not block
+          shared caches, and has nothing to do with TLS.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control"
+      - id: "CACHE-CLIENT-07"
+        question: "A user says 'I reloaded but still see the old CSS.' What is the cache-level cause and the real fix?"
+        type: "debug"
+        difficulty: "hard"
+        subchapter: "http-caching/client-side"
+        concepts: ["reload", "revalidation", "cache-busting"]
+        syllabus: "HTTP Caching → Client-side caching"
+        answers:
+          - value: "A normal reload only revalidates (max-age=0); a 304 keeps the old bytes. Fix by serving the CSS under a content-hashed URL"
+            correct: true
+          - value: "The browser cache is corrupt; the fix is to disable caching entirely"
+            correct: false
+          - value: "s-maxage is too high; lower it so the browser refreshes"
+            correct: false
+          - value: "The server must send no-store on every asset"
+            correct: false
+        explanation: >-
+          A normal reload sends max-age=0, so the browser revalidates; an
+          unchanged ETag/Last-Modified yields 304 and the stale bytes stay. A
+          hard reload (no-cache) would refetch, but the durable fix is cache
+          busting via a new (fingerprinted) URL. s-maxage is ignored by the
+          browser, and no-store throws away all caching benefit.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching"
+      - id: "CACHE-CLIENT-08"
+        question: "What does the request directive Cache-Control: only-if-cached ask a cache to do?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/client-side"
+        concepts: ["only-if-cached", "504", "request-directive"]
+        syllabus: "HTTP Caching → Client-side caching"
+        answers:
+          - value: "Return a cached copy if available, otherwise respond 504 without contacting the origin"
+            correct: true
+          - value: "Always revalidate the cached copy with the origin"
+            correct: false
+          - value: "Store the response only if it is cacheable"
+            correct: false
+          - value: "Accept a stale response up to a given age"
+            correct: false
+        explanation: >-
+          only-if-cached forbids any origin request: the cache serves a stored
+          entry or returns 504 (Gateway Timeout). Revalidating is no-cache/
+          max-age=0, and accepting stale up to N seconds is max-stale=N.
+        documentation: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives"
 
   - name: "HTTP Caching — Server-Side"
     questions:
-      - question: "What is Symfony\\Component\\HttpKernel\\HttpCache\\HttpCache?"
+      - id: "CACHE-SERVER-01"
+        question: "What is Symfony\\Component\\HttpKernel\\HttpCache\\HttpCache?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "http-caching/server-side"
+        concepts: ["reverse-proxy", "gateway-cache", "kernel"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
         answers:
           - value: "A reverse-proxy kernel that wraps your application kernel"
             correct: true
@@ -285,9 +771,16 @@ categories:
             correct: false
         explanation: >-
           HttpCache implements HttpKernelInterface and TerminableInterface and
-          wraps the real kernel, acting as an in-PHP shared gateway cache.
+          wraps the real kernel, acting as an in-PHP shared gateway cache. It is
+          not a PSR-6 pool, a Twig extension, or a compiler pass.
         documentation: "https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy"
-      - question: "By default, which request header makes the Symfony reverse proxy treat a request as private?"
+      - id: "CACHE-SERVER-02"
+        question: "By default, which request header makes the Symfony reverse proxy treat a request as private?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "http-caching/server-side"
+        concepts: ["private_headers", "cookie", "authorization"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
         answers:
           - value: "Cookie (and Authorization)"
             correct: true
@@ -300,9 +793,15 @@ categories:
         explanation: >-
           The private_headers option defaults to Authorization and Cookie;
           requests carrying them skip the shared cache, protecting authenticated
-          responses.
+          responses. Accept/User-Agent/Referer have no such role by default.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php"
-      - question: "Which header lets you inspect whether the reverse proxy served a cache hit?"
+      - id: "CACHE-SERVER-03"
+        question: "Which header lets you inspect whether the reverse proxy served a cache hit?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/server-side"
+        concepts: ["trace-header", "X-Symfony-Cache", "debugging"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
         answers:
           - value: "X-Symfony-Cache"
             correct: true
@@ -314,9 +813,16 @@ categories:
             correct: false
         explanation: >-
           HttpCache writes a trace to the trace_header (default X-Symfony-Cache),
-          e.g. "GET /: fresh", "miss", or "store".
+          e.g. "GET /: fresh", "miss", or "store". Age reports elapsed seconds,
+          not hit/miss, and the other header names are invented.
         documentation: "https://symfony.com/doc/current/http_cache.html"
-      - question: "What is the simplest way to enable the reverse proxy in Symfony 8?"
+      - id: "CACHE-SERVER-04"
+        question: "What is the simplest way to enable the reverse proxy in Symfony 8?"
+        type: "config"
+        difficulty: "easy"
+        subchapter: "http-caching/server-side"
+        concepts: ["framework.http_cache", "enable", "kernel-wrapping"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
         answers:
           - value: "Set framework.http_cache: true in configuration"
             correct: true
@@ -329,12 +835,131 @@ categories:
         explanation: >-
           framework.http_cache: true wraps the kernel automatically. The
           alternative is wrapping it manually in public/index.php with the
-          FrameworkBundle HttpCache subclass.
+          FrameworkBundle HttpCache subclass. There is no compiler pass or
+          #[AsHttpCache] attribute, and Varnish is a separate external proxy.
         documentation: "https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy"
+      - id: "CACHE-SERVER-05"
+        question: "Which interfaces does HttpCache implement, and what is its constructor shape?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "http-caching/server-side"
+        concepts: ["HttpKernelInterface", "TerminableInterface", "constructor"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
+        answers:
+          - value: "HttpKernelInterface and TerminableInterface; __construct(HttpKernelInterface $kernel, StoreInterface $store, ?SurrogateInterface $surrogate = null, array $options = [])"
+            correct: true
+          - value: "Only HttpKernelInterface; __construct(StoreInterface $store)"
+            correct: false
+          - value: "CacheItemPoolInterface (PSR-6); __construct(array $config)"
+            correct: false
+          - value: "EventSubscriberInterface; __construct(EventDispatcherInterface $dispatcher)"
+            correct: false
+        explanation: >-
+          HttpCache is both an HttpKernelInterface (so it can handle requests)
+          and TerminableInterface (so terminate() propagates). Its constructor
+          takes the wrapped kernel, a StoreInterface, an optional
+          SurrogateInterface (Esi/Ssi) and an options array. It is not a PSR-6
+          pool nor an event subscriber.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php"
+      - id: "CACHE-SERVER-06"
+        question: "A visitor sends Cache-Control: no-cache to force a reload through the Symfony reverse proxy. What happens by default?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/server-side"
+        concepts: ["allow_reload", "allow_revalidate", "defaults"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
+        answers:
+          - value: "It is ignored — allow_reload defaults to false, so the client cannot force a bypass"
+            correct: true
+          - value: "The proxy always refetches from the backend on no-cache"
+            correct: false
+          - value: "The proxy throws an error for unauthorized reload"
+            correct: false
+          - value: "The cached entry is deleted"
+            correct: false
+        explanation: >-
+          allow_reload (client no-cache) and allow_revalidate (client max-age=0)
+          both default to false, because letting any client force a bypass
+          invites abuse. So a hard reload does not blow past the shared cache
+          unless you opt in. Nothing is deleted and no error is raised.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php"
+      - id: "CACHE-SERVER-07"
+        question: >-
+          What does this config do? framework: { http_cache: { enabled: true,
+          trace_header: X-Symfony-Cache, default_ttl: 0 } }
+        type: "config"
+        difficulty: "hard"
+        subchapter: "http-caching/server-side"
+        concepts: ["framework.http_cache", "default_ttl", "trace_header"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
+        answers:
+          - value: "Wraps the kernel with HttpCache, sets the trace header name, and applies no default freshness when a response gives none"
+            correct: true
+          - value: "Disables caching because default_ttl is 0"
+            correct: false
+          - value: "Forces a 0-second TTL on every response regardless of its headers"
+            correct: false
+          - value: "Only renames the trace header without enabling caching"
+            correct: false
+        explanation: >-
+          enabled: true wraps the kernel; trace_header sets the debug header
+          name; default_ttl is the TTL used ONLY when a response carries no
+          freshness info — 0 means such responses are not cached by default, but
+          responses that do set s-maxage/max-age are still cached normally. It
+          does not override explicit freshness nor disable caching.
+        documentation: "https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy"
+      - id: "CACHE-SERVER-08"
+        question: "A page sets s-maxage=60 but logged-in users never get a shared-cache hit from HttpCache. Why, and how do you still cache the anonymous view?"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "http-caching/server-side"
+        concepts: ["private_headers", "cookie", "esi"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
+        answers:
+          - value: "Their session Cookie is in private_headers, so the request is treated as private; move per-user parts into ESI so the shell stays anonymous/cacheable"
+            correct: true
+          - value: "s-maxage is too low; raising it will cache logged-in requests"
+            correct: false
+          - value: "HttpCache never caches HTML, only assets"
+            correct: false
+          - value: "The response must be marked private to be cached"
+            correct: false
+        explanation: >-
+          Logged-in requests carry a session Cookie, which is in the default
+          private_headers, so HttpCache treats them as private and neither serves
+          from nor stores in the shared cache. Anonymous requests are cached.
+          Raising s-maxage changes nothing, HttpCache caches any cacheable
+          response, and private means no shared caching at all — instead isolate
+          per-user bits with ESI fragments.
+        documentation: "https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy"
+      - id: "CACHE-SERVER-09"
+        question: "The default HttpCache Store is a distributed store shared across servers out of the box."
+        type: "true-false"
+        difficulty: "medium"
+        subchapter: "http-caching/server-side"
+        concepts: ["store", "filesystem", "distributed"]
+        syllabus: "HTTP Caching → Server-side (reverse proxy)"
+        answers:
+          - value: "True"
+            correct: false
+          - value: "False"
+            correct: true
+        explanation: >-
+          False. The default Store (Symfony\\Component\\HttpKernel\\HttpCache\\Store)
+          is a filesystem store keyed by URL + Vary, using digest and lock files.
+          There is no built-in distributed/shared store — that is a reason to use
+          Varnish or a CDN at scale.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Store.php"
 
   - name: "HTTP Caching — Edge Side Includes"
     questions:
-      - question: "When does the render_esi Twig function actually emit an <esi:include> tag?"
+      - id: "CACHE-ESI-01"
+        question: "When does the render_esi Twig function actually emit an <esi:include> tag?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "http-caching/esi"
+        concepts: ["render_esi", "surrogate-capability", "inline-fallback"]
+        syllabus: "HTTP Caching → Edge Side Includes"
         answers:
           - value: "Only when a surrogate advertises ESI capability; otherwise it renders the fragment inline"
             correct: true
@@ -345,10 +970,18 @@ categories:
           - value: "Only for JSON responses"
             correct: false
         explanation: >-
-          The ESI renderer checks the Surrogate-Capability. Without a surrogate it
-          falls back to inline rendering so the same template works everywhere.
+          The ESI renderer checks the Surrogate-Capability header. Without a
+          surrogate it falls back to inline rendering so the same template works
+          everywhere. It is not always-on, not dev-only, and not tied to content
+          type.
         documentation: "https://symfony.com/doc/current/http_cache/esi.html"
-      - question: "What is the primary benefit of ESI over full-page caching?"
+      - id: "CACHE-ESI-02"
+        question: "What is the primary benefit of ESI over full-page caching?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/esi"
+        concepts: ["esi", "mixed-freshness", "fragment"]
+        syllabus: "HTTP Caching → Edge Side Includes"
         answers:
           - value: "Each fragment can be cached with its own independent lifetime"
             correct: true
@@ -360,9 +993,17 @@ categories:
             correct: false
         explanation: >-
           ESI caches fragments as separate entries, so a long-lived shell can
-          coexist with short-lived or per-user fragments on one page.
+          coexist with short-lived or per-user fragments on one page. It provides
+          no encryption or compression, and it actually requires a surrogate
+          (reverse proxy) to work.
         documentation: "https://symfony.com/doc/current/http_cache/esi.html"
-      - question: "Which component processes <esi:include> tags?"
+      - id: "CACHE-ESI-03"
+        question: "Which component processes <esi:include> tags?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/esi"
+        concepts: ["surrogate", "reverse-proxy", "varnish"]
+        syllabus: "HTTP Caching → Edge Side Includes"
         answers:
           - value: "The reverse proxy / surrogate (Symfony HttpCache or Varnish)"
             correct: true
@@ -375,8 +1016,15 @@ categories:
         explanation: >-
           ESI is a surrogate feature; the gateway cache fetches each include as a
           sub-request and stitches the results, caching each on its own terms.
+          Twig/PHP only emit the tag, and the browser never sees or resolves it.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Esi.php"
-      - question: "Why does Symfony sign _fragment URIs (UriSigner)?"
+      - id: "CACHE-ESI-04"
+        question: "Why does Symfony sign _fragment URIs (UriSigner)?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "http-caching/esi"
+        concepts: ["UriSigner", "fragment", "security"]
+        syllabus: "HTTP Caching → Edge Side Includes"
         answers:
           - value: "To prevent attackers forging arbitrary fragment requests"
             correct: true
@@ -387,6 +1035,123 @@ categories:
           - value: "To compute the response ETag"
             correct: false
         explanation: >-
-          Fragment URIs are signed with the application secret so only
-          legitimately generated fragment calls are honoured by the kernel.
+          Fragment URIs are signed with the application secret (via UriSigner) so
+          only legitimately generated fragment calls are honoured by the kernel.
+          Signing is a security measure, not compression, push, or ETag
+          computation.
+        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+      - id: "CACHE-ESI-05"
+        question: >-
+          What is the minimal config to make render_esi emit real ESI tags that
+          get processed?
+        type: "config"
+        difficulty: "medium"
+        subchapter: "http-caching/esi"
+        concepts: ["framework.esi", "framework.http_cache", "fragments"]
+        syllabus: "HTTP Caching → Edge Side Includes"
+        answers:
+          - value: "framework.esi: true AND a running surrogate (framework.http_cache: true or Varnish)"
+            correct: true
+          - value: "framework.esi: true alone is enough"
+            correct: false
+          - value: "framework.http_cache: true alone is enough"
+            correct: false
+          - value: "Nothing — ESI is on by default in Symfony 8"
+            correct: false
+        explanation: >-
+          You need ESI enabled (framework.esi: true) AND a surrogate to advertise
+          the capability and process the includes — the Symfony reverse proxy
+          (framework.http_cache: true) or Varnish. Enabling only one of them
+          means render_esi falls back to inline rendering; ESI is not on by
+          default.
+        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+      - id: "CACHE-ESI-06"
+        question: "Without ESI, adding a #[Cache(smaxage: 5)] fragment to an s-maxage=3600 page collapses the whole page to a 5-second TTL. Which mechanism causes this?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "http-caching/esi"
+        concepts: ["ResponseCacheStrategy", "min-ttl", "inline"]
+        syllabus: "HTTP Caching → Edge Side Includes"
+        answers:
+          - value: "ResponseCacheStrategy reduces the master TTL to the minimum of all embedded (inline) fragment TTLs"
+            correct: true
+          - value: "The #[Cache] attribute overrides the parent controller's headers"
+            correct: false
+          - value: "The kernel discards s-maxage whenever a sub-request runs"
+            correct: false
+          - value: "Twig strips Cache-Control from embedded responses"
+            correct: false
+        explanation: >-
+          When a fragment is rendered inline into the master response,
+          ResponseCacheStrategy merges freshness by taking the MINIMUM TTL, so the
+          5-second fragment caps the page. ESI avoids this by caching the fragment
+          as a separate entry, leaving the shell's long TTL intact. It is not an
+          attribute override, a kernel discard, or Twig stripping headers.
+        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+      - id: "CACHE-ESI-07"
+        question: "Which Twig call embeds a controller as an ESI fragment?"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "http-caching/esi"
+        concepts: ["render_esi", "controller", "twig"]
+        syllabus: "HTTP Caching → Edge Side Includes"
+        answers:
+          - value: "{{ render_esi(controller('App\\\\Controller\\\\FragmentController::userGreeting')) }}"
+            correct: true
+          - value: "{{ esi('App\\\\Controller\\\\FragmentController::userGreeting') }}"
+            correct: false
+          - value: "{{ include_esi('user-greeting') }}"
+            correct: false
+          - value: "{{ render('esi:App\\\\Controller\\\\FragmentController::userGreeting') }}"
+            correct: false
+        explanation: >-
+          render_esi() wraps a controller() reference and delegates to the
+          fragment handler, which emits <esi:include> when a surrogate is present
+          (else inline). There is no esi(), include_esi(), or 'esi:' render
+          prefix in Twig — the pair is render()/render_esi()/render_ssi().
+        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+      - id: "CACHE-ESI-08"
+        question: "What is the near-identical alternative to ESI for servers like nginx or Varnish that speak Server Side Includes?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "http-caching/esi"
+        concepts: ["ssi", "render_ssi", "surrogate"]
+        syllabus: "HTTP Caching → Edge Side Includes"
+        answers:
+          - value: "SSI, via render_ssi(), the Ssi surrogate and framework.ssi"
+            correct: true
+          - value: "AJAX with hinclude, via render_hinclude()"
+            correct: false
+          - value: "Server push, via framework.http2"
+            correct: false
+          - value: "PSR-6 tag-based invalidation"
+            correct: false
+        explanation: >-
+          SSI is the sibling of ESI: same mixed-freshness idea, exposed through
+          render_ssi(), the Ssi surrogate class and framework.ssi. hinclude is a
+          pure client-side AJAX approach (no caching goal), and the others are
+          unrelated.
+        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+      - id: "CACHE-ESI-09"
+        question: "You set framework.esi: true but run no reverse proxy. A page uses render_esi for a fragment. What happens?"
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "http-caching/esi"
+        concepts: ["inline-fallback", "surrogate", "no-benefit"]
+        syllabus: "HTTP Caching → Edge Side Includes"
+        answers:
+          - value: "The fragment renders inline on every request — no separate caching, no benefit, but the page still works"
+            correct: true
+          - value: "An exception is thrown because no surrogate is configured"
+            correct: false
+          - value: "The <esi:include> tag is sent raw to the browser"
+            correct: false
+          - value: "The whole page becomes uncacheable"
+            correct: false
+        explanation: >-
+          With no surrogate advertising ESI capability, render_esi silently falls
+          back to inline rendering, so the fragment is embedded and re-rendered
+          each request — correct output, but none of the per-fragment caching
+          benefit. No exception is thrown and no raw <esi:include> reaches the
+          browser (that only happens if a broken proxy fails to process it).
         documentation: "https://symfony.com/doc/current/http_cache/esi.html"

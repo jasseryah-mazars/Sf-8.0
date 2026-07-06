@@ -1,7 +1,13 @@
 categories:
   - name: "Forms — Creating forms"
     questions:
-      - question: "Which two methods do you typically override in an AbstractType?"
+      - id: "FORM-CREATE-01"
+        question: "Which two methods do you typically override in an AbstractType?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/creation"
+        concepts: ["AbstractType", "buildForm", "configureOptions"]
+        syllabus: "Forms → Creating forms"
         answers:
           - value: "buildForm(FormBuilderInterface, array) and configureOptions(OptionsResolver)"
             correct: true
@@ -16,7 +22,13 @@ categories:
           type's options via OptionsResolver. getName() was removed; buildView()
           exists but is not the primary pair.
         documentation: "https://symfony.com/doc/current/forms.html"
-      - question: "A compound form with no data_class set returns what from getData()?"
+      - id: "FORM-CREATE-02"
+        question: "A compound form with no data_class set returns what from getData()?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/creation"
+        concepts: ["data_class", "data-mapper", "compound-form"]
+        syllabus: "Forms → Creating forms"
         answers:
           - value: "An associative array keyed by child field name"
             correct: true
@@ -30,7 +42,13 @@ categories:
           Without data_class the data mapper maps children into and out of an
           array. Set data_class to bind the form to an object instead.
         documentation: "https://symfony.com/doc/current/form/data_class.html"
-      - question: "Where should field-adding logic live in a form type?"
+      - id: "FORM-CREATE-03"
+        question: "Where should field-adding logic live in a form type?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/creation"
+        concepts: ["buildForm", "FormBuilderInterface", "configureOptions"]
+        syllabus: "Forms → Creating forms"
         answers:
           - value: "In buildForm(), using the FormBuilderInterface"
             correct: true
@@ -44,10 +62,111 @@ categories:
           buildForm() receives the builder and is where ->add() calls belong.
           configureOptions() only declares options via OptionsResolver.
         documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-CREATE-04"
+        question: >-
+          A developer writes `public function configureOptions(OptionsResolver
+          $resolver): void { return ['data_class' => Contact::class]; }`. Why does the
+          form type fail to compile / behave?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "forms/creation"
+        concepts: ["configureOptions", "OptionsResolver", "setDefaults"]
+        syllabus: "Forms → Creating forms"
+        answers:
+          - value: "configureOptions() returns void; you must call $resolver->setDefaults([...]), not return an array"
+            correct: true
+          - value: "data_class must be a string literal, never a ::class constant"
+            correct: false
+          - value: "You must call parent::configureOptions() first or it throws"
+            correct: false
+          - value: "Options can only be declared inside buildForm()"
+            correct: false
+        explanation: >-
+          configureOptions() has a void return type and configures the injected
+          OptionsResolver imperatively via setDefaults()/setRequired()/setAllowedTypes().
+          Returning an array does nothing. ::class constants are perfectly valid option
+          values, and there is no requirement to call the parent (AbstractType's is empty).
+        documentation: "https://symfony.com/doc/current/form/create_custom_field_type.html"
+      - id: "FORM-CREATE-05"
+        question: >-
+          When you call $this->createForm(RegistrationType::class, $data), which object
+          resolves the type's parent chain and extensions before the builder tree is built?
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "forms/creation"
+        concepts: ["FormFactory", "FormRegistry", "ResolvedFormType"]
+        syllabus: "Forms → Creating forms"
+        answers:
+          - value: "FormFactory::create() asks FormRegistry for a ResolvedFormType, which builds the FormBuilder and walks buildForm() parent→child"
+            correct: true
+          - value: "The controller instantiates the FormInterface tree directly"
+            correct: false
+          - value: "OptionsResolver builds the form tree from the declared defaults"
+            correct: false
+          - value: "The DataMapper creates the child forms from data_class metadata"
+            correct: false
+        explanation: >-
+          createForm() delegates to FormFactory::create(), which via FormRegistry obtains a
+          ResolvedFormType wrapping the type, its resolved parent chain and applicable type
+          extensions. The resolved type creates a FormBuilder and runs each buildForm()
+          from parent to child; getForm() then produces the immutable FormInterface tree.
+          OptionsResolver only resolves options; the DataMapper maps data at submit/view time.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php"
+      - id: "FORM-CREATE-06"
+        question: >-
+          Inside buildForm(FormBuilderInterface $builder, array $options), can you read
+          the user's submitted values (e.g. $builder->getData() as posted input)?
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/creation"
+        concepts: ["FormBuilderInterface", "build-time", "submitted-data"]
+        syllabus: "Forms → Creating forms"
+        answers:
+          - value: "No — buildForm() runs at build time on a FormBuilderInterface; the form is not submitted yet, so there is no request data to read"
+            correct: true
+          - value: "Yes — $builder->getData() returns the POSTed values"
+            correct: false
+          - value: "Yes — via $builder->getRequest()"
+            correct: false
+          - value: "Only for PATCH submissions"
+            correct: false
+        explanation: >-
+          buildForm() receives a FormBuilderInterface, not a submitted FormInterface. The
+          form does not exist yet and handleRequest()/submit() have not run, so submitted
+          input is unavailable. To react to submitted values, add a PRE_SUBMIT listener,
+          which fires later with the raw view data. There is no $builder->getRequest().
+        documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-CREATE-07"
+        question: "What determines the Twig block name used to theme a custom form type?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/creation"
+        concepts: ["getBlockPrefix", "theming", "FQCN"]
+        syllabus: "Forms → Creating forms"
+        answers:
+          - value: "getBlockPrefix() (defaults to the snake_cased class name without the Type suffix)"
+            correct: true
+          - value: "getName(), which returns the block name"
+            correct: false
+          - value: "The fully-qualified class name, lowercased"
+            correct: false
+          - value: "The value passed as the field's second ->add() argument"
+            correct: false
+        explanation: >-
+          getBlockPrefix() drives Twig block naming; it defaults to the snake-cased short
+          class name minus the Type suffix. getName() was removed long ago — the FQCN is
+          now the type identifier, but the FQCN is not used verbatim for block names.
+        documentation: "https://symfony.com/doc/current/form/create_custom_field_type.html"
 
   - name: "Forms — Handling submissions"
     questions:
-      - question: "What is the canonical order of the controller form-handling calls?"
+      - id: "FORM-HANDLE-01"
+        question: "What is the canonical order of the controller form-handling calls?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/handling"
+        concepts: ["handleRequest", "isSubmitted", "isValid"]
+        syllabus: "Forms → Handling submissions"
         answers:
           - value: "handleRequest(), then isSubmitted() && isValid(), then getData()"
             correct: true
@@ -61,7 +180,13 @@ categories:
           handleRequest() inspects the request and submits the form; only then are
           isSubmitted()/isValid() meaningful, after which getData() holds the model.
         documentation: "https://symfony.com/doc/current/forms.html"
-      - question: "For a PATCH submission, handleRequest passes which clearMissing value?"
+      - id: "FORM-HANDLE-02"
+        question: "For a PATCH submission, handleRequest passes which clearMissing value?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/handling"
+        concepts: ["clearMissing", "PATCH", "partial-update"]
+        syllabus: "Forms → Handling submissions"
         answers:
           - value: "false, enabling partial updates (absent fields keep their value)"
             correct: true
@@ -75,7 +200,13 @@ categories:
           handleRequest passes clearMissing: false for PATCH so fields missing from
           the payload retain their current value, enabling partial updates.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php"
-      - question: "Which service does FormInterface::handleRequest() delegate to under FrameworkBundle?"
+      - id: "FORM-HANDLE-03"
+        question: "Which service does FormInterface::handleRequest() delegate to under FrameworkBundle?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/handling"
+        concepts: ["RequestHandlerInterface", "HttpFoundationRequestHandler", "delegation"]
+        syllabus: "Forms → Handling submissions"
         answers:
           - value: "HttpFoundationRequestHandler"
             correct: true
@@ -90,7 +221,13 @@ categories:
           HttpFoundationRequestHandler; NativeRequestHandler is the fallback when
           working with PHP superglobals directly.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php"
-      - question: "Why redirect after a successful POST (POST-redirect-GET)?"
+      - id: "FORM-HANDLE-04"
+        question: "Why redirect after a successful POST (POST-redirect-GET)?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/handling"
+        concepts: ["post-redirect-get", "idempotency", "double-submit"]
+        syllabus: "Forms → Handling submissions"
         answers:
           - value: "So a browser refresh re-fetches a GET instead of re-submitting the form"
             correct: true
@@ -104,10 +241,84 @@ categories:
           Without the redirect, refreshing re-POSTs the data and duplicates side
           effects. Redirecting lands the browser on a safe GET.
         documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-HANDLE-05"
+        question: "What happens if you call $form->isValid() on a form that was never submitted?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/handling"
+        concepts: ["isValid", "isSubmitted", "LogicException"]
+        syllabus: "Forms → Handling submissions"
+        answers:
+          - value: "It throws a LogicException ('Cannot check if an unsubmitted form is valid')"
+            correct: true
+          - value: "It returns false silently"
+            correct: false
+          - value: "It returns true because there are no errors yet"
+            correct: false
+          - value: "It implicitly submits the form first"
+            correct: false
+        explanation: >-
+          isValid() is only meaningful after submission, so calling it on an unsubmitted
+          form throws a LogicException. Always guard with isSubmitted() first
+          (isSubmitted() && isValid()). It does not auto-submit or silently return a value.
+        documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-HANDLE-06"
+        question: >-
+          A form posts to a controller and the browser gets a 405 Method Not Allowed on
+          submit, though the page renders fine on GET. What is the most likely cause?
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "forms/handling"
+        concepts: ["route-methods", "405", "handleRequest"]
+        syllabus: "Forms → Handling submissions"
+        answers:
+          - value: "The route restricts methods to GET (missing POST in methods: ['GET','POST'])"
+            correct: true
+          - value: "handleRequest() was not called"
+            correct: false
+          - value: "The CSRF token is missing"
+            correct: false
+          - value: "data_class is not set on the form"
+            correct: false
+        explanation: >-
+          A 405 comes from the router rejecting the HTTP method before the controller runs,
+          so the route must allow POST as well as GET. A missing handleRequest() or CSRF
+          token would let the request through and manifest as a form not submitting or an
+          invalid-token error, not a 405; data_class is unrelated.
+        documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-HANDLE-07"
+        question: >-
+          Which accessor returns each of a field's three data representations after submit?
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "forms/handling"
+        concepts: ["model-data", "norm-data", "view-data"]
+        syllabus: "Forms → Handling submissions"
+        answers:
+          - value: "getData() = model, getNormData() = normalized, getViewData() = view"
+            correct: true
+          - value: "getData() = view, getViewData() = model, getNormData() = raw"
+            correct: false
+          - value: "getModelData(), getNormalizedData(), getRenderedData()"
+            correct: false
+          - value: "All three return the same array"
+            correct: false
+        explanation: >-
+          A field holds data in three shapes: model (your PHP value), normalized
+          (transport-neutral canonical), and view (strings for HTML). They are read with
+          getData()/getNormData()/getViewData() respectively; transformers convert between
+          adjacent shapes. There are no getModelData()/getRenderedData() methods.
+        documentation: "https://symfony.com/doc/current/form/data_transformers.html"
 
   - name: "Forms — Types & hierarchy"
     questions:
-      - question: "What does a form type's getParent() return?"
+      - id: "FORM-TYPES-01"
+        question: "What does a form type's getParent() return?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/types"
+        concepts: ["getParent", "type-hierarchy", "FQCN"]
+        syllabus: "Forms → Form types"
         answers:
           - value: "The parent type's fully-qualified class name (a string)"
             correct: true
@@ -121,7 +332,13 @@ categories:
           getParent() returns a class string (default FormType::class). The registry
           resolves it into the parent chain of a ResolvedFormType.
         documentation: "https://symfony.com/doc/current/form/create_custom_field_type.html"
-      - question: "Which object bundles a type with its parent chain and applicable extensions?"
+      - id: "FORM-TYPES-02"
+        question: "Which object bundles a type with its parent chain and applicable extensions?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/types"
+        concepts: ["ResolvedFormType", "FormRegistry", "type-extensions"]
+        syllabus: "Forms → Form types"
         answers:
           - value: "ResolvedFormType"
             correct: true
@@ -135,7 +352,13 @@ categories:
           FormRegistry produces a ResolvedFormType wrapping the type, its resolved
           parent, and every type extension that applies.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php"
-      - question: "In what order do configureOptions() run along the type hierarchy?"
+      - id: "FORM-TYPES-03"
+        question: "In what order do configureOptions() run along the type hierarchy?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/types"
+        concepts: ["configureOptions", "hierarchy", "override"]
+        syllabus: "Forms → Form types"
         answers:
           - value: "Parent first, then child (child can override parent defaults)"
             correct: true
@@ -149,10 +372,85 @@ categories:
           The resolved type walks the chain top-down, so parent defaults are set
           before the child's, letting the child override them.
         documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-TYPES-04"
+        question: >-
+          A custom type does `public function getParent(): string { return new
+          TextType(); }`. What is wrong?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "forms/types"
+        concepts: ["getParent", "FQCN", "return-type"]
+        syllabus: "Forms → Form types"
+        answers:
+          - value: "getParent() must return a class-string (TextType::class), not an instance"
+            correct: true
+          - value: "Nothing — Symfony instantiates the returned object as the parent"
+            correct: false
+          - value: "It should return an array of parent FQCNs"
+            correct: false
+          - value: "getParent() must be static"
+            correct: false
+        explanation: >-
+          getParent() is declared to return string; returning an object violates the
+          return type and the registry expects an FQCN to resolve. Use TextType::class.
+          It is not static and returns a single string, not an array.
+        documentation: "https://symfony.com/doc/current/form/create_custom_field_type.html"
+      - id: "FORM-TYPES-05"
+        question: >-
+          In configureOptions(), which OptionsResolver call derives one option's value from
+          the values of others?
+        type: "config"
+        difficulty: "hard"
+        subchapter: "forms/types"
+        concepts: ["OptionsResolver", "setNormalizer", "setAllowedTypes"]
+        syllabus: "Forms → Form types"
+        answers:
+          - value: "setNormalizer('opt', fn (Options $o, $value) => ...)"
+            correct: true
+          - value: "setAllowedTypes('opt', 'string')"
+            correct: false
+          - value: "setRequired('opt')"
+            correct: false
+          - value: "setDefault('opt', fn () => ...) only"
+            correct: false
+        explanation: >-
+          setNormalizer() receives the resolved Options plus the raw value, letting one
+          option depend on others (e.g. force expanded when multiple is false).
+          setAllowedTypes validates a type, setRequired marks an option mandatory, and a
+          default closure cannot read sibling options the way a normalizer can.
+        documentation: "https://symfony.com/doc/current/components/options_resolver.html"
+      - id: "FORM-TYPES-06"
+        question: "How are custom form types made available by their FQCN and able to receive injected services?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/types"
+        concepts: ["form.type", "autoconfiguration", "dependency-injection"]
+        syllabus: "Forms → Form types"
+        answers:
+          - value: "FrameworkBundle autoconfigures FormTypeInterface implementers with the form.type tag"
+            correct: true
+          - value: "You must register each type manually in config/services.yaml with form.type"
+            correct: false
+          - value: "Types are discovered by a #[AsFormType] attribute"
+            correct: false
+          - value: "The FormFactory scans the Form/ directory at runtime"
+            correct: false
+        explanation: >-
+          Service autoconfiguration tags any class implementing FormTypeInterface with
+          form.type, so it is usable by FQCN and can autowire constructor dependencies.
+          There is no #[AsFormType] attribute and no runtime directory scan; manual tagging
+          is only needed when autoconfiguration is disabled.
+        documentation: "https://symfony.com/doc/current/form/create_custom_field_type.html"
 
   - name: "Forms — Rendering"
     questions:
-      - question: "What does form_row(form.email) render?"
+      - id: "FORM-RENDER-01"
+        question: "What does form_row(form.email) render?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/rendering"
+        concepts: ["form_row", "label", "widget"]
+        syllabus: "Forms → Rendering"
         answers:
           - value: "Label, widget, errors and help for that field"
             correct: true
@@ -166,7 +464,13 @@ categories:
           form_row composes the label, widget, errors and help via the *_row theme
           block. form_widget renders only the control.
         documentation: "https://symfony.com/doc/current/form/form_customization.html"
-      - question: "How is the hidden CSRF token normally emitted into the HTML?"
+      - id: "FORM-RENDER-02"
+        question: "How is the hidden CSRF token normally emitted into the HTML?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/rendering"
+        concepts: ["form_rest", "form_end", "csrf-token"]
+        syllabus: "Forms → Rendering"
         answers:
           - value: "By form_rest, which form_end calls by default"
             correct: true
@@ -180,7 +484,13 @@ categories:
           The CSRF token is a hidden child rendered by form_rest; form_end triggers
           form_rest unless you pass render_rest: false.
         documentation: "https://symfony.com/doc/current/security/csrf.html"
-      - question: "Which call renders form-level (non-field) errors?"
+      - id: "FORM-RENDER-03"
+        question: "Which call renders form-level (non-field) errors?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/rendering"
+        concepts: ["form_errors", "form-level-errors", "root-view"]
+        syllabus: "Forms → Rendering"
         answers:
           - value: "form_errors(form)"
             correct: true
@@ -194,10 +504,84 @@ categories:
           Passing the root form view to form_errors renders errors attached to the
           form itself; per-field errors use form_errors(form.field).
         documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-RENDER-04"
+        question: >-
+          A template renders each field manually and ends with `{{ form_end(form,
+          {'render_rest': false}) }}`. Submissions now fail with an invalid CSRF token. Why?
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "forms/rendering"
+        concepts: ["render_rest", "form_rest", "csrf"]
+        syllabus: "Forms → Rendering"
+        answers:
+          - value: "render_rest: false suppresses form_rest, so the hidden _token is never emitted; render form_rest(form) yourself"
+            correct: true
+          - value: "form_end always drops the token; you must add it in form_start"
+            correct: false
+          - value: "CSRF only works with form(form), never with manual layouts"
+            correct: false
+          - value: "The token expired because manual rendering is slower"
+            correct: false
+        explanation: >-
+          form_end normally calls form_rest, which renders un-rendered fields including the
+          hidden CSRF token. Passing render_rest: false skips that, so the _token is absent
+          and PRE_SUBMIT validation fails. Render form_rest(form) (or the token) manually.
+          Manual layouts are fully CSRF-capable; the token has nothing to do with speed.
+        documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-RENDER-05"
+        question: >-
+          How do partial rendering (form_row on some fields) and form_rest avoid rendering
+          the same field twice?
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "forms/rendering"
+        concepts: ["FormView", "isRendered", "form_rest"]
+        syllabus: "Forms → Rendering"
+        answers:
+          - value: "Each FormView carries an isRendered() flag; form_row/form_widget set it, and form_rest skips already-rendered views"
+            correct: true
+          - value: "form_rest re-renders everything and Twig de-duplicates the HTML"
+            correct: false
+          - value: "The renderer diffs the output string to remove duplicates"
+            correct: false
+          - value: "Fields can only be rendered once per request globally"
+            correct: false
+        explanation: >-
+          Rendering operates on the FormView tree. Each view has an isRendered() flag set
+          when form_row/form_widget renders it, so form_rest emits only the leftover
+          (un-rendered) fields — including hidden and CSRF fields. There is no string diffing.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php"
+      - id: "FORM-RENDER-06"
+        question: "Which Twig call is wrong for rendering a single field's widget?"
+        type: "trap"
+        difficulty: "easy"
+        subchapter: "forms/rendering"
+        concepts: ["form", "form_widget", "form_row"]
+        syllabus: "Forms → Rendering"
+        answers:
+          - value: "form(form.email) — form() is for the whole form; use form_widget/form_row for a field"
+            correct: true
+          - value: "form_widget(form.email)"
+            correct: false
+          - value: "form_row(form.email)"
+            correct: false
+          - value: "form_label(form.email)"
+            correct: false
+        explanation: >-
+          form() renders an entire form (start, rows, end). For an individual field use
+          form_row (label+widget+errors+help) or the granular form_widget/form_label/
+          form_errors/form_help. Calling form() on a child view is a common mistake.
+        documentation: "https://symfony.com/doc/current/form/form_customization.html"
 
   - name: "Forms — Theming"
     questions:
-      - question: "In which order does the renderer try candidate theme blocks?"
+      - id: "FORM-THEME-01"
+        question: "In which order does the renderer try candidate theme blocks?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/theming"
+        concepts: ["block-prefix", "resolution-order", "FormRenderer"]
+        syllabus: "Forms → Theming"
         answers:
           - value: "Most specific (unique field id) down to least specific (form_widget)"
             correct: true
@@ -211,7 +595,13 @@ categories:
           The block-prefix hierarchy is walked from the unique per-field name down
           to the root form_* block; the first existing block wins.
         documentation: "https://symfony.com/doc/current/form/form_themes.html"
-      - question: "What does the built-in bootstrap_5_layout.html.twig provide?"
+      - id: "FORM-THEME-02"
+        question: "What does the built-in bootstrap_5_layout.html.twig provide?"
+        type: "trap"
+        difficulty: "easy"
+        subchapter: "forms/theming"
+        concepts: ["built-in-theme", "markup-only", "bootstrap"]
+        syllabus: "Forms → Theming"
         answers:
           - value: "Twig blocks producing Bootstrap-compatible markup (a theme only)"
             correct: true
@@ -225,7 +615,13 @@ categories:
           Built-in layouts are theme templates (markup only). You still load the CSS
           framework yourself; the Form component ships no assets.
         documentation: "https://symfony.com/doc/current/form/bootstrap5.html"
-      - question: "When two global form themes define the same block, which wins?"
+      - id: "FORM-THEME-03"
+        question: "When two global form themes define the same block, which wins?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/theming"
+        concepts: ["form_themes", "override-order", "last-wins"]
+        syllabus: "Forms → Theming"
         answers:
           - value: "The theme listed last in twig.form_themes"
             correct: true
@@ -239,10 +635,84 @@ categories:
           Themes in twig.form_themes are applied in order; later entries override
           earlier ones on a block clash.
         documentation: "https://symfony.com/doc/current/form/form_themes.html"
+      - id: "FORM-THEME-04"
+        question: >-
+          Which twig.yaml block applies a Bootstrap theme app-wide, then lets your own
+          file override its blocks?
+        type: "config"
+        difficulty: "medium"
+        subchapter: "forms/theming"
+        concepts: ["form_themes", "yaml", "order"]
+        syllabus: "Forms → Theming"
+        answers:
+          - value: "twig: { form_themes: ['bootstrap_5_layout.html.twig', 'form/fields.html.twig'] }"
+            correct: true
+          - value: "twig: { form_themes: ['form/fields.html.twig', 'bootstrap_5_layout.html.twig'] }"
+            correct: false
+          - value: "twig: { theme: 'bootstrap_5_layout.html.twig' }"
+            correct: false
+          - value: "framework: { form_theme: 'bootstrap_5_layout.html.twig' }"
+            correct: false
+        explanation: >-
+          form_themes are applied in order and the last wins on conflicts, so your file must
+          come after the Bootstrap layout to override its blocks. The key is twig.form_themes
+          (a list), not twig.theme or a framework.* key.
+        documentation: "https://symfony.com/doc/current/form/form_themes.html"
+      - id: "FORM-THEME-05"
+        question: "What is required to theme a form with {% form_theme form _self %}?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/theming"
+        concepts: ["_self", "form_theme", "extends"]
+        syllabus: "Forms → Theming"
+        answers:
+          - value: "The template must NOT {% extends %} another template"
+            correct: true
+          - value: "You must also list the template in twig.form_themes"
+            correct: false
+          - value: "The blocks must be defined in a macro"
+            correct: false
+          - value: "_self only works for the CSRF field"
+            correct: false
+        explanation: >-
+          _self references the current template's own blocks, which requires that the
+          template does not extend another (extending re-scopes blocks). It works for any
+          field's blocks, not just CSRF, and does not need a form_themes entry or macros.
+        documentation: "https://symfony.com/doc/current/form/form_themes.html"
+      - id: "FORM-THEME-06"
+        question: >-
+          A field with block prefix 'rating' (parent 'integer') ignores your
+          integer_widget override, but rating_widget works. Why?
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "forms/theming"
+        concepts: ["block-prefix", "resolution", "override"]
+        syllabus: "Forms → Theming"
+        answers:
+          - value: "The renderer tries rating_widget before integer_widget; the more specific block exists and wins, so integer_widget is never reached"
+            correct: true
+          - value: "integer_widget is a reserved block that cannot be overridden"
+            correct: false
+          - value: "Parent-prefix blocks are ignored unless you set inherit_data"
+            correct: false
+          - value: "You must clear the Twig cache for parent blocks to apply"
+            correct: false
+        explanation: >-
+          Block-name resolution goes most-specific to least-specific along the block-prefix
+          chain (rating → integer → form). Since rating_widget exists, it wins and the more
+          generic integer_widget is never consulted. Override rating_widget (or remove it to
+          fall through). inherit_data and caching are unrelated.
+        documentation: "https://symfony.com/doc/current/form/form_themes.html"
 
   - name: "Forms — CSRF protection"
     questions:
-      - question: "At which form event is the CSRF token validated?"
+      - id: "FORM-CSRF-01"
+        question: "At which form event is the CSRF token validated?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/csrf"
+        concepts: ["PRE_SUBMIT", "CsrfValidationListener", "token"]
+        syllabus: "Forms → CSRF protection"
         answers:
           - value: "PRE_SUBMIT"
             correct: true
@@ -256,7 +726,13 @@ categories:
           CsrfValidationListener runs on PRE_SUBMIT: it pops the _token field from
           the raw submitted data and validates it, adding a form error on failure.
         documentation: "https://symfony.com/doc/current/security/csrf.html"
-      - question: "What does the csrf_token_id option control?"
+      - id: "FORM-CSRF-02"
+        question: "What does the csrf_token_id option control?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/csrf"
+        concepts: ["csrf_token_id", "intention", "namespace"]
+        syllabus: "Forms → CSRF protection"
         answers:
           - value: "The token intention/namespace used to generate and validate it"
             correct: true
@@ -270,7 +746,13 @@ categories:
           csrf_token_id is the intention string. csrf_field_name sets the HTML field
           name (default _token); csrf_protection toggles the feature.
         documentation: "https://symfony.com/doc/current/reference/forms/types/form.html"
-      - question: "Stateless CSRF (Symfony 7.2+/8) primarily removes the need for what?"
+      - id: "FORM-CSRF-03"
+        question: "Stateless CSRF (Symfony 7.2+/8) primarily removes the need for what?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/csrf"
+        concepts: ["stateless-csrf", "SameOriginCsrfTokenManager", "session"]
+        syllabus: "Forms → CSRF protection"
         answers:
           - value: "A server-side session to store the token"
             correct: true
@@ -285,10 +767,82 @@ categories:
           SameOriginCsrfTokenManager validates via a double-submit cookie plus
           origin checks, so no token is stored in the session.
         documentation: "https://symfony.com/doc/current/security/csrf.html"
+      - id: "FORM-CSRF-04"
+        question: "Which configuration enables stateless CSRF for the login and logout token ids?"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "forms/csrf"
+        concepts: ["stateless_token_ids", "csrf_protection", "yaml"]
+        syllabus: "Forms → CSRF protection"
+        answers:
+          - value: "framework: { csrf_protection: { stateless_token_ids: ['authenticate', 'logout'] } }"
+            correct: true
+          - value: "framework: { csrf_protection: { stateless: true } }"
+            correct: false
+          - value: "framework: { csrf_protection: { session: false } }"
+            correct: false
+          - value: "security: { stateless_csrf: true }"
+            correct: false
+        explanation: >-
+          Stateless CSRF is enabled per token id by listing them under
+          framework.csrf_protection.stateless_token_ids; forms whose csrf_token_id is in
+          that list use SameOriginCsrfTokenManager. There is no boolean stateless/session
+          flag, and the key lives under framework, not security.
+        documentation: "https://symfony.com/doc/current/security/csrf.html"
+      - id: "FORM-CSRF-05"
+        question: "When a submission arrives with a missing or invalid _token, what does CsrfValidationListener do?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "forms/csrf"
+        concepts: ["CsrfValidationListener", "form-error", "PRE_SUBMIT"]
+        syllabus: "Forms → CSRF protection"
+        answers:
+          - value: "It adds a form error (so isValid() returns false) — it does not throw an exception"
+            correct: true
+          - value: "It throws an AccessDeniedException immediately"
+            correct: false
+          - value: "It returns a 403 response before the controller runs"
+            correct: false
+          - value: "It silently regenerates a fresh token and continues"
+            correct: false
+        explanation: >-
+          On PRE_SUBMIT the listener pops _token from the raw data and validates it; a
+          missing/invalid token results in a form error, so isValid() is false and you
+          re-render with csrf_message. It does not throw or short-circuit with a 403 — that
+          is the pattern for the manual isCsrfTokenValid() helper in a controller.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Csrf/Type/FormTypeCsrfExtension.php"
+      - id: "FORM-CSRF-06"
+        question: "If csrf_token_id is not set explicitly on a form, what is its default value?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/csrf"
+        concepts: ["csrf_token_id", "block-prefix", "default"]
+        syllabus: "Forms → CSRF protection"
+        answers:
+          - value: "The form's block prefix"
+            correct: true
+          - value: "The literal string '_token'"
+            correct: false
+          - value: "The application secret"
+            correct: false
+          - value: "A random value regenerated every request"
+            correct: false
+        explanation: >-
+          The default csrf_token_id is the form's block prefix; setting it explicitly makes
+          the intention stable regardless of the class name. '_token' is the default
+          csrf_field_name (the HTML name), not the id, and the token is not the app secret
+          nor regenerated per request within a namespace.
+        documentation: "https://symfony.com/doc/current/reference/forms/types/form.html"
 
   - name: "Forms — File uploads"
     questions:
-      - question: "How do you read the value of an unmapped FileType field?"
+      - id: "FORM-FILE-01"
+        question: "How do you read the value of an unmapped FileType field?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/file-upload"
+        concepts: ["mapped-false", "getData", "FileType"]
+        syllabus: "Forms → File uploads"
         answers:
           - value: "$form->get('field')->getData()"
             correct: true
@@ -302,7 +856,13 @@ categories:
           mapped => false excludes the field from the data mapper, so it is not
           written to the model; you fetch it directly from the child form.
         documentation: "https://symfony.com/doc/current/controller/upload_file.html"
-      - question: "Which UploadedFile value is safe to trust for validating file type?"
+      - id: "FORM-FILE-02"
+        question: "Which UploadedFile value is safe to trust for validating file type?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/file-upload"
+        concepts: ["UploadedFile", "getMimeType", "untrusted-input"]
+        syllabus: "Forms → File uploads"
         answers:
           - value: "getMimeType()/guessExtension() (content-based)"
             correct: true
@@ -316,7 +876,13 @@ categories:
           Client-supplied name and MIME are spoofable. Content-based guessing (used
           by the File/Image constraints) is authoritative.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php"
-      - question: "When does form_start emit enctype=\"multipart/form-data\"?"
+      - id: "FORM-FILE-03"
+        question: "When does form_start emit enctype=\"multipart/form-data\"?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/file-upload"
+        concepts: ["form_start", "multipart", "enctype"]
+        syllabus: "Forms → File uploads"
         answers:
           - value: "When the form contains a file field"
             correct: true
@@ -330,10 +896,84 @@ categories:
           The form's multipart view variable is set when a child (e.g. FileType)
           requires it, and form_start renders the enctype accordingly.
         documentation: "https://symfony.com/doc/current/reference/forms/types/file.html"
+      - id: "FORM-FILE-04"
+        question: >-
+          On an optional upload field, the controller calls $file->move(...) and
+          occasionally crashes with a fatal error. What is the fix?
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "forms/file-upload"
+        concepts: ["UploadedFile", "null-check", "instanceof"]
+        syllabus: "Forms → File uploads"
+        answers:
+          - value: "Guard with `if ($file instanceof UploadedFile)` — getData() is null when no file was uploaded"
+            correct: true
+          - value: "Set required => true so getData() is never null"
+            correct: false
+          - value: "Call handleRequest() a second time to populate the file"
+            correct: false
+          - value: "Use $request->files->get() instead of the form"
+            correct: false
+        explanation: >-
+          An optional FileType returns null from getData() when nothing is uploaded, so
+          calling move() on null is fatal. Check `$file instanceof UploadedFile` first.
+          Forcing required doesn't fit an optional field, re-running handleRequest is wrong,
+          and bypassing the form loses validation.
+        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
+      - id: "FORM-FILE-05"
+        question: "Is a FileType field with mapped => false still validated by its constraints?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/file-upload"
+        concepts: ["mapped-false", "validation", "constraints"]
+        syllabus: "Forms → File uploads"
+        answers:
+          - value: "Yes — mapped => false only stops data-mapping; the field is still rendered, submitted and validated"
+            correct: true
+          - value: "No — unmapped fields skip validation entirely"
+            correct: false
+          - value: "Only if you also set required => true"
+            correct: false
+          - value: "Only when constraints are on the model class, not the field"
+            correct: false
+        explanation: >-
+          mapped => false only disconnects the field from the data mapper (it is not
+          written to the model). The field is still part of the form: rendered, submitted,
+          and validated via its constraints option — which is exactly why the pattern is
+          safe for uploads and plain passwords.
+        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
+      - id: "FORM-FILE-06"
+        question: "What is the recommended way to name an uploaded file before move()?"
+        type: "scenario"
+        difficulty: "medium"
+        subchapter: "forms/file-upload"
+        concepts: ["slugger", "safe-filename", "guessExtension"]
+        syllabus: "Forms → File uploads"
+        answers:
+          - value: "Slug the original basename, append uniqid(), and use guessExtension()"
+            correct: true
+          - value: "Use getClientOriginalName() directly as the target path"
+            correct: false
+          - value: "Use the raw $_FILES tmp_name"
+            correct: false
+          - value: "Store the UploadedFile object on the entity and let Doctrine name it"
+            correct: false
+        explanation: >-
+          Generate a safe name: slug the original filename, add uniqid() for uniqueness, and
+          derive the extension from guessExtension() (content-based). Using the client name
+          risks path traversal, the tmp_name is transient, and persisting the UploadedFile
+          object (Doctrine is out of scope) is wrong.
+        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
 
   - name: "Forms — Built-in types"
     questions:
-      - question: "Which ChoiceType options render checkboxes?"
+      - id: "FORM-BUILTIN-01"
+        question: "Which ChoiceType options render checkboxes?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/built-in-types"
+        concepts: ["ChoiceType", "expanded", "multiple"]
+        syllabus: "Forms → Built-in types"
         answers:
           - value: "expanded => true, multiple => true"
             correct: true
@@ -347,7 +987,13 @@ categories:
           expanded + multiple renders checkboxes; expanded + single renders radios;
           collapsed renders a select element.
         documentation: "https://symfony.com/doc/current/reference/forms/types/choice.html"
-      - question: "What does MoneyType's divisor option do?"
+      - id: "FORM-BUILTIN-02"
+        question: "What does MoneyType's divisor option do?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/built-in-types"
+        concepts: ["MoneyType", "divisor", "transformer"]
+        syllabus: "Forms → Built-in types"
         answers:
           - value: "Scales the model value (e.g. 100 lets you store integer cents)"
             correct: true
@@ -361,7 +1007,13 @@ categories:
           The displayed amount is divided by divisor to form the model value, so
           100 lets you store amounts in cents.
         documentation: "https://symfony.com/doc/current/reference/forms/types/money.html"
-      - question: "For a mapped CollectionType to call the parent's adder/remover methods, set…"
+      - id: "FORM-BUILTIN-03"
+        question: "For a mapped CollectionType to call the parent's adder/remover methods, set…"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "forms/built-in-types"
+        concepts: ["CollectionType", "by_reference", "adder-remover"]
+        syllabus: "Forms → Built-in types"
         answers:
           - value: "by_reference => false"
             correct: true
@@ -375,7 +1027,13 @@ categories:
           by_reference => false forces the form to call add/remove methods instead of
           mutating the returned collection in place, keeping associations in sync.
         documentation: "https://symfony.com/doc/current/reference/forms/types/collection.html"
-      - question: "Which type is out of scope here because it belongs to the Doctrine bridge?"
+      - id: "FORM-BUILTIN-04"
+        question: "Which type is out of scope here because it belongs to the Doctrine bridge?"
+        type: "trap"
+        difficulty: "easy"
+        subchapter: "forms/built-in-types"
+        concepts: ["EntityType", "doctrine-bridge", "out-of-scope"]
+        syllabus: "Forms → Built-in types"
         answers:
           - value: "EntityType"
             correct: true
@@ -389,10 +1047,83 @@ categories:
           EntityType lives in the Doctrine bridge and is out of scope. Use ChoiceType
           with explicit choices for the non-Doctrine equivalent.
         documentation: "https://symfony.com/doc/current/reference/forms/types/choice.html"
+      - id: "FORM-BUILTIN-05"
+        question: >-
+          For a DateType that renders one HTML5 date input and produces a
+          \DateTimeImmutable model, which options do you set?
+        type: "config"
+        difficulty: "medium"
+        subchapter: "forms/built-in-types"
+        concepts: ["DateType", "widget", "input"]
+        syllabus: "Forms → Built-in types"
+        answers:
+          - value: "widget => 'single_text', input => 'datetime_immutable'"
+            correct: true
+          - value: "widget => 'choice', input => 'string'"
+            correct: false
+          - value: "widget => 'text', input => 'timestamp'"
+            correct: false
+          - value: "widget => 'single_text', input => 'array'"
+            correct: false
+        explanation: >-
+          widget controls rendering: single_text is one type=\"date\" input (best with
+          HTML5); choice renders dropdowns and text renders three text fields. input picks
+          the model type — datetime_immutable is the recommended value, whereas string,
+          timestamp and array yield other model shapes.
+        documentation: "https://symfony.com/doc/current/reference/forms/types/date.html"
+      - id: "FORM-BUILTIN-06"
+        question: "What is RepeatedType used for?"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "forms/built-in-types"
+        concepts: ["RepeatedType", "confirmation", "first_options"]
+        syllabus: "Forms → Built-in types"
+        answers:
+          - value: "Rendering one inner type twice (e.g. password + confirmation) that only passes if both entries match"
+            correct: true
+          - value: "Rendering a dynamic list of sub-forms you can add/remove"
+            correct: false
+          - value: "Repeating a form submission N times server-side"
+            correct: false
+          - value: "Rendering the same field for every locale"
+            correct: false
+        explanation: >-
+          RepeatedType renders its inner type (via the type option) twice — configured with
+          first_options/second_options — and validates only if both values match, ideal for
+          password confirmation. The dynamic add/remove list is CollectionType, not
+          RepeatedType.
+        documentation: "https://symfony.com/doc/current/reference/forms/types/repeated.html"
+      - id: "FORM-BUILTIN-07"
+        question: "Which statements about PasswordType and button types are correct? (choose 2)"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "forms/built-in-types"
+        concepts: ["PasswordType", "always_empty", "SubmitType"]
+        syllabus: "Forms → Built-in types"
+        answers:
+          - value: "PasswordType is not re-rendered with its value by default (always_empty => true)"
+            correct: true
+          - value: "SubmitType/ButtonType/ResetType are not part of the mapped form data"
+            correct: true
+          - value: "PasswordType always re-renders the submitted value for convenience"
+            correct: false
+          - value: "SubmitType values are written to the data_class object"
+            correct: false
+        explanation: >-
+          PasswordType defaults to always_empty => true, so the field renders blank after
+          submit for safety. Buttons (Submit/Button/Reset) are unmapped — they carry no data
+          — though SubmitType lets you detect the clicked button via getClickedButton().
+        documentation: "https://symfony.com/doc/current/reference/forms/types/password.html"
 
   - name: "Forms — Data transformers"
     questions:
-      - question: "In which direction does reverseTransform() run?"
+      - id: "FORM-TRANSFORM-01"
+        question: "In which direction does reverseTransform() run?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/data-transformers"
+        concepts: ["reverseTransform", "view-to-model", "direction"]
+        syllabus: "Forms → Data transformers"
         answers:
           - value: "View to model (on submission)"
             correct: true
@@ -406,7 +1137,13 @@ categories:
           transform() converts toward the view (display); reverseTransform() converts
           toward the model (submission). Reversing these is the classic trap.
         documentation: "https://symfony.com/doc/current/form/data_transformers.html"
-      - question: "addModelTransformer() converts between which representations?"
+      - id: "FORM-TRANSFORM-02"
+        question: "addModelTransformer() converts between which representations?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/data-transformers"
+        concepts: ["addModelTransformer", "model-norm", "slots"]
+        syllabus: "Forms → Data transformers"
         answers:
           - value: "Model and normalized data"
             correct: true
@@ -420,7 +1157,13 @@ categories:
           Model transformers bridge model<->norm; view transformers bridge
           norm<->view. Pick a model transformer when the underlying type changes.
         documentation: "https://symfony.com/doc/current/form/data_transformers.html"
-      - question: "What should a transformer throw when input cannot be converted?"
+      - id: "FORM-TRANSFORM-03"
+        question: "What should a transformer throw when input cannot be converted?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/data-transformers"
+        concepts: ["TransformationFailedException", "invalid_message", "failure"]
+        syllabus: "Forms → Data transformers"
         answers:
           - value: "TransformationFailedException"
             correct: true
@@ -434,7 +1177,13 @@ categories:
           TransformationFailedException is caught by the form and turned into a
           field-level invalid state showing the field's invalid_message, not a 500.
         documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php"
-      - question: "On submit, which transformers run first?"
+      - id: "FORM-TRANSFORM-04"
+        question: "On submit, which transformers run first?"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "forms/data-transformers"
+        concepts: ["submit-order", "view-transformer", "model-transformer"]
+        syllabus: "Forms → Data transformers"
         answers:
           - value: "View transformers (view->norm), then model transformers (norm->model)"
             correct: true
@@ -448,10 +1197,87 @@ categories:
           On submission data flows view -> norm -> model, so view transformers'
           reverseTransform runs before model transformers' reverseTransform.
         documentation: "https://symfony.com/doc/current/form/data_transformers.html"
+      - id: "FORM-TRANSFORM-05"
+        question: >-
+          In a DataTransformer, what should transform(null) return when the model value is
+          unset?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "forms/data-transformers"
+        concepts: ["transform", "null-handling", "empty-string"]
+        syllabus: "Forms → Data transformers"
+        answers:
+          - value: "'' (an empty string the widget can display)"
+            correct: true
+          - value: "null (let the widget decide)"
+            correct: false
+          - value: "It must throw TransformationFailedException"
+            correct: false
+          - value: "false"
+            correct: false
+        explanation: >-
+          On display, transform(null) fires for an unset model value and should return ''
+          so the input renders cleanly and later value comparisons hold; returning null can
+          make the widget render oddly. Throwing is for genuinely unconvertible input on
+          reverseTransform, not for a normal empty value.
+        documentation: "https://symfony.com/doc/current/form/data_transformers.html"
+      - id: "FORM-TRANSFORM-06"
+        question: >-
+          An optional text field with a custom transformer reports 'invalid' whenever it is
+          left blank. What is the likely cause?
+        type: "debug"
+        difficulty: "hard"
+        subchapter: "forms/data-transformers"
+        concepts: ["reverseTransform", "empty-handling", "TransformationFailedException"]
+        syllabus: "Forms → Data transformers"
+        answers:
+          - value: "reverseTransform('') runs the parser on an empty string and throws TransformationFailedException; guard for ''/null and return the empty model value first"
+            correct: true
+          - value: "The field needs a NotBlank constraint removed"
+            correct: false
+          - value: "transform() must return null for empty values"
+            correct: false
+          - value: "Model transformers cannot handle optional fields"
+            correct: false
+        explanation: >-
+          An empty submission arrives as '' (or null) at reverseTransform(); if you parse it
+          instead of short-circuiting, you raise a spurious TransformationFailedException and
+          the field is marked invalid. Guard the first line for emptiness and return the
+          model's empty value (null/[]/0). This is a format-handling bug, not a validation
+          constraint issue.
+        documentation: "https://symfony.com/doc/current/form/data_transformers.html"
+      - id: "FORM-TRANSFORM-07"
+        question: "You need a field whose view is an id string but whose model is a domain object. Which transformer slot fits?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/data-transformers"
+        concepts: ["model-transformer", "view-transformer", "choosing"]
+        syllabus: "Forms → Data transformers"
+        answers:
+          - value: "A model transformer (the underlying type changes: id string <-> object)"
+            correct: true
+          - value: "A view transformer (only formatting changes)"
+            correct: false
+          - value: "Either — the slot makes no difference"
+            correct: false
+          - value: "A PRE_SET_DATA listener instead of any transformer"
+            correct: false
+        explanation: >-
+          Use a model transformer when the type of the underlying object changes (id <->
+          rich object); it bridges model<->norm. A view transformer is for pure string
+          formatting (norm<->view). The slot matters because it determines where in the
+          pipeline the conversion runs and what the norm data looks like.
+        documentation: "https://symfony.com/doc/current/form/data_transformers.html"
 
   - name: "Forms — Events"
     questions:
-      - question: "What is the correct order of the submit-phase form events?"
+      - id: "FORM-EVENTS-01"
+        question: "What is the correct order of the submit-phase form events?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["PRE_SUBMIT", "SUBMIT", "POST_SUBMIT"]
+        syllabus: "Forms → Form events"
         answers:
           - value: "PRE_SUBMIT -> SUBMIT -> POST_SUBMIT"
             correct: true
@@ -465,7 +1291,13 @@ categories:
           Submission dispatches PRE_SUBMIT (raw view data), SUBMIT (normalized), then
           POST_SUBMIT (bound model), in that order.
         documentation: "https://symfony.com/doc/current/form/events.html"
-      - question: "What is the correct order of the set-data-phase form events?"
+      - id: "FORM-EVENTS-02"
+        question: "What is the correct order of the set-data-phase form events?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["PRE_SET_DATA", "POST_SET_DATA", "no-SET_DATA"]
+        syllabus: "Forms → Form events"
         answers:
           - value: "PRE_SET_DATA -> POST_SET_DATA"
             correct: true
@@ -479,7 +1311,13 @@ categories:
           Setting data (on create/populate) dispatches PRE_SET_DATA then
           POST_SET_DATA. There is no SET_DATA constant.
         documentation: "https://symfony.com/doc/current/form/events.html"
-      - question: "On PRE_SUBMIT, what does $event->getData() return?"
+      - id: "FORM-EVENTS-03"
+        question: "On PRE_SUBMIT, what does $event->getData() return?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["PRE_SUBMIT", "raw-view-data", "getData"]
+        syllabus: "Forms → Form events"
         answers:
           - value: "The raw submitted view data (an array/string)"
             correct: true
@@ -493,7 +1331,13 @@ categories:
           PRE_SUBMIT fires before transformation, so the data is the raw request
           values — not your object.
         documentation: "https://symfony.com/doc/current/form/events.html"
-      - question: "To add a field based on the submitted value, which event do you listen on?"
+      - id: "FORM-EVENTS-04"
+        question: "To add a field based on the submitted value, which event do you listen on?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["PRE_SUBMIT", "dynamic-fields", "dependent-dropdown"]
+        syllabus: "Forms → Form events"
         answers:
           - value: "PRE_SUBMIT"
             correct: true
@@ -507,7 +1351,13 @@ categories:
           Fields must be added before binding. PRE_SUBMIT exposes the raw submitted
           value while the form is still mutable (dynamic/dependent fields).
         documentation: "https://symfony.com/doc/current/form/dynamic_form_modification.html"
-      - question: "Which event does the validator form extension hook to run validation?"
+      - id: "FORM-EVENTS-05"
+        question: "Which event does the validator form extension hook to run validation?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["POST_SUBMIT", "validation", "no-validate-event"]
+        syllabus: "Forms → Form events"
         answers:
           - value: "POST_SUBMIT"
             correct: true
@@ -521,10 +1371,82 @@ categories:
           Validation runs after data is bound to the model, via a POST_SUBMIT
           listener. There is no PRE_VALIDATE/POST_VALIDATE in FormEvents.
         documentation: "https://symfony.com/doc/current/form/events.html"
+      - id: "FORM-EVENTS-06"
+        question: >-
+          In a PRE_SUBMIT listener you read the submitted country. Which line is safe?
+        type: "code"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["PRE_SUBMIT", "raw-array", "null-coalescing"]
+        syllabus: "Forms → Form events"
+        answers:
+          - value: "$country = $event->getData()['country'] ?? null;"
+            correct: true
+          - value: "$country = $event->getData()->getCountry();"
+            correct: false
+          - value: "$country = $event->getData()['country'];"
+            correct: false
+          - value: "$country = $event->getForm()->getData()->country;"
+            correct: false
+        explanation: >-
+          PRE_SUBMIT data is the raw request array, so a blank field is simply an absent
+          key — read it with ?? null to avoid an undefined-key warning. Treating the data as
+          an object (->getCountry()) is wrong: it is not transformed yet, and the model on
+          the form is not yet populated from this submission.
+        documentation: "https://symfony.com/doc/current/form/events.html"
+      - id: "FORM-EVENTS-07"
+        question: "Which of these is NOT a real FormEvents constant?"
+        type: "trap"
+        difficulty: "easy"
+        subchapter: "forms/events"
+        concepts: ["FormEvents", "no-validate-event", "constants"]
+        syllabus: "Forms → Form events"
+        answers:
+          - value: "FormEvents::PRE_VALIDATE"
+            correct: true
+          - value: "FormEvents::PRE_SET_DATA"
+            correct: false
+          - value: "FormEvents::PRE_SUBMIT"
+            correct: false
+          - value: "FormEvents::POST_SUBMIT"
+            correct: false
+        explanation: >-
+          There is no PRE_VALIDATE (nor POST_VALIDATE) in FormEvents. The five constants are
+          PRE_SET_DATA, POST_SET_DATA, PRE_SUBMIT, SUBMIT and POST_SUBMIT; validation is
+          simply a POST_SUBMIT listener registered by the validator extension.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php"
+      - id: "FORM-EVENTS-08"
+        question: "How do you attach a reusable event subscriber to a form?"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "forms/events"
+        concepts: ["addEventSubscriber", "EventSubscriberInterface", "getSubscribedEvents"]
+        syllabus: "Forms → Form events"
+        answers:
+          - value: "Implement EventSubscriberInterface (with getSubscribedEvents()) and call $builder->addEventSubscriber($subscriber)"
+            correct: true
+          - value: "Implement FormEventSubscriberInterface and tag it form.subscriber"
+            correct: false
+          - value: "Add a #[AsFormSubscriber] attribute to the class"
+            correct: false
+          - value: "Register it under framework.form.subscribers in YAML"
+            correct: false
+        explanation: >-
+          Form subscribers implement the EventDispatcher's EventSubscriberInterface (the
+          Form component has no dedicated FormEventSubscriberInterface) declaring
+          getSubscribedEvents(), and are added with $builder->addEventSubscriber(). There is
+          no #[AsFormSubscriber] attribute or framework.form.subscribers config for this.
+        documentation: "https://symfony.com/doc/current/form/events.html"
 
   - name: "Forms — Type extensions"
     questions:
-      - question: "Which method declares the types a form type extension applies to?"
+      - id: "FORM-EXT-01"
+        question: "Which method declares the types a form type extension applies to?"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "forms/type-extensions"
+        concepts: ["getExtendedTypes", "static", "iterable"]
+        syllabus: "Forms → Type extensions"
         answers:
           - value: "public static function getExtendedTypes(): iterable"
             correct: true
@@ -538,7 +1460,13 @@ categories:
           getExtendedTypes() is static and returns an iterable of type FQCNs. It
           replaced the removed singular getExtendedType().
         documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
-      - question: "With autoconfiguration enabled, how is a type extension registered?"
+      - id: "FORM-EXT-02"
+        question: "With autoconfiguration enabled, how is a type extension registered?"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "forms/type-extensions"
+        concepts: ["form.type_extension", "autoconfiguration", "FormTypeExtensionInterface"]
+        syllabus: "Forms → Type extensions"
         answers:
           - value: "Automatically, via the form.type_extension tag on FormTypeExtensionInterface services"
             correct: true
@@ -552,7 +1480,13 @@ categories:
           Symfony auto-tags implementers of FormTypeExtensionInterface with
           form.type_extension. There is no dedicated attribute for this in core.
         documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
-      - question: "What is the effect of returning FormType::class from getExtendedTypes()?"
+      - id: "FORM-EXT-03"
+        question: "What is the effect of returning FormType::class from getExtendedTypes()?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/type-extensions"
+        concepts: ["FormType", "global-extension", "hierarchy"]
+        syllabus: "Forms → Type extensions"
         answers:
           - value: "The extension applies to every form type (all descend from FormType)"
             correct: true
@@ -565,4 +1499,74 @@ categories:
         explanation: >-
           Because all types inherit from FormType, the extension attaches to every
           form — powerful for global concerns but risky to overuse.
+        documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
+      - id: "FORM-EXT-04"
+        question: "Which attribute registers a form type extension in core Symfony?"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "forms/type-extensions"
+        concepts: ["no-attribute", "AsFormTypeExtension", "registration"]
+        syllabus: "Forms → Type extensions"
+        answers:
+          - value: "There is none — core has no #[AsFormTypeExtension]; registration is by interface + getExtendedTypes() (autoconfig) or a manual tag"
+            correct: true
+          - value: "#[AsFormTypeExtension]"
+            correct: false
+          - value: "#[AsFormExtension]"
+            correct: false
+          - value: "#[FormTypeExtension]"
+            correct: false
+        explanation: >-
+          Unlike #[AsEventListener] or #[AsCommand], form type extensions have no dedicated
+          attribute in core. Autoconfiguration tags FormTypeExtensionInterface services with
+          form.type_extension, and getExtendedTypes() tells the registry which types to
+          attach them to; a manual form.type_extension tag with extended_type is the
+          fallback when autoconfiguration is off.
+        documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
+      - id: "FORM-EXT-05"
+        question: >-
+          A type extension defines `public function getExtendedType(): string { return
+          FileType::class; }` but never applies. What is wrong?
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "forms/type-extensions"
+        concepts: ["getExtendedTypes", "removed-method", "getExtendedType"]
+        syllabus: "Forms → Type extensions"
+        answers:
+          - value: "The singular getExtendedType() was removed; you must implement the static getExtendedTypes(): iterable returning [FileType::class]"
+            correct: true
+          - value: "FileType cannot be extended; only FormType can"
+            correct: false
+          - value: "The method must be private"
+            correct: false
+          - value: "You must also return the parent chain from getExtendedType()"
+            correct: false
+        explanation: >-
+          Registration keys off the static getExtendedTypes(): iterable; the old singular
+          getExtendedType() no longer exists, so the extension is never matched to a type.
+          Any type (including FileType) can be extended, and the method is static/public.
+        documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
+      - id: "FORM-EXT-06"
+        question: >-
+          With autoconfiguration disabled, which services.yaml tag correctly registers an
+          extension for FileType?
+        type: "config"
+        difficulty: "hard"
+        subchapter: "forms/type-extensions"
+        concepts: ["manual-tag", "form.type_extension", "extended_type"]
+        syllabus: "Forms → Type extensions"
+        answers:
+          - value: "tags: [{ name: form.type_extension, extended_type: Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType }]"
+            correct: true
+          - value: "tags: [{ name: form.type_extension }]  # extended_type inferred"
+            correct: false
+          - value: "tags: [{ name: form.type, extended_type: FileType }]"
+            correct: false
+          - value: "tags: [{ name: form.extension, class: FileType }]"
+            correct: false
+        explanation: >-
+          Without autoconfiguration you must both use the form.type_extension tag and supply
+          the extended_type attribute (the FQCN of the extended type) — it is not inferred
+          from getExtendedTypes() in the manual case. form.type is for form types, and
+          form.extension is not a real tag.
         documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
