@@ -196,8 +196,8 @@ on.
     - `insulate()` forfeits in-process profiler/container access.
 
 !!! warning "Common mistakes"
-    - Passing headers to the wrong argument position of `request()` (server params
-      are the **5th/6th** arg, after parameters and files).
+    - Passing headers to the wrong argument position of `request()` — server params
+      are the **5th** argument, after `parameters` and `files`.
     - Expecting `loginUser()` to work without a configured firewall.
 
 ## Exercises
