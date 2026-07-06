@@ -746,7 +746,7 @@ categories:
           - value: "app.session — accessing it can start the session"
             correct: true
           - value: "app.flashes — reading flash messages consumes (clears) them"
-            correct: false
+            correct: true
           - value: "app.environment — pure read, no side effect"
             correct: false
           - value: "app.debug — pure read, no side effect"
@@ -755,8 +755,7 @@ categories:
           Accessing app.session may start the session (which can defeat HTTP caching),
           and reading app.flashes consumes the messages so they are cleared after
           display — both have side effects. app.environment and app.debug are plain
-          reads with no side effect. NOTE the intended second correct answer is
-          app.flashes; both flagged answers describe real side effects.
+          reads with no side effect.
         documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
 
       - id: "TWIG-GLOBALS-08"
