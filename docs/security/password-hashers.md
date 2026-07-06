@@ -86,6 +86,23 @@ hashes while upgrading them on the next successful login:
 
 This is transparent to the user — no password reset needed.
 
+### Null behavior
+
+`PasswordAuthenticatedUserInterface::getPassword()` is typed **`?string`**, so a
+user may legitimately have **`null`** as their stored hash (passwordless / SSO /
+token-only accounts). The `CheckCredentialsListener` guards for this: a `null`
+hash means "no password on file", so verification **fails cleanly** instead of
+calling `verify()` against nothing, and `needsRehash()` short-circuits when there
+is no hash to inspect.
+
+Never feed a `null` (or empty) plaintext into `hashPassword()` expecting a
+"blank" account — hash a real secret, or leave the field `null` and let the login
+fail. Treat `getPassword()` as `?string` at every call site.
+
+!!! note "Null in real life"
+    A `null` hash is a lock with no key cut for it yet: you cannot test a key
+    against it, so that door just will not open by key.
+
 ## Configuration & code
 
 === "YAML"

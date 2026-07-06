@@ -7,6 +7,13 @@
     (not a constructor), and there is **no `#[Factory]` attribute** (use
     `#[Autowire(factory:)]`).
 
+!!! example "Real-world analogy"
+    A factory is a dish the kitchen can't just grab off the shelf — it's made to
+    order by a specialist (a static method, another service, or an invokable) who
+    assembles it from live inputs and hands back the finished plate. The container
+    keeps the plate the specialist returns; the `arguments:` are the specialist's
+    order ticket, not the raw ingredients of a constructor.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
