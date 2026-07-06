@@ -133,6 +133,33 @@ is fine; just remember it counts as a hit until it expires.
     still read the note instead of redoing the work; a blank pad (no note at all)
     is the real miss.
 
+!!! info "Expert note"
+    Stampede protection is invisible until you *stop* getting it. The moment you
+    drop to the raw PSR-6 `getItem()`/`save()` API (or set `$beta = 0`) you lose the
+    probabilistic early recompute — under load, every request that sees the expired
+    item recomputes at once. Keep hot keys on `CacheInterface::get($key, $cb)`, and
+    reserve PSR-6 for when you genuinely need deferred saves or metadata.
+
+??? example "Debugging story"
+    **Symptom:** `invalidateTags(['products'])` did nothing — stale prices kept
+    serving. **Diagnosis:** the pool was a plain `FilesystemAdapter`, never wrapped
+    in a `TagAwareAdapter`, so `$item->tag()` was effectively a no-op and no tag
+    metadata was stored. **Fix:** set `tags: true` on the pool so a
+    `TagAwareCacheInterface` is injected. **Avoid:** calling `tag()` while assuming
+    the pool is tag-aware — check the injected type.
+
+??? abstract "Source-code tour"
+    - `Symfony\Contracts\Cache\CacheInterface::get()` is implemented via
+      `Cache\Traits\ContractsTrait`, which computes probabilistic early expiration
+      from the item metadata and `$beta`.
+    - Adapters such as `Cache\Adapter\FilesystemAdapter` extend
+      `Cache\Adapter\AbstractAdapter` and implement **both** PSR-6
+      `CacheItemPoolInterface` and the contracts interface.
+    - `Cache\Adapter\TagAwareAdapter` decorates any pool, storing tag→version keys;
+      `invalidateTags()` bumps a tag's version so tagged items become stale at once.
+    - `Cache\CacheItem` carries the value, expiry and tag metadata the trait reads
+      to decide hit / early-expiry / miss.
+
 ## Configuration & code
 
 === "PHP Attributes"

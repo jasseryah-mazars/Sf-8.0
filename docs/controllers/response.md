@@ -267,9 +267,25 @@ sequenceDiagram
     - Non-Response return ⇒ ViewEvent ⇒ else LogicException.
     - `JsonResponse::fromJsonString($json)` for pre-encoded JSON.
 
+## Connections
+
+- **Depends on:** [HTTP → Response](../http/response.md) — the HttpFoundation `Response` and its subclasses.
+- **Reused in:** [HTTP Redirects](http-redirects.md) — `RedirectResponse` is one of these subclasses.
+- **Confused with:** [Error Pages](error-pages.md) — errors are produced by *throwing*, not by building an error `Response`.
+
 ## Official References
 - [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a controller must return a `Response`
+- [ ] pick `JsonResponse`/`StreamedResponse`/`BinaryFileResponse` by payload in Symfony 8
+- [ ] debug the `LogicException` from returning a non-`Response`
+- [ ] spot that `StreamedResponse` runs its callback at send time (no late headers)
+- [ ] explain how `kernel.view` can turn a non-`Response` into one
 
 ---
 

@@ -38,6 +38,15 @@ that returns the configured instance. The container calls the factory and stores
 its return value as the service. This is common for third-party clients, objects
 built from a connection, or classes with private constructors.
 
+!!! question "Predict first"
+    A service is built by a factory and you set `arguments: ['EUR']`. Do those go to
+    the class constructor or somewhere else — and is there a `#[Factory]` attribute?
+
+??? note "Reveal"
+    They go to the **factory method**, not the constructor. There is **no**
+    `#[Factory]` attribute — configure factories via `#[Autowire(factory: [...])]`
+    or YAML/PHP config.
+
 ## Deep Dive — how it works internally
 
 ### The `factory` on a Definition

@@ -242,10 +242,30 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - Find a type: `debug:autowiring <needle>`; inspect: `debug:container <id>`.
     - `--show-private` reveals hidden services.
 
+## Connections
+
+- **Depends on:** [The Service Container](container.md) — built-in services are just
+  container services wired by bundles.
+- **Reused in:** [Controllers](../controllers/request.md),
+  [Console](../console/custom-commands.md) — the same interfaces are injected across
+  entry points.
+- **Confused with:** [Autowiring](autowiring.md) — you reach built-ins by autowiring
+  an interface, not by raw id.
+
 ## Official References
 - [Official Symfony docs — Debugging services](https://symfony.com/doc/current/service_container/debug.html)
 - [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
 - [Symfony source — FrameworkExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/FrameworkExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** you autowire an interface instead of a raw service id
+- [ ] discover a service's autowire type with `debug:autowiring` in Symfony 8
+- [ ] debug a `null` `getCurrentRequest()` outside the HTTP cycle
+- [ ] spot that a raw `Request` is not injectable but `RequestStack` is
+- [ ] explain the difference between a service id, its class, and its alias
 
 ---
 

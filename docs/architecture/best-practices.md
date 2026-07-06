@@ -29,6 +29,16 @@ typical web apps — not laws — but the certification expects you to know them
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A junior marks every service `public: true` "to be safe" and queries the
+    database directly inside a controller action. Which two best practices did they
+    break, and what does it cost?
+
+??? note "Reveal"
+    Business logic belongs in an **autowired service**, not the controller; and app
+    services should be **private** by default. Public services block the DI
+    compiler's inlining/removal and invite the service-locator anti-pattern.
+
 ### The practices, grouped
 
 | Area | Best practice |

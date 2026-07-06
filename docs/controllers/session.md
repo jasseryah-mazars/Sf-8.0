@@ -45,6 +45,15 @@ $session->has('cart_id');
 The session also owns the [flash bag](flash-messages.md) and metadata (created,
 last-used, lifetime).
 
+!!! question "Predict first"
+    A request never reads or writes the session. Does Symfony still send a session
+    `Set-Cookie` and call `session_start()`?
+
+??? note "Reveal"
+    No — Symfony sessions are **lazy**: `session_start()` and the cookie fire only
+    on first read/write. That is why touching the session on a public page makes it
+    uncacheable. Reach it via `RequestStack::getSession()`, not a service constructor.
+
 ## Deep Dive — how it works internally
 
 ### Getting the session — the Symfony 8 way

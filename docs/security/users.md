@@ -49,6 +49,15 @@ public function getUserIdentifier(): string; // the login identifier
 | `EquatableInterface` | `isEqualTo(UserInterface): bool` |
 | `LegacyPasswordAuthenticatedUserInterface` | `getSalt()` (plaintext/legacy only) |
 
+!!! question "Predict first"
+    You keep a `public function eraseCredentials(): void {}` on your Symfony 8
+    user to blank the password after login. Does it run?
+
+??? note "Reveal"
+    No. `eraseCredentials()` was **removed** from `UserInterface` in 8.0 — nothing
+    calls it. Strip the password in `__serialize()` instead, which is what actually
+    runs when the user is stored in the session.
+
 ## Deep Dive — how it works internally
 
 ### `getUserIdentifier()`
@@ -283,10 +292,30 @@ changes to invalidate existing sessions immediately.
     - No `eraseCredentials()` in 8.0 → use `__serialize()`.
     - `isEqualTo() === false` on refresh ⇒ logout.
 
+## Connections
+
+- **Depends on:** [Providers](providers.md) — a provider loads and refreshes the
+  `UserInterface`.
+- **Reused in:** [Roles](roles.md) — `getRoles()` feeds the token and hierarchy.
+- **Reused in:** [Password Hashers](password-hashers.md) — password users expose
+  `getPassword(): ?string`.
+- **Confused with:** [Authentication](authentication.md) — the user is *who you
+  are*, not *how* you proved it.
+
 ## Official References
 - [Symfony docs — The User](https://symfony.com/doc/current/security.html#the-user)
 - [Symfony source — UserInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/UserInterface.php)
 - [Symfony UPGRADE-8.0 (Security)](https://github.com/symfony/symfony/blob/8.0/UPGRADE-8.0.md)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `UserInterface` is minimal (identity + roles only)
+- [ ] implement `UserInterface` + `PasswordAuthenticatedUserInterface` in 8.0
+- [ ] debug a stale password leaking into the session (missing `__serialize()`)
+- [ ] spot that `eraseCredentials()`/`getUsername()` are gone in 8.0
+- [ ] explain how `isEqualTo()` on refresh can force a logout
 
 ---
 
