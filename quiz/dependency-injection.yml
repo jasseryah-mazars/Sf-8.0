@@ -26,7 +26,7 @@ categories:
 
       - id: "DI-CONTAINER-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/container"
         concepts: ["private-services", "get", "ServiceNotFoundException"]
         syllabus: "Dependency Injection → Service Container"
@@ -108,7 +108,7 @@ categories:
 
       - id: "DI-CONTAINER-06"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/container"
         concepts: ["shared", "get", "instances"]
         syllabus: "Dependency Injection → Service Container"
@@ -221,7 +221,7 @@ categories:
 
       - id: "DI-BUILTIN-03"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/built-in-services"
         concepts: ["debug:container", "private-services", "console"]
         syllabus: "Dependency Injection → Built-in Services"
@@ -266,7 +266,7 @@ categories:
 
       - id: "DI-BUILTIN-05"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/built-in-services"
         concepts: ["id", "class", "autowiring-alias"]
         syllabus: "Dependency Injection → Built-in Services"
@@ -420,7 +420,7 @@ categories:
 
       - id: "DI-PARAM-06"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/parameters"
         concepts: ["env-vars", "type-casting", "Autowire"]
         syllabus: "Dependency Injection → Configuration Parameters"
@@ -443,7 +443,7 @@ categories:
 
       - id: "DI-PARAM-07"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/parameters"
         concepts: ["FrozenParameterBag", "compilation", "immutability"]
         syllabus: "Dependency Injection → Configuration Parameters"
@@ -529,7 +529,7 @@ categories:
 
       - id: "DI-REG-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/registration"
         concepts: ["autoconfigure", "autowire", "flags"]
         syllabus: "Dependency Injection → Service Registration"
@@ -550,7 +550,7 @@ categories:
 
       - id: "DI-REG-03"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/registration"
         concepts: ["alias", "interface", "autowiring"]
         syllabus: "Dependency Injection → Service Registration"
@@ -640,7 +640,7 @@ categories:
 
       - id: "DI-REG-07"
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/registration"
         concepts: ["alias", "compile-error", "null-behavior"]
         syllabus: "Dependency Injection → Service Registration"
@@ -664,7 +664,7 @@ categories:
       # --- decoration.md ---
       - id: "DI-DECOR-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/decoration"
         concepts: ["inner", "DecoratorServicePass", "delegation"]
         syllabus: "Dependency Injection → Service Decoration"
@@ -685,7 +685,7 @@ categories:
 
       - id: "DI-DECOR-02"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/decoration"
         concepts: ["AutowireDecorated", "AsDecorator", "attributes"]
         syllabus: "Dependency Injection → Service Decoration"
@@ -795,7 +795,7 @@ categories:
 
       - id: "DI-DECOR-07"
         type: "config"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/decoration"
         concepts: ["decoration_on_invalid", "null", "nullable"]
         syllabus: "Dependency Injection → Service Decoration"
@@ -819,7 +819,7 @@ categories:
       # --- tags.md ---
       - id: "DI-TAGS-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/tags"
         concepts: ["tagged_locator", "ServiceLocator", "lazy"]
         syllabus: "Dependency Injection → Tags"
@@ -840,7 +840,7 @@ categories:
 
       - id: "DI-TAGS-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/tags"
         concepts: ["priority", "ordering", "tagged-iterator"]
         syllabus: "Dependency Injection → Tags"
@@ -882,7 +882,7 @@ categories:
 
       - id: "DI-TAGS-04"
         type: "single"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/tags"
         concepts: ["tagged_iterator", "tagged_locator", "lazy"]
         syllabus: "Dependency Injection → Tags"
@@ -971,7 +971,7 @@ categories:
       # --- semantic-config.md ---
       - id: "DI-SEMCFG-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/semantic-config"
         concepts: ["Configuration", "TreeBuilder", "validation"]
         syllabus: "Dependency Injection → Semantic Configuration"
@@ -1034,7 +1034,7 @@ categories:
 
       - id: "DI-SEMCFG-04"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/semantic-config"
         concepts: ["AbstractBundle", "configure", "loadExtension"]
         syllabus: "Dependency Injection → Semantic Configuration"
@@ -1126,7 +1126,7 @@ categories:
       # --- factories.md ---
       - id: "DI-FACTORY-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/factories"
         concepts: ["factory", "arguments", "construction"]
         syllabus: "Dependency Injection → Factories"
@@ -1234,7 +1234,7 @@ categories:
 
       - id: "DI-FACTORY-06"
         type: "config"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/factories"
         concepts: ["static-factory", "private-constructor", "arguments"]
         syllabus: "Dependency Injection → Factories"
@@ -1280,7 +1280,7 @@ categories:
 
       - id: "DI-PASS-02"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/compiler-passes"
         concepts: ["PassConfig", "phase", "TYPE_BEFORE_OPTIMIZATION"]
         syllabus: "Dependency Injection → Compiler Passes"
@@ -1366,7 +1366,7 @@ categories:
 
       - id: "DI-PASS-06"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/compiler-passes"
         concepts: ["priority", "phase", "ordering"]
         syllabus: "Dependency Injection → Compiler Passes"
@@ -1521,7 +1521,7 @@ categories:
 
       - id: "DI-AUTOWIRE-04"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/autowiring"
         concepts: ["named-alias", "parameter-name", "Target"]
         syllabus: "Dependency Injection → Autowiring"
@@ -1590,7 +1590,7 @@ categories:
 
       - id: "DI-AUTOWIRE-07"
         type: "multiple"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/autowiring"
         concepts: ["ambiguity", "Target", "named-alias", "disambiguation"]
         syllabus: "Dependency Injection → Autowiring"
@@ -1613,7 +1613,7 @@ categories:
       # --- service-locators.md ---
       - id: "DI-LOCATOR-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "dependency-injection/service-locators"
         concepts: ["ServiceLocator", "whitelist", "anti-pattern"]
         syllabus: "Dependency Injection → Service Locators"
@@ -1766,7 +1766,7 @@ categories:
 
       - id: "DI-LOCATOR-08"
         type: "scenario"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "dependency-injection/service-locators"
         concepts: ["service-locator", "lazy", "pick-one-of-many"]
         syllabus: "Dependency Injection → Service Locators"
