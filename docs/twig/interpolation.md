@@ -117,8 +117,8 @@ placeholders (translation strings use `%name%` placeholders — see
 
 ??? success "Solutions"
 
-    **1.** `{{ "Order ##{id} (#{status})" }}` — note `##` to print a literal `#`
-    before the interpolation, or `{{ "Order #" ~ id ... }}`. Cleaner:
+    **1.** Combine a literal `#` with interpolation:
+    `{{ "Order #" ~ "#{id} (#{status})" }}` — or, cleanest, use `format`:
     `{{ "Order #%d (%s)"|format(id, status) }}`.
 
     **2.** `{{ "Order #" ~ id ~ " (" ~ status ~ ")" }}`.
