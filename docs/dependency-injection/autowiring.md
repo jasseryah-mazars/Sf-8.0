@@ -116,6 +116,31 @@ instead.
     marking it "optional — skip if unavailable" (nullable + default) lets the meal
     go out with that item simply absent (null).
 
+!!! info "Expert note"
+    A named autowiring alias id is literally the string `Type $paramName`, matched
+    against the **constructor variable name**. Rename the parameter and the wiring
+    silently breaks. Seniors reach for `#[Target('name')]` so the intended alias is
+    stated in code and survives refactors.
+
+??? example "Debugging story"
+    **Symptom:** `Cannot autowire … no such service exists` for an interface that
+    "obviously" had one implementation. **Diagnosis:** the implementation was
+    registered, but no alias mapped the *interface* to it (a non-`App\` class from a
+    library). **Fix:** add an `Interface: '@Concrete'` alias (or `#[AsAlias]`).
+    **Avoid:** remember one-implementation auto-aliasing only fires for services
+    registered via the `App\:` glob; library classes need an explicit alias.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\DependencyInjection\Compiler\AutowirePass` — resolves each
+      argument's type-hint to a service id or alias at compile time.
+    - `Symfony\Component\DependencyInjection\Attribute\Autowire` &
+      `Symfony\Component\DependencyInjection\Attribute\Target` — per-argument
+      overrides and explicit named-alias selection.
+    - `Symfony\Component\DependencyInjection\Alias` — the interface→id mappings the
+      pass follows; ambiguity arises when several match and none is default.
+    - `Symfony\Component\DependencyInjection\Reference` — the resolved wiring the
+      pass writes back onto the `Definition`.
+
 ## Configuration & code
 
 === "PHP Attributes"
@@ -266,9 +291,29 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
     - `#[Autowire(service:/value:/env:/param:/expression:)]`.
     - Debug: `debug:autowiring [--all]`.
 
+## Connections
+
+- **Depends on:** [Service Registration](registration.md) — autowiring fills the
+  arguments of registered definitions.
+- **Reused in:** [Controllers](../controllers/value-resolvers.md),
+  [Console](../console/custom-commands.md) — action and command dependencies are
+  autowired the same way.
+- **Confused with:** [Parameters](parameters.md) — scalars are **never** autowired;
+  they need `bind` or `#[Autowire]`.
+
 ## Official References
 - [Official Symfony docs — Autowiring](https://symfony.com/doc/current/service_container/autowiring.html)
 - [Symfony source — AutowirePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/AutowirePass.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** autowiring removes argument boilerplate and when it can't
+- [ ] disambiguate with `#[Target]`, `#[Autowire]`, a named alias, or `bind`
+- [ ] debug an ambiguity or "cannot autowire" build error
+- [ ] spot that scalars are never autowired and resolution is compile-time
+- [ ] explain how `AutowirePass` maps a type-hint to a service id/alias
 
 ---
 

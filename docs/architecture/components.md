@@ -40,6 +40,16 @@ build on Symfony components for exactly this reason.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You need URL matching in a plain PHP CLI script with no kernel. Can you use
+    `symfony/routing` on its own, and what should you type-hint elsewhere for
+    swap-ability?
+
+??? note "Reveal"
+    Yes — components are standalone Composer packages; `composer require
+    symfony/routing` and use `UrlMatcher` directly. For swap-ability, type-hint the
+    **contract** interfaces (`symfony/*-contracts`), not concrete classes.
+
 ### Decoupling by design
 
 Components depend on **interfaces**, not implementations. The
@@ -97,6 +107,31 @@ autowire — see [Dependency Injection](../dependency-injection/index.md).
 !!! note "Source reference"
     Component list and layout —
     [symfony/symfony `8.0` `src/Symfony/Component`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component).
+
+!!! info "Expert note"
+    The `symfony/*-contracts` packages are versioned **independently** of the
+    components that implement them and carry almost no dependencies. That is what
+    lets a library depend on `symfony/event-dispatcher-contracts` without dragging in
+    the full `symfony/event-dispatcher` implementation — the classic way to stay
+    framework-agnostic while remaining Symfony-compatible.
+
+??? example "Debugging story"
+    **Symptom:** a shared library pulled the entire framework into an unrelated
+    project's dependency tree. **Diagnosis:** `composer why symfony/framework-bundle`
+    traced it to the library type-hinting a concrete component class and requiring
+    `symfony/framework-bundle` "to be safe". **Fix:** depend only on the needed
+    component (or its `-contracts` package) and type-hint the interface. **Avoid:**
+    never require the `symfony/symfony` metapackage or a bundle from a library.
+
+??? abstract "Source-code tour"
+    - Each component lives under `src/Symfony/Component/<Name>` in the monorepo and
+      ships as its own `symfony/<name>` package.
+    - Contracts live under `src/Symfony/Contracts` as `symfony/*-contracts`
+      (e.g. `Symfony\Contracts\EventDispatcher\EventDispatcherInterface`).
+    - Each bundle's DI extension registers a component's services into the container.
+    - `Symfony\Component\DependencyInjection\ContainerBuilder` compiles those
+      services; see [Dependency Injection](../dependency-injection/index.md).
+    - Bridges under `src/Symfony/Bridge` glue components to third-party libraries.
 
 ## Configuration & code
 
@@ -205,10 +240,26 @@ services and configuration, not by instantiating them.
     - Type-hint contracts/interfaces for swap-ability.
     - `composer require symfony/<name>` — no full framework needed.
 
+## Connections
+
+- **Depends on:** [Bridges](bridges.md) — the glue layer that lets a component integrate a specific third-party library.
+- **Reused in:** [Dependency Injection](../dependency-injection/index.md) — the framework wires every component in as a container service; [HTTP](../http/request.md) *is* the `HttpFoundation` component.
+- **Confused with:** [Interoperability & PSRs](psr.md) — contracts are Symfony-specific interface packages; PSRs are cross-vendor standards.
+
 ## Official References
 - [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
 - [Symfony Contracts](https://github.com/symfony/contracts)
 - [Symfony source — components](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** decoupled components enable reuse outside the framework
+- [ ] use a component (e.g. `Routing`) standalone via Composer
+- [ ] debug a dependency tree that wrongly pulls in the whole framework
+- [ ] spot the difference between a component, a contract, a bridge and a bundle
+- [ ] explain how FrameworkBundle composes components into container services
 
 ---
 

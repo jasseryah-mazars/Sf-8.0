@@ -42,6 +42,15 @@ The old `showAction()` suffix is a Symfony 2/3 relic tied to annotation
 autodetection. Modern code uses attributes for routing, so the suffix carries no
 meaning — drop it.
 
+!!! question "Predict first"
+    Does Symfony 8 require controller action methods to end in `Action`, and how do
+    you reference an invokable controller in `_controller`?
+
+??? note "Reveal"
+    No `Action` suffix — a controller is *any callable*; the framework imposes no
+    naming rule. An invokable controller is referenced by its **class name alone**;
+    the `ControllerResolver` detects `__invoke()`. Action methods must be `public`.
+
 ## Deep Dive — how it works internally
 
 The kernel never guesses your method name from the class name. During request
@@ -250,6 +259,12 @@ and lets `AbstractController` receive its service locator.
     - `_controller`: `Class::method` | `Class` (invokable) | `service::method`.
     - Invokable = `#[Route]` on class + `public function __invoke()`.
     - No `Action` suffix. Methods `public`. Classes usually `final`.
+
+## Connections
+
+- **Depends on:** [Architecture → Request handling](../architecture/request-handling.md) — the `ControllerResolver` turns `_controller` into the callable.
+- **Reused in:** [AbstractController](abstract-controller.md) — controllers registered as services are what let it receive its locator.
+- **Confused with:** [Value Resolvers](value-resolvers.md) — the resolver names the *callable*; value resolvers fill its *arguments*.
 
 ## Official References
 - [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html)

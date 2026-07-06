@@ -46,6 +46,16 @@ refreshUser(UserInterface $user): UserInterface;
 supportsClass(string $class): bool;
 ```
 
+!!! question "Predict first"
+    A user account is deleted server-side while that user has an active session.
+    What happens on their next stateful request?
+
+??? note "Reveal"
+    `refreshUser()` can no longer load them, so it throws
+    (`UserNotFoundException`); the `ContextListener` discards the token and clears
+    storage — an effective logout. This is why `refreshUser()` runs on *every*
+    stateful request, not just at login.
+
 ## Deep Dive — how it works internally
 
 ### Who calls the provider

@@ -261,10 +261,31 @@ verification usually lives in a `token_handler`, not the password hasher.
     - Rehash triggered by `PasswordUpgradeBadge` → `PasswordMigratingListener`.
     - bcrypt: 72-byte limit; sodium: Argon2id, memory-hard.
 
+## Connections
+
+- **Depends on:** [Users](users.md) — hashers key off the user class and its
+  `getPassword(): ?string`.
+- **Reused in:** [Authenticators](authenticators.md) — the `PasswordCredentials`
+  badge is verified with the configured hasher.
+- **Reused in:** [Providers](providers.md) — a `PasswordUpgraderInterface`
+  provider persists rehashed passwords.
+- **Confused with:** [Configuration](configuration.md) — `password_hashers` is
+  keyed by user class, not by provider or firewall name.
+
 ## Official References
 - [Symfony docs — Passwords](https://symfony.com/doc/current/security/passwords.html)
 - [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
 - [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** passwords are slow, salted, one-way hashes
+- [ ] configure `auto`/`sodium` with `migrate_from` in Symfony 8
+- [ ] debug rehash that computes but never persists (missing upgrader)
+- [ ] spot that `plaintext` is a production anti-pattern and bcrypt's 72-byte limit
+- [ ] trace verification to `CheckCredentialsListener` on `CheckPassportEvent`
 
 ---
 

@@ -239,9 +239,25 @@ controller output in a template.
     - Kernel: `SUB_REQUEST`, pushed on `RequestStack`.
     - forward ≠ redirect (no 3xx, no URL change).
 
+## Connections
+
+- **Depends on:** [HTTP Redirects](http-redirects.md) — the contrast that defines a forward (no 3xx, same request).
+- **Reused in:** [Architecture → Request handling](../architecture/request-handling.md) — sub-requests run the same kernel pipeline as the main request.
+- **Confused with:** [Built-in Controllers](built-in-controllers.md) — `RedirectController` redirects the client; `forward()` does not.
+
 ## Official References
 - [Official Symfony docs — Forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
 - [Symfony source — HttpKernelInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernelInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a forward is not a redirect (same request, no URL change)
+- [ ] forward to another controller and pass arguments in Symfony 8
+- [ ] debug a firewall/`isMainRequest()` surprise inside a sub-request
+- [ ] spot that `forward()` passes data via attributes, not `query`
+- [ ] explain how the sub-request is pushed onto `RequestStack`
 
 ---
 

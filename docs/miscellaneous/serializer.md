@@ -39,6 +39,15 @@ back. Symfony splits this in two stages:
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A `UserDto` carries `#[Groups(['read'])]` on `$name`. You call
+    `serialize($dto, 'json')` with **no** context. Which fields land in the JSON?
+
+??? note "Reveal"
+    **All** readable ones (only `#[Ignore]` is dropped). Group filtering activates
+    only when you pass `['groups' => ['read']]` in the context; with no groups the
+    `#[Groups]` attributes are ignored and every property is emitted.
+
 ### The two-stage pipeline
 
 ```mermaid

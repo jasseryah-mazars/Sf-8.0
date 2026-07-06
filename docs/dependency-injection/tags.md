@@ -38,6 +38,15 @@ either a [compiler pass](compiler-passes.md) or the built-in
 tag and injects them as a group. This is how Symfony wires "all voters", "all
 event subscribers", "all Messenger handlers".
 
+!!! question "Predict first"
+    You inject `#[AutowireLocator('app.handler')]` but nothing implements the tagged
+    interface. At runtime you `get('missing')` on the locator. Empty result or error?
+
+??? note "Reveal"
+    Collecting a tag nothing carries yields an **empty** iterator/locator (a
+    `foreach` just does nothing) — never `null`. But `locator->get('missing')` for a
+    key not present throws `ServiceNotFoundException`; guard with `has()` first.
+
 ## Deep Dive — how it works internally
 
 ### Collection vs locator

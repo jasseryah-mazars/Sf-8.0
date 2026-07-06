@@ -29,6 +29,15 @@ canonical example: add an `help_inline` option, or a file-upload helper, to ever
 Create a custom type when you need a *new field identity*; use a type extension
 when you want to *augment existing types* uniformly.
 
+!!! question "Predict first"
+    A teammate reaches for `#[AsFormTypeExtension]` to register an extension on
+    `FileType`. Does that attribute exist?
+
+??? note "Reveal"
+    No. Type extensions have **no dedicated attribute**. Autoconfiguration tags any
+    `FormTypeExtensionInterface` service with `form.type_extension`; the static
+    `getExtendedTypes(): iterable` names the target types.
+
 ## Deep Dive — how it works internally
 
 ### The class
@@ -290,9 +299,25 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
       `extended_type`.
     - No `#[AsFormTypeExtension]`; `getExtendedType()` (singular) is gone.
 
+## Connections
+
+- **Depends on:** [Form types](types.md) — the `ResolvedFormType` bundles a type *with* its applicable extensions.
+- **Reused in:** [Theming](theming.md) — a `buildView` var added by an extension is consumed in a themed block.
+- **Confused with:** [Data transformers](data-transformers.md) — extensions augment options/behaviour, not value conversion.
+
 ## Official References
 - [Official Symfony docs — Create a form type extension](https://symfony.com/doc/current/form/create_form_type_extension.html)
 - [Symfony source — AbstractTypeExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/AbstractTypeExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** an extension beats subclassing to augment types you don't own
+- [ ] write an `AbstractTypeExtension` with static `getExtendedTypes()` in Symfony 8
+- [ ] debug an extension that never runs (singular `getExtendedType`, missing tag)
+- [ ] spot the wrong answer inventing `#[AsFormTypeExtension]`
+- [ ] explain when an extension's hooks run relative to the extended type's hooks
 
 ---
 
