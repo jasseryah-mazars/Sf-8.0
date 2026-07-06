@@ -1,5 +1,11 @@
 # Edge Side Includes (ESI)
 
+!!! tip "In a nutshell"
+    ESI lets one page mix freshness: `<esi:include>` holes are fetched and cached
+    separately by the reverse proxy, so a long-lived shell can wrap a per-user
+    fragment. Exam hook: `render_esi()` only emits the tag when a surrogate
+    advertises ESI capability — otherwise it renders the fragment inline.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

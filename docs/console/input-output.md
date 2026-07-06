@@ -1,5 +1,11 @@
 # Input & Output
 
+!!! tip "In a nutshell"
+    Commands read through `InputInterface` and write through `OutputInterface`, but
+    `SymfonyStyle` is the styled wrapper you should reach for by default. Remember
+    for the exam: STDERR is `getErrorOutput()`, which lives on
+    `ConsoleOutputInterface` only — keep piped data on STDOUT.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

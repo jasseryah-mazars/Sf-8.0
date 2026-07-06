@@ -1,5 +1,12 @@
 # Validation (ETag, Last-Modified)
 
+!!! tip "In a nutshell"
+    Validation attaches a fingerprint (`ETag` or `Last-Modified`) so a cache can
+    ask "still current?" and get a bodyless `304` when nothing changed. Key fact:
+    compute the validator cheaply, call `Response::isNotModified($request)` (it
+    mutates the response to 304 and strips the body), and remember ETag wins over
+    Last-Modified when both are sent.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,11 @@
 # Group Sequence
 
+!!! tip "In a nutshell"
+    A group sequence validates groups in a fixed order and stops at the first group
+    that produces a violation, so cheap checks gate expensive ones. Key trap:
+    inside the sequence reference the `{ClassName}` group, never `Default` (which
+    would loop).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

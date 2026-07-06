@@ -1,5 +1,11 @@
 # Accessing Framework Objects in Tests
 
+!!! tip "In a nutshell"
+    Tests reach real services — or swap in doubles — through the test container from
+    `self::getContainer()`, which exposes services that are private at runtime. Exam
+    hook: a `set()` replacement is discarded on the next kernel reboot, so pair it
+    with `disableReboot()`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,12 @@
 # Expiration (Expires, Cache-Control)
 
+!!! tip "In a nutshell"
+    Expiration says how long a response stays **fresh** so caches answer without
+    hitting the origin. Remember the shared-cache precedence `s-maxage` >
+    `max-age` > `Expires`, that `setSharedMaxAge()` also marks the response
+    `public`, and that `no-cache` means "revalidate first", not "never store"
+    (that is `no-store`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,11 @@
 # Access Control Rules
 
+!!! tip "In a nutshell"
+    `access_control` is a top-to-bottom list of URL-based authorization rules; only
+    the **first matching rule** is enforced.
+    Exam hook: order specific → general, and use `PUBLIC_ACCESS` (not the removed
+    `IS_AUTHENTICATED_ANONYMOUSLY`) for open paths.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

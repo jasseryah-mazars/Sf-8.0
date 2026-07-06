@@ -1,5 +1,10 @@
 # Filters & Functions
 
+!!! tip "In a nutshell"
+    Filters transform a value with a pipe (`value|filter`); functions are called by
+    name (`func(args)`) — register your own via `#[AsTwigFilter]`/`#[AsTwigFunction]`.
+    Exam hook: filter output is auto-escaped unless declared `is_safe: ['html']`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

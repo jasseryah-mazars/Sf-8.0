@@ -1,5 +1,10 @@
 # PHP Object Validation
 
+!!! tip "In a nutshell"
+    You declare constraints as attributes and ask the `ValidatorInterface` service
+    to check an object; it hands back a `ConstraintViolationList`. It never returns
+    a bool and never throws on failure, so you inspect the result with `count()`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

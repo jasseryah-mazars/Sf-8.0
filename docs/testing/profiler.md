@@ -1,5 +1,11 @@
 # The Profiler in Tests
 
+!!! tip "In a nutshell"
+    The profiler records a request's internals (timings, events, sent emails) into a
+    `Profile` of data collectors, but collection is off by default in the test env.
+    Exam hook: call `enableProfiler()` **before** the request, or `getProfile()`
+    returns `false` (not `null`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

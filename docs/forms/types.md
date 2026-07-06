@@ -1,5 +1,10 @@
 # Form Types & the Type Hierarchy
 
+!!! tip "In a nutshell"
+    Every field is a form of some *type*, and types inherit down a chain to the
+    root `FormType`. Remember: `getParent()` returns a **class string** (FQCN), the
+    FQCN is the type id (no `getName()`), and parent hooks run before the child's.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

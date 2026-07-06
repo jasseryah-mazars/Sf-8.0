@@ -1,5 +1,11 @@
 # Server-Side Caching
 
+!!! tip "In a nutshell"
+    Symfony ships a reverse proxy written in PHP, `HttpCache`, that **wraps** your
+    kernel and serves shared-cache hits before the app runs. Enable it with
+    `framework.http_cache: true`; it honours `s-maxage`, keeps a filesystem
+    `Store`, and reports each hit/miss in the `X-Symfony-Cache` trace header.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,11 @@
 # Service Registration
 
+!!! tip "In a nutshell"
+    Registration tells the container which classes are services; the `App\:`
+    resource glob plus `autowire`/`autoconfigure` covers ~95% of it. Highest-yield
+    fact: an auto-registered service's **id is its FQCN**, and `autowire` (args by
+    type) and `autoconfigure` (tags by interface) are **independent** flags.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

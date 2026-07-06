@@ -1,5 +1,11 @@
 # Filesystem & Finder Components
 
+!!! tip "In a nutshell"
+    Filesystem wraps PHP's file functions with cross-platform methods that throw
+    on failure; Finder is a fluent builder that yields matching files as
+    `SplFileInfo`. Exam gold: `dumpFile()` writes atomically (temp + rename), and
+    Finder always needs directories via `in()`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

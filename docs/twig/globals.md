@@ -1,5 +1,10 @@
 # Global Variables
 
+!!! tip "In a nutshell"
+    `app` is the one global Symfony gives every template — your window into the
+    request, user, session and environment, backed by `AppVariable`. Exam hook:
+    `app.user` is `null` when nobody is logged in, so always guard it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

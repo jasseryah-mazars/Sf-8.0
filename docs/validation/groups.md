@@ -1,5 +1,11 @@
 # Validation Groups
 
+!!! tip "In a nutshell"
+    Groups tag constraints so you can validate a subset per context (registration
+    vs profile edit). The most tested nuance: on a class with a group sequence,
+    validating `Default` runs the sequence, while `{ClassName}` runs the same
+    constraints flat, bypassing the ordering.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

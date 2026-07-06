@@ -1,5 +1,10 @@
 # Translations & Pluralization
 
+!!! tip "In a nutshell"
+    Translate with `'key'|trans(params, domain, locale)` and pluralize with ICU
+    `{n, plural, …}` in a `+intl-icu` domain. Exam hook: `transchoice` was removed —
+    ICU MessageFormat is the only pluralization path now.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

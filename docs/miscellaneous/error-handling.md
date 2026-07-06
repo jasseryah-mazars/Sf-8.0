@@ -1,5 +1,12 @@
 # Error Handling
 
+!!! tip "In a nutshell"
+    The ErrorHandler component turns PHP errors into catchable exceptions and
+    renders uncaught throwables (via a serializable `FlattenException`), while
+    HttpKernel's `kernel.exception` flow turns an exception into a `Response`.
+    Exam gold: only `HttpExceptionInterface` carries a custom status; everything
+    else becomes a 500.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,10 @@
 # Verbosity Levels
 
+!!! tip "In a nutshell"
+    Verbosity controls how much a command prints without changing what it does;
+    users pick it with `-q`, `-v`, `-vv` or `-vvv`. Remember for the exam: the
+    constants are 16/32/64/128/256 and they live on the output, not the input.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

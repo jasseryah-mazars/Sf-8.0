@@ -1,5 +1,11 @@
 # Process Component
 
+!!! tip "In a nutshell"
+    Process runs OS commands in sub-processes cleanly across platforms. Build it
+    with an array of arguments so each is auto-escaped, then `run()` (blocking)
+    or `start()`/`wait()` (async). Exam gold: `fromShellCommandline()` is NOT
+    escaped (injection risk), and the default timeout is 60 seconds.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

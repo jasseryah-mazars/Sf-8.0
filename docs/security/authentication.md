@@ -1,5 +1,12 @@
 # Authentication
 
+!!! tip "In a nutshell"
+    Authentication answers *"who is making this request?"*. In Symfony 8 there is
+    one system: an **authenticator** builds a **Passport** of badges, listeners
+    validate them on `CheckPassportEvent`, then a **token** is stored.
+    Exam hook: there is no `enable_authenticator_manager` flag anymore — it *is*
+    how security works.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -165,7 +172,7 @@ authenticator that is also an entry point, you **must** name one explicitly via
 
     ```console
     $ php bin/console debug:firewall main
-    $ php bin/console security:help
+    $ php bin/console debug:config security
     ```
 
 ## Best practices & anti-patterns

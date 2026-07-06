@@ -1,5 +1,11 @@
 # Voters & Voting Strategies
 
+!!! tip "In a nutshell"
+    A voter answers GRANTED / DENIED / ABSTAIN for an attribute on an optional
+    subject — the way to express the per-object rules roles cannot.
+    Exam hook: the default strategy is **affirmative** (one grant is enough), and
+    **abstain ≠ deny**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

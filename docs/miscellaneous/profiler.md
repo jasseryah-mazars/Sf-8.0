@@ -1,5 +1,11 @@
 # Web Profiler & Data Collectors
 
+!!! tip "In a nutshell"
+    The profiler stores one profile per request (timing, queries, logs) fed by
+    data collectors and shows the debug toolbar. Exam gold: collection happens
+    on `kernel.response` (late collectors at terminate), `$this->data` must be
+    serializable, and it is a dev-only tool disabled in prod.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,11 @@
 # Cache Types
 
+!!! tip "In a nutshell"
+    Caches live in three places: the user's browser (**private**), network
+    proxies/CDNs (**shared**), and a reverse proxy you own (**gateway**). The one
+    call that matters: mark a response `public` so shared caches may store it —
+    Symfony's default `no-cache, private` shares nothing.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

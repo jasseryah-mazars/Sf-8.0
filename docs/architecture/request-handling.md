@@ -121,8 +121,9 @@ sequenceDiagram
    response has been sent to the client. Ideal for heavy work you don't want the
    user to wait on (sending emails, dispatching messages via `kernel.terminate`).
 
-A ninth event, **`kernel.exception`** (`ExceptionEvent`), is dispatched *out of
-band* whenever any exception escapes during `handleRaw()` (and `$catch` is `true`).
+The eighth `KernelEvents` constant, **`kernel.exception`** (`ExceptionEvent`), is
+dispatched *out of band* — it is not part of the linear flow above but fires
+whenever any exception escapes during `handleRaw()` (and `$catch` is `true`).
 It is covered in [Exception Handling](exception-handling.md).
 
 !!! note "Source reference"

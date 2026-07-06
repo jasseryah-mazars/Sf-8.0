@@ -1,5 +1,11 @@
 # The Crawler
 
+!!! tip "In a nutshell"
+    The `Crawler` is an immutable node set over the response DOM: query it with
+    `filter()` (CSS) or `filterXPath()`, then derive `Link` and `Form` objects.
+    Exam hook: CSS `filter()` needs the css-selector component, and `text()` throws
+    on an empty match unless you pass a default.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

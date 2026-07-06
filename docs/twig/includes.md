@@ -1,5 +1,10 @@
 # Template Includes
 
+!!! tip "In a nutshell"
+    `include` drops a reusable fragment in place; by default it sees the caller's
+    variables, and `only` isolates it to just the `with` values. Exam hook: `include`
+    can't override blocks — that's `embed` (include + block overriding).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

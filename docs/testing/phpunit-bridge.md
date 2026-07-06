@@ -1,5 +1,11 @@
 # The PHPUnit Bridge
 
+!!! tip "In a nutshell"
+    `symfony/phpunit-bridge` augments PHPUnit with deprecation collection plus clock
+    and DNS mocking, all wired by registering `SymfonyExtension`. Exam hook:
+    clock/DNS mocking is opt-in per group (`time-sensitive` / `dns-sensitive`), and
+    `SYMFONY_DEPRECATIONS_HELPER` is an env var, not a CLI flag.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -63,9 +69,9 @@ This env var (set in `phpunit.dist.xml` or the shell) tunes the handler:
 
 | Value | Effect |
 |---|---|
-| `max[total=0]` | fail if **any** deprecation is triggered |
-| `max[self=0]` | fail on deprecations from **your own** code only |
-| `max[direct=0]` | fail on deprecations from **your direct** calls |
+| `max[total]=0` | fail if **any** deprecation is triggered |
+| `max[self]=0` | fail on deprecations from **your own** code only |
+| `max[direct]=0` | fail on deprecations from **your direct** calls |
 | `disabled=1` | do not collect or report at all |
 | `weak` | report but **never** fail the build |
 | `baselineFile=…&generateBaseline=true` | record current deprecations to ignore later |

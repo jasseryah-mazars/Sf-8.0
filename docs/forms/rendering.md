@@ -1,5 +1,10 @@
 # Rendering Forms with Twig
 
+!!! tip "In a nutshell"
+    Twig form functions turn a form into HTML at any granularity, from `form(form)`
+    to per-part `form_label`/`form_widget`. Don't forget: `form_end` renders the
+    remaining fields — including the hidden **CSRF token** — unless you pass `render_rest: false`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

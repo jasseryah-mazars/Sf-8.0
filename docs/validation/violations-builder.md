@@ -1,5 +1,11 @@
 # Violations Builder
 
+!!! tip "In a nutshell"
+    Inside a validator or callback you create errors with
+    `$context->buildViolation(...)` — a fluent builder that records nothing until
+    you call `addViolation()`. Callers read the errors back from a Countable,
+    iterable `ConstraintViolationList`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

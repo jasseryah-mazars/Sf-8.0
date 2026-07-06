@@ -1,5 +1,10 @@
 # Template Inheritance
 
+!!! tip "In a nutshell"
+    A child `{% extends %}` a parent layout and overrides its named `{% block %}`
+    holes; `{{ parent() }}` keeps the parent's content. Exam hook: a template extends
+    exactly one parent, but `{% use %}` mixes in blocks from many (horizontal reuse).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

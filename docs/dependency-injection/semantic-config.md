@@ -1,5 +1,12 @@
 # Semantic (Bundle) Configuration
 
+!!! tip "In a nutshell"
+    Semantic config is the typed, validated configuration a bundle exposes under
+    its own root key: `Configuration` defines and validates the schema,
+    `Extension::load()` turns processed values into services and parameters.
+    Highest-yield fact: `prepend()` runs **before** all `load()` calls, letting one
+    bundle set defaults for another.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

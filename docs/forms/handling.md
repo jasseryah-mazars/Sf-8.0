@@ -1,5 +1,10 @@
 # Handling Submissions
 
+!!! tip "In a nutshell"
+    One controller action both shows and processes a form via `handleRequest()`.
+    Golden rule: always guard with `isSubmitted() && isValid()` (calling
+    `isValid()` on an unsubmitted form throws), then redirect after a successful POST.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

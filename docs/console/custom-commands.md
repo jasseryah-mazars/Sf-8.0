@@ -53,7 +53,7 @@ class* — the basis of [lazy loading](configuration.md).
 
 Registration is automatic via **autoconfiguration**: any service that extends
 `Command` **or** carries `#[AsCommand]` is tagged `console.command`. The
-`Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\...AddConsoleCommandPass`
+`Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass`
 collects those tags and builds a
 `Symfony\Component\Console\CommandLoader\ContainerCommandLoader`, mapping each name
 to its service id. The command is instantiated only when actually invoked.

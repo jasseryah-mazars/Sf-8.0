@@ -1,5 +1,10 @@
 # URL Generation
 
+!!! tip "In a nutshell"
+    Generate links from route names, never hard-code them: `path()` gives a relative
+    URL, `url()` an absolute one. Exam hook: use `url()` whenever the link leaves the
+    page (emails, canonical tags, RSS); extra params become the query string.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

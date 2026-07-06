@@ -1,5 +1,10 @@
 # Validation Scopes
 
+!!! tip "In a nutshell"
+    Constraints attach at three scopes: property, getter (its return value) and
+    class (the whole object, for cross-field rules). The rule to memorise: a nested
+    object is only validated if its property carries `#[Assert\Valid]`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

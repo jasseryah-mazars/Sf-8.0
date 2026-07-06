@@ -1,5 +1,12 @@
 # User Providers
 
+!!! tip "In a nutshell"
+    A user provider **loads** users by identifier and **refreshes** them on each
+    stateful request; it never authenticates them.
+    Exam hook: the loader is `loadUserByIdentifier()` (legacy
+    `loadUserByUsername()` is gone), and `refreshUser()` runs on *every* stateful
+    request.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

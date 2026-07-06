@@ -1,5 +1,10 @@
 # CSRF Protection in Forms
 
+!!! tip "In a nutshell"
+    Symfony forms auto-add and check a hidden `_token` field so a foreign site
+    cannot forge a submission. Key facts: the token is validated on **PRE_SUBMIT**,
+    and **stateless CSRF** (7.2+, via `stateless_token_ids`) needs no session.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

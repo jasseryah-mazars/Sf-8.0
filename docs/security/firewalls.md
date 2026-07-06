@@ -1,5 +1,11 @@
 # Firewalls
 
+!!! tip "In a nutshell"
+    A firewall defines *how* requests in a URL zone are authenticated; exactly
+    **one** is active per request — the first whose matcher matches.
+    Exam hook: `security: false` (e.g. the `dev` firewall) still counts as the
+    match, so it must come first.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

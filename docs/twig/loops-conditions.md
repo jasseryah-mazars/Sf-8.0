@@ -1,5 +1,10 @@
 # Loops & Conditions
 
+!!! tip "In a nutshell"
+    `{% for %}` iterates and exposes the `loop` variable (`index`, `first`, `last`,
+    `length`); `{% for … else %}` handles the empty case. Exam hook: Twig has no
+    `break`/`continue` — filter the source with `for x in items if …` instead.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

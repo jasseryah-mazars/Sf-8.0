@@ -1,5 +1,11 @@
 # Arguments & Options
 
+!!! tip "In a nutshell"
+    Arguments are positional inputs; options are named `--flags` with optional `-x`
+    shortcuts. Remember for the exam: memorise the mode integers — arguments
+    REQUIRED=1 / OPTIONAL=2 / IS_ARRAY=4, and options VALUE_NONE=1 / REQUIRED=2 /
+    OPTIONAL=4 / IS_ARRAY=8 / NEGATABLE=16.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

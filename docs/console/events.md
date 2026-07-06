@@ -1,5 +1,11 @@
 # Console Events
 
+!!! tip "In a nutshell"
+    When a command runs through the framework, the Application fires four
+    `ConsoleEvents`: COMMAND, SIGNAL, ERROR and TERMINATE. Remember for the exam:
+    the order is COMMAND → (ERROR only if something throws) → TERMINATE, and
+    TERMINATE always runs — your last chance to change the exit code.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

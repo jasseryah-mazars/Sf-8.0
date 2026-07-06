@@ -1,5 +1,11 @@
 # Client Configuration
 
+!!! tip "In a nutshell"
+    `createClient($options, $server)` presets the kernel environment plus default
+    **server parameters** (headers, HTTPS, Basic auth) applied to every request.
+    Exam hook: request headers become `HTTP_`-prefixed server params, and `$server`
+    is the **second** argument — not a list of header strings.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -106,7 +112,7 @@ flowchart LR
         {
             $client = static::createClient();
 
-            // Per-request server params (6th arg of request()).
+            // Per-request server params (5th arg of request()).
             $client->request('GET', '/admin', [], [], [
                 'PHP_AUTH_USER' => 'admin',
                 'PHP_AUTH_PW' => 'secret',

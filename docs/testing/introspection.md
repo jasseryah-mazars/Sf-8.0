@@ -1,5 +1,11 @@
 # Request/Response Introspection
 
+!!! tip "In a nutshell"
+    After a request, assert the outcome with the built-in helpers (`assertResponse*`,
+    `assertSelector*`, `assertRoute*`) instead of reading `getResponse()` by hand —
+    they print the response on failure. Exam hook: `assertResponseIsSuccessful()`
+    accepts **any 2xx**; use `assertResponseStatusCodeSame()` for an exact code.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

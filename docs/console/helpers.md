@@ -1,5 +1,11 @@
 # Console Helpers
 
+!!! tip "In a nutshell"
+    Helpers are reusable CLI UI widgets — prompts, progress bars, tables — reached
+    through the command's `HelperSet`. Remember for the exam: a classic command
+    grabs one by name with `$this->getHelper('question')`, while `SymfonyStyle`
+    wraps most helpers so you rarely fetch them by hand.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

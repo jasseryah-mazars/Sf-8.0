@@ -1,5 +1,12 @@
 # Built-in Services
 
+!!! tip "In a nutshell"
+    Symfony's bundles register hundreds of services; you reach them by
+    **autowiring an interface**, not by raw id. Learn the headline ones and use
+    `debug:container` / `debug:autowiring` to discover the rest. Highest-yield
+    fact: inject `RequestStack` (then `getCurrentRequest()`), never a raw
+    `Request`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,10 @@
 # Built-in Form Types Catalogue
 
+!!! tip "In a nutshell"
+    Symfony ships ready-made field types (text, choice, date, money, collection,
+    repeated, buttons) so you rarely build one from scratch. Highest-yield fact:
+    `ChoiceType`'s widget is decided by `expanded` × `multiple` (select / radios / checkboxes).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

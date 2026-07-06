@@ -1,5 +1,10 @@
 # Data Transformers
 
+!!! tip "In a nutshell"
+    A data transformer converts a field's value between what your model holds and
+    what the browser shows (and back). Remember the direction: `transform()` goes
+    **model → view** (display), `reverseTransform()` goes **view → model** (submit).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

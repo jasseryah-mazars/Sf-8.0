@@ -1,5 +1,11 @@
 # Custom Constraints
 
+!!! tip "In a nutshell"
+    A reusable rule is two classes: a `Constraint` (options + default message) and
+    its `ConstraintValidator` (the logic that adds violations). By default the
+    validator's name is the constraint name plus `Validator`, and a class-level
+    rule must override `getTargets()` to return `CLASS_CONSTRAINT`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -126,7 +132,7 @@ Contract points:
 ```mermaid
 flowchart LR
     A["#[ContainsAlphanumeric]"] --> B[Constraint object]
-    B -->|validatedBy| C["...ValidatorValidator id"]
+    B -->|validatedBy| C["ContainsAlphanumericValidator (service id)"]
     C --> D[ConstraintValidator service]
     D --> E["context.buildViolation().addViolation()"]
 ```

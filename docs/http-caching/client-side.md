@@ -1,5 +1,11 @@
 # Client-Side Caching
 
+!!! tip "In a nutshell"
+    The browser keeps its own **private** cache and obeys `max-age`/`Expires`
+    while ignoring `s-maxage`. Highest-yield fact: a normal reload sends
+    `max-age=0` (revalidate → maybe 304), a hard reload sends `no-cache` (full
+    refetch), and you "bust" a cached asset by changing its URL, not by clearing it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

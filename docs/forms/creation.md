@@ -1,5 +1,10 @@
 # Creating Forms
 
+!!! tip "In a nutshell"
+    You describe a form in a reusable type class (`buildForm` + `configureOptions`)
+    and let the framework build it via `createForm()`. Exam hook: `data_class`
+    binds the form to an object — without it, a compound form's data is a plain **array**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,12 @@
 # Authenticators, Passports & Badges
 
+!!! tip "In a nutshell"
+    An authenticator turns a request into a token by building a **Passport** of
+    **badges**; it never verifies credentials itself — that happens on
+    `CheckPassportEvent`.
+    Exam hook: credentials (`PasswordCredentials`) live in `Passport\Credentials`,
+    while `UserBadge`/`CsrfTokenBadge`/`RememberMeBadge` live in `Passport\Badge`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -96,11 +103,13 @@ You rarely write these from scratch — configure them in `security.yaml`:
 
 ### `AbstractAuthenticator` and `AbstractLoginFormAuthenticator`
 
-`AbstractAuthenticator` provides a default `createToken()` returning a
-`UsernamePasswordToken`/`PostAuthenticationToken` and a null
-`onAuthenticationFailure()`. `AbstractLoginFormAuthenticator` adds
-`supports()` (POST to the check path) and the entry point via the abstract
-`getLoginUrl()` — you implement `authenticate()`, `getLoginUrl()` and
+`AbstractAuthenticator` provides a single default: `createToken()` returning a
+`PostAuthenticationToken` (subclasses such as `FormLoginAuthenticator` override
+it to return a `UsernamePasswordToken`); it does **not** implement
+`onAuthenticationFailure()`. `AbstractLoginFormAuthenticator` adds `supports()`
+(POST to the check path), the entry point (`start()`) via the abstract
+`getLoginUrl()`, and a default `onAuthenticationFailure()` that redirects back to
+the login page — you implement `authenticate()`, `getLoginUrl()` and
 `onAuthenticationSuccess()`.
 
 ## Configuration & code

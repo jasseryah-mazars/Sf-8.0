@@ -1,5 +1,10 @@
 # Handling File Uploads
 
+!!! tip "In a nutshell"
+    A `FileType` field gives you an `UploadedFile`; uploads are usually
+    `mapped => false`, so you fetch and move the file yourself. Never trust the
+    client-sent name or MIME type — rename the file and validate with the `File`/`Image` constraint.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

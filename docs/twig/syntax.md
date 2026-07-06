@@ -1,5 +1,10 @@
 # Twig Syntax
 
+!!! tip "In a nutshell"
+    Twig has three delimiters — `{{ }}` prints, `{% %}` does, `{# #}` comments.
+    Templates compile once to cached PHP classes, so rendering is cheap. Exam hook:
+    `~` concatenates (not `+`), `//` is floor division, and filters bind tightest.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -191,8 +196,8 @@ prod so a missing optional variable renders as empty rather than erroring.
 
     **2.** `{{ count ?? 0 }}` (null-coalescing on undefined) and
     `{{ count|default(0) }}` (also treats empty as default). `??` only replaces
-    `null`/undefined; `default` also replaces empty strings unless you pass `true`
-    as the second arg — actually `default` replaces undefined/null/empty.
+    `null`/undefined; `default` also replaces empty values (`''`, `[]`) as well as
+    undefined/null.
 
     **3.** `{{ attribute(obj, key) }}` — dynamic attribute access.
 

@@ -1,5 +1,10 @@
 # Controller Rendering
 
+!!! tip "In a nutshell"
+    When a fragment needs its own data, embed a controller with
+    `render(controller(...))` instead of querying in the template. Exam hook: inline
+    rendering is a real HttpKernel sub-request; `render_esi` defers to a reverse proxy.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

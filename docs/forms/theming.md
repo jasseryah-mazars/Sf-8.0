@@ -1,5 +1,10 @@
 # Form Theming
 
+!!! tip "In a nutshell"
+    A form theme is a set of Twig blocks controlling how each fragment renders;
+    apply one per template or globally. Exam hook: block lookup runs **most
+    specific → least specific**, and built-in Bootstrap/Foundation themes ship **markup only**, not CSS.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

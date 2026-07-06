@@ -1,5 +1,11 @@
 # Users
 
+!!! tip "In a nutshell"
+    A user is any object implementing `UserInterface`, which in Symfony 8 has just
+    **two** methods: `getRoles()` and `getUserIdentifier()`.
+    Exam hook: `eraseCredentials()` was **removed** in 8.0 — strip secrets in
+    `__serialize()` instead.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

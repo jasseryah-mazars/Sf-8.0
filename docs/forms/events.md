@@ -159,11 +159,11 @@ Subscribers are reusable across forms and testable in isolation.
 
     namespace App\Form\EventListener;
 
+    use Symfony\Component\EventDispatcher\EventSubscriberInterface;
     use Symfony\Component\Form\Event\PreSubmitEvent;
     use Symfony\Component\Form\FormEvents;
-    use Symfony\Component\Form\FormEventSubscriberInterface;
 
-    final class TrimSubscriber implements FormEventSubscriberInterface
+    final class TrimSubscriber implements EventSubscriberInterface
     {
         public static function getSubscribedEvents(): array
         {

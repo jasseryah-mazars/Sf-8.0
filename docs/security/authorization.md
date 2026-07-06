@@ -1,5 +1,13 @@
 # Authorization
 
+!!! tip "In a nutshell"
+    Authorization answers *"is this token allowed to do X?"*. Every check —
+    `#[IsGranted]`, `denyAccessUnlessGranted()`, Twig `is_granted()`,
+    `access_control` — funnels through `isGranted()` → `AccessDecisionManager` →
+    voters.
+    Exam hook: only the `isGranted()` path can pass a **subject**; `access_control`
+    is URL-based only.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

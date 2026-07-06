@@ -1,5 +1,10 @@
 # Form Type Extensions
 
+!!! tip "In a nutshell"
+    A type extension adds options or behaviour to form types you do not own,
+    without subclassing them. Exam hook: it declares its targets with the static
+    **`getExtendedTypes()`** — there is **no `#[AsFormTypeExtension]` attribute**.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

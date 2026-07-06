@@ -1,5 +1,10 @@
 # Auto-Escaping
 
+!!! tip "In a nutshell"
+    Twig escapes every `{{ }}` output to block XSS, and Symfony picks the strategy
+    from the file extension (`.html.twig` → HTML, `.js.twig` → JS…). Exam hook:
+    `.txt.twig` escapes nothing, and `|raw` / `{% autoescape false %}` turn it off.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

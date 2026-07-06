@@ -1,5 +1,11 @@
 # Runtime Component
 
+!!! tip "In a nutshell"
+    The Runtime decouples your entry point from how the app is run, so the same
+    `index.php` boots under PHP-FPM, CLI, Swoole or RoadRunner. Exam gold:
+    `public/index.php` **returns** a callable (it never calls `handle()`), the
+    default runtime is `SymfonyRuntime`, and `APP_RUNTIME` selects it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

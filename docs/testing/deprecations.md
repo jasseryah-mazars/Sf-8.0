@@ -1,5 +1,11 @@
 # Handling Deprecated Code in Tests
 
+!!! tip "In a nutshell"
+    The PHPUnit bridge collects triggered deprecations and can fail the build,
+    sorting each into a self / direct / indirect / legacy bucket. Exam hook:
+    `#[IgnoreDeprecations]` (not the removed `@group legacy`) silences a test, and
+    `max[self]=0` fails only on *your own* code.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -45,9 +51,10 @@ Exceeding any non-`legacy` threshold fails the suite with a non-zero exit code.
 - `#[IgnoreDeprecations]` (`Symfony\Bridge\PhpUnit\Attribute\IgnoreDeprecations`)
   on a test method/class tells the handler to **ignore** deprecations from that
   test — the modern replacement for the old `@group legacy` docblock.
-- `ExpectDeprecationTrait` / the `expectUserDeprecationMessage()` helper lets a
-  test **assert** that a specific deprecation message is emitted (useful when *you*
-  add a `trigger_deprecation()` and want to prove it fires).
+- `ExpectUserDeprecationMessageTrait` and its `expectUserDeprecationMessage()`
+  helper let a test **assert** that a specific deprecation message is emitted
+  (useful when *you* add a `trigger_deprecation()` and want to prove it fires). The
+  old `ExpectDeprecationTrait::expectDeprecation()` was removed in Symfony 7.0.
 
 ```mermaid
 flowchart TD
