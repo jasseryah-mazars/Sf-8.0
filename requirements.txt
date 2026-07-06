@@ -2,7 +2,7 @@
 # Pinned for reproducible builds in CI and local development.
 mkdocs-material==9.5.44
 mkdocs==1.6.1
-pymdown-extensions==10.12
+pymdown-extensions==11.0.1
 # Pygments >=2.19 changed HtmlFormatter to call html.escape(filename); with
 # pymdownx.highlight passing filename=None this raises. Pin to a compatible release.
 pygments==2.18.0
