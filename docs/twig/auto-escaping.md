@@ -1,0 +1,233 @@
+# Auto-Escaping
+
+!!! abstract "Learning objectives"
+    By the end of this chapter you can:
+
+    - [ ] Explain Symfony's context-aware auto-escaping and what it defends against.
+    - [ ] Choose the correct `escape` strategy (`html`, `js`, `css`, `url`, `html_attr`).
+    - [ ] Use `|raw` and `{% autoescape %}` safely and know when *not* to.
+
+    **Syllabus:** `Templating (Twig) → Auto-escaping` ·
+    **Level:** Expert ·
+    **Est. time:** 30 min ·
+    **Prerequisites:** [Web Security Fundamentals](../php-web-security/web-security.md)
+
+---
+
+## Theory
+
+Auto-escaping is Twig's built-in defence against **XSS**: every value printed
+with `{{ }}` is escaped for its output context before it reaches the browser. In
+Symfony, escaping is **on by default** and the strategy is chosen from the
+template's **file extension** — so `page.html.twig` escapes as HTML,
+`data.js.twig` as JavaScript, etc.
+
+```twig
+{{ '<b>hi</b>' }}   {# renders &lt;b&gt;hi&lt;/b&gt; — not bold #}
+```
+
+Because escaping is automatic, the developer's job shrinks to two decisions:
+**which context** a value lands in, and **when a value is trusted HTML** (rare).
+
+## Deep Dive — how it works internally
+
+Escaping is a Twig **extension**, `Twig\Extension\EscaperExtension`, backed by
+`Twig\Runtime\EscaperRuntime` (the `twig_escape_filter` logic). The engine adds
+an implicit `|escape(strategy)` to every `{{ }}` unless the node is already
+marked *safe*.
+
+The **strategy** is decided by Symfony's TwigBundle: it configures the
+environment with a callable strategy —
+`Twig\FileExtensionEscapingStrategy::guess()` — which maps the template name's
+extension to a context:
+
+| Template ends with | Strategy |
+|---|---|
+| `.html.twig`, `.html` | `html` |
+| `.js.twig` | `js` |
+| `.css.twig` | `css` |
+| `.txt.twig` | *none* (false) |
+| anything else | `html` |
+
+```mermaid
+flowchart LR
+    P["{{ value }}"] --> M{Marked safe?}
+    M -- yes --> O[echo raw]
+    M -- no --> S[EscaperExtension]
+    S --> G[FileExtensionEscapingStrategy::guess]
+    G --> E["escape(value, strategy, charset)"]
+    E --> O2[echo escaped]
+```
+
+- A value is **safe** when produced by a filter/function declared with
+  `is_safe`, when passed through `|raw`, or inside `{% autoescape false %}`.
+- Escaping is **idempotent-aware**: Twig marks already-escaped strings so
+  chained prints do not double-escape.
+- Each strategy maps to a real PHP escaper: `html` → `htmlspecialchars` with
+  `ENT_QUOTES|ENT_SUBSTITUTE`, `html_attr` → an attribute-safe escaper,
+  `js` → `\xNN` hex encoding, `css` → CSS hex encoding, `url` → `rawurlencode`.
+
+!!! note "Source reference"
+    `Twig\Extension\EscaperExtension`, `Twig\Runtime\EscaperRuntime`,
+    `Twig\FileExtensionEscapingStrategy` —
+    [twigphp/Twig `3.x`](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php).
+
+### Why context matters (security rationale)
+
+HTML-escaping a value that lands in a `<script>` block or a `style` attribute
+does **not** make it safe — the escape set is different. Putting user data into
+a URL, a JS string, or a CSS value each needs its own encoding. Using the wrong
+strategy is a real XSS vector. See
+[Web Security Fundamentals](../php-web-security/web-security.md) for the attack
+model.
+
+## Configuration & code
+
+=== "Twig — explicit strategies"
+
+    ```twig
+    {# HTML body (default) #}
+    <p>{{ comment }}</p>
+
+    {# HTML attribute #}
+    <div title="{{ tooltip|e('html_attr') }}"></div>
+
+    {# Inside a URL #}
+    <a href="/search?q={{ query|e('url') }}">go</a>
+
+    {# Inside inline JS #}
+    <script>const n = "{{ name|e('js') }}";</script>
+
+    {# Inside inline CSS #}
+    <style>.x { content: "{{ label|e('css') }}"; }</style>
+    ```
+
+=== "Twig — autoescape blocks"
+
+    ```twig
+    {% autoescape 'js' %}
+        {{ value }} {# escaped as JS here #}
+    {% endautoescape %}
+
+    {% autoescape false %}
+        {{ trustedHtml }} {# NOT escaped — dangerous if untrusted #}
+    {% endautoescape %}
+    ```
+
+=== "YAML (bundle default)"
+
+    ```yaml
+    # config/packages/twig.yaml
+    twig:
+        # 'name' = guess by file extension (the Symfony default)
+        autoescape: name
+        strict_variables: '%kernel.debug%'
+    ```
+
+The `|e` filter is the short alias of `|escape`. Passing an explicit strategy
+overrides the context guess for that value only.
+
+## Best practices & anti-patterns
+
+| ✅ Do | ❌ Avoid |
+|---|---|
+| Trust auto-escaping; name files `*.html.twig` | Disabling autoescape globally |
+| Match the strategy to the context (`js`, `url`…) | HTML-escaping a value in a `<script>` |
+| Sanitise, then `|raw` only vetted HTML | `|raw` on user input |
+| Keep `strict_variables` on in dev | Guessing whether a value is safe |
+
+## When (not) to use it / alternatives
+
+Use `|raw` **only** for HTML you generated or sanitised server-side (e.g. a
+`html_sanitizer`-cleaned string). For rich user content, sanitise in PHP with the
+HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
+
+!!! danger "Certification traps"
+    - The default strategy is chosen by **file extension**, not a fixed `html`.
+      A `.txt.twig` template escapes **nothing**.
+    - `|e('html_attr')` ≠ `|e('html')`. Attribute context needs the stricter
+      encoder (spaces, `=`, backticks).
+    - `|raw` and `{% autoescape false %}` **disable** protection — untrusted data
+      there is an XSS hole.
+    - Escaping is applied at **print** (`{{ }}`), not when a variable is `set`.
+
+!!! warning "Common mistakes"
+    - Double-escaping worries: Twig tracks safe strings, so `{{ x|e }}` after an
+      auto-escape does not double-encode in normal flow — but calling `|e|e`
+      still escapes twice.
+    - Using `|e('js')` for a value placed inside an HTML attribute — wrong context.
+
+## Exercises
+
+1. **(Basic)** Which strategy for a value inside `href="..."`? Write the snippet.
+2. **(Intermediate)** A partial is named `snippet.js.twig`. What is auto-escaped
+   inside it, and how do you force HTML escaping for one value?
+3. **(Advanced)** You have server-sanitised HTML in `body`. Print it un-escaped
+   and justify why it is safe.
+
+??? success "Solutions"
+
+    **1.** URL context inside an attribute value:
+    `<a href="/q?s={{ term|e('url') }}">`. (The attribute quotes themselves are
+    handled by HTML escaping of the surrounding literal.)
+
+    **2.** In a `.js.twig` file the guess is `js`, so `{{ x }}` is JS-escaped.
+    Force HTML with `{{ x|e('html') }}`.
+
+    **3.** `{{ body|raw }}` — safe **only because** it was passed through the
+    HtmlSanitizer server-side; raw is trusting the source.
+
+## Certification questions
+
+??? question "Q1. In Symfony, how is the default escaping strategy chosen?"
+    - [ ] A. Always `html`
+    - [x] B. Guessed from the template file extension ✅
+    - [ ] C. From the `Accept` header
+    - [ ] D. It is off by default
+
+    **Why:** TwigBundle sets `autoescape: name`, using
+    `FileExtensionEscapingStrategy::guess()`. **Ref:**
+    [Twig autoescape](https://symfony.com/doc/current/templates.html#output-escaping).
+
+??? question "Q2. A value goes inside `<script>const x = \"…\";</script>`. Which filter?"
+    - [ ] A. `|e('html')`
+    - [x] B. `|e('js')` ✅
+    - [ ] C. `|raw`
+    - [ ] D. `|e('html_attr')`
+
+    **Why:** JavaScript string context needs JS escaping, not HTML. **Ref:**
+    [escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html).
+
+??? question "Q3. What does `{% autoescape false %}` do?"
+    - [ ] A. Escapes as text
+    - [x] B. Disables escaping inside the block ✅
+    - [ ] C. Escapes as URL
+    - [ ] D. Throws an error
+
+    **Why:** It turns escaping off — use only for trusted content. **Ref:**
+    [autoescape tag](https://twig.symfony.com/doc/3.x/tags/autoescape.html).
+
+## Key takeaways
+
+- Escaping is **on by default**, context chosen by **file extension**.
+- Five strategies: `html`, `html_attr`, `js`, `css`, `url` — match the context.
+- `|raw` / `{% autoescape false %}` disable protection: trusted content only.
+- Escaping happens at print time via `EscaperExtension`.
+
+## Last-minute revision
+
+!!! tip "Cheat sheet"
+    - `.html.twig`→html · `.js.twig`→js · `.txt.twig`→none.
+    - `|e` = `|escape`; strategies `html|html_attr|js|css|url`.
+    - `|raw` = trust me. `{% autoescape 's' %}…{% endautoescape %}`.
+    - Escape at `{{ }}`, not at `{% set %}`.
+
+## References
+
+- [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
+- [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
+- [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
+
+---
+
+<small>Related: [Twig Syntax](syntax.md) · [Web Security](../php-web-security/web-security.md) · [Filters & Functions](filters-functions.md)</small>

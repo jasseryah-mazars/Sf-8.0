@@ -1,0 +1,272 @@
+# Form Types & the Type Hierarchy
+
+!!! abstract "Learning objectives"
+    By the end of this chapter you can:
+
+    - [ ] Distinguish built-in from custom types and place any type in the hierarchy.
+    - [ ] Use `getParent()` to inherit behaviour and explain how `ResolvedFormType` is built.
+    - [ ] Declare and validate type options with `OptionsResolver`.
+
+    **Syllabus:** `Forms → Form types` ·
+    **Level:** Advanced → Expert ·
+    **Est. time:** 30 min ·
+    **Prerequisites:** [Creating forms](creation.md)
+
+---
+
+## Theory
+
+Every field *is* a form, and every form is an instance of some **type**. Types
+form an inheritance chain: your custom type declares a **parent**, which declares
+its parent, up to the root `FormType`. Behaviour and options accumulate down the
+chain.
+
+- **Built-in types** live in
+  `Symfony\Component\Form\Extension\Core\Type\*` (e.g. `TextType`, `ChoiceType`).
+- **Custom types** extend `AbstractType` and usually set `getParent()`.
+
+The common root is `Symfony\Component\Form\Extension\Core\Type\FormType`, and the
+common *field* base is `TextType` for scalar inputs.
+
+## Deep Dive — how it works internally
+
+### The hierarchy
+
+```mermaid
+flowchart TD
+    FT["FormType (root)"] --> TT[TextType]
+    FT --> CT[ChoiceType]
+    TT --> ET[EmailType]
+    TT --> MyVat["MyVatNumberType (custom)"]
+    CT --> Country[CountryType]
+```
+
+`getParent()` returns the FQCN of the parent type (default `FormType`). Return a
+built-in type to inherit its `buildForm`, `buildView`, transformers and options —
+you write only the delta.
+
+### `ResolvedFormType` — how a type is "resolved"
+
+A raw type is not usable alone. The `Symfony\Component\Form\FormRegistry` wraps
+each type in a `Symfony\Component\Form\ResolvedFormType` that captures:
+
+- the type instance,
+- its **fully resolved parent chain**,
+- all **type extensions** that apply (see [type extensions](type-extensions.md)).
+
+When building a form, the resolved type invokes, **parent → child**:
+`configureOptions` (merged into one `OptionsResolver`), then `buildForm`,
+then on view creation `buildView` and `finishView`. Each type extension's hooks
+run **after** the type's own at each level.
+
+!!! note "Source reference"
+    `ResolvedFormType::buildForm()` and `FormRegistry::resolveType()` —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php).
+
+### Option resolution
+
+`configureOptions(OptionsResolver $resolver)` is where you:
+
+- `setDefaults([...])` — default values;
+- `setRequired([...])` — options callers must pass;
+- `setAllowedTypes('opt', 'string')` / `setAllowedValues(...)` — validation;
+- `setNormalizer('opt', fn ($opts, $value) => ...)` — derive one option from
+  others;
+- `setDeprecated(...)` — mark an option deprecated.
+
+Because parent `configureOptions` runs first, a child can *override* a parent
+default and reference the parent's option in a normalizer.
+
+### Type discovery & DI
+
+Custom types are auto-registered: FrameworkBundle autoconfigures classes
+implementing `FormTypeInterface` with the `form.type` tag, so you can inject
+services into a type's constructor and it is available by FQCN. There is **no**
+`getName()` any more — the FQCN is the identifier and `getBlockPrefix()` names
+the Twig block.
+
+## Configuration & code
+
+=== "Custom type via getParent"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Form\Type;
+
+    use Symfony\Component\Form\AbstractType;
+    use Symfony\Component\Form\Extension\Core\Type\TextType;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
+
+    /** A trimmed, uppercased VAT number field built on TextType. */
+    final class VatNumberType extends AbstractType
+    {
+        public function configureOptions(OptionsResolver $resolver): void
+        {
+            $resolver->setDefaults([
+                'invalid_message' => 'Please enter a valid VAT number.',
+            ]);
+        }
+
+        public function getParent(): string
+        {
+            return TextType::class;
+        }
+    }
+    ```
+
+=== "OptionsResolver features"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    use Symfony\Component\OptionsResolver\OptionsResolver;
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['multiple' => false, 'expanded' => false]);
+        $resolver->setAllowedTypes('multiple', 'bool');
+        $resolver->setRequired('choices');
+        $resolver->setNormalizer(
+            'expanded',
+            static fn (\Symfony\Component\OptionsResolver\Options $o, bool $v): bool
+                => $v && !$o['multiple'] ? true : $v,
+        );
+    }
+    ```
+
+## Best practices & anti-patterns
+
+| ✅ Do | ❌ Avoid |
+|---|---|
+| Extend the closest built-in via `getParent` | Re-implementing `TextType` from scratch |
+| Validate options with allowed types/values | Trusting raw `$options` blindly |
+| Inject services into custom types | Static/global lookups inside `buildForm` |
+| Reference the FQCN as the type id | Looking for `getName()` |
+
+## When (not) to use it / alternatives
+
+Create a custom type when a field shape recurs (a money field, a VAT field). If
+you only need to tweak an *existing* type across many forms without a new field
+identity, prefer a **type extension** ([type-extensions](type-extensions.md)).
+For a one-off, just configure options at `->add()`.
+
+!!! danger "Certification traps"
+    - `getParent()` returns a **class string**, not an instance.
+    - Parent `configureOptions`/`buildForm` run **before** the child's; the child
+      sees parent defaults already set.
+    - Types are identified by **FQCN**; `getName()` no longer exists.
+    - A `ResolvedFormType` bundles the type **plus its extensions** — extensions
+      are not applied per-instance ad hoc.
+
+!!! warning "Common mistakes"
+    - Returning `new TextType()` from `getParent()` instead of `TextType::class`.
+    - Adding fields in a type whose parent is a scalar type like `TextType`
+      (scalar types are not compound — set the parent to `FormType` for a
+      compound custom type).
+
+## Exercises
+
+1. **(Advanced)** Build a `PercentageType` on top of `NumberType` that defaults
+   `scale` to 2 and a helpful `invalid_message`.
+2. **(Expert)** Explain why `ChoiceType` options like `expanded`/`multiple`
+   change the *rendered widget* (checkbox/radio vs select) without a new type.
+
+??? success "Solutions"
+
+    **1.**
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Form\Type;
+
+    use Symfony\Component\Form\AbstractType;
+    use Symfony\Component\Form\Extension\Core\Type\NumberType;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
+
+    final class PercentageType extends AbstractType
+    {
+        public function configureOptions(OptionsResolver $resolver): void
+        {
+            $resolver->setDefaults([
+                'scale' => 2,
+                'invalid_message' => 'Enter a number between 0 and 100.',
+            ]);
+        }
+
+        public function getParent(): string
+        {
+            return NumberType::class;
+        }
+    }
+    ```
+
+    **2.** `ChoiceType::buildView()` reads `expanded`/`multiple` and sets view
+    variables; the Twig `choice_widget` block branches on them to render a
+    `<select>`, or expanded checkboxes/radios. One resolved type, many widgets —
+    options drive the view, not the class.
+
+## Certification questions
+
+??? question "Q1. What does `getParent()` return?"
+    - [ ] A. A `FormBuilderInterface`
+    - [x] B. The parent type's fully-qualified class name ✅
+    - [ ] C. A `ResolvedFormType` instance
+    - [ ] D. `null` for all custom types
+
+    **Why:** `getParent()` returns a class string (default `FormType::class`); the
+    registry resolves it into the parent chain.
+    **Ref:** [Creating a custom type](https://symfony.com/doc/current/form/create_custom_field_type.html).
+
+??? question "Q2. Which object bundles a type with its parents and extensions?"
+    - [ ] A. `FormBuilder`
+    - [ ] B. `FormConfig`
+    - [x] C. `ResolvedFormType` ✅
+    - [ ] D. `OptionsResolver`
+
+    **Why:** `FormRegistry` produces a `ResolvedFormType` capturing the type, its
+    resolved parent, and applicable type extensions.
+    **Ref:** [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php).
+
+??? question "Q3. In what order do `configureOptions` methods run?"
+    - [x] A. Parent first, then child ✅
+    - [ ] B. Child first, then parent
+    - [ ] C. Alphabetical by class name
+    - [ ] D. Undefined
+
+    **Why:** The resolved type walks the chain top-down, so a child can override
+    defaults set by its parent.
+    **Ref:** [Form types docs](https://symfony.com/doc/current/forms.html).
+
+## Key takeaways
+
+- Types form an inheritance chain rooted at `FormType`; `getParent()` returns a
+  class string.
+- `ResolvedFormType` = type + parent chain + type extensions; it drives build.
+- Parent hooks run before child hooks (options and build).
+- Options are declared/validated with `OptionsResolver`; FQCN is the type id.
+
+## Last-minute revision
+
+!!! tip "Cheat sheet"
+    - Built-in: `Symfony\Component\Form\Extension\Core\Type\*`.
+    - `getParent(): string` → e.g. `TextType::class`.
+    - `OptionsResolver`: `setDefaults / setRequired / setAllowedTypes / setNormalizer`.
+    - No `getName()`; `getBlockPrefix()` for theming; FQCN is the id.
+    - `form.type` tag autoconfigured → inject services into types.
+
+## References
+
+- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
+- [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
+- [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)
+
+---
+
+<small>Related: [Creating forms](creation.md) · [Built-in types](built-in-types.md) ·
+[Type extensions](type-extensions.md)</small>
+</content>

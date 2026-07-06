@@ -1,0 +1,230 @@
+# The Request in a Controller
+
+!!! abstract "Learning objectives"
+    By the end of this chapter you can:
+
+    - [ ] Obtain the `Request` in a controller via type-hint or `RequestStack`.
+    - [ ] Read the correct parameter bag for query, body, attributes, headers,
+          cookies, files, and server data.
+    - [ ] Explain how the `Request` reaches your action through the value resolver.
+
+    **Syllabus:** `Controllers → The Request` ·
+    **Level:** Advanced ·
+    **Est. time:** 14 min ·
+    **Prerequisites:** [HTTP → Request](../http/request.md)
+
+---
+
+## Theory
+
+`Symfony\Component\HttpFoundation\Request` is the object-oriented wrapper around
+PHP's superglobals. In a controller you almost never touch `$_GET`/`$_POST`
+directly — you read the **parameter bags**:
+
+| Bag | Property | Source | Typical use |
+|---|---|---|---|
+| `query` | `$request->query` | `$_GET` | Query string params |
+| `request` | `$request->request` | `$_POST` body | Form fields |
+| `attributes` | `$request->attributes` | app-internal | Route params, `_route` |
+| `cookies` | `$request->cookies` | `$_COOKIE` | Reading cookies |
+| `files` | `$request->files` | `$_FILES` | Uploaded files |
+| `server` | `$request->server` | `$_SERVER` | Server/env values |
+| `headers` | `$request->headers` | `$_SERVER` HTTP_* | Request headers |
+
+Query and request bags are `InputBag` and expose type-safe getters
+(`getString`, `getInt`, `getBoolean`, `getEnum`, `getAlpha`, `getDigits`).
+
+## Deep Dive — how it works internally
+
+You get the `Request` two ways:
+
+1. **Type-hint the argument.** When an action parameter is type-hinted
+   `Request`, `Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver`
+   supplies the *current* request. This resolver has a **high priority (120)**, so
+   the argument is filled reliably.
+2. **Inject `RequestStack`.** Where you are not inside an action (a service),
+   inject `Symfony\Component\HttpFoundation\RequestStack` and call
+   `getCurrentRequest()`. During a [sub-request](internal-redirects.md) the stack
+   holds several requests; the top is the active one.
+
+```mermaid
+flowchart LR
+    K[HttpKernel] --> AR[ArgumentResolver]
+    AR --> RVR[RequestValueResolver<br>priority 120]
+    RVR -->|current Request| A["action(Request $r)"]
+    RS[RequestStack] -.getCurrentRequest.-> A
+```
+
+The `Request` is **not a service** you can autowire into a constructor — it is
+request-scoped and created per HTTP call. Autowire `RequestStack` instead and
+read the current request lazily.
+
+!!! note "Source reference"
+    `RequestValueResolver` —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php).
+
+### Prefer explicit resolvers for input
+
+Reading `$request->query->get('page')` works, but Symfony 8 favours mapping
+attributes — `#[MapQueryParameter]`, `#[MapQueryString]`, `#[MapRequestPayload]`
+— which validate and cast for you. See [Value Resolvers](value-resolvers.md).
+
+## Configuration & code
+
+=== "Type-hint"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Controller;
+
+    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\Routing\Attribute\Route;
+
+    final class SearchController extends AbstractController
+    {
+        #[Route('/search', name: 'search', methods: ['GET'])]
+        public function __invoke(Request $request): Response
+        {
+            $term = $request->query->getString('q');
+            $page = $request->query->getInt('page', 1);
+            $ua   = $request->headers->get('User-Agent', 'unknown');
+
+            return $this->render('search/results.html.twig', [
+                'term' => $term,
+                'page' => $page,
+                'ua'   => $ua,
+            ]);
+        }
+    }
+    ```
+
+=== "RequestStack (service)"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    namespace App\Service;
+
+    use Symfony\Component\HttpFoundation\RequestStack;
+
+    final class LocaleReader
+    {
+        public function __construct(private RequestStack $requestStack) {}
+
+        public function currentLocale(): string
+        {
+            return $this->requestStack->getCurrentRequest()?->getLocale() ?? 'en';
+        }
+    }
+    ```
+
+## Best practices & anti-patterns
+
+| ✅ Do | ❌ Avoid |
+|---|---|
+| Type-hint `Request` in actions | Reading `$_GET`/`$_POST` superglobals |
+| Use `InputBag` typed getters (`getInt`, `getEnum`) | `get()` then manual casting |
+| Inject `RequestStack` in services | Trying to autowire `Request` into a constructor |
+| Prefer `#[MapQueryParameter]` for validated input | Hand-parsing/validating query strings |
+
+## When (not) to use it / alternatives
+
+- Type-hint `Request` when you need several disparate values or the raw body.
+- Use mapping attributes when the input maps cleanly to typed scalars or a DTO.
+- Use `RequestStack` only outside the controller call chain (listeners, services).
+
+!!! danger "Certification traps"
+    - `Request` is **request-scoped**, not a container service — you cannot
+      constructor-inject it; inject `RequestStack`.
+    - `$request->request` is the **POST body** bag, not "the request object". The
+      naming trips people up.
+    - Route parameters live in `$request->attributes`, not `query`.
+    - `getInt`/`getString` are on `InputBag` (`query`, `request`); `headers`,
+      `cookies`, `server`, `files` are `HeaderBag`/`ParameterBag`/`FileBag`.
+
+!!! warning "Common mistakes"
+    - Looking for a route param in `$request->query` instead of `attributes`.
+    - Assuming `$request->getContent()` is JSON-decoded — it returns the raw body;
+      use `#[MapRequestPayload]` or `json_decode()` yourself.
+
+## Exercises
+
+1. **(Basic)** In an action, read a `page` query param as an int defaulting to 1
+   and an `Accept` header.
+2. **(Intermediate)** In a service, return the current request's client IP,
+   handling the no-request case gracefully.
+
+??? success "Solutions"
+
+    **1.**
+    ```php
+    $page = $request->query->getInt('page', 1);
+    $accept = $request->headers->get('Accept', '*/*');
+    ```
+
+    **2.**
+    ```php
+    public function clientIp(): ?string
+    {
+        return $this->requestStack->getCurrentRequest()?->getClientIp();
+    }
+    ```
+    The nullsafe operator handles the CLI/no-request context.
+
+## Certification questions
+
+??? question "Q1. Which resolver fills a `Request` type-hinted argument?"
+    - [x] A. `RequestValueResolver` ✅
+    - [ ] B. `RequestAttributeValueResolver`
+    - [ ] C. `RequestPayloadValueResolver`
+    - [ ] D. `DefaultValueResolver`
+
+    **Why:** `RequestValueResolver` supplies the current `Request`; the attribute
+    resolver handles route parameters. **Ref:** [controller](https://symfony.com/doc/current/controller.html#the-request-object-as-a-controller-argument).
+
+??? question "Q2. Where do route parameters land?"
+    - [ ] A. `$request->query`
+    - [ ] B. `$request->request`
+    - [x] C. `$request->attributes` ✅
+    - [ ] D. `$request->server`
+
+    **Why:** the router writes matched parameters into the `attributes` bag.
+    **Ref:** [request](https://symfony.com/doc/current/components/http_foundation.html#request).
+
+??? question "Q3. How should a service obtain the current request?"
+    - [ ] A. Autowire `Request` in the constructor.
+    - [x] B. Inject `RequestStack` and call `getCurrentRequest()`. ✅
+    - [ ] C. Read `$GLOBALS['request']`.
+    - [ ] D. Call `Request::createFromGlobals()`.
+
+    **Why:** the `Request` is request-scoped; `RequestStack` is the stable service.
+    **Ref:** [request stack](https://symfony.com/doc/current/service_container/request.html).
+
+## Key takeaways
+
+- Type-hint `Request` in actions; inject `RequestStack` in services.
+- Bags: `query` (GET), `request` (POST body), `attributes` (route/internal),
+  `headers`, `cookies`, `files`, `server`.
+- `InputBag` typed getters cast safely; prefer mapping attributes for validation.
+
+## Last-minute revision
+
+!!! tip "Cheat sheet"
+    - `query`→GET, `request`→POST, `attributes`→route params.
+    - `getInt/getString/getEnum/getBoolean` on `query` & `request`.
+    - Services: `RequestStack::getCurrentRequest()`. Never autowire `Request`.
+
+## References
+
+- [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html)
+- [Official Symfony docs — Request as controller argument](https://symfony.com/doc/current/controller.html)
+- [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)
+
+---
+
+<small>Related: [HTTP → Request](../http/request.md) · [Value Resolvers](value-resolvers.md) · [The Response](response.md) · [Cookies](cookies.md)</small>
