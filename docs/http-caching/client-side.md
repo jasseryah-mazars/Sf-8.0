@@ -120,9 +120,10 @@ and can invalidate stored entries for the target URL. Only **safe** methods
 
     use Symfony\Component\HttpFoundation\Request;
 
-    // Did the client force a revalidation (reload)?
+    // Did the client force a revalidation (reload)? The directive value is a
+    // string ("0"), so compare as a string.
     $forceRevalidate = $request->headers->hasCacheControlDirective('no-cache')
-        || 0 === $request->headers->getCacheControlDirective('max-age');
+        || '0' === $request->headers->getCacheControlDirective('max-age');
     ```
 
 === "Raw HTTP (hard reload)"

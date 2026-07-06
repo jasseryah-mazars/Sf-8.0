@@ -1,0 +1,664 @@
+categories:
+  - name: "Templating (Twig)"
+    questions:
+      # --- syntax.md ---
+      - question: "Which Twig delimiter executes a statement without printing anything?"
+        answers:
+          - value: "{% ... %}"
+            correct: true
+          - value: "{{ ... }}"
+            correct: false
+          - value: "{# ... #}"
+            correct: false
+          - value: "#{ ... }"
+            correct: false
+        explanation: >-
+          {% %} runs tags/control flow, {{ }} prints an (escaped) expression, and
+          {# #} is a comment that is stripped at compile time.
+        documentation: "https://twig.symfony.com/doc/3.x/templates.html#twig-language-references"
+
+      - question: "What does {{ 7 // 2 }} output in Twig?"
+        answers:
+          - value: "3"
+            correct: true
+          - value: "3.5"
+            correct: false
+          - value: "4"
+            correct: false
+          - value: "An error"
+            correct: false
+        explanation: >-
+          // is integer (floor) division in Twig; / performs float division and
+          would return 3.5.
+        documentation: "https://twig.symfony.com/doc/3.x/templates.html#math"
+
+      - question: "What is the result of {{ \"a\" ~ 1 + 1 }}?"
+        answers:
+          - value: "\"a2\""
+            correct: true
+          - value: "\"a11\""
+            correct: false
+          - value: "2"
+            correct: false
+          - value: "An error"
+            correct: false
+        explanation: >-
+          + binds tighter than ~, so it evaluates as "a" ~ (1 + 1) => "a" ~ 2 =>
+          "a2". ~ is string concatenation, not addition.
+        documentation: "https://twig.symfony.com/doc/3.x/templates.html#other-operators"
+
+      - question: "How do you strip whitespace between HTML tags in current Twig 3.x?"
+        answers:
+          - value: "{% apply spaceless %}...{% endapply %}"
+            correct: true
+          - value: "{% spaceless %}...{% endspaceless %}"
+            correct: false
+          - value: "{{ strip }}"
+            correct: false
+          - value: "{% trim %}...{% endtrim %}"
+            correct: false
+        explanation: >-
+          The {% spaceless %} tag was removed in Twig 3; use the spaceless filter
+          via {% apply spaceless %} (or the {{- -}} whitespace modifiers).
+        documentation: "https://twig.symfony.com/doc/3.x/filters/spaceless.html"
+
+      # --- auto-escaping.md (prime topic) ---
+      - question: "In Symfony, how is the default auto-escaping strategy chosen for a template?"
+        answers:
+          - value: "Guessed from the template file extension (e.g. .html.twig => html)"
+            correct: true
+          - value: "It is always 'html'"
+            correct: false
+          - value: "From the HTTP Accept header"
+            correct: false
+          - value: "Auto-escaping is disabled by default"
+            correct: false
+        explanation: >-
+          TwigBundle configures autoescape to 'name', using
+          FileExtensionEscapingStrategy::guess() so .html.twig escapes as html,
+          .js.twig as js, .txt.twig not at all.
+        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+
+      - question: "A value is placed inside <script>const x = \"...\";</script>. Which escape filter is correct?"
+        answers:
+          - value: "|e('js')"
+            correct: true
+          - value: "|e('html')"
+            correct: false
+          - value: "|e('html_attr')"
+            correct: false
+          - value: "|raw"
+            correct: false
+        explanation: >-
+          A JavaScript string context requires the 'js' strategy; HTML escaping
+          does not neutralise the characters dangerous in JS.
+        documentation: "https://twig.symfony.com/doc/3.x/filters/escape.html"
+
+      - question: "What does {% autoescape false %} ... {% endautoescape %} do?"
+        answers:
+          - value: "Disables auto-escaping inside the block (use for trusted content only)"
+            correct: true
+          - value: "Escapes the content as plain text"
+            correct: false
+          - value: "Escapes the content as a URL"
+            correct: false
+          - value: "Throws an exception"
+            correct: false
+        explanation: >-
+          It turns escaping off within the block, exactly like piping every value
+          through |raw. Only use it for trusted/sanitised content.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/autoescape.html"
+
+      - question: "Which escaping filter is required for a value used inside an HTML attribute?"
+        answers:
+          - value: "|e('html_attr')"
+            correct: true
+          - value: "|e('html')"
+            correct: false
+          - value: "|e('url')"
+            correct: false
+          - value: "|e('css')"
+            correct: false
+        explanation: >-
+          Attribute context needs the stricter html_attr encoder, which escapes
+          spaces, =, backticks and other characters that html escaping leaves
+          untouched.
+        documentation: "https://twig.symfony.com/doc/3.x/filters/escape.html"
+
+      # --- inheritance.md ---
+      - question: "How many templates can a single template extend in Twig?"
+        answers:
+          - value: "Exactly one"
+            correct: true
+          - value: "Up to three"
+            correct: false
+          - value: "Unlimited"
+            correct: false
+          - value: "Zero"
+            correct: false
+        explanation: >-
+          Twig uses single vertical inheritance. For reusing blocks from several
+          templates (horizontal reuse), use the {% use %} tag instead.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/extends.html"
+
+      - question: "Inside an overridden block, what does {{ parent() }} render?"
+        answers:
+          - value: "The parent template's version of that same block"
+            correct: true
+          - value: "The entire parent template"
+            correct: false
+          - value: "The parent controller's output"
+            correct: false
+          - value: "Nothing"
+            correct: false
+        explanation: >-
+          parent() outputs the content of the same block from the parent
+          template, letting a child extend rather than fully replace it.
+        documentation: "https://twig.symfony.com/doc/3.x/functions/parent.html"
+
+      - question: "Which tag provides horizontal reuse of blocks (like a trait)?"
+        answers:
+          - value: "{% use %}"
+            correct: true
+          - value: "{% extends %}"
+            correct: false
+          - value: "{% include %}"
+            correct: false
+          - value: "{% embed %}"
+            correct: false
+        explanation: >-
+          {% use %} imports block definitions from another template without
+          setting a parent, and multiple use statements are allowed.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/use.html"
+
+      # --- globals.md (prime topic) ---
+      - question: "What does app.user return when no one is authenticated?"
+        answers:
+          - value: "null"
+            correct: true
+          - value: "An empty User object"
+            correct: false
+          - value: "The string 'anonymous'"
+            correct: false
+          - value: "It throws an exception"
+            correct: false
+        explanation: >-
+          AppVariable::getUser() reads the token from the token storage and
+          returns its user, or null when there is no authenticated user.
+        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+
+      - question: "Which class backs the Twig `app` global in Symfony?"
+        answers:
+          - value: "Symfony\\Bridge\\Twig\\AppVariable"
+            correct: true
+          - value: "Symfony\\Component\\HttpFoundation\\Request"
+            correct: false
+          - value: "Twig\\Environment"
+            correct: false
+          - value: "Symfony\\Component\\HttpKernel\\Kernel"
+            correct: false
+        explanation: >-
+          TwigBundle registers Symfony\Bridge\Twig\AppVariable as the `app`
+          global; its getters expose user, request, session, flashes, etc.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php"
+
+      - question: "Which of these is NOT a member of the `app` global?"
+        answers:
+          - value: "app.controller"
+            correct: true
+          - value: "app.request"
+            correct: false
+          - value: "app.environment"
+            correct: false
+          - value: "app.flashes"
+            correct: false
+        explanation: >-
+          app exposes user, request, session, flashes, environment, debug, token,
+          locale, current_route and current_route_parameters. There is no
+          app.controller.
+        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+
+      - question: "What does app.environment return?"
+        answers:
+          - value: "The kernel environment string, e.g. 'dev' or 'prod'"
+            correct: true
+          - value: "The operating-system environment variables"
+            correct: false
+          - value: "The APP_ENV file path"
+            correct: false
+          - value: "A boolean debug flag"
+            correct: false
+        explanation: >-
+          app.environment is the kernel environment (dev/prod/test); app.debug is
+          the boolean debug flag. They are unrelated to OS env vars.
+        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+
+      - question: "How do you register a static global string in Twig?"
+        answers:
+          - value: "Under twig.globals in config, or via a GlobalsInterface extension"
+            correct: true
+          - value: "With a #[AsGlobal] attribute"
+            correct: false
+          - value: "With {% global x = 'y' %}"
+            correct: false
+          - value: "It cannot be done"
+            correct: false
+        explanation: >-
+          Declare globals under twig.globals in twig.yaml, or return them from an
+          extension implementing Twig\Extension\GlobalsInterface::getGlobals().
+        documentation: "https://symfony.com/doc/current/templates.html#global-variables"
+
+      # --- filters-functions.md ---
+      - question: "Which attribute registers a custom Twig filter in current Twig 3.x?"
+        answers:
+          - value: "#[AsTwigFilter]"
+            correct: true
+          - value: "#[TwigFilter]"
+            correct: false
+          - value: "#[AsFilter]"
+            correct: false
+          - value: "#[Filter]"
+            correct: false
+        explanation: >-
+          Twig 3.x provides Twig\Attribute\AsTwigFilter and AsTwigFunction as an
+          attribute-based alternative to returning TwigFilter/TwigFunction from an
+          AbstractExtension.
+        documentation: "https://symfony.com/doc/current/templates.html#creating-a-twig-extension"
+
+      - question: "A custom filter returns '<b>x</b>' but the page shows escaped text. Why?"
+        answers:
+          - value: "The filter must be declared with the is_safe => ['html'] option"
+            correct: true
+          - value: "Twig never escapes filter output"
+            correct: false
+          - value: "You must call |raw on the input"
+            correct: false
+          - value: "It is a Twig bug"
+            correct: false
+        explanation: >-
+          Filter/function output is auto-escaped unless the TwigFilter/TwigFunction
+          declares is_safe for the relevant context.
+        documentation: "https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping"
+
+      - question: "What does the `default` filter replace?"
+        answers:
+          - value: "Undefined, null AND empty values"
+            correct: true
+          - value: "Only undefined variables"
+            correct: false
+          - value: "Only null values"
+            correct: false
+          - value: "Only empty strings"
+            correct: false
+        explanation: >-
+          default(x) substitutes x when the value is undefined, null or empty
+          (unless you pass true as the second argument to only test 'defined').
+        documentation: "https://twig.symfony.com/doc/3.x/filters/default.html"
+
+      # --- includes.md ---
+      - question: "What does the `only` keyword do on an include?"
+        answers:
+          - value: "Restricts the included template's scope to just the `with` variables"
+            correct: true
+          - value: "Includes the template only once"
+            correct: false
+          - value: "Makes the variables read-only"
+            correct: false
+          - value: "Ignores a missing template"
+            correct: false
+        explanation: >-
+          By default an include inherits the parent context; adding `only`
+          isolates it so it sees only the variables passed via `with` (plus the
+          app global).
+        documentation: "https://twig.symfony.com/doc/3.x/tags/include.html"
+
+      - question: "Which construct includes a template AND lets you override its blocks?"
+        answers:
+          - value: "{% embed %}"
+            correct: true
+          - value: "{% include %}"
+            correct: false
+          - value: "{% use %}"
+            correct: false
+          - value: "{% extends %}"
+            correct: false
+        explanation: >-
+          embed combines include with extends-style block overriding, ideal for
+          configurable components with slots.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/embed.html"
+
+      - question: "What does {% include ['a.html.twig', 'b.html.twig'] %} render?"
+        answers:
+          - value: "The first template in the list that exists"
+            correct: true
+          - value: "Both templates concatenated"
+            correct: false
+          - value: "The last template"
+            correct: false
+          - value: "An error"
+            correct: false
+        explanation: >-
+          Passing an array of names renders the first template that can be loaded,
+          which is handy for theme overrides.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/include.html"
+
+      # --- loops-conditions.md ---
+      - question: "What is loop.index on the first iteration of a for loop?"
+        answers:
+          - value: "1"
+            correct: true
+          - value: "0"
+            correct: false
+          - value: "null"
+            correct: false
+          - value: "-1"
+            correct: false
+        explanation: >-
+          loop.index is 1-based; loop.index0 is the 0-based counterpart.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/for.html#the-loop-variable"
+
+      - question: "When does the `else` clause of a for loop execute?"
+        answers:
+          - value: "When the collection is empty (zero iterations)"
+            correct: true
+          - value: "On the last item"
+            correct: false
+          - value: "On every iteration"
+            correct: false
+          - value: "When an error occurs"
+            correct: false
+        explanation: >-
+          {% for ... else ... endfor %} renders the else block only when the loop
+          produced no iterations.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/for.html#the-else-clause"
+
+      - question: "How do you skip iterations in a Twig for loop?"
+        answers:
+          - value: "Filter the source, e.g. {% for x in items if x.active %}"
+            correct: true
+          - value: "Use {% continue %}"
+            correct: false
+          - value: "Use {% break %}"
+            correct: false
+          - value: "Call loop.skip()"
+            correct: false
+        explanation: >-
+          Twig has no break/continue by design; filter the iterable inline or use
+          an if inside the body.
+        documentation: "https://twig.symfony.com/doc/3.x/tags/for.html"
+
+      # --- urls.md ---
+      - question: "What is the difference between path() and url() in Twig?"
+        answers:
+          - value: "path() returns a relative URL, url() returns an absolute URL"
+            correct: true
+          - value: "url() is relative, path() is absolute"
+            correct: false
+          - value: "They are identical"
+            correct: false
+          - value: "path() only works inside controllers"
+            correct: false
+        explanation: >-
+          Both use UrlGeneratorInterface via RoutingExtension; path() uses
+          ABSOLUTE_PATH (relative) and url() uses ABSOLUTE_URL (scheme + host).
+        documentation: "https://symfony.com/doc/current/templates.html#linking-to-pages"
+
+      - question: "Given route 'search' => /search, what does path('search', {q: 'x', page: 2}) produce?"
+        answers:
+          - value: "/search?q=x&page=2"
+            correct: true
+          - value: "/search/x/2"
+            correct: false
+          - value: "/search (extra params are dropped)"
+            correct: false
+          - value: "An error"
+            correct: false
+        explanation: >-
+          Parameters not consumed by the route pattern are appended as the query
+          string.
+        documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+
+      - question: "Which Twig extension provides path() and url()?"
+        answers:
+          - value: "Symfony\\Bridge\\Twig\\Extension\\RoutingExtension"
+            correct: true
+          - value: "Twig\\Extension\\CoreExtension"
+            correct: false
+          - value: "Symfony\\Bridge\\Twig\\Extension\\AssetExtension"
+            correct: false
+          - value: "Symfony\\Bridge\\Twig\\Extension\\HttpKernelExtension"
+            correct: false
+        explanation: >-
+          RoutingExtension wraps the UrlGeneratorInterface and reads the
+          RequestContext to build relative and absolute URLs.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php"
+
+      # --- controller-rendering.md ---
+      - question: "How does render(controller('C::m')) execute the controller?"
+        answers:
+          - value: "As a sub-request through HttpKernel (inline fragment)"
+            correct: true
+          - value: "As a plain static method call with no request"
+            correct: false
+          - value: "As an HTTP redirect"
+            correct: false
+          - value: "As a console command"
+            correct: false
+        explanation: >-
+          The InlineFragmentRenderer issues a real HttpKernel sub-request, so the
+          kernel events run again for the fragment.
+        documentation: "https://symfony.com/doc/current/templates.html#embedding-controllers"
+
+      - question: "What happens with render_esi() when no ESI-capable reverse proxy is present?"
+        answers:
+          - value: "It transparently falls back to inline rendering"
+            correct: true
+          - value: "It throws an exception"
+            correct: false
+          - value: "It renders nothing"
+            correct: false
+          - value: "It caches the fragment forever"
+            correct: false
+        explanation: >-
+          Without a proxy that understands ESI, Symfony degrades render_esi to an
+          inline sub-request so the page still works.
+        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+
+      - question: "Which service selects the fragment renderer for render()/render_esi()?"
+        answers:
+          - value: "Symfony\\Component\\HttpKernel\\Fragment\\FragmentHandler"
+            correct: true
+          - value: "Symfony\\Component\\Routing\\Generator\\UrlGenerator"
+            correct: false
+          - value: "Twig\\Extension\\EscaperExtension"
+            correct: false
+          - value: "Symfony\\Bridge\\Twig\\AppVariable"
+            correct: false
+        explanation: >-
+          HttpKernelExtension delegates to FragmentHandler, which picks a
+          FragmentRendererInterface (inline, esi, hinclude) by strategy name.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php"
+
+      # --- translations.md ---
+      - question: "What is the argument order of the `trans` filter?"
+        answers:
+          - value: "(parameters, domain, locale)"
+            correct: true
+          - value: "(domain, parameters, locale)"
+            correct: false
+          - value: "(locale, domain, parameters)"
+            correct: false
+          - value: "(parameters, locale, domain)"
+            correct: false
+        explanation: >-
+          The signature is message|trans(parameters = {}, domain = 'messages',
+          locale = null).
+        documentation: "https://symfony.com/doc/current/translation.html#translations-in-templates"
+
+      - question: "How do you pluralize a message in Symfony 8 templates?"
+        answers:
+          - value: "Use ICU MessageFormat {count, plural, ...} in a +intl-icu domain"
+            correct: true
+          - value: "Use the removed transchoice() function"
+            correct: false
+          - value: "Use the |plural filter"
+            correct: false
+          - value: "Use a {% pluralize %} tag"
+            correct: false
+        explanation: >-
+          transchoice was removed; pluralization uses ICU MessageFormat, which is
+          applied to catalogues whose domain ends with +intl-icu.
+        documentation: "https://symfony.com/doc/current/translation/message_format.html"
+
+      - question: "A translation key has no entry for the current locale and no fallback. What is rendered?"
+        answers:
+          - value: "The key string itself"
+            correct: true
+          - value: "An empty string"
+            correct: false
+          - value: "A 500 error"
+            correct: false
+          - value: "null"
+            correct: false
+        explanation: >-
+          The translator returns the untranslated message id when no translation
+          is found.
+        documentation: "https://symfony.com/doc/current/translation.html"
+
+      # --- interpolation.md ---
+      - question: "Where does #{...} string interpolation work in Twig?"
+        answers:
+          - value: "Only inside double-quoted strings"
+            correct: true
+          - value: "Inside any string literal"
+            correct: false
+          - value: "Only inside single-quoted strings"
+            correct: false
+          - value: "Only inside {% %} tags"
+            correct: false
+        explanation: >-
+          The lexer only interpolates #{...} within double-quoted strings; single
+          quotes render the text literally.
+        documentation: "https://twig.symfony.com/doc/3.x/templates.html#string-interpolation"
+
+      - question: "What is the result of {{ 1 + 2 ~ 3 }}?"
+        answers:
+          - value: "\"33\""
+            correct: true
+          - value: "\"123\""
+            correct: false
+          - value: "6"
+            correct: false
+          - value: "\"15\""
+            correct: false
+        explanation: >-
+          + binds tighter than ~, so (1 + 2) ~ 3 => 3 ~ 3 => the string "33".
+        documentation: "https://twig.symfony.com/doc/3.x/templates.html#other-operators"
+
+      - question: "Which filter applies sprintf-style formatting in Twig?"
+        answers:
+          - value: "format"
+            correct: true
+          - value: "sprintf"
+            correct: false
+          - value: "printf"
+            correct: false
+          - value: "interpolate"
+            correct: false
+        explanation: >-
+          The format filter wraps vsprintf, e.g. \"%s scored %d\"|format(a, b).
+        documentation: "https://twig.symfony.com/doc/3.x/filters/format.html"
+
+      # --- assets.md ---
+      - question: "What does asset('css/app.css') return?"
+        answers:
+          - value: "A public URL/path (relative to public/) with base path and version applied"
+            correct: true
+          - value: "A route-generated URL"
+            correct: false
+          - value: "The file's contents"
+            correct: false
+          - value: "An absolute filesystem path"
+            correct: false
+        explanation: >-
+          asset() resolves a path relative to public/ through the
+          Symfony\Component\Asset\Packages service, applying base path and
+          versioning.
+        documentation: "https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets"
+
+      - question: "What is the purpose of asset versioning?"
+        answers:
+          - value: "Cache busting so browsers refetch changed files"
+            correct: true
+          - value: "Access control for static files"
+            correct: false
+          - value: "Minifying assets"
+            correct: false
+          - value: "Matching routes"
+            correct: false
+        explanation: >-
+          Versioning changes the URL when a file changes (static version or a JSON
+          manifest of content hashes) so clients do not serve a stale cached copy.
+        documentation: "https://symfony.com/doc/current/frontend.html"
+
+      - question: "Which build tools are OUT of scope when only using asset()?"
+        answers:
+          - value: "AssetMapper and Webpack Encore"
+            correct: true
+          - value: "The Routing component"
+            correct: false
+          - value: "The Translation component"
+            correct: false
+          - value: "The Twig EscaperExtension"
+            correct: false
+        explanation: >-
+          asset() only resolves the final public path/version. Bundling and
+          hashing are done by AssetMapper or Webpack Encore, which are not covered
+          here.
+        documentation: "https://symfony.com/doc/current/components/asset.html"
+
+      # --- debugging.md ---
+      - question: "What does {{ dump() }} with no arguments do?"
+        answers:
+          - value: "Dumps all variables available in the current template context"
+            correct: true
+          - value: "Dumps nothing"
+            correct: false
+          - value: "Throws an exception"
+            correct: false
+          - value: "Dumps only the app global"
+            correct: false
+        explanation: >-
+          Called with no arguments, dump() outputs the entire render context (all
+          passed variables plus globals).
+        documentation: "https://symfony.com/doc/current/templates.html#the-dump-twig-utilities"
+
+      - question: "Why does dump() error in the prod environment?"
+        answers:
+          - value: "The DumpExtension is only registered in debug mode"
+            correct: true
+          - value: "It is a syntax error"
+            correct: false
+          - value: "VarDumper is never installed"
+            correct: false
+          - value: "It has been deprecated"
+            correct: false
+        explanation: >-
+          The dump function/tag come from the debug-only DumpExtension (backed by
+          VarDumper); in prod the function is undefined, so leftover dumps throw.
+        documentation: "https://symfony.com/doc/current/components/var_dumper.html"
+
+      - question: "What is the difference between {{ dump(x) }} and {% dump x %}?"
+        answers:
+          - value: "The function prints inline; the tag sends data to the collector without injecting markup"
+            correct: true
+          - value: "They are identical"
+            correct: false
+          - value: "The tag works in prod, the function does not"
+            correct: false
+          - value: "The function only works in prod"
+            correct: false
+        explanation: >-
+          The dump() function outputs where called; the {% dump %} tag routes the
+          data to the profiler/toolbar without adding markup to the page.
+        documentation: "https://symfony.com/doc/current/templates.html#the-dump-twig-utilities"
