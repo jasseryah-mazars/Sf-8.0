@@ -396,6 +396,20 @@ categories:
           TemplatedEmail (in the Twig bridge) carries htmlTemplate()/textTemplate() and
           context(); a body renderer turns them into MIME parts before sending.
         documentation: "https://symfony.com/doc/current/mailer.html#twig-html-css"
+      - question: "How is an inline (embedded) image referenced from an email's HTML body?"
+        answers:
+          - value: "Via a cid: reference produced by embed()/embedFromPath()"
+            correct: true
+          - value: "Only as an absolute external URL"
+            correct: false
+          - value: "As a base64 data: URI hand-written by the developer"
+            correct: false
+          - value: "Inline images are not supported"
+            correct: false
+        explanation: >-
+          embed()/embedFromPath() add a DataPart addressed with cid:<name>, which the
+          HTML body references (e.g. <img src="cid:logo">).
+        documentation: "https://symfony.com/doc/current/mailer.html#embedding-images"
 
   - name: "Miscellaneous — Runtime & Clock"
     questions:
