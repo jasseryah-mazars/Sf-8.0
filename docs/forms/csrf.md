@@ -37,6 +37,15 @@ add and check this token automatically — you get protection for free.
 By default, every form built through the framework has CSRF protection enabled
 and renders a hidden `_token` field.
 
+!!! question "Predict first"
+    A user submits a form whose hidden `_token` field is missing entirely. Does the
+    Form component throw an exception, or do something else?
+
+??? note "Reveal"
+    Something else: on **PRE_SUBMIT** the `CsrfValidationListener` pops `_token`, finds
+    it absent/invalid, and adds a **form error** — no exception. `isValid()` returns
+    `false` and you re-render with the `csrf_message`.
+
 ## Deep Dive — how it works internally
 
 ### The moving parts
@@ -282,10 +291,26 @@ mutates state under cookie auth **must** keep CSRF.
     - Manual: `csrf_token('intention')` in Twig · `isCsrfTokenValid('intention', $t)`.
     - Never disable CSRF for cookie-authenticated state changes.
 
+## Connections
+
+- **Depends on:** [Web security fundamentals](../php-web-security/web-security.md) — CSRF is the cross-site request-forgery threat this defends against.
+- **Reused in:** [Rendering forms](rendering.md) — `form_rest`/`form_end` emit the hidden `_token`; drop it and every POST fails.
+- **Confused with:** [Form events](events.md) — the token is checked by a listener on `PRE_SUBMIT`, not a separate validation phase.
+
 ## Official References
 - [Official Symfony docs — CSRF protection](https://symfony.com/doc/current/security/csrf.html)
 - [Official Symfony docs — Form type CSRF options](https://symfony.com/doc/current/reference/forms/types/form.html)
 - [Symfony source — FormTypeCsrfExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Csrf/Type/FormTypeCsrfExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** CSRF protection exists and which requests need it
+- [ ] configure `csrf_protection`, `csrf_token_id`, `csrf_field_name` and stateless CSRF in Symfony 8
+- [ ] debug a form that always fails validation because `_token` was never rendered
+- [ ] spot the wrong answer about which event validates the token (PRE_SUBMIT)
+- [ ] explain how `SameOriginCsrfTokenManager` validates without a session
 
 ---
 

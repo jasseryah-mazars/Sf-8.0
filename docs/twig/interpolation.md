@@ -38,6 +38,14 @@ Three ways to build a string from parts:
 - **`~`** joins values as strings (numbers are cast to string).
 - **`format`** applies `sprintf` placeholders (`%s`, `%d`, `%.2f`, `%1$s`).
 
+!!! question "Predict first"
+    What does `{{ 1 + 2 ~ 3 }}` produce — `6`, `"123"`, or `"33"`?
+
+??? note "Reveal"
+    `"33"`. `+` binds **tighter** than `~`, so it evaluates as `(1 + 2) ~ 3` →
+    `3 ~ 3` → the string `"33"`. `~` concatenates (casting to string); `+` is
+    arithmetic — they are not interchangeable.
+
 ## Deep Dive — how it works internally
 
 Interpolation is a **lexer** feature: inside a `"..."` string, `#{` opens an
@@ -172,6 +180,12 @@ placeholders (translation strings use `%name%` placeholders — see
     - `"hi #{name}"` (double quotes) · `'hi #{name}'` = literal.
     - `a ~ b` join · `a + b` add.
     - `"%s %d"|format(a, b)` · `"%x%"|replace({'%x%': v})`.
+
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — `~` vs `+` and their precedence come straight from the operator table.
+- **Reused in:** [Translations](translations.md) — translation messages use `%name%` placeholders, the same substitution idea as `format`/`replace`.
+- **Confused with:** [Filters & Functions](filters-functions.md) — `format` is a filter (`|format`), not string syntax.
 
 ## Official References
 - [Twig — string interpolation](https://twig.symfony.com/doc/3.x/templates.html#string-interpolation)

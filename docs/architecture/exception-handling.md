@@ -39,6 +39,15 @@ its own status code.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A `kernel.exception` listener reads `getThrowable()`, matches nothing in its
+    branch, and returns without calling `setResponse()`. What does the client see?
+
+??? note "Reveal"
+    Nothing custom. The event's response stays `null`, so `ErrorListener`
+    (priority `-128`) fills it with the default error page. If you had also disabled
+    `ErrorListener`, the kernel re-throws and the client gets a bare `500`.
+
 ### The catch in `handleRaw()`
 
 `HttpKernel::handle(..., catch: true)` wraps `handleRaw()` in a `try/catch`. On an

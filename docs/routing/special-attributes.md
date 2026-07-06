@@ -35,6 +35,15 @@ controller arguments. They are conventionally prefixed with an underscore.
 | `_route` | Name of the matched route (read-only) |
 | `_route_params` | The matched route's parameters (read-only) |
 
+!!! question "Predict first"
+    Can you set `_route` in a route's `defaults` to change what
+    `$request->attributes->get('_route')` returns?
+
+??? note "Reveal"
+    No. `_route` and `_route_params` are **read-only outputs** injected by the
+    matcher — you read them, never set them. The inputs you *do* set are
+    `_controller`, `_format`, `_locale` and `_fragment`.
+
 ## Deep Dive — how it works internally
 
 When `UrlMatcher::match()` succeeds it returns an **array of parameters** merged
@@ -268,10 +277,26 @@ in templates you can just append `#anchor` in the href.
     - `stateless: true` = no session (debug assertion).
     - Populated by `RouterListener` on `kernel.request`.
 
+## Connections
+
+- **Depends on:** [Defaults](defaults.md) — special attributes are just reserved `defaults` keys.
+- **Reused in:** [Locale](locale.md) — `_locale` is the special attribute that sets the request locale.
+- **Confused with:** [URL generation](url-generation.md) — `_fragment` acts only at generation, never in matching.
+
 ## Official References
 - [Official Symfony docs — Special parameters](https://symfony.com/doc/current/routing.html#special-parameters)
 - [Official Symfony docs — Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes)
 - [Symfony source — RouterListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain the input vs output special attributes and what each controls
+- [ ] implement `_format` with a requirement and a `stateless` route in Symfony 8
+- [ ] debug `items.exe` matching because `_format` had no requirement
+- [ ] spot that `_route`/`_route_params` are read-only and `_fragment` is generation-only
+- [ ] explain how `RouterListener` copies matcher output into request attributes
 
 ---
 

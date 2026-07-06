@@ -56,6 +56,15 @@ Accept-Language: fr-FR, fr;q=0.8, en;q=0.5
 
 Higher `q` wins; `q=0` means "not acceptable". Ties break by specificity.
 
+!!! question "Predict first"
+    Given `Accept: application/xml;q=0.8, application/json;q=0.9`, which format does
+    `getPreferredFormat()` return?
+
+??? note "Reveal"
+    `json` — the higher `q` (0.9 > 0.8) wins. Note it returns a Symfony **format
+    name**, not a MIME type, and you must set `Vary: Accept` so shared caches key
+    each representation separately.
+
 ## Deep Dive — how it works internally
 
 ### Request-side API

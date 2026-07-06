@@ -33,6 +33,15 @@ file path so you never write `require`.
 | Qualified | `Service\Foo` | Relative to current namespace (or a `use`) |
 | Unqualified | `Foo` | Current namespace, then a matching `use` |
 
+!!! question "Predict first"
+    Inside `namespace App;`, `strlen($s)` works without a `use`, but
+    `new DateTime()` fails. Why the difference?
+
+??? note "Reveal"
+    Unqualified **function/constant** calls fall back to the global namespace;
+    **class names do not**. So `strlen` resolves to `\strlen`, but `DateTime`
+    means `App\DateTime` unless you write `\DateTime` or import it.
+
 ## Deep Dive — how it works internally
 
 ### Name resolution rules
@@ -214,6 +223,12 @@ builds a static classmap so no filesystem stat per class is needed.
     - `\Foo` = fully qualified; `Foo` = current ns (class) or global (function).
     - Grouped: `use App\{A, B, C};` · function: `use function`; const: `use const`.
     - PSR-4: `App\ → src/`, case-sensitive on Linux.
+
+## Connections
+
+- **Depends on:** [OOP](oop.md) — namespaces organise the classes/interfaces you define.
+- **Reused in:** [Extensions](extensions.md) — the same `composer.json` declares `ext-*` beside PSR-4; [Interfaces](interfaces.md) type-hints imported FQCNs.
+- **Confused with:** [Traits](traits.md) — file-level `use Some\Class;` (import) vs class-body `use TraitName;` (trait inclusion).
 
 ## Official References
 - [PHP: Namespaces](https://www.php.net/manual/en/language.namespaces.php)

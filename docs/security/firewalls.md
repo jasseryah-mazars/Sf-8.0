@@ -38,6 +38,15 @@ Think of firewalls as the *authentication* layer (who are you, per URL zone) and
 [`access_control`](access-control.md) as the *authorization* layer (are you
 allowed) — they are separate.
 
+!!! question "Predict first"
+    You list `main` (no `pattern`) before `api` (`pattern: ^/api`). Which firewall
+    handles a request to `/api/orders`?
+
+??? note "Reveal"
+    `main`. Firewalls are first-match and `main` has no pattern, so it matches
+    everything — `api` is never reached. Order specific patterns first; the
+    pattern-less catch-all goes last.
+
 ## Deep Dive — how it works internally
 
 ### Matching

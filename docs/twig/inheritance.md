@@ -251,6 +251,16 @@ definitions — no `extends`, no surrounding HTML.
 - [Twig — extends / use / block](https://twig.symfony.com/doc/3.x/tags/extends.html)
 - [Twig source — Template.php](https://github.com/twigphp/Twig/blob/3.x/src/Template.php)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** layouts use blocks and how child overrides win
+- [ ] build a multi-level `extends` chain with `parent()` in Symfony 8
+- [ ] debug a block that lost its parent content because `{{ parent() }}` was dropped
+- [ ] spot the trick answer that allows `extends` of multiple parents
+- [ ] explain how inheritance maps to PHP method overriding on `Twig\Template`
+
 ---
 
 <small>Related: [Twig Syntax](syntax.md) · [Includes](includes.md) · [Controller Rendering](controller-rendering.md)</small>

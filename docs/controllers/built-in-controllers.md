@@ -31,6 +31,15 @@ Symfony ships two ready-made controllers so trivial routes need **no PHP class**
 You reference them in the route's `controller` (or `_controller`) and pass their
 parameters as route **defaults**.
 
+!!! question "Predict first"
+    A route points at `RedirectController::urlRedirectAction` with an **empty**
+    `path` default. What status does the visitor get — 404, 500, or something else?
+
+??? note "Reveal"
+    **410 Gone.** An empty target tells `RedirectController` the resource is
+    permanently gone, so it returns 410 — not a 404. (And `permanent: true` turns
+    the redirect into 301, or 308 with `keepRequestMethod`.)
+
 ## Deep Dive — how it works internally
 
 Both are ordinary invokable/service controllers registered by the framework and
@@ -229,10 +238,26 @@ flowchart LR
     - Redirect URL: `RedirectController::urlRedirectAction`, `defaults.path`.
     - `permanent`→301/308 · empty target→410 · `keepRequestMethod`/`keepQueryParams`.
 
+## Connections
+
+- **Depends on:** [HTTP Redirects](http-redirects.md) — supplies the 301/302/308 semantics `permanent` selects.
+- **Reused in:** [Naming Conventions](naming-conventions.md) — these are referenced as a route's `controller`, like any callable.
+- **Confused with:** [Internal Redirects](internal-redirects.md) — `RedirectController` sends a real 3xx, not an internal forward.
+
 ## Official References
 - [Official Symfony docs — Render a template from a route](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
 - [Official Symfony docs — Redirect directly from a route](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a config-only controller exists (logic-free routes, no PHP class)
+- [ ] wire `TemplateController` and `RedirectController` from route defaults in Symfony 8
+- [ ] debug a redirect that 404s because `::redirectAction`/`::urlRedirectAction` was omitted
+- [ ] spot that an empty target yields 410 while `permanent: true` yields 301/308
+- [ ] explain how these are ordinary invokable/service controllers internally
 
 ---
 

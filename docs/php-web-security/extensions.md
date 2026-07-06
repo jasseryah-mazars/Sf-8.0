@@ -241,6 +241,16 @@ flowchart LR
 - [Composer platform dependencies](https://getcomposer.org/doc/articles/composer-platform-dependencies.md)
 - [Symfony source — String component](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** Symfony declares `ext-*` platform requirements
+- [ ] detect a loaded extension at runtime and require it in a Symfony 8 `composer.json`
+- [ ] debug a UTF-8 length bug caused by `strlen` instead of `mb_strlen`
+- [ ] spot the trick: `ctype_digit(123)` treating a small int as an ASCII code
+- [ ] explain what `opcache` caches (bytecode) and why it speeds up production
+
 ---
 
 <small>Related: [Namespaces](namespaces.md) · [SPL](spl.md) · [Web Security](web-security.md)</small>

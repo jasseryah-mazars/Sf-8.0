@@ -32,6 +32,15 @@ Crawler over the current page, so it is the bridge between "I loaded a page" and
 A Crawler is an **immutable, iterable set of nodes**: filtering returns a *new*
 Crawler holding the matched subset.
 
+!!! question "Predict first"
+    `$crawler->filter('div.item')->text()` throws on a page with no `div.item`.
+    Which two facts explain the exception?
+
+??? note "Reveal"
+    `text()` reads the **first** node and throws on an empty set unless you pass a
+    default. And CSS `filter()` needs the css-selector component to convert the
+    selector to XPath — without it only `filterXPath()` works.
+
 ## Deep Dive — how it works internally
 
 Internally the Crawler holds a list of `DOMNode` objects from a parsed
@@ -310,10 +319,26 @@ express the query (axes, text predicates).
     - Read: `text($default)`, `attr('href')`, `html()`, `each(fn)`, `extract([...])`.
     - Derive: `->link()`, `->form([$overrides])`, `->image()`.
 
+## Connections
+
+- **Depends on:** [The Client](client.md) — every navigation call hands you a fresh Crawler.
+- **Reused in:** [Introspection](introspection.md) — selector assertions query the same DOM more readably.
+- **Confused with:** [Introspection](introspection.md) — the Crawler *finds* nodes; the `assertSelector*` helpers *check* them.
+
 ## Official References
 - [Official Symfony docs — DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html)
 - [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/current/testing.html#the-crawler)
 - [Symfony source — Crawler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DomCrawler/Crawler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the Crawler is an immutable node set over the DOM
+- [ ] query with `filter()` / `filterXPath()` and derive `Link` / `Form` objects
+- [ ] debug a thrown `text()` on an empty match
+- [ ] spot the trap that CSS `filter()` needs the css-selector component
+- [ ] explain how `filter()` converts CSS to XPath internally
 
 ---
 

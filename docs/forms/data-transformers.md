@@ -41,6 +41,15 @@ Two transformer slots per field:
 | **Model transformer** | model ↔ norm | `addModelTransformer()` |
 | **View transformer** | norm ↔ view | `addViewTransformer()` |
 
+!!! question "Predict first"
+    A field converts a `DateTimeImmutable` model into a `"2026-07-06"` string in the
+    browser. Which method runs when the page is **displayed**, and in which direction?
+
+??? note "Reveal"
+    `transform()` runs on display, **model → view**. `reverseTransform()` runs on
+    submit, **view → model**. Getting this pair backwards is the single most common
+    transformer bug (and a favourite exam trap).
+
 ## Deep Dive — how it works internally
 
 ### The interface & its two directions

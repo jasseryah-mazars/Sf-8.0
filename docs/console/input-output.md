@@ -34,6 +34,15 @@ On top sits **`Symfony\Component\Console\Style\SymfonyStyle`**, the recommended
 helper that wraps both into a consistent, styled API — the exam expects you to know
 it.
 
+!!! question "Predict first"
+    You want progress messages on STDERR while piping data on STDOUT. Can you call
+    `getErrorOutput()` on any `OutputInterface`?
+
+??? note "Reveal"
+    No. `getErrorOutput()` lives on `ConsoleOutputInterface`, not the base
+    `OutputInterface`. Guard with `instanceof` first, or a plain output throws a
+    type error. Routing status to STDERR keeps piped STDOUT data clean.
+
 ## Deep Dive — how it works internally
 
 `SymfonyStyle` implements `StyleInterface` and `OutputInterface`, decorating the

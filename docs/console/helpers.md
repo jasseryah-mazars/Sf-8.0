@@ -299,6 +299,16 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
 - [Official Symfony docs — QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html)
 - [Symfony source — Console helpers](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** helpers exist (reusable CLI UI widgets shared across commands)
+- [ ] prompt, render a `Table` and a `ProgressBar` in Symfony 8
+- [ ] debug a prompt that hangs or returns `null` under `--no-interaction`
+- [ ] spot the trick that invokable commands can't call `$this->getHelper()`
+- [ ] explain the `HelperSet` and how `getHelper('question')` resolves a helper
+
 ---
 
 <small>Related: [Input & output](input-output.md) · [Custom commands](custom-commands.md) · [Verbosity](verbosity.md)</small>

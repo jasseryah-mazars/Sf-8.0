@@ -255,10 +255,31 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
     - `requires_channel: https` = pre-auth redirect.
     - `ips` + `PUBLIC_ACCESS` = LAN allowlist; no match = allowed.
 
+## Connections
+
+- **Depends on:** [Firewalls](firewalls.md) — the `AccessListener` runs inside the
+  matched firewall's listener chain.
+- **Depends on:** [Authorization](authorization.md) — rules resolve through the
+  same `AccessDecisionManager` as `isGranted()`.
+- **Reused in:** [Voters](voters.md) — `roles`/`allow_if` are ultimately voter
+  decisions.
+- **Confused with:** [Roles](roles.md) — `access_control` protects URL *zones*;
+  it cannot see a subject, unlike a voter.
+
 ## Official References
 - [Symfony docs — access_control](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
 - [Symfony docs — Security expressions](https://symfony.com/doc/current/security/expressions.html)
 - [Symfony source — AccessListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/AccessListener.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `access_control` exists alongside `#[IsGranted]`/voters
+- [ ] write ordered rules with `path`/`ips`/`allow_if`/`requires_channel`
+- [ ] debug a rule that never fires because a broader one precedes it
+- [ ] spot the trap that `access_control` cannot pass a subject
+- [ ] explain that it runs through the same `AccessDecisionManager` internally
 
 ---
 

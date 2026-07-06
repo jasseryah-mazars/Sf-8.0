@@ -283,10 +283,26 @@ scope) instead of polling.
     - HTTP/2 = binary + multiplex + HPACK; HTTP/3 = QUIC/UDP; push deprecated.
     - Client IP behind a proxy → `setTrustedProxies()` + `getClientIp()`.
 
+## Connections
+
+- **Depends on:** [Web Security Fundamentals](../php-web-security/web-security.md) — TLS/HTTPS underpins the secure transport HTTP rides on.
+- **Reused in:** [Request Handling](../architecture/request-handling.md) — the front controller and kernel turn the raw exchange into `Request`→`Response`.
+- **Confused with:** [Cookies](cookies.md) — HTTP is stateless; cookies are the application-layer add-on that carries state.
+
 ## Official References
 - [MDN — HTTP overview](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** HTTP is stateless and how a page load is many independent exchanges
+- [ ] trace the full cycle DNS → TCP → TLS → HTTP → front controller → `Response`
+- [ ] debug a wrong client IP / protocol behind a proxy (`setTrustedProxies()`)
+- [ ] spot the trick: PHP neither picks the HTTP version nor terminates TLS; server push is dead
+- [ ] explain what `getScheme()`, `isSecure()` and `getProtocolVersion()` each report
 
 ---
 
