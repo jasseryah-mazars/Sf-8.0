@@ -1,5 +1,11 @@
 # Internal Redirects (Forwarding)
 
+!!! tip "In a nutshell"
+    `forward()` runs another controller in a **sub-request** inside the same HTTP
+    request — no `3xx`, no URL change (a redirect is the opposite). Sub-requests run
+    as `SUB_REQUEST`, so `isMainRequest()` is false; a shared service is usually
+    cleaner than forwarding.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

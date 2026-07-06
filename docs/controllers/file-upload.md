@@ -1,5 +1,11 @@
 # Handling File Uploads
 
+!!! tip "In a nutshell"
+    Uploads arrive as `UploadedFile` in `$request->files`; validate the
+    content-detected `getMimeType()` (never the spoofable client name) and `move()`
+    them to storage outside the web root. `#[MapUploadedFile]` binds and validates
+    an upload straight into a controller argument.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

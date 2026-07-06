@@ -1,5 +1,10 @@
 # 404 & Error Pages
 
+!!! tip "In a nutshell"
+    To return an HTTP error you **throw** an exception, not build a `Response`.
+    `HttpExceptionInterface` sets the status (anything else is 500). Exam hook:
+    `createNotFoundException()` only *returns* the 404 — you must `throw` it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

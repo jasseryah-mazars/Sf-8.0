@@ -1,5 +1,11 @@
 # Flash Messages
 
+!!! tip "In a nutshell"
+    A flash is a one-shot message stored in the session and shown on the next
+    request — built for Post/Redirect/Get. `addFlash()` queues it; reading it
+    (`app.flashes`) **consumes** it, so pair it with a redirect and use `peek()`
+    when you must not consume.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -1,5 +1,11 @@
 # Cookies
 
+!!! tip "In a nutshell"
+    Cookies are asymmetric: read from `$request->cookies`, write with
+    `$response->headers->setCookie()` using the immutable `Cookie` object. Know the
+    security defaults — `HttpOnly` is on, and `SameSite=None` is rejected unless
+    `Secure` is true.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
