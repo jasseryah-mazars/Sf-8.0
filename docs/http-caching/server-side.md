@@ -92,6 +92,32 @@ public function __construct(
    into a refreshed store entry.
 6. **Store** the backend response if it is cacheable, then serve it.
 
+For a *validateable* stale entry, the proxy issues a **conditional GET** to the
+backend and turns a `304` into a refreshed hit — the client never sees the extra
+round-trip:
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant H as HttpCache + Store
+    participant K as App Kernel
+    C->>H: GET /articles
+    alt fresh in Store
+        H-->>C: 200 (cached) + Age
+    else stale but validateable
+        H->>K: GET + If-None-Match / If-Modified-Since
+        alt unchanged
+            K-->>H: 304 Not Modified
+            H->>H: refresh entry, reset Age
+            H-->>C: 200 (revalidated)
+        else changed
+            K-->>H: 200 + new body
+            H->>H: store entry
+            H-->>C: 200 (fresh)
+        end
+    end
+```
+
 ### Options that shape behaviour
 
 | Option | Default | Effect |

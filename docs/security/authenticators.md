@@ -64,6 +64,22 @@ valid API token already identifies the user) — it needs only a `UserBadge`.
 | `Badge\RememberMeBadge` | `RememberMeListener` | Enable remember-me cookie |
 | `Badge\PasswordUpgradeBadge` | `PasswordMigratingListener` | Rehash on login |
 
+A `Passport` is a **composition** of badges; on `CheckPassportEvent` a dedicated
+listener resolves each one before the passport is accepted:
+
+```mermaid
+flowchart TD
+    P["Passport"] --> UB["UserBadge"]
+    P --> CR["PasswordCredentials /<br/>CustomCredentials"]
+    P --> CB["CsrfTokenBadge"]
+    P --> RB["RememberMeBadge"]
+    UB -.resolved by.-> L1["UserProviderListener"]
+    CR -.-> L2["CheckCredentialsListener"]
+    CB -.-> L3["CsrfProtectionListener"]
+    RB -.-> L4["RememberMeListener"]
+    L1 & L2 & L3 & L4 --> CPE["CheckPassportEvent:<br/>all resolved → createToken()"]
+```
+
 !!! note "Source reference"
     `Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator`
     and `Passport` —

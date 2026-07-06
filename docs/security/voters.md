@@ -82,6 +82,23 @@ The `AccessDecisionManager` combines votes using a strategy
 `allow_if_all_abstain` (default `false`) controls what happens when **every**
 voter abstains — by default access is **denied**.
 
+The manager polls **every** voter, then the strategy reduces their votes to a
+single decision:
+
+```mermaid
+flowchart TD
+    IG["isGranted(attribute, subject)"] --> ADM["AccessDecisionManager"]
+    ADM --> V1["Voter A.vote()"]
+    ADM --> V2["Voter B.vote()"]
+    ADM --> V3["Voter C.vote()"]
+    V1 & V2 & V3 -->|GRANTED / DENIED / ABSTAIN| S{"strategy"}
+    S -->|affirmative: any grant| G["access granted"]
+    S -->|unanimous: no deny| G
+    S -->|consensus: more grants| G
+    S -->|priority: first non-abstain| G
+    S -->|else| D["AccessDeniedException"]
+```
+
 ### Configuring the strategy
 
 ```yaml

@@ -76,6 +76,27 @@ flowchart LR
     E --> F["execute() / __invoke() -> int"]
 ```
 
+Once instantiated, the **run-time order** is driven by `Command::run()`. The full
+lifecycle (with the overridable hooks) is detailed in
+[Configuration](configuration.md); here is the compact call order, showing that
+`configure()` has already run once in the constructor:
+
+```mermaid
+sequenceDiagram
+    participant A as Application::run
+    participant R as Command::run
+    participant M as Your command
+    Note over M: configure() ran once (constructor)
+    A->>R: find + run the command
+    R->>M: initialize(input, output)
+    opt interactive (no -n / --no-interaction)
+        R->>M: interact(input, output)
+    end
+    R->>R: input.validate()
+    R->>M: execute() / __invoke()
+    M-->>A: int exit code (SUCCESS / FAILURE / INVALID)
+```
+
 !!! note "Source reference"
     `Symfony\Component\Console\Command\Command::SUCCESS|FAILURE|INVALID` and the
     invokable adapter —

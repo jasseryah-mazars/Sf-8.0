@@ -52,6 +52,27 @@ via `$event->setResponse()`, that response is returned (still passing through
 It also runs at a **low priority (`-128`)** so your own `kernel.exception`
 listeners get first chance to handle or transform the exception.
 
+```mermaid
+sequenceDiagram
+    participant K as HttpKernel
+    participant D as Dispatcher
+    participant EL as ErrorListener (-128)
+    participant EC as ErrorController
+    Note over K: throwable escapes handleRaw()
+    K->>K: catch in handle(catch: true)
+    K->>D: dispatch kernel.exception (ExceptionEvent)
+    Note over D: your listeners run first…
+    D->>EL: __invoke(event)
+    EL->>EC: forward as sub-request
+    EC-->>EL: Response (status/headers via HttpExceptionInterface)
+    EL-->>D: event->setResponse(...)
+    D-->>K: Response → passes through kernel.response
+```
+
+If one of your higher-priority listeners sets a response first, `ErrorListener`
+sees a response already set and does nothing; if none does, `ErrorListener`
+produces the fallback error page (or re-throw path when `catch` is `false`).
+
 ### HttpExceptionInterface → status code
 
 `Symfony\Component\HttpKernel\Exception\HttpExceptionInterface` exposes

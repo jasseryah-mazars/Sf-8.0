@@ -59,6 +59,29 @@ parameter. All of these are pure metadata objects.
 `ContainerBuilder` extends `Container` and additionally stores these definitions,
 aliases, extensions and compiler passes.
 
+```mermaid
+classDiagram
+    class ContainerBuilder
+    class Definition {
+      +class
+      +arguments
+      +tags
+      +public/shared/lazy
+    }
+    class Reference
+    class Alias
+    class Parameter
+    class CompilerPassInterface {
+      +process(ContainerBuilder)
+    }
+    ContainerBuilder "1" o-- "*" Definition : holds
+    ContainerBuilder "1" o-- "*" Alias : holds
+    ContainerBuilder ..> CompilerPassInterface : runs
+    Definition "1" o-- "*" Reference : argument
+    Definition ..> Parameter : argument
+    Alias ..> Definition : resolves to
+```
+
 ### The compilation pipeline
 
 `ContainerBuilder::compile()` runs the passes registered in
@@ -87,6 +110,23 @@ next request the kernel loads that class directly; the `ContainerBuilder` is nev
 touched again. In `dev`, the `ConfigCache` checks the tracked resources (config
 files) and rebuilds only when they change; in `prod` you warm it once during
 deploy.
+
+```mermaid
+flowchart TB
+    subgraph compile["Compile — once (warmup / config change)"]
+        direction TB
+        CFG["config: YAML / PHP / #[attributes]"] --> BLD["ContainerBuilder<br/>(Definition objects)"]
+        BLD --> OPT["passes: optimize<br/>(autowire, resolve refs)"]
+        OPT --> REM["passes: remove<br/>(prune private / unused)"]
+        REM --> DMP["PhpDumper"]
+        DMP --> CACHE[("var/cache · *Container.php")]
+    end
+    subgraph runtime["Runtime — every request"]
+        direction TB
+        LOAD["kernel loads compiled class"] --> GET["get(id): build once, share instance"]
+    end
+    CACHE -.->|"loaded, not rebuilt<br/>unless config changes"| LOAD
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\ContainerBuilder` &

@@ -74,6 +74,27 @@ Any listener can call `$event->stopPropagation()`. Before invoking each listener
 the dispatcher checks `$event->isPropagationStopped()` and stops the loop. The
 event object itself carries this flag — it must extend the contracts `Event`.
 
+```mermaid
+sequenceDiagram
+    participant Caller
+    participant D as EventDispatcher
+    participant A as Listener A (prio 10)
+    participant B as Listener B (prio 0)
+    participant C as Listener C (prio -10)
+    Caller->>D: dispatch(event)
+    D->>A: __invoke(event)
+    A-->>D: returns (no stop)
+    D->>B: __invoke(event)
+    B-->>D: stopPropagation()
+    Note over D: isPropagationStopped() → halt loop
+    D--xC: never called
+    D-->>Caller: same event object
+```
+
+Listeners run **high → low** priority; the check happens *before* each call, so
+`B` still runs fully but `C` is skipped. The one already-invoked listeners are
+never rewound — propagation only prevents the *remaining* listeners.
+
 ### Compile-time registration
 
 You rarely call `addListener()` at runtime. The `RegisterListenersPass` compiler

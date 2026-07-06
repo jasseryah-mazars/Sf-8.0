@@ -155,6 +155,25 @@ A controller (or listener) can render a fragment by calling `handle()` again wit
 `RequestStack` tracks the nesting so `getCurrentRequest()` and
 `getMainRequest()` stay correct; `kernel.finish_request` restores parent state.
 
+```mermaid
+sequenceDiagram
+    participant C as Controller (main)
+    participant K as HttpKernel
+    participant RS as RequestStack
+    participant D as Dispatcher
+    C->>K: handle(subRequest, SUB_REQUEST)
+    K->>RS: push(subRequest)
+    K->>D: kernel.request … kernel.response
+    Note over K,D: same flow, but NO kernel.terminate
+    K->>D: kernel.finish_request
+    D->>RS: pop() → parent becomes current again
+    K-->>C: sub-response (e.g. rendered fragment)
+```
+
+`handleRaw()` pushes the sub-request onto the `RequestStack` before
+`kernel.request` and pops it right after `kernel.finish_request`, which is how the
+parent locale/request context is restored.
+
 ### Compilation vs runtime
 
 `Kernel::boot()` loads the **compiled** container from

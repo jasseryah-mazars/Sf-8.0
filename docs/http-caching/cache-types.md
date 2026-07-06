@@ -38,6 +38,19 @@ user-specific data. A **reverse proxy** (a.k.a. *gateway cache* or *HTTP
 accelerator*) is a shared cache you control, deployed in front of the app — this
 is what Symfony's [`HttpCache`](server-side.md) and Varnish are.
 
+For one request these caches form **layers**: each may serve a fresh hit and
+short-circuit, or pass the miss down to the next layer, ending at your app.
+
+```mermaid
+flowchart TD
+    U[User request] --> B{Browser<br/>private cache}
+    B -->|fresh hit| U
+    B -->|miss / stale| P{Shared / reverse proxy<br/>HttpCache · Varnish}
+    P -->|fresh hit| B
+    P -->|miss / stale| K[App Kernel]
+    K -->|response| P
+```
+
 ### `public` vs `private`
 
 The single most important decision: **may a shared cache store this response?**
