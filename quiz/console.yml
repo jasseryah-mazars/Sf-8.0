@@ -1,0 +1,485 @@
+categories:
+  - name: "Console — Built-in commands & the Application"
+    questions:
+      - question: "Which command runs when you execute `php bin/console` with no arguments?"
+        answers:
+          - value: "list"
+            correct: true
+          - value: "help"
+            correct: false
+          - value: "about"
+            correct: false
+          - value: "debug:container"
+            correct: false
+        explanation: >-
+          The Application's default command is `list`, which prints all available
+          commands grouped by namespace.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+      - question: "Which command is provided by an optional bundle (MakerBundle), not by Symfony core?"
+        answers:
+          - value: "make:command"
+            correct: true
+          - value: "cache:clear"
+            correct: false
+          - value: "debug:router"
+            correct: false
+          - value: "about"
+            correct: false
+        explanation: >-
+          `make:*` generators ship with the optional symfony/maker-bundle dev
+          dependency; `cache:clear`, `debug:router` and `about` are core/framework.
+        documentation: "https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html"
+
+      - question: "How does `bin/console` obtain the console Application in Symfony 8?"
+        answers:
+          - value: "It returns a closure that the Runtime component executes to build the kernel and Application"
+            correct: true
+          - value: "It calls Application::create() statically"
+            correct: false
+          - value: "The web front controller instantiates it"
+            correct: false
+          - value: "It parses services.yaml directly"
+            correct: false
+        explanation: >-
+          bin/console requires vendor/autoload_runtime.php and returns a closure; the
+          Runtime component runs it to build the Kernel and FrameworkBundle Application.
+        documentation: "https://symfony.com/doc/current/components/runtime.html"
+
+      - question: "What does `php bin/console ca:cl` do when the abbreviation is unambiguous?"
+        answers:
+          - value: "Runs cache:clear via command-name abbreviation"
+            correct: true
+          - value: "Fails — abbreviations are not supported"
+            correct: false
+          - value: "Lists commands starting with 'ca'"
+            correct: false
+          - value: "Clears only the 'cl' namespace"
+            correct: false
+        explanation: >-
+          Application::find() resolves unambiguous abbreviations to the full command
+          name.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+  - name: "Console — Custom commands"
+    questions:
+      - question: "What integer value does `Command::INVALID` represent?"
+        answers:
+          - value: "2"
+            correct: true
+          - value: "0"
+            correct: false
+          - value: "1"
+            correct: false
+          - value: "255"
+            correct: false
+        explanation: >-
+          The return constants are SUCCESS=0, FAILURE=1, INVALID=2.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+      - question: "In Symfony 8, what does an invokable command class require?"
+        answers:
+          - value: "The #[AsCommand] attribute and an __invoke() method returning int"
+            correct: true
+          - value: "It must extend Command"
+            correct: false
+          - value: "It must implement CommandInterface"
+            correct: false
+          - value: "It must be registered manually in services.yaml"
+            correct: false
+        explanation: >-
+          Invokable commands only need #[AsCommand] plus an __invoke() method; they
+          do not extend Command, though they still use its SUCCESS/FAILURE constants.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+      - question: "How is a command normally registered in the service container?"
+        answers:
+          - value: "Autoconfiguration tags #[AsCommand]/Command subclasses with 'console.command'"
+            correct: true
+          - value: "You always add the 'console.command' tag manually"
+            correct: false
+          - value: "You call Application::add() inside bin/console"
+            correct: false
+          - value: "It is discovered purely by filename"
+            correct: false
+        explanation: >-
+          Autoconfiguration applies the console.command tag; a compiler pass builds a
+          ContainerCommandLoader mapping name to service id for lazy loading.
+        documentation: "https://symfony.com/doc/current/console/commands_as_services.html"
+
+      - question: "What must a command's execute()/__invoke() return in Symfony 8?"
+        answers:
+          - value: "An int exit code"
+            correct: true
+          - value: "void"
+            correct: false
+          - value: "A Response object"
+            correct: false
+          - value: "A bool"
+            correct: false
+        explanation: >-
+          The returned int becomes the process exit code; returning void is invalid.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+  - name: "Console — Configuration & lifecycle"
+    questions:
+      - question: "What is the correct command lifecycle order?"
+        answers:
+          - value: "configure → initialize → interact → execute"
+            correct: true
+          - value: "initialize → configure → execute → interact"
+            correct: false
+          - value: "configure → interact → initialize → execute"
+            correct: false
+          - value: "execute → configure → initialize → interact"
+            correct: false
+        explanation: >-
+          configure() runs in the constructor; then run() calls initialize(),
+          interact() (if interactive), input validation, and finally execute().
+        documentation: "https://symfony.com/doc/current/console.html"
+
+      - question: "When is interact() called?"
+        answers:
+          - value: "Only when the input is interactive"
+            correct: true
+          - value: "Always, before initialize()"
+            correct: false
+          - value: "Only when --no-interaction is passed"
+            correct: false
+          - value: "After execute()"
+            correct: false
+        explanation: >-
+          interact() is skipped for non-interactive input (e.g. -n / --no-interaction).
+        documentation: "https://symfony.com/doc/current/console.html"
+
+      - question: "Why declare the command name in #[AsCommand] rather than only in configure()?"
+        answers:
+          - value: "It lets the command loader know the name without instantiating the class (lazy loading)"
+            correct: true
+          - value: "configure() cannot set a name at all"
+            correct: false
+          - value: "Attributes execute faster at runtime"
+            correct: false
+          - value: "It is required for execute() to run"
+            correct: false
+        explanation: >-
+          The attribute exposes name/aliases at compile time so ContainerCommandLoader
+          maps name→id and instantiates the command only when invoked.
+        documentation: "https://symfony.com/doc/current/console/commands_as_services.html"
+
+      - question: "A command declared with hidden: true …"
+        answers:
+          - value: "Does not appear in `list` but can still be executed"
+            correct: true
+          - value: "Cannot be executed at all"
+            correct: false
+          - value: "Is removed from the container"
+            correct: false
+          - value: "Only runs in the dev environment"
+            correct: false
+        explanation: >-
+          The hidden flag only affects listing; the command remains runnable by name.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+  - name: "Console — Arguments & options"
+    questions:
+      - question: "Which mode declares a valueless boolean flag option?"
+        answers:
+          - value: "InputOption::VALUE_NONE"
+            correct: true
+          - value: "InputOption::VALUE_OPTIONAL"
+            correct: false
+          - value: "InputOption::VALUE_REQUIRED"
+            correct: false
+          - value: "InputArgument::OPTIONAL"
+            correct: false
+        explanation: >-
+          VALUE_NONE takes no value; the option is false unless present, then true. It
+          cannot have a default.
+        documentation: "https://symfony.com/doc/current/console/input.html"
+
+      - question: "What is the integer value of InputOption::VALUE_IS_ARRAY?"
+        answers:
+          - value: "8"
+            correct: true
+          - value: "2"
+            correct: false
+          - value: "4"
+            correct: false
+          - value: "16"
+            correct: false
+        explanation: >-
+          Option modes are VALUE_NONE=1, VALUE_REQUIRED=2, VALUE_OPTIONAL=4,
+          VALUE_IS_ARRAY=8, VALUE_NEGATABLE=16.
+        documentation: "https://symfony.com/doc/current/console/input.html"
+
+      - question: "Which statement about an IS_ARRAY argument is correct?"
+        answers:
+          - value: "There can be only one and it must be declared last"
+            correct: true
+          - value: "It must be declared first"
+            correct: false
+          - value: "You may declare several per command"
+            correct: false
+          - value: "It cannot be combined with REQUIRED"
+            correct: false
+        explanation: >-
+          An array argument greedily consumes the remaining tokens, so only one is
+          allowed and it must come last. It may be REQUIRED or OPTIONAL.
+        documentation: "https://symfony.com/doc/current/console/input.html"
+
+      - question: "Which option mode adds a `--no-foo` counterpart to `--foo`?"
+        answers:
+          - value: "InputOption::VALUE_NEGATABLE"
+            correct: true
+          - value: "InputOption::VALUE_NONE"
+            correct: false
+          - value: "InputOption::VALUE_OPTIONAL"
+            correct: false
+          - value: "InputOption::VALUE_IS_ARRAY"
+            correct: false
+        explanation: >-
+          VALUE_NEGATABLE (16) generates the --no- twin; the value is true, false, or
+          its default.
+        documentation: "https://symfony.com/doc/current/console/input.html"
+
+      - question: "Which InputArgument mode value is OPTIONAL?"
+        answers:
+          - value: "2"
+            correct: true
+          - value: "1"
+            correct: false
+          - value: "4"
+            correct: false
+          - value: "8"
+            correct: false
+        explanation: >-
+          Argument modes are REQUIRED=1, OPTIONAL=2, IS_ARRAY=4.
+        documentation: "https://symfony.com/doc/current/console/input.html"
+
+  - name: "Console — Input & output"
+    questions:
+      - question: "Which method returns the STDERR stream in a CLI command?"
+        answers:
+          - value: "ConsoleOutputInterface::getErrorOutput()"
+            correct: true
+          - value: "OutputInterface::getErrorOutput()"
+            correct: false
+          - value: "SymfonyStyle::stderr()"
+            correct: false
+          - value: "InputInterface::getError()"
+            correct: false
+        explanation: >-
+          The split-stream getErrorOutput() lives on ConsoleOutputInterface, not the
+          base OutputInterface, so check the type first.
+        documentation: "https://symfony.com/doc/current/console/verbosity.html"
+
+      - question: "Which two arguments does SymfonyStyle require?"
+        answers:
+          - value: "An InputInterface and an OutputInterface"
+            correct: true
+          - value: "An Application and a Command"
+            correct: false
+          - value: "A QuestionHelper and an OutputInterface"
+            correct: false
+          - value: "Only an OutputInterface"
+            correct: false
+        explanation: >-
+          SymfonyStyle wraps both input (for prompts) and output (for styled writing).
+        documentation: "https://symfony.com/doc/current/console/style.html"
+
+      - question: "What does $output->section() return?"
+        answers:
+          - value: "A ConsoleSectionOutput that can be overwritten or cleared independently"
+            correct: true
+          - value: "A new Application"
+            correct: false
+          - value: "A SymfonyStyle instance"
+            correct: false
+          - value: "A boolean"
+            correct: false
+        explanation: >-
+          Output sections are independently re-writable regions; require
+          ConsoleOutputInterface.
+        documentation: "https://symfony.com/doc/current/console.html"
+
+  - name: "Console — Helpers"
+    questions:
+      - question: "How does a classic command obtain the QuestionHelper?"
+        answers:
+          - value: "$this->getHelper('question')"
+            correct: true
+          - value: "new QuestionHelper($input)"
+            correct: false
+          - value: "$this->getApplication()->question()"
+            correct: false
+          - value: "SymfonyStyle::helper()"
+            correct: false
+        explanation: >-
+          Helpers are fetched by their string name from the command's HelperSet.
+        documentation: "https://symfony.com/doc/current/components/console/helpers/questionhelper.html"
+
+      - question: "Which question class offers a fixed list of selectable answers?"
+        answers:
+          - value: "ChoiceQuestion"
+            correct: true
+          - value: "Question"
+            correct: false
+          - value: "ConfirmationQuestion"
+            correct: false
+          - value: "HiddenQuestion"
+            correct: false
+        explanation: >-
+          ChoiceQuestion presents options and supports single or multi-select.
+        documentation: "https://symfony.com/doc/current/components/console/helpers/questionhelper.html"
+
+      - question: "What does ProgressBar::setRedrawFrequency(100) do?"
+        answers:
+          - value: "Redraws the bar only every 100 steps to reduce terminal I/O"
+            correct: true
+          - value: "Sets the total number of steps to 100"
+            correct: false
+          - value: "Caps the bar width at 100 characters"
+            correct: false
+          - value: "Sleeps 100 ms between steps"
+            correct: false
+        explanation: >-
+          Redraw throttling avoids expensive terminal writes on every micro-step.
+        documentation: "https://symfony.com/doc/current/components/console/helpers/progressbar.html"
+
+      - question: "Which class moves or hides the terminal cursor?"
+        answers:
+          - value: "Symfony\\Component\\Console\\Cursor"
+            correct: true
+          - value: "FormatterHelper"
+            correct: false
+          - value: "Table"
+            correct: false
+          - value: "ProgressBar"
+            correct: false
+        explanation: >-
+          Cursor issues ANSI escape sequences to move/hide/show the cursor and clear
+          lines.
+        documentation: "https://symfony.com/doc/current/components/console/helpers/index.html"
+
+  - name: "Console — Events"
+    questions:
+      - question: "What is the dispatch order for a successful framework command?"
+        answers:
+          - value: "COMMAND then TERMINATE"
+            correct: true
+          - value: "TERMINATE then COMMAND"
+            correct: false
+          - value: "ERROR then COMMAND"
+            correct: false
+          - value: "COMMAND then ERROR"
+            correct: false
+        explanation: >-
+          ERROR fires only on a thrown Throwable; TERMINATE always fires last, after
+          COMMAND and execution.
+        documentation: "https://symfony.com/doc/current/components/console/events.html"
+
+      - question: "Which event lets you change the exit code regardless of outcome?"
+        answers:
+          - value: "ConsoleEvents::TERMINATE"
+            correct: true
+          - value: "ConsoleEvents::COMMAND"
+            correct: false
+          - value: "ConsoleEvents::SIGNAL"
+            correct: false
+          - value: "It cannot be changed after execution"
+            correct: false
+        explanation: >-
+          ConsoleTerminateEvent::setExitCode() runs on every command and is the last
+          chance to alter the exit code.
+        documentation: "https://symfony.com/doc/current/components/console/events.html"
+
+      - question: "What exit code results from ConsoleCommandEvent::disableCommand()?"
+        answers:
+          - value: "113"
+            correct: true
+          - value: "0"
+            correct: false
+          - value: "1"
+            correct: false
+          - value: "255"
+            correct: false
+        explanation: >-
+          Disabling the command in the COMMAND event returns
+          ConsoleCommandEvent::RETURN_CODE_DISABLED, which is 113.
+        documentation: "https://symfony.com/doc/current/components/console/events.html"
+
+      - question: "Which interface lets a command react to OS signals such as SIGTERM?"
+        answers:
+          - value: "SignalableCommandInterface"
+            correct: true
+          - value: "SignalHandlerInterface"
+            correct: false
+          - value: "TerminableInterface"
+            correct: false
+          - value: "EventSubscriberInterface"
+            correct: false
+        explanation: >-
+          Implement getSubscribedSignals() and handleSignal(); requires the pcntl
+          extension.
+        documentation: "https://symfony.com/doc/current/components/console/events.html"
+
+  - name: "Console — Verbosity"
+    questions:
+      - question: "Which flag maps to VERBOSITY_VERY_VERBOSE?"
+        answers:
+          - value: "-vv"
+            correct: true
+          - value: "-v"
+            correct: false
+          - value: "-vvv"
+            correct: false
+          - value: "-q"
+            correct: false
+        explanation: >-
+          -v is VERBOSE, -vv is VERY_VERBOSE, -vvv is DEBUG, -q is QUIET.
+        documentation: "https://symfony.com/doc/current/console/verbosity.html"
+
+      - question: "What is the integer value of VERBOSITY_NORMAL?"
+        answers:
+          - value: "32"
+            correct: true
+          - value: "0"
+            correct: false
+          - value: "16"
+            correct: false
+          - value: "64"
+            correct: false
+        explanation: >-
+          QUIET=16, NORMAL=32, VERBOSE=64, VERY_VERBOSE=128, DEBUG=256.
+        documentation: "https://symfony.com/doc/current/console/verbosity.html"
+
+      - question: "Where is the current verbosity level stored?"
+        answers:
+          - value: "On the OutputInterface, set by the Application from the flags"
+            correct: true
+          - value: "On the InputInterface"
+            correct: false
+          - value: "On the Command instance"
+            correct: false
+          - value: "In an environment variable only"
+            correct: false
+        explanation: >-
+          The Application parses -v/-vv/-vvv/-q and calls $output->setVerbosity();
+          verbosity is a property of the output.
+        documentation: "https://symfony.com/doc/current/console/verbosity.html"
+
+      - question: "A message written with VERBOSITY_VERBOSE is displayed at which levels?"
+        answers:
+          - value: "-v, -vv and -vvv"
+            correct: true
+          - value: "only -v"
+            correct: false
+          - value: "normal and above"
+            correct: false
+          - value: "-q and above"
+            correct: false
+        explanation: >-
+          A message prints when the current level is greater than or equal to the
+          message's level, so VERBOSE (64) shows at -v, -vv and -vvv.
+        documentation: "https://symfony.com/doc/current/console/verbosity.html"
