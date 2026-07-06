@@ -1,0 +1,730 @@
+categories:
+  - name: "Architecture — Symfony Flex"
+    questions:
+      - question: "What kind of tool is Symfony Flex?"
+        answers:
+          - value: "A Composer plugin that resolves aliases and applies recipes"
+            correct: true
+          - value: "A runtime kernel event listener"
+            correct: false
+          - value: "A templating engine"
+            correct: false
+        explanation: >-
+          Flex is a Composer plugin. It runs at Composer install/update time,
+          resolving package aliases and applying recipes; it has no role during
+          HTTP request handling.
+        documentation: "https://symfony.com/doc/current/setup.html"
+      - question: "What does the symfony.lock file track?"
+        answers:
+          - value: "Which recipes are installed and their versions"
+            correct: true
+          - value: "The compiled service container"
+            correct: false
+          - value: "Locked HTTP sessions"
+            correct: false
+        explanation: >-
+          symfony.lock records applied recipes so Flex can detect updates and
+          reverse them; it is distinct from composer.lock (package versions).
+        documentation: "https://symfony.com/doc/current/setup.html"
+      - question: "How does a recipe auto-register a bundle?"
+        answers:
+          - value: "By writing an entry into config/bundles.php"
+            correct: true
+          - value: "Via an #[AsBundle] attribute"
+            correct: false
+          - value: "By editing services.yaml"
+            correct: false
+        explanation: >-
+          The bundles configurator adds the bundle class to config/bundles.php,
+          which the kernel reads at boot via MicroKernelTrait::registerBundles().
+        documentation: "https://symfony.com/doc/current/bundles.html"
+      - question: "Which repository holds the community (opt-in) recipes?"
+        answers:
+          - value: "symfony/recipes-contrib"
+            correct: true
+          - value: "symfony/recipes"
+            correct: false
+          - value: "symfony/flex-recipes"
+            correct: false
+        explanation: >-
+          Curated recipes live in symfony/recipes; community recipes live in
+          symfony/recipes-contrib and require enabling extra.symfony.allow-contrib.
+        documentation: "https://github.com/symfony/recipes-contrib"
+
+  - name: "Architecture — License & Trademark"
+    questions:
+      - question: "Under which license is Symfony released?"
+        answers:
+          - value: "MIT"
+            correct: true
+          - value: "GPLv3"
+            correct: false
+          - value: "Apache 2.0"
+            correct: false
+        explanation: >-
+          Symfony components are released under the permissive, non-copyleft MIT
+          license.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/LICENSE"
+      - question: "What is the core obligation of the MIT license?"
+        answers:
+          - value: "Retain the copyright and permission notice in copies"
+            correct: true
+          - value: "Publish all your source code"
+            correct: false
+          - value: "Pay a royalty per deployment"
+            correct: false
+        explanation: >-
+          MIT only requires that the copyright and permission notice be kept in
+          all copies or substantial portions; it is not copyleft.
+        documentation: "https://opensource.org/license/mit"
+      - question: "Does the MIT license grant rights to use the Symfony name and logo?"
+        answers:
+          - value: "No — those are governed by the separate trademark policy"
+            correct: true
+          - value: "Yes — the license covers name and logo"
+            correct: false
+          - value: "Only for non-commercial use"
+            correct: false
+        explanation: >-
+          The code license (MIT) and the trademark (name/logo) are separate legal
+          instruments. Using the Symfony name/logo follows Symfony SAS's trademark
+          policy.
+        documentation: "https://symfony.com/trademark"
+
+  - name: "Architecture — Components"
+    questions:
+      - question: "What best describes a Symfony component?"
+        answers:
+          - value: "A standalone, reusable PHP library shipped as its own Composer package"
+            correct: true
+          - value: "A configuration file loaded by the kernel"
+            correct: false
+          - value: "A bundle that can only run inside the framework"
+            correct: false
+        explanation: >-
+          Components are decoupled libraries, each independently versioned and
+          usable without the full framework.
+        documentation: "https://symfony.com/doc/current/components/index.html"
+      - question: "What do the symfony/*-contracts packages contain?"
+        answers:
+          - value: "Stable interfaces and traits to depend on"
+            correct: true
+          - value: "Compiled service containers"
+            correct: false
+          - value: "Twig templates"
+            correct: false
+        explanation: >-
+          Contracts packages hold interface-only definitions so consumers can
+          depend on a stable API decoupled from a concrete implementation.
+        documentation: "https://github.com/symfony/contracts"
+      - question: "Can symfony/routing be used without FrameworkBundle?"
+        answers:
+          - value: "Yes — it is a standalone component"
+            correct: true
+          - value: "No — it requires the kernel"
+            correct: false
+          - value: "Only in the dev environment"
+            correct: false
+        explanation: >-
+          Components are decoupled; Routing can be installed and used on its own
+          via UrlMatcher/UrlGenerator without the framework.
+        documentation: "https://symfony.com/doc/current/components/routing.html"
+
+  - name: "Architecture — Bridges"
+    questions:
+      - question: "What is a Symfony bridge?"
+        answers:
+          - value: "An integration layer between a component and a specific third-party library"
+            correct: true
+          - value: "A configuration file format"
+            correct: false
+          - value: "A replacement for the service container"
+            correct: false
+        explanation: >-
+          A bridge holds the glue coupling a Symfony component to one specific
+          external library, keeping the component itself dependency-free.
+        documentation: "https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge"
+      - question: "Where do bridges live in the Symfony monorepo?"
+        answers:
+          - value: "src/Symfony/Bridge/"
+            correct: true
+          - value: "src/Symfony/Component/"
+            correct: false
+          - value: "src/Symfony/Bundle/"
+            correct: false
+        explanation: >-
+          Bridges have their own top-level directory, distinct from Component and
+          Bundle.
+        documentation: "https://github.com/symfony/symfony/tree/8.0/src/Symfony"
+      - question: "What typically activates a bridge inside a framework application?"
+        answers:
+          - value: "A bundle that registers the bridge's classes as services"
+            correct: true
+          - value: "The bridge auto-registers itself at runtime"
+            correct: false
+          - value: "A Twig template include"
+            correct: false
+        explanation: >-
+          Bridges provide classes; a bundle wires them into the container and
+          exposes configuration.
+        documentation: "https://symfony.com/doc/current/bundles.html"
+
+  - name: "Architecture — Code Organization"
+    questions:
+      - question: "Which directory is the web root of a Symfony application?"
+        answers:
+          - value: "public/"
+            correct: true
+          - value: "src/"
+            correct: false
+          - value: "web/"
+            correct: false
+        explanation: >-
+          public/ contains index.php and static assets and is the only
+          web-accessible directory.
+        documentation: "https://symfony.com/doc/current/configuration.html"
+      - question: "Where are bundles enabled in a modern Symfony app?"
+        answers:
+          - value: "config/bundles.php"
+            correct: true
+          - value: "config/services.yaml"
+            correct: false
+          - value: "Manually in src/Kernel.php"
+            correct: false
+        explanation: >-
+          config/bundles.php maps each bundle class to the environments where it
+          is enabled; the kernel reads it via MicroKernelTrait.
+        documentation: "https://symfony.com/doc/current/bundles.html"
+      - question: "What supplies registerBundles() and registerContainerConfiguration() in a skeleton Kernel?"
+        answers:
+          - value: "MicroKernelTrait"
+            correct: true
+          - value: "AbstractController"
+            correct: false
+          - value: "The FrameworkBundle extension"
+            correct: false
+        explanation: >-
+          App\\Kernel uses MicroKernelTrait, which implements the boilerplate to
+          load bundles from config/bundles.php and configuration from config/.
+        documentation: "https://symfony.com/doc/current/configuration/micro_kernel_trait.html"
+
+  - name: "Architecture — Request Handling (HttpKernel)"
+    questions:
+      - question: "For a controller that returns a Response, in what order do the kernel events fire?"
+        answers:
+          - value: "kernel.request -> kernel.controller -> kernel.controller_arguments -> kernel.response"
+            correct: true
+          - value: "kernel.request -> kernel.view -> kernel.controller -> kernel.response"
+            correct: false
+          - value: "kernel.controller -> kernel.request -> kernel.response -> kernel.terminate"
+            correct: false
+        explanation: >-
+          kernel.view is skipped because a Response was returned; the remaining
+          events follow the canonical order, then finish_request and terminate.
+        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+      - question: "When is kernel.view dispatched?"
+        answers:
+          - value: "Only when the controller returns a value that is not a Response"
+            correct: true
+          - value: "On every request"
+            correct: false
+          - value: "Only for sub-requests"
+            correct: false
+        explanation: >-
+          If the controller returns a non-Response value, kernel.view listeners
+          must convert it into a Response.
+        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-view"
+      - question: "When is kernel.terminate dispatched?"
+        answers:
+          - value: "After the response has been sent to the client, for the main request"
+            correct: true
+          - value: "Before kernel.response"
+            correct: false
+          - value: "Once for every sub-request"
+            correct: false
+        explanation: >-
+          terminate() runs after send() and is not called for sub-requests; it is
+          ideal for slow post-response work.
+        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-terminate"
+      - question: "A listener calls setResponse() on kernel.request. What happens next?"
+        answers:
+          - value: "The controller is skipped and flow continues at kernel.response"
+            correct: true
+          - value: "The controller still runs normally"
+            correct: false
+          - value: "A kernel.view event becomes mandatory"
+            correct: false
+        explanation: >-
+          Setting a response on kernel.request short-circuits controller
+          resolution; the response still passes through kernel.response.
+        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-request"
+      - question: "What is the value of HttpKernelInterface::MAIN_REQUEST?"
+        answers:
+          - value: "1 (and SUB_REQUEST is 2)"
+            correct: true
+          - value: "0"
+            correct: false
+          - value: "It is still called MASTER_REQUEST"
+            correct: false
+        explanation: >-
+          MAIN_REQUEST is 1 and SUB_REQUEST is 2; the old MASTER_REQUEST constant
+          was removed.
+        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+
+  - name: "Architecture — Exception Handling"
+    questions:
+      - question: "Which event is responsible for turning an exception into a response?"
+        answers:
+          - value: "kernel.exception"
+            correct: true
+          - value: "kernel.view"
+            correct: false
+          - value: "kernel.terminate"
+            correct: false
+        explanation: >-
+          When an exception escapes handleRaw(), HttpKernel dispatches
+          kernel.exception; listeners may set the response.
+        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+      - question: "What status code results from an uncaught plain \\LogicException?"
+        answers:
+          - value: "500"
+            correct: true
+          - value: "404"
+            correct: false
+          - value: "400"
+            correct: false
+        explanation: >-
+          Only exceptions implementing HttpExceptionInterface carry a status; any
+          other exception defaults to 500.
+        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+      - question: "At what priority is the default ErrorListener registered on kernel.exception?"
+        answers:
+          - value: "-128, so custom listeners run first"
+            correct: true
+          - value: "1024, so it always runs first"
+            correct: false
+          - value: "0"
+            correct: false
+        explanation: >-
+          ErrorListener runs at a low priority (-128) so your own exception
+          listeners get the first chance to handle the throwable.
+        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+      - question: "Where do you override the default 404 error template?"
+        answers:
+          - value: "templates/bundles/TwigBundle/Exception/error404.html.twig"
+            correct: true
+          - value: "templates/error/404.twig"
+            correct: false
+          - value: "Directly in vendor/"
+            correct: false
+        explanation: >-
+          TwigBundle resolves error templates from
+          templates/bundles/TwigBundle/Exception/, falling back to error.html.twig.
+        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+
+  - name: "Architecture — Event Dispatcher & Kernel Events"
+    questions:
+      - question: "What does a higher listener priority mean?"
+        answers:
+          - value: "It runs earlier"
+            correct: true
+          - value: "It runs later"
+            correct: false
+          - value: "It cannot be stopped"
+            correct: false
+        explanation: >-
+          Listeners are sorted by priority in descending order, so higher
+          priorities run first; the default priority is 0.
+        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+      - question: "What is the dispatch() signature in Symfony 8 (PSR-14)?"
+        answers:
+          - value: "dispatch(object $event, ?string $eventName = null)"
+            correct: true
+          - value: "dispatch(string $eventName, Event $event)"
+            correct: false
+          - value: "dispatch(Event $event, string $eventName) with a required name"
+            correct: false
+        explanation: >-
+          Symfony follows PSR-14: the event object comes first, the name is
+          optional (defaults to the event's class name).
+        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+      - question: "Which method must an event subscriber implement?"
+        answers:
+          - value: "public static function getSubscribedEvents(): array"
+            correct: true
+          - value: "public function subscribe(): array"
+            correct: false
+          - value: "It only needs the #[AsEventSubscriber] attribute"
+            correct: false
+        explanation: >-
+          EventSubscriberInterface defines the static getSubscribedEvents()
+          method returning event names mapped to handlers.
+        documentation: "https://symfony.com/doc/current/event_dispatcher.html"
+      - question: "What does $event->stopPropagation() do?"
+        answers:
+          - value: "Prevents the remaining listeners of this event from running"
+            correct: true
+          - value: "Cancels the whole request"
+            correct: false
+          - value: "Removes the listener permanently"
+            correct: false
+        explanation: >-
+          It sets a flag the dispatcher checks before each listener; only the
+          current event's remaining listeners are skipped.
+        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+
+  - name: "Architecture — Official Best Practices"
+    questions:
+      - question: "Where should business logic live according to the best practices?"
+        answers:
+          - value: "In autowired services"
+            correct: true
+          - value: "In controllers"
+            correct: false
+          - value: "In Twig templates"
+            correct: false
+        explanation: >-
+          Controllers should be thin and delegate to services, which keeps logic
+          reusable and testable.
+        documentation: "https://symfony.com/doc/current/best_practices.html"
+      - question: "What visibility should application services have by default?"
+        answers:
+          - value: "Private"
+            correct: true
+          - value: "Public"
+            correct: false
+          - value: "Protected"
+            correct: false
+        explanation: >-
+          Private services let the DI compiler inline and remove them, and
+          discourage the service-locator anti-pattern.
+        documentation: "https://symfony.com/doc/current/service_container.html"
+      - question: "Where do sensitive credentials belong?"
+        answers:
+          - value: "The Secrets vault"
+            correct: true
+          - value: "config/services.yaml"
+            correct: false
+          - value: "Hard-coded parameters"
+            correct: false
+        explanation: >-
+          Secrets should be stored in the encrypted Secrets vault, while
+          infrastructure config uses env vars and behaviour uses parameters.
+        documentation: "https://symfony.com/doc/current/configuration/secrets.html"
+
+  - name: "Architecture — Release Management"
+    questions:
+      - question: "How often does a new Symfony minor version ship?"
+        answers:
+          - value: "Every six months, in May and November"
+            correct: true
+          - value: "Every month"
+            correct: false
+          - value: "Every two years"
+            correct: false
+        explanation: >-
+          Symfony uses a fixed time-based cadence: a minor every May and November,
+          a major every two years.
+        documentation: "https://symfony.com/releases"
+      - question: "Which Symfony 8.x version is the LTS?"
+        answers:
+          - value: "8.4"
+            correct: true
+          - value: "8.0"
+            correct: false
+          - value: "8.2"
+            correct: false
+        explanation: >-
+          The last minor of each major (X.4) is the LTS; it ships alongside the
+          next major (9.0).
+        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+      - question: "What may a MINOR release NOT do?"
+        answers:
+          - value: "Break backward compatibility"
+            correct: true
+          - value: "Add new features"
+            correct: false
+          - value: "Introduce deprecations"
+            correct: false
+        explanation: >-
+          Minors add features and deprecations but never break BC; breaks are
+          reserved for major releases.
+        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+      - question: "What are the maintenance windows for a standard (non-LTS) release?"
+        answers:
+          - value: "8 months of bug fixes and 14 months of security fixes"
+            correct: true
+          - value: "3 years of bug fixes and 4 years of security fixes"
+            correct: false
+          - value: "1 month of everything"
+            correct: false
+        explanation: >-
+          Standard versions get 8 months bug fixes and 14 months security fixes;
+          LTS versions get 3 years and 4 years respectively.
+        documentation: "https://symfony.com/releases"
+
+  - name: "Architecture — Backward Compatibility Promise"
+    questions:
+      - question: "When may Symfony break backward compatibility?"
+        answers:
+          - value: "Only in a major release, and only after prior deprecation"
+            correct: true
+          - value: "In any minor release"
+            correct: false
+          - value: "In patch releases"
+            correct: false
+        explanation: >-
+          BC breaks are reserved for majors and require the affected API to have
+          been deprecated in the previous major line.
+        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+      - question: "What does the @internal marker mean for the BC promise?"
+        answers:
+          - value: "The element is excluded from the BC promise and may change at any time"
+            correct: true
+          - value: "The element is extra stable"
+            correct: false
+          - value: "The element is deprecated"
+            correct: false
+        explanation: >-
+          @internal marks implementation details not covered by BC, even if they
+          are PHP-public.
+        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+      - question: "How should you customise a final Symfony class in a BC-safe way?"
+        answers:
+          - value: "Decorate or compose it"
+            correct: true
+          - value: "Subclass and override it"
+            correct: false
+          - value: "Edit it in vendor/"
+            correct: false
+        explanation: >-
+          final classes must not be subclassed; wrap them via decoration so
+          Symfony can change internals without breaking you.
+        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+
+  - name: "Architecture — Deprecations"
+    questions:
+      - question: "Which function emits a Symfony deprecation notice, and from which package?"
+        answers:
+          - value: "trigger_deprecation() from symfony/deprecation-contracts"
+            correct: true
+          - value: "deprecate() from symfony/http-kernel"
+            correct: false
+          - value: "There is no helper; you must call trigger_error() directly"
+            correct: false
+        explanation: >-
+          symfony/deprecation-contracts provides trigger_deprecation($package,
+          $version, $message, ...$args), which formats an E_USER_DEPRECATED notice.
+        documentation: "https://github.com/symfony/deprecation-contracts"
+      - question: "When is deprecated code actually removed?"
+        answers:
+          - value: "In the next major release"
+            correct: true
+          - value: "In the next patch release"
+            correct: false
+          - value: "Immediately"
+            correct: false
+        explanation: >-
+          Deprecations survive the whole major line and are only removed in the
+          next major, per the BC promise.
+        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+      - question: "Which tool lets you fail the test suite when new deprecations appear?"
+        answers:
+          - value: "symfony/phpunit-bridge configured via SYMFONY_DEPRECATIONS_HELPER"
+            correct: true
+          - value: "symfony/console"
+            correct: false
+          - value: "symfony/flex"
+            correct: false
+        explanation: >-
+          The PHPUnit bridge collects deprecations; SYMFONY_DEPRECATIONS_HELPER
+          (e.g. max[total]=0) can make the suite fail on any deprecation.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+      - question: "What is the argument order of trigger_deprecation()?"
+        answers:
+          - value: "package, version, message, ...args"
+            correct: true
+          - value: "message, package, version"
+            correct: false
+          - value: "version, package, message"
+            correct: false
+        explanation: >-
+          The signature is trigger_deprecation(string $package, string $version,
+          string $message, mixed ...$args) with sprintf-style formatting.
+        documentation: "https://github.com/symfony/deprecation-contracts"
+
+  - name: "Architecture — Framework Overloading"
+    questions:
+      - question: "Where do you place a template that overrides a bundle template?"
+        answers:
+          - value: "templates/bundles/<BundleName>/path.html.twig"
+            correct: true
+          - value: "templates/override/path.html.twig"
+            correct: false
+          - value: "Inside vendor/"
+            correct: false
+        explanation: >-
+          Twig resolves overrides from templates/bundles/<BundleName>/, which
+          takes precedence over the bundle's own templates.
+        documentation: "https://symfony.com/doc/current/bundles/override.html"
+      - question: "What is the current mechanism to override an inherited bundle resource?"
+        answers:
+          - value: "Per-resource overriding of templates, services, translations and config"
+            correct: true
+          - value: "getParent() bundle inheritance"
+            correct: false
+          - value: "Editing the bundle in vendor/"
+            correct: false
+        explanation: >-
+          Bundle inheritance via getParent() was deprecated in 4.4 and removed in
+          5.0; modern Symfony overrides each resource type individually.
+        documentation: "https://symfony.com/doc/current/bundles/override.html"
+      - question: "How do you augment a bundle service without replacing it?"
+        answers:
+          - value: "Decorate it with #[AsDecorator] / the decorates: key"
+            correct: true
+          - value: "Make it public and fetch it"
+            correct: false
+          - value: "Use getParent()"
+            correct: false
+        explanation: >-
+          Decoration wraps the original service (injected as .inner), letting you
+          add behaviour and delegate.
+        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+
+  - name: "Architecture — Roadmap & Schedule"
+    questions:
+      - question: "In which months do Symfony minor releases ship?"
+        answers:
+          - value: "May and November"
+            correct: true
+          - value: "January and July"
+            correct: false
+          - value: "March and September"
+            correct: false
+        explanation: >-
+          The cadence is fixed: a new minor every May and every November.
+        documentation: "https://symfony.com/releases"
+      - question: "When does 8.4 (LTS) release relative to 9.0?"
+        answers:
+          - value: "At the same time (both November 2027)"
+            correct: true
+          - value: "One year before 9.0"
+            correct: false
+          - value: "After 9.0"
+            correct: false
+        explanation: >-
+          The LTS (X.4) always ships together with the next major (X+1).0.
+        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+      - question: "How often is a new major (and its LTS) released?"
+        answers:
+          - value: "Every two years"
+            correct: true
+          - value: "Every six months"
+            correct: false
+          - value: "Every year"
+            correct: false
+        explanation: >-
+          Majors, and the accompanying LTS, come every two years.
+        documentation: "https://symfony.com/releases"
+
+  - name: "Architecture — Interoperability & PSRs"
+    questions:
+      - question: "Which PSR does Symfony's EventDispatcher implement?"
+        answers:
+          - value: "PSR-14 (Event Dispatcher)"
+            correct: true
+          - value: "PSR-7 (HTTP Message)"
+            correct: false
+          - value: "PSR-3 (Logger)"
+            correct: false
+        explanation: >-
+          Symfony's EventDispatcherInterface extends the PSR-14
+          Psr\\EventDispatcher\\EventDispatcherInterface.
+        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+      - question: "Is HttpFoundation's Request a PSR-7 message?"
+        answers:
+          - value: "No — a psr-http-message bridge converts between them"
+            correct: true
+          - value: "Yes, natively"
+            correct: false
+          - value: "Only in the prod environment"
+            correct: false
+        explanation: >-
+          HttpFoundation predates and differs from PSR-7; the psr-http-message
+          bridge converts between HttpFoundation and PSR-7/15/17.
+        documentation: "https://symfony.com/doc/current/components/psr7.html"
+      - question: "Which PSR interface does Symfony's service container implement?"
+        answers:
+          - value: "PSR-11 (Container)"
+            correct: true
+          - value: "PSR-6 (Cache)"
+            correct: false
+          - value: "PSR-16 (Simple Cache)"
+            correct: false
+        explanation: >-
+          Symfony's ContainerInterface extends
+          Psr\\Container\\ContainerInterface (PSR-11).
+        documentation: "https://symfony.com/doc/current/service_container.html"
+      - question: "Which PSR does Symfony primarily consume (rather than implement) so you can inject any implementation?"
+        answers:
+          - value: "PSR-3 (Logger) via Psr\\Log\\LoggerInterface"
+            correct: true
+          - value: "PSR-11 (Container)"
+            correct: false
+          - value: "PSR-20 (Clock)"
+            correct: false
+        explanation: >-
+          Components type-hint Psr\\Log\\LoggerInterface (PSR-3), so any compliant
+          logger can be injected. PSR-11, PSR-14, PSR-6 and PSR-20 are implemented
+          by Symfony.
+        documentation: "https://www.php-fig.org/psr/"
+
+  - name: "Architecture — Naming Conventions"
+    questions:
+      - question: "How are application service IDs written in modern Symfony?"
+        answers:
+          - value: "As the fully-qualified class name (FQCN)"
+            correct: true
+          - value: "As lowercase dotted strings only"
+            correct: false
+          - value: "As random UUIDs"
+            correct: false
+        explanation: >-
+          The service id is the FQCN; autowiring matches type-hints to these ids.
+        documentation: "https://symfony.com/doc/current/service_container.html"
+      - question: "What naming case do environment variables use?"
+        answers:
+          - value: "UPPER_SNAKE_CASE, usually with an APP_ prefix"
+            correct: true
+          - value: "camelCase"
+            correct: false
+          - value: "kebab-case"
+            correct: false
+        explanation: >-
+          Env vars use upper snake case (APP_ENV, APP_DEBUG) and are read in config
+          via processors such as %env(int:APP_PAGE_SIZE)%.
+        documentation: "https://symfony.com/doc/current/configuration.html"
+      - question: "Which is a correctly named route?"
+        answers:
+          - value: "invoice_show"
+            correct: true
+          - value: "InvoiceShow"
+            correct: false
+          - value: "invoice show"
+            correct: false
+        explanation: >-
+          Route names use snake_case, conventionally entity_action.
+        documentation: "https://symfony.com/doc/current/routing.html"
+      - question: "How is an abstract class conventionally named?"
+        answers:
+          - value: "With an Abstract prefix, e.g. AbstractController"
+            correct: true
+          - value: "With an Abstract suffix, e.g. ControllerAbstract"
+            correct: false
+          - value: "With an _abstract suffix"
+            correct: false
+        explanation: >-
+          Abstract classes take the Abstract prefix; interfaces use the Interface
+          suffix and traits use the Trait suffix.
+        documentation: "https://symfony.com/doc/current/contributing/code/standards.html"

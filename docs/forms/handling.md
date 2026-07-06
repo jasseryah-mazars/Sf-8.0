@@ -175,9 +175,9 @@ unit tests you may call `$form->submit($array)` directly — but in tests prefer
 driving through `handleRequest` with a crafted `Request` for fidelity.
 
 !!! danger "Certification traps"
-    - `isValid()` **implies** `isSubmitted()` internally but you must guard with
-      `isSubmitted()` first, or you validate a never-submitted form → it returns
-      `false` and can throw in some setups.
+    - Calling `isValid()` on a form that was **never submitted throws a
+      `LogicException`** ("Cannot check if an unsubmitted form is valid"). Always
+      guard with `isSubmitted()` first.
     - `handleRequest` only acts if the **HTTP method matches** the form's
       `method` option; a mismatched method is silently ignored (form not
       submitted).
