@@ -87,6 +87,24 @@ YAML/PHP config. (Do not confuse with `#[AsAlias]`, which aliases, not builds.)
     `PhpDumper` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php).
 
+### Null behavior
+
+The container stores **whatever the factory returns**. If a factory can
+legitimately return `null` — e.g. an optional client built only when a DSN is
+configured — the consuming argument must be typed nullable (`?Gateway $gateway`) and
+callers must guard with `?->` / `??`. A factory that *accidentally* returns `null`
+(a missed branch, an unresolved lookup) is a nasty bug: it surfaces later, wherever
+the "service" is used, as a `TypeError` or a null-method call rather than at build
+time. Env-driven factories are the classic source — `#[Autowire(env: 'GATEWAY_DSN')]`
+yields an empty string when unset, so branch on it explicitly rather than assuming a
+value. Keep factory return types explicit (`: Gateway` vs `: ?Gateway`) so the
+intent is enforced.
+
+!!! note "Null in real life"
+    A made-to-order dish that comes back an empty plate (factory returns null) isn't
+    caught at the pass — the diner discovers it later, so declare up front whether
+    "no dish" is an allowed outcome.
+
 ## Configuration & code
 
 === "PHP Attributes"

@@ -6,6 +6,13 @@
     instances, or `tagged_locator` / `#[AutowireLocator]` for a lazy keyed set.
     Highest-yield fact: **higher `priority` = earlier** in the iterator.
 
+!!! example "Real-world analogy"
+    A tag is a sticker on a recipe card — "brunch menu". The sticker alone does
+    nothing; a collector (the chef assembling the brunch service) gathers every card
+    wearing that sticker into one tray. `tagged_iterator` brings all the dishes out
+    already plated; `tagged_locator` hands you a labelled tray you cook from one slot
+    at a time. `priority` is where each card sits in the tray.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -74,6 +81,23 @@ implementing it is tagged automatically.
     `Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait` &
     the `TaggedIteratorArgument` value object —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PriorityTaggedServiceTrait.php).
+
+### Null behavior
+
+Collect a tag that **nothing carries** and you get an *empty* iterator/locator, not
+`null` — a `foreach` over it simply does zero iterations, so only check emptiness
+(`iterator_count()`, or `count()` on a materialised array) if "no handlers" is
+itself an error worth reporting. A `tagged_locator` behaves like any locator:
+`get($key)` for a key **not present** throws `ServiceNotFoundException`, so check
+`has($key)` first when the key is dynamic. If `default_index_method` / `index_by`
+resolves the *same* key for two services, the later one silently wins — a "my
+handler vanished" surprise that looks like a null but is an overwrite. The common
+bug is expecting an empty collection to be `null` and calling a method on it.
+
+!!! note "Null in real life"
+    An empty brunch tray (no cards stickered) is still a tray you can carry — it
+    just holds nothing; reaching into a labelled slot that was never filled
+    (`locator->get('x')`) is the error.
 
 ## Configuration & code
 

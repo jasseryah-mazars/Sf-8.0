@@ -7,6 +7,12 @@
     by `AuthenticatedVoter`), and `IS_AUTHENTICATED_ANONYMOUSLY` was replaced by
     `PUBLIC_ACCESS`.
 
+!!! example "Real-world analogy"
+    Roles are clearance tiers printed on your badge. "Admin" clearance implies
+    "User" clearance the way a manager's keycard also opens every staff door —
+    that inheritance is the **role hierarchy**. `IS_AUTHENTICATED_FULLY` is not a
+    tier; it is *how recently* you badged in.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
