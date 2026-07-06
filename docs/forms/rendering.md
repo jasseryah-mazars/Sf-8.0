@@ -10,7 +10,7 @@
     **Syllabus:** `Forms → Rendering` ·
     **Level:** Advanced → Expert ·
     **Est. time:** 25 min ·
-    **Prerequisites:** [Creating forms](creation.md) · [Templating](../templating/index.md)
+    **Prerequisites:** [Creating forms](creation.md) · [Templating](../twig/index.md)
 
 ---
 

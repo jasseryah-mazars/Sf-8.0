@@ -220,5 +220,5 @@ than a block override. Reach for a full custom theme only when the default
 ---
 
 <small>Related: [Rendering forms](rendering.md) · [Form types](types.md) ·
-[Templating](../templating/index.md)</small>
+[Templating](../twig/index.md)</small>
 </content>

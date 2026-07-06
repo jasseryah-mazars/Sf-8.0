@@ -15,7 +15,7 @@ type extensions — that the Expert exam loves.
 !!! info "Stage at a glance"
     | Property | Value |
     |---|---|
-    | **Prerequisites** | [Templating (Twig)](../templating/index.md) · [Validation](../validation/index.md) |
+    | **Prerequisites** | [Templating (Twig)](../twig/index.md) · [Validation](../validation/index.md) |
     | **Level** | Advanced → Expert |
     | **Difficulty** | ★★★ |
     | **Dependencies** | Twig (7), Validation (8), DI + Events (3–4) |
@@ -73,7 +73,7 @@ Work through them roughly in order:
 
 ---
 
-<small>Related: [Templating](../templating/index.md) ·
+<small>Related: [Templating](../twig/index.md) ·
 [Validation](../validation/index.md) ·
 [Web Security Fundamentals](../php-web-security/web-security.md) ·
 [Controllers](../controllers/index.md)</small>

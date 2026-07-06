@@ -1,0 +1,589 @@
+categories:
+  - name: "Controllers — Naming Conventions"
+    questions:
+      - question: "How is an invokable single-action controller referenced in the `_controller` attribute? (choose one)"
+        answers:
+          - value: "The fully-qualified class name only (Symfony calls __invoke)"
+            correct: true
+          - value: "Class::__invokeAction"
+            correct: false
+          - value: "class#invoke"
+            correct: false
+        explanation: >-
+          For an invokable controller you reference only the class; the
+          ControllerResolver detects the __invoke() method automatically.
+        documentation: "https://symfony.com/doc/current/controller.html"
+      - question: "Is the `Action` method suffix required for controller actions in Symfony 8?"
+        answers:
+          - value: "No — it is a legacy convention with no meaning under attribute routing"
+            correct: true
+          - value: "Yes, the router matches methods ending in Action"
+            correct: false
+          - value: "Yes, but only for invokable controllers"
+            correct: false
+        explanation: >-
+          Attribute routing binds a specific method explicitly, so the Action
+          suffix is purely historical and can be dropped.
+        documentation: "https://symfony.com/doc/current/controller.html"
+      - question: "What visibility must a controller action method have to be invoked by the kernel?"
+        answers:
+          - value: "public"
+            correct: true
+          - value: "protected"
+            correct: false
+          - value: "private"
+            correct: false
+        explanation: >-
+          The kernel invokes the controller callable externally, so the method
+          must be public.
+        documentation: "https://symfony.com/doc/current/controller.html"
+      - question: "Which statement best defines a Symfony controller?"
+        answers:
+          - value: "Any PHP callable that returns a Response"
+            correct: true
+          - value: "A class extending AbstractController"
+            correct: false
+          - value: "A method whose name ends in Action"
+            correct: false
+        explanation: >-
+          A controller is any callable (method, invokable object, closure) the
+          kernel runs to produce a Response; extending AbstractController is optional.
+        documentation: "https://symfony.com/doc/current/controller.html"
+
+  - name: "Controllers — AbstractController"
+    questions:
+      - question: "How does AbstractController obtain its helper services?"
+        answers:
+          - value: "Via a lazy service locator injected through setContainer(), driven by getSubscribedServices()"
+            correct: true
+          - value: "Through constructor injection of each service"
+            correct: false
+          - value: "The full application container is injected"
+            correct: false
+        explanation: >-
+          AbstractController implements ServiceSubscriberInterface; the compiler
+          builds a per-controller locator containing only the subscribed services.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+      - question: "What does `$this->container` hold inside an AbstractController?"
+        answers:
+          - value: "Only the subscribed services (a restricted service locator)"
+            correct: true
+          - value: "The entire application service container"
+            correct: false
+          - value: "Only container parameters"
+            correct: false
+        explanation: >-
+          The injected locator exposes exactly the services returned by
+          getSubscribedServices(), not the whole container.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+      - question: "What happens if you call `$this->render()` without Twig installed?"
+        answers:
+          - value: "A clear LogicException telling you Twig is required"
+            correct: true
+          - value: "A container 'service not found' fatal error"
+            correct: false
+          - value: "It silently returns an empty Response"
+            correct: false
+        explanation: >-
+          The twig service is subscribed with the optional '?' prefix, so the
+          helper guards its absence with a descriptive LogicException.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php"
+      - question: "When overriding getSubscribedServices() to add a service, what must you do to keep the built-in helpers?"
+        answers:
+          - value: "Spread parent::getSubscribedServices() into the returned array"
+            correct: true
+          - value: "Nothing; helpers are always available"
+            correct: false
+          - value: "Re-declare every core service manually"
+            correct: false
+        explanation: >-
+          Returning only your service replaces the list; merge the parent's
+          subscriptions so render/getUser/etc. still resolve.
+        documentation: "https://symfony.com/doc/current/controller.html#the-base-controller-class-services"
+
+  - name: "Controllers — The Request"
+    questions:
+      - question: "Which value resolver supplies a `Request` type-hinted controller argument?"
+        answers:
+          - value: "RequestValueResolver"
+            correct: true
+          - value: "RequestAttributeValueResolver"
+            correct: false
+          - value: "RequestPayloadValueResolver"
+            correct: false
+        explanation: >-
+          RequestValueResolver (priority 120) injects the current Request;
+          RequestAttributeValueResolver handles named route parameters.
+        documentation: "https://symfony.com/doc/current/controller.html"
+      - question: "In which parameter bag do matched route parameters appear?"
+        answers:
+          - value: "$request->attributes"
+            correct: true
+          - value: "$request->query"
+            correct: false
+          - value: "$request->request"
+            correct: false
+        explanation: >-
+          The router writes matched parameters into the attributes bag; query is
+          GET data and request is the POST body.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+      - question: "How should a service (not a controller) access the current Request?"
+        answers:
+          - value: "Inject RequestStack and call getCurrentRequest()"
+            correct: true
+          - value: "Autowire Request in the constructor"
+            correct: false
+          - value: "Call Request::createFromGlobals()"
+            correct: false
+        explanation: >-
+          The Request is request-scoped and cannot be injected directly; inject
+          the RequestStack service instead.
+        documentation: "https://symfony.com/doc/current/service_container/request.html"
+
+  - name: "Controllers — The Response"
+    questions:
+      - question: "What must a controller ultimately produce?"
+        answers:
+          - value: "A Response object (or a value converted to one by a kernel.view listener)"
+            correct: true
+          - value: "An array that Symfony auto-serializes to JSON"
+            correct: false
+          - value: "A string that becomes the body"
+            correct: false
+        explanation: >-
+          If a controller returns a non-Response, the kernel fires ViewEvent; if
+          no listener produces a Response a LogicException is thrown.
+        documentation: "https://symfony.com/doc/current/controller.html"
+      - question: "When does a StreamedResponse produce its body?"
+        answers:
+          - value: "During send(), by invoking its callback"
+            correct: true
+          - value: "When it is constructed"
+            correct: false
+          - value: "During the kernel.controller event"
+            correct: false
+        explanation: >-
+          The callback runs at send time and streams output; you cannot change
+          headers once streaming has begun.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response"
+      - question: "Which response class best serves a resumable (range-request) file download?"
+        answers:
+          - value: "BinaryFileResponse"
+            correct: true
+          - value: "StreamedResponse"
+            correct: false
+          - value: "JsonResponse"
+            correct: false
+        explanation: >-
+          BinaryFileResponse supports HTTP range requests and X-Sendfile/X-Accel
+          offloading for efficient downloads.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#serving-files"
+
+  - name: "Controllers — Cookies"
+    questions:
+      - question: "Where does a controller read incoming cookies from?"
+        answers:
+          - value: "$request->cookies"
+            correct: true
+          - value: "$request->headers"
+            correct: false
+          - value: "$_SESSION"
+            correct: false
+        explanation: >-
+          The cookies ParameterBag wraps $_COOKIE; responses set cookies via
+          $response->headers->setCookie().
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+      - question: "A cookie sent with SameSite=None also requires which attribute?"
+        answers:
+          - value: "Secure=true"
+            correct: true
+          - value: "HttpOnly=false"
+            correct: false
+          - value: "A domain attribute"
+            correct: false
+        explanation: >-
+          Modern browsers reject SameSite=None cookies unless they are marked
+          Secure (HTTPS-only).
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#setting-cookies"
+      - question: "Why might clearCookie('token') fail to delete the cookie?"
+        answers:
+          - value: "The path/domain do not match those used when the cookie was set"
+            correct: true
+          - value: "clearCookie only works over HTTPS"
+            correct: false
+          - value: "Cookies cannot be removed from the server side"
+            correct: false
+        explanation: >-
+          Deletion sends an expired Set-Cookie scoped by path/domain; a mismatch
+          targets a different cookie and leaves the original intact.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+
+  - name: "Controllers — The Session"
+    questions:
+      - question: "What is the recommended way for a service to access the session?"
+        answers:
+          - value: "Inject RequestStack and call getSession()"
+            correct: true
+          - value: "Inject SessionInterface in the constructor"
+            correct: false
+          - value: "Use the $_SESSION superglobal"
+            correct: false
+        explanation: >-
+          The session is request-scoped; RequestStack::getSession() is the stable
+          entry point in services.
+        documentation: "https://symfony.com/doc/current/session.html"
+      - question: "When does a lazy Symfony session actually start (session_start + Set-Cookie)?"
+        answers:
+          - value: "Only when the session is first read or written"
+            correct: true
+          - value: "On every request automatically"
+            correct: false
+          - value: "When the kernel boots"
+            correct: false
+        explanation: >-
+          Lazy sessions avoid emitting a session cookie for requests that never
+          touch the session, preserving cacheability.
+        documentation: "https://symfony.com/doc/current/session.html"
+      - question: "Which method regenerates the session id after login to prevent session fixation?"
+        answers:
+          - value: "migrate()"
+            correct: true
+          - value: "clear()"
+            correct: false
+          - value: "save()"
+            correct: false
+        explanation: >-
+          migrate() issues a new session id while keeping data; invalidate() also
+          wipes data. Symfony authenticators call migrate() on login.
+        documentation: "https://symfony.com/doc/current/session.html"
+      - question: "What is a caching side effect of touching the session on a public page?"
+        answers:
+          - value: "A Set-Cookie header makes the response uncacheable by shared proxies"
+            correct: true
+          - value: "Nothing; sessions never affect HTTP caching"
+            correct: false
+          - value: "It disables Twig template caching"
+            correct: false
+        explanation: >-
+          Shared caches must not store responses carrying a per-user Set-Cookie,
+          so touching the session prevents shared caching.
+        documentation: "https://symfony.com/doc/current/http_cache.html"
+
+  - name: "Controllers — Flash Messages"
+    questions:
+      - question: "What happens the first time you read a flash message (get/all or app.flashes)?"
+        answers:
+          - value: "It is returned and removed (consumed)"
+            correct: true
+          - value: "It stays until the session expires"
+            correct: false
+          - value: "It is copied to the next request"
+            correct: false
+        explanation: >-
+          Reading consumes flashes; use peek()/peekAll() to read without removing
+          them.
+        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+      - question: "`$this->addFlash('notice', 'Saved')` is shorthand for which call?"
+        answers:
+          - value: "getSession()->getFlashBag()->add('notice', 'Saved')"
+            correct: true
+          - value: "Setting a response header"
+            correct: false
+          - value: "Writing a cookie"
+            correct: false
+        explanation: >-
+          addFlash() is an AbstractController convenience over the session flash bag.
+        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+      - question: "Why are flash messages typically paired with a redirect?"
+        answers:
+          - value: "They display on the next (GET) request, matching the Post/Redirect/Get pattern"
+            correct: true
+          - value: "Redirects are required to write to the session"
+            correct: false
+          - value: "Flashes cannot be added during a GET request"
+            correct: false
+        explanation: >-
+          Flashes are built to survive exactly one redirect and be shown on the
+          following request, then discarded.
+        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+
+  - name: "Controllers — HTTP Redirects"
+    questions:
+      - question: "What is the default HTTP status code of redirectToRoute()?"
+        answers:
+          - value: "302"
+            correct: true
+          - value: "301"
+            correct: false
+          - value: "307"
+            correct: false
+        explanation: >-
+          RedirectResponse defaults to 302 Found; pass a status argument to change it.
+        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+      - question: "Which redirect status codes preserve the original HTTP method and body?"
+        answers:
+          - value: "307 and 308"
+            correct: true
+          - value: "301 and 302"
+            correct: false
+          - value: "302 and 303"
+            correct: false
+        explanation: >-
+          307/308 must not change the request method; 303 always forces GET and
+          301/302 may downgrade to GET.
+        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+      - question: "What is the difference between redirect() and redirectToRoute()?"
+        answers:
+          - value: "redirect() takes a URL; redirectToRoute() takes a route name and parameters"
+            correct: true
+          - value: "redirect() is 301 and redirectToRoute() is 302"
+            correct: false
+          - value: "redirectToRoute() performs an internal forward"
+            correct: false
+        explanation: >-
+          redirect() is URL-based; redirectToRoute() builds the URL from the
+          router. Both return a RedirectResponse (default 302).
+        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+
+  - name: "Controllers — Internal Redirects (Forwarding)"
+    questions:
+      - question: "What does AbstractController::forward() do?"
+        answers:
+          - value: "Runs another controller in a sub-request and returns its Response, without a new client request"
+            correct: true
+          - value: "Sends a 302 redirect to another route"
+            correct: false
+          - value: "Includes a Twig template"
+            correct: false
+        explanation: >-
+          forward() dispatches a sub-request through the kernel; the browser URL
+          does not change and no 3xx is sent.
+        documentation: "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+      - question: "During a forwarded sub-request, what does Request::isMainRequest() return?"
+        answers:
+          - value: "false"
+            correct: true
+          - value: "true"
+            correct: false
+          - value: "null"
+            correct: false
+        explanation: >-
+          The sub-request is dispatched with HttpKernelInterface::SUB_REQUEST, so
+          isMainRequest() is false and some listeners (e.g. the firewall) skip.
+        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+      - question: "After a forward(), what does the user's address bar show?"
+        answers:
+          - value: "The original URL, unchanged"
+            correct: true
+          - value: "The forwarded controller's route"
+            correct: false
+          - value: "An internal /_fragment URL"
+            correct: false
+        explanation: >-
+          Forwarding is server-internal within the same request, so no new client
+          navigation occurs.
+        documentation: "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+
+  - name: "Controllers — 404 & Error Pages"
+    questions:
+      - question: "How do you correctly produce a 404 from a controller?"
+        answers:
+          - value: "throw $this->createNotFoundException()"
+            correct: true
+          - value: "return new Response('', 404)"
+            correct: false
+          - value: "return $this->notFound()"
+            correct: false
+        explanation: >-
+          createNotFoundException() returns a NotFoundHttpException you must
+          throw; the kernel then renders the error page.
+        documentation: "https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages"
+      - question: "A controller throws a plain \\RuntimeException. What status code results?"
+        answers:
+          - value: "500"
+            correct: true
+          - value: "400"
+            correct: false
+          - value: "404"
+            correct: false
+        explanation: >-
+          Only exceptions implementing HttpExceptionInterface set a specific
+          status; any other exception becomes a 500.
+        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+      - question: "Where do you place a custom production 404 template?"
+        answers:
+          - value: "templates/bundles/TwigBundle/Exception/error404.html.twig"
+            correct: true
+          - value: "public/404.html"
+            correct: false
+          - value: "config/errors.yaml"
+            correct: false
+        explanation: >-
+          The Twig error renderer looks up per-status templates in that path in
+          the prod environment.
+        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+      - question: "Which kernel event lets a listener turn an exception into a Response?"
+        answers:
+          - value: "kernel.exception (ExceptionEvent)"
+            correct: true
+          - value: "kernel.view"
+            correct: false
+          - value: "kernel.terminate"
+            correct: false
+        explanation: >-
+          ExceptionEvent listeners can call setResponse(); otherwise the error
+          controller renders the page.
+        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+
+  - name: "Controllers — File Upload"
+    questions:
+      - question: "Which value should you trust to determine an uploaded file's real type?"
+        answers:
+          - value: "getMimeType() (content-detected by the guesser)"
+            correct: true
+          - value: "getClientMimeType()"
+            correct: false
+          - value: "getClientOriginalExtension()"
+            correct: false
+        explanation: >-
+          Client-supplied name/MIME are spoofable; getMimeType()/guessExtension()
+          inspect the actual file content.
+        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
+      - question: "What does UploadedFile::move() do when it fails?"
+        answers:
+          - value: "Throws a FileException"
+            correct: true
+          - value: "Returns false"
+            correct: false
+          - value: "Returns null and logs a warning"
+            correct: false
+        explanation: >-
+          move() throws FileException on failure rather than returning a status
+          value.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php"
+      - question: "With #[MapUploadedFile] and a failing File constraint, what happens?"
+        answers:
+          - value: "An HTTP exception is thrown before the action body runs"
+            correct: true
+          - value: "The argument is set to null"
+            correct: false
+          - value: "A flash message is added"
+            correct: false
+        explanation: >-
+          The resolver validates the upload and aborts with an HTTP error when a
+          constraint fails, so the body never executes with invalid input.
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+
+  - name: "Controllers — Built-in Internal Controllers"
+    questions:
+      - question: "Which built-in controller renders a Twig template purely from route config?"
+        answers:
+          - value: "TemplateController"
+            correct: true
+          - value: "RenderController"
+            correct: false
+          - value: "TwigController"
+            correct: false
+        explanation: >-
+          TemplateController::__invoke() renders the 'template' default and can
+          set HTTP cache headers, needing no custom class.
+        documentation: "https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route"
+      - question: "RedirectController configured with permanent: true returns which status?"
+        answers:
+          - value: "301 (or 308 when keepRequestMethod is true)"
+            correct: true
+          - value: "302"
+            correct: false
+          - value: "410"
+            correct: false
+        explanation: >-
+          permanent selects the permanent status code; combined with
+          keepRequestMethod it becomes 308 to preserve the method.
+        documentation: "https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route"
+      - question: "What status does RedirectController return when the target route/path is empty?"
+        answers:
+          - value: "410 Gone"
+            correct: true
+          - value: "404 Not Found"
+            correct: false
+          - value: "302 Found to /"
+            correct: false
+        explanation: >-
+          An empty target signals the resource is permanently gone, so the
+          controller responds 410.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php"
+
+  - name: "Controllers — Argument Value Resolvers"
+    questions:
+      - question: "Which interface does a custom value resolver implement in Symfony 8?"
+        answers:
+          - value: "ValueResolverInterface (resolve(Request, ArgumentMetadata): iterable)"
+            correct: true
+          - value: "ArgumentValueResolverInterface (supports() + resolve())"
+            correct: false
+          - value: "ControllerResolverInterface"
+            correct: false
+        explanation: >-
+          The split supports()/resolve() interface was removed; resolve() now
+          returns an iterable and yielding nothing declines the argument.
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+      - question: "How does a value resolver signal that it does not handle an argument?"
+        answers:
+          - value: "It yields nothing (returns an empty iterable)"
+            correct: true
+          - value: "It returns false"
+            correct: false
+          - value: "It throws UnsupportedArgumentException"
+            correct: false
+        explanation: >-
+          Yielding no value passes the argument to the next resolver in priority
+          order.
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+      - question: "Which resolvers have the highest default priority (120) in Symfony 8?"
+        answers:
+          - value: "RequestValueResolver and SessionValueResolver"
+            correct: true
+          - value: "DefaultValueResolver and VariadicValueResolver"
+            correct: false
+          - value: "RequestAttributeValueResolver and BackedEnumValueResolver"
+            correct: false
+        explanation: >-
+          Request and Session resolvers run first at priority 120; the attribute,
+          enum, uid and datetime resolvers sit at 100.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Resources/config/web.php"
+      - question: "A #[MapRequestPayload] argument fails validation. Which status is thrown?"
+        answers:
+          - value: "422 Unprocessable Entity (400 if the body itself is malformed)"
+            correct: true
+          - value: "500 Internal Server Error"
+            correct: false
+          - value: "200 with a null argument"
+            correct: false
+        explanation: >-
+          RequestPayloadValueResolver deserializes then validates; validation
+          errors throw UnprocessableEntityHttpException (422).
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html#mapping-the-whole-request-payload"
+      - question: "How do the #[MapRequestPayload]/#[MapQueryParameter] resolvers get activated?"
+        answers:
+          - value: "They are targeted resolvers that run only when their attribute is present on the argument"
+            correct: true
+          - value: "They always run first in the priority chain"
+            correct: false
+          - value: "They require manual registration in services.yaml"
+            correct: false
+        explanation: >-
+          These resolvers carry the controller.targeted_value_resolver tag and are
+          invoked only for arguments bearing the matching attribute.
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+      - question: "What binds a single typed query parameter such as ?page=2 to an int argument?"
+        answers:
+          - value: "#[MapQueryParameter]"
+            correct: true
+          - value: "#[MapQueryString]"
+            correct: false
+          - value: "#[MapRequestPayload]"
+            correct: false
+        explanation: >-
+          #[MapQueryParameter] binds one query value with casting; #[MapQueryString]
+          maps the whole query string into a DTO.
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
