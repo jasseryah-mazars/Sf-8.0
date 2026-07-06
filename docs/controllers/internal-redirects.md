@@ -49,7 +49,8 @@ return $this->container->get('http_kernel')
 Key points:
 
 - The sub-request is dispatched with `HttpKernelInterface::SUB_REQUEST` (not
-  `MASTER_REQUEST`/main). Events fire with `isMainRequest() === false`, so some
+  `MAIN_REQUEST`; the old `MASTER_REQUEST` constant was removed). Events fire with
+  `isMainRequest() === false`, so some
   listeners (e.g. firewall) behave differently or skip.
 - The `_controller` attribute is set to your target; the full kernel pipeline
   runs — value resolvers, `kernel.controller`, the controller, `kernel.view`,
