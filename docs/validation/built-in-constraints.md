@@ -96,7 +96,8 @@ field** (e.g. `#[Assert\GreaterThan(propertyPath: 'startDate')]`).
 #[Assert\Choice(choices: ['draft', 'published', 'archived'])]
 public string $status = 'draft';
 
-#[Assert\Choice(callback: [Role::class, 'cases'], multiple: true)]
+// callback names a static method returning the allowed *scalar* values
+#[Assert\Choice(callback: 'allowedRoles', multiple: true)]
 public array $roles = [];
 ```
 

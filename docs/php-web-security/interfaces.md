@@ -21,8 +21,8 @@
 
 ## Theory
 
-An **interface** is a pure contract: method signatures (and, since 8.1, `public`
-constants — typed since 8.3) with no implementation. A class may implement
+An **interface** is a pure contract: method signatures and constants (implicitly
+`public`; optionally **typed since 8.3**) with no implementation. A class may implement
 **many** interfaces, and an interface may `extends` **several** parent
 interfaces — this is how PHP gets multiple inheritance of *type* without
 multiple inheritance of *state*.

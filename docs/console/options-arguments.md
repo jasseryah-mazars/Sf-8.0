@@ -147,7 +147,7 @@ type and default decide the mode: a `bool` option â†’ `VALUE_NONE`; an `array` â
                 ->addArgument('recipients', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Emails')
                 ->addOption('count', 'c', InputOption::VALUE_REQUIRED, 'Repeat count', 1)
                 ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Dry run')
-                ->addOption('ansi', null, InputOption::VALUE_NEGATABLE, 'Colorize', true);
+                ->addOption('color', null, InputOption::VALUE_NEGATABLE, 'Colorize', true);
         }
 
         protected function execute(InputInterface $input, OutputInterface $output): int
@@ -166,7 +166,7 @@ type and default decide the mode: a `bool` option â†’ `VALUE_NONE`; an `array` â
     ```console
     $ php bin/console app:notify a@x.io b@x.io --count=3 --dry-run
     $ php bin/console app:notify a@x.io -c 3
-    $ php bin/console app:notify a@x.io --no-ansi
+    $ php bin/console app:notify a@x.io --no-color
     ```
 
 ## Best practices & anti-patterns

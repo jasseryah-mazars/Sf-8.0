@@ -47,7 +47,7 @@ stateful objects — this is verbose but explicit.
 `Symfony\Contracts\Cache\CacheInterface::get()`:
 
 ```php
-public function get(string $key, callable $callback, ?float $beta = null, array &$metadata = null): mixed
+public function get(string $key, callable $callback, ?float $beta = null, ?array &$metadata = null): mixed
 ```
 
 On a miss it calls `$callback(ItemInterface $item, bool &$save)` to compute the

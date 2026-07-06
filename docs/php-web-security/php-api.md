@@ -227,7 +227,8 @@ final class Reporter
 
 Hooks add computed **get**/**set** behaviour to a property without a backing
 field or explicit getter/setter, replacing many boilerplate accessors. A hook
-can be *virtual* (no backing store) or wrap a real field via `$field`.
+can be *virtual* (no backing store) or read/write the property's own backing
+value (referenced through the property name).
 
 ```php
 <?php

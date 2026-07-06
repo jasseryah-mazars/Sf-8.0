@@ -88,8 +88,8 @@ From **lowest** to **highest** binding:
 |---|---|
 | ternary | `? :`, `?:`, `??` |
 | logic | `or` → `and` → `not` |
-| comparison | `==` `!=` `<` `>` `<=` `>=` `<=>` `in` `is` `matches` `starts with` `ends with` |
 | bitwise | `b-or` `b-xor` `b-and` |
+| comparison | `==` `!=` `<` `>` `<=` `>=` `<=>` `in` `is` `matches` `starts with` `ends with` |
 | string | `~` (concatenation) |
 | additive | `+` `-` |
 | multiplicative | `*` `/` `//` (floor div) `%` |
