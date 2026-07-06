@@ -52,6 +52,15 @@ The crucial idea: there are **two containers**.
 | When | cache warmup / first request | every request |
 | Mutable? | yes (until frozen) | no |
 
+!!! question "Predict first"
+    A service is registered `public: false`. At runtime you call
+    `$container->get(App\Invoice\InvoiceGenerator::class)`. What happens?
+
+??? note "Reveal"
+    It throws `ServiceNotFoundException`. Private services are not fetchable by id
+    from the runtime container — the compiler may even have inlined or removed them.
+    Inject the service via autowiring instead of pulling it from the container.
+
 ## Deep Dive — how it works internally
 
 ### Definitions, not instances (build time)
@@ -181,6 +190,31 @@ always present.
 !!! note "Null in real life"
     A missing service id is the waiter saying "we're out of that tonight" — with
     `NULL_ON_INVALID_REFERENCE` you get an empty plate (null) instead of an argument.
+
+!!! info "Expert note"
+    `debug:container` reads the *dumped* container, so it shows the world after
+    compilation — inlined and removed private services simply are not there. When a
+    service "disappears", check whether it was private and unreferenced: the removal
+    pass pruned it. Add `--show-private` to see the private ids the compiler kept.
+
+??? example "Debugging story"
+    **Symptom:** an edit to `services.yaml` had no effect in `prod`.
+    **Diagnosis:** the compiled container in `var/cache/prod/` was never rebuilt —
+    the deploy skipped `cache:clear`, so the dumped `*Container.php` still held the
+    old resolved arguments. **Fix:** run `cache:warmup` in the release step.
+    **Avoid:** treat the compiled container as a build artifact; never edit
+    `var/cache/` by hand, and always warm the cache on deploy.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\DependencyInjection\ContainerBuilder` — the build-time
+      container; holds `Definition`s and runs `compile()`.
+    - `Symfony\Component\DependencyInjection\Definition` &
+      `Symfony\Component\DependencyInjection\Reference` — the recipe and the
+      "wire me to that id" pointer.
+    - `Symfony\Component\DependencyInjection\Compiler\PassConfig` — the ordered list
+      of passes `compile()` executes.
+    - `Symfony\Component\DependencyInjection\Dumper\PhpDumper` — turns the frozen
+      builder into the optimised `*Container.php` served at runtime.
 
 ## Configuration & code
 
@@ -343,10 +377,31 @@ register value objects, entities, or DTOs — build those with `new`. When you n
     - `get()` on private id → `ServiceNotFoundException`.
     - `Definition`/`Reference`/`Alias`/`Parameter` = build-time metadata only.
 
+## Connections
+
+- **Depends on:** [Symfony Architecture](../architecture/index.md) — the kernel
+  builds and boots the container.
+- **Reused in:** [Controllers](../controllers/abstract-controller.md),
+  [Console](../console/custom-commands.md),
+  [Messenger](../miscellaneous/messenger.md) — every entry point pulls its
+  collaborators from this container.
+- **Confused with:** [Service Locators](service-locators.md) — a locator is a small
+  PSR-11 subset, not the whole container.
+
 ## Official References
 - [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
 - [Official Symfony docs — Compiling the Container](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
 - [Symfony source — ContainerBuilder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ContainerBuilder.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the container exists and what problem DI solves
+- [ ] build and wire a service in Symfony 8 (`autowire` + the `App\:` glob)
+- [ ] debug a `ServiceNotFoundException` thrown on a private id
+- [ ] spot the trick that services are private **and** shared by default
+- [ ] explain compile-time (`ContainerBuilder`) vs runtime (dumped container)
 
 ---
 

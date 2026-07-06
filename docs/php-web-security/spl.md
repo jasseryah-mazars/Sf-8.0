@@ -34,6 +34,14 @@ make your objects behave like native language constructs — indexable
 | `IteratorAggregate` | `foreach` (delegated) | `getIterator()` |
 | `Traversable` | Marker (base of both) | — |
 
+!!! question "Predict first"
+    You `foreach` a generator to the end, then `foreach` the same generator again.
+    What comes out the second time?
+
+??? note "Reveal"
+    Nothing. A generator is a **single-use** `Iterator` — it cannot be rewound
+    after consumption. Build an array (or re-create the generator) to iterate twice.
+
 ## Deep Dive — how it works internally
 
 ### The iteration hierarchy
@@ -306,11 +314,27 @@ function readLines(string $path): \Generator
     - `yield` → Generator (Iterator); `yield from` delegates.
     - Stack=LIFO, Queue=FIFO, Heap=ordered, PriorityQueue=value+priority (unstable).
 
+## Connections
+
+- **Depends on:** [Interfaces](interfaces.md) — SPL is a set of interfaces (`Iterator`, `Countable`, `ArrayAccess`) you implement.
+- **Reused in:** [Closures](closures.md) — generators and callables collaborate; Symfony's `RewindableGenerator` wraps tagged services.
+- **Confused with:** [OOP](oop.md) magic methods — `ArrayAccess` uses explicit `offset*` methods, not `__get`/`__set`.
+
 ## Official References
 - [PHP: SPL](https://www.php.net/manual/en/book.spl.php)
 - [PHP: Predefined Interfaces](https://www.php.net/manual/en/reserved.interfaces.php)
 - [PHP: Generators](https://www.php.net/manual/en/language.generators.php)
 - [Symfony source — RewindableGenerator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Argument/RewindableGenerator.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `IteratorAggregate` + a generator beats hand-writing five methods
+- [ ] implement `ArrayAccess`/`Countable`/`IteratorAggregate` in Symfony 8
+- [ ] debug "nothing on the second loop" over a generator
+- [ ] spot the trick: `SplPriorityQueue` being unstable among equal priorities
+- [ ] explain how `SplObjectStorage` keys entries by object identity
 
 ---
 

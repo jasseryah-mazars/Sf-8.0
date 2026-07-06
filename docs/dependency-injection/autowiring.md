@@ -37,6 +37,15 @@ for that type. It resolves entirely at **compile time**, so mistakes surface as
 build errors, not runtime surprises. Autowiring handles *objects by type*; it
 cannot guess scalars — those come from `bind` or `#[Autowire]`.
 
+!!! question "Predict first"
+    Two services implement `TransportInterface` and no default alias is set. You
+    type-hint `TransportInterface`. What does the container do at compile time?
+
+??? note "Reveal"
+    It throws an **ambiguity error** listing the candidates — autowiring never
+    silently picks one. Disambiguate with `#[Target('name')]`,
+    `#[Autowire(service: 'id')]`, a named alias, or `bind`.
+
 ## Deep Dive — how it works internally
 
 ### Type → service resolution

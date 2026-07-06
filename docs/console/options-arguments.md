@@ -49,6 +49,16 @@ Combine with a bitmask, e.g. `IS_ARRAY | OPTIONAL`.
 | `VALUE_IS_ARRAY` | 8 | Repeatable (`--id=1 --id=2`) |
 | `VALUE_NEGATABLE` | 16 | Adds a `--no-…` twin (`--ansi`/`--no-ansi`) |
 
+!!! question "Predict first"
+    You declare `--force` as `VALUE_NONE` and try to give it a default of `false`.
+    What happens?
+
+??? note "Reveal"
+    It throws a `LogicException`. A `VALUE_NONE` flag **cannot** carry a default: it
+    is `false` unless present, then `true`. Defaults belong to `VALUE_REQUIRED` /
+    `VALUE_OPTIONAL` options (and `NEGATABLE`, whose default applies when neither
+    `--foo` nor `--no-foo` is passed).
+
 ## Deep Dive — how it works internally
 
 A command owns an `Symfony\Component\Console\Input\InputDefinition` — the ordered
@@ -278,10 +288,29 @@ are self-documenting and order-free. Interactive prompting (see
     - Array argument = last; only one.
     - Read via `$input->getArgument()` / `$input->getOption()`.
 
+## Connections
+
+- **Depends on:** [Custom commands](custom-commands.md) — arguments/options are
+  declared on the command (via attributes or `configure()`).
+- **Reused in:** [Input & output](input-output.md) — you read the bound values back
+  through `InputInterface`.
+- **Confused with:** [Configuration](configuration.md) — `configure()` *declares*
+  options; the `InputDefinition` is what *binds and validates* them.
+
 ## Official References
 - [Official Symfony docs — Console input](https://symfony.com/doc/current/console/input.html)
 - [Symfony source — InputOption](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputOption.php)
 - [Symfony source — InputArgument](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputArgument.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** arguments (positional) and options (named) differ and when to use each
+- [ ] declare every `InputArgument`/`InputOption` mode, including `NEGATABLE`, in Symfony 8
+- [ ] debug a "required argument after optional" or misplaced array-argument error
+- [ ] spot the trick on the mode integers and `VALUE_NONE` having no default
+- [ ] explain how the `InputDefinition` binds and validates raw `ArgvInput` tokens
 
 ---
 

@@ -30,6 +30,15 @@ skill is telling *your* deprecations (which you must fix) from *third-party* one
 (which you tolerate until they release a fix), and quieting the ones you
 deliberately keep testing.
 
+!!! question "Predict first"
+    Your CI runs with `max[self]=0`. A vendor library triggers a deprecation deep
+    inside its own internals. Does the build go red?
+
+??? note "Reveal"
+    No — that is an **indirect** deprecation, and `max[self]=0` counts only your
+    own code (`self`). It is reported but does not fail. Only a `self` deprecation
+    (or a broader `max[total]=0`) would break the build.
+
 ## Deep Dive — how it works internally
 
 The `DeprecationErrorHandler` classifies each deprecation by inspecting the call
@@ -275,10 +284,26 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
     - Baseline: `baselineFile=…&generateBaseline=true`, then `baselineFile=…`.
     - Attributes/traits: `#[IgnoreDeprecations]`, `ExpectUserDeprecationMessageTrait`.
 
+## Connections
+
+- **Depends on:** [PHPUnit Bridge](phpunit-bridge.md) — the bridge's `DeprecationErrorHandler` does the bucketing and gating.
+- **Reused in:** [Architecture — Deprecations](../architecture/deprecations.md) — the framework's own rules for *authoring* deprecations.
+- **Confused with:** [Unit Tests](unit-tests.md) — asserting a deprecation message differs from asserting a return value.
+
 ## Official References
 - [Official Symfony docs — PHPUnit bridge deprecations](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail)
 - [Symfony source — DeprecationErrorHandler Configuration](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/DeprecationErrorHandler/Configuration.php)
 - [Architecture — Deprecations Best Practices](../architecture/deprecations.md)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** failing on deprecations is free upgrade insurance
+- [ ] configure `max[self|direct|indirect|total]`, `weak`, `disabled`, and a baseline
+- [ ] debug why a deprecation is bucketed `indirect` instead of `self`
+- [ ] spot the trap that `#[IgnoreDeprecations]` replaced `@group legacy`
+- [ ] explain how the handler classifies a deprecation by its call stack
 
 ---
 

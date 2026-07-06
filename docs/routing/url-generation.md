@@ -40,6 +40,15 @@ A **reference type** decides how much of the URL is emitted:
 | `NETWORK_PATH` | `//example.com/blog/42` |
 | `RELATIVE_PATH` | `../42` |
 
+!!! question "Predict first"
+    A console command builds `generateUrl(..., ABSOLUTE_URL)` and the link comes out
+    as `http://localhost/...`. Why?
+
+??? note "Reveal"
+    There is no request in CLI, so the `RequestContext` has no real host — set
+    `framework.router.default_uri`. (Also remember the default reference type is
+    `ABSOLUTE_PATH`, a root-relative path, not a full URL.)
+
 ## Deep Dive — how it works internally
 
 The framework's `router` service implements `UrlGeneratorInterface`; at runtime it
@@ -310,10 +319,26 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
       `RELATIVE_PATH`.
     - CLI links → set `framework.router.default_uri`.
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — generation reads the same compiled `RouteCollection` by name.
+- **Reused in:** [Twig → URLs](../twig/urls.md) — `path()`/`url()` call this generator from templates.
+- **Confused with:** [Defaults](defaults.md) — a value equal to its default is dropped from the generated URL.
+
 ## Official References
 - [Official Symfony docs — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
 - [Symfony source — UrlGenerator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Generator/UrlGenerator.php)
 - [Symfony source — RequestContext](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RequestContext.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain the four reference types and that the default is `ABSOLUTE_PATH`
+- [ ] implement generation in a controller, a DI service, and Twig in Symfony 8
+- [ ] debug `http://localhost` links from a worker/console (missing `default_uri`)
+- [ ] spot that extra params become the query string and the constants live on `UrlGeneratorInterface`
+- [ ] explain how `CompiledUrlGenerator` and `RequestContext` collaborate
 
 ---
 

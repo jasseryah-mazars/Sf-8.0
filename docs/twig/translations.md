@@ -33,6 +33,16 @@ Signature: `message|trans(parameters = {}, domain = 'messages', locale = null)`.
 The key (`welcome.title`) is looked up in the catalogue for the current locale;
 if missing, the key itself is returned.
 
+!!! question "Predict first"
+    You need "1 message / 5 messages" pluralization in a Symfony 8 template.
+    Reaching for `transchoice`? What is the current path?
+
+??? note "Reveal"
+    `transchoice()` and `|transchoice` were **removed**. Pluralize with **ICU
+    MessageFormat** — `{count, plural, one {…} other {…}}` — in a domain whose file
+    is suffixed `+intl-icu` (e.g. `messages+intl-icu.en.yaml`). Only that suffix
+    triggers ICU parsing.
+
 ## Deep Dive — how it works internally
 
 The filter/tag are provided by
@@ -215,10 +225,26 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - ICU: `messages+intl-icu.en.yaml`, `{n, plural, =0{} one{} other{#}}`.
     - `transchoice` = removed.
 
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — `trans` is a filter; the `{% trans %}` tag follows the same delimiter rules.
+- **Reused in:** [Intl](../miscellaneous/intl.md) — ICU messages share the intl formatting used by `format_number`/`format_currency`.
+- **Confused with:** [String Interpolation](interpolation.md) — `%name%` placeholders are substituted by the translator, not by `#{}` interpolation.
+
 ## Official References
 - [Official — Translations in templates](https://symfony.com/doc/current/translation.html#translations-in-templates)
 - [Official — Message format (ICU)](https://symfony.com/doc/current/translation/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** translation uses stable keys + domains rather than raw sentences
+- [ ] translate and pluralize with `trans` and ICU in Symfony 8
+- [ ] debug ICU braces rendering literally in a non-`+intl-icu` file
+- [ ] spot the trick answer using `transchoice` or the wrong `trans` argument order
+- [ ] explain the `TranslationExtension` → `TranslatorInterface` → catalogue/`IntlFormatter` flow
 
 ---
 

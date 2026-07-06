@@ -43,6 +43,15 @@ code.
 
 A plain `\Exception` becomes **500**.
 
+!!! question "Predict first"
+    You write `$this->createNotFoundException('Nope');` on its own line and keep
+    going. Does the visitor get a 404?
+
+??? note "Reveal"
+    No. `createNotFoundException()` only **builds and returns** the exception — you
+    must `throw` it. Without `throw`, the action runs on with a `null` entity and
+    fatals later. The kernel turns a *thrown* `HttpExceptionInterface` into the status.
+
 ## Deep Dive — how it works internally
 
 When a controller throws, the kernel catches it and dispatches a
@@ -288,9 +297,25 @@ lines later, not a clean 404.
     - Non-Http exception → 500. Status from `getStatusCode()`.
     - Prod templates: `templates/bundles/TwigBundle/Exception/errorXXX.html.twig`.
 
+## Connections
+
+- **Depends on:** [Architecture → Exception handling](../architecture/exception-handling.md) — `kernel.exception` → error controller is where a throw becomes a page.
+- **Reused in:** [The Response](response.md) — the error renderer ultimately produces a `Response`.
+- **Confused with:** [AbstractController](abstract-controller.md) — `createNotFoundException()` returns an exception; it does not abort by itself.
+
 ## Official References
 - [Official Symfony docs — Errors & 404 pages](https://symfony.com/doc/current/controller/error_pages.html)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** you throw an exception instead of building a 404 `Response`
+- [ ] throw the right `HttpException` subclass for 400/403/404/409 in Symfony 8
+- [ ] debug a missing 404 caused by forgetting `throw`
+- [ ] spot that a non-`HttpExceptionInterface` exception becomes a 500
+- [ ] explain the `kernel.exception` → `ErrorController` → `ErrorRenderer` flow
 
 ---
 

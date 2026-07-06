@@ -41,6 +41,16 @@ Unlike a [compiler pass](compiler-passes.md) that rewrites definitions, decorati
 is declarative — you say "this service decorates that id" and the container
 rewires everyone who depended on the original to now get the decorator.
 
+!!! question "Predict first"
+    Two decorators target `mailer`: caching with `decoration_priority: 20`, logging
+    with `10`. Which one do consumers hit first, and which sits nearest the original?
+
+??? note "Reveal"
+    Higher priority is applied **first** and ends up **innermost**, so caching (20)
+    wraps the original directly. Consumers hit the lowest-priority, outermost
+    decorator first — logging (10) — which delegates inward to caching, then the
+    original.
+
 ## Deep Dive — how it works internally
 
 ### What the compiler does
@@ -98,6 +108,30 @@ turning an optional wrap into a `TypeError` the moment the target is absent.
 !!! note "Null in real life"
     A `null` inner is a garnish station with no plate coming down the line — you
     must check the belt is empty (`?->`) before you try to season nothing.
+
+!!! info "Expert note"
+    Injecting the decorated service by its own id inside the decorator causes
+    infinite recursion — the decorator has taken over that id. Always take the
+    original through `.inner` / `#[AutowireDecorated]`, never by re-fetching the
+    public id.
+
+??? example "Debugging story"
+    **Symptom:** after adding `decoration_on_invalid: null`, requests fatalled with a
+    `TypeError` on `.inner`. **Diagnosis:** the `.inner` argument was typed
+    non-nullable `MailerInterface`, but with the target absent the compiler injected
+    `null`. **Fix:** type it `?MailerInterface` and guard delegation with
+    `$this->inner?->send(...)`. **Avoid:** whenever you opt into `null`, make the
+    inner type nullable and use the nullsafe operator.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass` — renames
+      the decorated id to `*.inner` and hands the public id to the decorator.
+    - `Symfony\Component\DependencyInjection\Definition::setDecoratedService()` — how
+      `decorates`, `decoration_priority` and `decoration_on_invalid` are stored.
+    - `Symfony\Component\DependencyInjection\Reference` — the `.inner` argument is
+      rewritten to a reference to the renamed original.
+    - `Symfony\Component\DependencyInjection\Attribute\AsDecorator` &
+      `AutowireDecorated` — the attribute equivalents of the YAML keys.
 
 ## Configuration & code
 
@@ -255,9 +289,29 @@ run *many* handlers, use [tags](tags.md) instead.
     - `DecoratorServicePass` renames original → `.inner`, decorator → public id.
     - Higher priority = innermost.
 
+## Connections
+
+- **Depends on:** [Compiler Passes](compiler-passes.md) — `DecoratorServicePass`
+  does the rewiring at compile time.
+- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+  [Security](../security/authenticators.md) — middleware and handlers are commonly
+  decorated to add logging or caching.
+- **Confused with:** [Factories](factories.md) — a factory *builds* a service; a
+  decorator *wraps* an existing one under its id.
+
 ## Official References
 - [Official Symfony docs — Service Decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
 - [Symfony source — DecoratorServicePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/DecoratorServicePass.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** decoration beats subclassing for cross-cutting behaviour
+- [ ] decorate a service with `#[AsDecorator]` + `#[AutowireDecorated]` in Symfony 8
+- [ ] debug an infinite recursion or a `null` `.inner` `TypeError`
+- [ ] spot that higher `decoration_priority` = innermost (applied first)
+- [ ] explain what `DecoratorServicePass` renames and rewires
 
 ---
 

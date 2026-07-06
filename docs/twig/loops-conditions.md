@@ -64,6 +64,15 @@ The **`loop`** variable inside a `for`:
 {% endfor %}
 ```
 
+!!! question "Predict first"
+    You need to skip inactive rows inside a `{% for %}`. Reaching for `{% continue %}`?
+    What does Twig actually give you?
+
+??? note "Reveal"
+    Nothing — Twig has **no `break`/`continue`** (deliberately, to keep templates
+    declarative). Filter the source instead: `{% for x in items if x.active %}`,
+    or slice it, or wrap the body in an `{% if %}`.
+
 ## Deep Dive — how it works internally
 
 `{% for %}` compiles to a PHP `foreach`, and the `loop` variable is a small array
@@ -241,10 +250,26 @@ collections, paginate rather than looping thousands of rows in Twig.
     - `for … else … endfor` = empty state.
     - Tests: `is defined/null/empty/even/odd/iterable/same as/divisible by`.
 
+## Connections
+
+- **Depends on:** [Twig Syntax](syntax.md) — the tests (`is defined`/`null`/`empty`) and null rules used in conditions are defined there.
+- **Reused in:** [Filters & Functions](filters-functions.md) — `slice`, `default`, `length` shape and guard the iterable a loop walks.
+- **Confused with:** [Twig Syntax](syntax.md) — `is empty` (true for `0`/`''`/`[]`/`null`) is broader than `is null`.
+
 ## Official References
 - [Official — Loops in templates](https://symfony.com/doc/current/templates.html)
 - [Twig — for / if tags](https://twig.symfony.com/doc/3.x/tags/for.html)
 - [Twig source — ForNode](https://github.com/twigphp/Twig/blob/3.x/src/Node/ForNode.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** Twig omits `break`/`continue` and what replaces them
+- [ ] use every `loop.*` member and `for … else` in Symfony 8
+- [ ] debug a missing `loop.length`/`loop.last` on a non-countable iterator
+- [ ] spot the trick answer confusing `is null`, `is empty`, and `is defined`
+- [ ] explain how `for` compiles to `foreach` and when the `else` clause fires
 
 ---
 

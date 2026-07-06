@@ -27,6 +27,15 @@ An HTML file input arrives in `$_FILES`, which Symfony exposes as
 binary upload is not something you usually store *as-is* on your model, the field
 is frequently **unmapped** — the form validates it, you handle persistence.
 
+!!! question "Predict first"
+    An uploaded file arrives with `getClientOriginalName()` = `"../../evil.php"`. Is
+    that value safe to use as the stored filename?
+
+??? note "Reveal"
+    No — client-sent name and MIME type are **untrusted** (path traversal, spoofing).
+    Generate a safe name (slug + `uniqid()` + `guessExtension()`) and validate with the
+    content-based `File`/`Image` constraint before `move()`.
+
 ## Deep Dive — how it works internally
 
 ### From request to `UploadedFile`
@@ -265,10 +274,26 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
     - `File(maxSize: '5m', mimeTypes: [...])` / `Image(...)`.
     - See also [controllers/file-upload](../controllers/file-upload.md).
 
+## Connections
+
+- **Depends on:** [Handling submissions](handling.md) — the request handler merges `$request->files` into submitted data.
+- **Reused in:** [Controllers — file upload](../controllers/file-upload.md) — the same `UploadedFile`/`move()` flow outside a form.
+- **Confused with:** [Validation](../validation/index.md) — the `File`/`Image` constraints enforce size/MIME, even on an unmapped field.
+
 ## Official References
 - [Official Symfony docs — Uploading files](https://symfony.com/doc/current/controller/upload_file.html)
 - [Official Symfony docs — File field type](https://symfony.com/doc/current/reference/forms/types/file.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** uploads are usually `mapped => false`
+- [ ] add a `FileType`, read the `UploadedFile`, and move it safely in Symfony 8
+- [ ] debug a fatal on `move()` from a missing `instanceof UploadedFile` check
+- [ ] spot the wrong answer that trusts `getClientMimeType()` for an allow-list
+- [ ] explain when `form_start` emits `enctype="multipart/form-data"`
 
 ---
 

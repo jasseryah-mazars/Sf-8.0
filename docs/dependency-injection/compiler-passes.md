@@ -38,6 +38,15 @@ wiring (autowiring, decoration, tag collection, removal of private services) is 
 compiler passes. You write one when you need to transform definitions
 programmatically — most often to wire up all services carrying a given tag.
 
+!!! question "Predict first"
+    You want a `#[CompilerPass]` attribute to register your pass. Does one exist —
+    and within a phase, does higher `priority` run earlier or later?
+
+??? note "Reveal"
+    There is **no** `#[CompilerPass]` attribute — register with `addCompilerPass()`
+    in `Kernel::build()` or `Bundle::build()`. Higher `priority` runs **earlier**
+    within its phase.
+
 ## Deep Dive — how it works internally
 
 ### The interface and registration
@@ -115,6 +124,30 @@ service isn't registered.
     Reaching for a recipe card that isn't on the board throws (get with no guard);
     checking the board first (`has()`) and shrugging if it's missing is the safe
     prep habit.
+
+!!! info "Expert note"
+    Reaching for a *real* service inside `process()` (`$container->get(...)`) is the
+    senior tell of a broken pass: at compile time nothing is instantiated. You only
+    touch `Definition`s and `Reference`s. If you need the object, add a `Reference`
+    to the consuming definition and let the runtime container build it.
+
+??? example "Debugging story"
+    **Symptom:** a pass that removed a service caused an autowiring failure
+    elsewhere. **Diagnosis:** it was registered in `TYPE_BEFORE_OPTIMIZATION`, so it
+    deleted a definition the optimization phase still needed to resolve a
+    `Reference`. **Fix:** move removal to `TYPE_BEFORE_REMOVING` / `TYPE_REMOVING`.
+    **Avoid:** match the phase to the intent — read/add args before optimization,
+    prune only in the removing phases.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface` — the
+      one method you implement, `process(ContainerBuilder)`.
+    - `Symfony\Component\DependencyInjection\Compiler\PassConfig` — fixes the phase
+      order and holds the built-in passes (`AutowirePass`, the removal passes).
+    - `ContainerBuilder::addCompilerPass()` / `findTaggedServiceIds()` — register a
+      pass; collect tagged definitions inside it.
+    - `Symfony\Component\DependencyInjection\Reference` — what you add to a collector
+      `Definition`, resolved to an instance at runtime.
 
 ## Configuration & code
 
@@ -280,10 +313,30 @@ expresses.
     - `PassConfig::TYPE_*`; default = `TYPE_BEFORE_OPTIMIZATION`.
     - `findTaggedServiceIds()`, `findDefinition()`, `new Reference($id)`.
 
+## Connections
+
+- **Depends on:** [The Service Container](container.md) — passes rewrite
+  `Definition`s during `compile()`.
+- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+  [Security](../security/voters.md) — handler and voter collection is wired by
+  passes.
+- **Confused with:** [Tags](tags.md) — a tag only labels; a pass is what *consumes*
+  the label (when a `tagged_iterator` won't do).
+
 ## Official References
 - [Official Symfony docs — Compiler Passes](https://symfony.com/doc/current/service_container/compiler_passes.html)
 - [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/current/service_container/tags.html)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** passes exist (transform definitions before the dump)
+- [ ] register one in `Kernel::build()` and pick the right phase
+- [ ] debug a pass that runs in the wrong phase or skips its `has()` guard
+- [ ] spot the trap that there is no `#[CompilerPass]` attribute
+- [ ] explain why higher `priority` runs earlier and why `get()` is illegal here
 
 ---
 

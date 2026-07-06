@@ -33,6 +33,15 @@ Two console commands answer the everyday routing questions:
 Both read the same compiled `RouteCollection` the app uses, so what they report is
 what production does.
 
+!!! question "Predict first"
+    You edit routes in **prod** and reload the page — the old behaviour persists.
+    Why, and what fixes it?
+
+??? note "Reveal"
+    The compiled router is built at cache warmup and is **not** auto-refreshed in
+    prod, so run `cache:clear` / `cache:warmup`. (In `dev` the route files are tracked
+    as cache resources and rebuild automatically.)
+
 ## Deep Dive — how it works internally
 
 `debug:router` (`RouterDebugCommand`) dumps the `RouteCollection` via the framework's
@@ -209,9 +218,25 @@ instead of scraping HTML.
     - Prod: `cache:clear` after route edits.
     - Profiler → Routing panel shows `_route`.
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — both commands read the same compiled `RouteCollection`.
+- **Reused in:** [Methods](methods.md) — `router:match --method` distinguishes a 405 from a 404.
+- **Confused with:** [URL generation](url-generation.md) — the matcher's `_route` vs the generator's separate compiled file.
+
 ## Official References
 - [Official Symfony docs — Debugging routes](https://symfony.com/doc/current/routing.html#debugging-routes)
 - [Symfony source — RouterMatchCommand](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Command/RouterMatchCommand.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain the dev vs prod compiled-router cache and when to clear it
+- [ ] implement `debug:router` and `router:match` invocations in Symfony 8
+- [ ] debug a route that 404s/405s using `TraceableUrlMatcher` output
+- [ ] spot that prod route changes need a cache rebuild (not just a reload)
+- [ ] explain the two compiled files and the profiler Routing panel
 
 ---
 

@@ -43,6 +43,15 @@ Security bundle. Five top-level keys matter for the exam:
 | `password_hashers` | How passwords are hashed ([Password Hashers](password-hashers.md)) |
 | `role_hierarchy` | Role inheritance ([Roles](roles.md)) |
 
+!!! question "Predict first"
+    You define two `providers` but a firewall omits `provider:`. Does Symfony pick
+    the first one?
+
+??? note "Reveal"
+    No — it is a **configuration error**. With more than one provider there is no
+    implicit default; each firewall must name its `provider:` explicitly. Only a
+    single defined provider is used automatically.
+
 ## Deep Dive — how it works internally
 
 ### Config → services
@@ -237,10 +246,31 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
     - Multiple providers ⇒ each firewall needs `provider:`.
     - `debug:config security`, `debug:firewall`, `security:hash-password`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) —
+  `SecurityExtension` compiles YAML into container services.
+- **Reused in:** [Firewalls](firewalls.md) — each firewall block becomes a
+  `FirewallContext` in the `FirewallMap`.
+- **Reused in:** [Providers](providers.md) — the `providers` key wires user
+  loading.
+- **Confused with:** [Access Control Rules](access-control.md) — `firewalls`
+  configure *authentication*; `access_control` configures *authorization*.
+
 ## Official References
 - [Symfony docs — Security configuration](https://symfony.com/doc/current/security.html)
 - [Symfony docs — SecurityBundle config reference](https://symfony.com/doc/current/reference/configuration/security.html)
 - [Symfony source — SecurityExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/DependencyInjection/SecurityExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `security.yaml` is a single declarative surface
+- [ ] lay out the five keys and order firewalls/rules correctly
+- [ ] debug a profiler redirect caused by a missing `dev` firewall
+- [ ] spot the trap that `enable_authenticator_manager` no longer exists
+- [ ] explain what `SecurityExtension` compiles per firewall internally
 
 ---
 

@@ -322,10 +322,26 @@ rules belong to the Validator.
     - Empty/null handling first, always.
     - Failure: `throw new TransformationFailedException(...)`.
 
+## Connections
+
+- **Depends on:** [Handling submissions](handling.md) — transformers bridge the model/norm/view shapes introduced there.
+- **Reused in:** [Built-in types](built-in-types.md) — `IntegerType`/`DateType` register transformers for you.
+- **Confused with:** [Validation](../validation/index.md) — a failed transform is a *format* error (`invalid_message`), not a business-rule violation.
+
 ## Official References
 - [Official Symfony docs — Data transformers](https://symfony.com/doc/current/form/data_transformers.html)
 - [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/current/form/data_transformers.html#example-1-transforming-string-to-datetime)
 - [Symfony source — Form.php](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** transformers exist (model value vs browser representation)
+- [ ] implement `DataTransformerInterface` with correct directions in Symfony 8
+- [ ] debug an optional field that crashes on empty input in `reverseTransform('')`
+- [ ] spot the wrong answer that swaps `transform`/`reverseTransform`
+- [ ] explain the order model vs view transformers run on display vs submit
 
 ---
 

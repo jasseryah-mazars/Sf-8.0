@@ -29,6 +29,15 @@ After a request you can inspect two things: the raw **objects**
 for you. The helpers produce readable failure messages (they print the response on
 failure), so prefer them over hand-rolled `assertSame($response->getStatusCode())`.
 
+!!! question "Predict first"
+    A controller returns `204 No Content`. Does `assertResponseIsSuccessful()`
+    pass? What about `assertResponseStatusCodeSame(200)`?
+
+??? note "Reveal"
+    `assertResponseIsSuccessful()` passes — it accepts **any 2xx**. But
+    `assertResponseStatusCodeSame(200)` fails, because 204 ≠ 200. Use the exact
+    helper only when the precise code matters.
+
 ## Deep Dive — how it works internally
 
 `$client->getResponse()` returns the `HttpFoundation\Response` from the last
@@ -316,10 +325,26 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
     - DOM: `assertSelectorExists`, `assertSelectorTextContains/Same`,
       `assertPageTitleContains`, `assertRouteSame`.
 
+## Connections
+
+- **Depends on:** [The Client](client.md) — the assertions read the client's last request/response.
+- **Reused in:** [The Profiler](profiler.md) — deeper assertions read collectors when the response alone isn't enough.
+- **Confused with:** [The Crawler](crawler.md) — the Crawler *queries* the DOM; `assertSelector*` *asserts* on it.
+
 ## Official References
 - [Official Symfony docs — The assertions](https://symfony.com/doc/current/testing.html#the-assertions)
 - [Symfony source — HttpFoundation test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpFoundation/Test/Constraint)
 - [Symfony source — DomCrawler test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/DomCrawler/Test/Constraint)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the helpers beat a hand-rolled `assertSame` on `getStatusCode()`
+- [ ] assert status, redirects, headers, and DOM content in Symfony 8
+- [ ] debug a selector assertion running against the wrong (unfollowed) page
+- [ ] spot the trap that `IsSuccessful` accepts any 2xx, not only 200
+- [ ] explain how each `assert*` delegates to a PHPUnit `Constraint`
 
 ---
 

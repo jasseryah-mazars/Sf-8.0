@@ -42,6 +42,16 @@ The single entry point is `AuthorizationCheckerInterface::isGranted($attribute,
 $subject = null)`. Everything — `#[IsGranted]`, `denyAccessUnlessGranted()`,
 Twig's `is_granted()`, `access_control` — funnels through it.
 
+!!! question "Predict first"
+    You call `isGranted('ROLE_ADMIN')` on a logged-out visitor. Does it throw, or
+    return a value?
+
+??? note "Reveal"
+    It returns `false` — no exception. With no token the `AuthorizationChecker`
+    substitutes a `NullToken` and still runs the voters; `AuthenticatedVoter`
+    denies the role. `null` bites only *inside* a voter, where `$token->getUser()`
+    can be `null`.
+
 ## Deep Dive — how it works internally
 
 ### The decision path
@@ -263,10 +273,31 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
     - Twig: `is_granted(attr, subject)`.
     - Voter votes: GRANTED 1 / ABSTAIN 0 / DENIED -1.
 
+## Connections
+
+- **Depends on:** [Authentication](authentication.md) — authorization needs the
+  token authentication produced.
+- **Reused in:** [Voters](voters.md) — every `isGranted()` ends in a voter
+  decision.
+- **Reused in:** [Controllers](../controllers/index.md) — `#[IsGranted]` and
+  `denyAccessUnlessGranted()` guard controller actions.
+- **Confused with:** [Access Control Rules](access-control.md) — only the
+  `isGranted()` path can pass a subject; `access_control` is URL-only.
+
 ## Official References
 - [Symfony docs — Authorization](https://symfony.com/doc/current/security.html#access-control-authorization)
 - [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
 - [Symfony source — AuthorizationChecker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AuthorizationChecker.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** authorization runs after authentication
+- [ ] enforce access with `#[IsGranted]` and `denyAccessUnlessGranted()`
+- [ ] debug why `isGranted()` returns `false` for an anonymous user
+- [ ] spot when a check needs a subject (voter) vs a role
+- [ ] trace `isGranted()` → `AccessDecisionManager` → voters internally
 
 ---
 

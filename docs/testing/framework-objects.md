@@ -29,6 +29,15 @@ dedicated **test container** available from `KernelTestCase::getContainer()`. It
 the same graph the app uses, but with visibility relaxed so tests can reach into
 it.
 
+!!! question "Predict first"
+    You `set()` a mock on `self::getContainer()`, fire a request, then a second
+    request — and the second uses the *real* service again. What did you forget?
+
+??? note "Reveal"
+    `$client->disableReboot()`. By default the kernel reboots after each request,
+    rebuilding the container and discarding your replacement. Disable the reboot to
+    keep the mock alive across requests.
+
 ## Deep Dive — how it works internally
 
 At runtime Symfony makes most services **private**: they are inlined into their
@@ -283,10 +292,26 @@ and swapping a `MockClock` over global clock mocking.
     - Persist replacement: `$client->disableReboot()` first.
     - Container id: `test.service_container` (`TestContainer`).
 
+## Connections
+
+- **Depends on:** [The Container](../dependency-injection/container.md) — the test container is the same service graph with visibility relaxed.
+- **Reused in:** [Functional Tests](functional-tests.md) — where you fetch and replace services mid-test.
+- **Confused with:** [The Client](client.md) — `disableReboot()` lives on the client but is what makes a `set()` replacement persist.
+
 ## Official References
 - [Official Symfony docs — Accessing the container](https://symfony.com/doc/current/testing.html#accessing-the-container)
 - [Official Symfony docs — Mocking services](https://symfony.com/doc/current/testing.html#mocking-services)
 - [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the test container exposes services that are private at runtime
+- [ ] fetch and replace services via `self::getContainer()` in Symfony 8
+- [ ] debug a replacement that vanishes on the next request
+- [ ] spot the trap that an *unused* private service is still optimised away
+- [ ] explain which compiler passes build the `TestContainer`
 
 ---
 

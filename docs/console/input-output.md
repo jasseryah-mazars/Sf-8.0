@@ -276,10 +276,29 @@ messages.
     - `write()` no newline, `writeln()` newline.
     - STDERR: `$output->getErrorOutput()` (ConsoleOutputInterface only).
 
+## Connections
+
+- **Depends on:** [Arguments & options](options-arguments.md) — `InputInterface`
+  exposes the values bound from those definitions.
+- **Reused in:** [Testing — Functional tests](../testing/functional-tests.md) — a
+  `CommandTester` captures this output so you can assert on it.
+- **Confused with:** [Helpers](helpers.md) — `SymfonyStyle` wraps the helpers; raw
+  `OutputInterface` is for byte-exact, unstyled output.
+
 ## Official References
 - [Official Symfony docs — Console style](https://symfony.com/doc/current/console/style.html)
 - [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/current/console/verbosity.html)
 - [Symfony source — SymfonyStyle](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Style/SymfonyStyle.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `SymfonyStyle` exists and what consistent UI problem it solves
+- [ ] read input and write styled output (title/table/progress) in Symfony 8
+- [ ] debug a fatal `getErrorOutput()` call on a plain `OutputInterface`
+- [ ] spot the trick separating `write()` from `writeln()` and STDOUT from STDERR
+- [ ] explain output sections (`ConsoleSectionOutput`) and independent re-writes
 
 ---
 

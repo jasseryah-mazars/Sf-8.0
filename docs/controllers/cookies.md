@@ -30,6 +30,15 @@ the response.
   response header bag: `$response->headers->setCookie($cookie)`.
 - **Delete:** `$response->headers->clearCookie('name')` sends an expired cookie.
 
+!!! question "Predict first"
+    You set a cookie with `SameSite=None` but leave `Secure` at its default. Does a
+    modern browser store it?
+
+??? note "Reveal"
+    No — browsers **reject** a `SameSite=None` cookie that is not also `Secure`.
+    Remember the asymmetry too: you read from `$request->cookies` but write via
+    `$response->headers->setCookie()`.
+
 ## Deep Dive — how it works internally
 
 A `Response`'s cookies live in `Symfony\Component\HttpFoundation\ResponseHeaderBag`,
@@ -213,9 +222,25 @@ server-side state.
     - Delete: `$response->headers->clearCookie('x', path, domain)`.
     - `SameSite=None` ⇒ must be `Secure`.
 
+## Connections
+
+- **Depends on:** [The Response](response.md) — cookies are written onto the response's header bag.
+- **Reused in:** [The Session](session.md) — the session id itself is carried in a cookie.
+- **Confused with:** [HTTP → Cookies](../http/cookies.md) — this is the controller-side read/write; the HTTP chapter covers the protocol.
+
 ## Official References
 - [Official Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** cookie access is read/write asymmetric and never holds secrets
+- [ ] set, read, and clear a cookie with the immutable `Cookie` value object in Symfony 8
+- [ ] debug a `clearCookie()` that fails because path/domain don't match
+- [ ] spot that `SameSite=None` requires `Secure=true`
+- [ ] explain how `ResponseHeaderBag` emits one `Set-Cookie` per cookie
 
 ---
 

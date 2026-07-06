@@ -55,6 +55,14 @@ name is dynamic. A missing attribute yields `null` (or throws under `strict_vari
 Strings `"hi"`/`'hi'`, numbers `42`/`4.2`, booleans `true`/`false`, `null`,
 arrays `[1, 2]`, hashes `{ key: 'v', (expr): 'v2' }`, and ranges `1..5`.
 
+!!! question "Predict first"
+    What does `{{ 7 // 2 }}` output — `3.5`, `3`, or `4`?
+
+??? note "Reveal"
+    `3`. `//` is **floor (integer) division** in Twig, distinct from `/` (float
+    division, which gives `3.5`). Small operator differences like this — `~` vs `+`,
+    `//` vs `/`, filters binding tightest — are exactly what the exam probes.
+
 ## Deep Dive — how it works internally
 
 Twig is a **compiler**, not an interpreter. `Twig\Environment::render()` runs a
@@ -267,10 +275,26 @@ prod so a missing optional variable renders as empty rather than erroring.
     - Precedence high→low: `**` > `* / // %` > `+ -` > `~` > compare > `and`/`or` > `?:`.
     - Trim: `{{- -}}`. `{% apply spaceless %}`.
 
+## Connections
+
+- **Depends on:** [Controllers](../controllers/index.md) — a controller renders the template that this syntax lives in.
+- **Reused in:** [Loops & Conditions](loops-conditions.md), [Filters & Functions](filters-functions.md) — every tag, filter and test builds on these delimiters and precedence rules.
+- **Confused with:** [String Interpolation](interpolation.md) — `~` concatenates while `+` adds; `#{}` lives inside a string, not `{{ }}`.
+
 ## Official References
 - [Official — Twig for template designers](https://twig.symfony.com/doc/3.x/templates.html)
 - [Official — Creating templates (Symfony)](https://symfony.com/doc/current/templates.html)
 - [Twig source — Environment/Compiler](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** each of the three delimiters exists and what it compiles to
+- [ ] read expressions with correct operator precedence in Symfony 8
+- [ ] debug a missing attribute that prints empty until `strict_variables` is on
+- [ ] spot the trick answer on `//`, `~` vs `+`, or filter binding
+- [ ] explain the lex → parse → compile pipeline and the cached `Twig\Template` class
 
 ---
 

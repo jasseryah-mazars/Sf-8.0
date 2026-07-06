@@ -40,6 +40,15 @@ Twig form functions turn a `FormView` (the render-time snapshot from
 | `form_label` / `form_widget` / `form_errors` / `form_help` | One part of a field |
 | `form_rest(form)` | All not-yet-rendered fields (incl. hidden + CSRF) |
 
+!!! question "Predict first"
+    You render every visible field by hand and finish with
+    `form_end(form, {'render_rest': false})`. What silently goes missing?
+
+??? note "Reveal"
+    The hidden fields — most importantly the **CSRF `_token`**. `form_end` calls
+    `form_rest` by default to emit them; with `render_rest: false` you must render
+    `form_rest`/the token yourself or every submit fails CSRF validation.
+
 ## Deep Dive — how it works internally
 
 ### From `FormInterface` to `FormView`
@@ -221,10 +230,26 @@ switch off CSRF explicitly.
     - Override label: `form_label(field, 'Text')`.
     - Pass the `FormInterface`; Twig calls `createView()`.
 
+## Connections
+
+- **Depends on:** [Creating forms](creation.md) — rendering operates on the `FormView` from `createView()`; [Twig templating](../twig/index.md) provides the functions.
+- **Reused in:** [Theming](theming.md) — each function resolves a theme block via the block-prefix hierarchy.
+- **Confused with:** [CSRF protection](csrf.md) — `form_rest`/`form_end` is what actually emits the token into the HTML.
+
 ## Official References
 - [Official Symfony docs — Form customization](https://symfony.com/doc/current/form/form_customization.html)
 - [Official Symfony docs — Rendering forms](https://symfony.com/doc/current/forms.html)
 - [Symfony source — Twig FormExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `form_end`/`form_rest` must emit the hidden CSRF field
+- [ ] render a form whole or granularly (`form_row`/`form_widget`/`form_label`) in Symfony 8
+- [ ] debug a missing hidden field caused by `render_rest: false`
+- [ ] spot the wrong answer about what `form_row` includes (label + widget + errors + help)
+- [ ] explain how the `isRendered()` flag lets partial + `form_rest` rendering coexist
 
 ---
 

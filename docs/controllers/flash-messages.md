@@ -42,6 +42,15 @@ $this->addFlash('success', 'Profile updated.');
 `'success'` is the **type** (an arbitrary key you choose — `success`, `error`,
 `warning`…), and the second argument is the message (string or any value).
 
+!!! question "Predict first"
+    A controller reads `app.session.flashbag.get('success')` for logging, then
+    renders a template that loops `app.flashes`. What does the user see?
+
+??? note "Reveal"
+    Nothing for `success` — reading a flash **consumes** it, so the earlier `get()`
+    drained the bag. Use `peek()` to read without consuming, and pair `addFlash()`
+    with a **redirect** (PRG) so the message shows on the next request.
+
 ## Deep Dive — how it works internally
 
 Flashes live in a `Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface`
@@ -233,9 +242,25 @@ flows but means flash-bearing pages are not shared-cacheable.
     - `get/all` consume; `peek/peekAll` don't.
     - Needs a session ⇒ not for shared-cached pages.
 
+## Connections
+
+- **Depends on:** [The Session](session.md) — flashes are a bag stored inside the session.
+- **Reused in:** [HTTP Redirects](http-redirects.md) — the PRG pattern carries a flash across the redirect.
+- **Confused with:** [AbstractController](abstract-controller.md) — `addFlash()` is sugar over `getSession()->getFlashBag()->add()`.
+
 ## Official References
 - [Official Symfony docs — Flash Messages](https://symfony.com/doc/current/controller.html#flash-messages)
 - [Symfony source — FlashBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** flashes are one-shot and tied to Post/Redirect/Get
+- [ ] add and render flash messages in Symfony 8 and Twig
+- [ ] debug a flash that never appears (rendered instead of redirected, or double-consumed)
+- [ ] spot the difference between `get`/`all` (consume) and `peek`/`peekAll`
+- [ ] explain how `addFlash()` maps onto the session flash bag
 
 ---
 

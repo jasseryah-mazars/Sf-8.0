@@ -43,6 +43,16 @@ phrase** (e.g. `404 Not Found`). The first digit defines the *class*:
 
 The reason phrase is informational only; clients act on the numeric code.
 
+!!! question "Predict first"
+    An API receives well-formed JSON that fails validation. Is that a 400, a 422,
+    or a 500?
+
+??? note "Reveal"
+    **422 Unprocessable Content** — the syntax is valid but the content is
+    semantically wrong. 400 is for malformed syntax; 500 is a server fault.
+    `Response::HTTP_UNPROCESSABLE_ENTITY` equals **422** (the constant keeps the
+    old name).
+
 ## Deep Dive — how it works internally
 
 ### `Response::$statusTexts`
@@ -292,10 +302,26 @@ Symfony's security layer picks the code for you.
     - **API:** 422 validation, 429 rate-limit (+`Retry-After`), 405 (+`Allow`).
     - `Response::$statusTexts[$code]` → reason phrase; `Response::HTTP_*` constants.
 
+## Connections
+
+- **Depends on:** [HTTP Response](response.md) — the code is set on `Response` (`$statusTexts`, `HTTP_*` constants).
+- **Reused in:** [HTTP Redirects](../controllers/http-redirects.md) — choosing among 301/302/303/307/308.
+- **Confused with:** [HTTP Methods](methods.md) — 303 forces GET because POST is non-idempotent; also 401 vs 403.
+
 ## Official References
 - [MDN — HTTP status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the code (not the reason phrase) drives clients and caches
+- [ ] pick correctly among 301/302/303/307/308, 401/403, 404/410, 422/429
+- [ ] debug a browser re-POSTing on refresh (302 where 303 was meant)
+- [ ] spot the trick: 307/308 preserve the method, 303 forces GET; 401 ≠ 403
+- [ ] explain how `Response::$statusTexts`/`HTTP_*` work and when `setStatusCode()` throws
 
 ---
 

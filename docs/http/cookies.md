@@ -52,6 +52,14 @@ Set-Cookie: token=abc; Path=/; Domain=example.com; Max-Age=3600;
 | `HttpOnly` | Hidden from JavaScript (`document.cookie`) — blocks XSS theft |
 | `SameSite` | Cross-site sending policy: `Strict`, `Lax`, `None` |
 
+!!! question "Predict first"
+    `$c = Cookie::create('a'); $c->withValue('b');` then you set `$c` on the
+    response. What value does the browser receive?
+
+??? note "Reveal"
+    Empty. `Cookie` is **immutable** — `withValue()` returns a *new* instance you
+    discarded. Reassign it: `$c = Cookie::create('a')->withValue('b');`.
+
 ## Deep Dive — how it works internally
 
 ### The `Cookie` value object
@@ -322,10 +330,26 @@ but you lose `HttpOnly` protection — trade-offs apply).
     - `clearCookie(name, path, domain)` must match the original scope.
     - Read incoming: `$request->cookies->get('name')`.
 
+## Connections
+
+- **Depends on:** [HTTP Response](response.md) — cookies are queued on the `ResponseHeaderBag` (`setCookie`/`clearCookie`).
+- **Reused in:** [The Session](../controllers/session.md) — the session ID rides in a cookie.
+- **Confused with:** [Web Security](../php-web-security/web-security.md) — `SameSite`/`HttpOnly` are CSRF/XSS mitigations, not just flags.
+
 ## Official References
 - [MDN — Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
 - [Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** cookies exist and what each attribute controls
+- [ ] build a cookie with the immutable `Cookie` API and set/clear it via the response
+- [ ] debug a `clearCookie()` that doesn't delete (path/domain mismatch)
+- [ ] spot the trick: `SameSite=None` needs `Secure`; no expiry ⇒ session cookie
+- [ ] explain how `HttpOnly`/`Secure`/`SameSite`/`__Host-` harden a cookie
 
 ---
 

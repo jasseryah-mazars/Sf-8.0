@@ -35,6 +35,15 @@ the rest of the platform builds on; deep configuration lives in the
 | Session hijacking | Steal a session cookie | `Secure`/`HttpOnly`, HTTPS |
 | Clickjacking | Frame the site invisibly | `X-Frame-Options`/CSP |
 
+!!! question "Predict first"
+    A comment `<script>alert(1)</script>` is rendered with `{{ comment }}` in Twig.
+    Does the alert fire?
+
+??? note "Reveal"
+    No. Twig auto-escapes it to `&lt;script&gt;…`, shown as literal text. Only
+    `{{ comment|raw }}` would reintroduce the XSS — so reserve `|raw` for content
+    you generated and sanitised.
+
 ## Deep Dive — threats and mitigations
 
 ### XSS (Cross-Site Scripting)
@@ -269,12 +278,28 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
     - Clickjacking→`X-Frame-Options`/CSP `frame-ancestors`.
     - Passwords→`PASSWORD_ARGON2ID`/`BCRYPT`; verify with `password_verify`.
 
+## Connections
+
+- **Depends on:** [Exceptions](exceptions.md) — controlled error handling avoids leaking internals to attackers.
+- **Reused in:** [Security stage](../security/index.md) & [CSRF Protection](../forms/csrf.md) — where these threats get concrete Symfony configuration.
+- **Confused with:** [authentication](../security/authentication.md) — CSRF tokens protect state-changing requests, they do not identify the user.
+
 ## Official References
 - [Symfony — Security](https://symfony.com/doc/current/security.html)
 - [Symfony — CSRF](https://symfony.com/doc/current/security/csrf.html)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - [PHP — password_hash](https://www.php.net/manual/en/function.password-hash.php)
 - [Symfony source — PasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** each threat exists and the Symfony defence it maps to
+- [ ] configure session cookie flags, security headers and `password_hash` in Symfony 8
+- [ ] debug an XSS caused by `|raw` or a wrong escaping context
+- [ ] spot the trick: HTML-escaping a value placed inside `<script>` or a URL
+- [ ] explain how session-id regeneration on login stops fixation
 
 ---
 

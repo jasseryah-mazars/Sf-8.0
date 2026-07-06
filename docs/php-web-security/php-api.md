@@ -37,6 +37,14 @@ about.
 | 8.3 | **typed class constants**, `#[\Override]`, `json_validate()`, dynamic class-constant fetch, anonymous readonly classes |
 | 8.4 | **property hooks**, **asymmetric visibility**, `new` without parentheses, `#[\Deprecated]`, lazy objects |
 
+!!! question "Predict first"
+    `Suit::from('X')` vs `Suit::tryFrom('X')` when `'X'` is not a case — what does
+    each do?
+
+??? note "Reveal"
+    `from()` throws `\ValueError`; `tryFrom()` returns `null`. Reach for `tryFrom`
+    on untrusted input so an unknown value doesn't blow up the request.
+
 ## Deep Dive — the features one by one
 
 ### Enums (8.1)
@@ -450,12 +458,28 @@ flowchart TD
     - 8.4: property hooks, asymmetric visibility (`private(set)`), `new` w/o `()`.
     - `match`===strict + throws; `tryFrom`=null, `from`=`\ValueError`.
 
+## Connections
+
+- **Depends on:** [OOP](oop.md) — promotion, `readonly` and visibility underpin these features.
+- **Reused in:** [Closures](closures.md) — first-class callable syntax; [Interfaces](interfaces.md) — typed constants and DNF types.
+- **Confused with:** [OOP](oop.md) `readonly` — asymmetric visibility `private(set)` still *reads* public and allows internal writes.
+
 ## Official References
 - [PHP: Enumerations](https://www.php.net/manual/en/language.enumerations.php)
 - [PHP: Property hooks](https://www.php.net/manual/en/language.oop5.property-hooks.php)
 - [PHP: Asymmetric visibility](https://www.php.net/manual/en/language.oop5.visibility.php)
 - [PHP: match](https://www.php.net/manual/en/control-structures.match.php)
 - [Symfony source — BackedEnumNormalizer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Normalizer/BackedEnumNormalizer.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** each feature exists and which PHP version added it
+- [ ] use enums, `readonly`, `match`, property hooks and `private(set)` in Symfony 8
+- [ ] debug an `\UnhandledMatchError` or a `\ValueError` from `Enum::from()`
+- [ ] spot the trick: `match` (strict `===`) vs `switch` (loose `==`, fall-through)
+- [ ] explain how a property hook computes a virtual value without a backing field
 
 ---
 

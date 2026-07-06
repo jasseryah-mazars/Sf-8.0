@@ -37,6 +37,15 @@ choose it with global flags; commands respect it when writing output.
 diagnostic detail. The constants live on
 `Symfony\Component\Console\Output\OutputInterface`.
 
+!!! question "Predict first"
+    To decide whether to print a diagnostic line, do you check the verbosity on the
+    `InputInterface` or the `OutputInterface`?
+
+??? note "Reveal"
+    On the **output**. The Application parses `-v/-vv/-vvv/-q` and calls
+    `$output->setVerbosity()`, so verbosity is an output property. Gate with
+    `$output->isVerbose()` / `isDebug()` (mirrored on `SymfonyStyle`).
+
 ## Deep Dive — how it works internally
 
 The `Application` parses the global `-v/-vv/-vvv/-q` flags **before** dispatching to
@@ -237,9 +246,28 @@ formats. In `-vvv` (debug), Symfony also shows full exception traces on errors.
     - `$output->isVerbose()`, `isVeryVerbose()`, `isDebug()`, `isQuiet()`.
     - `-vvv` also prints full exception traces.
 
+## Connections
+
+- **Depends on:** [Input & output](input-output.md) — verbosity is a property of
+  `OutputInterface`, the same object you write through.
+- **Reused in:** [Built-in commands](built-in-commands.md) — `-v/-vv/-vvv/-q` are
+  global options every command inherits.
+- **Confused with:** [Input & output](input-output.md) — verbosity toggles *how much*
+  to print, not machine formats (use `--format`/STDOUT for data).
+
 ## Official References
 - [Official Symfony docs — Console verbosity](https://symfony.com/doc/current/console/verbosity.html)
 - [Symfony source — OutputInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Output/OutputInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** verbosity exists (tune diagnostics without changing behaviour)
+- [ ] gate output with `isVerbose()`/`isDebug()` or per-message masks in Symfony 8
+- [ ] debug output that vanishes under `-q` or never shows without `-v`
+- [ ] spot the trick on the 16/32/64/128/256 constants and input-vs-output placement
+- [ ] explain how `write()` compares the level and why higher shows lower-tagged lines
 
 ---
 

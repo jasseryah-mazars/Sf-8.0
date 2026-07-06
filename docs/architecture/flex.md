@@ -39,6 +39,15 @@ bare library download.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You run `composer require orm`. Which files might change on disk, and does any
+    of it affect how a request is handled at runtime?
+
+??? note "Reveal"
+    A recipe may edit `config/bundles.php`, add files under `config/packages/`,
+    append to `.env`, and record itself in `symfony.lock`. None of it runs at HTTP
+    time — Flex works only at Composer install/update time.
+
 ### Flex is a Composer plugin
 
 `symfony/flex` registers as a Composer plugin and subscribes to Composer events
@@ -111,6 +120,34 @@ reads this file at boot, so no manual bundle wiring is needed.
 Flex operates entirely at **Composer time** (install/update). It writes files;
 it plays **no** role at HTTP runtime. The kernel later reads `config/bundles.php`
 and `config/` at boot/compile time.
+
+!!! info "Expert note"
+    `symfony.lock` and `composer.lock` are independent: `composer.lock` pins package
+    *versions*, `symfony.lock` records which *recipe version* was applied. Deleting
+    `symfony.lock` uninstalls nothing, but it makes Flex forget which recipes ran —
+    so it can no longer cleanly reverse a recipe on removal or detect recipe updates.
+    Commit both.
+
+??? example "Debugging story"
+    **Symptom:** after `composer require` a bundle worked on a teammate's machine but
+    threw "bundle not registered" in CI. **Diagnosis:** the teammate had hand-edited
+    `config/bundles.php`, but the `bundles` configurator only writes that entry when
+    the recipe is *applied*; CI checked out a state where the entry was missing.
+    `composer recipes` showed the recipe as not fully applied. **Fix:** run
+    `composer recipes:install <package> --force` to re-apply, then commit the
+    regenerated `config/bundles.php` and `symfony.lock`. **Avoid:** let the recipe
+    manage `bundles.php` — don't hand-edit recipe-managed files.
+
+??? abstract "Source-code tour"
+    - `Symfony\Flex\Flex` is the Composer plugin: it subscribes to Composer events
+      and drives recipe application.
+    - `Symfony\Flex\Downloader` fetches recipes and their `manifest.json` from the
+      recipe server.
+    - `Symfony\Flex\Configurator` dispatches each manifest key to a configurator
+      (e.g. `Symfony\Flex\Configurator\BundlesConfigurator`, `EnvConfigurator`).
+    - `Symfony\Flex\Lock` reads and writes `symfony.lock`.
+    - At boot, `Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait::registerBundles()`
+      reads the `config/bundles.php` that the `bundles` configurator produced.
 
 ## Configuration & code
 
@@ -218,10 +255,26 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - `symfony.lock` = recipes; `composer.lock` = versions.
     - `composer recipes` / `recipes:update`.
 
+## Connections
+
+- **Depends on:** [Code Organization](code-organization.md) — recipes write into the conventional `config/`, `.env` and `config/bundles.php` layout.
+- **Reused in:** [Dependency Injection](../dependency-injection/index.md) — the files a recipe drops in `config/packages/` feed the container build.
+- **Confused with:** [Components](components.md) — Flex is Composer-time automation, not a runtime component.
+
 ## Official References
 - [Official docs — Setup & Flex](https://symfony.com/doc/current/setup.html)
 - [Symfony Flex source](https://github.com/symfony/flex)
 - [Symfony recipes](https://github.com/symfony/recipes)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** recipes turn `composer require` into a configured feature
+- [ ] describe what a recipe writes and how `composer recipes` inspects it
+- [ ] debug a bundle "not registered" after a recipe wasn't fully applied
+- [ ] spot that `symfony.lock` tracks recipes while `composer.lock` tracks versions
+- [ ] explain that Flex runs at Composer time only, never at HTTP runtime
 
 ---
 

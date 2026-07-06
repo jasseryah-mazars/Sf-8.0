@@ -113,6 +113,34 @@ firewalls to share the session token between them; set distinct contexts (or
 rely on defaults) to isolate them (e.g. a customer area vs an admin area with
 separate logins).
 
+!!! info "Expert note"
+    A `security: false` firewall is *not* an empty firewall — it registers **no**
+    security listeners at all and still counts as the match, so nothing below it
+    is evaluated. That is exactly why the `dev`/profiler firewall must be first:
+    it must win the match *before* any protecting firewall can redirect the
+    profiler to a login page.
+
+??? example "Debugging story"
+    **Symptom:** the Symfony profiler and web debug toolbar kept 302-ing to
+    `/login` in `dev`. **Diagnosis:** a broad `main` firewall (no `pattern`) was
+    listed *above* the `dev` firewall, so it matched `/_profiler/...` first and its
+    entry point redirected. **Fix:** move the `dev` firewall
+    (`pattern: ^/(_(profiler|wdt)|css|images|js)/`, `security: false`) to the top.
+    **Avoid:** the `dev` firewall is always first — first-match means order is
+    correctness, not style.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Security\Http\Firewall` — the `kernel.request` listener
+      (priority 8) that drives everything.
+    - `Symfony\Bundle\SecurityBundle\Security\FirewallMap` — resolves the request
+      to a single `FirewallContext`.
+    - `...\Security\FirewallContext` — bundles the matched firewall's listeners and
+      exception handling.
+    - `Symfony\Component\HttpFoundation\RequestMatcherInterface` — how `pattern`/
+      `host`/`methods` become a matcher.
+    - `...\Http\Firewall\ContextListener` — stores/restores the token in the
+      session unless the firewall is `stateless`.
+
 ## Configuration & code
 
 === "YAML"
@@ -242,10 +270,31 @@ differs per path.
     - `lazy: true` = auth on token read; `stateless: true` = no session token.
     - Same `context:` ⇒ shared login.
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — `SecurityExtension` compiles
+  each firewall into a `FirewallContext` + `FirewallMap`.
+- **Depends on:** [Event Dispatcher](../architecture/events.md) — the `Firewall`
+  runs as a `kernel.request` listener.
+- **Reused in:** [Authentication](authentication.md) — the matched firewall runs
+  its authenticators.
+- **Confused with:** [Access Control Rules](access-control.md) — firewalls select
+  *authentication*; `access_control` handles *authorization*.
+
 ## Official References
 - [Symfony docs — The firewall](https://symfony.com/doc/current/security.html#the-firewall)
 - [Symfony docs — Security config reference](https://symfony.com/doc/current/reference/configuration/security.html)
 - [Symfony source — Firewall](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** exactly one firewall is active per request
+- [ ] configure `dev`/`api`/`main` firewalls in the correct order
+- [ ] debug a profiler that redirects to login (firewall ordering)
+- [ ] spot the trap that `security: false` still counts as the match
+- [ ] explain `lazy`, `stateless` and shared `context` internally
 
 ---
 

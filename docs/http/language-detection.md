@@ -34,6 +34,15 @@ come from several places, in rough order of precedence in a typical app:
 Detection is choosing the best of these, constrained to the locales you actually
 support.
 
+!!! question "Predict first"
+    The browser sends `Accept-Language: es, en;q=0.8` and your app supports only
+    `en` and `fr`. What does `getPreferredLanguage(['en', 'fr'])` return?
+
+??? note "Reveal"
+    `en` — `es` isn't in your whitelist, so the intersection falls to the next
+    acceptable option (`en`, weight 0.8). The **no-argument** form would have
+    returned `es`, a locale you can't serve.
+
 ## Deep Dive — how it works internally
 
 ### The `_locale` attribute
@@ -247,10 +256,26 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
       `set_locale_from_accept_language`.
     - Different languages at one URL ⇒ `Vary: Accept-Language`.
 
+## Connections
+
+- **Depends on:** [Content Negotiation](content-negotiation.md) — locale guessing reuses the same `Accept-Language`/`q`-value machinery.
+- **Reused in:** [Locale Guessing](../routing/locale.md) — the `_locale` route param and `enabled_locales` in routing.
+- **Confused with:** [Internationalization (Intl)](../miscellaneous/intl.md) — *detecting* the locale (HTTP) vs *translating* content.
+
 ## Official References
 - [Symfony docs — Translations & locale](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** locale detection is bounded to the locales you support
+- [ ] guess a locale from `Accept-Language` with `getPreferredLanguage($whitelist)`
+- [ ] debug an unsupported locale leaking in (no-arg `getPreferredLanguage()`)
+- [ ] spot the trick: whitelist form is safe; `enabled_locales` bounds valid locales
+- [ ] explain how `LocaleListener`/`LocaleAwareListener` set and propagate the locale
 
 ---
 

@@ -42,6 +42,15 @@ is a real network round-trip: the response carries a `3xx` status and a
 Both build a `Symfony\Component\HttpFoundation\RedirectResponse`. Default status
 is **302 Found**.
 
+!!! question "Predict first"
+    After a successful POST you call `redirectToRoute('show')` with no status
+    argument. Which HTTP status does the browser receive, and does it keep the POST?
+
+??? note "Reveal"
+    **302 Found** (the default), and the method may downgrade to GET. For strict
+    PRG use 303; 307/308 *preserve* the method+body; 301/308 are **cached**. A
+    redirect is a fresh request — the current `Request` and attributes don't carry over.
+
 ## Deep Dive — how it works internally
 
 `redirectToRoute()` calls `generateUrl()` (the router) to turn the route + params
@@ -215,9 +224,25 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
     - 302 default · 303 force GET (PRG) · 307/308 keep method · 301/308 cached.
     - Internal target ⇒ `redirectToRoute`. External input ⇒ validate.
 
+## Connections
+
+- **Depends on:** [Routing → URL generation](../routing/url-generation.md) — `redirectToRoute()` builds the target URL from the router.
+- **Reused in:** [Flash Messages](flash-messages.md) — a redirect is how a one-shot flash reaches the next request.
+- **Confused with:** [Internal Redirects](internal-redirects.md) — a forward is same-request with no 3xx; a redirect is a new client request.
+
 ## Official References
 - [Official Symfony docs — Redirecting](https://symfony.com/doc/current/controller.html#redirecting)
 - [Symfony source — RedirectResponse](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/RedirectResponse.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a redirect is a full round-trip, unlike a forward
+- [ ] choose 301/302/303/307/308 correctly in Symfony 8
+- [ ] debug an open-redirect from passing unvalidated user input to `redirect()`
+- [ ] spot that `redirect()` takes a URL while `redirectToRoute()` takes a route name
+- [ ] explain how `RedirectResponse` sets the `Location` header
 
 ---
 

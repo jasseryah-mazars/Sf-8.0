@@ -192,6 +192,16 @@ placeholders (translation strings use `%name%` placeholders — see
 - [Twig — format filter](https://twig.symfony.com/doc/3.x/filters/format.html)
 - [Twig source — Lexer](https://github.com/twigphp/Twig/blob/3.x/src/Lexer.php)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** `~` and `+` differ and when to reach for `#{}` vs `format`
+- [ ] build a string three ways (interpolation, `~`, `format`) in Symfony 8
+- [ ] debug `#{name}` printing literally inside a single-quoted string
+- [ ] spot the trick answer on `~`/`+` precedence (e.g. `1 + 2 ~ 3`)
+- [ ] explain that `#{}` is a lexer feature living inside a double-quoted literal
+
 ---
 
 <small>Related: [Twig Syntax](syntax.md) · [Filters & Functions](filters-functions.md) · [Translations](translations.md)</small>

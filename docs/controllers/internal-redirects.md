@@ -33,6 +33,15 @@ $response = $this->forward('App\Controller\ReportController::monthly', [
 ]);
 ```
 
+!!! question "Predict first"
+    Inside a `forward()`ed controller, what does `$request->isMainRequest()` return,
+    and what URL does the browser's address bar show?
+
+??? note "Reveal"
+    `false` — the sub-request is dispatched with `HttpKernelInterface::SUB_REQUEST`.
+    The address bar is **unchanged**: a forward is server-internal, no 3xx, no new
+    client request. (A shared service is often cleaner than forwarding.)
+
 ## Deep Dive — how it works internally
 
 `AbstractController::forward()` creates a **sub-request** and dispatches it

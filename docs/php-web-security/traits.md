@@ -35,6 +35,14 @@ traits — but they are **not types**: you cannot type-hint against a trait.
 | Static members? | Yes |
 | Abstract methods? | Yes (forces the user class to implement) |
 
+!!! question "Predict first"
+    A class, its parent, and a `use`-d trait all define `run()`. Which one wins?
+
+??? note "Reveal"
+    The class's own `run()`. Precedence is **class > trait > inherited parent** —
+    a trait method overrides the parent's, but the class's own method overrides
+    the trait's.
+
 ## Deep Dive — precedence & conflict resolution
 
 ### Precedence order
@@ -254,10 +262,26 @@ a classic exam distractor.
     - Cannot type-hint a trait; pair it with an interface.
     - Abstract trait methods force the using class to implement them.
 
+## Connections
+
+- **Depends on:** [OOP](oop.md) — traits copy members into the class's object model at compile time.
+- **Reused in:** [Abstract Classes](abstract-classes.md) — abstract trait methods impose a contract like abstract class methods.
+- **Confused with:** [Interfaces](interfaces.md) — a trait is *not* a type (no type-hint); pair it with an interface for the contract.
+
 ## Official References
 - [PHP: Traits](https://www.php.net/manual/en/language.oop5.traits.php)
 - [PHP: Trait conflict resolution](https://www.php.net/manual/en/language.oop5.traits.php#language.oop5.traits.conflict)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** traits exist (horizontal reuse past single inheritance)
+- [ ] resolve conflicts with `insteadof`/`as` and change visibility in Symfony 8
+- [ ] debug a fatal error from two traits declaring the same method
+- [ ] spot the trick: type-hinting a trait, or a "shared" static trait property
+- [ ] explain the class > trait > parent precedence order
 
 ---
 

@@ -32,6 +32,15 @@ You apply a theme:
 - **Per template** with `{% form_theme form 'theme.html.twig' %}`.
 - **Globally** via `twig.form_themes` in `config/packages/twig.yaml`.
 
+!!! question "Predict first"
+    A field has block prefix `rating` (parent `integer`). You define an `integer_widget`
+    override but it never applies, while `rating_widget` does. Why?
+
+??? note "Reveal"
+    Block lookup runs **most specific → least specific**. `rating_widget` sits above
+    `integer_widget` in the prefix chain, so it matches first and `integer_widget` is
+    never reached. Override `rating_widget`, or remove it to fall through.
+
 ## Deep Dive — how it works internally
 
 ### Block-name resolution
@@ -216,10 +225,26 @@ than a block override. Reach for a full custom theme only when the default
     - `{% use 'base' %}` to inherit blocks, override deltas.
     - Bootstrap layout = markup, not CSS.
 
+## Connections
+
+- **Depends on:** [Rendering forms](rendering.md) — theming customises the blocks the renderer resolves.
+- **Reused in:** [Form types](types.md) — a type's `getBlockPrefix()` and parent chain define the candidate block names.
+- **Confused with:** [Twig templating](../twig/index.md) — themes are ordinary Twig blocks applied via `form_theme`/`twig.form_themes`, not a separate engine.
+
 ## Official References
 - [Official Symfony docs — Form themes](https://symfony.com/doc/current/form/form_themes.html)
 - [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/current/form/bootstrap5.html)
 - [Symfony source — form_div_layout.html.twig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** themes separate markup from field logic
+- [ ] apply a theme per-template and globally in Symfony 8
+- [ ] debug an override that hits the wrong block in the prefix chain
+- [ ] spot the wrong answer claiming the Bootstrap layout ships CSS
+- [ ] explain the specific → generic block-name resolution order
 
 ---
 

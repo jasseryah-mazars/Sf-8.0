@@ -30,6 +30,15 @@ report, failing the build if you exceed configured thresholds. It also provides
 **clock mocking** and **DNS mocking** so time- and network-sensitive code becomes
 deterministic.
 
+!!! question "Predict first"
+    You add `sleep(61)` to a test expecting it to run instantly via clock mocking,
+    but the suite really waits 61 seconds. What is missing?
+
+??? note "Reveal"
+    Clock mocking is opt-in **per group**: the test (or class) must be in the
+    `time-sensitive` group, and `SymfonyExtension` must be registered. Without both,
+    `ClockMock` never overrides the global `sleep()`.
+
 ## Deep Dive — how it works internally
 
 The bridge installs a PHPUnit **extension**,
@@ -270,10 +279,26 @@ reserve `ClockMock` for legacy code calling global `time()`/`sleep()` directly.
     - Groups: `#[Group('time-sensitive')]`, `#[Group('dns-sensitive')]`.
     - Env: `SYMFONY_DEPRECATIONS_HELPER=max[direct]=0` / `weak` / `disabled=1`.
 
+## Connections
+
+- **Depends on:** [Unit Tests](unit-tests.md) — the bridge augments plain PHPUnit `TestCase` runs.
+- **Reused in:** [Handling Deprecated Code](deprecations.md) — the bridge's handler buckets and gates deprecations.
+- **Confused with:** [Clock Component](../miscellaneous/clock.md) — inject `MockClock` for DI code; reserve `ClockMock` for global `time()`/`sleep()`.
+
 ## Official References
 - [Official Symfony docs — PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
 - [Symfony source — DeprecationErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/DeprecationErrorHandler.php)
 - [Symfony source — ClockMock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/ClockMock.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the bridge exists on top of vanilla PHPUnit
+- [ ] register `SymfonyExtension` and configure `SYMFONY_DEPRECATIONS_HELPER` in Symfony 8
+- [ ] debug clock mocking that never activates (missing group or extension)
+- [ ] spot the trap that the helper is an env/server var, not a CLI flag
+- [ ] explain how the extension wires the deprecation handler and clock/DNS mocks
 
 ---
 

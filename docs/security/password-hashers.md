@@ -42,6 +42,16 @@ salted, one-way function. Symfony's PasswordHasher component wraps PHP's
 | `pbkdf2` | `hash_pbkdf2` | legacy interop |
 | `plaintext` | none | **tests only — never production** |
 
+!!! question "Predict first"
+    You set `migrate_from: ['bcrypt']` but your provider does not implement
+    `PasswordUpgraderInterface`. Do legacy hashes get upgraded on login?
+
+??? note "Reveal"
+    No. The new hash is *computed* (because `needsRehash()` is true) but there is
+    nowhere to persist it — transparent rehash needs **both** `migrate_from` *and*
+    a `PasswordUpgraderInterface` provider that the `PasswordMigratingListener`
+    calls.
+
 ## Deep Dive — how it works internally
 
 ### Factory and per-class hashers

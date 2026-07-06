@@ -44,6 +44,15 @@ if ($form->isSubmitted() && $form->isValid()) {
 - `isSubmitted()` — was the form submitted at all?
 - `isValid()` — did validation pass? **Only meaningful after submission.**
 
+!!! question "Predict first"
+    You call `$form->isValid()` on a form that was created but **never** submitted
+    (no `handleRequest`/`submit`). What happens?
+
+??? note "Reveal"
+    It throws a `LogicException` ("Cannot check if an unsubmitted form is valid").
+    Always guard with `isSubmitted() && isValid()` in that order — `handleRequest`
+    must run first to bind the request.
+
 ## Deep Dive — how it works internally
 
 ### `handleRequest` delegates to a RequestHandler
@@ -286,10 +295,26 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
     - `getErrors(true)` = deep error iterator.
     - Always **redirect** after a successful POST.
 
+## Connections
+
+- **Depends on:** [Creating forms](creation.md) — you handle the form built there; [HTTP request](../http/request.md) is what `handleRequest` inspects.
+- **Reused in:** [Form events](events.md) — submission dispatches PRE_SUBMIT → SUBMIT → POST_SUBMIT.
+- **Confused with:** [Data transformers](data-transformers.md) — the model/norm/view shapes bound here are converted by transformers.
+
 ## Official References
 - [Official Symfony docs — Processing forms](https://symfony.com/doc/current/forms.html)
 - [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
 - [Symfony source — HttpFoundationRequestHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** POST-redirect-GET matters after a successful submit
+- [ ] wire `handleRequest` → `isSubmitted() && isValid()` → redirect in Symfony 8
+- [ ] debug a `PATCH` form that wipes untouched fields (`clearMissing`)
+- [ ] spot the wrong answer calling `isValid()` before submission or before `handleRequest`
+- [ ] explain when validation actually runs in the submit lifecycle (POST_SUBMIT)
 
 ---
 

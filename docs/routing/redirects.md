@@ -37,6 +37,15 @@ Both accept `permanent` (301 vs 302) and can force `scheme`/`httpPort`/`httpsPor
 For redirects that depend on logic, redirect from the controller instead (see
 [Controllers → HTTP Redirects](../controllers/http-redirects.md)).
 
+!!! question "Predict first"
+    A route is defined as `/blog/`. A `GET /blog` and a `POST /blog` both arrive.
+    What does each one get?
+
+??? note "Reveal"
+    `GET /blog` → **301** redirect to `/blog/` (the trailing-slash auto-redirect for
+    safe methods). `POST /blog` → **405**, because redirecting would silently turn
+    the POST into a GET.
+
 ## Deep Dive — how it works internally
 
 A redirect route is an ordinary route whose `_controller` default points at
@@ -246,9 +255,25 @@ cached by browsers — prefer 302 while a target is still in flux.
     - `permanent`, `keepQueryParams`, `keepRequestMethod`, `scheme`.
     - Slash mismatch: 301 (safe) / 405 (POST).
 
+## Connections
+
+- **Depends on:** [Configuration](configuration.md) — a redirect route is an ordinary route whose `_controller` is `RedirectController`.
+- **Reused in:** [URL generation](url-generation.md) — `redirectAction` forwards params to a generated target URL.
+- **Confused with:** [Controllers → HTTP Redirects](../controllers/http-redirects.md) — config-only redirects vs logic-driven `redirectToRoute()`.
+
 ## Official References
 - [Official Symfony docs — Redirecting URLs](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain when to use `RedirectController` vs a controller redirect
+- [ ] implement `redirectAction`/`urlRedirectAction` with `permanent` in Symfony 8
+- [ ] debug a POST to a slashed route returning 405 instead of redirecting
+- [ ] spot that the trailing-slash redirect is 301/GET-HEAD-only and `permanent` = 301
+- [ ] explain that (except trailing slash) the redirect is produced by a controller, not the matcher
 
 ---
 

@@ -29,6 +29,15 @@ In the `test` environment collection is **off by default** for speed; you turn i
 on per request with `$client->enableProfiler()` **before** the request, then read
 the profile afterwards to assert on internals a plain response can't reveal.
 
+!!! question "Predict first"
+    You call `$client->request('GET', '/')` then `$client->getProfile()`,
+    expecting a `Profile`. You get `false`. Why?
+
+??? note "Reveal"
+    In the `test` env `framework.profiler.collect` is `false`, so you must call
+    `$client->enableProfiler()` **before** the request. Called after (or not at
+    all), no profile is kept — and it returns `false`, not `null`.
+
 ## Deep Dive — how it works internally
 
 `KernelBrowser::enableProfiler()` sets a flag so the next request keeps its
@@ -290,10 +299,26 @@ only in the tests that need it.
     - Emails: `assertEmailCount()`, `getMailerMessage()`, `assertEmailHtmlBodyContains()`.
     - Test default: `framework.profiler.collect: false`.
 
+## Connections
+
+- **Depends on:** [Functional Tests](functional-tests.md) — profiling attaches to a client-driven request.
+- **Reused in:** [Introspection](introspection.md) — the mailer assertions read the profiler's mailer collector.
+- **Confused with:** [Web Profiler & Data Collectors](../miscellaneous/profiler.md) — that chapter is the dev toolbar; this is asserting collectors in tests.
+
 ## Official References
 - [Official Symfony docs — Profiling tests](https://symfony.com/doc/current/testing/profiling.html)
 - [Official Symfony docs — Testing emails](https://symfony.com/doc/current/mailer.html#testing-emails)
 - [Symfony source — Profiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Profiler/Profiler.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** profiling is off by default in the test env
+- [ ] enable and read a `Profile`'s collectors in Symfony 8
+- [ ] debug a `getProfile()` that returns `false`
+- [ ] spot the trap that `enableProfiler()` must precede the request
+- [ ] explain how `ProfilerListener` triggers collection on `kernel.response`
 
 ---
 

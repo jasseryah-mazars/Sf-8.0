@@ -37,6 +37,16 @@ when routes change:
 Use `path()` for on-site links; use `url()` when the URL leaves the page —
 emails, RSS, canonical tags, redirects consumed elsewhere.
 
+!!! question "Predict first"
+    You build an email body with `{{ path('order_show', { id: order.id }) }}`.
+    Why do recipients complain the link is broken?
+
+??? note "Reveal"
+    `path()` produces a **relative** URL (`/order/42`) — fine on-page, useless in a
+    mail client that has no host to resolve it against. Use `url()` for anything
+    that leaves the page (emails, canonical tags, RSS): it emits an **absolute**
+    URL built from the request context.
+
 ## Deep Dive — how it works internally
 
 Both functions come from **`Symfony\Bridge\Twig\Extension\RoutingExtension`**,
@@ -200,10 +210,26 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
     - Extras → `?query`. Missing required → exception.
     - `app.current_route` + `app.current_route_parameters` to rebuild.
 
+## Connections
+
+- **Depends on:** [Routing](../routing/index.md) — `path()`/`url()` turn a defined route name into a link.
+- **Reused in:** [URL generation (Routing)](../routing/url-generation.md) — the same `UrlGeneratorInterface`, `RequestContext` and reference types drive both Twig and controllers.
+- **Confused with:** [Assets](assets.md) — `path()`/`url()` are for routes; `asset()` is for static files under `public/`.
+
 ## Official References
 - [Official — Linking to pages](https://symfony.com/doc/current/templates.html#linking-to-pages)
 - [Official — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
 - [Symfony source — RoutingExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** to generate URLs from route names instead of hard-coding them
+- [ ] use `path()` vs `url()` and pass route params in Symfony 8
+- [ ] debug a broken relative link in an email that should have used `url()`
+- [ ] spot the trick answer swapping relative/absolute or dropping extra params
+- [ ] explain how `RoutingExtension` delegates to `UrlGeneratorInterface` + `RequestContext`
 
 ---
 

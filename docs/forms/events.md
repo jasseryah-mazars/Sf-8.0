@@ -43,6 +43,15 @@ Two distinct sequences fire at two different times:
 | **Setting data** (`setData`, on create/populate) | `PRE_SET_DATA` → `POST_SET_DATA` |
 | **Submitting** (`submit`, on `handleRequest`) | `PRE_SUBMIT` → `SUBMIT` → `POST_SUBMIT` |
 
+!!! question "Predict first"
+    You need to add a `city` field whose choices depend on the **submitted** country.
+    Which form event do you listen on, and what shape is `$event->getData()` there?
+
+??? note "Reveal"
+    `PRE_SUBMIT` — it fires before binding (so you can still add fields) and carries the
+    **raw request array** (view data), so read `$data['country'] ?? null`. Adding fields
+    on `SUBMIT`/`POST_SUBMIT` is too late.
+
 ## Deep Dive — how it works internally
 
 ### What each event carries
@@ -335,10 +344,26 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
     - `addEventListener` / `addEventSubscriber` on the builder.
     - No `PRE_VALIDATE`; validation = POST_SUBMIT listener.
 
+## Connections
+
+- **Depends on:** [Handling submissions](handling.md) — the submit lifecycle is what dispatches these events.
+- **Reused in:** [Type extensions](type-extensions.md) — extensions commonly attach form listeners across many types.
+- **Confused with:** [EventDispatcher](../architecture/events.md) — form events use the same dispatcher but a distinct `FormEvents` set, not kernel events.
+
 ## Official References
 - [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
 - [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html)
 - [Symfony source — FormEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** form events exist (dynamic fields, raw-input massaging)
+- [ ] add a listener/subscriber to a form builder in Symfony 8
+- [ ] debug a `PRE_SUBMIT` listener that treats raw array data as an object
+- [ ] spot the wrong answer inventing `PRE_VALIDATE` or reordering the submit sequence
+- [ ] explain the data shape carried by each of the five `FormEvents`
 
 ---
 

@@ -157,6 +157,35 @@ page never appears and the default (or a 500) wins instead.
     answers**: with nobody acting, the building falls back to the emergency exit —
     the re-thrown 500.
 
+!!! info "Expert note"
+    The response `ErrorListener` produces is built by **re-entering the kernel as a
+    sub-request** to the error controller — so it passes through `kernel.request` and
+    `kernel.response` again. A `kernel.request` listener that assumes it only runs for
+    real client requests can therefore fire unexpectedly during error rendering;
+    guard with `$event->isMainRequest()` when that matters.
+
+??? example "Debugging story"
+    **Symptom:** API clients got HTML 500 pages instead of a JSON error envelope.
+    **Diagnosis:** the custom `kernel.exception` listener only called `setResponse()`
+    inside an `if ($e instanceof ApiException)` branch; a plain `\RuntimeException`
+    fell through untouched, so `ErrorListener` produced the default HTML page.
+    `debug:event-dispatcher kernel.exception` confirmed the listener ran but set no
+    response. **Fix:** on the `/api` path always build a `JsonResponse`, deriving the
+    status from `HttpExceptionInterface::getStatusCode()` (default `500`). **Avoid:**
+    every branch that should own the response must call `setResponse()`.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\HttpKernel\HttpKernel::handle()` catches the throwable and
+      calls the private `handleThrowable()`.
+    - `handleThrowable()` dispatches `Symfony\Component\HttpKernel\Event\ExceptionEvent`
+      and re-throws if no listener set a response.
+    - `Symfony\Component\HttpKernel\EventListener\ErrorListener` (priority `-128`)
+      logs and forwards to the error controller as a sub-request.
+    - `Symfony\Component\HttpKernel\Controller\ErrorController` renders through the
+      configured error renderer.
+    - `Symfony\Component\HttpKernel\Exception\HttpExceptionInterface::getStatusCode()`
+      decides the HTTP status; other throwables default to `500`.
+
 ## Configuration & code
 
 === "PHP Attributes"
@@ -290,10 +319,26 @@ control flow.
     - `ErrorListener` priority **-128**; `error_controller` = `ErrorController`.
     - No response set → re-thrown → 500.
 
+## Connections
+
+- **Depends on:** [Events](events.md) — the whole mechanism is one out-of-band `kernel.exception` dispatch; [Request Handling](request-handling.md) is where the `try/catch` lives.
+- **Reused in:** [Error Pages](../controllers/error-pages.md) — customising the rendered page builds directly on this flow.
+- **Confused with:** [HTTP Response](../http/response.md) — throwing an `HttpException` sets a *status*, but a listener still must turn it into a real `Response`.
+
 ## Official References
 - [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
 - [Official docs — kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the kernel converts exceptions via an event instead of inline
+- [ ] implement a `kernel.exception` listener that returns a JSON error envelope
+- [ ] debug a custom error page that never appears (a missing `setResponse()`)
+- [ ] spot that a bare `\LogicException` becomes `500`, not `404`
+- [ ] explain `ErrorListener`'s `-128` priority and the re-throw fallback
 
 ---
 

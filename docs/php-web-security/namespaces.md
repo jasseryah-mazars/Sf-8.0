@@ -236,6 +236,16 @@ builds a static classmap so no filesystem stat per class is needed.
 - [PSR-4 Autoloader](https://www.php-fig.org/psr/psr-4/)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** functions fall back to global but classes do not
+- [ ] configure PSR-4 and `dump-autoload --optimize` for a Symfony 8 app
+- [ ] debug a "class not found" from a missing `\` or `use` inside a namespace
+- [ ] spot the trick: `use` claimed to load a file (it only aliases) or a leading `\` in a `use`
+- [ ] explain how PSR-4 maps a prefix to a path (strip prefix, `\`→`/`, add `.php`)
+
 ---
 
 <small>Related: [OOP](oop.md) · [Interfaces](interfaces.md) · [PHP API](php-api.md)</small>

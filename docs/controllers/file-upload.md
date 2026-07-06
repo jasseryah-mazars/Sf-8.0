@@ -31,6 +31,15 @@ An uploaded file arrives in the `files` bag as
 
 Never trust the client filename — generate a safe name.
 
+!!! question "Predict first"
+    To decide whether an upload is really a PDF, do you trust
+    `getClientMimeType()`, the file extension, or `getMimeType()`?
+
+??? note "Reveal"
+    `getMimeType()` — it is detected from the file **content**. The client-supplied
+    name, extension, and MIME are all spoofable. Then `move()` the file to storage
+    outside the web root (it throws `FileException` on failure, never returns a bool).
+
 ## Deep Dive — how it works internally
 
 `UploadedFile` extends `Symfony\Component\HttpFoundation\File\File` (itself a
@@ -241,10 +250,26 @@ For form-driven uploads, use the `FileType` field — see
     - `move($dir, $safeName)` (throws `FileException`).
     - `#[MapUploadedFile([new File(...)])] UploadedFile $x`.
 
+## Connections
+
+- **Depends on:** [The Request](request.md) — uploads arrive in the `files` bag of the current request.
+- **Reused in:** [Value Resolvers](value-resolvers.md) — `#[MapUploadedFile]` binds and validates an upload as a controller argument.
+- **Confused with:** [Forms → File Upload](../forms/file-upload.md) — the `FileType` field wraps this with CSRF, binding, and error rendering.
+
 ## Official References
 - [Official Symfony docs — Uploading Files](https://symfony.com/doc/current/controller/upload_file.html)
 - [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** you must not trust the client-supplied filename/MIME
+- [ ] read, validate, and `move()` an `UploadedFile` safely in Symfony 8
+- [ ] debug an empty `files` bag after exceeding `post_max_size`
+- [ ] spot that `move()` throws `FileException` rather than returning a bool
+- [ ] explain how `#[MapUploadedFile]` validates before the action body runs
 
 ---
 

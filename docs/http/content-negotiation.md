@@ -313,10 +313,26 @@ multiple clients transparently.
       `getMimeTypes`.
     - Negotiate → set `Vary`.
 
+## Connections
+
+- **Depends on:** [HTTP Request](request.md) — the `Accept*` parsing and format registry live on `Request`.
+- **Reused in:** [Language Detection](language-detection.md) — `getPreferredLanguage()` is the same `q`-value machinery for locales.
+- **Confused with:** [HTTP Response](response.md) — the negotiated choice is echoed via `Content-Type` + `Vary` on the response.
+
 ## Official References
 - [MDN — Content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation)
 - [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
 - [Symfony source — AcceptHeader](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/AcceptHeader.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** content negotiation exists and how `q`-values rank options
+- [ ] use `getPreferredFormat()`, `getAcceptableContentTypes()` and `getPreferredLanguage($list)`
+- [ ] debug a proxy serving JSON to a browser (a missing `Vary`)
+- [ ] spot the trick: `q=0` means unacceptable; format name vs raw MIME type
+- [ ] explain how the `AcceptHeader` parser and the format↔MIME registry work
 
 ---
 
