@@ -85,7 +85,7 @@ their attribute:
 | `#[MapRequestPayload]` | `RequestPayloadValueResolver` | Deserialize + validate the body into a DTO |
 | `#[MapQueryString]` | `RequestPayloadValueResolver` | Deserialize + validate the query string into a DTO |
 | `#[MapQueryParameter]` | `QueryParameterValueResolver` | Bind one query param, typed |
-| `#[MapUploadedFile]` | `MapUploadedFileValueResolver` | Bind + validate an upload |
+| `#[MapUploadedFile]` | `RequestPayloadValueResolver` | Bind + validate an upload |
 | `#[CurrentUser]` | `UserValueResolver` (security) | Inject the authenticated user |
 
 `#[MapEntity]` (Doctrine) also exists but is **out of scope** here — it is a

@@ -68,7 +68,8 @@ flowchart LR
 
 ### `#[MapUploadedFile]` (Symfony 8)
 
-The `MapUploadedFileValueResolver` fills an `UploadedFile` (or array of them)
+The `RequestPayloadValueResolver` (the same targeted resolver behind
+`#[MapRequestPayload]`/`#[MapQueryString]`) fills an `UploadedFile` (or array of them)
 controller argument directly, and can apply `File`/`Image` constraints inline —
 throwing an `HttpException` on validation failure. See
 [Value Resolvers](value-resolvers.md).
