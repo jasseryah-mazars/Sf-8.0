@@ -29,6 +29,15 @@ any compliant implementation in). Knowing the mapping is prime exam material.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A third-party library requires a PSR-7 `ServerRequestInterface`. Can you pass
+    Symfony's `HttpFoundation` `Request` straight in?
+
+??? note "Reveal"
+    No — `HttpFoundation` is **not** PSR-7. Convert it with the psr-http-message
+    bridge's `PsrHttpFactory` (and `HttpFoundationFactory` to go back). PSR-15
+    middleware integrates through the same bridge.
+
 ### The PSR map for Symfony
 
 | PSR | Standard | Symfony relationship |
@@ -220,10 +229,26 @@ crossing library boundaries.
     - Consumes: PSR-3 (Logger). Autoload: PSR-4.
     - PSR-7/15/17 → via psr-http-message **bridge**.
 
+## Connections
+
+- **Depends on:** [Components](components.md) — each PSR is implemented or consumed by a specific component.
+- **Reused in:** [Events](events.md) — the EventDispatcher implements PSR-14; [Dependency Injection](../dependency-injection/index.md) implements PSR-11; [HTTP](../http/request.md) is where the PSR-7 gap bites.
+- **Confused with:** [Bridges](bridges.md) — PSR-7/15/17 support comes via the psr-http-message *bridge*, not a PSR Symfony implements natively.
+
 ## Official References
 - [PHP-FIG PSRs](https://www.php-fig.org/psr/)
 - [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html)
 - [Clock component](https://symfony.com/doc/current/components/clock.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** PSRs enable cross-library interoperability
+- [ ] map each PSR to the component that implements or consumes it
+- [ ] convert an HttpFoundation request to PSR-7 via the bridge
+- [ ] spot that `HttpFoundation` is not PSR-7 and PSR-3 is consumed, not implemented
+- [ ] distinguish PSR-6 (pool/items) from PSR-16 (simple get/set) caching
 
 ---
 

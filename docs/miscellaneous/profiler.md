@@ -30,6 +30,15 @@ disabled in prod. (For consuming profiles in tests, see
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Your custom collector stores the live PDO connection in `$this->data` so the
+    panel can query it. The request errors with a serialization failure. Why?
+
+??? note "Reveal"
+    Profiles are **serialized** to storage (cloned via VarDumper). A live PDO
+    connection/resource isn't serializable. Store scalar/array snapshots instead —
+    exactly the data the panel will render.
+
 ### Collection lifecycle
 
 The `Symfony\Bundle\FrameworkBundle`/`WebProfilerBundle` register a
@@ -210,10 +219,26 @@ data. For prod observability use proper metrics/tracing.
     - Tag `data_collector` + `template:`; profiler UI at `/_profiler`.
     - `LateDataCollectorInterface::lateCollect()` for post-response data.
 
+## Connections
+
+- **Depends on:** [Request Handling](../architecture/request-handling.md) — collection hooks `kernel.response`; [Debugging](debugging.md) — dumps feed the Debug panel.
+- **Reused in:** [The Profiler Object](../testing/profiler.md) — functional tests read stored profiles to assert queries/emails.
+- **Confused with:** production observability — the profiler is a dev-only tool, not a metrics backend.
+
 ## Official References
 - [Official docs — Profiler](https://symfony.com/doc/current/profiler.html)
 - [Official docs — Custom data collector](https://symfony.com/doc/current/profiler/data_collector.html)
 - [Symfony source — DataCollectorInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DataCollector/DataCollectorInterface.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** profiles are stored per request keyed by token
+- [ ] write a `DataCollector` + panel template and tag it in Symfony 8
+- [ ] debug a serialization failure from non-serializable `$this->data`
+- [ ] spot the trick: collection on `kernel.response`, late collectors at terminate; dev-only
+- [ ] describe when to use `LateDataCollectorInterface`
 
 ---
 

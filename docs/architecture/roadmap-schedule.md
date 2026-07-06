@@ -28,6 +28,14 @@ matching **LTS** every **two years**. This chapter turns the
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    A product must run 3+ years without a major upgrade. Which 8.x version do you
+    target, and when does the next major arrive?
+
+??? note "Reveal"
+    Target **8.4 (LTS)** — 3 years of bug fixes, 4 of security fixes. It ships in
+    Nov 2027, **at the same time** as the next major, `9.0`.
+
 ### The 8.x timeline
 
 | Version | Released | Type |
@@ -172,9 +180,25 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
     - LTS = `X.4`, ships with `(X+1).0`.
     - `php bin/console about` shows EOL dates.
 
+## Connections
+
+- **Depends on:** [Release Management](release-management.md) — this chapter turns those SemVer/maintenance rules into a dated calendar.
+- **Reused in:** [Deprecations](deprecations.md) — plan deprecation cleanup around the major boundary; [BC Promise](bc-promise.md) explains why the LTS jump is safe once deprecations are cleared.
+- **Confused with:** LTS timing — the LTS ships *with* the next major, not before it.
+
 ## Official References
 - [Symfony releases & schedule](https://symfony.com/releases)
 - [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** publishing dates years ahead helps teams plan upgrades
+- [ ] lay out the full Symfony 8.x timeline including the LTS
+- [ ] combine release dates with maintenance windows to pick a version
+- [ ] spot that `8.4` LTS ships alongside `9.0` (Nov 2027), not before
+- [ ] read EOL dates with `php bin/console about`
 
 ---
 

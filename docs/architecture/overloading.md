@@ -29,6 +29,16 @@ services via **decoration/redefinition**, templates and translations via
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You place your override at `templates/AcmeBlog/post/show.html.twig` and see no
+    change. Where should it go, and why did Twig ignore yours?
+
+??? note "Reveal"
+    Bundle template overrides must live under `templates/bundles/<BundleName>/…`
+    (e.g. `templates/bundles/AcmeBlogBundle/post/show.html.twig`). Only that path
+    takes precedence over the bundle's own templates — a bare `templates/AcmeBlog/…`
+    is not resolved as an override.
+
 ### Overriding services
 
 Three tools, in increasing surgical precision:
@@ -213,10 +223,26 @@ third-party resources.
     - Config override: `config/packages/<alias>.yaml`.
     - No `getParent()` in Symfony 8.
 
+## Connections
+
+- **Depends on:** [Code Organization](code-organization.md) — overrides live in the app's conventional `templates/`, `translations/`, `config/`; [Dependency Injection](../dependency-injection/index.md) provides decoration and compiler passes.
+- **Reused in:** [Exception Handling](exception-handling.md) — overriding error templates is exactly this mechanism.
+- **Confused with:** [Bridges](bridges.md) — overloading customises an existing bundle; a bridge glues a component to a third-party library.
+
 ## Official References
 - [Official docs — Overriding bundles](https://symfony.com/doc/current/bundles/override.html)
 - [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
 - [Symfony source — bundles](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bundle)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** overriding beats editing `vendor/`
+- [ ] override a bundle's service, template, translation and config
+- [ ] debug an override template that has no effect (wrong directory)
+- [ ] spot that bundle inheritance (`getParent()`) is removed in modern Symfony
+- [ ] explain when to redefine vs decorate vs use a compiler pass
 
 ---
 

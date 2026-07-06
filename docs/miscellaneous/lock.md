@@ -38,6 +38,15 @@ whether mutual exclusion holds across servers.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Two cron runs start at once. Each does `if (!$lock->acquire()) return;` with a
+    default `acquire()`. Does the second one block, throw, or return immediately?
+
+??? note "Reveal"
+    It returns **`false` immediately** — `acquire()` is non-blocking by default, so
+    the second run skips the work. Pass `acquire(true)` only when the work must
+    eventually run (then it waits instead of bailing).
+
 ### Factory, lock, store
 
 | Role | FQCN |
@@ -248,10 +257,26 @@ scaled app.
     - Shared: `SharedLockInterface::acquireRead()`.
     - DSN: `flock`, `semaphore`, `redis://…`, `%env(LOCK_DSN)%`.
 
+## Connections
+
+- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — `LockFactory` is autowired from the configured store DSN.
+- **Reused in:** [Messenger](messenger.md) — serialise duplicate worker runs; [Process](process.md) — guard shared external tools.
+- **Confused with:** [Cache](cache.md) stampede protection — Lock enforces strict mutual exclusion; the cache only reduces duplicate recompute.
+
 ## Official References
 - [Official docs — Lock](https://symfony.com/doc/current/lock.html)
 - [Official docs — Lock component](https://symfony.com/doc/current/components/lock.html)
 - [Symfony source — Lock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Lock/Lock.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a distributed store is needed for multi-server exclusion
+- [ ] acquire/release/refresh a lock in Symfony 8, releasing in `finally`
+- [ ] debug a lock lost mid-job (TTL expired, no `refresh()`) or Flock across servers
+- [ ] spot the trick: `acquire()` is non-blocking and returns `false`, not null
+- [ ] describe how a `Key` + store persist ownership and TTL
 
 ---
 

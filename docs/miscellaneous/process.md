@@ -37,6 +37,17 @@ exit code, stdout and stderr.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    `Process::fromShellCommandline("git log $userInput")` runs with attacker-set
+    `$userInput`. What's the risk, and would `new Process(['git', 'log', $userInput])`
+    behave the same?
+
+??? note "Reveal"
+    The shell form is **command injection** — it runs through `/bin/sh` unescaped.
+    The array form auto-escapes each element, so `$userInput` becomes a single
+    literal argument, not shell syntax. Prefer the array constructor for any
+    untrusted input.
+
 ### Two ways to construct
 
 - `new Process(['git', 'log', '--oneline'])` — the array form. Each element is a
@@ -222,9 +233,25 @@ For work that should be deferred/retried, dispatch a
     - `getOutput()`, `getErrorOutput()`, `getExitCode()`, `isSuccessful()`, `getIterator()`.
     - `setTimeout(120)` / `setIdleTimeout()` / default 60 s.
 
+## Connections
+
+- **Depends on:** [Console](../console/index.md) — commands frequently wrap `Process` to shell out.
+- **Reused in:** [Messenger](messenger.md) — defer/retry long shell work as a message; [Filesystem & Finder](filesystem-finder.md) discovers the files you process.
+- **Confused with:** running work inline — for deferrable/retriable jobs, dispatch a message instead of blocking the request.
+
 ## Official References
 - [Official docs — Process](https://symfony.com/doc/current/components/process.html)
 - [Symfony source — Process](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Process/Process.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the array constructor is safer than `fromShellCommandline`
+- [ ] run sync/async processes and read output/exit code in Symfony 8
+- [ ] debug a hung/killed process (default 60 s timeout, missing `checkTimeout()`)
+- [ ] spot the trick: array args auto-escape, shell strings don't; default timeout 60 s
+- [ ] describe `run()` vs `start()`/`wait()` and streaming with `getIterator()`
 
 ---
 

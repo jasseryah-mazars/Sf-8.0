@@ -30,6 +30,16 @@ RoadRunner) by only swapping the runtime.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Your `public/index.php` builds a `Kernel` and calls `$kernel->handle(...)`
+    itself, then the page comes back blank or duplicated. What did the Runtime
+    expect instead?
+
+??? note "Reveal"
+    It expects you to **return** a callable that *produces* the app object — the
+    runtime (via `autoload_runtime.php`) resolves its arguments and runs `handle()`,
+    `send()` and `terminate()` for you. Calling `handle()` yourself double-runs it.
+
 ### The entry-point flow
 
 `public/index.php` requires `vendor/autoload_runtime.php` and **returns** a
@@ -214,10 +224,26 @@ the app object is created/run. The component is transparent for standard apps.
     - `RuntimeInterface::getResolver()` + `getRunner()`; `RunnerInterface::run(): int`.
     - `APP_RUNTIME` env / `extra.runtime.class`. Default `SymfonyRuntime`.
 
+## Connections
+
+- **Depends on:** [Request Handling](../architecture/request-handling.md) — the runner drives `handle()`→`send()`→`terminate()`.
+- **Reused in:** [Deployment](deployment.md) — swap runtimes (Swoole/RoadRunner) via `APP_RUNTIME`; [Configuration](configuration.md) supplies `$context`.
+- **Confused with:** the `Kernel` itself — the runtime *runs* the kernel; it isn't the kernel.
+
 ## Official References
 - [Official docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
 - [Symfony source — RuntimeInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php)
 - [Symfony source — SymfonyRuntime](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/SymfonyRuntime.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** returning a callable decouples the entry point from the server
+- [ ] write `public/index.php`/`bin/console` returning a callable in Symfony 8
+- [ ] debug a blank/duplicated response from calling `handle()` manually
+- [ ] spot the trick: `index.php` returns a callable; default runtime is `SymfonyRuntime`
+- [ ] describe `getResolver()` (autowire args) + `getRunner()` (execute)
 
 ---
 

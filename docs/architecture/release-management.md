@@ -30,6 +30,15 @@ tightly with the [Backward Compatibility promise](bc-promise.md) and the
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You are on 8.0 and want new features without risking a breakage. Is it safe to
+    upgrade to 8.3, and where would a breaking change first be allowed?
+
+??? note "Reveal"
+    Yes — minors (`8.0 → 8.3`) never break BC; they only add features and
+    deprecations. Breaking changes are allowed only in the next **major** (`9.0`),
+    and only for code deprecated during the 8.x line.
+
 ### What each release level may change
 
 | Level | Example | May contain |
@@ -182,10 +191,26 @@ alternative cadence to opt into.
     - LTS = `X.4` (3 yr bug + 4 yr sec) · Standard = 8 mo bug + 14 mo sec.
     - Patch: bugs only · Minor: features+deprecations, BC-safe · Major: removals.
 
+## Connections
+
+- **Depends on:** [BC Promise](bc-promise.md) — the promise is what guarantees minors stay BC-safe.
+- **Reused in:** [Roadmap & Schedule](roadmap-schedule.md) — the same rules become a concrete 8.x calendar; [Deprecations](deprecations.md) are cleared between minors to keep the major jump clean.
+- **Confused with:** patch vs minor — a patch is bug-fix-only; a minor adds features and deprecations.
+
 ## Official References
 - [Symfony releases](https://symfony.com/releases)
 - [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
 - [Backward compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a time-based SemVer cadence makes upgrades predictable
+- [ ] state what a patch, minor and major may each change
+- [ ] plan an upgrade using the standard vs LTS maintenance windows
+- [ ] spot that `8.4` is the LTS and ships with `9.0`
+- [ ] explain the merge-up model across maintained branches
 
 ---
 

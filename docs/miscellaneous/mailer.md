@@ -37,6 +37,15 @@ sends that message through a **transport** chosen by a DSN. You build a message
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    Messenger is configured to route `SendEmailMessage` to `async`. You call
+    `$mailer->send($email)`. Has the email left the building when `send()` returns?
+
+??? note "Reveal"
+    No. With routing configured, `send()` **dispatches** a `SendEmailMessage` to the
+    queue and returns; a worker delivers it later. If no worker runs, the mail sits
+    in the queue — nothing was sent inline.
+
 ### The Mime part model
 
 `Symfony\Component\Mime\Email` is a high-level builder over
@@ -223,10 +232,26 @@ production unless the email must be confirmed before responding.
     - `MailerInterface::send($email)`; DSN via `MAILER_DSN`.
     - Async: route `SendEmailMessage` → transport; run `messenger:consume`.
 
+## Connections
+
+- **Depends on:** [Messenger](messenger.md) — async delivery routes `SendEmailMessage`; [Twig](../twig/index.md) renders `TemplatedEmail`.
+- **Reused in:** [Console](../console/index.md) — `messenger:consume` is what actually delivers queued mail.
+- **Confused with:** the Mailer `Envelope` (sender/recipients for the SMTP conversation) vs the visible message headers.
+
 ## Official References
 - [Official docs — Mailer](https://symfony.com/doc/current/mailer.html)
 - [Official docs — Mime](https://symfony.com/doc/current/components/mime.html)
 - [Symfony source — Mailer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Mailer/Mailer.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the Mime part tree models alternative/mixed/related bodies
+- [ ] build and send a `TemplatedEmail` with an attachment/embed in Symfony 8
+- [ ] debug "async email never arrives" (no worker consuming the transport)
+- [ ] spot the trick: with routing, `send()` queues `SendEmailMessage`, not sends inline
+- [ ] describe transport DSN selection and `Envelope` vs headers
 
 ---
 
