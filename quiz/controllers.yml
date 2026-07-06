@@ -131,7 +131,7 @@ categories:
       - id: "CTRL-ABSTRACT-01"
         question: "How does AbstractController obtain its helper services?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/abstract-controller"
         concepts: ["service-subscriber", "service-locator", "getSubscribedServices"]
         syllabus: "Controllers → AbstractController"
@@ -185,7 +185,7 @@ categories:
       - id: "CTRL-ABSTRACT-04"
         question: "When overriding getSubscribedServices() to add a service, what must you do to keep the built-in helpers?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/abstract-controller"
         concepts: ["getSubscribedServices", "parent", "service-subscriber"]
         syllabus: "Controllers → AbstractController"
@@ -299,7 +299,7 @@ categories:
       - id: "CTRL-REQUEST-01"
         question: "Which value resolver supplies a `Request` type-hinted controller argument?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/request"
         concepts: ["request-value-resolver", "priority", "argument"]
         syllabus: "Controllers → The Request"
@@ -355,7 +355,7 @@ categories:
           For the URL `/search` (no `?page=`), what does
           `(int) $request->query->get('page')` evaluate to, and what is the safer call?
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/request"
         concepts: ["input-bag", "typed-getters", "null"]
         syllabus: "Controllers → The Request"
@@ -424,7 +424,7 @@ categories:
       - id: "CTRL-RESPONSE-01"
         question: "What must a controller ultimately produce?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/response"
         concepts: ["response", "view-event", "logic-exception"]
         syllabus: "Controllers → The Response"
@@ -442,7 +442,7 @@ categories:
       - id: "CTRL-RESPONSE-02"
         question: "When does a StreamedResponse produce its body?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/response"
         concepts: ["streamed-response", "send", "callback"]
         syllabus: "Controllers → The Response"
@@ -554,7 +554,7 @@ categories:
       - id: "CTRL-COOKIES-02"
         question: "A cookie sent with SameSite=None also requires which attribute?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/cookies"
         concepts: ["samesite", "secure", "browser-policy"]
         syllabus: "Controllers → Cookies"
@@ -645,7 +645,7 @@ categories:
       - id: "CTRL-SESSION-01"
         question: "What is the recommended way for a service to access the session?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/session"
         concepts: ["request-stack", "getSession", "request-scoped"]
         syllabus: "Controllers → The Session"
@@ -663,7 +663,7 @@ categories:
       - id: "CTRL-SESSION-02"
         question: "When does a lazy Symfony session actually start (session_start + Set-Cookie)?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/session"
         concepts: ["lazy-session", "set-cookie", "cacheability"]
         syllabus: "Controllers → The Session"
@@ -774,7 +774,7 @@ categories:
       - id: "CTRL-FLASH-01"
         question: "What happens the first time you read a flash message (get/all or app.flashes)?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/flash-messages"
         concepts: ["flash-bag", "consume", "one-shot"]
         syllabus: "Controllers → Flash messages"
@@ -809,7 +809,7 @@ categories:
       - id: "CTRL-FLASH-03"
         question: "Why are flash messages typically paired with a redirect?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/flash-messages"
         concepts: ["prg", "redirect", "next-request"]
         syllabus: "Controllers → Flash messages"
@@ -846,7 +846,7 @@ categories:
       - id: "CTRL-FLASH-05"
         question: "Which method reads flash messages WITHOUT consuming them?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/flash-messages"
         concepts: ["peek", "consume", "flash-bag"]
         syllabus: "Controllers → Flash messages"
@@ -916,7 +916,7 @@ categories:
       - id: "CTRL-REDIRECT-03"
         question: "What is the difference between redirect() and redirectToRoute()?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/http-redirects"
         concepts: ["redirect", "redirectToRoute", "url-vs-route"]
         syllabus: "Controllers → HTTP redirects"
@@ -1006,7 +1006,7 @@ categories:
       - id: "CTRL-FORWARD-01"
         question: "What does AbstractController::forward() do?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/internal-redirects"
         concepts: ["forward", "sub-request", "response"]
         syllabus: "Controllers → Internal redirects (forwarding)"
@@ -1024,7 +1024,7 @@ categories:
       - id: "CTRL-FORWARD-02"
         question: "During a forwarded sub-request, what does Request::isMainRequest() return?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/internal-redirects"
         concepts: ["sub-request", "isMainRequest", "kernel"]
         syllabus: "Controllers → Internal redirects (forwarding)"
@@ -1174,7 +1174,7 @@ categories:
       - id: "CTRL-ERROR-04"
         question: "Which kernel event lets a listener turn an exception into a Response?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/error-pages"
         concepts: ["kernel.exception", "ExceptionEvent", "setResponse"]
         syllabus: "Controllers → Generating 404 / error pages"
@@ -1194,7 +1194,7 @@ categories:
           `$this->createNotFoundException('Missing');` is written on its own line,
           then the action continues and fatals with 'member function on null'. Why?
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/error-pages"
         concepts: ["createNotFoundException", "throw", "returns"]
         syllabus: "Controllers → Generating 404 / error pages"
@@ -1264,7 +1264,7 @@ categories:
       - id: "CTRL-UPLOAD-01"
         question: "Which value should you trust to determine an uploaded file's real type?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/file-upload"
         concepts: ["getMimeType", "content-detection", "security"]
         syllabus: "Controllers → File upload"
@@ -1282,7 +1282,7 @@ categories:
       - id: "CTRL-UPLOAD-02"
         question: "What does UploadedFile::move() do when it fails?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/file-upload"
         concepts: ["move", "file-exception", "error-handling"]
         syllabus: "Controllers → File upload"
@@ -1505,7 +1505,7 @@ categories:
       - id: "CTRL-RESOLVER-02"
         question: "How does a value resolver signal that it does not handle an argument?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "controllers/value-resolvers"
         concepts: ["decline", "yield-nothing", "empty-iterable"]
         syllabus: "Controllers → Argument value resolvers"
@@ -1523,7 +1523,7 @@ categories:
       - id: "CTRL-RESOLVER-03"
         question: "Which resolvers have the highest default priority (120) in Symfony 8?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/value-resolvers"
         concepts: ["priority", "RequestValueResolver", "SessionValueResolver"]
         syllabus: "Controllers → Argument value resolvers"
@@ -1559,7 +1559,7 @@ categories:
       - id: "CTRL-RESOLVER-05"
         question: "How do the #[MapRequestPayload]/#[MapQueryParameter] resolvers get activated?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/value-resolvers"
         concepts: ["targeted-resolver", "attribute-driven", "tag"]
         syllabus: "Controllers → Argument value resolvers"
@@ -1649,7 +1649,7 @@ categories:
       - id: "CTRL-RESOLVER-10"
         question: "Which resolvers/attributes are targeted (activated only by their attribute), not part of the priority chain? (choose 3)"
         type: "multiple"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/value-resolvers"
         concepts: ["targeted-resolver", "attributes", "chain"]
         syllabus: "Controllers → Argument value resolvers"
@@ -1688,7 +1688,7 @@ categories:
           `ArgumentValueResolverInterface` with supports()+resolve() and no longer
           works in Symfony 8. Why?
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "controllers/value-resolvers"
         concepts: ["removed-interface", "ValueResolverInterface", "migration"]
         syllabus: "Controllers → Argument value resolvers"

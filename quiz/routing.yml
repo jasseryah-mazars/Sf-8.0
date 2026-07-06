@@ -1,7 +1,13 @@
 categories:
   - name: "Routing — Configuration"
     questions:
-      - question: "What is the fully-qualified class of the routing attribute in Symfony 8?"
+      - id: "ROUT-CONFIG-01"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/configuration"
+        concepts: ["route-attribute", "namespace"]
+        syllabus: "Routing → Configuration"
+        question: "What is the fully-qualified class of the routing attribute in Symfony 8?"
         answers:
           - value: "Symfony\\Component\\Routing\\Attribute\\Route"
             correct: true
@@ -15,7 +21,13 @@ categories:
           The routing attribute lives in the Attribute namespace since 6.4; the old
           Annotation\Route alias is removed in Symfony 8.
         documentation: "https://symfony.com/doc/current/routing.html"
-      - question: "Two routes can match the same request path. Which one wins?"
+      - id: "ROUT-CONFIG-02"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "routing/configuration"
+        concepts: ["route-collection", "matching-order", "first-match-wins"]
+        syllabus: "Routing → Configuration"
+        question: "Two routes can match the same request path. Which one wins?"
         answers:
           - value: "The first one declared in the RouteCollection"
             correct: true
@@ -27,9 +39,17 @@ categories:
             correct: false
         explanation: >-
           The matcher iterates the collection in declaration order and returns the
-          first route whose host and path match.
+          first route whose host and path match. It is first-match-wins, not
+          most-specific-wins — so more specific routes must be declared before
+          catch-all ones.
         documentation: "https://symfony.com/doc/current/routing.html"
-      - question: "A class-level #[Route('/blog', name: 'app_blog_')] contributes what to its method routes?"
+      - id: "ROUT-CONFIG-03"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "routing/configuration"
+        concepts: ["class-level-route", "path-prefix", "name-prefix"]
+        syllabus: "Routing → Configuration"
+        question: "A class-level #[Route('/blog', name: 'app_blog_')] contributes what to its method routes?"
         answers:
           - value: "A path prefix and a name prefix"
             correct: true
@@ -41,9 +61,16 @@ categories:
             correct: false
         explanation: >-
           Class-level route data merges as prefixes: the path is prepended and the
-          name becomes a prefix for each action's route.
+          name becomes a prefix for each action's route. A class-level name is never
+          a complete route name on its own.
         documentation: "https://symfony.com/doc/current/routing.html#creating-routes-as-attributes"
-      - question: "Which YAML import type loads #[Route] attributes from a directory in Symfony 8?"
+      - id: "ROUT-CONFIG-04"
+        type: "config"
+        difficulty: "easy"
+        subchapter: "routing/configuration"
+        concepts: ["route-loading", "yaml-import", "attribute-loader"]
+        syllabus: "Routing → Configuration"
+        question: "Which YAML import type loads #[Route] attributes from a directory in Symfony 8?"
         answers:
           - value: "type: attribute"
             correct: true
@@ -57,10 +84,106 @@ categories:
           Attribute route loading uses `type: attribute`; the `annotation` type is
           gone in Symfony 8.
         documentation: "https://symfony.com/doc/current/routing.html"
+      - id: "ROUT-CONFIG-05"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "routing/configuration"
+        concepts: ["class-level-route", "name-prefix", "path-concatenation"]
+        syllabus: "Routing → Configuration"
+        question: >-
+          With #[Route('/blog', name: 'app_blog_')] on the class and
+          #[Route('/list', name: 'index')] on a method, what name and path result?
+        answers:
+          - value: "Name app_blog_index, path /blog/list"
+            correct: true
+          - value: "Name index, path /list"
+            correct: false
+          - value: "Name app_blog_, path /blog"
+            correct: false
+          - value: "Name app_blog_index, path /list"
+            correct: false
+        explanation: >-
+          The class path /blog is prepended to the method path /list (giving
+          /blog/list) and the class name prefix app_blog_ is prepended to the method
+          name index (giving app_blog_index). Both parts concatenate, not replace.
+        documentation: "https://symfony.com/doc/current/routing.html#creating-routes-as-attributes"
+      - id: "ROUT-CONFIG-06"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/configuration"
+        concepts: ["loaders", "AttributeClassLoader", "RouteCollection"]
+        syllabus: "Routing → Configuration"
+        question: "Which loader reads #[Route] attributes into the RouteCollection in a Symfony 8 app?"
+        answers:
+          - value: "AttributeRouteControllerLoader (built on AttributeClassLoader)"
+            correct: true
+          - value: "YamlFileLoader"
+            correct: false
+          - value: "AnnotationClassLoader (removed in Symfony 8)"
+            correct: false
+          - value: "XmlFileLoader"
+            correct: false
+        explanation: >-
+          Attribute routes are read by AttributeClassLoader, wrapped by the
+          framework's AttributeRouteControllerLoader. YamlFileLoader/XmlFileLoader
+          handle those formats, and AnnotationClassLoader no longer exists in
+          Symfony 8. All loaders implement LoaderInterface and are orchestrated by a
+          DelegatingLoader.
+        documentation: "https://symfony.com/doc/current/routing.html"
+      - id: "ROUT-CONFIG-07"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/configuration"
+        concepts: ["route-naming", "auto-generated-name"]
+        syllabus: "Routing → Configuration"
+        question: "You omit the name: option on a #[Route]. What happens?"
+        answers:
+          - value: "Symfony auto-generates a name from the class and method (e.g. app_blog_index)"
+            correct: true
+          - value: "The route is silently skipped"
+            correct: false
+          - value: "A fatal error is thrown at compile time"
+            correct: false
+          - value: "The path string is used verbatim as the name"
+            correct: false
+        explanation: >-
+          A missing name is generated from the class + method. This works but is
+          brittle — renaming the method breaks every generateUrl() call — so an
+          explicit, stable name is recommended.
+        documentation: "https://symfony.com/doc/current/routing.html"
+      - id: "ROUT-CONFIG-08"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/configuration"
+        concepts: ["yaml-import", "prefix", "name_prefix"]
+        syllabus: "Routing → Configuration"
+        question: >-
+          A YAML import declares `resource: routes/api.yaml`, `prefix: /api`,
+          `name_prefix: api_`. What is the effect on the imported routes?
+        answers:
+          - value: "Every imported path is prepended with /api and every name with api_"
+            correct: true
+          - value: "Only the first imported route gets the prefixes"
+            correct: false
+          - value: "The prefixes replace the imported paths and names"
+            correct: false
+          - value: "prefix affects the path but name_prefix is ignored for YAML"
+            correct: false
+        explanation: >-
+          Import options cascade to every route in the resource: prefix is prepended
+          to each path and name_prefix to each name. This is how you namespace a
+          whole imported set without editing each definition.
+        documentation: "https://symfony.com/doc/current/routing.html"
 
   - name: "Routing — Requirements"
     questions:
-      - question: "A route path is /blog/{page<\\d+>} and the request is /blog/latest. What happens?"
+      - id: "ROUT-REQ-01"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/requirements"
+        concepts: ["requirements", "matching", "404"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "A route path is /blog/{page<\\d+>} and the request is /blog/latest. What happens?"
         answers:
           - value: "The route does not match; matching continues (likely a 404)"
             correct: true
@@ -73,8 +196,15 @@ categories:
         explanation: >-
           Requirements are compiled into the route regex, so a non-matching value
           means the route is skipped — it is a matching concern, not validation.
+          There is no 400 from routing itself.
         documentation: "https://symfony.com/doc/current/routing.html#parameters-validation"
-      - question: "Which two declarations are exactly equivalent?"
+      - id: "ROUT-REQ-02"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "routing/requirements"
+        concepts: ["inline-requirements", "requirements-array", "equivalence"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "Which two declarations are exactly equivalent?"
         answers:
           - value: "{id<\\d+>} and requirements: {id: '\\d+'}"
             correct: true
@@ -86,9 +216,15 @@ categories:
             correct: false
         explanation: >-
           The inline <...> syntax is sugar for a matching entry in the requirements
-          array.
+          array. defaults is unrelated (it sets values, not patterns).
         documentation: "https://symfony.com/doc/current/routing.html#parameters-validation"
-      - question: "What is the default regex applied to a placeholder that has no requirement?"
+      - id: "ROUT-REQ-03"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/requirements"
+        concepts: ["default-regex", "placeholder"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "What is the default regex applied to a placeholder that has no requirement?"
         answers:
           - value: "[^/]+"
             correct: true
@@ -102,7 +238,13 @@ categories:
           Placeholders match any characters except the / separator by default; use
           .+ to span multiple segments.
         documentation: "https://symfony.com/doc/current/routing.html"
-      - question: "How do you allow a single parameter to capture several path segments (slashes)?"
+      - id: "ROUT-REQ-04"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "routing/requirements"
+        concepts: ["catch-all", "slash-in-parameters"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "How do you allow a single parameter to capture several path segments (slashes)?"
         answers:
           - value: "Override its requirement to .+, e.g. {path<.+>}"
             correct: true
@@ -116,10 +258,108 @@ categories:
           The default [^/]+ stops at a slash; requiring .+ lets the token match
           across path segments.
         documentation: "https://symfony.com/doc/current/routing.html#slash-in-parameters"
+      - id: "ROUT-REQ-05"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/requirements"
+        concepts: ["anchoring", "regex", "compiled-route"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "You write requirements: {id: '^\\d+$'} to constrain an id. What is wrong?"
+        answers:
+          - value: "Requirement regexes are implicitly anchored; adding ^ and $ is wrong"
+            correct: true
+          - value: "Nothing — anchors are required"
+            correct: false
+          - value: "You must also add anchors to the path"
+            correct: false
+          - value: "The regex must be double-quoted to work"
+            correct: false
+        explanation: >-
+          RouteCompiler substitutes the placeholder with a named capture group over
+          the whole token, so the requirement is already anchored. Adding ^/$
+          injects them inside the group and breaks matching. Likewise, avoid
+          capturing groups — use (?:...) if grouping is needed.
+        documentation: "https://symfony.com/doc/current/routing.html#parameters-validation"
+      - id: "ROUT-REQ-06"
+        type: "code"
+        difficulty: "hard"
+        subchapter: "routing/requirements"
+        concepts: ["declaration-order", "requirements", "disambiguation"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: >-
+          Two routes share the path shape /blog/{x}: blog_show has {slug} (default
+          [^/]+) declared first, blog_paged has {page<\\d+>} declared second. Which
+          route matches /blog/42?
+        answers:
+          - value: "blog_show — the first route matches /42 as a slug, shadowing the numeric route"
+            correct: true
+          - value: "blog_paged — the numeric requirement always wins"
+            correct: false
+          - value: "Neither — the ambiguity is a 404"
+            correct: false
+          - value: "Both — the matcher runs both controllers"
+            correct: false
+        explanation: >-
+          Matching is first-match-wins in declaration order. Because blog_show's
+          {slug} defaults to [^/]+, it also matches 42, so it captures /blog/42
+          before the numeric route is ever tried. Declare the numeric route first
+          to disambiguate.
+        documentation: "https://symfony.com/doc/current/routing.html#parameters-validation"
+      - id: "ROUT-REQ-07"
+        type: "config"
+        difficulty: "easy"
+        subchapter: "routing/requirements"
+        concepts: ["requirements-array", "yaml"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: >-
+          In YAML, which block restricts a {slug} placeholder to lowercase letters,
+          digits and hyphens?
+        answers:
+          - value: "requirements:\\n    slug: '[a-z0-9\\-]+'"
+            correct: true
+          - value: "defaults:\\n    slug: '[a-z0-9\\-]+'"
+            correct: false
+          - value: "constraints:\\n    slug: '[a-z0-9\\-]+'"
+            correct: false
+          - value: "validation:\\n    slug: '[a-z0-9\\-]+'"
+            correct: false
+        explanation: >-
+          The YAML key is `requirements`, a map of placeholder name to regex.
+          `defaults` sets values, and there are no `constraints`/`validation` keys in
+          a route definition — validation is a separate component.
+        documentation: "https://symfony.com/doc/current/routing.html#parameters-validation"
+      - id: "ROUT-REQ-08"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/requirements"
+        concepts: ["RouteCompiler", "compiled-route", "named-capture-group"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "How does RouteCompiler represent /blog/{page<\\d+>} in the CompiledRoute regex?"
+        answers:
+          - value: "As a named capture group, e.g. #^/blog/(?P<page>\\d+)$#sD"
+            correct: true
+          - value: "As an unnamed group #^/blog/(\\d+)$#"
+            correct: false
+          - value: "As two separate regexes joined at runtime"
+            correct: false
+          - value: "It is not compiled; the requirement is checked in the controller"
+            correct: false
+        explanation: >-
+          RouteCompiler::compile() extracts each {name} token and substitutes it with
+          a named capture group using its requirement (or [^/]+ by default),
+          producing a single anchored regex. Named groups are how the matcher maps
+          captured values back to parameter names.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php"
 
   - name: "Routing — Defaults"
     questions:
-      - question: "Which placeholder is optional (matches /blog and /blog/N) with default 1 and digits only?"
+      - id: "ROUT-DEFAULT-01"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "routing/defaults"
+        concepts: ["inline-default", "optional-parameter", "requirement"]
+        syllabus: "Routing → Default values"
+        question: "Which placeholder is optional (matches /blog and /blog/N) with default 1 and digits only?"
         answers:
           - value: "{page<\\d+>?1}"
             correct: true
@@ -133,7 +373,13 @@ categories:
           The inline order is {name<requirement>?default}: the requirement comes
           first, then ? and the default value.
         documentation: "https://symfony.com/doc/current/routing.html#optional-parameters"
-      - question: "generateUrl('blog', ['page' => 1]) where page defaults to 1 produces?"
+      - id: "ROUT-DEFAULT-02"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "routing/defaults"
+        concepts: ["url-generation", "default-omission", "canonical-url"]
+        syllabus: "Routing → Default values"
+        question: "generateUrl('blog', ['page' => 1]) where page defaults to 1 produces?"
         answers:
           - value: "/blog"
             correct: true
@@ -145,9 +391,16 @@ categories:
             correct: false
         explanation: >-
           The generator omits a trailing segment whose value equals its default,
-          yielding the canonical shortest URL.
+          yielding the canonical shortest URL. This keeps generated URLs stable and
+          avoids duplicate-content variants.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
-      - question: "In the path /{a}/{b}, which placeholder can be made optional?"
+      - id: "ROUT-DEFAULT-03"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/defaults"
+        concepts: ["trailing-optional", "compilation"]
+        syllabus: "Routing → Default values"
+        question: "In the path /{a}/{b}, which placeholder can be made optional?"
         answers:
           - value: "b only, because it is the trailing placeholder"
             correct: true
@@ -159,9 +412,16 @@ categories:
             correct: false
         explanation: >-
           Only trailing placeholders can be optional; a gap in the middle cannot be
-          located by the matcher.
+          located by the matcher. RouteCompiler emits nested optional groups from the
+          tail, so an optional a with a required b is impossible.
         documentation: "https://symfony.com/doc/current/routing.html#optional-parameters"
-      - question: "What default value does the placeholder {slug?} declare?"
+      - id: "ROUT-DEFAULT-04"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/defaults"
+        concepts: ["null-default", "optional-parameter"]
+        syllabus: "Routing → Default values"
+        question: "What default value does the placeholder {slug?} declare?"
         answers:
           - value: "null"
             correct: true
@@ -174,10 +434,80 @@ categories:
         explanation: >-
           A bare ? with no value after it sets the default to null.
         documentation: "https://symfony.com/doc/current/routing.html#optional-parameters"
+      - id: "ROUT-DEFAULT-05"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/defaults"
+        concepts: ["inline-syntax", "requirement-order"]
+        syllabus: "Routing → Default values"
+        question: "Why is the inline placeholder {page?1<\\d+>} wrong?"
+        answers:
+          - value: "The requirement must precede the ?: it should be {page<\\d+>?1}"
+            correct: true
+          - value: "Defaults cannot be numeric"
+            correct: false
+          - value: "You cannot combine a requirement and a default"
+            correct: false
+          - value: "The default must come before the placeholder name"
+            correct: false
+        explanation: >-
+          The inline grammar is strictly {name<requirement>?default}. Putting ?1
+          before the <\\d+> requirement is a syntax error / misparse. Requirement and
+          default can absolutely be combined — just in the right order.
+        documentation: "https://symfony.com/doc/current/routing.html#optional-parameters"
+      - id: "ROUT-DEFAULT-06"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/defaults"
+        concepts: ["defaults-array", "nullable", "yaml"]
+        syllabus: "Routing → Default values"
+        question: >-
+          For path /archive/{year<\\d+>}/{month}, which YAML makes month optional and
+          null when absent?
+        answers:
+          - value: "defaults:\\n    month: null"
+            correct: true
+          - value: "requirements:\\n    month: null"
+            correct: false
+          - value: "optional:\\n    - month"
+            correct: false
+          - value: "defaults:\\n    month: ''"
+            correct: false
+        explanation: >-
+          A trailing placeholder becomes optional by having a default; setting it to
+          null in the defaults array is the array-form equivalent of the inline {month?}.
+          '' is an empty string, not null, and there is no `optional` key.
+        documentation: "https://symfony.com/doc/current/routing.html#optional-parameters"
+      - id: "ROUT-DEFAULT-07"
+        type: "code"
+        difficulty: "easy"
+        subchapter: "routing/defaults"
+        concepts: ["url-generation", "non-default-value"]
+        syllabus: "Routing → Default values"
+        question: "For /blog/{page<\\d+>?1}, what does generateUrl('blog_list', ['page' => 3]) produce?"
+        answers:
+          - value: "/blog/3"
+            correct: true
+          - value: "/blog"
+            correct: false
+          - value: "/blog?page=3"
+            correct: false
+          - value: "/blog/1"
+            correct: false
+        explanation: >-
+          The segment is only omitted when the value equals the default (1). Since 3
+          differs, the generator emits the full /blog/3.
+        documentation: "https://symfony.com/doc/current/routing.html#optional-parameters"
 
   - name: "Routing — URL Generation"
     questions:
-      - question: "What is the default reference type of UrlGeneratorInterface::generate() / generateUrl()?"
+      - id: "ROUT-URLGEN-01"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/url-generation"
+        concepts: ["reference-type", "absolute-path", "default"]
+        syllabus: "Routing → Generate URLs"
+        question: "What is the default reference type of UrlGeneratorInterface::generate() / generateUrl()?"
         answers:
           - value: "ABSOLUTE_PATH (a root-relative path like /blog/42)"
             correct: true
@@ -191,7 +521,13 @@ categories:
           By default the generator returns a root-relative path; ABSOLUTE_URL adds
           the scheme and host.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
-      - question: "generateUrl('blog_show', ['id' => 42, 'utm' => 'x']) produces what?"
+      - id: "ROUT-URLGEN-02"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/url-generation"
+        concepts: ["query-string", "extra-parameters"]
+        syllabus: "Routing → Generate URLs"
+        question: "generateUrl('blog_show', ['id' => 42, 'utm' => 'x']) produces what?"
         answers:
           - value: "/blog/42?utm=x"
             correct: true
@@ -205,7 +541,13 @@ categories:
           Parameters that are not route placeholders are appended as query string
           arguments.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
-      - question: "Which type defines the constants ABSOLUTE_URL, ABSOLUTE_PATH, NETWORK_PATH, RELATIVE_PATH?"
+      - id: "ROUT-URLGEN-03"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/url-generation"
+        concepts: ["UrlGeneratorInterface", "reference-type-constants"]
+        syllabus: "Routing → Generate URLs"
+        question: "Which type defines the constants ABSOLUTE_URL, ABSOLUTE_PATH, NETWORK_PATH, RELATIVE_PATH?"
         answers:
           - value: "Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface"
             correct: true
@@ -218,7 +560,13 @@ categories:
         explanation: >-
           The reference-type constants are declared on UrlGeneratorInterface.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
-      - question: "Why might a console command generate URLs like http://localhost/... ?"
+      - id: "ROUT-URLGEN-04"
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "routing/url-generation"
+        concepts: ["request-context", "default-uri", "cli"]
+        syllabus: "Routing → Generate URLs"
+        question: "Why might a console command generate URLs like http://localhost/... ?"
         answers:
           - value: "There is no request context, and framework.router.default_uri is not set"
             correct: true
@@ -232,7 +580,13 @@ categories:
           Outside a web request the generator falls back to the RequestContext
           defaults; configure router.default_uri for correct absolute URLs.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls-in-commands"
-      - question: "Which Twig function outputs an absolute URL?"
+      - id: "ROUT-URLGEN-05"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/url-generation"
+        concepts: ["twig", "url-function", "absolute-url"]
+        syllabus: "Routing → Generate URLs"
+        question: "Which Twig function outputs an absolute URL?"
         answers:
           - value: "url()"
             correct: true
@@ -245,10 +599,103 @@ categories:
         explanation: >-
           url() maps to ABSOLUTE_URL; path() maps to the default ABSOLUTE_PATH.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls-in-templates"
+      - id: "ROUT-URLGEN-06"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/url-generation"
+        concepts: ["network-path", "protocol-relative"]
+        syllabus: "Routing → Generate URLs"
+        question: "What does UrlGeneratorInterface::NETWORK_PATH produce for blog_show id 42?"
+        answers:
+          - value: "//example.com/blog/42 (protocol-relative)"
+            correct: true
+          - value: "https://example.com/blog/42"
+            correct: false
+          - value: "/blog/42"
+            correct: false
+          - value: "../42"
+            correct: false
+        explanation: >-
+          NETWORK_PATH emits a scheme-relative URL beginning with //, letting the
+          browser reuse the current scheme. ABSOLUTE_URL includes the scheme,
+          ABSOLUTE_PATH is root-relative, and RELATIVE_PATH gives something like ../42.
+        documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+      - id: "ROUT-URLGEN-07"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "routing/url-generation"
+        concepts: ["RouteNotFoundException", "InvalidParameterException", "generation-flow"]
+        syllabus: "Routing → Generate URLs"
+        question: "Generating a URL for a route name that does not exist throws which exception?"
+        answers:
+          - value: "RouteNotFoundException"
+            correct: true
+          - value: "ResourceNotFoundException"
+            correct: false
+          - value: "InvalidParameterException"
+            correct: false
+          - value: "MethodNotAllowedException"
+            correct: false
+        explanation: >-
+          generate() first looks up the route by name and throws RouteNotFoundException
+          when it is missing. InvalidParameterException is thrown later, when a passed
+          value fails a requirement. ResourceNotFoundException/MethodNotAllowedException
+          belong to matching, not generation.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Generator/UrlGenerator.php"
+      - id: "ROUT-URLGEN-08"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/url-generation"
+        concepts: ["schemes", "forced-absolute", "reference-type"]
+        syllabus: "Routing → Generate URLs"
+        question: >-
+          A route declares schemes: ['https'], the current context is http, and you
+          call generateUrl() with the default ABSOLUTE_PATH. What is returned?
+        answers:
+          - value: "An absolute https URL — generation is upgraded because a path cannot switch scheme"
+            correct: true
+          - value: "A root-relative path /... as requested"
+            correct: false
+          - value: "An InvalidParameterException"
+            correct: false
+          - value: "An http absolute URL"
+            correct: false
+        explanation: >-
+          When the target route's scheme differs from the context, the generator must
+          emit an absolute URL with the correct (https) scheme, overriding the
+          requested ABSOLUTE_PATH — a path-only URL could not change scheme.
+        documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+      - id: "ROUT-URLGEN-09"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/url-generation"
+        concepts: ["default-uri", "request-context", "workers"]
+        syllabus: "Routing → Generate URLs"
+        question: "What is framework.router.default_uri used for?"
+        answers:
+          - value: "Supplying scheme/host/base-path to the RequestContext when there is no request (CLI, Messenger)"
+            correct: true
+          - value: "Setting the application's homepage route"
+            correct: false
+          - value: "Rewriting all generated paths to that URI"
+            correct: false
+          - value: "Configuring the default HTTP method for routes"
+            correct: false
+        explanation: >-
+          RequestContext is normally populated from the incoming Request. In CLI or a
+          queue worker there is no request, so the generator uses default_uri to build
+          correct absolute URLs instead of http://localhost.
+        documentation: "https://symfony.com/doc/current/routing.html#generating-urls-in-commands"
 
   - name: "Routing — Redirects"
     questions:
-      - question: "A route path is /blog/. A GET request to /blog results in?"
+      - id: "ROUT-REDIR-01"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "routing/redirects"
+        concepts: ["trailing-slash", "301", "RedirectableUrlMatcher"]
+        syllabus: "Routing → Trigger redirects"
+        question: "A route path is /blog/. A GET request to /blog results in?"
         answers:
           - value: "A 301 redirect to /blog/"
             correct: true
@@ -262,7 +709,13 @@ categories:
           RedirectableUrlMatcher issues a 301 to the canonical trailing-slash URL for
           safe (GET/HEAD) methods.
         documentation: "https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes"
-      - question: "A POST to /blog when the route is defined as /blog/ yields?"
+      - id: "ROUT-REDIR-02"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/redirects"
+        concepts: ["trailing-slash", "405", "safe-methods"]
+        syllabus: "Routing → Trigger redirects"
+        question: "A POST to /blog when the route is defined as /blog/ yields?"
         answers:
           - value: "405 Method Not Allowed"
             correct: true
@@ -274,9 +727,15 @@ categories:
             correct: false
         explanation: >-
           Redirecting a POST would alter the method, so the matcher returns 405
-          rather than a trailing-slash redirect.
+          rather than a trailing-slash redirect. The auto-redirect is GET/HEAD only.
         documentation: "https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes"
-      - question: "Which RedirectController action redirects to another route by name?"
+      - id: "ROUT-REDIR-03"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/redirects"
+        concepts: ["RedirectController", "redirectAction"]
+        syllabus: "Routing → Trigger redirects"
+        question: "Which RedirectController action redirects to another route by name?"
         answers:
           - value: "redirectAction (uses a 'route' default)"
             correct: true
@@ -290,7 +749,13 @@ categories:
           redirectAction targets a route name and forwards parameters;
           urlRedirectAction targets a literal path or URL.
         documentation: "https://symfony.com/doc/current/routing.html"
-      - question: "In a RedirectController route config, permanent: true means which status code?"
+      - id: "ROUT-REDIR-04"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/redirects"
+        concepts: ["permanent", "301", "302"]
+        syllabus: "Routing → Trigger redirects"
+        question: "In a RedirectController route config, permanent: true means which status code?"
         answers:
           - value: "301 Moved Permanently"
             correct: true
@@ -303,10 +768,102 @@ categories:
         explanation: >-
           permanent toggles a 301; the default is a 302.
         documentation: "https://symfony.com/doc/current/routing.html"
+      - id: "ROUT-REDIR-05"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/redirects"
+        concepts: ["urlRedirectAction", "path-default", "yaml"]
+        syllabus: "Routing → Trigger redirects"
+        question: >-
+          You want /docs to redirect (302) to the literal path /docs/intro via
+          RedirectController. Which controller + default do you use?
+        answers:
+          - value: "urlRedirectAction with defaults: {path: /docs/intro, permanent: false}"
+            correct: true
+          - value: "redirectAction with defaults: {route: /docs/intro}"
+            correct: false
+          - value: "urlRedirectAction with defaults: {route: /docs/intro}"
+            correct: false
+          - value: "redirectAction with defaults: {path: /docs/intro}"
+            correct: false
+        explanation: >-
+          urlRedirectAction targets a literal path/URL via the `path` default;
+          redirectAction targets a route name via the `route` default. Mixing the
+          action with the wrong default key does not work.
+        documentation: "https://symfony.com/doc/current/routing.html"
+      - id: "ROUT-REDIR-06"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "routing/redirects"
+        concepts: ["redirectToRoute", "status-code", "controller-redirect"]
+        syllabus: "Routing → Trigger redirects"
+        question: "What status code does $this->redirectToRoute('blog_show', ['id' => $id]) return by default?"
+        answers:
+          - value: "302 Found"
+            correct: true
+          - value: "301 Moved Permanently"
+            correct: false
+          - value: "307 Temporary Redirect"
+            correct: false
+          - value: "303 See Other"
+            correct: false
+        explanation: >-
+          redirectToRoute() builds a RedirectResponse with a 302 by default; pass a
+          third status argument (e.g. 301) to change it. Use controller-level
+          redirects when the target depends on logic/data.
+        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+      - id: "ROUT-REDIR-07"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/redirects"
+        concepts: ["RedirectController", "RedirectResponse", "matcher-vs-controller"]
+        syllabus: "Routing → Trigger redirects"
+        question: "For a RedirectController route, where is the 30x response actually produced?"
+        answers:
+          - value: "In the controller — it returns a RedirectResponse like any normal action"
+            correct: true
+          - value: "In the matcher, which emits the redirect before any controller runs"
+            correct: false
+          - value: "In RouterListener during kernel.request"
+            correct: false
+          - value: "In the HttpKernel before routing"
+            correct: false
+        explanation: >-
+          A redirect route is an ordinary route whose _controller is RedirectController;
+          the kernel runs it and it returns a RedirectResponse. The matcher only
+          produces redirects itself in the special trailing-slash / scheme cases.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php"
+      - id: "ROUT-REDIR-08"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/redirects"
+        concepts: ["301-caching", "302", "temporary-redirect"]
+        syllabus: "Routing → Trigger redirects"
+        question: "Why is permanent: true (301) a poor choice for a temporary or A/B redirect?"
+        answers:
+          - value: "Browsers cache 301s aggressively, so you cannot easily change the target later"
+            correct: true
+          - value: "301 is not a valid redirect status"
+            correct: false
+          - value: "301 strips query parameters automatically"
+            correct: false
+          - value: "301 requires HTTPS"
+            correct: false
+        explanation: >-
+          A 301 tells clients the move is permanent, so browsers cache it hard and
+          may not re-request the old URL. Use 302 (the default) while a target is
+          still in flux.
+        documentation: "https://symfony.com/doc/current/routing.html"
 
   - name: "Routing — Special Attributes"
     questions:
-      - question: "Which request attribute holds the name of the matched route?"
+      - id: "ROUT-SPECIAL-01"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/special-attributes"
+        concepts: ["special-parameters", "_route", "request-attributes"]
+        syllabus: "Routing → Special internal attributes"
+        question: "Which request attribute holds the name of the matched route?"
         answers:
           - value: "_route"
             correct: true
@@ -320,7 +877,13 @@ categories:
           The matcher injects _route (the matched name) and _route_params (the
           placeholder values) into the request attributes.
         documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
-      - question: "What does the special _format parameter do when matched?"
+      - id: "ROUT-SPECIAL-02"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/special-attributes"
+        concepts: ["_format", "content-negotiation", "request-format"]
+        syllabus: "Routing → Special internal attributes"
+        question: "What does the special _format parameter do when matched?"
         answers:
           - value: "Sets the request format, influencing the response Content-Type"
             correct: true
@@ -334,7 +897,13 @@ categories:
           RouterListener applies _format via Request::setRequestFormat(), driving
           content negotiation.
         documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
-      - question: "What does #[Route(stateless: true)] primarily do?"
+      - id: "ROUT-SPECIAL-03"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "routing/special-attributes"
+        concepts: ["stateless", "session", "UnexpectedSessionUsageException"]
+        syllabus: "Routing → Special internal attributes"
+        question: "What does #[Route(stateless: true)] primarily do?"
         answers:
           - value: "Asserts the route must not use the session (warns in debug if it does)"
             correct: true
@@ -345,10 +914,17 @@ categories:
           - value: "Makes the route match any HTTP method"
             correct: false
         explanation: >-
-          It flags accidental session usage during development; important for
-          cacheable and API endpoints.
+          It flags accidental session usage during development, raising
+          UnexpectedSessionUsageException in debug; important for cacheable and API
+          endpoints. It is an assertion, not a hard prod block.
         documentation: "https://symfony.com/doc/current/routing.html#stateless-routes"
-      - question: "Where does the special _fragment parameter take effect?"
+      - id: "ROUT-SPECIAL-04"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/special-attributes"
+        concepts: ["_fragment", "generation", "matching"]
+        syllabus: "Routing → Special internal attributes"
+        question: "Where does the special _fragment parameter take effect?"
         answers:
           - value: "During URL generation, appended as #fragment"
             correct: true
@@ -359,12 +935,106 @@ categories:
           - value: "In the session"
             correct: false
         explanation: >-
-          _fragment is honoured by the generator and ignored by the matcher.
+          _fragment is honoured by the generator and ignored by the matcher (a URL
+          fragment is never sent to the server).
+        documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
+      - id: "ROUT-SPECIAL-05"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/special-attributes"
+        concepts: ["RouterListener", "kernel.request", "request-attributes"]
+        syllabus: "Routing → Special internal attributes"
+        question: "Which component copies the matcher's output parameters into $request->attributes?"
+        answers:
+          - value: "RouterListener, on the kernel.request event"
+            correct: true
+          - value: "ControllerResolver, when resolving _controller"
+            correct: false
+          - value: "The UrlMatcher itself writes directly to the Request"
+            correct: false
+          - value: "ArgumentResolver, on kernel.controller"
+            correct: false
+        explanation: >-
+          UrlMatcher::match() returns an array (route defaults + captured placeholders
+          + _route/_route_params); RouterListener, a kernel.request subscriber, copies
+          each entry into the request attribute bag. ControllerResolver and
+          ArgumentResolver then consume _controller and the args later.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php"
+      - id: "ROUT-SPECIAL-06"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "routing/special-attributes"
+        concepts: ["_route", "request-attributes", "reading-outputs"]
+        syllabus: "Routing → Special internal attributes"
+        question: "How do you read the matched route name inside a controller or listener?"
+        answers:
+          - value: "$request->attributes->get('_route')"
+            correct: true
+          - value: "$request->query->get('_route')"
+            correct: false
+          - value: "$request->getRoute()"
+            correct: false
+          - value: "$router->getMatchedRoute()"
+            correct: false
+        explanation: >-
+          _route (and _route_params) are read-only outputs stored in the request
+          attribute bag by RouterListener. There is no Request::getRoute() helper, and
+          it is not a query parameter.
+        documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
+      - id: "ROUT-SPECIAL-07"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/special-attributes"
+        concepts: ["_format", "requirement", "default"]
+        syllabus: "Routing → Special internal attributes"
+        question: >-
+          For path /api/items.{_format} serving only JSON or XML defaulting to JSON,
+          which config is correct?
+        answers:
+          - value: "defaults: {_format: json} + requirements: {_format: 'json|xml'}"
+            correct: true
+          - value: "defaults: {_format: 'json|xml'}"
+            correct: false
+          - value: "requirements: {_format: json}"
+            correct: false
+          - value: "methods: [json, xml]"
+            correct: false
+        explanation: >-
+          _format is a normal special parameter: a default gives it a value when the
+          extension is absent, and a requirement whitelists the allowed formats.
+          Without the requirement, items.exe would match. Formats are never HTTP methods.
+        documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
+      - id: "ROUT-SPECIAL-08"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/special-attributes"
+        concepts: ["_route_params", "read-only", "outputs"]
+        syllabus: "Routing → Special internal attributes"
+        question: "Should you set _route or _route_params yourself in a route's defaults?"
+        answers:
+          - value: "No — they are read-only outputs injected by the matcher; you only read them"
+            correct: true
+          - value: "Yes — _route sets the route name used for generation"
+            correct: false
+          - value: "Yes — _route_params overrides captured placeholders"
+            correct: false
+          - value: "Only _route_params may be set; _route is reserved"
+            correct: false
+        explanation: >-
+          _route and _route_params are outputs the matcher writes; setting them in
+          defaults is meaningless and would be overwritten. They exist for logging,
+          subscribers and debugging.
         documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
 
   - name: "Routing — Host Matching"
     questions:
-      - question: "What is the default regex applied to a host placeholder like {sub}?"
+      - id: "ROUT-HOST-01"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/host-matching"
+        concepts: ["host-regex", "default-pattern"]
+        syllabus: "Routing → Domain name matching"
+        question: "What is the default regex applied to a host placeholder like {sub}?"
         answers:
           - value: "[^.]+"
             correct: true
@@ -376,9 +1046,15 @@ categories:
             correct: false
         explanation: >-
           Host labels are separated by dots, so a host token matches any non-dot
-          characters by default.
+          characters by default (contrast with the path default [^/]+).
         documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"
-      - question: "During matching, when is the host constraint checked?"
+      - id: "ROUT-HOST-02"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/host-matching"
+        concepts: ["matchCollection", "host-first", "order-of-checks"]
+        syllabus: "Routing → Domain name matching"
+        question: "During matching, when is the host constraint checked?"
         answers:
           - value: "Before the path regex"
             correct: true
@@ -389,10 +1065,17 @@ categories:
           - value: "Never; host is informational"
             correct: false
         explanation: >-
-          matchCollection() tests the compiled host regex first, then the path
+          matchCollection() tests the compiled host regex against
+          RequestContext::getHost() first; only if it matches does it test the path
           regex.
         documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"
-      - question: "Generating a URL for a route bound to a different host produces?"
+      - id: "ROUT-HOST-03"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "routing/host-matching"
+        concepts: ["generation", "absolute-url", "cross-host"]
+        syllabus: "Routing → Domain name matching"
+        question: "Generating a URL for a route bound to a different host produces?"
         answers:
           - value: "An absolute (or network) URL"
             correct: true
@@ -406,10 +1089,125 @@ categories:
           A path-only URL cannot switch host, so the generator upgrades the
           reference type automatically.
         documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+      - id: "ROUT-HOST-04"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/host-matching"
+        concepts: ["host-placeholder", "requirements", "defaults"]
+        syllabus: "Routing → Domain name matching"
+        question: >-
+          Which config captures a subdomain {tenant} (lowercase alphanumerics/hyphen)
+          on example.com, defaulting to www?
+        answers:
+          - value: "host: '{tenant}.example.com' + requirements: {tenant: '[a-z0-9\\-]+'} + defaults: {tenant: www}"
+            correct: true
+          - value: "path: '{tenant}.example.com'"
+            correct: false
+          - value: "host: '{tenant}.example.com' with no requirement needed"
+            correct: false
+          - value: "subdomain: '{tenant}' + domain: example.com"
+            correct: false
+        explanation: >-
+          Host placeholders obey the same requirements/defaults rules as path ones;
+          you set the constraint and a base default on the route's `host`. There is no
+          `subdomain`/`domain` key, and the host belongs in `host`, not `path`.
+        documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"
+      - id: "ROUT-HOST-05"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/host-matching"
+        concepts: ["CompiledRoute", "getHostRegex", "separate-regex"]
+        syllabus: "Routing → Domain name matching"
+        question: "How is the host constraint stored on a CompiledRoute?"
+        answers:
+          - value: "As a second, separate regex (getHostRegex) and its own token list"
+            correct: true
+          - value: "Merged into the single path regex"
+            correct: false
+          - value: "As a plain string compared with ==="
+            correct: false
+          - value: "It is not compiled; the host is checked at runtime by DNS"
+            correct: false
+        explanation: >-
+          RouteCompiler compiles `host` into its own regex and token list on the
+          CompiledRoute, kept separate from the path regex, so matchCollection() can
+          test host and path independently at negligible cost.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php"
+      - id: "ROUT-HOST-06"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/host-matching"
+        concepts: ["host-normalization", "lowercase", "case-sensitivity"]
+        syllabus: "Routing → Domain name matching"
+        question: "Why should host constraints be written in lowercase?"
+        answers:
+          - value: "The context host is normalized to lowercase, so an uppercase regex will not match"
+            correct: true
+          - value: "YAML requires lowercase host values"
+            correct: false
+          - value: "Uppercase hosts are rejected with a 400"
+            correct: false
+          - value: "Host matching is always case-insensitive, so it does not matter"
+            correct: false
+        explanation: >-
+          RequestContext lowercases the incoming host. A case-sensitive constraint
+          like Admin.Example.com would then fail against admin.example.com. Write host
+          patterns in lowercase.
+        documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"
+      - id: "ROUT-HOST-07"
+        type: "code"
+        difficulty: "medium"
+        subchapter: "routing/host-matching"
+        concepts: ["generation", "host-placeholder", "absolute-url"]
+        syllabus: "Routing → Domain name matching"
+        question: >-
+          For host '{tenant}.example.com', what does
+          generateUrl('tenant_home', ['tenant' => 'acme'], UrlGeneratorInterface::ABSOLUTE_URL)
+          produce (current host example.com)?
+        answers:
+          - value: "https://acme.example.com/"
+            correct: true
+          - value: "/"
+            correct: false
+          - value: "https://example.com/?tenant=acme"
+            correct: false
+          - value: "https://www.example.com/"
+            correct: false
+        explanation: >-
+          The tenant placeholder fills the host label, and because the requested host
+          differs from the current one an absolute URL on acme.example.com is
+          produced. tenant is a host placeholder, so it is not appended as a query arg.
+        documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"
+      - id: "ROUT-HOST-08"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/host-matching"
+        concepts: ["import-options", "host", "grouping"]
+        syllabus: "Routing → Domain name matching"
+        question: "How do you apply one host to a whole imported controller directory?"
+        answers:
+          - value: "Set host: on the YAML resource import (alongside prefix/name_prefix)"
+            correct: true
+          - value: "Set host: in services.yaml"
+            correct: false
+          - value: "Use _host in each route's defaults"
+            correct: false
+          - value: "It is not possible; host must be per-route"
+            correct: false
+        explanation: >-
+          Import-level options — host, prefix, name_prefix — cascade to every route in
+          the imported resource, so you avoid repeating host: on each action.
+        documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"
 
   - name: "Routing — Conditions"
     questions:
-      - question: "A route's condition expression evaluates to false. What is the result?"
+      - id: "ROUT-COND-01"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/conditions"
+        concepts: ["condition", "404", "not-authorization"]
+        syllabus: "Routing → Conditional matching"
+        question: "A route's condition expression evaluates to false. What is the result?"
         answers:
           - value: "404 — the route is simply not matched"
             correct: true
@@ -421,9 +1219,15 @@ categories:
             correct: false
         explanation: >-
           A false condition means the route does not match; matching continues and
-          may end in a 404. It is not authorization.
+          may end in a 404. It is not authorization, so it never produces a 403.
         documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
-      - question: "Which variables/functions are available inside a routing condition expression?"
+      - id: "ROUT-COND-02"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/conditions"
+        concepts: ["expression-language", "context", "request", "env", "service"]
+        syllabus: "Routing → Conditional matching"
+        question: "Which variables/functions are available inside a routing condition expression?"
         answers:
           - value: "context, request, env(), service()"
             correct: true
@@ -437,7 +1241,13 @@ categories:
           The routing expression provider exposes the RequestContext (context), the
           Request (request), and the env()/service() functions.
         documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
-      - question: "Do conditions affect URL generation with generateUrl()?"
+      - id: "ROUT-COND-03"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/conditions"
+        concepts: ["generation", "matching-only"]
+        syllabus: "Routing → Conditional matching"
+        question: "Do conditions affect URL generation with generateUrl()?"
         answers:
           - value: "No — conditions are matching-only"
             correct: true
@@ -451,7 +1261,13 @@ categories:
           There is no request to evaluate during generation, so conditions never
           influence generated URLs.
         documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
-      - question: "To reference service('x') in a routing condition, service x must…"
+      - id: "ROUT-COND-04"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/conditions"
+        concepts: ["routing.condition_service", "AsRoutingConditionService", "tag"]
+        syllabus: "Routing → Conditional matching"
+        question: "To reference service('x') in a routing condition, service x must…"
         answers:
           - value: "Be tagged routing.condition_service (e.g. via #[AsRoutingConditionService])"
             correct: true
@@ -463,12 +1279,108 @@ categories:
             correct: false
         explanation: >-
           Only services tagged routing.condition_service are exposed to the routing
-          expression language.
+          expression language. Visibility/base class are irrelevant.
+        documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
+      - id: "ROUT-COND-05"
+        type: "code"
+        difficulty: "hard"
+        subchapter: "routing/conditions"
+        concepts: ["condition", "request", "expression"]
+        syllabus: "Routing → Conditional matching"
+        question: >-
+          Which condition matches only when the request query string contains a
+          'preview' key?
+        answers:
+          - value: "condition: \"request.query.has('preview')\""
+            correct: true
+          - value: "condition: \"request.get('preview') == true\""
+            correct: false
+          - value: "condition: \"query.preview is defined\""
+            correct: false
+          - value: "condition: \"has('preview')\""
+            correct: false
+        explanation: >-
+          Inside a condition, `request` is the HttpFoundation Request, so
+          request.query.has('preview') is the idiomatic check. `query` alone is not a
+          variable, and there is no bare has() function.
+        documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
+      - id: "ROUT-COND-06"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/conditions"
+        concepts: ["ExpressionLanguage", "compiled-closures", "no-eval"]
+        syllabus: "Routing → Conditional matching"
+        question: "How are route conditions executed at request time?"
+        answers:
+          - value: "As pre-compiled PHP closures baked into the dumped matcher (not runtime eval)"
+            correct: true
+          - value: "Via eval() of the expression string on each request"
+            correct: false
+          - value: "By calling a Twig template"
+            correct: false
+          - value: "They are evaluated once at boot and cached as booleans"
+            correct: false
+        explanation: >-
+          The framework compiles all conditions ahead of time through
+          ExpressionLanguage and the routing ExpressionLanguageProvider, so the dumped
+          matcher contains compiled closures. UrlMatcher::handleRouteRequirements()
+          runs them after host/path match — no per-request eval, and they cannot be
+          reduced to a constant because they depend on the live request.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php"
+      - id: "ROUT-COND-07"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/conditions"
+        concepts: ["authorization", "404-vs-403", "security"]
+        syllabus: "Routing → Conditional matching"
+        question: "Why is a routing condition a poor substitute for a security voter/authorization check?"
+        answers:
+          - value: "A failed condition is a 404 (route not matched), not a 403, and cannot show a login page"
+            correct: true
+          - value: "Conditions cannot read the request at all"
+            correct: false
+          - value: "Conditions run after the controller, too late to deny access"
+            correct: false
+          - value: "Conditions always return 403 on failure"
+            correct: false
+        explanation: >-
+          Conditions are a matching filter: failing one just hides the route (404), so
+          there is no 403 and no way to trigger authentication. Use Security voters for
+          authorization.
+        documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
+      - id: "ROUT-COND-08"
+        type: "config"
+        difficulty: "hard"
+        subchapter: "routing/conditions"
+        concepts: ["AsRoutingConditionService", "alias", "service"]
+        syllabus: "Routing → Conditional matching"
+        question: >-
+          You tag a service #[AsRoutingConditionService(alias: 'feature_checker')].
+          How do you call its isEnabled() method in a condition?
+        answers:
+          - value: "condition: \"service('feature_checker').isEnabled(request)\""
+            correct: true
+          - value: "condition: \"feature_checker.isEnabled(request)\""
+            correct: false
+          - value: "condition: \"@feature_checker.isEnabled(request)\""
+            correct: false
+          - value: "condition: \"container.get('feature_checker').isEnabled(request)\""
+            correct: false
+        explanation: >-
+          The alias becomes the argument to the service() function; you then call
+          methods on the returned object and can pass request. There is no bare
+          identifier, @ syntax or container variable in routing expressions.
         documentation: "https://symfony.com/doc/current/routing.html#matching-expressions"
 
   - name: "Routing — HTTP Methods"
     questions:
-      - question: "A route allows only GET. A POST to that same path returns?"
+      - id: "ROUT-METHOD-01"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/methods"
+        concepts: ["405", "method-matching", "allow-header"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "A route allows only GET. A POST to that same path returns?"
         answers:
           - value: "405 Method Not Allowed (with an Allow header)"
             correct: true
@@ -480,9 +1392,16 @@ categories:
             correct: false
         explanation: >-
           When the path matches but the method is not allowed, the matcher throws
-          MethodNotAllowedException, producing a 405 with an Allow header.
+          MethodNotAllowedException, producing a 405 with an Allow header. It is not a
+          404 — the path did match.
         documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
-      - question: "A route declared with methods: ['GET'] also matches which verb automatically?"
+      - id: "ROUT-METHOD-02"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/methods"
+        concepts: ["head", "get", "implicit-method"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "A route declared with methods: ['GET'] also matches which verb automatically?"
         answers:
           - value: "HEAD"
             correct: true
@@ -494,8 +1413,15 @@ categories:
             correct: false
         explanation: >-
           HttpKernel handles HEAD as a bodyless GET, so GET routes also match HEAD.
+          Declaring HEAD explicitly is redundant.
         documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
-      - question: "An http request hits a route restricted with schemes: ['https']. What happens?"
+      - id: "ROUT-METHOD-03"
+        type: "single"
+        difficulty: "hard"
+        subchapter: "routing/methods"
+        concepts: ["schemes", "redirect", "https"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "An http request hits a route restricted with schemes: ['https']. What happens?"
         answers:
           - value: "It is redirected to the https URL"
             correct: true
@@ -506,10 +1432,16 @@ categories:
           - value: "404 Not Found"
             correct: false
         explanation: >-
-          The redirectable matcher redirects a scheme mismatch to the correct scheme
-          rather than rejecting it.
+          The RedirectableUrlMatcher redirects a scheme mismatch to the correct scheme
+          rather than rejecting it — contrast with a wrong method, which is a 405.
         documentation: "https://symfony.com/doc/current/routing.html#matching-the-http-scheme"
-      - question: "For a form's _method field to influence which route matches, you must…"
+      - id: "ROUT-METHOD-04"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/methods"
+        concepts: ["method-override", "_method", "enableHttpMethodParameterOverride"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "For a form's _method field to influence which route matches, you must…"
         answers:
           - value: "Call Request::enableHttpMethodParameterOverride()"
             correct: true
@@ -521,12 +1453,81 @@ categories:
             correct: false
         explanation: >-
           Method override is opt-in; once enabled, getMethod() returns the overridden
-          verb that the matcher uses.
+          verb that the matcher uses. It is not on by default.
         documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+      - id: "ROUT-METHOD-05"
+        type: "debug"
+        difficulty: "medium"
+        subchapter: "routing/methods"
+        concepts: ["405", "allow-header", "diagnostics"]
+        syllabus: "Routing → HTTP methods matching"
+        question: >-
+          A DELETE-only route /tags/{id} gets a GET. What does the 405 response's
+          Allow header contain?
+        answers:
+          - value: "DELETE — the verbs permitted by the matched path"
+            correct: true
+          - value: "GET — the verb that was requested"
+            correct: false
+          - value: "It has no Allow header"
+            correct: false
+          - value: "*/* — all methods"
+            correct: false
+        explanation: >-
+          On a 405 the matcher collects the allowed methods of the matching path and
+          returns them in the Allow header (DELETE here), telling the client which
+          verbs are valid.
+        documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
+      - id: "ROUT-METHOD-06"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/methods"
+        concepts: ["methods-list", "multiple-verbs"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "How do you make one route accept both PUT and PATCH?"
+        answers:
+          - value: "methods: ['PUT', 'PATCH']"
+            correct: true
+          - value: "methods: 'PUT|PATCH'"
+            correct: false
+          - value: "Two separate routes are required"
+            correct: false
+          - value: "methods: ['PUT'] with allowPatch: true"
+            correct: false
+        explanation: >-
+          methods accepts a list of verbs; any listed verb matches. A single route can
+          serve several verbs — no pipe syntax or extra flags needed.
+        documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
+      - id: "ROUT-METHOD-07"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/methods"
+        concepts: ["case-insensitive", "verb-casing"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "Are HTTP method names in the methods option case-sensitive?"
+        answers:
+          - value: "No — matching is case-insensitive, though uppercase is conventional"
+            correct: true
+          - value: "Yes — only uppercase verbs match"
+            correct: false
+          - value: "Yes — only lowercase verbs match"
+            correct: false
+          - value: "Only GET is case-insensitive"
+            correct: false
+        explanation: >-
+          Method matching is case-insensitive, but you should write verbs in uppercase
+          by convention for readability and debug:router clarity.
+        documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
 
   - name: "Routing — Locale"
     questions:
-      - question: "Does Symfony guess the user's locale from the Accept-Language header by default?"
+      - id: "ROUT-LOCALE-01"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "routing/locale"
+        concepts: ["locale-guessing", "accept-language", "opt-in"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "Does Symfony guess the user's locale from the Accept-Language header by default?"
         answers:
           - value: "No — you must enable set_locale_from_accept_language or do it manually"
             correct: true
@@ -537,10 +1538,17 @@ categories:
           - value: "Only in the dev environment"
             correct: false
         explanation: >-
-          Locale guessing precedence is matched _locale, then the sticky session
-          locale, then default_locale; Accept-Language is opt-in.
+          Locale precedence is a matched _locale, then the sticky session locale, then
+          default_locale; Accept-Language is opt-in. To honour it, read
+          Request::getPreferredLanguage($available) or enable the option.
         documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
-      - question: "A #[Route(path: ['en' => '/about', 'fr' => '/a-propos'])] produces what?"
+      - id: "ROUT-LOCALE-02"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/locale"
+        concepts: ["localized-routes", "path-array", "expansion"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "A #[Route(path: ['en' => '/about', 'fr' => '/a-propos'])] produces what?"
         answers:
           - value: "One route per locale, each carrying its _locale default"
             correct: true
@@ -551,9 +1559,16 @@ categories:
           - value: "An error — arrays are not allowed"
             correct: false
         explanation: >-
-          A localized path array expands at load time into one Route per locale.
+          A localized path array expands at load time into one Route per locale, each
+          with defaults['_locale'] set and a _locale requirement.
         documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
-      - question: "Matching a route that sets the _locale parameter causes what?"
+      - id: "ROUT-LOCALE-03"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "routing/locale"
+        concepts: ["_locale", "LocaleListener", "setLocale"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "Matching a route that sets the _locale parameter causes what?"
         answers:
           - value: "Request::setLocale() is called via the LocaleListener"
             correct: true
@@ -565,9 +1580,15 @@ categories:
             correct: false
         explanation: >-
           _locale is a special parameter applied by the LocaleListener on
-          kernel.request.
+          kernel.request, which calls Request::setLocale().
         documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
-      - question: "How do you generate the French variant of a localized route named app_about?"
+      - id: "ROUT-LOCALE-04"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/locale"
+        concepts: ["generation", "_locale", "localized-variant"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "How do you generate the French variant of a localized route named app_about?"
         answers:
           - value: "generateUrl('app_about', ['_locale' => 'fr'])"
             correct: true
@@ -581,10 +1602,104 @@ categories:
           Pass the _locale special parameter to select a localized variant; omit it
           to reuse the current request locale.
         documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
+      - id: "ROUT-LOCALE-05"
+        type: "config"
+        difficulty: "medium"
+        subchapter: "routing/locale"
+        concepts: ["_locale-prefix", "requirements", "default"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: >-
+          Which config exposes /{_locale}/blog restricted to en, fr or de and
+          defaulting to en?
+        answers:
+          - value: "path '/{_locale}/blog' + requirements: {_locale: 'en|fr|de'} + defaults: {_locale: 'en'}"
+            correct: true
+          - value: "path '/{_locale}/blog' with no requirement"
+            correct: false
+          - value: "path '/blog' + locale: [en, fr, de]"
+            correct: false
+          - value: "path '/{_locale<en|fr|de>}/blog' + defaults omitted"
+            correct: false
+        explanation: >-
+          The _locale placeholder is constrained by a requirement whitelist and given
+          a default. Omitting the requirement lets any /xx/blog match; there is no
+          top-level locale: list on a route. (Inline requirement is valid too, but a
+          default is still needed for it to be optional at the root.)
+        documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
+      - id: "ROUT-LOCALE-06"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/locale"
+        concepts: ["_locale-requirement", "over-matching"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "What goes wrong if /{_locale}/blog has no _locale requirement?"
+        answers:
+          - value: "Any segment matches _locale, so /xx/blog or /foo/blog wrongly match"
+            correct: true
+          - value: "The route fails to compile"
+            correct: false
+          - value: "The default locale is ignored"
+            correct: false
+          - value: "Symfony injects a default en|fr requirement automatically"
+            correct: false
+        explanation: >-
+          Without a requirement, _locale keeps the default [^/]+ and matches any label,
+          so invalid locales like /xx/blog match. Always whitelist _locale with a
+          requirement.
+        documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
+      - id: "ROUT-LOCALE-07"
+        type: "internals"
+        difficulty: "hard"
+        subchapter: "routing/locale"
+        concepts: ["LocaleListener", "LocaleAwareListener", "translator"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "Which two listeners cooperate to apply and propagate the request locale?"
+        answers:
+          - value: "LocaleListener (sets Request locale from _locale) and LocaleAwareListener (propagates it to locale-aware services)"
+            correct: true
+          - value: "RouterListener and ControllerListener"
+            correct: false
+          - value: "TranslatorListener and SessionListener"
+            correct: false
+          - value: "FirewallListener and LocaleListener"
+            correct: false
+        explanation: >-
+          LocaleListener reads _locale on kernel.request and calls setLocale();
+          LocaleAwareListener then propagates the locale to locale-aware services such
+          as the translator. RouterListener only copies matcher output into attributes.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php"
+      - id: "ROUT-LOCALE-08"
+        type: "code"
+        difficulty: "easy"
+        subchapter: "routing/locale"
+        concepts: ["generation", "_locale", "prefixed-locale"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: >-
+          For route app_help at /{_locale}/help, what does
+          generateUrl('app_help', ['_locale' => 'es']) produce?
+        answers:
+          - value: "/es/help"
+            correct: true
+          - value: "/help?_locale=es"
+            correct: false
+          - value: "/help/es"
+            correct: false
+          - value: "/en/help"
+            correct: false
+        explanation: >-
+          _locale is a real placeholder in the path, so it fills the {_locale} segment
+          giving /es/help — not a query string, and not the default en.
+        documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
 
   - name: "Routing — Debugging"
     questions:
-      - question: "Which console command simulates matching a specific URL and explains rejections?"
+      - id: "ROUT-DEBUG-01"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/debugging"
+        concepts: ["router-match", "TraceableUrlMatcher", "console"]
+        syllabus: "Routing → Router debugging"
+        question: "Which console command simulates matching a specific URL and explains rejections?"
         answers:
           - value: "router:match"
             correct: true
@@ -598,7 +1713,13 @@ categories:
           router:match runs a TraceableUrlMatcher against the given path and reports
           which routes matched or why they failed.
         documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
-      - question: "After changing route definitions in the prod environment you must…"
+      - id: "ROUT-DEBUG-02"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/debugging"
+        concepts: ["prod-cache", "cache-clear", "warmup"]
+        syllabus: "Routing → Router debugging"
+        question: "After changing route definitions in the prod environment you must…"
         answers:
           - value: "Rebuild the cache (cache:clear / cache:warmup)"
             correct: true
@@ -612,7 +1733,13 @@ categories:
           The compiled router (url_matching_routes.php / url_generating_routes.php) is
           built at cache warmup and is not auto-refreshed in prod.
         documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
-      - question: "Which files hold the compiled router in the cache directory?"
+      - id: "ROUT-DEBUG-03"
+        type: "single"
+        difficulty: "medium"
+        subchapter: "routing/debugging"
+        concepts: ["compiled-router", "dumpers", "cache-files"]
+        syllabus: "Routing → Router debugging"
+        question: "Which files hold the compiled router in the cache directory?"
         answers:
           - value: "url_matching_routes.php and url_generating_routes.php"
             correct: true
@@ -626,3 +1753,110 @@ categories:
           The CompiledUrlMatcherDumper and CompiledUrlGeneratorDumper write these two
           files that the Router loads at runtime.
         documentation: "https://symfony.com/doc/current/routing.html"
+      - id: "ROUT-DEBUG-04"
+        type: "debug"
+        difficulty: "hard"
+        subchapter: "routing/debugging"
+        concepts: ["router-match", "method-option", "405-vs-404"]
+        syllabus: "Routing → Router debugging"
+        question: >-
+          router:match /blog/hello reports no match, but the page works for real GET
+          requests. What is the likely cause?
+        answers:
+          - value: "You omitted --method=GET, so the default context did not reproduce the real request"
+            correct: true
+          - value: "The compiled cache is corrupt"
+            correct: false
+          - value: "router:match cannot test parameterized paths"
+            correct: false
+          - value: "The route is missing from url_generating_routes.php"
+            correct: false
+        explanation: >-
+          router:match builds a RequestContext from the options you pass; without
+          --method/--host/--scheme it may not reproduce the real request and can report
+          a no-match (or a method rejection) that does not happen in production. Pass
+          the exact conditions.
+        documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
+      - id: "ROUT-DEBUG-05"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "routing/debugging"
+        concepts: ["debug-router", "ANY", "compiled-view"]
+        syllabus: "Routing → Router debugging"
+        question: "In debug:router output, a route shows Scheme=ANY and Host=ANY. What does that mean?"
+        answers:
+          - value: "The route has no scheme/host constraint, so it matches any scheme and host"
+            correct: true
+          - value: "The route is disabled"
+            correct: false
+          - value: "The route only matches literally the host 'ANY'"
+            correct: false
+          - value: "The route requires both HTTP and HTTPS simultaneously"
+            correct: false
+        explanation: >-
+          ANY is the compiled view's way of saying no constraint was set for that
+          column; such a route matches regardless of scheme/host. It is not a literal
+          value.
+        documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
+      - id: "ROUT-DEBUG-06"
+        type: "internals"
+        difficulty: "medium"
+        subchapter: "routing/debugging"
+        concepts: ["dev-cache", "resources", "auto-rebuild"]
+        syllabus: "Routing → Router debugging"
+        question: "Why do new routes appear immediately in dev but not in prod?"
+        answers:
+          - value: "In dev the router tracks route files as cache resources and rebuilds when they change; prod does not"
+            correct: true
+          - value: "Dev disables the compiled router entirely"
+            correct: false
+          - value: "Prod reads routes from the database"
+            correct: false
+          - value: "Dev and prod share the same cache, so it is a timing issue"
+            correct: false
+        explanation: >-
+          In dev, route files are registered as cache resources so Symfony detects
+          changes and rebuilds the compiled matcher/generator automatically. In prod
+          the cache is warmed once (cache:clear/warmup) and not auto-refreshed.
+        documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
+      - id: "ROUT-DEBUG-07"
+        type: "config"
+        difficulty: "easy"
+        subchapter: "routing/debugging"
+        concepts: ["cache-clear", "prod", "console"]
+        syllabus: "Routing → Router debugging"
+        question: "Which command rebuilds the compiled router after editing routes in prod?"
+        answers:
+          - value: "php bin/console cache:clear --env=prod"
+            correct: true
+          - value: "php bin/console router:reload --env=prod"
+            correct: false
+          - value: "php bin/console debug:router --refresh"
+            correct: false
+          - value: "php bin/console routes:compile"
+            correct: false
+        explanation: >-
+          cache:clear (or cache:warmup) in the prod env runs the RouterCacheWarmer and
+          regenerates url_matching_routes.php / url_generating_routes.php. The other
+          commands do not exist.
+        documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
+      - id: "ROUT-DEBUG-08"
+        type: "single"
+        difficulty: "easy"
+        subchapter: "routing/debugging"
+        concepts: ["profiler", "routing-panel", "_route"]
+        syllabus: "Routing → Router debugging"
+        question: "Where in the web profiler can you see the matched _route for the current request?"
+        answers:
+          - value: "The Routing panel (linked from the web debug toolbar)"
+            correct: true
+          - value: "The Doctrine panel"
+            correct: false
+          - value: "The Cache panel"
+            correct: false
+          - value: "It is never shown in the profiler"
+            correct: false
+        explanation: >-
+          The profiler's Routing panel shows the matched _route and its parameters for
+          the current request, so you do not need dump() calls to find them.
+        documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"

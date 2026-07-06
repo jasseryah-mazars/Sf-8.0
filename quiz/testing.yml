@@ -46,7 +46,7 @@ categories:
 
       - id: "TEST-UNIT-03"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/unit-tests"
         concepts: ["stub", "mock", "test-double"]
         syllabus: "Automated Tests → Unit Testing"
@@ -110,7 +110,7 @@ categories:
 
       - id: "TEST-UNIT-06"
         type: "code"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/unit-tests"
         concepts: ["TestWith", "data-provider", "parameterised"]
         syllabus: "Automated Tests → Unit Testing"
@@ -232,7 +232,7 @@ categories:
 
       - id: "TEST-FUNC-03"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/functional-tests"
         concepts: ["createClient", "kernel", "one-client"]
         syllabus: "Automated Tests → Functional Testing"
@@ -422,7 +422,7 @@ categories:
 
       - id: "TEST-FWOBJ-04"
         type: "code"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/framework-objects"
         concepts: ["set", "disableReboot", "mocking"]
         syllabus: "Automated Tests → Accessing framework services"
@@ -509,7 +509,7 @@ categories:
 
       - id: "TEST-CLIENT-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/client"
         concepts: ["redirect", "followRedirect", "default-behaviour"]
         syllabus: "Automated Tests → The Client"
@@ -530,7 +530,7 @@ categories:
 
       - id: "TEST-CLIENT-03"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/client"
         concepts: ["disableReboot", "service-replacement", "kernel-reboot"]
         syllabus: "Automated Tests → The Client"
@@ -668,7 +668,7 @@ categories:
 
       - id: "TEST-CRAWLER-03"
         type: "multiple"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/crawler"
         concepts: ["immutability", "filter", "node-set"]
         syllabus: "Automated Tests → The Crawler"
@@ -776,7 +776,7 @@ categories:
 
       - id: "TEST-INTRO-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/introspection"
         concepts: ["assertSelectorTextSame", "assertSelectorTextContains", "exact-match"]
         syllabus: "Automated Tests → Request/response introspection"
@@ -820,7 +820,7 @@ categories:
 
       - id: "TEST-INTRO-04"
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/introspection"
         concepts: ["redirect", "assertSelector", "current-dom"]
         syllabus: "Automated Tests → Request/response introspection"
@@ -903,7 +903,7 @@ categories:
     questions:
       - id: "TEST-PROFILER-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/profiler"
         concepts: ["enableProfiler", "ordering", "profile"]
         syllabus: "Automated Tests → Profiler in tests"
@@ -1031,7 +1031,7 @@ categories:
     questions:
       - id: "TEST-CLICFG-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/client-configuration"
         concepts: ["createClient", "server-parameters", "arguments"]
         syllabus: "Automated Tests → Client configuration"
@@ -1052,7 +1052,7 @@ categories:
 
       - id: "TEST-CLICFG-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/client-configuration"
         concepts: ["server-parameters", "HTTP_-prefix", "headers"]
         syllabus: "Automated Tests → Client configuration"
@@ -1115,7 +1115,7 @@ categories:
 
       - id: "TEST-CLICFG-05"
         type: "multiple"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/client-configuration"
         concepts: ["server-parameters", "unprefixed", "CGI"]
         syllabus: "Automated Tests → Client configuration"
@@ -1201,7 +1201,7 @@ categories:
     questions:
       - id: "TEST-BRIDGE-01"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/phpunit-bridge"
         concepts: ["SymfonyExtension", "phpunit-extension", "registration"]
         syllabus: "Automated Tests → PHPUnit bridge"
@@ -1264,7 +1264,7 @@ categories:
 
       - id: "TEST-BRIDGE-04"
         type: "config"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/phpunit-bridge"
         concepts: ["phpunit.dist.xml", "extensions", "bootstrap"]
         syllabus: "Automated Tests → PHPUnit bridge"
@@ -1304,7 +1304,7 @@ categories:
 
       - id: "TEST-BRIDGE-06"
         type: "scenario"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/phpunit-bridge"
         concepts: ["MockClock", "ClockInterface", "clock-mock"]
         syllabus: "Automated Tests → PHPUnit bridge"
@@ -1365,7 +1365,7 @@ categories:
 
       - id: "TEST-DEPR-02"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "testing/deprecations"
         concepts: ["weak", "reporting", "thresholds"]
         syllabus: "Automated Tests → Handling deprecated code"
@@ -1407,7 +1407,7 @@ categories:
 
       - id: "TEST-DEPR-04"
         type: "multiple"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "testing/deprecations"
         concepts: ["deprecation-buckets", "self", "direct", "indirect"]
         syllabus: "Automated Tests → Handling deprecated code"
