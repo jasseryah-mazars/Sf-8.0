@@ -343,7 +343,7 @@ categories:
       - id: "VAL-CONSTRAINTS-07"
         question: "How do you make GreaterThan compare against another property of the same object (e.g. endDate > startDate)?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/built-in-constraints"
         concepts: ["comparison", "propertyPath", "cross-field"]
         syllabus: "Data Validation → Built-in constraints"
@@ -714,7 +714,7 @@ categories:
       - id: "VAL-GROUPS-03"
         question: "For class App\\Entity\\User with no group sequence, what is the {ClassName} group?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/groups"
         concepts: ["ClassName-group", "short-name", "Default"]
         syllabus: "Data Validation → Validation groups"
@@ -896,7 +896,7 @@ categories:
       - id: "VAL-GROUPSEQ-03"
         question: "What must a class annotated with #[Assert\\GroupSequenceProvider] provide?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/group-sequence"
         concepts: ["GroupSequenceProvider", "interface", "getGroupSequence"]
         syllabus: "Data Validation → Group sequences"
@@ -1211,7 +1211,7 @@ categories:
       - id: "VAL-CUSTOM-01"
         question: "By default, which validator class validates the constraint App\\Validator\\Foo?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/custom-constraints"
         concepts: ["validatedBy", "naming-convention", "ConstraintValidator"]
         syllabus: "Data Validation → Custom constraints"
@@ -1445,7 +1445,7 @@ categories:
       - id: "VAL-VIOLATIONS-02"
         question: "Which method returns the message with its {{ placeholders }} still unresolved?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/violations-builder"
         concepts: ["getMessageTemplate", "getMessage", "interpolation"]
         syllabus: "Data Validation → Violations & the execution context"
@@ -1467,7 +1467,7 @@ categories:
       - id: "VAL-VIOLATIONS-03"
         question: "On the violation builder, which method attaches the error to a different property?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/violations-builder"
         concepts: ["atPath", "property-path", "builder"]
         syllabus: "Data Validation → Violations & the execution context"
@@ -1582,7 +1582,7 @@ categories:
       - id: "VAL-VIOLATIONS-08"
         question: "What is the purpose of the builder's setCode() value?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "validation/violations-builder"
         concepts: ["setCode", "findByCodes", "stable-code"]
         syllabus: "Data Validation → Violations & the execution context"
