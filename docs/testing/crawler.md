@@ -6,6 +6,15 @@
     Exam hook: CSS `filter()` needs the css-selector component, and `text()` throws
     on an empty match unless you pass a default.
 
+!!! example "Real-world analogy"
+    Think of laying a stencil over a printed newspaper page. Each time you filter, you cut a
+    new stencil that exposes only the matching parts — the original page is never altered,
+    and every cut hands you a fresh, narrower stencil (the Crawler is immutable). You can
+    then read off the words showing through, or lift a clipped-out coupon (`->link()`) or a
+    fill-in form (`->form()`) to act on. But if you ask to read the text of a region your
+    stencil didn't expose anything in, there is simply nothing there to read — so it complains
+    unless you told it what blank to say instead.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

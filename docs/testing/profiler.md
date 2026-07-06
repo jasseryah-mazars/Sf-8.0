@@ -6,6 +6,15 @@
     Exam hook: call `enableProfiler()` **before** the request, or `getProfile()`
     returns `false` (not `null`).
 
+!!! example "Real-world analogy"
+    The profiler is a flight data recorder that you have to arm *before* takeoff. During
+    normal test flights the recorder is switched off to save weight and fuel, so nothing is
+    logged. If you flip the switch after landing — or forget it entirely — and then go to
+    read the black box, there is no tape at all: it reads empty (`false`), not merely a blank
+    recording. Arm it first with `enableProfiler()`, fly the request, and afterward you can
+    read each instrument's trace — the timing gauge, the events log, the outgoing-mail
+    manifest — from the recovered box.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

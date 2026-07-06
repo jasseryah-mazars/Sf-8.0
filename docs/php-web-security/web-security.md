@@ -5,6 +5,15 @@
     pairing (XSS→Twig escaping, CSRF→token+SameSite, SQLi→prepared statements).
     Store passwords only with `password_hash()` (bcrypt/argon2id), never plain hashes.
 
+!!! example "Real-world analogy"
+    Securing a web app is like securing a house, where each defence counters one
+    specific intrusion. You never repeat verbatim what a stranger shouts through the
+    mailbox (XSS to Twig escaping), you check the ID of anyone claiming to act on your
+    behalf (CSRF to token plus SameSite), and you fit tamper-proof locks rather than
+    trusting whoever rattles the door (SQL injection to prepared statements). And you
+    store the key not as the raw key itself but as a one-way imprint (`password_hash`),
+    so a burglar who photographs your records still cannot reconstruct it.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -5,6 +5,14 @@
     sight. Remember which release added what — the PHP 8.4 headliners are
     **property hooks** and **asymmetric visibility** (`public private(set)`).
 
+!!! example "Real-world analogy"
+    Learning the PHP API by version is like a mechanic knowing car model years: power
+    windows arrived in one year, lane-assist in another, and an expert dates a part on
+    sight. The certification works the same way — it shows you a feature and expects you
+    to name its "model year" (`match` and attributes in 8.0, enums in 8.1, property
+    hooks in 8.4), just as the mechanic instantly places which generation a component
+    belongs to.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

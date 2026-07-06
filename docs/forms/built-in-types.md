@@ -5,6 +5,15 @@
     repeated, buttons) so you rarely build one from scratch. Highest-yield fact:
     `ChoiceType`'s widget is decided by `expanded` × `multiple` (select / radios / checkboxes).
 
+!!! example "Real-world analogy"
+    The core types are a hardware store's wall of ready-made fasteners — screws,
+    bolts, and washers already sized for the job, so you fit the right one rather than
+    machining your own. And ordering from a menu shows how `ChoiceType` picks its
+    widget: two questions decide the format — may you take more than one dish
+    (`multiple`?), and are all options laid out in the open or hidden behind a "see
+    list" prompt (`expanded`?). Openly listed and pick-many gives you a row of tick
+    boxes; hidden and pick-one gives you a single dropdown.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,15 @@
     REQUIRED=1 / OPTIONAL=2 / IS_ARRAY=4, and options VALUE_NONE=1 / REQUIRED=2 /
     OPTIONAL=4 / IS_ARRAY=8 / NEGATABLE=16.
 
+!!! example "Real-world analogy"
+    Ordering at a coffee counter shows the difference. You state the essentials in a fixed
+    order — "large, latte" — and if you swap them the barista is confused, exactly like
+    positional arguments where sequence matters. The extras, though, are named and can come
+    in any order: "with oat milk", "no sugar", "extra hot" — mirroring named options like
+    `--milk=oat` or the on/off `--sugar` / `--no-sugar` of a negatable flag. Some extras
+    just toggle a state with no value (a flag), while others always need a value, which is
+    precisely what the different option modes encode.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

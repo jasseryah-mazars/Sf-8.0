@@ -5,6 +5,14 @@
     fact: `catch (\Exception)` misses engine faults like `TypeError` — catch
     `\Throwable` to get both, and remember `finally` always runs.
 
+!!! example "Real-world analogy"
+    Picture a building's safety systems. An `Exception` is a fire alarm you pull on
+    purpose for a recoverable situation — evacuate, handle it, carry on — while an
+    `Error` is the structure itself failing, like a load-bearing beam cracking
+    (an engine-level fault). A net that only catches pulled alarms (`catch (\Exception)`)
+    misses the collapsing beam; you need the wider `\Throwable` net to catch both. And
+    `finally` is the security guard who locks up at the end no matter what happened.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

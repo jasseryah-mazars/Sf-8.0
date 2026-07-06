@@ -6,6 +6,14 @@
     them to storage outside the web root. `#[MapUploadedFile]` binds and validates
     an upload straight into a controller argument.
 
+!!! example "Real-world analogy"
+    Handling an upload is like airport customs inspecting a package. The shipping
+    label may claim "books" (the client-sent name and MIME), but the officer trusts
+    the X-ray of the actual contents (`getMimeType()`), not the sticker. Only after
+    it clears inspection is the parcel re-tagged with a fresh reference number and
+    moved into a secured back-room warehouse — never left in the public arrivals hall
+    where anyone could open it (storing outside the web root).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

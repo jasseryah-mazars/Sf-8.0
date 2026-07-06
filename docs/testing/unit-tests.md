@@ -6,6 +6,15 @@
     `TestCase` directly — Symfony ships no unit-test base class. Exam hook: PHPUnit
     11/12 is attribute-only, so it is `#[DataProvider]`, never `@dataProvider`.
 
+!!! example "Real-world analogy"
+    A unit test is like bench-testing a single car part on the workbench with dummy connectors,
+    instead of bolting it into the whole car and driving around. Because everything around the
+    part is faked, if the bench light goes red you know the fault is in *that* part, nothing
+    else. A **stub** is a dummy sensor that just feeds the part a fixed reading so it has
+    something to work with — you never check the sensor itself. A **mock** is a fancier dummy
+    that also keeps a tally of whether and how the part poked it, and raises an alarm at the
+    end if the expected pokes never happened.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

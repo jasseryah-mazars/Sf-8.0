@@ -6,6 +6,15 @@
     copyright/permission notice, and the **"Symfony" name/logo is a separate
     trademark**.
 
+!!! example "Real-world analogy"
+    Think of a recipe printed for free in a community cookbook. Anyone may cook it, tweak
+    it, and even sell the finished dish in their own restaurant behind closed doors — the
+    single rule is to keep the little "recipe by …" credit line attached (the MIT
+    notice). The restaurant's registered *name and logo*, however, are a completely
+    separate matter: you may truthfully say your dish is "made from Grandma's recipe," but
+    you cannot open a restaurant called "Grandma's" or reuse her logo without permission.
+    The recipe's licence and the brand's trademark are two different legal instruments.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

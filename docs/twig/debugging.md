@@ -5,6 +5,15 @@
     toolbar without page markup. Exam hook: dump tooling exists only in debug/dev — a
     stray `dump()` errors in prod.
 
+!!! example "Real-world analogy"
+    `dump()` is the mechanic's diagnostic scanner plugged into a car up on the workshop lift.
+    It shows a rich, expandable readout of any component's state — far more than a bare
+    warning light (`var_dump`). The `{{ dump() }}` function prints that readout on a screen
+    bolted to the dashboard where you're standing, while `{% dump %}` pipes the same data to
+    the workshop's central console without cluttering the dashboard. Crucially, the
+    diagnostic port only exists on shop-floor cars (debug/dev); ship a car to a customer with
+    the scanner still jacked in (prod) and it jams the ignition entirely.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

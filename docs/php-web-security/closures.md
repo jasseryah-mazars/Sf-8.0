@@ -5,6 +5,14 @@
     hook: `use ($x)` captures **by value at definition time** (add `&` for a
     reference), while arrow functions `fn` auto-capture by value only.
 
+!!! example "Real-world analogy"
+    Capturing with `use ($x)` is like snapping a photograph of a value: however the
+    scene changes afterwards, the developed print still shows the moment the shutter
+    clicked — capture *by value at definition time*. Capturing with `use (&$x)` is
+    instead a live video feed that keeps reflecting later changes to the same subject.
+    An arrow function always takes the photo automatically and can never keep the live
+    feed running.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

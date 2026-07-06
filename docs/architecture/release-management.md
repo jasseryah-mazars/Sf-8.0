@@ -5,6 +5,15 @@
     May/November, majors every two years. Highest-yield: minors **never break BC**
     (only majors do, by removing deprecated code), and `8.4` is the 8.x **LTS**.
 
+!!! example "Real-world analogy"
+    Think of a train service running to a fixed, printed timetable. Local trains (minor
+    releases) depart on schedule every May and November, and they never change the
+    platforms that already work — they only add new carriages (features) and post "this
+    door will be removed" notices (deprecations). Only the big timetable overhaul every
+    two years (a major) actually removes those flagged doors. One special long-distance
+    service each cycle (the `X.4` LTS) keeps running for years, serving passengers who
+    cannot afford to re-plan their journey every six months.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

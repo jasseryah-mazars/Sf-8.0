@@ -6,6 +6,16 @@
     `templates/bundles/<BundleName>/`, config via `config/packages/` — and bundle
     inheritance (`getParent()`) is **gone**.
 
+!!! example "Real-world analogy"
+    Overloading is like personalising a furnished rental flat. You never rip out the
+    landlord's fittings (that's editing `vendor/`); instead you slip a cover over their
+    sofa to change its behaviour (decoration), hang your own curtains on the rail the
+    lease designates for them (`templates/bundles/<Name>/`), and adjust the heating from
+    its proper wall panel (`config/packages/`). Each change has one sanctioned spot — put
+    the curtains on the wrong rail and nothing happens. And the old option of knocking
+    through into the neighbouring flat (`getParent()` bundle inheritance) has been
+    permanently bricked up.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

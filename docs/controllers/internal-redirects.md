@@ -6,6 +6,15 @@
     as `SUB_REQUEST`, so `isMainRequest()` is false; a shared service is usually
     cleaner than forwarding.
 
+!!! example "Real-world analogy"
+    Picture a bank clerk at the counter. A redirect is telling you "that's not my
+    desk — walk over to counter 4," so you physically move and everyone sees you
+    queue somewhere new (a new URL, a 3xx round-trip). A forward is the clerk quietly
+    stepping into the back office to have a colleague prepare the paperwork, then
+    handing it back to you at the very same window: you never moved and the sign above
+    the counter never changed. It's more work behind the scenes, though — often it
+    would be simpler to keep a shared reference binder at the desk (a service).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

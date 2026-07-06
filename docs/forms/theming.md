@@ -5,6 +5,15 @@
     apply one per template or globally. Exam hook: block lookup runs **most
     specific → least specific**, and built-in Bootstrap/Foundation themes ship **markup only**, not CSS.
 
+!!! example "Real-world analogy"
+    Resolving a form block is like a receptionist looking someone up: she tries the
+    full unique name first ("Jane Doe in Accounting on the 3rd floor"), then the last
+    name, then just the department, and finally "any employee" — the first entry that
+    exists wins. That is why an override for one specific field beats an override for
+    a whole field type, which beats the catch-all. And a built-in Bootstrap theme is
+    like a tailor's cutting pattern: it shapes the garment's seams (the markup) but
+    supplies none of the cloth — you still bring the fabric (the CSS) yourself.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

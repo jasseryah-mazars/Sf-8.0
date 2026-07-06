@@ -6,6 +6,15 @@
     and `Trait` **suffixes**, `Abstract` **prefix**, service id = **FQCN**, routes
     **snake_case**, env vars **UPPER_SNAKE** (`APP_`-prefixed).
 
+!!! example "Real-world analogy"
+    Picture a hospital where every staff member wears a role-coded uniform and badge. A
+    green scrub reading "Surgeon" (the `Interface` suffix, the FQCN badge) lets the triage
+    system route a case to the right person automatically, with nobody stopping to ask
+    who does what. A nurse in a plain, unlabelled shirt (a random dotted service id) can
+    still work, but the automated dispatcher can no longer match them to the task by
+    type. The dress code isn't cosmetic — it is exactly what makes the automatic routing
+    and wiring function.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

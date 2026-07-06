@@ -5,6 +5,14 @@
     they are **not types**, so you cannot type-hint against one. Precedence to
     memorise: class > trait > inherited parent.
 
+!!! example "Real-world analogy"
+    A trait is like a rubber stamp of ready-made methods pressed onto each class: the
+    ink is physically copied onto the page at compile time, exactly as if you had
+    written it there by hand — which is why a stamp is not a "thing" you can point to
+    as a type. If the page already carries the class's own handwriting for a method,
+    that handwriting wins over the stamp, and the stamp in turn wins over anything
+    inherited from a parent template.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

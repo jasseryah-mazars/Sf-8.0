@@ -5,6 +5,15 @@
     `mapped => false`, so you fetch and move the file yourself. Never trust the
     client-sent name or MIME type — rename the file and validate with the `File`/`Image` constraint.
 
+!!! example "Real-world analogy"
+    Think of a job application with a CV clipped to it. The form still checks the
+    attachment — it must be a PDF under the size limit (the field is unmapped but
+    still validated) — yet the paper form itself never files your CV into your
+    permanent employee record. A clerk unclips it (`->getData()`), gives it a fresh
+    reference name, and files it in a separate secure cabinet. That is `mapped =>
+    false`: the attachment travels with the form and gets inspected, but it is not
+    written onto the record card the form otherwise fills in.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

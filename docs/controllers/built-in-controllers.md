@@ -5,6 +5,15 @@
     redirect with **no PHP class** — pure route config. `permanent: true` makes a
     redirect 301/308; an empty target returns 410 Gone.
 
+!!! example "Real-world analogy"
+    Think of a receptionist handling the two most trivial requests without ever
+    phoning a manager. For "show me the terms," she hands over a pre-printed brochure
+    (`TemplateController`); for "where did the old office go?" she reads a laminated
+    card taped to her desk and points you down the hall (`RedirectController`). The
+    card even distinguishes "moved permanently" (301/308) from "this room no longer
+    exists" (410 Gone) — all from the instruction sheet (route config), with no
+    judgement call of her own.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

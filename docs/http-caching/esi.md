@@ -6,6 +6,15 @@
     fragment. Exam hook: `render_esi()` only emits the tag when a surrogate
     advertises ESI capability — otherwise it renders the fragment inline.
 
+!!! example "Real-world analogy"
+    Think of a museum information board that is a permanent printed panel with a few clip-in
+    card slots. The big panel is reprinted rarely, while the "today's events" card and a
+    per-visitor "your audioguide language" card are swapped on their own schedules and
+    slotted into cutouts. A staff member (the **surrogate**, i.e. the reverse proxy) holds
+    the durable panel and refreshes only the cards that expired, instead of reprinting the
+    whole board. With no such staff member on duty, everything is printed as one flat sheet
+    and the entire board must be reprinted as often as its most frequently-changing card.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

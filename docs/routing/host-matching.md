@@ -5,6 +5,15 @@
     parameters (`{tenant}.example.com`), enabling multi-tenant and admin-subdomain apps.
     Exam hook: host tokens default to `[^.]+` (dot separator), the host is checked before the path, and cross-host generation forces an absolute URL.
 
+!!! example "Real-world analogy"
+    Picture a large office campus with several buildings that all happen to use the same room
+    numbers. Reception checks *which building* you want before it ever looks up the room, so
+    "Room 101" in the Admin building and "Room 101" in the Sales building lead to different
+    people (host checked before path). A subdomain placeholder is like "the {tenant} building" —
+    a single label with no dots inside. And to send a visitor to a *different* building you must
+    hand them the full building address, not just "Room 101", the same way a cross-host link is
+    forced to an absolute URL.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

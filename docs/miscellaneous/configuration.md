@@ -6,6 +6,14 @@
     evaluates dynamic rules. Exam gold: `.env.local` is skipped in the `test`
     environment, and real OS environment variables always win.
 
+!!! example "Real-world analogy"
+    Think of setting up a new employee's workstation. A settings checklist (the Config
+    schema) rejects impossible choices before they apply — you can't request a monitor
+    size that doesn't exist. Default preferences come from a stack of policy documents
+    (the `.env` files), but a direct instruction IT already pinned to the machine (a real
+    OS environment variable) overrides anything a document says. And a short "if this,
+    then that" rule sheet the manager consults on the spot is the ExpressionLanguage.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

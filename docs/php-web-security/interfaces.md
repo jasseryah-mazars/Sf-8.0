@@ -5,6 +5,15 @@
     exam hinge: when overriding, **return types are covariant** (may narrow) and
     **parameter types are contravariant** (may widen) — reverse them and PHP fatals.
 
+!!! example "Real-world analogy"
+    An interface is like a job posting that states a contract: "returns a Vehicle,
+    accepts a Dog." An applicant may honour it by delivering something more specific —
+    a particular Car instead of any Vehicle (a narrower, covariant return) — and by
+    agreeing to accept any Animal, not just dogs (a wider, contravariant parameter).
+    Both keep every caller's expectations safe. Flip the rules — promise less than
+    agreed on the return, or demand more than agreed on the input — and you have broken
+    the contract, which is exactly why PHP fatals.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,16 @@
     security defaults — `HttpOnly` is on, and `SameSite=None` is rejected unless
     `Secure` is true.
 
+!!! example "Real-world analogy"
+    A cookie works like a coat-check ticket. When you drop off your coat, the
+    attendant writes a stub and hands it to you (the server's `Set-Cookie` on the
+    response); on your next visit you present that same stub and they read it (the
+    browser sending it back in the request). That is the asymmetry: you never write
+    on a stub you're handing back, and a stub you're given now only helps on a later
+    visit — never the same trip. And just as a good cloakroom won't accept a ticket
+    with no security markings, browsers reject a `SameSite=None` ticket that isn't
+    also stamped `Secure`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

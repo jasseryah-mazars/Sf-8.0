@@ -5,6 +5,15 @@
     different actions per verb; pair it with `schemes` for HTTPS-only endpoints.
     Exam hook: a matching path with the wrong verb is a 405 (with `Allow`), not a 404 — and `GET` also matches `HEAD`.
 
+!!! example "Real-world analogy"
+    A path with `methods` is like a bank counter that exists but only handles certain
+    transactions. Walk up to the "Deposits" window (the right path) and ask to open a mortgage
+    (the wrong verb) and the teller does not pretend the window doesn't exist (404) — they tell
+    you "this window only does deposits and withdrawals" (405 with an `Allow` list). Asking merely
+    to *see* the balance is treated like a deposit request with the paperwork discarded (GET also
+    covers HEAD), and if you showed up on the insecure street they simply point you to the secure
+    entrance next door (a scheme redirect) instead of refusing you.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

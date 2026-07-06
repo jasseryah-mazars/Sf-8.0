@@ -5,6 +5,14 @@
     targets a route name, `urlRedirectAction` a literal path, and `permanent: true` makes it a 301.
     Exam hook: a trailing-slash mismatch auto-redirects (301) only for GET/HEAD — a POST to the non-canonical form is a 405.
 
+!!! example "Real-world analogy"
+    A redirect route is like a change-of-address order at the post office: mail for the old
+    address is automatically forwarded to the new one, and you decide whether the move is
+    permanent (301) or temporary (302). The trailing-slash rule is the subtlety: a plain letter
+    (a safe GET) gets quietly forwarded to the canonical address, but a signed, method-sensitive
+    parcel (a POST) is *not* silently rerouted — the clerk hands it back marked "not deliverable
+    as addressed" (405), because forwarding it would strip the sender's intended handling.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

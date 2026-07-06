@@ -5,6 +5,14 @@
     subclasses must implement. Key fact: a single `abstract` method forces the
     whole class to be declared `abstract`, and you can `extends` only one.
 
+!!! example "Real-world analogy"
+    Think of a franchise operations manual. It fixes the shared parts every branch
+    inherits — branding, opening procedure, till layout — but deliberately leaves
+    certain steps blank: "prepare the local specialty" is an instruction each branch
+    *must* fill in. You cannot open "the franchise" itself as a shop, only a concrete
+    branch that completes every blank step, and each branch belongs to exactly one
+    chain — mirroring single inheritance of one abstract parent.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -5,6 +5,13 @@
     ones it needs as Composer `ext-*` requirements. Remember `strlen()` counts
     **bytes** while `mb_strlen()` counts **characters** — the UTF-8 length trap.
 
+!!! example "Real-world analogy"
+    A bare PHP install is like a workshop with just a workbench: capable of little on
+    its own. Specialised jobs need power tools plugged in — a drill, a saw — and those
+    tools are the compiled extensions. A project's spec sheet (`composer.json`'s
+    `ext-*` requirements) lists which tools must be present before work starts, so if
+    the drill is missing you are told up front rather than discovering it mid-job.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

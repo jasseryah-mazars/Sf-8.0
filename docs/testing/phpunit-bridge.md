@@ -6,6 +6,15 @@
     clock/DNS mocking is opt-in per group (`time-sensitive` / `dns-sensitive`), and
     `SYMFONY_DEPRECATIONS_HELPER` is an env var, not a CLI flag.
 
+!!! example "Real-world analogy"
+    Think of a film studio's soundstage add-ons that you bolt onto an ordinary set. One is a
+    script supervisor who notes every outdated line of dialogue and tallies them at the end
+    of the shoot (deprecation collection). Another is a controllable studio clock that lets
+    you skip hours in an instant, and a fake-weather rig that fabricates rain on cue (clock
+    and DNS mocking). Crucially, the clock and weather rig only switch on for scenes you have
+    explicitly labelled "time-sensitive" or "dns-sensitive," and none of the crew shows up at
+    all unless you've signed them onto the call sheet first (registering `SymfonyExtension`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

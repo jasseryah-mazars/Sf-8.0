@@ -5,6 +5,15 @@
     users pick it with `-q`, `-v`, `-vv` or `-vvv`. Remember for the exam: the
     constants are 16/32/64/128/256 and they live on the output, not the input.
 
+!!! example "Real-world analogy"
+    Verbosity is like the zoom level on a digital map. Zooming in or out never changes the
+    territory itself — the roads and rivers are the same, just as a command's logic is
+    unchanged — it only controls how much detail is drawn. At the furthest-out view you see
+    just major cities (`-q`), and as you zoom in you progressively reveal towns, then
+    streets, then every labelled alley (`-vvv`). And that setting belongs to the display
+    you're looking through, not to the map's underlying data — which is why verbosity lives
+    on the output, not the input.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

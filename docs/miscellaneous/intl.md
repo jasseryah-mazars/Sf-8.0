@@ -6,6 +6,15 @@
     Exam gold: Symfony 8 uses ICU MessageFormat (`{count, plural, ...}`) for
     plurals, and a missing translation returns the message id, not an error.
 
+!!! example "Real-world analogy"
+    Translation is a museum's multilingual audio guide. Each exhibit has a code (the
+    message id), and the guide plays the matching phrase in your chosen language, falling
+    back to a regional then a default language when your exact one has no recording (locale
+    fallback). If no recording exists anywhere, it simply reads the code aloud instead of
+    going silent (a missing key returns the id). Following the language's own grammar it
+    correctly says "1 painting" versus "3 paintings" (ICU plural rules), while Intl is the
+    pre-printed booklet of country, currency and language names the museum ships with.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

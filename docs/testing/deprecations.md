@@ -6,6 +6,16 @@
     `#[IgnoreDeprecations]` (not the removed `@group legacy`) silences a test, and
     `max[self]=0` fails only on *your own* code.
 
+!!! example "Real-world analogy"
+    Picture a building inspector walking your property and writing up code violations, each
+    tagged by who is responsible. Some are things *you* built wrong (**self**); some come
+    from a contractor *you hired directly* (**direct**); some are buried deep in a
+    sub-contractor's work your contractor subbed out (**indirect**). You set the policy for
+    when the sale falls through: fail on *anything* (`max[total]=0`) or only on your own
+    workmanship (`max[self]=0`), tolerating what others must fix. A baseline is the
+    grandfather clause — a signed list of already-known issues that won't block the sale, so
+    only *new* violations do.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

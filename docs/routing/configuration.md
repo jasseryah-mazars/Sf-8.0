@@ -5,6 +5,14 @@
     `#[Route]` attribute (or YAML) and everything compiles into one `RouteCollection`.
     Exam hook: the attribute is `Symfony\Component\Routing\Attribute\Route` and matching is first-match-wins in declaration order.
 
+!!! example "Real-world analogy"
+    A route is like an entry in a mailroom's sorting rulebook: each rule pairs an address
+    pattern (path) with a destination desk (controller) under a unique label (name). The clerk
+    reads the rules strictly top to bottom and hands the letter to the *first* desk whose
+    pattern fits — never the "most specific" one — which is why the narrow rules must sit above
+    the broad catch-all ones. The whole rulebook is typed up and laminated once (compiled to a
+    cached file), so each incoming letter is sorted by a quick glance, not by re-reading policy.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

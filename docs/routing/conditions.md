@@ -5,6 +5,14 @@
     `env()`/`service()`) that acts as a last-mile match filter when path, host, method and scheme aren't enough.
     Exam hook: conditions affect matching only (a false one is a 404, never affects `generateUrl()`).
 
+!!! example "Real-world analogy"
+    Think of a nightclub bouncer standing at the correct door of the correct building. You
+    already found the right address (host) and the right entrance (path + method), and now
+    the bouncer runs one last custom check — the wristband, the guest list, tonight's dress
+    code. Fail it and you are simply turned away as if the door were not there (a 404), never
+    "forbidden with a reason". And the bouncer never touches the printed invitations the club
+    mails out: those addresses are produced regardless of who would actually be let in.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

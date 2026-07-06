@@ -7,6 +7,15 @@
     `public`, and that `no-cache` means "revalidate first", not "never store"
     (that is `no-store`).
 
+!!! example "Real-world analogy"
+    Freshness is the "best before" date stamped on a carton of milk. While the date hasn't
+    passed you take it straight from the fridge and drink it without smelling it (a cache
+    serves it without contacting the origin). You can even give different windows to
+    different places — a longer one to the shared supermarket warehouse (`s-maxage`) than to
+    your home fridge (`max-age`). Note the crucial difference: `no-cache` is the rule "always
+    sniff-test before drinking, even if it looks fine" (revalidate first), which is nothing
+    like `no-store`, the rule "never keep this in the fridge at all".
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -5,6 +5,14 @@
     `_fragment` configure the request, while `_route` and `_route_params` are read-only outputs the matcher injects.
     Exam hook: `RouterListener` copies matcher output into request attributes, and `_format` sets the request format (driving `Content-Type`).
 
+!!! example "Real-world analogy"
+    Think of a shipping label with reserved boxes the courier's system understands. Some boxes
+    you fill in yourself — "handle as fragile", "documents in French" (inputs like `_controller`,
+    `_format`, `_locale`) — and they change how the parcel is processed. Other boxes are stamped
+    by the sorting facility as it scans the package — the tracking number and the route it took
+    (`_route`, `_route_params`) — which you may read off the label but must never write yourself.
+    The scanning conveyor that copies all of this onto the package is the `RouterListener`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

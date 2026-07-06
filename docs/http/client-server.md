@@ -5,6 +5,16 @@
     single page load is many independent exchanges. Exam hook: the web server /
     reverse proxy (not PHP) picks the HTTP version and terminates TLS.
 
+!!! example "Real-world analogy"
+    HTTP is like corresponding with a mail-order company by letter. Each letter you send (a
+    **request**) gets exactly one reply (a **response**), and the company keeps no memory of
+    you between letters unless you quote your account number on each one (cookies/sessions) —
+    that is what "stateless" means. Before any letter arrives it travels through the postal
+    system: you look up the address (DNS), a delivery route is established (TCP), and a
+    tamper-proof sealed envelope may be used (TLS). Loading a single web page is like mailing
+    dozens of these letters at once — one for the page and separate ones for every image and
+    stylesheet.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

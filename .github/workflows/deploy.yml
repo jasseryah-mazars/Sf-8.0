@@ -15,10 +15,11 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment.
+# Keep only the newest run per branch. Superseded runs are cancelled cleanly so a
+# burst of pushes never leaves a stuck/queued deploy — the latest content always wins.
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:

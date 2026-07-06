@@ -5,6 +5,15 @@
     variables, and `only` isolates it to just the `with` values. Exam hook: `include`
     can't override blocks — that's `embed` (include + block overriding).
 
+!!! example "Real-world analogy"
+    Including a partial is like pasting a reusable recipe card onto the page of a larger
+    cookbook you are writing. By default the card can read all the ingredients already listed
+    on that page (it inherits the parent context). Add `only` and you instead hand the card a
+    sealed lunchbox holding just the ingredients you packed for it — it can't see anything
+    else on the page. `embed` goes further: it doesn't merely paste the card, it lets you
+    cross out and rewrite specific numbered steps printed on it (overriding its blocks),
+    which plain `include` can never do.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

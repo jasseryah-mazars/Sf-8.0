@@ -6,6 +6,15 @@
     they print the response on failure. Exam hook: `assertResponseIsSuccessful()`
     accepts **any 2xx**; use `assertResponseStatusCodeSame()` for an exact code.
 
+!!! example "Real-world analogy"
+    The introspection helpers are the quality-control checklist at the end of an assembly
+    line, rather than you squinting at each part by hand. Instead of pulling the finished
+    item apart to read a serial number (`getResponse()->getStatusCode()`), you tick standard
+    checks that stamp pass or fail — and when one fails, the station automatically photographs
+    the defective item (prints the response) so you see what went wrong. Note the checks vary
+    in strictness: "passed inspection" means anything in the acceptable range (any 2xx),
+    which is broader than "is exactly model number 200."
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

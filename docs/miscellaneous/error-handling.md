@@ -7,6 +7,15 @@
     Exam gold: only `HttpExceptionInterface` carries a custom status; everything
     else becomes a 500.
 
+!!! example "Real-world analogy"
+    Picture a hospital emergency room. Raw incidents arriving in every shape — PHP
+    warnings, notices, fatals — are first written onto one standard patient chart (turned
+    into catchable exceptions) so they can all be handled the same way, and a flattened
+    photocopy of that chart (`FlattenException`) is safe to file or hand around. Most
+    walk-ins are logged under a generic emergency code (a 500) unless they arrive already
+    carrying a specific diagnosis tag (something implementing `HttpExceptionInterface`),
+    like the 404 tag a `NotFoundHttpException` wears.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

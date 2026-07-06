@@ -6,6 +6,14 @@
     nothing. Remember for the exam: return `Command::SUCCESS` (0), `FAILURE` (1) or
     `INVALID` (2), never a bare integer.
 
+!!! example "Real-world analogy"
+    A custom command is like a single-purpose kitchen appliance: a toaster does one job,
+    and you start it by pushing the one lever (`__invoke()`) rather than assembling a
+    machine from parts. When it finishes it reports a clear status — the toast pops up fine
+    (`SUCCESS`), it trips the breaker (`FAILURE`), or it refuses because you tried to toast
+    something it can't accept (`INVALID`). Those three defined signals matter far more than
+    an arbitrary number on a dial, just as the named constants beat a bare integer.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,14 @@
     family. Remember for the exam: the default command is `list` (not `help`), and
     `make:*` comes from the optional MakerBundle — not core.
 
+!!! example "Real-world analogy"
+    A brand-new smartphone already runs apps you never installed: the dialer, camera and
+    settings ship with the operating system itself, just as `list`, `help`, `about` and
+    completion exist in every Console `Application`. Other pre-loaded apps come from the
+    carrier or manufacturer add-on — like `cache:clear` and the `debug:*` family arriving
+    with FrameworkBundle. And an app-store download such as a barcode scanner is optional,
+    exactly like `make:*` from MakerBundle, which isn't part of the core phone at all.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

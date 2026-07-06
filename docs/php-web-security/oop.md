@@ -5,6 +5,14 @@
     fact examiners love: `static::` resolves to the *called* class at runtime
     (late static binding), while `self::` is fixed at compile time.
 
+!!! example "Real-world analogy"
+    Imagine a form template with the instruction "print your family name here." Using
+    `self::` is like the template author hardcoding *their own* surname into the print
+    — fixed the moment the template was written. Using `static::` is instead "use the
+    surname of whoever is actually filling out this form right now," resolved at the
+    moment of use — so a descendant filling in the same template correctly gets their
+    own name. That runtime resolution is late static binding.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

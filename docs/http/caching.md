@@ -6,6 +6,14 @@
     get a bodyless **304**). Exam hook: `max-age`/`s-maxage` are freshness;
     `ETag`/`Last-Modified` are validation.
 
+!!! example "Real-world analogy"
+    There are two ways to decide whether last night's leftovers are still good. One is the
+    "best before" date on the container: while it hasn't passed you eat them without a second
+    thought — that is **freshness**, where no question is asked at all. The other is asking
+    whoever cooked them "has this changed?"; you still make the call, but if the answer is
+    "no, same as before" you are spared re-cooking the whole meal — that is **validation**,
+    and the terse "no change" answer is the bodyless `304`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,16 @@
     PSR-6/11/14/16/20 and consumes PSR-3, and **HttpFoundation is not PSR-7** (a
     bridge converts between them).
 
+!!! example "Real-world analogy"
+    PSRs are like standardised shipping containers. Because every port, ship and truck
+    agrees on the same corner-fittings and dimensions (a PSR), a box from any
+    manufacturer just fits the cranes everywhere. Symfony builds some of its own boxes to
+    that spec so any port can lift them (it *implements* PSR-6/11/14/16/20), and it also
+    happily accepts any spec-compliant box you hand it (it *consumes* PSR-3). Its own
+    `Request` crate, though, was designed before the standard and isn't the regulation
+    shape — so a special transfer rig (the psr-http-message bridge) repacks it whenever a
+    PSR-7 port insists on the standard fitting.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

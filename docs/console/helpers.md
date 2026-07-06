@@ -6,6 +6,14 @@
     grabs one by name with `$this->getHelper('question')`, while `SymfonyStyle`
     wraps most helpers so you rarely fetch them by hand.
 
+!!! example "Real-world analogy"
+    Helpers are like the shared tool cabinet in a workshop: the tape measure, the label
+    maker and the pegboard are reusable widgets everyone reaches for, and you fetch a
+    specific one by asking for it by name (`$this->getHelper('question')`) from the
+    cabinet (the `HelperSet`). A `SymfonyStyle` is the multi-tool clipped to your belt — it
+    already bundles the tape measure and label maker together, so for everyday jobs you
+    rarely need to walk over and open the cabinet at all.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

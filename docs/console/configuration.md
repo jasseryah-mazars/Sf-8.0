@@ -6,6 +6,14 @@
     the lifecycle runs configure → initialize → interact → execute, and the name
     belongs in the attribute so commands load lazily.
 
+!!! example "Real-world analogy"
+    Think of a library's catalogue card for a book: it records the title (name), a short
+    blurb (description), alternate titles it's also shelved under (aliases), a long
+    synopsis (help), and whether the book is on open display or kept in the closed stacks
+    (hidden) — all without touching the book itself. Because the card carries the title up
+    front, the librarian can find and list the book without ever pulling it off the shelf,
+    which is exactly how an attribute-declared name lets a command load lazily.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,15 @@
     the order is COMMAND → (ERROR only if something throws) → TERMINATE, and
     TERMINATE always runs — your last chance to change the exit code.
 
+!!! example "Real-world analogy"
+    A commercial flight fires the same fixed sequence of announcements. Boarding is called
+    before the plane moves (COMMAND, before the command executes), and mid-flight a sudden
+    turbulence alert may interrupt at any moment (SIGNAL). If an engine fault occurs, the
+    crew logs an incident report — but only if something actually went wrong (ERROR). The
+    "we've reached the gate, thank you for flying" announcement always plays whether the
+    trip was smooth or diverted (TERMINATE), and it's the final moment to record the
+    outcome — your last chance to set the exit code.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

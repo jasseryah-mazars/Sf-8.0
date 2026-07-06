@@ -5,6 +5,15 @@
     major plus its LTS every **two years**. Highest-yield for 8.x: `8.4` is the
     **LTS** and ships alongside `9.0` in **November 2027**.
 
+!!! example "Real-world analogy"
+    Symfony's roadmap works like a school calendar published years in advance. Everyone
+    can already see that terms begin on fixed dates (the May and November minors) and
+    that a new curriculum, together with a long-support graduating cohort, arrives every
+    couple of years (`8.4` LTS shipping with `9.0`). Because the dates are pinned so far
+    ahead, families can plan enrolments, budget for the change, and know precisely when a
+    given course stops being offered (end of maintenance) — no scrambling because a
+    deadline appeared out of nowhere.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

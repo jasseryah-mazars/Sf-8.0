@@ -5,6 +5,16 @@
     names, never hard-code paths, and pick a reference type for how much of the URL to emit.
     Exam hook: the constants live on `UrlGeneratorInterface`, the default is `ABSOLUTE_PATH`, and extra (non-placeholder) params become the query string.
 
+!!! example "Real-world analogy"
+    Generating a URL is like dialling from your phone's contacts instead of memorising numbers:
+    you call "Alice" (a route name) and the phone fills in her current number, so when she changes
+    numbers you update it once and every future call still connects. The reference type is how much
+    of the number you dial — the internal extension (`ABSOLUTE_PATH`), the full number with country
+    and area code for calling from abroad (`ABSOLUTE_URL`), and so on. Any extras you tack on that
+    aren't part of the number — like a conference PIN — ride along as the query string, and when
+    you dial from a landline with no caller context (CLI) you must pre-configure the area code
+    (`default_uri`) or the number comes out wrong.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

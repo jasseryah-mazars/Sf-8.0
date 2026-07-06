@@ -6,6 +6,16 @@
     Exam hook: request headers become `HTTP_`-prefixed server params, and `$server`
     is the **second** argument — not a list of header strings.
 
+!!! example "Real-world analogy"
+    Think of briefing a courier before a run of deliveries. `createClient()` is where you
+    hand over the standing instructions every parcel inherits: always take the toll road
+    (`HTTPS`), always report to this depot (`HTTP_HOST`), always flash this ID badge
+    (`PHP_AUTH_USER`/`PHP_AUTH_PW`). Those are the *server parameters* — the conditions of
+    the trip — passed as the second argument, not the parcel's own address label. A single
+    delivery can still override the standing brief (the per-request `$server`), and choosing
+    `insulate()` is like sending each parcel in its own separate van so nothing from one trip
+    can contaminate the next — at the cost of your no longer riding along to watch.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

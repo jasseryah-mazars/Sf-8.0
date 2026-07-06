@@ -5,6 +5,15 @@
     base path and version applied. Exam hook: `asset()` is for static files (versioning
     = cache busting) while `path()`/`url()` are for routes; AssetMapper/Encore are out of scope.
 
+!!! example "Real-world analogy"
+    `asset()` is the coat-check counter. You hand over a simple, stable name — "the grey
+    coat," `css/app.css` — and it hands back the exact claim ticket for the current item,
+    complete with today's tag number. When you replace the coat with a new one, the tag
+    number changes, so nobody can walk off with the old coat by reusing a stale ticket (that
+    is cache busting via the version or the `manifest.json` hash). You always speak the plain
+    name; the counter handles where it actually hangs and which numbered tag is current —
+    even if it lives in another cloakroom across town (a CDN package).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

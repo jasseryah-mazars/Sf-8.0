@@ -5,6 +5,14 @@
     without subclassing them. Exam hook: it declares its targets with the static
     **`getExtendedTypes()`** — there is **no `#[AsFormTypeExtension]` attribute**.
 
+!!! example "Real-world analogy"
+    A type extension is like a phone case that adds a card slot and a grip to a phone
+    you didn't design or manufacture. You never crack open and rebuild the handset
+    (no subclassing); you just slip the case on, and it clearly states which models it
+    fits (`getExtendedTypes()`). Pick a case labelled "fits every phone ever made"
+    (`FormType::class`) and it snaps onto all of them at once — occasionally what you
+    want, more often a clumsy overreach.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

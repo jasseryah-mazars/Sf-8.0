@@ -6,6 +6,15 @@
     returns a `Crawler`, not a `Response`. Exam hook: redirects are **not** followed
     automatically — you call `followRedirect()`.
 
+!!! example "Real-world analogy"
+    Picture a robot sitting at a driving simulator instead of a real car on a real road. It
+    works the pedals and steering (sends requests to the kernel in-process, no actual
+    network), and it keeps your session going — remembering your parking stubs (the cookie
+    jar) and the route you have driven (the history). But when a road sign says "detour this
+    way" (a 302 redirect), the robot stops right at the sign and waits, so you can read where
+    it points, rather than automatically taking it. You must say "go" (`followRedirect()`) —
+    or set it to always obey detour signs up front (`followRedirects()`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

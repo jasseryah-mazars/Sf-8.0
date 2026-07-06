@@ -5,6 +5,14 @@
     written inline as `{id<\d+>}` or via the `requirements` array (the two are equivalent).
     Exam hook: it's compiled into the route regex, so a violating value simply fails to match (a 404), never a 400.
 
+!!! example "Real-world analogy"
+    A requirement is like the shaped slot on a vending machine's coin acceptor. The slot only
+    admits a coin of the right diameter; a token that is the wrong shape doesn't trigger an error
+    light — it just doesn't fit and drops straight through to the next mechanism (matching moves
+    on to the next route, ending in a 404). This is a *shape* check at the door, not a check of
+    whether the coin is counterfeit or worthless — verifying that a well-formed value is actually
+    valid is a job for later stages, not the coin slot.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

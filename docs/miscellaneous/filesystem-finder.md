@@ -6,6 +6,15 @@
     `SplFileInfo`. Exam gold: `dumpFile()` writes atomically (temp + rename), and
     Finder always needs directories via `in()`.
 
+!!! example "Real-world analogy"
+    Filesystem is a careful mover who shouts the moment something goes wrong rather than
+    silently dropping a box (it throws instead of returning `false`). Its `dumpFile()` is
+    like a chef plating a dish completely on a spare plate and only then swapping it onto
+    the table, so a diner never glimpses a half-arranged plate (the temp-file-plus-rename
+    atomic write). Finder is the librarian you send to fetch books: you must point them at
+    rooms and shelves (`in()`), not at a single book, and then they filter by title, date
+    or size and hand back each match as a labelled index card (an `SplFileInfo`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

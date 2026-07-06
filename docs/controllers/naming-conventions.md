@@ -6,6 +6,15 @@
     `camelCase` methods, or a single-action **invokable** class referenced by its
     class name alone.
 
+!!! example "Real-world analogy"
+    The switchboard doesn't care what job title is printed on your business card — it
+    only needs a working extension it can dial. Whether you're listed as
+    "ProductController::show" or simply reachable by your name alone (an invokable),
+    the operator (the `ControllerResolver`) just needs a number that connects to a
+    real, publicly reachable person. Tacking "Action" onto your title is like an old
+    company custom that no longer routes any calls; naming is for the humans reading
+    the directory, not for the switchboard.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

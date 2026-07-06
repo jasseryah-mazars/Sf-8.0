@@ -5,6 +5,16 @@
     URL, `url()` an absolute one. Exam hook: use `url()` whenever the link leaves the
     page (emails, canonical tags, RSS); extra params become the query string.
 
+!!! example "Real-world analogy"
+    Generating a URL is like giving someone directions. `path()` is the in-building
+    shorthand — "room 204, third door on the left" — perfectly clear once you are already
+    inside the same building (on the same site), but meaningless to anyone standing
+    elsewhere. `url()` is the full postal address with street, city and country: the only
+    form that still works when the note is carried far away and read somewhere else — an
+    email, an RSS feed, a canonical tag. Either way you name the destination by its label
+    (the route name), never by hand-copying the raw address, and any extra details you
+    tack on that the address doesn't need become the "apt/notes" line (the query string).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

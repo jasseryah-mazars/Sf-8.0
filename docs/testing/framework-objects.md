@@ -6,6 +6,16 @@
     hook: a `set()` replacement is discarded on the next kernel reboot, so pair it
     with `disableReboot()`.
 
+!!! example "Real-world analogy"
+    Think of a backstage pass at a theatre. During the real performance (prod), the crew,
+    props and understudies stay hidden behind the curtain — the audience can't reach them
+    (private services). But at a rehearsal (the test env) you're issued an all-access pass:
+    `self::getContainer()` lets you walk backstage and grab any prop or performer, even the
+    ones the audience never sees. You can even swap an actor for a stand-in (`set()`). Just
+    remember that if the stage is struck and reset between scenes (the kernel reboots), your
+    stand-in vanishes — you must lock the set (`disableReboot()`) to keep them on for the
+    next scene.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

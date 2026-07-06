@@ -7,6 +7,15 @@
     mutates the response to 304 and strips the body), and remember ETag wins over
     Last-Modified when both are sent.
 
+!!! example "Real-world analogy"
+    Imagine you keep a photocopy of a policy document and, before relying on it, you phone
+    the office quoting the version number printed on your copy: "I've got version v3 — still
+    current?". If nothing has changed they simply say "yes, keep using yours" instead of
+    posting the whole document again — that reply is the bodyless `304`. Only if it changed
+    do they mail the new copy. The version stamp (`ETag`) or the "last edited on" date
+    (`Last-Modified`) is the fingerprint that makes this cheap check possible, and a printed
+    version number is trusted over the edit date when your copy carries both.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

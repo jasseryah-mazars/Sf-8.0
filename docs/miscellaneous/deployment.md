@@ -6,6 +6,15 @@
     prod loads the compiled container as-is and never auto-detects config
     changes, so you must clear and warm the cache on every deploy.
 
+!!! example "Real-world analogy"
+    Deploying to prod is a restaurant's mise en place before service. During the quiet
+    build window the kitchen pre-chops and pre-portions everything (cache warmup) so no
+    prep steals time during the dinner rush. The printed menu is then fixed for the night:
+    staff follow it as-is and never re-check supplier prices mid-service (the compiled
+    container is loaded with freshness checks disabled). So if you change a recipe but skip
+    re-doing the prep, the kitchen keeps serving the old dish — which is why you must clear
+    and re-warm on every deploy.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

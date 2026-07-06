@@ -6,6 +6,16 @@
     `KernelTestCase` (kernel only). Exam hook: `self::getContainer()` returns the
     special **test** container, so it can hand you even **private** services.
 
+!!! example "Real-world analogy"
+    A functional test is a full dress rehearsal on the actual stage — real sets, real
+    lighting, the whole cast — rather than actors reading lines in a side room. You run the
+    entire performance from curtain to curtain (routing → controller → Twig → security) and
+    judge the result. `WebTestCase` is the version with an audience seat and opera glasses (a
+    browser client) from which you watch and react; `KernelTestCase` just brings the cast on
+    stage with no audience, for when you only need to check one performer's work. And because
+    it is a rehearsal, you get that backstage all-access pass — the test container hands you
+    even the crew the paying audience never sees.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

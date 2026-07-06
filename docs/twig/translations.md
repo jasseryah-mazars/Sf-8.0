@@ -5,6 +5,16 @@
     `{n, plural, …}` in a `+intl-icu` domain. Exam hook: `transchoice` was removed —
     ICU MessageFormat is the only pluralization path now.
 
+!!! example "Real-world analogy"
+    Translating with `trans` is like using a phrasebook organised into tabbed sections
+    (domains — `messages`, `admin`, `validators`) and one edition per language (locales). You
+    never write out a full English sentence; you look up a stable entry code like
+    `welcome.title`, and the book returns the phrase for the reader's language — or, if the
+    entry is missing, just echoes the code back at you. For anything that has to agree with a
+    count, you rely on the special ICU appendix (the `+intl-icu` files) that encodes each
+    language's own grammar rules, so it knows to say "1 message" but "5 messages" — and in
+    other languages, whatever their plural rules demand.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

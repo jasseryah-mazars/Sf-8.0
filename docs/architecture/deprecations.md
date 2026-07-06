@@ -6,6 +6,15 @@
     `trigger_deprecation(package, version, message, ...args)` — an
     `E_USER_DEPRECATED` notice from `symfony/deprecation-contracts`.
 
+!!! example "Real-world analogy"
+    A deprecation is the motorway sign that reads "This exit closes at the next
+    roadworks — use Exit 12 instead." The ramp still works perfectly today; nothing
+    stops you driving it, and the sign is only an advisory notice, not a barrier. But it
+    warns you far in advance and names the replacement route, so you have the whole
+    season (the rest of the major cycle) to change your habits. The ramp is only actually
+    demolished at the next big overhaul (the next major) — and drivers who ignored the
+    sign are the ones stranded the morning it disappears.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

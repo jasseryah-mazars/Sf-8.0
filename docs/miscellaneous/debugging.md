@@ -6,6 +6,15 @@
     named events for the profiler. Exam gold: `dd()` dumps and exits; `dump()`
     keeps running.
 
+!!! example "Real-world analogy"
+    VarDumper works like a crime-scene photographer. The cloner takes an immutable
+    photograph of a value at one instant (the `Data` snapshot) so investigators can study
+    it later without disturbing the live scene; the dumper then decides whether to print
+    that photo for the wall (HtmlDumper in the browser) or describe it over the radio
+    (CliDumper in the terminal). `dump()` photographs and keeps working the scene, while
+    `dd()` photographs and immediately leaves. Stopwatch is the separate stopwatch timing
+    each labelled leg of the investigation.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

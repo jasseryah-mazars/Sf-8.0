@@ -5,6 +5,14 @@
     the `defaults` array, so `/blog` and `/blog/2` both match.
     Exam hook: only trailing placeholders can be optional, and generation omits a segment whose value equals its default.
 
+!!! example "Real-world analogy"
+    Think of a postal address form where the last line — say "Apartment 1" — is optional and
+    assumed when left blank. You can drop that trailing line and the letter still arrives, but
+    you cannot leave the *street* blank while keeping the apartment, because the reader would
+    have no way to tell which line went missing. And when you write out the address for an
+    apartment that *is* number 1, you simply omit that line entirely — the shortest, canonical
+    form — rather than redundantly writing the default everyone already assumes.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

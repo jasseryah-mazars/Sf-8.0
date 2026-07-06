@@ -6,6 +6,15 @@
     call that matters: mark a response `public` so shared caches may store it —
     Symfony's default `no-cache, private` shares nothing.
 
+!!! example "Real-world analogy"
+    Think of handing out copies of a document. A photocopy you keep in your own desk
+    drawer (the **private** browser cache) is for your eyes only. A stack left on a public
+    library counter (a **shared** cache) can be taken by any passer-by, so you must never
+    leave anything with someone's name on it there. A mailroom you run in your own building
+    lobby (the **gateway/reverse proxy**) is a shared counter you control. Stamping a
+    document "public" is what declares it safe to leave on the library counter — by default
+    every document is stamped "for your eyes only".
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

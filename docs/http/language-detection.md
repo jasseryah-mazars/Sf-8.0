@@ -6,6 +6,16 @@
     you support. Exam hook: `getPreferredLanguage($whitelist)` is the safe API (the
     no-argument form can return an unsupported locale).
 
+!!! example "Real-world analogy"
+    Think of a hotel receptionist greeting an international guest. They pick a language in
+    order: if the booking form explicitly states one (the URL `_locale`), use that; else a
+    note in the guest's profile (a stored preference); else the languages the guest listed
+    that they speak, in their stated order (`Accept-Language`); else the hotel's house
+    language (the default). Crucially, the receptionist only ever chooses from languages the
+    staff on shift actually speak (the supported-locale whitelist) — greeting the guest in a
+    tongue nobody can follow up on would be worse than politely defaulting to the house
+    language.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,15 @@
     autowired services** (thin controllers), routing/validation use **attributes**,
     and secrets live in the vault.
 
+!!! example "Real-world analogy"
+    Think of a well-run restaurant. The waiter (the controller) only takes your order
+    and carries the finished plate out — they never cook; the actual cooking happens at
+    specialised stations (autowired services) that share the same prep counters and
+    ingredients (the container). Keeping the waiter "thin" is what lets the kitchen serve
+    many tables at once. The secret sauce recipe stays locked in the office safe (the
+    Secrets vault) rather than printed on the menu, and every station has a fixed,
+    labelled spot (attributes and conventions) so anyone can find it instantly.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

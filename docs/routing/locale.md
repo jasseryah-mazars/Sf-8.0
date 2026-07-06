@@ -5,6 +5,14 @@
     `_locale` then drives translations and formatting for the whole request.
     Exam hook: Symfony does not guess the locale from `Accept-Language` by default — it is opt-in via `set_locale_from_accept_language`.
 
+!!! example "Real-world analogy"
+    Think of a museum where the same exhibit has two entrances signposted in different languages:
+    "/about" and "/a-propos" lead to the same room, but the door you came through sets the
+    language of every label, audio guide and gift-shop receipt for the rest of your visit (the
+    matched `_locale` drives all translations). Crucially, the front desk will *not* guess your
+    language from the passport in your pocket — it only knows the door you chose, unless you
+    explicitly ask staff to read your preference (opting into `Accept-Language`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

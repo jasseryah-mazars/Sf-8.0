@@ -6,6 +6,15 @@
     for the exam: STDERR is `getErrorOutput()`, which lives on
     `ConsoleOutputInterface` only — keep piped data on STDOUT.
 
+!!! example "Real-world analogy"
+    A fast-food drive-through has two clearly separated channels. You speak your order into
+    the microphone (input, read through `InputInterface`) and receive your food at the
+    window (output, written through `OutputInterface`); a well-trained crew member with a
+    headset and a fixed script is the styled `SymfonyStyle` layer over both. Crucially, the
+    bag of food you carry away (STDOUT, the piped data) goes out one window while any
+    complaint or "we're out of fries" notice comes over a separate speaker (STDERR,
+    `getErrorOutput()`) so the two streams never get mixed together.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

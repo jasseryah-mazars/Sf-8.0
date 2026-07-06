@@ -6,6 +6,15 @@
     on `kernel.response` (late collectors at terminate), `$this->data` must be
     serializable, and it is a dev-only tool disabled in prod.
 
+!!! example "Real-world analogy"
+    The profiler is an aircraft's flight recorder. Throughout each flight (request) a set
+    of sensors (data collectors) note timings, fuel burn, queries and events, and the
+    recorder writes one snapshot per flight at a fixed moment near landing (on
+    `kernel.response`). What it stores must be plain recorded readings, not live wiring — a
+    tapped-off gauge value, never the sensor itself (the data must be serializable).
+    Investigators later pull up any flight by its tail number to replay it (`/_profiler/{token}`),
+    and this heavy instrumentation is stripped out of the lightweight production aircraft.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

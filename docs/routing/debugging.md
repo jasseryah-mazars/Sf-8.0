@@ -5,6 +5,14 @@
     (via `TraceableUrlMatcher`) explains why each route matched or was rejected.
     Exam hook: in prod the compiled router is not auto-refreshed — after changing routes you must clear/warm the cache.
 
+!!! example "Real-world analogy"
+    `router:match` is like a car GPS route simulator: you punch in a destination and it not only
+    tells you which road it would take, but *why* it rejected the others — "that street is
+    one-way the wrong direction" (wrong method), "that road is closed to trucks" (wrong host).
+    But the GPS drives from a map downloaded onto the device: in production, putting up new road
+    signs out in the field changes nothing until you re-download the map (`cache:clear`), whereas
+    the dev unit notices the signs changed and refreshes on its own.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -5,6 +5,15 @@
     concatenation, and the `format` (sprintf) filter. Exam hook: `~` joins as strings
     while `+` adds numbers, and `~` has lower precedence than arithmetic.
 
+!!! example "Real-world analogy"
+    Think of assembling a form letter. `#{...}` interpolation is the mail-merge field — but
+    the merge only fires on the official letterhead (double-quoted strings); type it on plain
+    scratch paper (single quotes) and the field prints as literal ink. The `~` operator is
+    stapling sheets end to end: everything, numbers included, becomes just more paper (text).
+    The `+` operator is a pocket calculator that genuinely adds figures. And because you must
+    finish the sums before you can staple the results together, the calculator always runs
+    before the stapler (`~` has the lower precedence).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

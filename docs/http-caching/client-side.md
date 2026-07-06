@@ -6,6 +6,15 @@
     `max-age=0` (revalidate → maybe 304), a hard reload sends `no-cache` (full
     refetch), and you "bust" a cached asset by changing its URL, not by clearing it.
 
+!!! example "Real-world analogy"
+    Picture a report you printed and keep on your own desk. If your copy is recent enough
+    (still **fresh**), you just read it without walking to the archive. A normal **reload**
+    is phoning the archive to ask "has this changed since my copy?" — often the answer is
+    "no, keep yours" (a bodyless `304`). A **hard reload** is binning your copy and fetching
+    a brand-new print. And you can never force yourself to notice a new edition filed under
+    the same title; instead the publisher gives the new edition a new title (a fingerprinted
+    URL) so it lands as something you have never seen before.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

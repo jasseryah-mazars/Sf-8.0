@@ -6,6 +6,15 @@
     dependency-free. Highest-yield: bridges live in `src/Symfony/Bridge/`, provide
     classes, and are wired into an app by a **bundle**.
 
+!!! example "Real-world analogy"
+    A bridge is like a travel plug adapter. Your laptop charger (a Symfony component) is
+    built to one plug standard, and a foreign wall socket (one specific third-party
+    library) is built to another; the adapter exists purely to mate those two shapes. It
+    is neither the charger nor the socket, and you buy it as a separate item precisely so
+    the charger itself stays universal and carries no country-specific baggage. But the
+    adapter alone powers nothing — you still have to plug the whole assembly into the wall
+    (enable the integrating bundle) before any current flows.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

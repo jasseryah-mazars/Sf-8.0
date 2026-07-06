@@ -5,6 +5,16 @@
     Composer autoloads classes. The trap: unqualified **function/constant** calls
     fall back to the global namespace, but **class names do not**.
 
+!!! example "Real-world analogy"
+    A namespace is like a full postal address: two people both named "John Smith" are
+    told apart by street and city, just as `App\Service\Mailer` never clashes with
+    another `Mailer` elsewhere. PSR-4 is the filing rule that maps a department name to
+    a physical drawer, so the clerk (the autoloader) finds the right folder without you
+    ever quoting the exact path. The fallback quirk: everyday words — like calling a
+    shared helpline (`strlen`) — resort to the town's central directory if there is no
+    local entry, but a *proper name* like `DateTime` never does; you must give its full
+    address.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

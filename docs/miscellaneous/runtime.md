@@ -6,6 +6,15 @@
     `public/index.php` **returns** a callable (it never calls `handle()`), the
     default runtime is `SymfonyRuntime`, and `APP_RUNTIME` selects it.
 
+!!! example "Real-world analogy"
+    The Runtime is the stage crew of a theatre, and your `index.php` is only the play's
+    script. The same script performs unchanged in an open-air amphitheatre (PHP-FPM), a
+    tiny studio (the CLI), or a touring setup (Swoole, RoadRunner), because the crew — not
+    the script — handles the lights, sound and curtain: setting the scene and taking the
+    bows (`handle()`, `send()`, `terminate()`). The playwright merely hands over the script
+    (returns a callable) and lets the crew run the venue; if the playwright grabs the
+    lighting board mid-scene (calls `handle()` themselves), the show gets staged twice.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

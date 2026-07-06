@@ -5,6 +5,14 @@
     and ships ready-made stacks, queues and heaps. Exam hook: a **generator is a
     single-use, lazy `Iterator`** you cannot rewind once consumed.
 
+!!! example "Real-world analogy"
+    Implementing `ArrayAccess`, `Countable` and `Iterator` is like fitting your custom
+    appliance with the standard plug, dials and gauge so it works with the house wiring
+    — `$obj[$k]`, `count($obj)`, `foreach` — instead of needing special handling. A
+    generator, by contrast, is like a single reel of film: it produces frames lazily on
+    demand, but once you have played it to the end you cannot wind it back — to watch
+    again you must thread a fresh reel.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

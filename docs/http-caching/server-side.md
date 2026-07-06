@@ -6,6 +6,16 @@
     `framework.http_cache: true`; it honours `s-maxage`, keeps a filesystem
     `Store`, and reports each hit/miss in the `X-Symfony-Cache` trace header.
 
+!!! example "Real-world analogy"
+    Picture a front-desk clerk stationed in the lobby, in front of the specialists upstairs.
+    Common questions ("what are your opening hours?") the clerk answers straight from a card
+    on the desk, never bothering the specialists — that is a shared-cache hit served before
+    the app even runs. Only new or expired questions get passed up the stairs. If a visitor
+    shows a personal ID badge or a private letter (a session `Cookie` or `Authorization`
+    header), the clerk refuses to give a canned answer and always sends them up, because the
+    reply would be personal. The clerk also stamps every answer with a note saying whether
+    it came from the desk card or from upstairs — that note is the `X-Symfony-Cache` trace.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

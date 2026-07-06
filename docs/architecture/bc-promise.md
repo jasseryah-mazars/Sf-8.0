@@ -6,6 +6,15 @@
     happen **only in a major, and only after deprecation** — `@internal`,
     `@experimental` and `final` sit outside the promise.
 
+!!! example "Real-world analogy"
+    A rental lease guarantees the apartment you signed for — the front door, the
+    kitchen, the agreed fixtures — stays the same for the whole term; the landlord may
+    only knock down a load-bearing wall when the lease renews (a major), and only after
+    giving you formal notice first (deprecation). Rooms marked "staff only" (`@internal`)
+    or "still being built" (`@experimental`) were never part of your lease, so they can
+    change any day. And a wall stamped "do not attach anything" (`final`) can be
+    redecorated by the landlord at will — bolting your own shelf to it was never covered.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
