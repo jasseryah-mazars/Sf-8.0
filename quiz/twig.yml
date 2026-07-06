@@ -91,7 +91,7 @@ categories:
       - id: "TWIG-SYNTAX-05"
         question: "For {{ user.name }}, in which order does Twig try to resolve the attribute?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/syntax"
         concepts: ["attribute-access", "getattr", "magic-getter"]
         syllabus: "Templating (Twig) → Twig syntax"
@@ -227,7 +227,7 @@ categories:
       - id: "TWIG-ESCAPE-02"
         question: "A value is placed inside <script>const x = \"...\";</script>. Which escape filter is correct?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/auto-escaping"
         concepts: ["escape-context", "js", "xss"]
         syllabus: "Templating (Twig) → Auto escaping"
@@ -248,7 +248,7 @@ categories:
       - id: "TWIG-ESCAPE-03"
         question: "What does {% autoescape false %} ... {% endautoescape %} do?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/auto-escaping"
         concepts: ["autoescape", "raw", "trusted-content"]
         syllabus: "Templating (Twig) → Auto escaping"
@@ -269,7 +269,7 @@ categories:
       - id: "TWIG-ESCAPE-04"
         question: "Which escaping filter is required for a value used inside an HTML attribute?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/auto-escaping"
         concepts: ["escape-context", "html_attr", "xss"]
         syllabus: "Templating (Twig) → Auto escaping"
@@ -449,7 +449,7 @@ categories:
       - id: "TWIG-INHERIT-02"
         question: "Inside an overridden block, what does {{ parent() }} render?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/inheritance"
         concepts: ["parent", "block", "override"]
         syllabus: "Templating (Twig) → Template inheritance"
@@ -470,7 +470,7 @@ categories:
       - id: "TWIG-INHERIT-03"
         question: "Which tag provides horizontal reuse of blocks (like a trait)?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/inheritance"
         concepts: ["use", "horizontal-reuse", "blocks"]
         syllabus: "Templating (Twig) → Template inheritance"
@@ -514,7 +514,7 @@ categories:
       - id: "TWIG-INHERIT-05"
         question: "Why must {% extends %} be the first tag, and what can a child template NOT do?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/inheritance"
         concepts: ["extends", "blocks", "markup"]
         syllabus: "Templating (Twig) → Template inheritance"
@@ -761,7 +761,7 @@ categories:
       - id: "TWIG-GLOBALS-08"
         question: "You need a global whose value is computed from an injected service. Which approach fits best?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/globals"
         concepts: ["GlobalsInterface", "extension", "lazy"]
         syllabus: "Templating (Twig) → Global variables"
@@ -835,7 +835,7 @@ categories:
       - id: "TWIG-FILTERS-01"
         question: "Which attribute registers a custom Twig filter in current Twig 3.x?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/filters-functions"
         concepts: ["AsTwigFilter", "custom-filter", "attributes"]
         syllabus: "Templating (Twig) → Filters and functions"
@@ -878,7 +878,7 @@ categories:
       - id: "TWIG-FILTERS-03"
         question: "What does the `default` filter replace?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/filters-functions"
         concepts: ["default", "null", "empty"]
         syllabus: "Templating (Twig) → Filters and functions"
@@ -1018,7 +1018,7 @@ categories:
       - id: "TWIG-INCLUDES-01"
         question: "What does the `only` keyword do on an include?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/includes"
         concepts: ["include", "only", "scope"]
         syllabus: "Templating (Twig) → Template includes"
@@ -1040,7 +1040,7 @@ categories:
       - id: "TWIG-INCLUDES-02"
         question: "Which construct includes a template AND lets you override its blocks?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/includes"
         concepts: ["embed", "blocks", "include"]
         syllabus: "Templating (Twig) → Template includes"
@@ -1061,7 +1061,7 @@ categories:
       - id: "TWIG-INCLUDES-03"
         question: "What does {% include ['a.html.twig', 'b.html.twig'] %} render?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/includes"
         concepts: ["include", "template-list", "fallback"]
         syllabus: "Templating (Twig) → Template includes"
@@ -1151,7 +1151,7 @@ categories:
       - id: "TWIG-INCLUDES-07"
         question: "How is an included template handled by Twig internally?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/includes"
         concepts: ["compilation", "FilesystemLoader", "not-inlined"]
         syllabus: "Templating (Twig) → Template includes"
@@ -1284,7 +1284,7 @@ categories:
       - id: "TWIG-LOOPS-06"
         question: "Which is true about the tests `is null`, `is empty`, and `is defined`?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/loops-conditions"
         concepts: ["tests", "is-empty", "is-null"]
         syllabus: "Templating (Twig) → Loops and conditions"
@@ -1481,7 +1481,7 @@ categories:
       - id: "TWIG-URLS-06"
         question: "Which UrlGenerator reference types back path() and url() respectively?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/urls"
         concepts: ["reference-type", "ABSOLUTE_PATH", "ABSOLUTE_URL"]
         syllabus: "Templating (Twig) → URLs generation"
@@ -1662,7 +1662,7 @@ categories:
       - id: "TWIG-RENDER-07"
         question: "Which config enables direct fragment URLs for ESI/hinclude?"
         type: "config"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/controller-rendering"
         concepts: ["framework.fragments", "esi", "configuration"]
         syllabus: "Templating (Twig) → Controller rendering"
@@ -1753,7 +1753,7 @@ categories:
       - id: "TWIG-TRANS-03"
         question: "A translation key has no entry for the current locale and no fallback. What is rendered?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/translations"
         concepts: ["missing-key", "fallback", "translator"]
         syllabus: "Templating (Twig) → Translations and pluralization"
@@ -1797,7 +1797,7 @@ categories:
       - id: "TWIG-TRANS-05"
         question: "Which catalogue file name enables ICU MessageFormat parsing for English?"
         type: "config"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/translations"
         concepts: ["intl-icu", "domain-suffix", "catalogue"]
         syllabus: "Templating (Twig) → Translations and pluralization"
@@ -1865,7 +1865,7 @@ categories:
       - id: "TWIG-TRANS-08"
         question: "Which service does the Twig trans filter ultimately call?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/translations"
         concepts: ["TranslationExtension", "TranslatorInterface", "catalogue"]
         syllabus: "Templating (Twig) → Translations and pluralization"
@@ -1890,7 +1890,7 @@ categories:
       - id: "TWIG-INTERP-01"
         question: "Where does #{...} string interpolation work in Twig?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "twig/interpolation"
         concepts: ["interpolation", "double-quotes", "lexer"]
         syllabus: "Templating (Twig) → String interpolation"
@@ -2153,7 +2153,7 @@ categories:
       - id: "TWIG-ASSETS-06"
         question: "With a JSON manifest configured, what does asset('app.css') resolve to?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "twig/assets"
         concepts: ["JsonManifestVersionStrategy", "hashed-name", "manifest"]
         syllabus: "Templating (Twig) → Assets management"

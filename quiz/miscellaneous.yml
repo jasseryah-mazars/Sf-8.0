@@ -331,7 +331,7 @@ categories:
       - id: "MISC-MSG-24"
         question: "Which serializer does a Messenger transport use by default to serialize the envelope?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "miscellaneous/messenger"
         concepts: ["transport", "serializer", "phpserializer"]
         syllabus: "Miscellaneous → Messenger"
@@ -598,7 +598,7 @@ categories:
       - id: "MISC-CACHE-02"
         question: "Which statement about PSR-6 vs PSR-16 is correct?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "miscellaneous/cache"
         concepts: ["psr-6", "psr-16", "tags"]
         syllabus: "Miscellaneous → Cache"
@@ -829,7 +829,7 @@ categories:
       - id: "MISC-SER-05"
         question: "A UserDto has #[Groups(['read'])] #[SerializedName('full_name')] on $name and #[Ignore] on $passwordHash. What is the JSON when serialized with context ['groups' => ['read']]?"
         type: "code"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "miscellaneous/serializer"
         concepts: ["groups", "serialized-name", "ignore"]
         syllabus: "Miscellaneous → Serializer"
@@ -981,7 +981,7 @@ categories:
       - id: "MISC-CFG-05"
         question: "What is the result of ExpressionLanguage::compile('1 + a', ['a'])?"
         type: "code"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "miscellaneous/configuration"
         concepts: ["expression-language", "compile", "php-source"]
         syllabus: "Miscellaneous → Configuration"
@@ -1113,7 +1113,7 @@ categories:
       - id: "MISC-DEPLOY-05"
         question: "What does `cache:clear` run, by default, in addition to removing stale cache?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "miscellaneous/deployment"
         concepts: ["cache-warmer", "warmup", "cache-warmer-interface"]
         syllabus: "Miscellaneous → Deployment"
@@ -1283,7 +1283,7 @@ categories:
       - id: "MISC-LOCK-02"
         question: "Which lock store provides mutual exclusion across multiple servers?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/lock"
         concepts: ["lock", "store", "distributed"]
         syllabus: "Miscellaneous → Lock"
@@ -1435,7 +1435,7 @@ categories:
       - id: "MISC-MAIL-04"
         question: "In the Mailer, how does the Envelope differ from the message headers?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "miscellaneous/mailer"
         concepts: ["envelope", "headers", "smtp"]
         syllabus: "Miscellaneous → Mailer"
@@ -1502,7 +1502,7 @@ categories:
       - id: "MISC-RUN-02"
         question: "Which environment variable selects the runtime class?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/runtime"
         concepts: ["runtime", "app-runtime"]
         syllabus: "Miscellaneous → Runtime"
@@ -1522,7 +1522,7 @@ categories:
       - id: "MISC-RUN-03"
         question: "Which class does the default SymfonyRuntime extend?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/runtime"
         concepts: ["symfony-runtime", "generic-runtime"]
         syllabus: "Miscellaneous → Runtime"
@@ -1606,7 +1606,7 @@ categories:
       - id: "MISC-CLOCK-03"
         question: "Which clock is best for measuring elapsed durations and is immune to system clock changes?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/clock"
         concepts: ["monotonic-clock", "durations"]
         syllabus: "Miscellaneous → Clock"
@@ -1773,7 +1773,7 @@ categories:
       - id: "MISC-ERR-03"
         question: "Which serializable object represents a throwable for rendering and logging?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/error-handling"
         concepts: ["flatten-exception", "error-renderer"]
         syllabus: "Miscellaneous → Error Handling"
@@ -1838,7 +1838,7 @@ categories:
       - id: "MISC-PROF-02"
         question: "Which service tag registers a custom data collector (with a toolbar/panel)?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/profiler"
         concepts: ["data-collector", "tag", "template"]
         syllabus: "Miscellaneous → Web Profiler"
@@ -1925,7 +1925,7 @@ categories:
       - id: "MISC-INTL-02"
         question: "What does the translator return when a message id has no translation in the active locale or its fallbacks?"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "miscellaneous/intl"
         concepts: ["translation", "missing-key", "fallback"]
         syllabus: "Miscellaneous → Internationalization"
