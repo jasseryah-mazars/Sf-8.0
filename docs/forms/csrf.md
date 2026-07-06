@@ -5,6 +5,14 @@
     cannot forge a submission. Key facts: the token is validated on **PRE_SUBMIT**,
     and **stateless CSRF** (7.2+, via `stateless_token_ids`) needs no session.
 
+!!! example "Real-world analogy"
+    The hidden `_token` is a **badge issued at the security desk**. When the form is
+    rendered, the desk (`CsrfTokenManager`) hands out a badge tied to your visit
+    (`csrf_token_id`). On submit, the guard (`CsrfValidationListener`) checks the
+    badge matches before letting the request through. A foreign site can make your
+    browser knock on the door, but it can't read or forge your badge — so the guard
+    turns it away.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -98,6 +106,21 @@ the recommended default for new apps and cache-friendly pages.
 ### Manual tokens (non-form actions)
 
 For a link/AJAX action outside the form system, mint and check tokens yourself.
+
+### Null behavior
+
+A submission with a missing or `null` `_token` is the normal attack/bug shape.
+`CsrfValidationListener` on `PRE_SUBMIT` pops `_token` from the raw data; if it is
+absent or does not match, it does **not** throw — it adds a form error, so
+`isValid()` returns `false` and you re-render with the `csrf_message`. The
+controller helper `isCsrfTokenValid('intention', $token)` treats a `null`/empty
+submitted token as invalid too. The common bug: skipping `form_rest`/`_token` in a
+manual template, so the token is `null` on submit and every post silently fails
+validation — no exception, just a form that never validates.
+
+!!! note "Null in real life"
+    `null` = a visitor with **no badge** at the security desk — not thrown out with
+    force, just quietly refused entry until they present a valid one.
 
 ## Configuration & code
 

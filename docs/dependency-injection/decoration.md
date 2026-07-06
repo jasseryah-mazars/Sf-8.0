@@ -7,6 +7,13 @@
     Highest-yield fact: **higher `decoration_priority` = applied first = innermost**
     (closest to the original).
 
+!!! example "Real-world analogy"
+    A decorator is a garnish station every plate passes through on its way out: the
+    dish (original service) is untouched, but it picks up a sprinkle (logging,
+    caching) under the same name. `.inner` is the plate handed in from the previous
+    station; `decoration_priority` is where each station sits on the pass line —
+    higher priority sits closest to the kitchen (innermost).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -76,6 +83,21 @@ absent.
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/DecoratorServicePass.php).
+
+### Null behavior
+
+`decoration_on_invalid` decides what happens when the **decorated id does not
+exist** at compile time. `exception` (default) fails the build; `ignore` drops the
+decorator entirely; and `null` injects **`null`** as `.inner`. If you choose `null`,
+the `.inner` argument must accept it — type it `?MailerInterface` (with
+`#[AutowireDecorated]`) — and every delegating method must guard with the nullsafe
+operator (`$this->inner?->send(...)`) or a `??` fallback. The common bug is
+declaring `decoration_on_invalid: null` but keeping a non-nullable `.inner` type,
+turning an optional wrap into a `TypeError` the moment the target is absent.
+
+!!! note "Null in real life"
+    A `null` inner is a garnish station with no plate coming down the line — you
+    must check the belt is empty (`?->`) before you try to season nothing.
 
 ## Configuration & code
 

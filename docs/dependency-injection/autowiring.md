@@ -7,6 +7,13 @@
     alias → an **ambiguity error**; disambiguate with `#[Target]`, `#[Autowire]`,
     or a named alias.
 
+!!! example "Real-world analogy"
+    Autowiring is a waiter who reads your order by *type* — "I'll have the fish" —
+    and the kitchen knows exactly which dish that means. Type-hint a
+    `LoggerInterface` and the container plates the one registered logger. Order "the
+    fish" when two fish dishes exist and no default is set, and the waiter stops to
+    ask which one (the ambiguity error) rather than guessing.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -81,6 +88,24 @@ pins.
     `Symfony\Component\DependencyInjection\Compiler\AutowirePass` &
     the `Autowire`/`Target` attributes —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/AutowirePass.php).
+
+### Null behavior
+
+Autowiring resolves a parameter by type. If the type is **nullable** and no service
+matches, you can make the argument optional so it resolves to `null` instead of
+failing the build — e.g. a `?SomeInterface $dep = null` parameter, or
+`#[Autowire(service: 'app.maybe')]` on a nullable arg. Without a nullable type and
+default, autowiring an **unregistered type** is a hard *compile error* ("Cannot
+autowire … no such service exists"), never a silent `null`. That is the key
+distinction: a missing dependency is a build failure unless you explicitly opt into
+null via `?Type $x = null`. The common bug is expecting an interface with no
+implementation or alias to quietly become `null` — it breaks the container build
+instead.
+
+!!! note "Null in real life"
+    Ordering a dish the kitchen doesn't stock stops the whole order (build error);
+    marking it "optional — skip if unavailable" (nullable + default) lets the meal
+    go out with that item simply absent (null).
 
 ## Configuration & code
 

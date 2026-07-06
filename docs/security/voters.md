@@ -6,6 +6,12 @@
     Exam hook: the default strategy is **affirmative** (one grant is enough), and
     **abstain ≠ deny**.
 
+!!! example "Real-world analogy"
+    A voter is one judge on a panel. Asked "can this person do X to Y?", each
+    judge raises a card for **grant** or **deny**, or sits out with **abstain**
+    ("not my speciality"). A **strategy** tallies the cards — affirmative needs
+    one yes, unanimous needs zero no's — into the final verdict.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -118,6 +124,29 @@ security:
 A voter that abstains has **no effect** on the outcome. New developers often
 return `false` ("not mine") which is actually a **DENY** and can block access
 under `unanimous`. Always return `ACCESS_ABSTAIN`/let `supports()` filter.
+
+### Null behavior
+
+Inside `voteOnAttribute()`, `$token->getUser()` returns **`null`** for an
+unauthenticated request (the `NullToken` carries no user). Since a voter usually
+needs a real user to reason about ownership, the first line is almost always a
+guard:
+
+```php
+$user = $token->getUser();
+if (!$user instanceof AppUser) {
+    return false;              // no (valid) user → deny this attribute
+}
+```
+
+The `instanceof` check does double duty: it rejects `null` **and** any user of
+the wrong class, and it narrows the type so the rest of the method is null-safe.
+Returning `false` here is correct because `supports()` already decided this
+attribute *is* ours — abstaining would be wrong (see "Abstain is not deny" above).
+
+!!! note "Null in real life"
+    A judge asked to rule on an anonymous petitioner with no identity papers:
+    there is nobody to judge, so the vote is a straight "no".
 
 ## Configuration & code
 

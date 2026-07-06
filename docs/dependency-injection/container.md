@@ -7,6 +7,14 @@
     that serves instances at runtime. Highest-yield fact: services are **private
     and shared by default**.
 
+!!! example "Real-world analogy"
+    The container is a restaurant kitchen. You order a dish (ask for a service);
+    the kitchen gathers and assembles the ingredients (its dependencies) and plates
+    it — you never touch the pans (`new`). **Compiling** the container is prepping
+    the kitchen *once* before service (mise en place), so every order during the
+    night is fast. Asking for a dish that is not on the menu (a private or removed
+    id) gets a polite refusal, not a plate.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -156,6 +164,23 @@ service cannot; it may only be *injected* into other services. Since Symfony 4,
 Fetching a private (or removed) service by id throws
 `ServiceNotFoundException`. That is why controllers use autowiring or the
 `ServiceSubscriberInterface`, not `$container->get()`.
+
+### Null behavior
+
+`ContainerInterface::get($id, $invalidBehavior)` decides what a *missing* id does.
+The default `EXCEPTION_ON_INVALID_REFERENCE` throws `ServiceNotFoundException`; pass
+`ContainerInterface::NULL_ON_INVALID_REFERENCE` and `get()` returns `null` instead
+— the sanctioned way to model an *optional* dependency. A **private** or
+compiler-**removed** service is "missing" from the public container even though it
+exists, so `get()` on it also throws. Guard with `has($id)` before `get()`, or type
+the injected dependency as nullable (`?LoggerInterface $logger = null`) so a
+`null`-resolved reference is legal. The common bug: letting a
+`ServiceNotFoundException` bubble up because you assumed an optional service was
+always present.
+
+!!! note "Null in real life"
+    A missing service id is the waiter saying "we're out of that tonight" — with
+    `NULL_ON_INVALID_REFERENCE` you get an empty plate (null) instead of an argument.
 
 ## Configuration & code
 

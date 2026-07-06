@@ -108,6 +108,22 @@ deferred saves — convenient but limited. PSR-6 supports deferred saves
 (`saveDeferred`/`commit`) and metadata. Symfony contracts wrap PSR-6 with the
 callback + stampede protection ergonomics.
 
+### Null behavior
+
+`CacheInterface::get()` **never returns null to mean "miss"** — on a miss it runs
+your callback, stores whatever it computes, and returns that value. Crucially,
+`null` is a **valid cached value**: if your callback returns `null`, the cache
+stores null and later calls return it as a **hit** (they do *not* recompute).
+This is why the contracts API sidesteps the classic PSR-6 footgun where
+`getItem($key)->get()` returns `null` for both "absent" and "stored null" — with
+PSR-6 you must check `isHit()` to tell them apart. Caching "no result" as `null`
+is fine; just remember it counts as a hit until it expires.
+
+!!! note "Null in real life"
+    A stored `null` is a note on the pad reading "checked — nothing here." You
+    still read the note instead of redoing the work; a blank pad (no note at all)
+    is the real miss.
+
 ## Configuration & code
 
 === "PHP Attributes"

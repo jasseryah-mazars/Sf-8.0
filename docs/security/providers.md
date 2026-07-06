@@ -7,6 +7,12 @@
     `loadUserByUsername()` is gone), and `refreshUser()` runs on *every* stateful
     request.
 
+!!! example "Real-world analogy"
+    A user provider is the records office. Give it an identifier ("employee
+    #4471") and it pulls the matching file (`loadUserByIdentifier()`); it also
+    re-checks that file on every visit (`refreshUser()`) so a revoked badge is
+    caught. It only *finds* people — it never checks whether you are really them.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

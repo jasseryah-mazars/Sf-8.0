@@ -6,6 +6,13 @@
     or advance a `MockClock`. Remember `ClockInterface::now()` always returns an
     immutable `DatePoint` (a `\DateTimeImmutable`).
 
+!!! example "Real-world analogy"
+    A clock is the **wall clock in the room — one you can swap for a stage prop**.
+    In production it's the real wall clock (`NativeClock`). In tests you hang a
+    fake clock (`MockClock`) whose hands you set by hand and can spin forward
+    instantly, so "what time is it?" (`now()`) always answers what the scene
+    needs — no waiting for real minutes to pass.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -78,6 +85,21 @@ test can inject a `MockClock`.
 !!! note "Source reference"
     `Symfony\Component\Clock\ClockInterface`, `MockClock`, `DatePoint` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/ClockInterface.php).
+
+### Null behavior
+
+Time is one place where null simply **cannot** appear: `ClockInterface::now()` is
+typed `: \DateTimeImmutable`, so it always hands back a real `DatePoint` — never
+`null`, even with a frozen `MockClock`. The autowired `clock` service is likewise
+always present, so an injected `ClockInterface` is never null. The lesson is the
+inverse of the usual null guard: because `now()` can't be null you never need
+`?->` on it — but you *can* still get a misleading value if you compare a
+`MockClock` time against the real `new \DateTime()`. Read time from the clock on
+both sides, not from a mix of clock and wall time.
+
+!!! note "Null in real life"
+    Asking "what time is it?" always gets an answer — the clock never shrugs. The
+    mistake isn't a missing time, it's reading two different clocks at once.
 
 ## Configuration & code
 

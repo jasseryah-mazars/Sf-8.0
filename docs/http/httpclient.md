@@ -127,6 +127,36 @@ or `$client->withOptions(['base_uri' => '...'])`.
   `ChunkInterface` pieces without buffering the whole body — for large downloads
   or Server-Sent Events (`EventSourceHttpClient`).
 
+### Null behavior
+
+`getContent()` returns a **string** — for a legitimately empty body (a `204 No
+Content`, or a `200` with nothing to send) that string is simply `''`, **not
+`null`**. Do not test the body with `=== null`; test `'' === $response->getContent()`
+or check the status code first.
+
+`toArray()` is stricter: on an empty body it throws a `JsonException` because `""`
+is not valid JSON — there is no silent `null` return. Guard a possibly-empty
+payload before decoding:
+
+```php
+$response = $client->request('GET', $url);
+if (204 === $response->getStatusCode() || '' === $response->getContent(false)) {
+    return [];
+}
+
+return $response->toArray();
+```
+
+To read a header that may be absent, header bags here are keyed arrays, so use
+`$response->getHeaders()['x-total'][0] ?? null` rather than a nullable getter. The
+common bug is calling `toArray()` on a `204` and being surprised by the decode
+exception instead of receiving `null`.
+
+!!! note "Null in real life"
+    An empty response is a **reply envelope that arrived empty** — the courier
+    delivered it (status `204`), there just aren't any pages inside. That is a
+    valid outcome, not a lost letter.
+
 ## Configuration & code
 
 === "PHP Attributes"

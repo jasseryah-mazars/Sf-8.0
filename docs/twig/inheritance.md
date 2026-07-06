@@ -5,6 +5,13 @@
     holes; `{{ parent() }}` keeps the parent's content. Exam hook: a template extends
     exactly one parent, but `{% use %}` mixes in blocks from many (horizontal reuse).
 
+!!! example "Real-world analogy"
+    Template inheritance is a printed form on company letterhead. The parent
+    `base.html.twig` is the pre-printed master page — logo, footer, overall layout —
+    and each `{% block %}` is a blank line left for you to fill in. A child page
+    keeps the letterhead and only writes into the blanks it cares about; `{{ parent()
+    }}` means "keep what was already printed here, then add to it."
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

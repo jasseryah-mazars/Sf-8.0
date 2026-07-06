@@ -6,6 +6,12 @@
     Exam hook: order specific → general, and use `PUBLIC_ACCESS` (not the removed
     `IS_AUTHENTICATED_ANONYMOUSLY`) for open paths.
 
+!!! example "Real-world analogy"
+    `access_control` is the posted list of rules by the entrance: "staff only
+    past this point", "visitors sign in", "everyone welcome in the lobby". The
+    guard reads top-to-bottom and enforces the **first** line that fits your
+    destination — the rest go unread.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

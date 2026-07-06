@@ -5,6 +5,12 @@
     `length`); `{% for … else %}` handles the empty case. Exam hook: Twig has no
     `break`/`continue` — filter the source with `for x in items if …` instead.
 
+!!! example "Real-world analogy"
+    `{% for %}` is a museum tour guide walking a group past each exhibit: the `loop`
+    variable is the guide's clipboard telling them which stop they're on (`index`),
+    whether it's the first or last (`first`/`last`), and how many remain. `for …
+    else` is the "gallery closed" sign shown when there is nothing to tour.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -92,6 +98,28 @@ flowchart TD
 `is defined`, `is null`, `is empty`, `is even`/`odd`, `is iterable`,
 `is same as(x)` (identity `===`), `divisible by(n)`, `constant('X')`. Negate with
 `is not`. `empty` is true for `null`, `false`, `0`, `''`, `[]`.
+
+### Null behavior
+
+Iterating `null` is safe: `{% for x in items %}` when `items` is `null` runs
+**zero** iterations and falls straight through to the `for … else` block — no
+error in lenient mode. That makes `for … else` the natural guard for a
+possibly-null collection; you rarely need a wrapping `{% if items %}`.
+
+In conditions, keep the three tests distinct:
+
+- `x is defined` — the variable exists at all (undefined ≠ null).
+- `x is null` — it exists and equals `null`.
+- `x is empty` — broader: true for `null`, `false`, `0`, `''` and `[]`.
+
+The trap: `{% if items %}` treats `null`, `0` and `[]` alike as falsy, so use
+`is null` when you must tell "no value" apart from "empty list". Combine with
+`is defined` when a variable may be missing entirely:
+`{% if x is defined and x is not null %}`.
+
+!!! note "Null in real life"
+    A null collection is an empty tour group: the guide has no one to walk through
+    the exhibits, so they skip straight to the "gallery closed" sign (`for … else`).
 
 ## Configuration & code
 

@@ -6,6 +6,14 @@
     `MailerInterface::send()`. Exam gold: once `SendEmailMessage` is routed via
     Messenger, `send()` queues the mail instead of delivering it inline.
 
+!!! example "Real-world analogy"
+    Think of a **mailroom**. Mime **assembles the envelope and its enclosures** —
+    the letter (text/HTML), photos and attachments nested in the right order.
+    Mailer is the **clerk who hands it to a carrier** chosen by `MAILER_DSN`
+    (SMTP, a provider API…). Routing `SendEmailMessage` via Messenger is dropping
+    it in the **outbox** for a courier to collect later, so you don't wait at the
+    counter.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

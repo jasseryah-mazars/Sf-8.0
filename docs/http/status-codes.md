@@ -6,6 +6,13 @@
     Exam hook: 307/308 preserve the method, 303 forces GET; **401 = not
     authenticated, 403 = not authorized**.
 
+!!! example "Real-world analogy"
+    A status code is the **delivery-outcome stamp** the postal service puts on a
+    returned item: green "Delivered" (`2xx`), "Address changed — forwarded"
+    (`3xx`), "No such recipient / not allowed" (`4xx`), or "Sorting office caught
+    fire" (`5xx`). The client acts on the stamp, not the human note beside it —
+    just as HTTP clients act on the numeric code, not the reason phrase.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

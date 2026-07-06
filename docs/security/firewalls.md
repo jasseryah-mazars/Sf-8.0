@@ -6,6 +6,13 @@
     Exam hook: `security: false` (e.g. the `dev` firewall) still counts as the
     match, so it must come first.
 
+!!! example "Real-world analogy"
+    A firewall is the security desk at a building entrance. Each wing has its own
+    desk with its own rules (badge readers for staff, a sign-in sheet for
+    visitors), but you pass exactly **one** desk on the way in — the first whose
+    area you step into. The desk decides *how* you prove who you are, not which
+    rooms you may enter.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

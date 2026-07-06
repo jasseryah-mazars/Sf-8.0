@@ -5,6 +5,12 @@
     name (`func(args)`) — register your own via `#[AsTwigFilter]`/`#[AsTwigFunction]`.
     Exam hook: filter output is auto-escaped unless declared `is_safe: ['html']`.
 
+!!! example "Real-world analogy"
+    Filters are a kitchen assembly line: a value slides down the belt and each `|`
+    is a station that transforms it (`|lower`, `|round`) before plating. Functions
+    are the chef you call by name (`path()`, `max()`) to fetch or produce something
+    new. Same kitchen, two ways to work.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -154,6 +160,25 @@ registered automatically. Use `{{ 9.9|price }}` and `{{ vat(100) }}`.
     For heavy dependencies, put the logic in a **runtime** class (lazy-instantiated
     via `RuntimeExtensionInterface` / the attribute style) and reference it with a
     lightweight extension — the service is only built when the filter is actually used.
+
+### Null behavior
+
+The `default` filter is Twig's primary null tool: `{{ name|default('Anon') }}`
+substitutes when `name` is `null`, undefined **or** empty (`''`, `[]`, `false`).
+That is broader than `??`, which replaces only `null`/undefined —
+`{{ '' ?? 'x' }}` keeps the empty string, while `{{ ''|default('x') }}` returns
+`'x'`.
+
+Most built-in filters tolerate `null`: `{{ null|length }}` is `0`,
+`{{ null|json_encode }}` is `null` (the JSON literal). A **custom** filter,
+though, receives `null` as-is — if your callable is typed `string $s` it will
+`TypeError` on a null argument, so type the parameter `?string` (or guard) when
+the value can be missing, and pair it with `|default` at the call site:
+`{{ bio|default('')|excerpt }}`.
+
+!!! note "Null in real life"
+    `|default` is the "N/A" stamp a clerk puts on any form field left blank, so the
+    rest of the paperwork never stalls on a missing entry.
 
 ## Configuration & code
 

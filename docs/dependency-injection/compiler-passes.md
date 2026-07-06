@@ -7,6 +7,13 @@
     there is **no `#[CompilerPass]` attribute**, and higher `priority` runs
     *earlier* within a phase.
 
+!!! example "Real-world analogy"
+    A compiler pass is a kitchen manager doing prep *before* service: they walk the
+    station cards (definitions) and — say — collect every "sauce" recipe tagged on
+    the board and staple them into the master station's checklist. They rearrange
+    recipes on paper; no food is cooked yet (no service is instantiated). It all
+    happens once, during pre-service prep (compilation).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -143,6 +143,25 @@ final class AuthorController
 }
 ```
 
+### Null behavior
+
+Passing `null` to `validate()` is legal — the validator wraps the value in a node
+and finds no class metadata, so you get an empty
+`ConstraintViolationListInterface` back (no error, no `TypeError`). Validation is
+*values against constraints*, and a bare `null` carries no constraints of its own.
+
+More commonly a *property* is `null`. The validator still visits it, but most
+constraints skip `null` (see [Built-in Constraints](built-in-constraints.md)), so
+a nullable property carrying only `#[Assert\Email]` passes when unset. Add
+`#[Assert\NotNull]` or `#[Assert\NotBlank]` when "missing" must itself be an
+error. A getter constraint can likewise return `null`; the same skip rule applies
+to the returned value.
+
+!!! note "Null in real life"
+    A `null` object is an empty belt: the scanners run but find nothing to flag —
+    no news is good news, which is exactly the bug when you *expected* a required
+    value to be there.
+
 ## Configuration & code
 
 === "PHP Attributes"

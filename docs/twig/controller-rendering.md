@@ -5,6 +5,13 @@
     `render(controller(...))` instead of querying in the template. Exam hook: inline
     rendering is a real HttpKernel sub-request; `render_esi` defers to a reverse proxy.
 
+!!! example "Real-world analogy"
+    Embedding a controller is like a newspaper page that sends a junior reporter to
+    fetch the "latest headlines" box while the main story is laid out.
+    `render(controller(...))` dispatches that reporter — a real sub-request — who
+    returns with a finished, self-contained clipping. ESI hands the same job to the
+    printing press (a reverse proxy) so the box can be reused across editions.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

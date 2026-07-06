@@ -148,6 +148,30 @@ flowchart LR
     `ConstraintValidator`, and `Attribute\HasNamedArguments` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php).
 
+### Null behavior
+
+By convention a custom validator **skips `null` and `''`** with an early return,
+so the rule composes with `NotBlank`/`NotNull` instead of re-implementing
+"required". The validator above does exactly this:
+
+```php
+if (null === $value || '' === $value) {
+    return; // let NotBlank decide whether empty is allowed
+}
+```
+
+Two consequences. First, a property-scoped validator can always receive `null`
+(nullable property, unset value), so guard before you touch string or object
+methods — otherwise you risk a `TypeError`. A `mixed $value` signature plus an
+early null return (then a `!\is_string($value)` throw) keeps it safe. Second, a
+**class-scoped** validator's `$value` is the object, which is not `null` at that
+point — but its *properties* may be, so read them with `?->` and `??`.
+
+!!! note "Null in real life"
+    A custom scanner ignores an empty slot on the belt — it is not its job to
+    complain that a bag is missing; that is the presence-check scanner's
+    (`NotBlank`) job.
+
 ## Configuration & code
 
 === "Use (PHP Attributes)"

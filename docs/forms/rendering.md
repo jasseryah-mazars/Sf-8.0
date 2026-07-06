@@ -5,6 +5,14 @@
     to per-part `form_label`/`form_widget`. Don't forget: `form_end` renders the
     remaining fields — including the hidden **CSRF token** — unless you pass `render_rest: false`.
 
+!!! example "Real-world analogy"
+    Rendering is the **print shop** that lays out your blank paper form from a spec
+    (the `FormView`). `form(form)` prints the whole page; the granular functions
+    (`form_row`, `form_label`, `form_widget`) let you place each field by hand for a
+    custom layout. `form_end`/`form_rest` is the shop making sure it also prints the
+    small print at the bottom — the hidden and **CSRF** fields — so nothing you
+    forgot to place is left off the page.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -103,6 +103,24 @@ object is validated in the group you are running, which may differ from its own
     `ValidValidator` and the graph walker in `RecursiveContextualValidator` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveContextualValidator.php).
 
+### Null behavior
+
+Cascading is null-safe. A `#[Assert\Valid]` property that is `null` is simply
+**not** descended into — there is nothing to recurse over, so no violation and no
+error. If a related object is *required*, the presence check and the cascade are
+orthogonal: guard the property with `#[Assert\NotNull]` **and** `#[Assert\Valid]`.
+
+For a cascaded collection, `null` *elements* are visited like any value, so their
+element constraints still apply. When you validate an associative array with
+`Collection`, use `Required` vs `Optional` to decide whether a missing key is an
+error. Getter scope has its own twist: a getter returning `null` feeds `null`
+into its constraints, which (except `NotNull`/`NotBlank`) skip it.
+
+!!! note "Null in real life"
+    A `null` nested object is a bag tag with no bag attached — screening has
+    nothing to open, so it waves through unless a separate "a bag must exist" rule
+    (`NotNull`) is in place.
+
 ## Configuration & code
 
 === "PHP Attributes"

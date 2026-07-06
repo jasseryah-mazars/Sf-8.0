@@ -7,6 +7,13 @@
     Exam hook: credentials (`PasswordCredentials`) live in `Passport\Credentials`,
     while `UserBadge`/`CsrfTokenBadge`/`RememberMeBadge` live in `Passport\Badge`.
 
+!!! example "Real-world analogy"
+    An authenticator is the clerk who assembles your file at the counter. They
+    gather your documents into one folder — the **Passport** of **badges** (ID,
+    proof of address, a signature) — but verify nothing themselves. A back office
+    (`CheckPassportEvent` listeners) checks each document before your pass is
+    issued.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -127,6 +134,28 @@ it to return a `UsernamePasswordToken`); it does **not** implement
 `getLoginUrl()`, and a default `onAuthenticationFailure()` that redirects back to
 the login page — you implement `authenticate()`, `getLoginUrl()` and
 `onAuthenticationSuccess()`.
+
+### Null behavior
+
+A `UserBadge` can be built with **no user loader** — just the identifier. That
+`null` loader is deliberate: it tells the `UserProviderListener` to fall back to
+the firewall's configured provider. If you *do* pass a loader and it returns
+`null`, the badge stays **unresolved** and `Passport::checkIfCompletelyResolved()`
+throws — a missing user surfaces as an `AuthenticationException`, never a silent
+`null` user on the token.
+
+```php
+new UserBadge($email);                                            // null loader → use the provider
+new UserBadge($email, fn (string $id): ?UserInterface => $repo->find($id)); // may be null → error
+```
+
+So there is no such thing as a token holding a `null` user coming out of a
+successful passport: either the user resolves, or authentication fails.
+
+!!! note "Null in real life"
+    A badge with a `null` loader is an application form with only your name on it —
+    the clerk looks you up in the directory. If the lookup finds nobody, the
+    application is rejected, not stamped blank.
 
 ## Configuration & code
 

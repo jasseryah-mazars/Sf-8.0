@@ -6,6 +6,14 @@
     (each `with*` returns a *new* instance). Exam hook: `SameSite=None` is rejected
     unless the cookie is also `Secure`.
 
+!!! example "Real-world analogy"
+    A cookie is a **self-addressed note the office asks you to keep in your
+    wallet** and show every time you write back. `Set-Cookie` hands you the note;
+    the `Cookie` header is you presenting it on the next letter. The attributes
+    are the rules written on it — which branches may see it (`Domain`/`Path`),
+    keep it dry (`Secure`), don't let strangers read it (`HttpOnly`), and when to
+    throw it away (`Expires`/`Max-Age`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -116,6 +124,32 @@ flowchart LR
 
 Session cookies in Symfony are configured under `framework.session.cookie_*` and
 default to `HttpOnly: true`, `SameSite: lax`.
+
+### Null behavior
+
+Incoming cookies are read from `$request->cookies`, an `InputBag`, so a cookie the
+browser never sent is a **missing key**: `$request->cookies->get('consent')`
+returns **`null`** (the `get()` default). A first-time visitor, a cleared cookie,
+and one the browser dropped for being `SameSite=None` without `Secure` all look
+identical from the server — absent.
+
+```php
+$consent = $request->cookies->get('consent');            // null on first visit
+$theme   = $request->cookies->getString('theme', 'light'); // 'light' when absent
+if (null === $consent) {
+    // show the consent banner
+}
+```
+
+Provide a default (`get('theme', 'light')`) or a `??` fallback rather than
+assuming the value is there. The common bug is treating `null` (never set) the
+same as a known "declined" value — store an explicit marker (`'0'`) so you can
+tell "hasn't chosen yet" from "chose no".
+
+!!! note "Null in real life"
+    A missing cookie is turning up at the counter **without the note in your
+    wallet** — maybe it's your first visit, maybe you threw it out. The clerk
+    can't assume what it said; they treat you as new.
 
 ## Configuration & code
 

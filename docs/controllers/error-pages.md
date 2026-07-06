@@ -84,6 +84,33 @@ browse `/_error/404` in `dev` (via the framework's test route) or set the env.
 own controller to fully own error rendering (logging, content negotiation, JSON
 vs HTML).
 
+### Null behavior
+
+A 404 almost always begins with a `null`: a lookup like
+`$repo->findOneBySlug($slug)` returns `null` when nothing matches, and *that*
+absence is your cue to raise a 404. The subtle part is what
+`createNotFoundException()` itself does with `null` — nothing. It merely
+**builds and returns** a `NotFoundHttpException`; it does not inspect your value,
+does not see the `null`, and does not abort the action. Only `throw` ends the
+request.
+
+So the null-driven guard reads cleanly with the throw expression:
+
+```php
+$article = $repo->findOneBySlug($slug)
+    ?? throw $this->createNotFoundException(\sprintf('No article "%s".', $slug));
+```
+
+The recurring bug is writing `$this->createNotFoundException(...)` on its own
+line without `throw`: the exception is created, discarded, and the action keeps
+running with a `null` entity — leading to a "member function on null" fatal a few
+lines later, not a clean 404.
+
+!!! note "Null in real life"
+    `null` is the courier arriving at an address and finding no package: they don't
+    guess a replacement, they file the official "not found" slip — which only
+    counts once they actually file it (`throw`), not merely fill it in.
+
 ## Configuration & code
 
 === "Throwing errors"

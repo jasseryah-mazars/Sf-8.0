@@ -6,6 +6,14 @@
     `getPreferredFormat()` returns a Symfony *format* (not a raw MIME type), and you
     must set `Vary` so shared caches don't mis-serve variants.
 
+!!! example "Real-world analogy"
+    Content negotiation is like a letter that says **"reply in French if you can,
+    otherwise English; I'd prefer a printed page but a PDF is fine."** The
+    `Accept*` headers are those ranked preferences (the `q` values), and the
+    office picks the best representation it can produce, then stamps the reply
+    with what it chose (`Content-Type`, `Content-Language`) plus a `Vary` note so
+    the sorting room files each variant separately.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -118,6 +126,31 @@ $best?->getQuality();              // 1.0
 proxy**, not PHP. Whenever a response varies by a request header, add
 `$response->setVary(['Accept', 'Accept-Language'])` so shared caches store one
 entry per variant — otherwise a cache may serve JSON to an HTML client.
+
+### Null behavior
+
+When the client sends **no `Accept` header at all**, there is nothing to
+negotiate — Symfony treats it as "accepts anything". `getPreferredFormat()` then
+returns the **default** you pass (`getPreferredFormat('html')` → `'html'`). Its
+signature is `getPreferredFormat(?string $default = 'html')`: pass `null` and a
+truly unmatchable request yields **`null`**, which you must then handle.
+`getPreferredLanguage()` called with no argument and no header returns `null` too.
+
+```php
+$format = $request->getPreferredFormat('json') ?? 'json';
+$locale = $request->getPreferredLanguage(['en', 'fr']) ?? 'en';
+```
+
+`AcceptHeader::first()` returns `?AcceptHeaderItem`: on an empty header it is
+`null`, so chain with the nullsafe operator — `$accept->first()?->getQuality()`.
+The common bug is passing `null` as the default to `getPreferredFormat()` and then
+using `match` with no fallback arm, hitting an `UnhandledMatchError` the first
+time a client omits `Accept`.
+
+!!! note "Null in real life"
+    No `Accept` header is a letter that **states no language preference** — the
+    office can't read your mind, so it falls back to the house default rather than
+    leaving the reply blank.
 
 ## Configuration & code
 

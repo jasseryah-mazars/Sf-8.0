@@ -6,6 +6,14 @@
     gold: `acquire()` is **non-blocking** by default (returns `false` if held),
     and local stores (Flock/Semaphore) only guard a single machine.
 
+!!! example "Real-world analogy"
+    A lock is the **"occupied" sign on a bathroom door**. `acquire()` tries the
+    door: if it's free you flip the sign and go in; if it already reads occupied
+    you get a plain "no" (`false`) and move on — you don't queue unless you ask to
+    (blocking). `release()` flips it back to vacant, and the **TTL** is a spring
+    that pops the sign to vacant after a while so a fainted occupant can't lock
+    everyone out forever (`refresh()` resets that spring).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -95,6 +103,22 @@ shared locks (Flock does; Redis via the component's implementation).
 !!! note "Source reference"
     `Symfony\Component\Lock\LockFactory` and `Lock::acquire()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Lock/Lock.php).
+
+### Null behavior
+
+Lock signals contention with a **boolean, not null**: `acquire(false)` returns
+`false` when the resource is already held and `true` when you got it —
+`createLock()` always returns a `Lock`, never null. The common bug is treating
+`acquire()` like something that throws or returns null on "busy": it doesn't, so
+`if (!$lock->acquire()) { return; }` is the correct guard. (Blocking
+`acquire(true)` instead waits and ultimately returns `true` or throws
+`LockConflictedException`.) Because `false` is an ordinary value, forgetting to
+check it means you march into the critical section unprotected.
+
+!!! note "Null in real life"
+    A busy door doesn't give you *nothing* — it gives you a clear "occupied"
+    (`false`). Reading that plain "no" as "I guess it's fine" is how two people
+    end up in the same stall.
 
 ## Configuration & code
 

@@ -104,6 +104,28 @@ sequenceDiagram
     `CallbackValidator` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/CallbackValidator.php).
 
+### Null behavior
+
+A callback runs whether or not the object's fields are set, so **nullable
+properties are the classic callback bug**. Comparing `$this->start >= $this->end`
+throws or misbehaves if either is `null`. Guard first, and let each field's own
+`#[Assert\NotNull]` enforce presence:
+
+```php
+if (null !== $this->start && null !== $this->end && $this->start >= $this->end) {
+    $context->buildViolation('End must be after start.')->atPath('end')->addViolation();
+}
+```
+
+The callback should assume a value *might* be missing and either bail early or use
+`?->` / `??`. Reading the instance via `$context->getObject()` can likewise hand
+you a partially populated object, so the same guards apply there.
+
+!!! note "Null in real life"
+    The supervisor eyeballing the whole bag must not assume every item is present
+    — check that both the boarding pass and the ticket exist before flagging a
+    mismatch between them.
+
 ## Configuration & code
 
 === "PHP Attributes"

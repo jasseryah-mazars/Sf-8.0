@@ -85,6 +85,29 @@ flowchart LR
     `Symfony\Bridge\Twig\AppVariable` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php).
 
+### Null behavior
+
+Several `app` members are **nullable by design**. `app.user` is `null` whenever
+the request is anonymous — `AppVariable::getUser()` reads the token's user and
+returns `null` if nobody is authenticated. `app.token` and `app.request` are
+`null` outside a security/HTTP context (some CLI or early-boot code).
+
+Always **guard** before dereferencing:
+
+```twig
+{{ app.user ? app.user.userIdentifier : 'Guest' }}
+{% if app.user %}<a href="{{ path('logout') }}">Log out</a>{% endif %}
+```
+
+Reading `app.user.userIdentifier` without the guard prints empty in lenient mode
+but throws once `strict_variables` is on — and `app.user.roles` on a `null` user
+is the classic anonymous-page crash. `app.user is not null` and the ternary above
+are the safe idioms.
+
+!!! note "Null in real life"
+    `app.user` is the unknown visitor at the security desk: until someone signs in,
+    the badge slot is empty — check it before you read a name off it.
+
 ## Configuration & code
 
 === "YAML — custom global"

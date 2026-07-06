@@ -6,6 +6,14 @@
     or `start()`/`wait()` (async). Exam gold: `fromShellCommandline()` is NOT
     escaped (injection risk), and the default timeout is 60 seconds.
 
+!!! example "Real-world analogy"
+    Process is **handing an errand to an assistant**. Writing the command as an
+    array puts **each word in its own labelled bag** (auto-escaped, nothing
+    mis-read) — versus barking one shell string they might misinterpret
+    (`fromShellCommandline`). They either go do it while you wait (`run()`) or set
+    off while you keep working and check back later (`start()`/`wait()`), then
+    report what they said (stdout) and whether it went fine (exit code).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

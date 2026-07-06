@@ -5,6 +5,13 @@
     request. Use `redirectToRoute()` (route name) or `redirect()` (URL); the default
     status is **302**, 307/308 preserve the method, and 301/308 are cached.
 
+!!! example "Real-world analogy"
+    A redirect is the **receptionist** saying "that's handled at counter 4 — please
+    walk over there." The visitor physically crosses the lobby and joins a new
+    queue: a fresh request, a new URL in the address bar. Contrast a
+    [forward](internal-redirects.md), where the receptionist steps into the back
+    office and fetches the answer for you — same visit, same URL, no extra trip.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
