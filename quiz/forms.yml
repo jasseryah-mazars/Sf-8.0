@@ -203,7 +203,7 @@ categories:
       - id: "FORM-HANDLE-03"
         question: "Which service does FormInterface::handleRequest() delegate to under FrameworkBundle?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "forms/handling"
         concepts: ["RequestHandlerInterface", "HttpFoundationRequestHandler", "delegation"]
         syllabus: "Forms → Handling submissions"
@@ -618,7 +618,7 @@ categories:
       - id: "FORM-THEME-03"
         question: "When two global form themes define the same block, which wins?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/theming"
         concepts: ["form_themes", "override-order", "last-wins"]
         syllabus: "Forms → Theming"
@@ -749,7 +749,7 @@ categories:
       - id: "FORM-CSRF-03"
         question: "Stateless CSRF (Symfony 7.2+/8) primarily removes the need for what?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/csrf"
         concepts: ["stateless-csrf", "SameOriginCsrfTokenManager", "session"]
         syllabus: "Forms → CSRF protection"
@@ -839,7 +839,7 @@ categories:
       - id: "FORM-FILE-01"
         question: "How do you read the value of an unmapped FileType field?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/file-upload"
         concepts: ["mapped-false", "getData", "FileType"]
         syllabus: "Forms → File uploads"
@@ -879,7 +879,7 @@ categories:
       - id: "FORM-FILE-03"
         question: "When does form_start emit enctype=\"multipart/form-data\"?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/file-upload"
         concepts: ["form_start", "multipart", "enctype"]
         syllabus: "Forms → File uploads"
@@ -970,7 +970,7 @@ categories:
       - id: "FORM-BUILTIN-01"
         question: "Which ChoiceType options render checkboxes?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/built-in-types"
         concepts: ["ChoiceType", "expanded", "multiple"]
         syllabus: "Forms → Built-in types"
@@ -990,7 +990,7 @@ categories:
       - id: "FORM-BUILTIN-02"
         question: "What does MoneyType's divisor option do?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/built-in-types"
         concepts: ["MoneyType", "divisor", "transformer"]
         syllabus: "Forms → Built-in types"
@@ -1274,7 +1274,7 @@ categories:
       - id: "FORM-EVENTS-01"
         question: "What is the correct order of the submit-phase form events?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/events"
         concepts: ["PRE_SUBMIT", "SUBMIT", "POST_SUBMIT"]
         syllabus: "Forms → Form events"
@@ -1294,7 +1294,7 @@ categories:
       - id: "FORM-EVENTS-02"
         question: "What is the correct order of the set-data-phase form events?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/events"
         concepts: ["PRE_SET_DATA", "POST_SET_DATA", "no-SET_DATA"]
         syllabus: "Forms → Form events"
@@ -1334,7 +1334,7 @@ categories:
       - id: "FORM-EVENTS-04"
         question: "To add a field based on the submitted value, which event do you listen on?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/events"
         concepts: ["PRE_SUBMIT", "dynamic-fields", "dependent-dropdown"]
         syllabus: "Forms → Form events"
@@ -1443,7 +1443,7 @@ categories:
       - id: "FORM-EXT-01"
         question: "Which method declares the types a form type extension applies to?"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "forms/type-extensions"
         concepts: ["getExtendedTypes", "static", "iterable"]
         syllabus: "Forms → Type extensions"
