@@ -7,6 +7,13 @@
     Exam hook: Symfony 8 **removed** `enable_authenticator_manager`; the
     authenticator system is the only one.
 
+!!! example "Real-world analogy"
+    `security.yaml` is the building's master blueprint. One document wires up the
+    records office (`providers`), each security desk (`firewalls`), the posted
+    door rules (`access_control`), the shredder spec (`password_hashers`) and the
+    clearance tiers (`role_hierarchy`). `SecurityExtension` is the contractor that
+    turns the blueprint into real wiring (services + a `FirewallMap`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

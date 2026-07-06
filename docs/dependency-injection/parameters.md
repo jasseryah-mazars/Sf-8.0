@@ -6,6 +6,13 @@
     works across environments. Highest-yield fact: env **processors** like
     `%env(int:MAX)%` cast/transform the raw string and chain right-to-left.
 
+!!! example "Real-world analogy"
+    Parameters are the recipe's printed measurements — fixed when the cookbook is
+    printed (compile time). Environment variables are the "salt to taste" note:
+    filled in at the stove (runtime), so the same printed recipe works in every
+    kitchen. Env **processors** are the prep steps on that note — "dice", "convert
+    to grams" — applied to the raw value before it hits the pan.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
