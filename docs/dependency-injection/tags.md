@@ -108,6 +108,29 @@ bug is expecting an empty collection to be `null` and calling a method on it.
     just holds nothing; reaching into a labelled slot that was never filled
     (`locator->get('x')`) is the error.
 
+!!! info "Expert note"
+    A tag on its own does *nothing* — it is inert metadata until a collector (a
+    `tagged_iterator`/`tagged_locator` argument or a compiler pass) consumes it. If
+    two services resolve the *same* index key, the later one silently overwrites the
+    earlier: a "my handler vanished" bug that looks like a null but is an overwrite.
+
+??? example "Debugging story"
+    **Symptom:** a new handler was never invoked even though it was tagged.
+    **Diagnosis:** its `getName()` returned the same string as an existing handler,
+    so it collided on the locator index key and the later one won. **Fix:** give it a
+    unique index (`#[AsTaggedItem(index: '...')]` or a distinct `getName()`).
+    **Avoid:** treat index keys like primary keys — unique across the tagged set.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait` —
+      collects, priority-orders and index-keys tagged services.
+    - `Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument` — the
+      value object `!tagged_iterator` / `#[AutowireIterator]` compiles to.
+    - `Symfony\Component\DependencyInjection\ServiceLocator` — what a
+      `tagged_locator` becomes: a lazy PSR-11 set keyed by index.
+    - `ContainerBuilder::registerForAutoconfiguration()` /
+      `#[AutoconfigureTag]` — auto-tag every implementer of an interface.
+
 ## Configuration & code
 
 === "PHP Attributes"
@@ -260,6 +283,16 @@ simpler. If you must *transform* definitions (not just collect), you need a
       `#[AutoconfigureTag('tag')]`, `#[AsTaggedItem(index:, priority:)]`.
     - YAML: `!tagged_iterator`, `!tagged_locator`, `_instanceof`.
     - Inspect: `debug:container --tag <name>`.
+
+## Connections
+
+- **Depends on:** [Service Registration](registration.md) — autoconfiguration adds
+  the tag to every implementer.
+- **Reused in:** [Security](../security/voters.md),
+  [Messenger](../miscellaneous/messenger.md), [Console](../console/events.md) —
+  voters, handlers and event subscribers are all collected by tag.
+- **Confused with:** [Service Locators](service-locators.md) — `tagged_locator`
+  *builds* a locator; a locator is the general lazy-set primitive.
 
 ## Official References
 - [Official Symfony docs — Service Tags](https://symfony.com/doc/current/service_container/tags.html)

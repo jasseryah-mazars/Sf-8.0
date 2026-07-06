@@ -129,6 +129,34 @@ consumer treating an absent key as an error rather than "the value was null".
     decides whether you pack that slot as visibly empty or leave it out of the bag
     altogether.
 
+!!! info "Expert note"
+    Normalizer **order matters**. The `Serializer` picks the *first* normalizer
+    whose `supportsNormalization()` returns true, so a broad custom normalizer
+    registered with a high priority can silently shadow `ObjectNormalizer`.
+    Built-ins like `DateTimeNormalizer` and `BackedEnumNormalizer` are ordered by
+    the `serializer.normalizer` tag priority — inspect `debug:container` when the
+    output type looks wrong.
+
+??? example "Debugging story"
+    **Symptom:** an API intermittently returned `{}` for some entities.
+    **Diagnosis:** those objects were **Doctrine lazy proxies**; `ObjectNormalizer`
+    read the uninitialised proxy before its DB round-trip, so the getters returned
+    nothing. **Fix:** initialise the association first (or, better, serialize a
+    plain DTO you control) and add groups so only loaded fields are requested.
+    **Avoid:** serializing entities directly — map to a DTO.
+
+??? abstract "Source-code tour"
+    - `Symfony\Component\Serializer\Serializer` holds ordered
+      `Normalizer\NormalizerInterface` + `Encoder\EncoderInterface` lists and
+      dispatches by `supports*()`.
+    - `serialize()` = `normalize()` (object → array via the first matching
+      normalizer) then `encode()` (array → string via the format's encoder).
+    - `Normalizer\ObjectNormalizer` reads metadata from
+      `Mapping\Factory\ClassMetadataFactory` to apply `Attribute\Groups`,
+      `Attribute\SerializedName`, `Attribute\Ignore`.
+    - `Normalizer\AbstractObjectNormalizer` tracks the circular-reference limit and
+      invokes the `CIRCULAR_REFERENCE_HANDLER` when it is exceeded.
+
 ## Configuration & code
 
 === "PHP Attributes"

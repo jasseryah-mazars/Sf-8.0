@@ -49,6 +49,15 @@ directly — you read the **parameter bags**:
 Query and request bags are `InputBag` and expose type-safe getters
 (`getString`, `getInt`, `getBoolean`, `getEnum`, `getAlpha`, `getDigits`).
 
+!!! question "Predict first"
+    A route is `/users/{id}`. Do you read `$id` from `$request->query`,
+    `$request->request`, or `$request->attributes`?
+
+??? note "Reveal"
+    `$request->attributes` — the router writes matched route params there. `query`
+    is `$_GET`, `request` is the `$_POST` body. And never autowire `Request` into a
+    service constructor; inject `RequestStack` instead.
+
 ## Deep Dive — how it works internally
 
 You get the `Request` two ways:

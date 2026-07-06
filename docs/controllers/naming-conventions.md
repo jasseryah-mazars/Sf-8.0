@@ -270,6 +270,16 @@ and lets `AbstractController` receive its service locator.
 - [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html)
 - [Symfony source — ControllerResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/ControllerResolver.php)
 
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** the `Action` method suffix is meaningless in Symfony 8
+- [ ] write invokable and multi-action controllers idiomatically
+- [ ] debug a route pointing at a non-`public` action method
+- [ ] spot the correct `_controller` value for an invokable (class name only)
+- [ ] explain how `ControllerResolver` normalises `_controller` into a callable
+
 ---
 
 <small>Related: [AbstractController](abstract-controller.md) · [Value Resolvers](value-resolvers.md) · [Routing](../routing/index.md)</small>

@@ -37,6 +37,15 @@ voters.
 Roles come from `UserInterface::getRoles()`. Best practice: always include
 `ROLE_USER` for any authenticated user, and let the **hierarchy** add the rest.
 
+!!! question "Predict first"
+    A user has `ROLE_USER` and the hierarchy says `ROLE_ADMIN: [ROLE_USER]`. Is
+    `is_granted('ROLE_ADMIN')` true for them?
+
+??? note "Reveal"
+    No. Hierarchy flows **downward**: having `ROLE_ADMIN` reaches `ROLE_USER`, not
+    the reverse. A `ROLE_USER` user's reachable set is just `{ROLE_USER}`, so the
+    admin check is `false`.
+
 ## Deep Dive — how it works internally
 
 ### From user to token to voter

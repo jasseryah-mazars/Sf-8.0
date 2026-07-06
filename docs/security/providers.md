@@ -280,10 +280,31 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
     - `memory` for tests; `chain` tries providers in order.
     - Stateless firewall ⇒ no `refreshUser()`.
 
+## Connections
+
+- **Depends on:** [Users](users.md) — the provider loads and refreshes
+  `UserInterface` instances.
+- **Depends on:** [Configuration](configuration.md) — providers are declared under
+  the `providers` key.
+- **Reused in:** [Authenticators](authenticators.md) — `UserProviderListener`
+  resolves the `UserBadge` via the firewall's provider.
+- **Confused with:** [Authentication](authentication.md) — the provider only
+  *loads* users; it never verifies credentials.
+
 ## Official References
 - [Symfony docs — User providers](https://symfony.com/doc/current/security/user_providers.html)
 - [Symfony source — InMemoryUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/InMemoryUserProvider.php)
 - [Symfony source — ChainUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/ChainUserProvider.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a provider loads/refreshes but never authenticates
+- [ ] configure memory/chain and write a custom `UserProviderInterface`
+- [ ] debug role changes that never take effect until re-login
+- [ ] spot that `loadUserByIdentifier()` throws (never returns `null`)
+- [ ] explain when `refreshUser()` runs and how a missing user logs out
 
 ---
 
