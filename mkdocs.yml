@@ -327,6 +327,22 @@ nav:
       - Easily Confused: revision/confusions.md
       - Top Certification Traps: revision/traps.md
       - Memory Aids: revision/memory-aids.md
+      - Revision Sheets:
+          - revision/sheets/index.md
+          - PHP & Web Security: revision/sheets/php-web-security.md
+          - HTTP: revision/sheets/http.md
+          - Symfony Architecture: revision/sheets/architecture.md
+          - Controllers: revision/sheets/controllers.md
+          - Routing: revision/sheets/routing.md
+          - Templating (Twig): revision/sheets/twig.md
+          - Forms: revision/sheets/forms.md
+          - Data Validation: revision/sheets/validation.md
+          - Dependency Injection: revision/sheets/dependency-injection.md
+          - Security: revision/sheets/security.md
+          - HTTP Caching: revision/sheets/http-caching.md
+          - Console: revision/sheets/console.md
+          - Automated Tests: revision/sheets/testing.md
+          - Miscellaneous: revision/sheets/miscellaneous.md
       - Flashcards:
           - revision/flashcards/index.md
           - PHP & Web Security: revision/flashcards/php-web-security.md

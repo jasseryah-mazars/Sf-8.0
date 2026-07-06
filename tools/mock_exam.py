@@ -38,6 +38,31 @@ def load():
         pool[stem] = qs
     return pool
 
+def _spread(qs, n, rng):
+    """Pick n questions favouring a ~30/45/25 easy/medium/hard spread when the
+    `difficulty` metadata is present; fall back to random otherwise."""
+    buckets = {"easy": [], "medium": [], "hard": [], None: []}
+    for q in qs:
+        buckets.get(q.get("difficulty"), buckets[None]).append(q)
+    for b in buckets.values():
+        rng.shuffle(b)
+    if not (buckets["easy"] or buckets["medium"] or buckets["hard"]):
+        return qs[:n]  # no metadata yet
+    targets = [("easy", round(n * 0.30)), ("medium", round(n * 0.45)), ("hard", n)]
+    out, seen = [], set()
+    for key, upto in targets:
+        for q in buckets[key]:
+            if len(out) >= upto:
+                break
+            out.append(q); seen.add(id(q))
+    # top up from anything remaining to reach n
+    if len(out) < n:
+        rest = [q for q in qs if id(q) not in seen]
+        rng.shuffle(rest)
+        out += rest[: n - len(out)]
+    return out[:n]
+
+
 def build(seed=8):
     rng = random.Random(seed)
     pool = load()
@@ -45,7 +70,7 @@ def build(seed=8):
     for stem, n in WEIGHTS.items():
         qs = pool.get(stem, [])[:]
         rng.shuffle(qs)
-        for q in qs[:n]:
+        for q in _spread(qs, n, rng):
             picked.append((stem, q))
     rng.shuffle(picked)
     return picked
