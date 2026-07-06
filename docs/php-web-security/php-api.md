@@ -203,9 +203,8 @@ if (!json_validate($raw)) {
 
 ### `new` in initializers (8.1)
 
-You can use `new` in parameter defaults, property defaults, static variables and
-attribute arguments — enabling clean default dependencies without a nullable +
-`??` dance.
+`new` is allowed in parameter/property defaults, static variables and attribute
+arguments — clean default dependencies without a nullable + `??` dance:
 
 ```php
 <?php
