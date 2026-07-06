@@ -6,6 +6,14 @@
     first**, `dispatch()` takes the **event object first** (PSR-14), and a subscriber
     declares its events in `getSubscribedEvents()`.
 
+!!! example "Real-world analogy"
+    The dispatcher is an **airport control tower**. When something happens it
+    **broadcasts** to every listener tuned to that frequency — but not at random:
+    higher-**priority** aircraft (listeners) are cleared first. Any listener can call
+    `stopPropagation()` — like the tower closing the runway — and the ones still
+    queued are grounded. The tower never flies the planes itself; it only
+    coordinates who acts and in what order.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -122,6 +130,23 @@ only constructed when its event actually fires, which keeps boot cheap.
 | `TERMINATE` | `TerminateEvent` | After the response is sent |
 
 See [Request Handling](request-handling.md) for their execution order.
+
+### Null behavior
+
+`dispatch(object $event, ?string $eventName = null): object` **always returns the
+same event object** — even when *no* listener is registered and even when every
+listener left it untouched. Passing `null` for (or omitting) `$eventName` is the
+normal case: the dispatcher falls back to the event's class name. Listeners
+themselves return `void`; the only way a result reaches the caller is by *mutating*
+the event, so you read it off the returned object
+(`$response = $dispatcher->dispatch($event)`). If a listener never calls a setter —
+`setResponse()` on a kernel event, say — the event simply comes back unchanged: no
+error, no `null` return. The common bug is expecting `dispatch()` to hand back a
+listener's return value; it never does — it returns the event you passed in.
+
+!!! note "Null in real life"
+    An event with no listeners is a **tower radio call that nobody answers**: the
+    message still goes out and comes back to you unchanged — silence is not an error.
 
 ## Configuration & code
 

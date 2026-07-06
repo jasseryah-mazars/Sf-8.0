@@ -6,6 +6,15 @@
     chain (`Request`/`Session` at 120) plus attribute-only "targeted" resolvers.
     Remember the order, and that a resolver declines by **yielding nothing**.
 
+!!! example "Real-world analogy"
+    A value resolver is a **translator** who turns the raw request slip into the
+    typed object your action asked for — a `Uuid`, a `\DateTimeImmutable`, a
+    validated DTO. Picture a line of specialist translators (the priority chain):
+    each reads the argument's metadata, and either translates it or shrugs and
+    waves the slip on to the next translator. That shrug — declining by yielding
+    nothing — is how the chain finds the one resolver that speaks the argument's
+    language.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

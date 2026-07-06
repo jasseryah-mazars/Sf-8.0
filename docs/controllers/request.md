@@ -6,6 +6,15 @@
     `Request` directly. Exam hook: `$request->request` is the POST body, while route
     params live in `$request->attributes`.
 
+!!! example "Real-world analogy"
+    Picture the `Request` as a visitor's intake folder, and each parameter bag as a
+    **labelled drawer** in the reception desk. `query` holds what was called out
+    from the doorway (the `?…` in the URL / GET); `request` holds the form the
+    visitor actually filled in and posted (POST body); `attributes` holds the
+    sticky notes the office itself clipped on (the matched route params). Open the
+    drawer that matches what you need — reaching into `query` for a route param
+    finds an empty drawer.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -74,6 +83,32 @@ read the current request lazily.
 Reading `$request->query->get('page')` works, but Symfony 8 favours mapping
 attributes — `#[MapQueryParameter]`, `#[MapQueryString]`, `#[MapRequestPayload]`
 — which validate and cast for you. See [Value Resolvers](value-resolvers.md).
+
+### Null behavior
+
+The two families of getters on an `InputBag` disagree about `null`, and the exam
+loves the difference:
+
+- `$request->query->get('x')` returns the raw value **or `null`** when the key is
+  absent — its default default is `null`, and the return type is `?string`. So
+  `$request->query->get('page')` on a URL without `?page=` is `null`.
+- The typed getters never hand back `null` for a missing key: `getInt('page', 1)`
+  returns `1`, `getString('q')` returns `''`, `getBoolean('flag')` returns
+  `false`. You give the default; they coerce and guarantee the type.
+
+The common null bug is `(int) $request->query->get('page')` — when `page` is
+absent that casts `null` to `0`, not to a sensible default. Either supply a
+default (`get('page', '1')`) or, better, use `getInt('page', 1)` so the type and
+fallback are explicit. Under `declare(strict_types=1)` a stray `null` flowing into
+an `int` parameter is exactly the kind of error the typed getters prevent.
+
+(Note `InputBag::get()` also throws if the value is a non-scalar array — it only
+returns a scalar or `null`, never an array.)
+
+!!! note "Null in real life"
+    Pulling a drawer that was never filled hands you nothing (`null`). A drawer
+    with a printed default form always hands you at least the blank form — that is
+    what `getInt`/`getString` with a default give you.
 
 ## Configuration & code
 

@@ -6,6 +6,14 @@
     services from a **lazy service locator** driven by `getSubscribedServices()` —
     not the constructor. That single fact is the exam's favourite.
 
+!!! example "Real-world analogy"
+    Think of your controller as a **receptionist** who takes a visitor's request
+    and hands back an answer. `AbstractController` is the well-stocked desk behind
+    that receptionist: a phone (`redirectToRoute`), a stamp (`json`), a visitor
+    badge check (`getUser`), a printer (`render`). The receptionist only reaches for
+    a tool when a visitor actually needs it — that "reach for it on demand" is the
+    lazy service locator, not a drawer pre-filled at the start of every shift.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -121,6 +129,31 @@ Symfony deliberately avoids a fat base class that injects everything eagerly:
 
 Override `getSubscribedServices()` to add your own service and merge the parent
 list — a clean pattern for a shared service across many controllers.
+
+### Null behavior
+
+`getUser(): ?UserInterface` is the helper most likely to hand you `null`. It reads
+the token from `security.token_storage`; when no one is authenticated (an
+anonymous visitor, or a route with no firewall), there is no token — or the
+token's user is not a `UserInterface` — so it returns `null`. That is a real
+absence, not an error.
+
+The classic bug is treating a public page's user as always present:
+`$this->getUser()->getEmail()` fatals with *"Call to a member function on null"*
+the moment an anonymous visitor arrives. Handle it deliberately:
+
+- Guard first with `denyAccessUnlessGranted('ROLE_USER')` (or `#[IsGranted]`) so
+  the action only runs for authenticated users, after which `getUser()` is safe.
+- Or read defensively: `$this->getUser()?->getUserIdentifier() ?? 'guest'`.
+
+Note the sibling trap: `createNotFoundException()` does not *return* `null` and
+does not abort — it returns a `NotFoundHttpException` you must `throw`. See
+[404 & error pages](error-pages.md).
+
+!!! note "Null in real life"
+    `null` here is the unknown visitor at the security desk who never showed a
+    badge — the receptionist can't greet them by name, so you check for a badge
+    before assuming one.
 
 ## Configuration & code
 

@@ -5,6 +5,13 @@
     and let the framework build it via `createForm()`. Exam hook: `data_class`
     binds the form to an object — without it, a compound form's data is a plain **array**.
 
+!!! example "Real-world analogy"
+    A form type is a **blank paper form**; `createForm()` hands you a fresh copy
+    with a **clerk** attached. When you submit, the clerk reads each field and files
+    the answers onto your **record** — `data_class` names which record file
+    (a `RegistrationData`). With no `data_class`, the clerk just keeps a loose stack
+    of labelled notes (an associative **array**).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -89,6 +96,21 @@ flowchart LR
   **data mapper** (`Symfony\Component\Form\Extension\Core\DataMapper\DataMapper`,
   which uses PropertyAccess). Without `data_class`, a compound form yields an
   associative **array**.
+
+### Null behavior
+
+Right after `createForm()` — **before any submit** — `getData()` returns whatever
+you passed. Pass nothing while `data_class` is set and the form still materialises
+a `new $dataClass()` from the `empty_data` option, so it is never `null` at render
+time. Pass nothing *without* `data_class` and `getData()` is `null` (or the initial
+array you gave). Unmapped fields (`'mapped' => false`, like `plainPassword`) are
+never written to the object — read them via `$form->get('plainPassword')->getData()`,
+not the model. The common bug: type-hinting `getData()` as your DTO and
+dereferencing it on an **unbound, `data_class`-less** form, hitting `null`.
+
+!!! note "Null in real life"
+    `null` = a blank record card the clerk has not filed anything onto yet — with a
+    named record file (`data_class`) they always start you a fresh one.
 
 ## Configuration & code
 

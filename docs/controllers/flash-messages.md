@@ -6,6 +6,12 @@
     (`app.flashes`) **consumes** it, so pair it with a redirect and use `peek()`
     when you must not consume.
 
+!!! example "Real-world analogy"
+    A flash is the **sticky note** the receptionist leaves on the counter for your
+    *next* visit: "Profile saved". You come back (the redirect's fresh request),
+    read it once, and it is peeled off and binned — reading consumes it. `peek()`
+    is glancing at the note while leaving it stuck for someone else.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

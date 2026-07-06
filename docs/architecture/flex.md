@@ -6,6 +6,14 @@
     Highest-yield: it runs at Composer time only (no runtime role), and
     `symfony.lock` tracks recipes — not package versions, which is `composer.lock`.
 
+!!! example "Real-world analogy"
+    Flex is like **IKEA's build instructions**. `composer require` delivers the flat
+    pack (the package); the **recipe** is the illustrated leaflet that tells Flex
+    exactly which screws go where — creating config files, registering the bundle in
+    `config/bundles.php`, appending `.env` variables. `symfony.lock` is the receipt
+    noting which leaflet version you followed, so any teammate can auto-assemble the
+    identical result.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

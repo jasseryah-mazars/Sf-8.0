@@ -6,6 +6,15 @@
     order **request → controller → controller_arguments → view → response →
     finish_request → terminate** (plus `exception`, out of band, on error).
 
+!!! example "Real-world analogy"
+    Picture a request as a **package moving through a sorting facility**.
+    `HttpKernel::handle()` is the conveyor belt, and each kernel event is a
+    **checkpoint**: routing scans the shipping label (`kernel.request`), the
+    controller is the worker who fills the box, `kernel.view` wraps a bare item into
+    a proper parcel, and `kernel.response` is the final quality check before it
+    ships. `kernel.terminate` is the paperwork filed *after* the truck has already
+    left the dock.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -190,6 +199,25 @@ freshness and rebuilds when source config changes.
 - Prefer `kernel.terminate` for post-response work to shorten time-to-first-byte.
 - Sub-requests are full request cycles — cache fragments (ESI/`render_esi`) rather
   than rendering many synchronous sub-requests.
+
+### Null behavior
+
+A controller may `return null;` — or any non-`Response` value. The kernel does not
+treat that as an error straight away. After the controller runs, `handleRaw()`
+checks `$response instanceof Response`; if it isn't, it dispatches **`kernel.view`**
+(`ViewEvent`) carrying the returned value so a listener can build a `Response` from
+it. It then calls `$event->hasResponse()`. If **still** no response was set, the
+kernel throws `ControllerDoesNotReturnResponseException` (a `LogicException`):
+*"The controller must return a "Symfony\Component\HttpFoundation\Response" object
+but it returned null. Did you forget to add a return statement somewhere in your
+controller?"* Handle it by returning a real `Response`, or by registering a
+`kernel.view` listener that calls `$event->setResponse()` (e.g. serializing the
+value to a `JsonResponse`).
+
+!!! note "Null in real life"
+    A controller returning `null` is a **parcel that reached the wrapping station
+    with no box**: `kernel.view` is the worker who boxes it, and if nobody does the
+    package is rejected at the dock — the "controller must return a Response" error.
 
 ## Configuration & code
 

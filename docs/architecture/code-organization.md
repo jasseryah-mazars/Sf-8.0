@@ -6,6 +6,14 @@
     (`public/index.php`), bundles are enabled in `config/bundles.php`, and
     `App\Kernel` stays tiny thanks to `MicroKernelTrait`.
 
+!!! example "Real-world analogy"
+    The skeleton layout is a **well-organized workshop**: every tool has a labelled
+    drawer, so any developer — or tool, or Flex recipe — knows where to reach without
+    asking. `public/` is the shop-front counter customers see, `src/` is the
+    workbench, `var/` is the bin of shavings you sweep away, and `config/` is the
+    instruction binder. `App\Kernel` is the foreman who already knows the whole
+    layout by heart.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -6,6 +6,14 @@
     service constructor. It is **lazy** — no cookie until you touch it — and
     `migrate()` after login defeats session fixation.
 
+!!! example "Real-world analogy"
+    A session is the reception desk's **coat-check**: a private locker per visitor,
+    keyed by a claim ticket (the session cookie). Nothing is rented until the
+    visitor actually hands something over — that is laziness, so a visitor who
+    checks nothing gets no ticket (no `Set-Cookie`). Regenerating the ticket after
+    they upgrade to a VIP badge (`migrate()` after login) stops anyone reusing an
+    old stub they slipped in earlier — session fixation.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -82,6 +90,32 @@ cookie — important for HTTP caching and privacy.
 ### Configuration
 
 `framework.session` controls the handler, cookie flags, and lifetime.
+
+### Null behavior
+
+The `null` you meet here is the **current request**, not the session itself.
+`RequestStack::getCurrentRequest()` returns `?Request` — `null` on the CLI, in a
+worker, or anywhere outside the HTTP request cycle. That absence then shapes how
+you reach the session:
+
+- `RequestStack::getSession()` and `Request::getSession()` do **not** return
+  `null` when there is no session — they *throw* `SessionNotFoundException`. So the
+  bug is not a null return, it is an exception when you call `getSession()` from a
+  context that has no request (a console command) or a request with no session.
+- Inside the bag, `$session->get('cart')` returns `null` for a missing key unless
+  you pass a default — `$session->get('cart', [])` is the safe idiom before a
+  `count()` or iteration.
+
+Guard the request first: `$request = $rs->getCurrentRequest();` then
+`if (!$request || !$request->hasSession()) { return $fallback; }`. The nullsafe
+operator makes the read-side concise: `$rs->getCurrentRequest()?->getSession()`
+still requires a session to exist, so pair it with `hasSession()` in CLI-reachable
+code.
+
+!!! note "Null in real life"
+    Turning up after hours: the coat-check attendant has gone home (no current
+    request), so there is simply no one to hand your ticket to — you check for the
+    attendant before waving the ticket.
 
 ## Configuration & code
 

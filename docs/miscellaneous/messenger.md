@@ -7,6 +7,14 @@
     and once a message is routed to a transport `SendMessageMiddleware` **stops**
     the bus so the handler runs in the worker, not in-process.
 
+!!! example "Real-world analogy"
+    Messenger is a **post office**. `dispatch()` is **dropping a letter in the
+    box** — you get a receipt (the `Envelope`), not a reply. The **transport** is
+    the queue and sorting room where letters wait; the **worker** is the courier
+    who later picks them up and delivers; the **handler** is the recipient who
+    finally acts on the letter. You don't wait at the counter for the recipient to
+    read it — that happens later, elsewhere.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -227,6 +235,23 @@ Adding `DispatchAfterCurrentBusStamp` to a message dispatched *inside* a handler
 defers its delivery until the **current** message finishes handling
 successfully. This prevents dispatching an "email confirmation" event before the
 surrounding database transaction commits.
+
+### Null behavior
+
+A handler that returns nothing (`void`) or explicitly `null` still produces a
+`HandledStamp` — its result is simply `null`. So `dispatch()` **never** returns
+null: it always returns the `Envelope`. When you read a query result with
+`$envelope->last(HandledStamp::class)?->getResult()`, two different nulls hide
+here: `last()` returns `null` when **no such stamp exists** (e.g. the message was
+routed async and hasn't been handled in this process yet), while `getResult()`
+returns `null` when the handler genuinely returned nothing. The nullsafe `?->`
+guards the first case; don't confuse "not handled here" with "handled, returned
+null".
+
+!!! note "Null in real life"
+    Null here is like a delivery receipt with the "reply" line left blank — the
+    letter was delivered (you hold the envelope), the recipient just didn't send
+    anything back.
 
 ## Configuration & code
 

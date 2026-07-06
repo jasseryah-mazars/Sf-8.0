@@ -5,6 +5,13 @@
     Golden rule: always guard with `isSubmitted() && isValid()` (calling
     `isValid()` on an unsubmitted form throws), then redirect after a successful POST.
 
+!!! example "Real-world analogy"
+    Think of a clerk at a counter. `handleRequest` is the clerk noticing whether you
+    actually **handed the form back** (this request is the submission) or are just
+    picking up a blank one (GET). `isSubmitted()` = "did you hand it in?";
+    `isValid()` = "did it pass the checks?". The redirect after success is the clerk
+    stamping a **receipt** so refreshing the page doesn't file your form twice.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -109,6 +116,23 @@ reliable after a submission.
 `submit($data, $clearMissing = true)` resets fields absent from the payload to
 empty. `handleRequest` sets `clearMissing = false` for `PATCH`, enabling partial
 updates — the exam's favourite `handleRequest` detail.
+
+### Null behavior
+
+An empty submission still submits: `handleRequest` calls `submit()` with
+empty/absent values, so `clearMissing` (default `true`) resets each field to its
+empty data — a text field becomes `''`, a `data_class` form keeps the object but
+blanks its properties, and an unbound compound form yields an array of nulls.
+**Before** submit, `getData()` is the initial model (or `null` if you passed none).
+For `PATCH`, `handleRequest` passes `clearMissing: false`, so fields absent from the
+payload keep their current value instead of going null — the whole point of a
+partial update. The classic bug: sending a PATCH as a plain POST, so `clearMissing`
+stays `true` and untouched fields are silently wiped to null/empty.
+
+!!! note "Null in real life"
+    `null`/empty = a blank line on the form the clerk got back. With `clearMissing`
+    on, a blank line **erases** what was on file; a PATCH tells the clerk to leave
+    untouched lines exactly as they were.
 
 ## Configuration & code
 

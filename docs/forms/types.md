@@ -5,6 +5,14 @@
     root `FormType`. Remember: `getParent()` returns a **class string** (FQCN), the
     FQCN is the type id (no `getName()`), and parent hooks run before the child's.
 
+!!! example "Real-world analogy"
+    Types are **standardised form templates that inherit from master templates**.
+    A specialised form (a VAT-number field) starts from a generic text-field
+    template and stamps a few extra rules on top; that template in turn builds on
+    the office-wide base layout (`FormType`). Each layer's rules are applied
+    outer-to-inner, so your specialisation only writes the **delta**, not the whole
+    page from scratch.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

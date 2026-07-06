@@ -5,6 +5,13 @@
     Templates compile once to cached PHP classes, so rendering is cheap. Exam hook:
     `~` concatenates (not `+`), `//` is floor division, and filters bind tightest.
 
+!!! example "Real-world analogy"
+    Reading a Twig template is like performing from a script. `{{ … }}` are the
+    lines you say **out loud** (printed to the audience), `{% … %}` are the stage
+    directions that shape the scene but are **never spoken**, and `{# … #}` are the
+    director's margin notes — for you only, never performed. The compile step is a
+    one-time rehearsal; every show after is fast.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

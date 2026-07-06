@@ -5,6 +5,15 @@
     from typed *bags* instead of `$_GET`/`$_POST`. Exam hook: route parameters live
     in **`attributes`** (a `ParameterBag`), not in `query`.
 
+!!! example "Real-world analogy"
+    An HTTP request is a **letter** you drop in the mail. The **method** is your
+    intent ("send me a copy", "here is a form"), the **URI** is the address on the
+    envelope, the **headers** are the notes in the margin (your language, the
+    content type, who you are), and the **body** is the letter's contents.
+    Symfony's `Request` is the clerk who opens the envelope and sorts each part
+    into a labelled tray (a *bag*) so you never rummage through the raw mail
+    (`$_GET`/`$_POST`).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

@@ -5,6 +5,15 @@
     one, or the kernel throws a `LogicException`. Pick the subclass by payload:
     `JsonResponse`, `StreamedResponse`, or `BinaryFileResponse`.
 
+!!! example "Real-world analogy"
+    If the controller is the **receptionist** taking a request, the `Response` is
+    the sealed envelope they must hand back — every visitor leaves with one. The
+    subclass is the envelope type: a plain letter (`Response`, HTML), a structured
+    memo (`JsonResponse`), a whole parcel (`BinaryFileResponse`), or a live
+    dictation given page by page (`StreamedResponse`). Walk away with no envelope
+    and the building's supervisor (the kernel) raises an alarm — the
+    `LogicException`.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

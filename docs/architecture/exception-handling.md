@@ -6,6 +6,14 @@
     `ErrorListener` runs at priority **-128** (yours run first), and only
     `HttpExceptionInterface` carries a status code — everything else becomes **500**.
 
+!!! example "Real-world analogy"
+    An uncaught exception is a **fire alarm** going off in the building. The kernel
+    catches the smoke and broadcasts `kernel.exception` to the responders
+    (listeners). Your own responders get first shot; the **building's default fire
+    brigade** (`ErrorListener`, priority `-128`) only steps in if nobody else acted.
+    The exception's status code is the **severity level** on the alarm panel — and if
+    no responder acts at all, the alarm keeps ringing (the exception is re-thrown).
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
@@ -122,6 +130,23 @@ flowchart TD
 The error controller, renderers and `ErrorListener` are wired at compile time by
 FrameworkBundle. At runtime only the dispatch + sub-request happen. The `dev`
 exception page depends on `kernel.debug = true`, resolved at boot.
+
+### Null behavior
+
+On `kernel.exception` a response is **not** guaranteed: `ExceptionEvent::getResponse()`
+returns `?Response` and stays `null` until some listener calls `setResponse()`.
+After dispatching, `handleThrowable()` checks `$event->hasResponse()`; if it is
+still unset, the kernel **re-throws** the original throwable, which — with
+`catch: true` — surfaces to the client as a `500`. In practice `ErrorListener`
+(priority `-128`) fills that gap, so the null case only bites when you replace or
+disable it. The classic bug: a listener that inspects `getThrowable()` but forgets
+`setResponse()` for its branch — the event's response stays `null`, so your custom
+page never appears and the default (or a 500) wins instead.
+
+!!! note "Null in real life"
+    A `kernel.exception` with no response set is a **fire alarm that no responder
+    answers**: with nobody acting, the building falls back to the emergency exit —
+    the re-thrown 500.
 
 ## Configuration & code
 

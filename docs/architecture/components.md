@@ -6,6 +6,14 @@
     components are usable without the framework, and contracts (`symfony/*-contracts`)
     are interface-only packages you type-hint against.
 
+!!! example "Real-world analogy"
+    Symfony components are **standalone appliances**: a kettle, a toaster and a
+    blender each work perfectly on their own. The **contracts**
+    (`symfony/*-contracts`) are the **standard power socket** they all plug into, so
+    you can swap one brand for another without rewiring. The **framework** is the
+    fully fitted kitchen that mounts every appliance in place and connects the wiring
+    for you.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

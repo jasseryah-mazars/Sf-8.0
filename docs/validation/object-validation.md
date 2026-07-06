@@ -5,6 +5,13 @@
     to check an object; it hands back a `ConstraintViolationList`. It never returns
     a bool and never throws on failure, so you inspect the result with `count()`.
 
+!!! example "Real-world analogy"
+    Think of validation as **airport baggage screening**. You (the airline) never
+    rummage through bags yourself — you send each one down the screening line (the
+    `ValidatorInterface`) and get back an itemised report of everything flagged
+    (the `ConstraintViolationList`). The line never shouts "denied"; it hands you a
+    list, even when that list is empty.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 

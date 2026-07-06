@@ -5,6 +5,14 @@
     what the browser shows (and back). Remember the direction: `transform()` goes
     **model → view** (display), `reverseTransform()` goes **view → model** (submit).
 
+!!! example "Real-world analogy"
+    A transformer is a **currency exchange booth** between what the user types and
+    what your object stores. `transform()` is handing over your money to get the
+    local currency the browser understands (model → view); `reverseTransform()` is
+    changing it back to your home currency on the way in (view → model). Hand over
+    an amount the booth can't convert and it refuses the deal
+    (`TransformationFailedException`) — it does not quietly hand you nothing.
+
 !!! abstract "Learning objectives"
     By the end of this chapter you can:
 
