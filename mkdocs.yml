@@ -299,6 +299,22 @@ nav:
       - Internationalization (Intl): miscellaneous/intl.md
       - Runtime Component: miscellaneous/runtime.md
       - Clock Component: miscellaneous/clock.md
+  - Labs:
+      - labs/index.md
+      - PHP & Web Security — SPL Collection: labs/php-web-security.md
+      - HTTP — API Client (MockHttpClient): labs/http.md
+      - Architecture — Event Subscriber: labs/architecture.md
+      - Controllers — Value Resolver: labs/controllers.md
+      - Routing — Match & Debug: labs/routing.md
+      - Twig — Custom Extension: labs/twig.md
+      - Forms — Data Transformer: labs/forms.md
+      - Validation — Custom Constraint: labs/validation.md
+      - Dependency Injection — Compiler Pass Registry: labs/dependency-injection.md
+      - Security — Voter: labs/security.md
+      - HTTP Caching — Cache Headers: labs/http-caching.md
+      - Console — CommandTester: labs/console.md
+      - Automated Tests — Kernel/Web Tests: labs/testing.md
+      - Miscellaneous — Messenger Middleware: labs/miscellaneous.md
   - Revision Hub:
       - revision/index.md
       - Revision Modes: revision/modes.md
