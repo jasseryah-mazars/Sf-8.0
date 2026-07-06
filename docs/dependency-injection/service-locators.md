@@ -39,6 +39,15 @@ answer to "I might need one of several services, but not all, and not eagerly."
 Unlike injecting the whole container (an anti-pattern), a locator exposes only an
 explicit whitelist — dependencies stay honest and analysable.
 
+!!! question "Predict first"
+    You call `$locator->get($key)` with a key that was never declared in the
+    locator. Do you get `null` or an exception?
+
+??? note "Reveal"
+    An **exception** (`ServiceNotFoundException`) — a locator's set is fixed at
+    compile time and has no "null on miss" mode. Check `has($key)` before `get()`
+    when the key is dynamic or user-supplied.
+
 ## Deep Dive — how it works internally
 
 ### `ServiceLocator`
@@ -280,9 +289,28 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
       `#[SubscribedService]`.
     - Lazy, whitelisted, not the whole container.
 
+## Connections
+
+- **Depends on:** [Tags](tags.md) — a `tagged_locator` builds a locator from a tag.
+- **Reused in:** [Controllers — AbstractController](../controllers/abstract-controller.md),
+  [Messenger](../miscellaneous/messenger.md) — the base controller and handler
+  wiring lean on subscribers/locators.
+- **Confused with:** [The Service Container](container.md) — a locator is a small
+  PSR-11 whitelist, not the whole container.
+
 ## Official References
 - [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 - [Symfony source — ServiceLocator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ServiceLocator.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** a locator beats injecting the whole container
+- [ ] build one with `#[AutowireLocator]` or a service subscriber in Symfony 8
+- [ ] debug a `get()` on an undeclared key that throws instead of returning null
+- [ ] spot that a locator is lazy, PSR-11, and fixed at compile time
+- [ ] explain why `ServiceSubscriberTrait` is deprecated for the Methods trait
 
 ---
 

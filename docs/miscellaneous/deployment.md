@@ -29,6 +29,15 @@ per-request work parses YAML, scans files, or exposes internals.
 
 ## Deep Dive — how it works internally
 
+!!! question "Predict first"
+    You deploy new code to prod but skip `cache:clear`/`warmup`. The app keeps
+    serving the old behaviour. Why doesn't Symfony just notice the changed files?
+
+??? note "Reveal"
+    In prod the compiled container in `var/cache/prod/` is loaded **as-is** —
+    freshness checks are disabled for speed. Symfony assumes the cache is current,
+    so you **must** clear/warm it on every deploy for changes to take effect.
+
 ### Environment & debug
 
 `APP_ENV=prod` selects prod config; `APP_DEBUG=0` disables the profiler, the

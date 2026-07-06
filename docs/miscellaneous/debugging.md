@@ -209,10 +209,26 @@ proper observability, not Stopwatch.
     - `dump()` / `dd()`; `server:dump` to a TCP server.
     - `Stopwatch::start()/stop()` → `StopwatchEvent::getDuration()` (ms).
 
+## Connections
+
+- **Depends on:** [Error Handling](error-handling.md) — `Debug::enable()` wires both the ErrorHandler and VarDumper in debug mode.
+- **Reused in:** [Profiler](profiler.md) — dumps are collected by `DumpDataCollector` and the Stopwatch feeds the timeline.
+- **Confused with:** [Clock](clock.md) — Stopwatch measures elapsed wall time; use `MonotonicClock` for robust durations.
+
 ## Official References
 - [Official docs — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
 - [Official docs — Stopwatch](https://symfony.com/doc/current/components/stopwatch.html)
 - [Symfony source — VarCloner](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/VarDumper/Cloner/VarCloner.php)
+
+## Confidence check
+
+I'm ready when I can:
+
+- [ ] explain **why** VarDumper separates cloning from rendering
+- [ ] use `dump()`/`dd()` and time code with `Stopwatch` in Symfony 8
+- [ ] debug a corrupted API response caused by a stray `dd()`
+- [ ] spot the trick: `dd()` exits, `dump()` continues; durations are in ms
+- [ ] describe the `VarCloner` → `Data` → `Cli/Html Dumper` pipeline
 
 ---
 
