@@ -120,6 +120,7 @@ nav:
       - Exam-Day Strategy: exam-guide/strategy.md
   - Roadmap: roadmap.md
   - Glossary: glossary.md
+  - Resources: resources.md
   - Tags: tags.md
   - PHP & Web Security:
       - php-web-security/index.md
