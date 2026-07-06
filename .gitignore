@@ -1,0 +1,17 @@
+# MkDocs build output
+/site/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Node (only if quiz tooling is added locally)
+/node_modules/
