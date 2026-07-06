@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Validation
+---
+
 # Lab: Custom Constraint + Validator — a `StrongPassword` rule
 
 !!! abstract "Practical Lab"

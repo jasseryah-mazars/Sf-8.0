@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Routing
+---
+
 # Lab: Route Matching — Predict & Verify with `debug:router`
 
 !!! abstract "Practical Lab"

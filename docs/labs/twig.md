@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Twig
+---
+
 # Lab: Custom Twig Extension — an `excerpt` filter
 
 !!! abstract "Practical Lab"

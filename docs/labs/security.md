@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Security
+---
+
 # Lab: Custom Voter — Fine-Grained Authorization (`POST_EDIT`)
 
 <!--

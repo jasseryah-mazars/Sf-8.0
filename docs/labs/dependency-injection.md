@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Dependency Injection
+---
+
 # Lab: Compiler Pass — A Tag-Driven Handler Registry
 
 <!-- TDD lab: code behaviour (a CompilerPass + registry you can compile and assert on). -->

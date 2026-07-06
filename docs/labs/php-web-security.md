@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - PHP & Web Security
+---
+
 # Lab: SPL typed collection — an immutable `PermissionSet`
 
 <!--

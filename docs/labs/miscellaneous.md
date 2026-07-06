@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Miscellaneous
+---
+
 # Lab: Messenger — A Message, a Handler and a Custom Middleware
 
 !!! abstract "Practical Lab"

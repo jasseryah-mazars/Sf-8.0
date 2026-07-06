@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Console
+---
+
 # Lab: Custom Console Command — Tested with `CommandTester`
 
 !!! abstract "Practical Lab"

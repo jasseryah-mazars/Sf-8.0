@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - HTTP Caching
+---
+
 # Lab: HTTP Caching — Make a Controller Response Cacheable and Prove It
 
 <!--

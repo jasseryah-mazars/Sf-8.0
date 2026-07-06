@@ -113,6 +113,129 @@ categories:
           before the surrounding work commits, so a failure/rollback cancels them.
         documentation: "https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html"
 
+  - name: "Miscellaneous — Messenger (Advanced)"
+    questions:
+      - question: "How do you retrieve a synchronous handler's return value after MessageBusInterface::dispatch()?"
+        answers:
+          - value: "$envelope->last(HandledStamp::class)->getResult()"
+            correct: true
+          - value: "The value is returned directly by dispatch()"
+            correct: false
+          - value: "$envelope->getResult()"
+            correct: false
+          - value: "$bus->getLastResult()"
+            correct: false
+        explanation: >-
+          dispatch() returns an Envelope. For a single sync handler you read its
+          result via the HandledStamp: $envelope->last(HandledStamp::class)->getResult().
+          Use HandleTrait to unwrap it in a query bus.
+        documentation: "https://symfony.com/doc/current/messenger.html#messenger-getting-handler-results"
+      - question: "What information does a RedeliveryStamp carry on a retried message?"
+        answers:
+          - value: "The current retry count (and timing), so the retry strategy knows how many attempts have happened"
+            correct: true
+          - value: "The DSN of the failure transport"
+            correct: false
+          - value: "The fully-qualified class name of the handler that failed"
+            correct: false
+          - value: "A cryptographic signature of the payload"
+            correct: false
+        explanation: >-
+          RedeliveryStamp records the retry count (and redelivery timestamp). The
+          worker reads it to compare against max_retries and to compute the next
+          delay via the retry strategy.
+        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
+      - question: "Inside a custom middleware, how do you pass the envelope on to the rest of the stack?"
+        answers:
+          - value: "return $stack->next()->handle($envelope, $stack);"
+            correct: true
+          - value: "return $this->bus->dispatch($envelope);"
+            correct: false
+          - value: "return $stack->handle($envelope);"
+            correct: false
+          - value: "$envelope->next();"
+            correct: false
+        explanation: >-
+          A MiddlewareInterface::handle() implementation calls
+          $stack->next()->handle($envelope, $stack) to invoke the next middleware.
+          Code before that call runs on the way in; code after it runs on the way out.
+        documentation: "https://symfony.com/doc/current/messenger.html#creating-your-own-middleware"
+      - question: "Which built-in transport handles a message immediately in the same process, without a queue?"
+        answers:
+          - value: "The sync transport (DSN sync://)"
+            correct: true
+          - value: "The in-memory transport (in-memory://)"
+            correct: false
+          - value: "The doctrine transport (doctrine://default)"
+            correct: false
+          - value: "The amqp transport (amqp://...)"
+            correct: false
+        explanation: >-
+          sync:// processes the message synchronously during dispatch. in-memory://
+          keeps messages in memory for tests, while doctrine/amqp/redis are real
+          asynchronous transports consumed by a worker.
+        documentation: "https://symfony.com/doc/current/messenger.html#transport-configuration"
+      - question: "In framework.messenger.routing, mapping App\\Message\\SmsNotification to 'async' means…"
+        answers:
+          - value: "SendMessageMiddleware sends that message class to the 'async' transport instead of handling it in-process"
+            correct: true
+          - value: "The handler is renamed to 'async'"
+            correct: false
+          - value: "The message is handled by every transport named async"
+            correct: false
+          - value: "It only affects messages dispatched from the CLI"
+            correct: false
+        explanation: >-
+          routing maps a message class (or interface/parent) to one or more transport
+          names. A routed message is serialized and sent to that transport rather than
+          handled synchronously. A message with no routing entry is handled immediately.
+        documentation: "https://symfony.com/doc/current/messenger.html#routing-messages-to-a-transport"
+      - question: "Which options let 'messenger:consume' stop a worker gracefully for zero-downtime deploys?"
+        answers:
+          - value: "--limit (max messages) and --time-limit (max seconds), optionally with memory limits"
+            correct: true
+          - value: "--kill and --restart"
+            correct: false
+          - value: "--stop-now only"
+            correct: false
+          - value: "--reload after each message"
+            correct: false
+        explanation: >-
+          A long-running worker is stopped cleanly with --limit / --time-limit
+          (and --memory-limit). Combined with a process manager and
+          messenger:stop-workers, this enables graceful restarts on deploy.
+        documentation: "https://symfony.com/doc/current/messenger.html#deploying-to-production"
+      - question: "Under a transport's retry_strategy, what does the 'multiplier' option control?"
+        answers:
+          - value: "The factor by which the delay grows between successive retries (exponential backoff)"
+            correct: true
+          - value: "The number of parallel workers spawned"
+            correct: false
+          - value: "How many transports share the message"
+            correct: false
+          - value: "The maximum number of messages fetched per poll"
+            correct: false
+        explanation: >-
+          retry_strategy defines max_retries, delay (initial, ms), multiplier
+          (delay is multiplied by this each attempt) and max_delay to cap it,
+          producing exponential backoff before the failure transport is used.
+        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
+      - question: "Which transport is intended specifically for functional tests, asserting dispatched messages without a broker?"
+        answers:
+          - value: "The in-memory transport (in-memory://), inspected via getSent()"
+            correct: true
+          - value: "The sync transport (sync://)"
+            correct: false
+          - value: "The redis transport (redis://localhost)"
+            correct: false
+          - value: "The doctrine transport"
+            correct: false
+        explanation: >-
+          in-memory:// keeps envelopes in memory instead of sending them, so a test
+          can fetch the transport from the container and assert on getSent(). It is
+          reset between tests via the messenger reset behaviour.
+        documentation: "https://symfony.com/doc/current/messenger.html#testing"
+
   - name: "Miscellaneous — Cache"
     questions:
       - question: "Symfony\\Contracts\\Cache\\CacheInterface::get() runs its callback…"

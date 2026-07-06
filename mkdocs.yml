@@ -61,6 +61,8 @@ theme:
 
 plugins:
   - search
+  - tags:
+      tags_file: tags.md
   - git-revision-date-localized:
       enable_creation_date: false
       fallback_to_build_date: true
@@ -117,6 +119,8 @@ nav:
       - Advanced vs Expert: exam-guide/levels.md
       - Exam-Day Strategy: exam-guide/strategy.md
   - Roadmap: roadmap.md
+  - Glossary: glossary.md
+  - Tags: tags.md
   - PHP & Web Security:
       - php-web-security/index.md
       - PHP API (up to 8.4): php-web-security/php-api.md

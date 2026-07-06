@@ -388,3 +388,96 @@ categories:
           It is read from the environment; commonly set via <php><server
           name="SYMFONY_DEPRECATIONS_HELPER" .../></php> or the shell.
         documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+
+  - name: "Testing — Tooling & Assertions"
+    questions:
+      - question: "You must test a service that needs the container but sends no HTTP requests. Which base class fits best?"
+        answers:
+          - value: "KernelTestCase — boots the kernel and exposes the container, without an HTTP client"
+            correct: true
+          - value: "WebTestCase — because only it can access the container"
+            correct: false
+          - value: "PHPUnit\\Framework\\TestCase — the container is available by default"
+            correct: false
+          - value: "DoctrineTestCase"
+            correct: false
+        explanation: >-
+          KernelTestCase boots the kernel and gives you self::getContainer() with no
+          browser. WebTestCase adds the HTTP client and is reserved for tests that
+          make requests; a plain TestCase boots no kernel at all.
+        documentation: "https://symfony.com/doc/current/testing.html#integration-tests"
+      - question: "To swap a real service for a mock before making a request in a functional test, you should…"
+        answers:
+          - value: "Fetch the test container with self::getContainer() and call ->set('service.id', $mock) before the request"
+            correct: true
+          - value: "Reassign the property on the kernel's compiled container"
+            correct: false
+          - value: "Edit config/services.yaml from within the test"
+            correct: false
+          - value: "Mocks cannot replace services in functional tests"
+            correct: false
+        explanation: >-
+          The test container returned by self::getContainer() allows ->set() to
+          override a (used) service with a double. Do this before issuing the request
+          so the kernel uses the replacement.
+        documentation: "https://symfony.com/doc/current/testing.html#mocking-services"
+      - question: "What does the WebTestCase helper assertResponseIsSuccessful() verify?"
+        answers:
+          - value: "That the last response has a 2xx status code"
+            correct: true
+          - value: "That the response body is non-empty"
+            correct: false
+          - value: "That the response is exactly 200 OK"
+            correct: false
+          - value: "That the response is a redirect"
+            correct: false
+        explanation: >-
+          assertResponseIsSuccessful() passes for any 2xx status. These
+          assertResponse*/assertSelector* helpers come from the BrowserKit/DomCrawler
+          assertion traits mixed into WebTestCase; assertSelectorTextContains() checks
+          a CSS-selected element's text.
+        documentation: "https://symfony.com/doc/current/testing.html#testing-the-response-status-code-headers-and-content"
+      - question: "A method referenced by #[DataProvider('provide')] must be…"
+        answers:
+          - value: "public static and return an array or other iterable of argument sets"
+            correct: true
+          - value: "private and return void"
+            correct: false
+          - value: "a protected instance method returning a Generator only"
+            correct: false
+          - value: "annotated with #[Test] as well"
+            correct: false
+        explanation: >-
+          PHPUnit\Framework\Attributes\DataProvider names a public static method
+          returning an iterable (array or Generator) of argument arrays; each set
+          becomes one parameterised run of the test.
+        documentation: "https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html#data-providers"
+      - question: "Which utility tests a console command's output and exit code without a real terminal?"
+        answers:
+          - value: "CommandTester — call execute([...]) then getDisplay() and getStatusCode()"
+            correct: true
+          - value: "KernelBrowser::request()"
+            correct: false
+          - value: "ApplicationTester::run() is the only option"
+            correct: false
+          - value: "ProcessTester"
+            correct: false
+        explanation: >-
+          Symfony\Component\Console\Tester\CommandTester wraps a single command:
+          execute() supplies input, then getDisplay() returns captured output and
+          getStatusCode() the exit code. ApplicationTester covers the whole app.
+        documentation: "https://symfony.com/doc/current/console.html#testing-commands"
+      - question: "Which SYMFONY_DEPRECATIONS_HELPER value makes the build fail on the very first deprecation?"
+        answers:
+          - value: "max[total]=0"
+            correct: true
+          - value: "weak"
+            correct: false
+          - value: "disabled=1"
+            correct: false
+          - value: "verbose=0"
+            correct: false
+        explanation: >-
+          max[total]=0 sets a zero threshold, so any deprecation fails the suite.
+          weak reports without failing, and disabled=1 turns collection off entirely.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"

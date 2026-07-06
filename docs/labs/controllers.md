@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Controllers
+---
+
 # Lab: Custom Value Resolver — hydrate a controller argument from the Request
 
 !!! abstract "Practical Lab"

@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Testing
+---
+
 # Lab: Automated Tests — A Service with `KernelTestCase` and an Endpoint with `WebTestCase`
 
 !!! abstract "Practical Lab"

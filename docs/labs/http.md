@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - HTTP
+---
+
 # Lab: HttpClient — An API Client Tested with `MockHttpClient`
 
 !!! abstract "Practical Lab"

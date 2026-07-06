@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Architecture
+---
+
 # Lab: Custom Event + Prioritised Subscribers — Drive the EventDispatcher
 
 !!! abstract "Practical Lab"

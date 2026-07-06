@@ -1,3 +1,9 @@
+---
+tags:
+  - Labs
+  - Forms
+---
+
 # Lab: Data Transformer — A `GeoPointType` field backed by a value object
 
 !!! abstract "Practical Lab"
