@@ -65,6 +65,27 @@ sequenceDiagram
     Note over Form: POST_SUBMIT (model)
 ```
 
+The same two flows seen as **data direction** — set data flows model→norm→view
+(forward transform), submit flows view→norm→model (reverse):
+
+```mermaid
+sequenceDiagram
+    participant M as Model data
+    participant N as Norm data
+    participant V as View data
+    Note over M,V: setData path (forward)
+    Note over M: PRE_SET_DATA (model)
+    M->>N: transform
+    N->>V: transform
+    Note over M: POST_SET_DATA (model)
+    Note over M,V: submit path (reverse)
+    Note over V: PRE_SUBMIT (raw view)
+    V->>N: reverseTransform
+    Note over N: SUBMIT (norm)
+    N->>M: reverseTransform
+    Note over M: POST_SUBMIT (model)
+```
+
 !!! note "Source reference"
     `Symfony\Component\Form\FormEvents` and `Form::setData()/submit()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php).

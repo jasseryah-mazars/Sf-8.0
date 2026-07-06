@@ -31,6 +31,22 @@ You declare it at class scope with `#[Assert\GroupSequence([...])]`. Each elemen
 is a group name; the special short **class-name** group represents "this class's
 own `Default` constraints".
 
+Each group is a **gate**: all of its constraints run, then the sequence halts on
+the first group that produced any violation — later groups are skipped.
+
+```mermaid
+flowchart TD
+    S[validate Default → GroupSequence] --> A[Run group A: all constraints]
+    A --> QA{Any violation in A?}
+    QA -->|yes| X[Halt — skip later groups]
+    QA -->|no| B[Run group B]
+    B --> QB{Any violation in B?}
+    QB -->|yes| X
+    QB -->|no| C[Run group C ...]
+    C --> R[ConstraintViolationList]
+    X --> R
+```
+
 ## Deep Dive — how stepwise validation works
 
 `Symfony\Component\Validator\Constraints\GroupSequence` is a value object holding

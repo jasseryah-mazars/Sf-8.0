@@ -208,6 +208,19 @@ inspected with `messenger:failed:show` and retried with
 Throwing `UnrecoverableMessageHandlingException` skips retries entirely and goes
 straight to the failure transport.
 
+```mermaid
+flowchart TD
+    H[Handler throws] --> HF[HandlerFailedStamp]
+    HF --> U{Unrecoverable?}
+    U -->|yes| F[(Failure transport)]
+    U -->|no| R{attempts &lt; max_retries?}
+    R -->|yes| S[RetryStrategy: delay + RedeliveryStamp]
+    S --> Q[(Re-send to transport)]
+    Q -. worker retries .-> H
+    R -->|no| F
+    F --> C[messenger:failed:show / retry]
+```
+
 ### Dispatch-after-current-bus
 
 Adding `DispatchAfterCurrentBusStamp` to a message dispatched *inside* a handler
