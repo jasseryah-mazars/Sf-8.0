@@ -104,7 +104,7 @@ categories:
       - id: "HTTP-CLIENTSERVER-06"
         question: "An app sits behind a TLS-terminating reverse proxy that forwards X-Forwarded-Proto: https, yet $request->isSecure() returns false. What is the most likely cause? (choose one)"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/client-server"
         concepts: ["trusted-proxies", "isSecure", "x-forwarded-proto"]
         syllabus: "HTTP → Client/server interaction"
@@ -172,7 +172,7 @@ categories:
       - id: "HTTP-STATUS-02"
         question: "The user is authenticated but lacks permission for a resource. Which status? (choose one)"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/status-codes"
         concepts: ["401", "403", "authorization"]
         syllabus: "HTTP → Status codes"
@@ -275,7 +275,7 @@ categories:
       - id: "HTTP-STATUS-07"
         question: "You call new Response('', Response::HTTP_CREATED) without a reason phrase. How does Symfony fill the reason phrase? (choose one)"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/status-codes"
         concepts: ["statusTexts", "reason-phrase", "response"]
         syllabus: "HTTP → Status codes"
@@ -297,7 +297,7 @@ categories:
       - id: "HTTP-STATUS-08"
         question: "What happens when you call $response->setStatusCode(600)? (choose one)"
         type: "code"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/status-codes"
         concepts: ["setStatusCode", "range", "exception"]
         syllabus: "HTTP → Status codes"
@@ -339,7 +339,7 @@ categories:
       - id: "HTTP-REQUEST-01"
         question: "Where does the Router place matched route parameters on the Request? (choose one)"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/request"
         concepts: ["attributes", "route-params", "parameterbag"]
         syllabus: "HTTP → The HTTP request"
@@ -462,7 +462,7 @@ categories:
       - id: "HTTP-REQUEST-07"
         question: "A request handler crashes with a TypeError only when the X-Trace-Id header is absent, on the line strtoupper($request->headers->get('X-Trace-Id')). What is the cause and fix? (choose one)"
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/request"
         concepts: ["headerbag", "null", "default"]
         syllabus: "HTTP → The HTTP request"
@@ -548,7 +548,7 @@ categories:
       - id: "HTTP-RESPONSE-04"
         question: "You create new Response('hi') and set no cache headers. What Cache-Control does ResponseHeaderBag emit by default? (choose one)"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/response"
         concepts: ["cache-control", "responseheaderbag", "defaults"]
         syllabus: "HTTP → The HTTP response"
@@ -635,7 +635,7 @@ categories:
       - id: "HTTP-METHODS-01"
         question: "Which set contains only idempotent methods? (choose one)"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/methods"
         concepts: ["idempotent", "get", "put", "delete"]
         syllabus: "HTTP → HTTP methods"
@@ -715,7 +715,7 @@ categories:
       - id: "HTTP-METHODS-05"
         question: "A candidate claims PATCH is always idempotent like PUT. Why is this wrong? (choose one)"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/methods"
         concepts: ["patch", "idempotent", "put"]
         syllabus: "HTTP → HTTP methods"
@@ -758,7 +758,7 @@ categories:
       - id: "HTTP-METHODS-07"
         question: "Which HTTP methods are considered safe? (choose 3)"
         type: "multiple"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/methods"
         concepts: ["safe", "get", "head", "options"]
         syllabus: "HTTP → HTTP methods"
@@ -779,7 +779,7 @@ categories:
       - id: "HTTP-METHODS-08"
         question: "What are the exact conditions under which Symfony applies the method override? (choose one)"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/methods"
         concepts: ["override", "post-only", "internals"]
         syllabus: "HTTP → HTTP methods"
@@ -883,7 +883,7 @@ categories:
       - id: "HTTP-COOKIES-05"
         question: "A cookie set with Path=/app and Domain=.example.com is not deleted by $response->headers->clearCookie('session'). Why? (choose one)"
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/cookies"
         concepts: ["clearcookie", "path", "domain"]
         syllabus: "HTTP → Cookies"
@@ -971,7 +971,7 @@ categories:
       - id: "HTTP-CACHING-01"
         question: "Which caching model can avoid contacting the server entirely? (choose one)"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/caching"
         concepts: ["freshness", "expiration", "max-age"]
         syllabus: "HTTP → Caching (overview)"
@@ -1074,7 +1074,7 @@ categories:
       - id: "HTTP-CACHING-06"
         question: "To cache a public page in a CDN for 10 minutes without letting the browser cache it long-term, which setter do you use? (choose one)"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/caching"
         concepts: ["setSharedMaxAge", "s-maxage", "setPublic"]
         syllabus: "HTTP → Caching (overview)"
@@ -1176,7 +1176,7 @@ categories:
       - id: "HTTP-CONTENTNEG-04"
         question: "Which response header ensures a shared cache stores one entry per representation? (choose one)"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/content-negotiation"
         concepts: ["vary", "shared-cache", "representation"]
         syllabus: "HTTP → Content negotiation"
@@ -1196,7 +1196,7 @@ categories:
       - id: "HTTP-CONTENTNEG-05"
         question: "What is the key difference between getPreferredFormat() and getAcceptableContentTypes()? (choose one)"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/content-negotiation"
         concepts: ["getPreferredFormat", "getAcceptableContentTypes", "format-vs-mime"]
         syllabus: "HTTP → Content negotiation"
@@ -1218,7 +1218,7 @@ categories:
       - id: "HTTP-CONTENTNEG-06"
         question: "Given AcceptHeader::fromString('text/html;q=0.9, application/json;q=1.0'), what does $accept->first()?->getQuality() return? (choose one)"
         type: "code"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/content-negotiation"
         concepts: ["acceptheader", "acceptheaderitem", "quality"]
         syllabus: "HTTP → Content negotiation"
@@ -1262,7 +1262,7 @@ categories:
       - id: "HTTP-CONTENTNEG-08"
         question: "How does getRequestFormat() differ from getPreferredFormat()? (choose one)"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/content-negotiation"
         concepts: ["getRequestFormat", "getPreferredFormat", "_format"]
         syllabus: "HTTP → Content negotiation"
@@ -1327,7 +1327,7 @@ categories:
       - id: "HTTP-LANG-03"
         question: "What does framework.enabled_locales configure? (choose one)"
         type: "single"
-        difficulty: "medium"
+        difficulty: "easy"
         subchapter: "http/language-detection"
         concepts: ["enabled_locales", "whitelist", "default_locale"]
         syllabus: "HTTP → Language detection"
@@ -1390,7 +1390,7 @@ categories:
       - id: "HTTP-LANG-06"
         question: "After the request locale is set, how does it reach services like the Translator? (choose one)"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/language-detection"
         concepts: ["localeawarelistener", "LocaleAwareInterface", "propagation"]
         syllabus: "HTTP → Language detection"
@@ -1560,7 +1560,7 @@ categories:
       - id: "HTTP-HTTPCLIENT-07"
         question: "Reading each response's getContent() inside the loop that fires the requests makes the batch slow. Why? (choose one)"
         type: "debug"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/httpclient"
         concepts: ["concurrency", "lazy", "blocking"]
         syllabus: "HTTP → HttpClient component"
@@ -1582,7 +1582,7 @@ categories:
       - id: "HTTP-HTTPCLIENT-08"
         question: "You call toArray() on a 204 No Content response (empty body). What happens? (choose one)"
         type: "trap"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "http/httpclient"
         concepts: ["toArray", "204", "json-exception"]
         syllabus: "HTTP → HttpClient component"

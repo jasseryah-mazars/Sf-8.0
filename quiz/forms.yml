@@ -422,7 +422,7 @@ categories:
       - id: "FORM-TYPES-06"
         question: "How are custom form types made available by their FQCN and able to receive injected services?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "forms/types"
         concepts: ["form.type", "autoconfiguration", "dependency-injection"]
         syllabus: "Forms → Form types"
@@ -578,7 +578,7 @@ categories:
       - id: "FORM-THEME-01"
         question: "In which order does the renderer try candidate theme blocks?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "forms/theming"
         concepts: ["block-prefix", "resolution-order", "FormRenderer"]
         syllabus: "Forms → Theming"
@@ -1140,7 +1140,7 @@ categories:
       - id: "FORM-TRANSFORM-02"
         question: "addModelTransformer() converts between which representations?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "forms/data-transformers"
         concepts: ["addModelTransformer", "model-norm", "slots"]
         syllabus: "Forms → Data transformers"
@@ -1463,7 +1463,7 @@ categories:
       - id: "FORM-EXT-02"
         question: "With autoconfiguration enabled, how is a type extension registered?"
         type: "internals"
-        difficulty: "medium"
+        difficulty: "hard"
         subchapter: "forms/type-extensions"
         concepts: ["form.type_extension", "autoconfiguration", "FormTypeExtensionInterface"]
         syllabus: "Forms → Type extensions"
