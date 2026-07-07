@@ -251,6 +251,9 @@ nav:
       - Compiler Passes: dependency-injection/compiler-passes.md
       - Autowiring: dependency-injection/autowiring.md
       - Service Locators: dependency-injection/service-locators.md
+      - Lazy Services & Native Lazy Objects: dependency-injection/lazy-services.md
+      - Resettable Services (Services Resetter): dependency-injection/service-reset.md
+      - Inside the Compiled Container: dependency-injection/container-dump.md
   - Security:
       - security/index.md
       - Authentication: security/authentication.md
@@ -264,6 +267,11 @@ nav:
       - Access Control Rules: security/access-control.md
       - Authenticators, Passports & Badges: security/authenticators.md
       - Voters & Voting Strategies: security/voters.md
+      - Role Hierarchy: security/role-hierarchy.md
+      - Access Decision Strategies: security/access-decision-strategies.md
+      - Impersonation (switch_user): security/impersonation.md
+      - Login Throttling: security/login-throttling.md
+      - Programmatic Login & Logout: security/programmatic-login.md
   - HTTP Caching:
       - http-caching/index.md
       - Cache Types: http-caching/cache-types.md
@@ -327,6 +335,12 @@ nav:
       - Console — CommandTester: labs/console.md
       - Automated Tests — Kernel/Web Tests: labs/testing.md
       - Miscellaneous — Messenger Middleware: labs/miscellaneous.md
+  - Source Tours:
+      - tours/index.md
+      - HttpKernel::handle(): tours/httpkernel-handle.md
+      - ControllerResolver & ArgumentResolver: tours/argument-resolver.md
+      - A Form's Life: tours/form-lifecycle.md
+      - Crossing the Firewall: tours/firewall-request-cycle.md
   - Chapter Exams:
       - exams/index.md
       - PHP & Web Security: exams/php-web-security.md
@@ -350,6 +364,8 @@ nav:
       - Master Cheat Sheet: revision/cheat-sheet.md
       - Easily Confused: revision/confusions.md
       - Top Certification Traps: revision/traps.md
+      - Execution-Order Codex: revision/execution-order-codex.md
+      - Edge-Case Drills: revision/edge-cases.md
       - Memory Aids: revision/memory-aids.md
       - Revision Sheets:
           - revision/sheets/index.md
