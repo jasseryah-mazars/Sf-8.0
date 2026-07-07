@@ -45,6 +45,16 @@ statut.
 
 Une simple `\Exception` devient **500**.
 
+```php
+// Throw — don't return — to produce the status code
+throw $this->createNotFoundException('Product not found.');   // 404
+throw $this->createAccessDeniedException('Owners only.');     // 403
+throw new BadRequestHttpException('Malformed payload.');      // 400
+throw new ConflictHttpException('Already processed.');        // 409
+throw new HttpException(503, 'Maintenance in progress.');     // any status
+throw new \RuntimeException('Boom');                          // no HttpExceptionInterface → 500
+```
+
 !!! question "Predict first"
     Vous écrivez `$this->createNotFoundException('Nope');` sur sa propre ligne et
     continuez. Le visiteur reçoit-il un 404 ?
@@ -64,6 +74,20 @@ du framework forwarde vers l'**error controller** (`error_controller`, par défa
 `Symfony\Component\HttpKernel\Controller\ErrorController`), qui rend une page
 d'erreur via `Symfony\Bundle\TwigBundle\ErrorRenderer\...` / l'`ErrorRendererInterface`.
 
+```php
+// A kernel.exception listener may short-circuit the ErrorController
+#[AsEventListener]
+final class ApiExceptionListener
+{
+    public function __invoke(ExceptionEvent $event): void
+    {
+        $e = $event->getThrowable();
+        // setting a Response stops the fallback to error_controller
+        $event->setResponse(new JsonResponse(['error' => $e->getMessage()], 500));
+    }
+}
+```
+
 ```mermaid
 flowchart LR
     C[Controller throws] --> EX[kernel.exception]
@@ -79,6 +103,17 @@ flowchart LR
 - En `dev`, vous obtenez la page d'exception détaillée (stack trace) ; en `prod`,
   le template d'erreur propre pour ce statut.
 - `FlattenException` normalise l'exception lancée pour le rendu et les logs.
+
+```php
+// What the kernel reads from a thrown HttpExceptionInterface
+$e = new MethodNotAllowedHttpException(['POST'], 'Use POST.');
+$e->getStatusCode(); // 405 → becomes the response status
+$e->getHeaders();    // ['Allow' => 'POST'] → merged into the response headers
+
+// Normalised copy used by the error renderer and logs
+$flat = FlattenException::createFromThrowable($e);
+$flat->getStatusCode(); // 405
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\Exception\NotFoundHttpException` et

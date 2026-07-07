@@ -104,6 +104,22 @@ départagent par spécificité.
 *votre* liste blanche et retourne la meilleure — voir
 [Language Detection](language-detection.md).
 
+```php
+// Accept: application/json;q=0.9, text/html;q=0.8
+$request->getAcceptableContentTypes(); // ['application/json', 'text/html']
+$request->getPreferredFormat();        // 'json' ('html' default if no match)
+
+// Accept-Language: fr-FR, fr;q=0.8, en;q=0.5
+$request->getLanguages();                     // ['fr_FR', 'fr', 'en']
+$request->getPreferredLanguage(['en', 'fr']); // 'fr' — best within your list
+
+$request->getCharsets();  // from Accept-Charset
+$request->getEncodings(); // from Accept-Encoding, e.g. ['gzip', 'br']
+
+$request->getRequestFormat();       // '_format' attribute, default 'html'
+$request->setRequestFormat('json'); // force it for this request
+```
+
 ### Formats ↔ MIME types
 
 Symfony fait correspondre des noms de **format** courts (`html`, `json`, `xml`,
@@ -118,6 +134,13 @@ $request->getMimeType('json');   // 'application/json'
 L'attribut de route `_format` (p. ex. `/api/users.{_format}`) alimente
 `getRequestFormat()`, et le kernel s'en sert pour choisir le `Content-Type` de la
 response.
+
+```php
+// route: #[Route('/api/users.{_format}', defaults: ['_format' => 'json'])]
+// incoming URL: GET /api/users.xml
+$request->attributes->get('_format'); // 'xml'
+$request->getRequestFormat();         // 'xml' — kernel derives the Content-Type
+```
 
 ```mermaid
 flowchart LR
@@ -159,6 +182,13 @@ request, ajoutez `$response->setVary(['Accept', 'Accept-Language'])` pour que le
 caches partagés stockent une entrée par variante — sinon un cache peut servir du
 JSON à un client HTML.
 
+```php
+// gzip/br negotiation itself is done by nginx/Apache/CDN, not PHP;
+// your job is to declare which request headers the response depends on
+$response->setVary(['Accept', 'Accept-Language']);
+$response->headers->get('Vary'); // 'Accept, Accept-Language'
+```
+
 ### Null behavior
 
 Quand le client n'envoie **aucun header `Accept`**, il n'y a rien à négocier —
@@ -179,6 +209,17 @@ $locale = $request->getPreferredLanguage(['en', 'fr']) ?? 'en';
 `$accept->first()?->getQuality()`. Le bug classique consiste à passer `null`
 comme défaut à `getPreferredFormat()` puis à utiliser un `match` sans branche de
 repli, déclenchant une `UnhandledMatchError` dès qu'un client omet `Accept`.
+
+```php
+$item = AcceptHeader::fromString($request->headers->get('Accept'))->first();
+$quality = $item?->getQuality(); // null-safe: header may be empty
+
+// keep a default arm when the negotiated format may be null
+$response = match ($request->getPreferredFormat(null)) {
+    'json' => $this->json($data),
+    default => $this->render('show.html.twig'), // no UnhandledMatchError
+};
+```
 
 !!! note "Null in real life"
     Aucun header `Accept`, c'est une lettre qui **n'exprime aucune préférence de

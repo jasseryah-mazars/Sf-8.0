@@ -45,6 +45,24 @@ Both accept `permanent` (301 vs 302) and can force `scheme`/`httpPort`/`httpsPor
 For redirects that depend on logic, redirect from the controller instead (see
 [Controllers → HTTP Redirects](../controllers/http-redirects.md)).
 
+```yaml
+# redirectAction: target a route by NAME
+legacy_home:
+    path: /home
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: app_dashboard   # target route name
+        permanent: true        # 301 (default false = 302)
+
+# urlRedirectAction: target a literal PATH/URL, optionally forcing the scheme
+legacy_docs:
+    path: /old-docs
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /docs            # literal target path
+        scheme: https          # httpPort / httpsPort can be forced too
+```
+
 !!! question "Predict first"
     A route is defined as `/blog/`. A `GET /blog` and a `POST /blog` both arrive.
     What does each one get?
@@ -63,6 +81,21 @@ runs the controller like any other; it builds a
 `Symfony\Component\HttpKernel\Exception\HttpException` for a missing target) and
 returns it. Nothing special happens in the matcher — the "redirect" is just a
 controller producing a 30x response.
+
+```php
+// Simplified: the route's _controller default points at RedirectController;
+// the other defaults (path, permanent, ...) become controller arguments.
+public function urlRedirectAction(Request $request, string $path, bool $permanent = false): Response
+{
+    if ('' === $path) {
+        // missing target -> HttpException (404, or 410 when permanent)
+        throw new HttpException($permanent ? 410 : 404);
+    }
+
+    // the "redirect" is just an ordinary controller returning a 30x response
+    return new RedirectResponse($path, $permanent ? 301 : 302);
+}
+```
 
 ### Automatic trailing-slash redirects
 

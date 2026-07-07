@@ -43,6 +43,14 @@ public function getUserIdentifier(): string; // the login identifier
 `getUserIdentifier()` (added in 5.3, mandatory since 6.0) replaced the old
 `getUsername()`. Additional capabilities are opt-in via extra interfaces.
 
+```php
+// Symfony 8: getUserIdentifier() is the contract — getUsername() no longer exists
+public function getUserIdentifier(): string
+{
+    return $this->email; // any stable, unique identifier
+}
+```
+
 | Interface | Adds |
 |---|---|
 | `PasswordAuthenticatedUserInterface` | `getPassword(): ?string` |
@@ -65,6 +73,15 @@ public function getUserIdentifier(): string; // the login identifier
 This is the string the `UserBadge` is built from and what the session stores to
 reload the user via `refreshUser()`. It must be **stable and unique** (email,
 username, UUID). It feeds logging, impersonation and the profiler.
+
+```php
+// Authentication: the UserBadge wraps the identifier the provider will load
+$badge = new UserBadge('jane@example.com');
+
+// Next stateful request: the provider reloads the user from the session copy,
+// matching it by getUserIdentifier()
+$fresh = $userProvider->refreshUser($sessionUser);
+```
 
 ### `eraseCredentials()` is gone in 8.0
 
@@ -115,6 +132,25 @@ flowchart LR
 `Symfony\Component\Security\Core\User\UserCheckerInterface` gates login: throw an
 `AccountStatusException` (e.g. `DisabledException`, `AccountExpiredException`) to
 block a load-valid user. Configure per firewall with `user_checker:`.
+
+```php
+// Implements UserCheckerInterface; enable per firewall with "user_checker:"
+final class AppUserChecker implements UserCheckerInterface
+{
+    public function checkPreAuth(UserInterface $user): void
+    {
+        // Any AccountStatusException subclass blocks the login
+        if ($user instanceof AppUser && $user->isDisabled()) {
+            throw new DisabledException();
+        }
+        if ($user instanceof AppUser && $user->isExpired()) {
+            throw new AccountExpiredException();
+        }
+    }
+
+    // checkPostAuth() also required by the interface (often a no-op)
+}
+```
 
 ### Null behavior
 

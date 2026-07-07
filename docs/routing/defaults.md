@@ -40,6 +40,17 @@ Two syntaxes, again equivalent:
   Use `?` with **no value** for a `null` default.
 - **`defaults` array** — `defaults: {page: 1}`.
 
+```php
+// Inline: <requirement> before ?, then the default -> /blog and /blog/7 both match
+#[Route('/blog/{page<\d+>?1}', name: 'blog_list')]
+
+// Bare ? with no value -> default is null
+#[Route('/report/{format?}', name: 'report')]
+
+// Equivalent `defaults` array form
+#[Route('/blog/{page}', name: 'blog_list', requirements: ['page' => '\d+'], defaults: ['page' => 1])]
+```
+
 Crucially, **only the trailing placeholders can be optional**. `/{a}/{b}` cannot
 make `a` optional while `b` is required, because the matcher cannot tell where the
 missing segment was.
@@ -61,6 +72,15 @@ text that's part of the optional tail). It emits nested optional groups in the
 regex, e.g. `/blog(?:/(?P<page>\d+))?`, so the whole trailing segment can be
 absent. Defaults themselves are stored on the `Route` (`getDefaults()`) and merged
 into the matched parameters by the matcher; they are **not** captured from the URL.
+
+```php
+use Symfony\Component\Routing\Route;
+
+$route = new Route('/blog/{page}', defaults: ['page' => 1], requirements: ['page' => '\d+']);
+$route->getDefaults();           // ['page' => 1] — stored on the Route
+$compiled = $route->compile();   // RouteCompiler marks the trailing token optional
+$compiled->getRegex();           // contains the nested group /blog(?:/(?P<page>\d+))?
+```
 
 The same default set is consulted by the **generator**: when you call
 `generateUrl('blog', ['page' => 1])` and `1` equals the default, the generator

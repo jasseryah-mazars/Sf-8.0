@@ -171,6 +171,17 @@ never written to the object — read them via `$form->get('plainPassword')->getD
 not the model. The common bug: type-hinting `getData()` as your DTO and
 dereferencing it on an **unbound, `data_class`-less** form, hitting `null`.
 
+```php
+$form = $this->createForm(FilterType::class);       // no data_class in this type
+$form->getData();  // null (or the initial array you passed)
+
+$form = $this->createForm(RegistrationType::class); // data_class is set
+$form->getData();  // fresh RegistrationData built via empty_data — never null
+
+// 'mapped' => false fields never reach the model — read them on the form:
+$plain = $form->get('plainPassword')->getData();
+```
+
 !!! note "Null in real life"
     `null` = a blank record card the clerk has not filed anything onto yet — with a
     named record file (`data_class`) they always start you a fresh one.

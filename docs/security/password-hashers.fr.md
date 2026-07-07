@@ -119,6 +119,19 @@ prochaine connexion réussie :
    `PasswordUpgraderInterface::upgradePassword()` sur le provider pour le
    persister.
 
+```php
+// security.yaml: App\Security\AppUser: { algorithm: sodium, migrate_from: ['bcrypt'] }
+final class UserRepository implements PasswordUpgraderInterface
+{
+    // Called by PasswordMigratingListener (via the PasswordUpgradeBadge)
+    // when needsRehash() returned true for the legacy hash
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        $user->setPassword($newHashedPassword); // persist the new sodium hash
+    }
+}
+```
+
 C'est transparent pour l'utilisateur — aucune réinitialisation de mot de passe
 nécessaire.
 
@@ -130,6 +143,16 @@ sans mot de passe / SSO / token uniquement). Le `CheckCredentialsListener` s'en
 protège : un hachage `null` signifie « aucun mot de passe enregistré », donc la
 vérification **échoue proprement** au lieu d'appeler `verify()` contre rien, et
 `needsRehash()` court-circuite quand il n'y a pas de hachage à inspecter.
+
+```php
+// PasswordAuthenticatedUserInterface::getPassword() is typed ?string
+public function getPassword(): ?string
+{
+    return $this->passwordHash; // null = passwordless / SSO / token-only account
+}
+// CheckCredentialsListener: a null hash fails cleanly — verify() is never
+// called against nothing, and needsRehash() is skipped
+```
 
 Ne passez jamais un mot de passe en clair `null` (ou vide) à `hashPassword()` en
 espérant un compte « vierge » — hachez un vrai secret, ou laissez le champ à

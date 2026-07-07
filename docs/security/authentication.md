@@ -48,6 +48,13 @@ An **authenticated token** (`Symfony\Component\Security\Core\Authentication\Toke
 holds the `UserInterface`, the firewall name and the roles. Once it is in the
 `TokenStorageInterface`, the user is "logged in" for that request.
 
+```php
+// TokenStorageInterface holds the authenticated TokenInterface
+$token = $tokenStorage->getToken();     // ?TokenInterface
+$user  = $token?->getUser();            // ?UserInterface
+$roles = $token?->getRoleNames() ?? []; // roles carried by the token, e.g. ['ROLE_USER']
+```
+
 !!! question "Predict first"
     A request hits a `lazy` firewall but the controller never reads the user.
     Does the authenticator actually run?

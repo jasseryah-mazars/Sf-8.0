@@ -68,6 +68,13 @@ fichier, et le sous-template est compilé et mis en cache exactement comme
 n'importe quel autre template — les includes ne sont pas « inlinés », ce sont des
 classes compilées distinctes invoquées à l'exécution.
 
+```php
+// simplified view of what an include does at runtime
+$sub = $twig->load('partials/_card.html.twig'); // Twig\Loader\FilesystemLoader resolves the name
+$sub->display($context);          // tag form: Twig\Template::display() echoes the output
+$html = $sub->render($context);   // function form: render() returns the string
+```
+
 ```mermaid
 flowchart LR
     P[Parent render] --> I["include 'x'"]
@@ -88,6 +95,17 @@ Règles de contexte :
   du scope parent.
 - **`ignore missing`** — si le template n'existe pas, ne rend rien au lieu de
   lever une `LoaderError`.
+
+```twig
+{# default: the partial sees the caller's vars plus the `with` ones #}
+{% include '_card.html.twig' with { title: 'Sales' } %}
+
+{# only: the partial sees just title — parent scope hidden #}
+{% include '_card.html.twig' with { title: 'Sales' } only %}
+
+{# missing template: render nothing instead of throwing LoaderError #}
+{% include '_promo.html.twig' ignore missing %}
+```
 
 La **fonction** `include()` est préférée en Twig moderne car elle retourne une
 chaîne, se compose dans les expressions, et accepte les mêmes options en

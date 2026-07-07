@@ -49,6 +49,22 @@ attributs** : les annotations en docblock comme `@dataProvider` et `@covers`
 sont supprimées. Les méthodes de test sont découvertes par le préfixe `test` ou
 l'attribut `#[Test]`.
 
+```php
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+
+final class DiscoveryTest extends TestCase
+{
+    // discovered via the "test" prefix
+    public function testItWorks(): void { self::assertTrue(true); }
+
+    #[Test] // discovered via the attribute — no prefix needed
+    public function itAlsoWorks(): void { self::assertTrue(true); }
+
+    // @dataProvider / @covers docblock annotations: REMOVED in PHPUnit 11/12
+}
+```
+
 !!! question "Predict first"
     Vous faites `createStub(Foo::class)` mais la classe testée ne l'appelle
     jamais, et vous n'affirmez rien sur le stub. Le test échoue-t-il ?
@@ -68,6 +84,21 @@ exécute `setUp()`, le test, puis `tearDown()`. Les assertions lèvent
 `PHPUnit\Framework\ExpectationFailedException` ; un throwable non attrapé marque
 le test comme *errored* plutôt que *failed*.
 
+```php
+final class LifecycleTest extends TestCase   // a fresh instance per test method
+{
+    protected function setUp(): void { /* runs before EACH test */ }
+    protected function tearDown(): void { /* runs after EACH test */ }
+
+    public function testExample(): void
+    {
+        // a failing assertion throws ExpectationFailedException => test "fails";
+        // any other uncaught throwable marks the test as "errored"
+        self::assertTrue(true);
+    }
+}
+```
+
 Les doublures de test proviennent de la machinerie **MockObject** de PHPUnit
 (`PHPUnit\Framework\MockObject\MockBuilder`). `createStub()` et `createMock()`
 génèrent à l'exécution une sous-classe du type cible :
@@ -81,6 +112,20 @@ génèrent à l'exécution une sous-classe du type cible :
 Les deux se configurent avec `method()`, `willReturn()`,
 `willReturnCallback()`, `willThrowException()`, et des matchers comme
 `$this->once()`, `$this->exactly(2)`, `$this->never()`.
+
+```php
+// createStub() / createMock() generate a runtime subclass (MockBuilder machinery)
+$stub = $this->createStub(Mailer::class);
+$stub->method('send')->willReturn(true);                              // canned value
+$stub->method('render')->willReturnCallback(fn (string $t): string => "<p>$t</p>");
+$stub->method('connect')->willThrowException(new \RuntimeException('down'));
+
+// A mock adds verified expectations, checked automatically at teardown
+$mock = $this->createMock(Mailer::class);
+$mock->expects($this->once())->method('connect');    // exactly one call
+$mock->expects($this->exactly(2))->method('send');   // exactly two calls
+$mock->expects($this->never())->method('render');    // must never be called
+```
 
 ```mermaid
 flowchart LR

@@ -82,6 +82,19 @@ de sous-classes de `Symfony\Component\Mime\Part\AbstractPart` :
 et `embedFromPath()` ajoutent des `DataPart`. Les images embarquées sont
 référencées via `cid:`.
 
+```php
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\File;
+
+$email = (new Email())
+    ->text('Plain-text body')                             // TextPart (text/plain)
+    ->html('<p>Hi <img src="cid:logo"></p>')              // TextPart (text/html)
+    ->addPart(new DataPart(new File('/data/report.csv'))) // manual DataPart
+    ->attachFromPath('/data/guide.pdf', 'guide.pdf')      // attachment DataPart
+    ->embedFromPath('/img/logo.png', 'logo');             // embedded, used as cid:logo
+```
+
 ```mermaid
 flowchart LR
     E[Email] --> M[Mailer::send]
@@ -101,9 +114,31 @@ est le point d'entrée. `Symfony\Component\Mailer\Transport` construit un
 bridges (hors du périmètre de ce cours). La variable d'environnement
 `MAILER_DSN` le configure.
 
+```php
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+
+// Transport::fromDsn() builds a TransportInterface (usually from MAILER_DSN)
+$transport = Transport::fromDsn('smtp://user:pass@mail.example.com:465');
+$mailer = new Mailer($transport);
+$mailer->send($email); // send(RawMessage $message, ?Envelope $envelope = null)
+```
+
 L'`Envelope` du Mailer (expéditeur + destinataires) est distincte des headers du
 message ; le transport utilise l'envelope pour la conversation SMTP, tandis que
 les headers apparaissent dans le message visible.
+
+```php
+use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mime\Address;
+
+// The Envelope drives the SMTP conversation, not the visible headers
+$envelope = new Envelope(
+    new Address('bounces@example.com'),          // MAIL FROM
+    [new Address('real-recipient@example.com')]  // RCPT TO (may differ from To:)
+);
+$mailer->send($email, $envelope);
+```
 
 ### TemplatedEmail
 

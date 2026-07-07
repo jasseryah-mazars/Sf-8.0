@@ -84,6 +84,18 @@ sequenceDiagram
 4. The proxy parses the body, issues a sub-request per include, and caches each
    fragment independently.
 
+```http
+# Proxy -> backend: advertise that a surrogate can process ESI
+GET / HTTP/1.1
+Surrogate-Capability: symfony="ESI/1.0"
+
+# Backend -> proxy: render_esi emitted a tag and signals ESI was used
+HTTP/1.1 200 OK
+Surrogate-Control: content="ESI/1.0"
+
+<esi:include src="/_fragment?_path=..." />
+```
+
 ### The classes
 
 - `Symfony\Component\HttpKernel\HttpCache\Esi` implements `SurrogateInterface`
@@ -98,6 +110,19 @@ sequenceDiagram
   `Symfony\Component\HttpFoundation\UriSigner` (via `framework.fragments`
   and the app secret) so arbitrary `_fragment` calls cannot be forged. (The URI
   is built by `Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator`.)
+
+```php
+use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Ssi;
+
+// Esi and Ssi both implement SurrogateInterface
+$cache = new HttpCache($kernel, $store, new Esi()); // the $surrogate argument
+
+// In Twig, render_esi delegates to FragmentHandler, which picks the "esi"
+// renderer (EsiFragmentRenderer); the fragment URI is built by
+// FragmentUriGenerator and signed by UriSigner (framework.fragments + secret).
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\HttpCache\Esi` and
@@ -118,6 +143,16 @@ whole page's TTL down.
 Each `<esi:include src>` points at Symfony's `_fragment` route
 (`FragmentListener` handles it). The referenced controller runs as an independent
 sub-request with its own `Response` — so it sets its own `#[Cache(...)]`.
+
+```php
+// FragmentListener resolves the signed /_fragment URL to this controller,
+// which runs as its own sub-request and returns its own Response.
+#[Cache(smaxage: 30)]           // freshness for this fragment only
+public function newsTicker(): Response
+{
+    return $this->render('fragment/ticker.html.twig');
+}
+```
 
 ## Configuration & code
 

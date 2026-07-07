@@ -109,6 +109,13 @@ translations d'un bundle. Fournissez un catalogue avec le même domaine et la m�
 (par exemple `translations/messages.en.yaml`) et vos chaînes l'emportent sur celles du
 bundle.
 
+```yaml
+# translations/messages.en.yaml — the app translations/ dir outranks the bundle's
+# (same "messages" domain + same "en" locale → your strings win)
+post.title: 'My custom post title'
+post.author: 'Written by %name%'
+```
+
 ### Overriding configuration
 
 Chaque bundle expose un arbre de configuration (son extension). Surchargez les valeurs
@@ -116,6 +123,15 @@ par défaut en écrivant `config/packages/<alias>.yaml` (par exemple
 `config/packages/twig.yaml`). Les surcharges par environnement vont sous
 `config/packages/<env>/`. Les valeurs que vous définissez remplacent ou fusionnent avec
 les valeurs par défaut du bundle selon la définition de la config.
+
+```yaml
+# config/packages/twig.yaml — <alias>.yaml overrides the bundle's defaults
+twig:
+    strict_variables: true
+
+# per-environment override lives under config/packages/<env>/,
+# e.g. config/packages/prod/twig.yaml
+```
 
 ```mermaid
 flowchart TD
@@ -134,6 +150,18 @@ de surcharger les ressources d'un autre bundle par héritage. Cette fonctionnali
 reposent plus non plus sur l'ancien dossier `Resources/` — l'organisation moderne
 utilise `config/`, `templates/`, `translations/` à la racine (voir
 [Code Organization](code-organization.md)).
+
+```php
+// REMOVED — Symfony 8 bundles have no getParent() (gone since 5.0):
+// public function getParent(): string { return 'AcmeBlogBundle'; }
+
+// Modern bundle layout (no legacy Resources/ folder):
+//   acme-blog-bundle/
+//   ├── config/          # service definitions
+//   ├── templates/       # bundle templates
+//   ├── translations/    # bundle catalogues
+//   └── src/AcmeBlogBundle.php
+```
 
 !!! note "Source reference"
     La mécanique de surcharge est répartie entre FrameworkBundle/TwigBundle et le

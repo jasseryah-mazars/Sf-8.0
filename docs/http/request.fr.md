@@ -47,6 +47,19 @@ Content-Type: application/json
 - **Headers** — métadonnées (`Host`, `Content-Type`, `Accept`, `Cookie`, …).
 - **Body** — charge utile pour POST/PUT/PATCH (données de formulaire, JSON, fichiers uploadés).
 
+```http
+GET /articles?draft=1 HTTP/1.1       ← GET: read-only, no body
+Host: example.com
+Accept: application/json             ← headers: metadata about the exchange
+Cookie: PHPSESSID=abc123
+
+POST /articles HTTP/1.1              ← POST: sends a payload
+Host: example.com
+Content-Type: application/json       ← describes the body below
+
+{"title":"Hello"}
+```
+
 !!! question "Predict first"
     Pour `GET /users/42?draft=1`, quel bag contient `42` et lequel contient `draft` ?
 
@@ -62,6 +75,17 @@ Content-Type: application/json
 autour des superglobales PHP** (`$_GET`, `$_POST`, `$_SERVER`, `$_COOKIE`,
 `$_FILES`). `Request::createFromGlobals()` les lit une seule fois dans le front
 controller ; vous ne touchez plus jamais aux superglobales ensuite.
+
+```php
+use Symfony\Component\HttpFoundation\Request;
+
+// public/index.php — wrap $_GET, $_POST, $_SERVER, $_COOKIE, $_FILES once
+$request = Request::createFromGlobals();
+
+$request->query->get('draft');      // was: $_GET['draft']
+$request->request->get('title');    // was: $_POST['title']
+$request->server->get('HTTP_HOST'); // was: $_SERVER['HTTP_HOST']
+```
 
 ### The parameter bags
 

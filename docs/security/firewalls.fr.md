@@ -105,11 +105,26 @@ jusqu'à ce que le token soit réellement **lu** (p. ex. `is_granted()`,
 et aucun authenticator ne s'exécute — un vrai gain de performance. Le template
 de projet par défaut l'active sur `main`.
 
+```yaml
+firewalls:
+    main:
+        lazy: true   # defer authentication until the token is read
+# With lazy: true, a fully public page that never calls is_granted()
+# or getUser() loads no session and runs no authenticator.
+```
+
 ### Stateless firewalls
 
 `stateless: true` saute le `ContextListener`, donc aucun token n'est
 stocké/restauré dans la session. Idéal pour les API ; voir
 [Authentication](authentication.md).
+
+```yaml
+firewalls:
+    api:
+        pattern: ^/api
+        stateless: true   # skips ContextListener — no token stored in the session
+```
 
 ### Firewall context sharing
 

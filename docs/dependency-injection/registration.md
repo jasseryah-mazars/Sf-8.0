@@ -151,6 +151,24 @@ the class checks before calling. The common bug is a nullable-defaulted property
 that a required code path assumes is always set — inject it through the constructor
 instead, so the container proves it exists at build time.
 
+```php
+// services.yaml: calls: [ setLogger: ['@?logger'] ]  — '@?' = optional reference
+final class ReportRunner
+{
+    private ?LoggerInterface $logger = null;   // stays null if 'logger' is absent
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    public function run(): void
+    {
+        $this->logger?->info('running');       // null-guard every use
+    }
+}
+```
+
 !!! note "Null in real life"
     An optional cook who may not show up (optional setter dep): leave the station
     marked empty (`= null`) and check before assigning work — don't build the menu

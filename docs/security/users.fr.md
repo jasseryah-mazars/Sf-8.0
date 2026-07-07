@@ -45,6 +45,14 @@ public function getUserIdentifier(): string; // the login identifier
 l'ancienne `getUsername()`. Les capacités supplémentaires sont optionnelles, via
 des interfaces additionnelles.
 
+```php
+// Symfony 8: getUserIdentifier() is the contract — getUsername() no longer exists
+public function getUserIdentifier(): string
+{
+    return $this->email; // any stable, unique identifier
+}
+```
+
 | Interface | Ajoute |
 |---|---|
 | `PasswordAuthenticatedUserInterface` | `getPassword(): ?string` |

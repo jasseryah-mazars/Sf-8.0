@@ -120,6 +120,23 @@ $ php bin/console debug:container security.role_hierarchy          # RoleHierarc
   configuration pour cela — effacez les données sensibles via `__serialize()`
   sur votre classe utilisateur (voir [Users](users.md)).
 
+```php
+// Symfony 8: enable_authenticator_manager, anonymous and guard keys are GONE.
+// eraseCredentials() was removed too — scrub secrets via __serialize():
+final class User implements UserInterface
+{
+    public ?string $plainPassword = null;
+
+    public function __serialize(): array
+    {
+        $data = (array) $this;
+        unset($data['plainPassword']); // never written to the session
+        return $data;
+    }
+    // ...getRoles(), getUserIdentifier()
+}
+```
+
 ### Ordering matters
 
 `firewalls` et `access_control` sont tous deux évalués **de haut en bas, premier
@@ -127,6 +144,19 @@ match gagnant**. Placez les patterns les plus spécifiques en premier ; le
 firewall attrape-tout (souvent `main`, sans `pattern`) vient en dernier. Le
 firewall `dev` (avec `security: false`) doit venir en premier pour que le
 profiler et les assets ne soient jamais interceptés.
+
+```yaml
+# Both lists are evaluated top-to-bottom — first match wins:
+firewalls:
+    dev:                          # must be FIRST: security: false zone
+        pattern: ^/(_(profiler|wdt)|css|images|js)/
+        security: false
+    main:                         # no pattern → catch-all, always LAST
+        lazy: true
+access_control:
+    - { path: ^/admin/users, roles: ROLE_SUPER_ADMIN }  # most specific first
+    - { path: ^/admin, roles: ROLE_ADMIN }              # broader rule after
+```
 
 ## Configuration & code
 

@@ -39,6 +39,20 @@ kernel doit tout de même produire une `Response`. Il le fait en dispatchant l'e
 candidate vaut sinon `500` par défaut, sauf si l'exception porte son propre code de
 statut.
 
+```php
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+
+// A kernel.exception listener turns the throwable into a Response
+final class FallbackExceptionListener
+{
+    public function __invoke(ExceptionEvent $event): void
+    {
+        $event->setResponse(new Response('Something broke.', 500));
+    }
+}
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -60,6 +74,17 @@ response via `$event->setResponse()`, cette response est renvoyée (en passant
 toujours par `kernel.response`) ; sinon, l'exception est relancée. Avec
 `catch: false` (souvent utilisé dans les sous-requests et les tests), l'exception
 se propage simplement.
+
+```php
+// HttpKernel::handle() — catch: true wraps handleRaw() in a try/catch
+$response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, catch: true);
+
+// On a throwable, handleThrowable() dispatches an ExceptionEvent;
+// a listener may convert it by calling $event->setResponse($response)
+
+// with catch: false the exception simply propagates to the caller
+$response = $kernel->handle($request, HttpKernelInterface::SUB_REQUEST, catch: false);
+```
 
 ### ErrorListener — the default converter
 
@@ -103,6 +128,19 @@ quand `catch` vaut `false`).
 `ErrorListener` / l'error controller utilisent ce code de statut et ces headers ;
 sinon, la response est un `500`. Les classes intégrées courantes :
 
+```php
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
+$e = new HttpException(429, 'Too Many Requests', headers: ['Retry-After' => '60']);
+
+if ($e instanceof HttpExceptionInterface) {
+    $status  = $e->getStatusCode(); // 429 — used by ErrorListener
+    $headers = $e->getHeaders();    // ['Retry-After' => '60']
+}
+// any other throwable -> 500
+```
+
 | Exception | Statut |
 |---|---|
 | `NotFoundHttpException` | 404 |
@@ -125,6 +163,17 @@ détaillée ; en `prod`, une page propre au code de statut. TwigBundle permet de
 surcharger les templates par chemin :
 `templates/bundles/TwigBundle/Exception/error404.html.twig` (repli :
 `error.html.twig`).
+
+```yaml
+# config/packages/framework.yaml
+framework:
+    # default: Symfony\Component\HttpKernel\Controller\ErrorController
+    error_controller: App\Controller\ApiErrorController
+
+# Twig template overrides (TwigBundle):
+#   templates/bundles/TwigBundle/Exception/error404.html.twig  # status-specific
+#   templates/bundles/TwigBundle/Exception/error.html.twig     # generic fallback
+```
 
 ```mermaid
 flowchart TD

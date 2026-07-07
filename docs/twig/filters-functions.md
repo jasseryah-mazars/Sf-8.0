@@ -55,6 +55,18 @@ Common built-in **filters**:
 Common built-in **functions**: `path()`, `url()`, `asset()`, `range()`, `max()`,
 `min()`, `random()`, `include()`, `dump()`, `constant()`, `cycle()`.
 
+```twig
+{{ path('home') }} {{ url('home') }}       {# relative vs absolute route URL #}
+<img src="{{ asset('img/logo.png') }}">    {# public asset path #}
+{{ max(1, 5) }} {{ min(1, 5) }}            {# 5 and 1 #}
+{{ random(['a', 'b', 'c']) }}              {# random element #}
+{{ range(0, 6, 2)|join(',') }}             {# 0,2,4,6 #}
+{{ include('partials/_card.html.twig') }}  {# render another template inline #}
+{{ dump(user) }}                           {# debug output (dev only) #}
+{{ constant('App\\Entity\\Post::DRAFT') }} {# read a PHP constant #}
+{{ cycle(['odd', 'even'], loop.index0) }}  {# alternate values by index #}
+```
+
 !!! question "Predict first"
     Your custom filter returns the string `<b>x</b>`, but the page shows the literal
     `<b>x</b>` text instead of bold. Why — and what one option fixes it?
@@ -71,6 +83,17 @@ Filters and functions are provided by **Twig extensions** —
 extensions (`RoutingExtension` for `path`/`url`, `AssetExtension` for `asset`,
 `TranslationExtension` for `trans`). Each is registered as a
 `Twig\TwigFilter` or `Twig\TwigFunction` object.
+
+```php
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+
+// every filter/function is a named callable wrapped in one of these objects
+$date  = new TwigFilter('date', $formatDate);      // CoreExtension: 'date', 'merge', 'default'…
+$path  = new TwigFunction('path', $generatePath);  // RoutingExtension: path()/url()
+$asset = new TwigFunction('asset', $resolveAsset); // AssetExtension: asset()
+$trans = new TwigFilter('trans', $translate);      // TranslationExtension: trans
+```
 
 ```mermaid
 flowchart LR

@@ -100,10 +100,25 @@ token is actually **read** (e.g. `is_granted()`, `getUser()`). For fully public
 pages, no session is loaded and no authenticator runs — a real performance win.
 The default project template enables it on `main`.
 
+```yaml
+firewalls:
+    main:
+        lazy: true   # defer authentication until the token is read
+# With lazy: true, a fully public page that never calls is_granted()
+# or getUser() loads no session and runs no authenticator.
+```
+
 ### Stateless firewalls
 
 `stateless: true` skips the `ContextListener`, so no token is stored/restored in
 the session. Ideal for APIs; see [Authentication](authentication.md).
+
+```yaml
+firewalls:
+    api:
+        pattern: ^/api
+        stateless: true   # skips ContextListener — no token stored in the session
+```
 
 ### Firewall context sharing
 

@@ -33,6 +33,15 @@ construit par une `Symfony\Component\Form\FormFactory`. Vous touchez rarement la
 factory directement. Vous décrivez plutôt *ce que* contient le form dans une
 **classe de form type** et laissez le framework l'assembler.
 
+```php
+// The FormFactory builds the object graph...
+$form = $formFactory->create(TaskType::class);
+
+// ...and returns the root of a FormInterface tree
+assert($form instanceof \Symfony\Component\Form\FormInterface);
+$title = $form->get('title'); // each child is also a FormInterface
+```
+
 Deux façons de créer un form :
 
 | Approach | Use when |
@@ -43,6 +52,14 @@ Deux façons de créer un form :
 Le helper de controller `AbstractController::createForm(FqcnType::class, $data, $options)`
 est le point d'entrée au quotidien. Sous le capot, il appelle
 `FormFactoryInterface::create(...)`.
+
+```php
+// Everyday entry point (AbstractController::createForm):
+$form = $this->createForm(RegistrationType::class, $data, $options);
+
+// What it calls under the hood (FormFactoryInterface::create):
+$form = $formFactory->create(RegistrationType::class, $data, $options);
+```
 
 !!! question "Predict first"
     Vous appelez `createForm(RegistrationType::class)` sur un form composé qui ne

@@ -56,6 +56,16 @@ ne construisez presque jamais de services avec `new` ; vous décrivez *comment* 
 se construisent et laissez le container s'en charger — de façon lazy, une seule
 fois, et en mode shared par défaut.
 
+```php
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+// Manual wiring with `new` — what you almost never do:
+$generator = new InvoiceGenerator(new Logger());
+
+// The container (ContainerInterface) builds it for you — lazily, once, shared:
+$generator = $container->get(InvoiceGenerator::class);
+```
+
 L'idée cruciale : il existe **deux containers**.
 
 | | Build time | Runtime |
@@ -87,6 +97,24 @@ classe, les arguments, les appels de méthodes, les tags, les drapeaux
 son id ; un `Symfony\Component\DependencyInjection\Alias` fait résoudre un id vers
 un autre ; un `Symfony\Component\DependencyInjection\Parameter` référence un
 parameter du container. Tous ces objets sont de pures métadonnées.
+
+```php
+use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Parameter;
+use Symfony\Component\DependencyInjection\Reference;
+
+// Definition: the recipe — nothing is instantiated here
+$def = new Definition(App\Invoice\InvoiceGenerator::class);
+$def->setArgument(0, new Reference('logger'));       // Reference: points to another service id
+$def->setArgument(1, new Parameter('kernel.debug')); // Parameter: references a container parameter
+$def->setPublic(false);  // public flag
+$def->setShared(true);   // shared flag
+$def->setLazy(false);    // lazy flag
+
+// Alias: makes one id resolve to another
+$containerBuilder->setAlias('app.invoices', new Alias(App\Invoice\InvoiceGenerator::class));
+```
 
 `ContainerBuilder` étend `Container` et stocke en plus ces definitions, aliases,
 extensions et compiler passes.

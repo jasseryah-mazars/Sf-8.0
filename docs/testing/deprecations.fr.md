@@ -110,6 +110,31 @@ $ echo $?
   `trigger_deprecation()` et voulez prouver qu'il se déclenche). L'ancien
   `ExpectDeprecationTrait::expectDeprecation()` a été supprimé en Symfony 7.0.
 
+```php
+use Symfony\Bridge\PhpUnit\Attribute\IgnoreDeprecations;
+use Symfony\Bridge\PhpUnit\ExpectUserDeprecationMessageTrait;
+
+final class LegacyPathTest extends TestCase
+{
+    use ExpectUserDeprecationMessageTrait;
+
+    #[IgnoreDeprecations]   // handler skips this test's deprecations
+    public function testDeprecatedPathStillWorks(): void
+    {
+        // exercising deprecated code here cannot fail the build
+    }
+
+    public function testEmitsDeprecation(): void
+    {
+        // asserts the message emitted by trigger_deprecation()
+        // (the old ExpectDeprecationTrait::expectDeprecation() is gone)
+        $this->expectUserDeprecationMessage('Since app 2.0: "foo()" is deprecated.');
+
+        trigger_deprecation('app', '2.0', '"foo()" is deprecated.');
+    }
+}
+```
+
 ```mermaid
 flowchart TD
     A["trigger_deprecation()"] --> B[DeprecationErrorHandler]

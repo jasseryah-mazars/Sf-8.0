@@ -44,6 +44,15 @@ come from several places, in rough order of precedence in a typical app:
 Detection is choosing the best of these, constrained to the locales you actually
 support.
 
+```php
+// 1. explicit route parameter (/fr/articles)
+$request->attributes->get('_locale');      // 'fr'
+// 3. browser preference
+$request->headers->get('Accept-Language'); // 'fr-FR, fr;q=0.8, en;q=0.5'
+// 4. fallback configured as framework.default_locale
+$request->getDefaultLocale();              // 'en'
+```
+
 !!! question "Predict first"
     The browser sends `Accept-Language: es, en;q=0.8` and your app supports only
     `en` and `fr`. What does `getPreferredLanguage(['en', 'fr'])` return?

@@ -63,6 +63,21 @@ value provides the argument (variadic resolvers yield several); yielding nothing
 passes to the next resolver. If none yields, a `\RuntimeException` explains that
 the argument could not be resolved.
 
+```php
+// ArgumentResolver::getArguments(), heavily simplified
+foreach ($this->argumentMetadataFactory->createArgumentMetadata($controller) as $metadata) {
+    foreach ($this->resolvers as $resolver) {
+        $resolved = [...$resolver->resolve($request, $metadata)]; // generator
+        if ($resolved !== []) {
+            $arguments = [...$arguments, ...$resolved]; // first to yield wins
+            continue 2;                                 // next parameter
+        }
+    }
+
+    throw new \RuntimeException('...requires that you provide a value...');
+}
+```
+
 ```mermaid
 flowchart TD
     K[HttpKernel] --> AR[ArgumentResolver]
@@ -111,6 +126,17 @@ DoctrineBundle feature, not core HttpKernel.
 
 You can also pin a resolver on an argument with `#[ValueResolver(MyResolver::class)]`
 (optionally `disabled: true`), which restricts resolution to that resolver.
+
+```php
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+
+public function show(
+    // pin: only ClientLocaleResolver may resolve this argument
+    #[ValueResolver(ClientLocaleResolver::class)] ClientLocale $locale,
+    // disabled: true excludes that resolver for this argument
+    #[ValueResolver(SomeResolver::class, disabled: true)] string $raw,
+): Response { /* ... */ }
+```
 
 !!! note "Source reference"
     `ValueResolverInterface`, `ArgumentResolver`, and the built-in resolvers —

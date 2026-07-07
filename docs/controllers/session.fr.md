@@ -121,6 +121,14 @@ $session->set('seen', true); // ...first write starts the session + emits the co
   session** (les authenticators de Symfony le font automatiquement).
 - **`invalidate()`** — efface les données *et* régénère l'id ; à utiliser au logout.
 
+```php
+// After login: new session id, data kept — defeats session fixation
+$session->migrate();       // migrate(bool $destroy = false)
+
+// On logout: wipe all data and regenerate the id
+$session->invalidate();
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Session\Session` et `SessionInterface` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php).
@@ -144,6 +152,16 @@ ensuite la façon d'atteindre la session :
 - À l'intérieur du bag, `$session->get('cart')` retourne `null` pour une clé absente
   sauf si vous passez une valeur par défaut — `$session->get('cart', [])` est
   l'idiome sûr avant un `count()` ou une itération.
+
+```php
+// CLI-safe access: guard the request before touching the session
+$request = $this->requestStack->getCurrentRequest(); // ?Request — null on the CLI
+if (!$request || !$request->hasSession()) {
+    return 0; // without this guard, getSession() throws SessionNotFoundException
+}
+
+return \count($request->getSession()->get('cart', [])); // default avoids null
+```
 
 Vérifiez d'abord la request : `$request = $rs->getCurrentRequest();` puis
 `if (!$request || !$request->hasSession()) { return $fallback; }`. L'opérateur

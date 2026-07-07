@@ -87,6 +87,17 @@ Depuis Symfony 5.4, les stratégies sont de vraies classes implémentant
 `PriorityStrategy`). Le manager transmet en flux les résultats des voters à
 `$strategy->decide($results)`, qui retourne le booléen final.
 
+```php
+use Symfony\Component\Security\Core\Authorization\Strategy\AffirmativeStrategy;
+use Symfony\Component\Security\Core\Authorization\Strategy\ConsensusStrategy;
+use Symfony\Component\Security\Core\Authorization\Strategy\PriorityStrategy;
+use Symfony\Component\Security\Core\Authorization\Strategy\UnanimousStrategy;
+
+// each implements AccessDecisionStrategyInterface::decide(\Traversable $results): bool
+$strategy = new UnanimousStrategy();
+$granted = $strategy->decide(new \ArrayIterator([1, 0, 0])); // GRANTED + 2 ABSTAIN → true
+```
+
 Détails comportementaux clés, tirés directement des implémentations :
 
 - **affirmative** retourne `true` au premier accord ; si seuls des refus ont

@@ -54,16 +54,44 @@ public function logout(bool $validateCsrf = true): ?Response;
 - **`$badges`** — extra passport badges, e.g. a `RememberMeBadge` so the
   remember-me cookie is written exactly as in an interactive login.
 
+```php
+// All four parameters made explicit
+$security->login(
+    $user,                    // any UserInterface instance
+    'form_login',             // built-in authenticator → config key ('json_login', 'remember_me', ...)
+    'main',                   // target firewall (needed when not the current one)
+    [new RememberMeBadge()],  // extra badges: write the remember-me cookie too
+);
+```
+
 Crucially, `login()` **dispatches the same authentication events** as an
 interactive login (`CheckPassportEvent` listeners resolve badges,
 `LoginSuccessEvent` fires, remember-me and other listeners react). Your audit
 logs, throttling resets and success handlers behave identically.
+
+```php
+// Reacts to Security::login() exactly like to an interactive login
+#[AsEventListener]
+final class LoginAuditListener
+{
+    public function __invoke(LoginSuccessEvent $event): void
+    {
+        // runs after CheckPassportEvent listeners resolved the badges
+    }
+}
+```
 
 `logout()` invalidates the current session/token and dispatches the
 `LogoutEvent` so all configured logout listeners (cookie clearing, CSRF token
 clearing…) run. By default it **validates the logout CSRF token** from the
 request; pass `false` to skip validation when the call does not originate from
 the logout form/link.
+
+```php
+// logout() dispatches LogoutEvent; CSRF is validated by default
+$security->logout();                     // expects the logout CSRF token in the request
+$security->logout(validateCsrf: false);  // programmatic flow → pass false to skip
+```
 
 ## Deep Dive — how it works internally
 

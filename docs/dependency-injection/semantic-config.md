@@ -37,6 +37,16 @@ parameters, the bundle defines a **schema** (`Configuration`) and an
 **extension** (`Extension`) that reads validated values and registers the right
 services and parameters. This is how bundle options become working services.
 
+```yaml
+# config/packages/*.yaml — each bundle owns one root key
+framework:            # FrameworkBundle's semantic config
+    secret: '%env(APP_SECRET)%'
+security:             # SecurityBundle's semantic config
+    firewalls: { main: { lazy: true } }
+app:                  # your own root key
+    per_page: 10      # validated by Configuration, consumed by Extension
+```
+
 !!! question "Predict first"
     Your bundle needs to set a default for *another* bundle (say a `framework`
     option). In which method do you do it, and does it run before or after the other

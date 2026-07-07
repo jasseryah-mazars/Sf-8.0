@@ -36,6 +36,18 @@ pure presentation — Bootstrap/Tailwind themes are markup only (no CSS/JS shipp
 that is not the Form component's job and CSS frameworks are otherwise out of
 scope here).
 
+```twig
+{# A theme is a set of Twig {% block %}s; the default one is form_div_layout.html.twig #}
+{% use 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    <div class="field-row">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+```
+
 You apply a theme:
 
 - **Per template** with `{% form_theme form 'theme.html.twig' %}`.

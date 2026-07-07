@@ -169,6 +169,20 @@ the modern, content-type-agnostic way to read submitted data.
 | `getContentTypeFormat()` | Format from `Content-Type` (e.g. `json`) |
 | `isXmlHttpRequest()` | `X-Requested-With: XMLHttpRequest` |
 
+```php
+// POST https://example.com/articles?draft=1 with X-HTTP-Method-Override: PUT
+$request->getMethod();            // 'PUT'  — honours the override
+$request->getRealMethod();        // 'POST' — raw method
+$request->getPathInfo();          // '/articles'
+$request->getRequestUri();        // '/articles?draft=1'
+$request->getUri();               // 'https://example.com/articles?draft=1'
+$request->getQueryString();       // 'draft=1'
+$request->getClientIp();          // e.g. '203.0.113.7' (needs trusted proxies)
+$request->getContent();           // raw body string
+$request->getContentTypeFormat(); // 'json' for Content-Type: application/json
+$request->isXmlHttpRequest();     // true if X-Requested-With: XMLHttpRequest
+```
+
 !!! info "Renamed in modern Symfony"
     `getContentType()` was removed; use **`getContentTypeFormat()`**. Reading the
     request format (from `_format`) is `getRequestFormat()`; the client-preferred

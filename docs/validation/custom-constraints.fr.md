@@ -113,6 +113,19 @@ Mécanismes clés :
 - `validatedBy()` retourne par défaut `static::class . 'Validator'` ;
   surchargez-le uniquement lorsque l'id de service du validator diffère.
 
+```php
+// inside the Constraint subclass
+public function getTargets(): string
+{
+    return Constraint::CLASS_CONSTRAINT; // default: Constraint::PROPERTY_CONSTRAINT
+}
+
+public function validatedBy(): string
+{
+    return LegacyRuleChecker::class; // default: static::class . 'Validator'
+}
+```
+
 ### The Validator
 
 ```php
@@ -167,6 +180,20 @@ Points du contrat :
   `validator.constraint_validator` (grâce à `ConstraintValidatorInterface`),
   vous pouvez donc y injecter des dépendances (un repository, le service
   `Security`, etc.).
+
+```php
+// the validator is a regular service: constructor injection just works.
+// It is autoconfigured with the validator.constraint_validator tag because
+// ConstraintValidator implements ConstraintValidatorInterface.
+final class UniqueEmailValidator extends ConstraintValidator
+{
+    public function __construct(
+        private UserRepository $users,   // repository dependency
+        private Security $security,      // current user, roles...
+    ) {
+    }
+}
+```
 
 ```mermaid
 flowchart LR

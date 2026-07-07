@@ -68,6 +68,18 @@ Register it programmatically:
 `addCompilerPass()` accepts a **phase** and a **priority** (higher runs first
 within the phase).
 
+```php
+// src/Kernel.php — application hook (same call works in Bundle::build())
+protected function build(ContainerBuilder $container): void
+{
+    $container->addCompilerPass(
+        new MyPass(),
+        PassConfig::TYPE_BEFORE_OPTIMIZATION, // phase (this is the default)
+        priority: 10,                         // higher runs earlier in the phase
+    );
+}
+```
+
 ### The `PassConfig` phases
 
 `Symfony\Component\DependencyInjection\Compiler\PassConfig` runs passes in this
@@ -102,6 +114,18 @@ Inside `process()`, `$container->findTaggedServiceIds('app.handler')` returns
 of the tag with its attributes. You then mutate a collector definition, e.g.
 `$container->findDefinition('registry')->addMethodCall('add', [new Reference($id)])`.
 
+```php
+public function process(ContainerBuilder $container): void
+{
+    // ['service_id' => [['attr' => 'value'], ...]]
+    foreach ($container->findTaggedServiceIds('app.handler') as $id => $tags) {
+        // Mutate the collector definition: one addMethodCall() per tagged id
+        $container->findDefinition('registry')
+            ->addMethodCall('add', [new Reference($id)]);
+    }
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\PassConfig` defines the phase
     order —
@@ -119,6 +143,22 @@ reference with `new Reference($id, ContainerInterface::NULL_ON_INVALID_REFERENCE
 so a missing target resolves to `null` at runtime instead of throwing. The common
 bug is skipping the `has()` guard and letting the pass explode whenever the target
 service isn't registered.
+
+```php
+// findDefinition()/getDefinition() throw ServiceNotFoundException — guard first
+if (!$container->hasDefinition('app.registry')) { // or has() for aliases too
+    return;
+}
+$registry = $container->getDefinition('app.registry');
+
+// Empty array (never null) when nothing carries the tag — plain foreach is safe
+foreach ($container->findTaggedServiceIds('app.handler') as $id => $tags) {
+    // Optional collaborator: a missing target resolves to null at runtime
+    $registry->addMethodCall('add', [
+        new Reference($id, ContainerInterface::NULL_ON_INVALID_REFERENCE),
+    ]);
+}
+```
 
 !!! note "Null in real life"
     Reaching for a recipe card that isn't on the board throws (get with no guard);
