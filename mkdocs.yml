@@ -101,6 +101,12 @@ markdown_extensions:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+      # Color `php` fragments that omit <?php (Pygments needs startinline).
+      extend_pygments_lang:
+        - name: php
+          lang: php
+          options:
+            startinline: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences:
@@ -130,6 +136,7 @@ extra:
 
 extra_css:
   - assets/quiz.css
+  - assets/code.css
 
 extra_javascript:
   - assets/quiz.js

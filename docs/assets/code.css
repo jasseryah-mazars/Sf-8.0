@@ -1,0 +1,7 @@
+/* No-horizontal-scroll safety net: wrap long code lines instead of scrolling. */
+.md-typeset pre > code {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+/* Keep mermaid diagrams unaffected (they are not <pre><code>). */
