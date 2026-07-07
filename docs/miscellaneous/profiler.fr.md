@@ -153,6 +153,23 @@ Le panneau d'un collector est un template Twig étendant
 tag de service `data_collector`. Il affiche le badge de la toolbar
 (`block toolbar`) et le panneau (`block panel`).
 
+```twig
+{# templates/data_collector/tenant.html.twig — referenced by the
+   data_collector tag's "template" attribute #}
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {# the small badge shown in the debug toolbar #}
+    {% set text %}Tenant: {{ collector.tenant }}{% endset %}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+{% endblock %}
+
+{% block panel %}
+    <h2>Tenant</h2>
+    <p>{{ collector.tenant }}</p>
+{% endblock %}
+```
+
 ## Configuration & code
 
 === "PHP Attributes"

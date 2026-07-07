@@ -110,12 +110,34 @@ $translator->trans('invite', ['gender' => 'female']); // "She comes"
   a key is missing for the active locale (e.g. `fr_CA` → `fr` → `en`).
 - Missing translations return the **id** itself (and are logged in dev).
 
+```yaml
+# config/packages/translation.yaml
+framework:
+    translator:
+        fallbacks: ['fr', 'en']   # tried in order: fr_CA -> fr -> en
+```
+
 ### Intl data component
 
 `Symfony\Component\Intl` provides static classes:
 `Countries::getName('FR')`, `Languages::getName('de')`, `Locales::getName('pt_BR')`,
 `Currencies::getSymbol('EUR')`, `Timezones`. They read the bundled ICU data and
 respect the current/requested locale for display names.
+
+```php
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Currencies;
+use Symfony\Component\Intl\Languages;
+use Symfony\Component\Intl\Locales;
+use Symfony\Component\Intl\Timezones;
+
+Countries::getName('FR');           // "France" (in the current locale)
+Languages::getName('de');           // "German"
+Locales::getName('pt_BR');          // "Portuguese (Brazil)"
+Currencies::getSymbol('EUR');       // "€"
+Timezones::getName('Europe/Paris'); // "Central European Time (Paris)"
+Countries::getName('FR', 'de');     // "Frankreich" — explicit display locale
+```
 
 !!! note "Source reference"
     `Symfony\Component\Translation\Translator::trans()` —
