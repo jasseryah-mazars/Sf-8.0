@@ -127,6 +127,13 @@ to a custom `RuntimeInterface` class. Alternative-server runtimes (RoadRunner,
 Swoole) ship their own runtime class you point `APP_RUNTIME` at — no change to
 `index.php`.
 
+```console
+# APP_RUNTIME selects the RuntimeInterface implementation — index.php unchanged
+$ APP_RUNTIME='Runtime\Swoole\Runtime' php public/index.php
+
+# or in composer.json: "extra": { "runtime": { "class": "Runtime\\Swoole\\Runtime" } }
+```
+
 ### What the callable may return
 
 | Return type | Runner behaviour |

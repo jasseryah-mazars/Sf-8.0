@@ -40,6 +40,16 @@ et les arguments. Cela permet à la *même* application de démarrer sous PHP-FP
 en CLI ou sous des runtimes alternatifs (Swoole, RoadRunner) en ne remplaçant
 que le runtime.
 
+```php
+// public/index.php — the whole entry point
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+return static function (array $context) {
+    // the runtime creates the Request and sends the Response — not you
+    return new App\Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -82,6 +92,17 @@ flowchart LR
    l'application et retourne le code de sortie (pour un `Kernel` : `handle()` →
    `send()` → `terminate()`).
 
+```php
+use Symfony\Component\Runtime\SymfonyRuntime;
+
+// What autoload_runtime.php does, simplified:
+$runtime = new SymfonyRuntime();                         // class named by APP_RUNTIME
+$app = require 'public/index.php';                       // the returned callable
+[$app, $args] = $runtime->getResolver($app)->resolve();  // autowire array $context, Request…
+$application = $app(...$args);                           // e.g. a Kernel
+exit($runtime->getRunner($application)->run());          // handle() → send() → terminate()
+```
+
 !!! note "Source reference"
     `Symfony\Component\Runtime\RuntimeInterface`, `SymfonyRuntime`, `GenericRuntime` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php).
@@ -96,6 +117,15 @@ flowchart LR
   `Input`/`Output` de la console, et exécuter un `HttpKernelInterface`/`Kernel`
   ou une `Application`/`Command` de console.
 
+```php
+// SymfonyRuntime resolvers can inject Symfony objects into the callable:
+return static function (Request $request): Response {
+    // the SymfonyRuntime runner will send() this Response for you
+    return new Response('Hello '.$request->query->get('name', 'world'));
+};
+// GenericRuntime only resolves plain values (array $context from $_SERVER, etc.)
+```
+
 ### Selecting a runtime
 
 Définissez `APP_RUNTIME` (variable d'environnement) ou la clé
@@ -103,6 +133,13 @@ Définissez `APP_RUNTIME` (variable d'environnement) ou la clé
 personnalisée. Les runtimes de serveurs alternatifs (RoadRunner, Swoole)
 fournissent leur propre classe de runtime vers laquelle pointer `APP_RUNTIME` —
 aucun changement dans `index.php`.
+
+```console
+# APP_RUNTIME selects the RuntimeInterface implementation — index.php unchanged
+$ APP_RUNTIME='Runtime\Swoole\Runtime' php public/index.php
+
+# or in composer.json: "extra": { "runtime": { "class": "Runtime\\Swoole\\Runtime" } }
+```
 
 ### What the callable may return
 
