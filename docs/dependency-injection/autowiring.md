@@ -37,6 +37,17 @@ for that type. It resolves entirely at **compile time**, so mistakes surface as
 build errors, not runtime surprises. Autowiring handles *objects by type*; it
 cannot guess scalars — those come from `bind` or `#[Autowire]`.
 
+```php
+public function __construct(
+    // Object: resolved by its type-hint at compile time
+    private MailerInterface $mailer,
+    // Scalar: never guessed — inject it with #[Autowire]...
+    #[Autowire('%kernel.environment%')]
+    private string $env,
+    // ...or with a YAML bind: `string $env: '%kernel.environment%'`
+) {}
+```
+
 !!! question "Predict first"
     Two services implement `TransportInterface` and no default alias is set. You
     type-hint `TransportInterface`. What does the container do at compile time?

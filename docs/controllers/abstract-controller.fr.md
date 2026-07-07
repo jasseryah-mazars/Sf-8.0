@@ -184,6 +184,15 @@ Gérez-le délibérément :
   authentifiés, après quoi `getUser()` est sûr.
 - Ou lisez défensivement : `$this->getUser()?->getUserIdentifier() ?? 'guest'`.
 
+```php
+// Option 1 — guard first, then getUser() is guaranteed non-null
+$this->denyAccessUnlessGranted('ROLE_USER'); // throws 403 for anonymous visitors
+$email = $this->getUser()->getUserIdentifier();
+
+// Option 2 — read defensively on a public page
+$name = $this->getUser()?->getUserIdentifier() ?? 'guest';
+```
+
 Notez le piège voisin : `createNotFoundException()` ne *retourne* pas `null`
 et n'interrompt rien — elle retourne une `NotFoundHttpException` que vous
 devez `throw`. Voir [404 & error pages](error-pages.md).

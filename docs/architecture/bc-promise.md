@@ -79,6 +79,25 @@ public, non-`@internal`, non-experimental API is covered; internals are not.
 - **`@experimental`** features (often whole components in their first release) are
   explicitly excluded from BC until marked stable.
 
+```php
+/**
+ * @internal — excluded from the BC promise; may change in ANY release,
+ *             even though it is "public" in PHP terms
+ */
+class InternalHashHelper {}
+
+// final keyword: subclassing is never BC-protected — decorate instead
+final class SignedUriFactory {}
+
+/** @final — same contract as the keyword, enforced by convention only */
+class SoftFinalNormalizer {}
+
+/**
+ * @experimental — excluded from BC until the feature is marked stable
+ */
+class ExperimentalProfileStreamer {}
+```
+
 ### What counts as a BC break
 
 Breaking changes to covered API include: removing/renaming a public method,

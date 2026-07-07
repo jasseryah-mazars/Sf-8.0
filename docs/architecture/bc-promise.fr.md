@@ -86,6 +86,25 @@ mécanismes internes ne le sont pas.
   première version) sont explicitement exclues de la BC jusqu'à ce qu'elles soient
   marquées stables.
 
+```php
+/**
+ * @internal — excluded from the BC promise; may change in ANY release,
+ *             even though it is "public" in PHP terms
+ */
+class InternalHashHelper {}
+
+// final keyword: subclassing is never BC-protected — decorate instead
+final class SignedUriFactory {}
+
+/** @final — same contract as the keyword, enforced by convention only */
+class SoftFinalNormalizer {}
+
+/**
+ * @experimental — excluded from BC until the feature is marked stable
+ */
+class ExperimentalProfileStreamer {}
+```
+
 ### What counts as a BC break
 
 Les changements cassants sur une API couverte incluent : supprimer/renommer une méthode

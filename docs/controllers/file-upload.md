@@ -39,6 +39,20 @@ An uploaded file arrives in the `files` bag as
 
 Never trust the client filename — generate a safe name.
 
+```php
+// 1. Read: the upload comes from the "files" bag
+$file = $request->files->get('avatar');            // ?UploadedFile
+
+// 2. Validate: error state (and size/MIME) before anything else
+if (null === $file || !$file->isValid()) {
+    throw new BadRequestHttpException('Invalid upload.');
+}
+
+// 3. Move: never keep the client filename — generate a safe one
+$newName = bin2hex(random_bytes(8)).'.'.$file->guessExtension();
+$file->move($targetDir, $newName);
+```
+
 !!! question "Predict first"
     To decide whether an upload is really a PDF, do you trust
     `getClientMimeType()`, the file extension, or `getMimeType()`?
@@ -60,6 +74,20 @@ Never trust the client filename — generate a safe name.
   throws `FileException` on failure.
 - `getClientOriginalExtension()` vs `guessExtension()` (from real MIME).
 
+```php
+$file->getClientOriginalName();      // "report.pdf"  — client-supplied, spoofable
+$file->getClientMimeType();          // claimed by the browser, spoofable
+$file->getClientOriginalExtension(); // "pdf" — from the client name, spoofable
+
+$file->getMimeType();                // "application/pdf" — MimeTypes guesser, content-based
+$file->guessExtension();             // "pdf" — derived from the real MIME type
+$file->getSize();                    // size in bytes
+$file->getError();                   // UPLOAD_ERR_OK (0) or another UPLOAD_ERR_* code
+$file->isValid();                    // true only for a successful upload
+
+$file->move('/var/data/uploads', 'a1b2c3.pdf'); // throws FileException on failure
+```
+
 ```mermaid
 flowchart LR
     Br[Browser multipart POST] --> F["$_FILES"]
@@ -78,6 +106,12 @@ flowchart LR
   `.php` in a served directory is remote code execution.
 - Sanitise the target name (e.g. slug + unique id); use `guessExtension()` from
   the detected MIME, not the client extension.
+
+```ini
+; php.ini — PHP-level bounds, enforced before Symfony ever runs
+upload_max_filesize = 2M   ; max size of a single uploaded file
+post_max_size = 8M         ; max size of the whole POST body (fields + files)
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\File\UploadedFile` —

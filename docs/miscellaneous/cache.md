@@ -171,6 +171,17 @@ deferred saves — convenient but limited. PSR-6 supports deferred saves
 (`saveDeferred`/`commit`) and metadata. Symfony contracts wrap PSR-6 with the
 callback + stampede protection ergonomics.
 
+```php
+// PSR-16 (SimpleCache): plain key/value — no items, no tags, no deferred saves
+$simpleCache->set('color', 'blue', 3600);
+$color = $simpleCache->get('color', 'default');
+
+// PSR-6: deferred saves batched into one commit()
+$pool->saveDeferred($pool->getItem('a')->set(1));
+$pool->saveDeferred($pool->getItem('b')->set(2));
+$pool->commit(); // persists both items at once
+```
+
 ### Null behavior
 
 `CacheInterface::get()` **never returns null to mean "miss"** — on a miss it runs
@@ -181,6 +192,19 @@ This is why the contracts API sidesteps the classic PSR-6 footgun where
 `getItem($key)->get()` returns `null` for both "absent" and "stored null" — with
 PSR-6 you must check `isHit()` to tell them apart. Caching "no result" as `null`
 is fine; just remember it counts as a hit until it expires.
+
+```php
+// Contracts: a stored null is a HIT — the callback will not run again
+$user = $cache->get('user_999', function (ItemInterface $item): ?array {
+    return $this->repo->find(999); // may return null ("not found")
+});
+
+// PSR-6 footgun: getItem($key)->get() is null for both "absent" and "stored null"
+$item = $pool->getItem('user_999');
+if ($item->isHit()) {     // the only reliable miss test
+    $user = $item->get(); // may legitimately be null
+}
+```
 
 !!! note "Null in real life"
     A stored `null` is a note on the pad reading "checked — nothing here." You

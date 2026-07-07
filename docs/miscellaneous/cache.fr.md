@@ -43,6 +43,20 @@ Symfony Cache propose trois API qui se recouvrent :
 L'API des **contracts** est celle recommandée : `get($key, callable $callback)`
 calcule et stocke en cas de miss, en un seul appel.
 
+```php
+// PSR-6 (Psr\Cache\CacheItemPoolInterface): explicit item objects
+$item = $pool->getItem('stats');
+if (!$item->isHit()) {
+    $pool->save($item->set(computeStats()));
+}
+
+// PSR-16 (Psr\SimpleCache\CacheInterface): simple get/set by key
+$stats = $simpleCache->get('stats') ?? computeStats();
+
+// Symfony contracts: get($key, callable $callback) computes-and-stores on miss
+$stats = $cache->get('stats', fn (ItemInterface $item) => computeStats());
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -62,6 +76,17 @@ calcule et stocke en cas de miss, en un seul appel.
 `Psr\Cache\CacheItemInterface`. Vous vérifiez `$item->isHit()`, et en cas de miss
 vous appelez `$item->set($value)->expiresAfter($ttl)` puis `$pool->save($item)`.
 Les items sont des objets avec état — c'est verbeux mais explicite.
+
+```php
+// Full PSR-6 lifecycle: getItem() -> isHit() -> set()/expiresAfter() -> save()
+$item = $pool->getItem('user_42');   // always returns a CacheItemInterface
+if (!$item->isHit()) {               // true only when a value is stored
+    $item->set($this->loadUser(42))  // put the computed value in the item
+         ->expiresAfter(3600);       // 1 hour TTL
+    $pool->save($item);              // nothing is stored until save()
+}
+$user = $item->get();
+```
 
 ### The contracts API and stampede protection
 

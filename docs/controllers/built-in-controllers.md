@@ -40,6 +40,15 @@ Symfony ships two ready-made controllers so trivial routes need **no PHP class**
 You reference them in the route's `controller` (or `_controller`) and pass their
 parameters as route **defaults**.
 
+```yaml
+# config/routes.yaml — 'controller' is sugar for the '_controller' default
+terms:
+    path: /terms
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:                                # parameters travel as route defaults
+        template: 'static/terms.html.twig'
+```
+
 !!! question "Predict first"
     A route points at `RedirectController::urlRedirectAction` with an **empty**
     `path` default. What status does the visitor get — 404, 500, or something else?

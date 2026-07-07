@@ -42,6 +42,14 @@ Symfony 8 offers two equivalent syntaxes: **inline** `{id<\d+>}` inside the path
 and the **`requirements`** array. Inline is concise and keeps the constraint next
 to the placeholder; the array is better when the regex is long or reused.
 
+```php
+// Inline syntax: the constraint lives next to the placeholder
+#[Route('/blog/{page<\d+>}', name: 'blog_paged')]
+
+// requirements array: strictly equivalent, better for long/reused regexes
+#[Route('/blog/{page}', name: 'blog_paged', requirements: ['page' => '\d+'])]
+```
+
 !!! question "Predict first"
     `/blog/{page<\d+>}` receives `/blog/latest`. Does the router raise a 400, does
     `page` become `'latest'`, or does something else happen?
@@ -59,6 +67,16 @@ to the placeholder; the array is better when the regex is long or reused.
 using that regex; tokens with no requirement get the default `[^/]+` (or `.+` for
 the special catch-all). The result is a single `CompiledRoute` regex like
 `#^/blog/(?P<page>\d+)$#sD`.
+
+```php
+use Symfony\Component\Routing\Route;
+
+// Route::compile() delegates to RouteCompiler::compile()
+$route = new Route('/blog/{page}', requirements: ['page' => '\d+']);
+$compiled = $route->compile();  // returns a CompiledRoute
+echo $compiled->getRegex();     // #^/blog/(?P<page>\d+)$#sD
+// Without a requirement, the {page} token would default to [^/]+
+```
 
 Because the constraint is baked into the compiled regex, a violating URL simply
 **fails to match that route** — the matcher moves on to the next route or finally

@@ -72,6 +72,22 @@ Deux façons d'attacher un comportement :
 donc `dispatch()` prend **l'objet event en premier** : `dispatch(object $event, ?string $eventName = null): object`.
 Quand aucun nom n'est fourni, c'est le nom de classe de l'event qui est utilisé.
 
+```php
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+final class OrderService
+{
+    public function __construct(private EventDispatcherInterface $dispatcher) {}
+
+    public function place(): void
+    {
+        // PSR-14 order: event object first, name optional
+        $event = $this->dispatcher->dispatch(new OrderPlacedEvent());
+        // no name given -> the class name OrderPlacedEvent::class was used
+    }
+}
+```
+
 ### How listeners are stored and sorted
 
 En interne, le dispatcher maintient `listeners[eventName][priority][] = callable`
@@ -79,6 +95,18 @@ et un cache parallèle `sorted[eventName]`. Au premier dispatch d'un event, il t
 par **priorité décroissante** — *la priorité la plus élevée s'exécute en premier* ;
 à priorité égale, l'ordre d'enregistrement s'applique. La liste triée est mémoïsée
 jusqu'à ce qu'un listener soit ajouté ou retiré.
+
+```php
+$dispatcher = new EventDispatcher();
+
+// stored as listeners['app.order'][priority][] = callable
+$dispatcher->addListener('app.order', $auditListener, 10);    // runs first
+$dispatcher->addListener('app.order', $mailListener);         // default priority 0
+$dispatcher->addListener('app.order', $cleanupListener, -10); // runs last
+
+// first dispatch sorts by priority desc and memoises into sorted['app.order']
+$dispatcher->dispatch(new OrderEvent(), 'app.order');
+```
 
 ```mermaid
 flowchart LR
@@ -97,6 +125,20 @@ N'importe quel listener peut appeler `$event->stopPropagation()`. Avant d'invoqu
 chaque listener, le dispatcher vérifie `$event->isPropagationStopped()` et
 interrompt la boucle. C'est l'objet event lui-même qui porte ce drapeau — il doit
 étendre l'`Event` des contracts.
+
+```php
+use Symfony\Contracts\EventDispatcher\Event;
+
+// The event must extend the contracts Event to carry the flag
+final class OrderPlacedEvent extends Event {}
+
+$listener = function (OrderPlacedEvent $event): void {
+    $event->stopPropagation(); // remaining listeners will be skipped
+};
+
+// checked by the dispatcher before invoking each listener:
+// if ($event->isPropagationStopped()) { break; }
+```
 
 ```mermaid
 sequenceDiagram

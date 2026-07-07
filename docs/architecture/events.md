@@ -209,6 +209,17 @@ the event, so you read it off the returned object
 error, no `null` return. The common bug is expecting `dispatch()` to hand back a
 listener's return value; it never does — it returns the event you passed in.
 
+```php
+// dispatch() always returns the SAME event object you passed in
+$event = new OrderPlacedEvent();
+$returned = $dispatcher->dispatch($event);
+
+var_dump($returned === $event); // true — even with zero listeners
+
+// results travel only by mutation, e.g. a kernel listener calling setResponse();
+// dispatch() never hands back a listener's return value
+```
+
 !!! note "Null in real life"
     An event with no listeners is a **tower radio call that nobody answers**: the
     message still goes out and comes back to you unchanged — silence is not an error.

@@ -39,6 +39,20 @@
 - **`$server`** — default **server parameters** (the PHP `$_SERVER` bag) applied to
   every request: HTTP headers (`HTTP_*`), `HTTPS`, host, and HTTP auth credentials.
 
+```php
+// $options (1st arg): kernel boot options — environment + debug
+// $server (2nd arg): default server parameters (the $_SERVER bag)
+$client = static::createClient(
+    ['environment' => 'test', 'debug' => false],
+    [
+        'HTTPS' => true,                  // simulate HTTPS
+        'HTTP_HOST' => 'api.example.com', // HTTP_* request header
+        'PHP_AUTH_USER' => 'admin',       // HTTP auth credentials
+        'PHP_AUTH_PW' => 'secret',
+    ],
+);
+```
+
 Server parameters model what a web server would set, so this is how you simulate
 headers, HTTPS, a custom host, or Basic auth without touching the controller.
 
@@ -60,8 +74,32 @@ Server parameters follow CGI conventions: request headers become
 per-request `$server` array passed to `request()`, then
 `HttpFoundation\Request::create()` turns them into request headers/attributes.
 
+```php
+// createClient() sets per-client defaults (CGI naming)
+$client = static::createClient([], [
+    'HTTP_ACCEPT' => 'application/json',         // header => HTTP_<UPPER_SNAKE>
+    'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest', // header => HTTP_<UPPER_SNAKE>
+    'CONTENT_TYPE' => 'application/json',        // no prefix
+    'HTTPS' => true,                             // no prefix
+    'PHP_AUTH_USER' => 'admin',                  // no prefix
+    'PHP_AUTH_PW' => 'secret',                   // no prefix
+]);
+
+// AbstractBrowser merges these defaults with the per-request $server array;
+// HttpFoundation\Request::create() then builds the final request from them
+$client->request('GET', '/api', [], [], ['HTTP_ACCEPT' => 'text/html']);
+```
+
 `$client->setServerParameter($key, $value)` sets a default for **subsequent**
 requests; the sixth argument of `request()` overrides for **one** request.
+
+```php
+// setServerParameter(): default for all SUBSEQUENT requests
+$client->setServerParameter('HTTP_ACCEPT_LANGUAGE', 'fr');
+
+// the per-request $server argument of request() overrides for ONE request
+$client->request('GET', '/page', [], [], ['HTTP_ACCEPT_LANGUAGE' => 'de']);
+```
 
 ### Insulated requests
 

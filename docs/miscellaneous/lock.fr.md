@@ -40,6 +40,17 @@ l'`acquire()`, faites le travail, puis `release()`. Un **store** sous-tend le
 lock ; sa portée (local ou partagé) détermine si l'exclusion mutuelle tient
 d'un serveur à l'autre.
 
+```php
+$lock = $lockFactory->createLock('nightly-report'); // LockInterface from the LockFactory
+if ($lock->acquire()) {          // got it — no other process holds the resource
+    try {
+        // ... critical work ...
+    } finally {
+        $lock->release();        // hand the resource back
+    }
+}
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"

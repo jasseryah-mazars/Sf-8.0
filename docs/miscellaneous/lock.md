@@ -188,6 +188,15 @@ Lock signals contention with a **boolean, not null**: `acquire(false)` returns
 `LockConflictedException`.) Because `false` is an ordinary value, forgetting to
 check it means you march into the critical section unprotected.
 
+```php
+$lock = $factory->createLock('import');  // createLock() returns a Lock, never null
+if (!$lock->acquire(false)) {            // non-blocking: false means "busy", no throw
+    return;                              // the mandatory guard
+}
+// Blocking variant: waits, returns true or throws LockConflictedException
+// $ok = $lock->acquire(true);
+```
+
 !!! note "Null in real life"
     A busy door doesn't give you *nothing* — it gives you a clear "occupied"
     (`false`). Reading that plain "no" as "I guess it's fine" is how two people
