@@ -347,6 +347,22 @@ Varnish).
 - **Confused with:** [Client-Side Caching](client-side.md) — this is a *shared*
   cache you own; the browser cache is private and per-user.
 
+## Official References
+- [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+- [Symfony source — HttpCache](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php)
+- [Symfony source — Store](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Store.php)
+
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "HTTP caching" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
@@ -356,11 +372,6 @@ I'm ready when I can:
 - [ ] debug "edits don't show up" (proxy enabled in dev) via the `X-Symfony-Cache` trace
 - [ ] spot the traps: `private_headers` skip auth requests; `allow_reload` is off by default
 - [ ] describe the `Store` lookup → validate → store flow and the `HttpCache` constructor
-
-## Official References
-- [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
-- [Symfony source — HttpCache](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php)
-- [Symfony source — Store](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Store.php)
 
 ---
 

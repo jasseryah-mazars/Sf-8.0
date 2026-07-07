@@ -231,6 +231,17 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
 - [Official — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
 - [Symfony source — RoutingExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Twig templating" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#linking-to-pages) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

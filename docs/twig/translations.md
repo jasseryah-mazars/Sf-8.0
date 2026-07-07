@@ -246,6 +246,17 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 - [Official — Message format (ICU)](https://symfony.com/doc/current/translation/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Twig templating" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/translation.html#translations-in-templates) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

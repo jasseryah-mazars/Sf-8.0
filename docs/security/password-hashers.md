@@ -277,6 +277,17 @@ verification usually lives in a `token_handler`, not the password hasher.
 - [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
 - [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony security" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/security/passwords.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

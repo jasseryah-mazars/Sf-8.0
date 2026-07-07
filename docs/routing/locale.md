@@ -303,6 +303,17 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
 - [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony routing" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#localized-routes-i18n) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

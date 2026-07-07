@@ -1,0 +1,116 @@
+name: Link Check
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  linkcheck:
+    name: Check documentation links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install optional dependencies
+        run: pip install pyyaml
+
+      - name: Run link checker
+        id: linkcheck
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          python tools/check_links.py --report specs/LinkCheckReport.md
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update issue on broken links
+        if: steps.linkcheck.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          # Deliberately NOT using `set -e` here: a curl/jq hiccup must not
+          # abort the workflow before the report upload + final-status steps run.
+          set -uo pipefail
+
+          API="https://api.github.com"
+          TITLE="Broken documentation links detected"
+
+          # Build the issue/comment body: report contents + a link to the run.
+          BODY_FILE="$(mktemp)"
+          {
+            echo "Automated link check found broken documentation links."
+            echo
+            echo "Workflow run: ${RUN_URL}"
+            echo
+            echo "---"
+            echo
+            if [ -f specs/LinkCheckReport.md ]; then
+              cat specs/LinkCheckReport.md
+            else
+              echo "_Report file specs/LinkCheckReport.md was not generated._"
+            fi
+          } > "$BODY_FILE"
+
+          # JSON-encode the body safely (jq is preinstalled on ubuntu-latest).
+          BODY_JSON="$(jq -Rs . < "$BODY_FILE")"
+
+          auth=(-H "Authorization: Bearer ${GH_TOKEN}"
+                -H "Accept: application/vnd.github+json"
+                -H "X-GitHub-Api-Version: 2022-11-28")
+
+          # Search OPEN issues for an exact title match to avoid duplicates.
+          # Use the search API scoped to this repo, then match the title exactly.
+          query="repo:${REPO}+is:issue+is:open+in:title+$(echo "$TITLE" | sed 's/ /+/g')"
+          search_resp="$(curl -sS "${auth[@]}" "${API}/search/issues?q=${query}")" || search_resp=''
+
+          existing_number="$(printf '%s' "$search_resp" \
+            | jq -r --arg t "$TITLE" \
+              'if type=="object" and has("items")
+                 then ([.items[] | select(.title==$t) | .number] | first) // empty
+                 else empty end' 2>/dev/null || true)"
+
+          if [ -n "${existing_number:-}" ] && [ "${existing_number}" != "null" ]; then
+            echo "Existing issue #${existing_number} found; adding a comment."
+            payload="$(jq -n --argjson body "$BODY_JSON" '{body: $body}')"
+            curl -sS "${auth[@]}" -X POST \
+              "${API}/repos/${REPO}/issues/${existing_number}/comments" \
+              -d "$payload" -o /dev/null \
+              && echo "Comment posted." \
+              || echo "WARNING: failed to post comment."
+          else
+            echo "No existing open issue; creating a new one."
+            payload="$(jq -n --arg title "$TITLE" --argjson body "$BODY_JSON" \
+              '{title: $title, body: $body, labels: ["documentation", "link-rot"]}')"
+            curl -sS "${auth[@]}" -X POST \
+              "${API}/repos/${REPO}/issues" \
+              -d "$payload" -o /dev/null \
+              && echo "Issue created." \
+              || echo "WARNING: failed to create issue."
+          fi
+
+      - name: Upload link check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-check-report
+          path: specs/LinkCheckReport.md
+          if-no-files-found: warn
+
+      - name: Fail if dead links were found
+        if: steps.linkcheck.outputs.exit_code != '0'
+        run: |
+          echo "Dead documentation links detected (checker exit code ${{ steps.linkcheck.outputs.exit_code }})."
+          exit 1

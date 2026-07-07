@@ -328,6 +328,23 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
 - **Confused with:** [Cache Types](cache-types.md) — validators say *whether it
   changed*, not *who may store it*.
 
+## Official References
+- [Symfony docs — Validation](https://symfony.com/doc/current/http_cache/validation.html)
+- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+- [MDN — Conditional requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests)
+- [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
+
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "HTTP caching" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/validation.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
@@ -337,12 +354,6 @@ I'm ready when I can:
 - [ ] debug a validator that never matches (e.g. `Last-Modified` set to `now()`)
 - [ ] spot that ETag beats Last-Modified when both conditional headers are present
 - [ ] explain how `#[Cache]` expressions evaluate pre-controller and SHA-256-hash the ETag
-
-## Official References
-- [Symfony docs — Validation](https://symfony.com/doc/current/http_cache/validation.html)
-- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
-- [MDN — Conditional requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests)
-- [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
 ---
 

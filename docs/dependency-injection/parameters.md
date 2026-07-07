@@ -291,6 +291,17 @@ anything that changes per environment or must stay secret. Prefer injecting the
 - [Official Symfony docs — Env Var Processors](https://symfony.com/doc/current/configuration/env_var_processors.html)
 - [Symfony source — EnvVarProcessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "dependency injection" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

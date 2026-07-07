@@ -278,6 +278,22 @@ resource — you change its **URL** instead (cache busting).
 - **Confused with:** [Server-Side Caching](server-side.md) — the browser cache is
   per-user and out of your control; the reverse proxy is shared and yours.
 
+## Official References
+- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [MDN — Cache-Control (request directives)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives)
+- [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
+
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "HTTP caching" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
@@ -287,11 +303,6 @@ I'm ready when I can:
 - [ ] debug "my reload doesn't fetch the new CSS" (reload vs hard reload vs cache busting)
 - [ ] spot the trap that the browser ignores `s-maxage`
 - [ ] explain how a UI action (F5 / Ctrl+Shift+R) maps to `Cache-Control` request directives
-
-## Official References
-- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
-- [MDN — Cache-Control (request directives)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives)
-- [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 
 ---
 

@@ -306,6 +306,17 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
 - [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
 - [Symfony source — HttpFoundationRequestHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony forms" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/forms.html#processing-forms) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

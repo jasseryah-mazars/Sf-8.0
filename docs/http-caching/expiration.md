@@ -355,6 +355,24 @@ with a cheap 304.
 - **Confused with:** [Validation](validation.md) — expiration *predicts* a lifetime;
   validation *asks the origin* whether the copy changed.
 
+## Official References
+- [Symfony docs — Expiration](https://symfony.com/doc/current/http_cache/expiration.html)
+- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+- [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
+- [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
+- [Symfony source — CacheAttributeListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php)
+
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "HTTP caching" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/expiration.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
@@ -364,13 +382,6 @@ I'm ready when I can:
 - [ ] debug "the CDN won't cache longer than the browser" (needs `s-maxage`, not just `max-age`)
 - [ ] spot the traps: `no-cache` ≠ `no-store`, and there is no `setMustRevalidate()`
 - [ ] explain the shared-cache precedence `s-maxage` > `max-age` > `Expires` and the `#[Cache]` listener timing
-
-## Official References
-- [Symfony docs — Expiration](https://symfony.com/doc/current/http_cache/expiration.html)
-- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
-- [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
-- [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
-- [Symfony source — CacheAttributeListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php)
 
 ---
 

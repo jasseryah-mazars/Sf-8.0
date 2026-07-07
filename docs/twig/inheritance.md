@@ -251,6 +251,17 @@ definitions — no `extends`, no surrounding HTML.
 - [Twig — extends / use / block](https://twig.symfony.com/doc/3.x/tags/extends.html)
 - [Twig source — Template.php](https://github.com/twigphp/Twig/blob/3.x/src/Template.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Twig templating" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

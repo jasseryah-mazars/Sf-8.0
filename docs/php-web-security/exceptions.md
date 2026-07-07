@@ -277,6 +277,17 @@ set_error_handler(static function (int $level, string $msg, string $file, int $l
 - [PHP: Errors in PHP 7+](https://www.php.net/manual/en/language.errors.php7.php)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "PHP & web security" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/index.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

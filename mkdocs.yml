@@ -110,6 +110,12 @@ extra:
     provider: mike
   generator: false
 
+extra_css:
+  - assets/quiz.css
+
+extra_javascript:
+  - assets/quiz.js
+
 nav:
   - Home: index.md
   - Exam Guide:
@@ -119,6 +125,7 @@ nav:
       - Advanced vs Expert: exam-guide/levels.md
       - Exam-Day Strategy: exam-guide/strategy.md
   - Roadmap: roadmap.md
+  - Exam Simulator: exam-simulator.md
   - Glossary: glossary.md
   - Resources: resources.md
   - Tags: tags.md

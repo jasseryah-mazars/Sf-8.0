@@ -286,6 +286,17 @@ differs per path.
 - [Symfony docs — Security config reference](https://symfony.com/doc/current/reference/configuration/security.html)
 - [Symfony source — Firewall](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony security" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/security.html#the-firewall) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

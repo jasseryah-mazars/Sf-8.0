@@ -305,6 +305,22 @@ may fit better.
 - **Confused with:** [Cache Types](cache-types.md) — ESI isolates a *fragment's*
   freshness rather than choosing `public`/`private` for the whole page.
 
+## Official References
+- [Symfony docs — ESI](https://symfony.com/doc/current/http_cache/esi.html)
+- [Symfony source — Esi](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Esi.php)
+- [Symfony source — EsiFragmentRenderer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/EsiFragmentRenderer.php)
+
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "HTTP caching" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/esi.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
@@ -314,11 +330,6 @@ I'm ready when I can:
 - [ ] debug "nothing is cached separately" (no surrogate → inline fallback)
 - [ ] spot that without ESI the shortest embedded TTL (`ResponseCacheStrategy`) caps the whole page
 - [ ] name the classes — `HttpCache\Esi`, `EsiFragmentRenderer`, `UriSigner` — and how they collaborate
-
-## Official References
-- [Symfony docs — ESI](https://symfony.com/doc/current/http_cache/esi.html)
-- [Symfony source — Esi](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Esi.php)
-- [Symfony source — EsiFragmentRenderer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/EsiFragmentRenderer.php)
 
 ---
 

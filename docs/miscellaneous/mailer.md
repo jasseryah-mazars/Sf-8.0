@@ -243,6 +243,17 @@ production unless the email must be confirmed before responding.
 - [Official docs — Mime](https://symfony.com/doc/current/components/mime.html)
 - [Symfony source — Mailer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Mailer/Mailer.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony components" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/mailer.html#sending-messages-async) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

@@ -355,6 +355,17 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 - [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html)
 - [Symfony source — FormEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony forms" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/form/events.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

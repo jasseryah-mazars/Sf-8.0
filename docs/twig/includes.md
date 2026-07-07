@@ -234,6 +234,17 @@ components (modals, cards with slots).
 - [Twig — include / embed](https://twig.symfony.com/doc/3.x/tags/include.html)
 - [Twig source — FilesystemLoader](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Twig templating" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#including-templates) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

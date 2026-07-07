@@ -45,6 +45,15 @@ jobs:
       - name: Validate quiz bank
         run: python tools/validate_quiz.py
 
+      - name: Regenerate interactive quiz dataset
+        run: python tools/gen_quiz_json.py
+
+      - name: Section-order audit (report only)
+        run: python tools/check_section_order.py
+
+      - name: Link inventory (offline, no network)
+        run: python tools/check_links.py --offline
+
       - name: Set up PHP (lint code snippets)
         uses: shivammathur/setup-php@v2
         with:

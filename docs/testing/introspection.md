@@ -345,6 +345,17 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
 - [Symfony source — HttpFoundation test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpFoundation/Test/Constraint)
 - [Symfony source — DomCrawler test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/DomCrawler/Test/Constraint)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony testing" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#the-assertions) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

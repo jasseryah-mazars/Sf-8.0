@@ -255,6 +255,17 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
 - [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
 - [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony architecture" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:

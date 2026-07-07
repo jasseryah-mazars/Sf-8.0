@@ -325,6 +325,23 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
 - **Confused with:** [Expiration](expiration.md) — cache *type* (who may store) is
   a different axis from *freshness* (how long it may be reused).
 
+## Official References
+- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
+- [MDN — Vary](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary)
+- [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
+
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "HTTP caching" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
@@ -334,12 +351,6 @@ I'm ready when I can:
 - [ ] debug a CDN serving one user's page to another (missing `private`/stray session)
 - [ ] spot the trick that `setPublic()` then `setPrivate()` yields only `private`
 - [ ] explain how `ResponseHeaderBag::computeCacheControlValue()` renders the header
-
-## Official References
-- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
-- [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
-- [MDN — Vary](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary)
-- [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
 
 ---
 

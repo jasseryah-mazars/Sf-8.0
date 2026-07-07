@@ -342,6 +342,17 @@ clearer than an event.
 - [Official docs — Events reference](https://symfony.com/doc/current/reference/events.html)
 - [Symfony source — EventDispatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/EventDispatcher/EventDispatcher.php)
 
+## Video references
+
+!!! tip "Watch & learn"
+    These are official, continuously-updated video channels — search them for
+    "Symfony architecture" to reinforce this chapter. We link stable channels rather than
+    individual videos so the references never rot.
+
+    - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
+    - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
+    - [Official docs for this topic](https://symfony.com/doc/current/components/event_dispatcher.html#connecting-listeners) — some Symfony doc pages embed a screencast.
+
 ## Confidence check
 
 I'm ready when I can:
