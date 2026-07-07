@@ -89,7 +89,13 @@ $user = $item->get();
 `Symfony\Contracts\Cache\CacheInterface::get()`:
 
 ```php
-public function get(string $key, callable $callback, ?float $beta = null, ?array &$metadata = null): mixed
+// On a miss, $callback computes the value; $beta tunes early expiration
+public function get(
+    string $key,
+    callable $callback,
+    ?float $beta = null,
+    ?array &$metadata = null,
+): mixed
 ```
 
 On a miss it calls `$callback(ItemInterface $item, bool &$save)` to compute the
@@ -102,15 +108,18 @@ recomputation; `0` disables early expiration.
 
 ```php
 // The callback receives the ItemInterface and a by-reference $save flag
-$rates = $cache->get('rates', function (ItemInterface $item, bool &$save): array {
-    $item->expiresAfter(300);
-    $rates = $this->api->fetchRates();
-    if ($rates === []) {
-        $save = false; // computed but NOT stored (retry on next call)
-    }
+$rates = $cache->get(
+    'rates',
+    function (ItemInterface $item, bool &$save): array {
+        $item->expiresAfter(300);
+        $rates = $this->api->fetchRates();
+        if ($rates === []) {
+            $save = false; // computed but NOT stored (retry on next call)
+        }
 
-    return $rates;
-});
+        return $rates;
+    }
+);
 
 $cache->get('rates', $callback, INF); // $beta = INF: force recomputation now
 $cache->get('rates', $callback, 0);   // $beta = 0: disable early expiration
@@ -154,7 +163,8 @@ The concrete pools implement both PSR-6 and the contracts interface (e.g.
 ```php
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
-// $pool is a TagAwareCacheInterface (TagAwareAdapter, or a pool with tags: true)
+// $pool is a TagAwareCacheInterface
+// (a TagAwareAdapter, or a pool configured with tags: true)
 $price = $pool->get('product_42', function (ItemInterface $item): float {
     $item->tag(['products']); // sticky label on this item
 
@@ -199,7 +209,8 @@ $user = $cache->get('user_999', function (ItemInterface $item): ?array {
     return $this->repo->find(999); // may return null ("not found")
 });
 
-// PSR-6 footgun: getItem($key)->get() is null for both "absent" and "stored null"
+// PSR-6 footgun: getItem($key)->get() is null both for
+// "absent" and for "stored null"
 $item = $pool->getItem('user_999');
 if ($item->isHit()) {     // the only reliable miss test
     $user = $item->get(); // may legitimately be null
@@ -257,12 +268,16 @@ if ($item->isHit()) {     // the only reliable miss test
 
         public function priceFor(int $id): float
         {
-            return $this->cache->get("price_$id", function (ItemInterface $item): float {
-                $item->expiresAfter(3600);
-                $item->tag(['prices']);
+            return $this->cache->get(
+                "price_$id",
+                function (ItemInterface $item): float {
+                    $item->expiresAfter(3600);
+                    $item->tag(['prices']);
 
-                return $this->recomputeExpensivePrice(); // runs only on miss
-            });
+                    // runs only on a cache miss
+                    return $this->recomputeExpensivePrice();
+                }
+            );
         }
 
         private function recomputeExpensivePrice(): float { return 9.99; }

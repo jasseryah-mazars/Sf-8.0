@@ -92,7 +92,13 @@ console `Application`. The Runtime executes that closure and calls
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return static function (array $context): Application {
-    return new Application(new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']));
+    // Build the kernel from the runtime context, then wrap it
+    $kernel = new Kernel(
+        $context['APP_ENV'],
+        (bool) $context['APP_DEBUG'],
+    );
+
+    return new Application($kernel);
 };
 ```
 
