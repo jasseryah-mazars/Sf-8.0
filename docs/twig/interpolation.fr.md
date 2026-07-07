@@ -52,9 +52,12 @@ Trois façons de construire une chaîne à partir de morceaux :
 
 ```twig
 {# the three tools side by side #}
-{{ "user #{name} (#{count})" }}             {# #{...}: any expression, double quotes only #}
-{{ 'user ' ~ name ~ ' (' ~ count ~ ')' }}   {# ~ casts values to string and joins them #}
-{{ '%s: %d items, %.2f kg (%1$s)'|format(name, count, weight) }}  {# %1$s reuses arg 1 #}
+{# #{...}: any expression, double quotes only #}
+{{ "user #{name} (#{count})" }}
+{# ~ casts values to string and joins them #}
+{{ 'user ' ~ name ~ ' (' ~ count ~ ')' }}
+{# %1$s reuses arg 1 #}
+{{ '%s: %d items, %.2f kg (%1$s)'|format(name, count, weight) }}
 ```
 
 !!! question "Predict first"
@@ -100,7 +103,8 @@ substitution par clés : `{{ "%name%"|replace({ '%name%': n }) }}`.
 {# both filters are registered by Twig\Extension\CoreExtension #}
 {{ "%s has %d points"|format(user, points) }}      {# format → PHP vsprintf #}
 {{ "Price: %.2f"|format(9.5) }}                    {# Price: 9.50 #}
-{{ "Hello %name%"|replace({ '%name%': name }) }}   {# replace → keyed substitution #}
+{# replace → keyed substitution #}
+{{ "Hello %name%"|replace({ '%name%': name }) }}
 ```
 
 ```mermaid

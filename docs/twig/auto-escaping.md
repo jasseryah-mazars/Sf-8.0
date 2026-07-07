@@ -58,8 +58,10 @@ an implicit `|escape(strategy)` to every `{{ }}` unless the node is already
 marked *safe*.
 
 ```php
-// EscaperExtension rewrites {{ value }} into {{ value|escape(strategy) }} at compile time.
-// The encoding itself runs in EscaperRuntime (the former twig_escape_filter logic):
+// EscaperExtension rewrites {{ value }} into
+// {{ value|escape(strategy) }} at compile time.
+// The encoding itself runs in EscaperRuntime
+// (the former twig_escape_filter logic):
 $escaped = $twig->getRuntime(\Twig\Runtime\EscaperRuntime::class)
     ->escape('<b>hi</b>', 'html');  // &lt;b&gt;hi&lt;/b&gt;
 ```

@@ -54,15 +54,17 @@ Deux endroits peuvent configurer une commande :
   appeler `setHelp()`, `setAliases()`, etc.
 
 ```php
-#[AsCommand(name: 'app:report', description: 'Generates the report')] // declarative, compile time
+// Declarative metadata, read at compile time
+#[AsCommand(name: 'app:report', description: 'Generates the report')]
 final class ReportCommand extends Command
 {
     protected function configure(): void            // imperative, classic style
     {
         $this
-            ->addArgument('period', InputArgument::REQUIRED)  // args/options: classic style only
-            ->setHelp('Shown by "help app:report".')          // setHelp()
-            ->setAliases(['app:rep']);                        // setAliases()
+            // args/options can only be added in classic style
+            ->addArgument('period', InputArgument::REQUIRED)
+            ->setHelp('Shown by "help app:report".')
+            ->setAliases(['app:rep']);
     }
 }
 ```
@@ -90,7 +92,8 @@ jamais toucher l'input/output.
 protected function configure(): void
 {
     $this->setDescription('Structure only: name, definition, help');
-    // Never read input here: $input->getArgument() is impossible, nothing is bound
+    // Never read input here: nothing is bound yet, so
+    // $input->getArgument() is impossible
 }
 ```
 
@@ -120,13 +123,18 @@ Ordre des méthodes que vous pouvez surcharger :
 5. **`execute(InputInterface, OutputInterface): int`** — le vrai travail.
 
 ```php
-protected function initialize(InputInterface $input, OutputInterface $output): void
-{
-    $this->io = new SymfonyStyle($input, $output);   // shared setup, input is bound
+protected function initialize(
+    InputInterface $input,
+    OutputInterface $output,
+): void {
+    // Shared setup: input is already bound at this point
+    $this->io = new SymfonyStyle($input, $output);
 }
 
-protected function interact(InputInterface $input, OutputInterface $output): void
-{
+protected function interact(
+    InputInterface $input,
+    OutputInterface $output,
+): void {
     // runs only when $input->isInteractive() (skipped with -n)
     if (null === $input->getArgument('name')) {
         $input->setArgument('name', $this->io->ask('Name?'));
@@ -154,10 +162,12 @@ donc le **nom dans l'attribut**.
 #[AsCommand(name: 'app:report')]
 final class ReportCommand extends Command { /* ... */ }
 
-// The ContainerCommandLoader maps "name => service id"; instantiation is on demand
-$application->setCommandLoader(
-    new ContainerCommandLoader($container, ['app:report' => ReportCommand::class])
-);
+// ContainerCommandLoader maps "name => service id";
+// the command object is instantiated on demand
+$application->setCommandLoader(new ContainerCommandLoader(
+    $container,
+    ['app:report' => ReportCommand::class],
+));
 
 // Anti-pattern: setName() inside configure() forces instantiating every command
 ```
@@ -223,8 +233,11 @@ $application->setCommandLoader(
                 ->setHidden(false);
         }
 
-        protected function execute(InputInterface $input, OutputInterface $output): int
-        {
+        protected function execute(
+            InputInterface $input,
+            OutputInterface $output,
+        ): int {
+            // Metadata was set in configure(); nothing else to do
             return Command::SUCCESS;
         }
     }
@@ -283,13 +296,18 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
     **2.**
 
     ```php
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
+    protected function initialize(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
+        // Store shared helpers once input/output are bound
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    protected function interact(InputInterface $input, OutputInterface $output): void
-    {
+    protected function interact(
+        InputInterface $input,
+        OutputInterface $output,
+    ): void {
         if (null === $input->getArgument('name')) {
             $input->setArgument('name', $this->io->ask('Name?'));
         }

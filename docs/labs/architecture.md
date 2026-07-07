@@ -118,24 +118,45 @@ final class OrderPlacedEventTest extends TestCase
     public function testListenersRunInPriorityOrderDescending(): void
     {
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(OrderPlacedEvent::class, static fn (OrderPlacedEvent $e) => $e->tag('low'), -10);
-        $dispatcher->addListener(OrderPlacedEvent::class, static fn (OrderPlacedEvent $e) => $e->tag('high'), 100);
-        $dispatcher->addListener(OrderPlacedEvent::class, static fn (OrderPlacedEvent $e) => $e->tag('mid'), 0);
+        $dispatcher->addListener(
+            OrderPlacedEvent::class,
+            static fn (OrderPlacedEvent $e) => $e->tag('low'),
+            -10,
+        );
+        $dispatcher->addListener(
+            OrderPlacedEvent::class,
+            static fn (OrderPlacedEvent $e) => $e->tag('high'),
+            100,
+        );
+        $dispatcher->addListener(
+            OrderPlacedEvent::class,
+            static fn (OrderPlacedEvent $e) => $e->tag('mid'),
+            0,
+        );
 
         $event = $dispatcher->dispatch(new OrderPlacedEvent('ORD-1', 4_999));
 
-        // Higher priority runs first; equal priority would keep registration order.
+        // Higher priority runs first; equal priority would keep
+        // registration order.
         self::assertSame(['high', 'mid', 'low'], $event->trace);
     }
 
     public function testStopPropagationSkipsLowerPriorityListeners(): void
     {
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(OrderPlacedEvent::class, static function (OrderPlacedEvent $e): void {
-            $e->tag('guard');
-            $e->stopPropagation();
-        }, 100);
-        $dispatcher->addListener(OrderPlacedEvent::class, static fn (OrderPlacedEvent $e) => $e->tag('never'), 0);
+        $dispatcher->addListener(
+            OrderPlacedEvent::class,
+            static function (OrderPlacedEvent $e): void {
+                $e->tag('guard');
+                $e->stopPropagation();
+            },
+            100,
+        );
+        $dispatcher->addListener(
+            OrderPlacedEvent::class,
+            static fn (OrderPlacedEvent $e) => $e->tag('never'),
+            0,
+        );
 
         $event = $dispatcher->dispatch(new OrderPlacedEvent('ORD-2', 100));
 
@@ -146,7 +167,11 @@ final class OrderPlacedEventTest extends TestCase
     public function testPlainListenerObjectIsInvoked(): void
     {
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(OrderPlacedEvent::class, [new AuditListener(), 'onOrderPlaced'], 50);
+        $dispatcher->addListener(
+            OrderPlacedEvent::class,
+            [new AuditListener(), 'onOrderPlaced'],
+            50,
+        );
 
         $event = $dispatcher->dispatch(new OrderPlacedEvent('ORD-3', 250));
 
@@ -159,7 +184,10 @@ final class OrderPlacedEventTest extends TestCase
         $dispatcher->addSubscriber(new NotificationSubscriber());
 
         // Two handlers were declared for the same event name.
-        self::assertCount(2, $dispatcher->getListeners(OrderPlacedEvent::class));
+        self::assertCount(
+            2,
+            $dispatcher->getListeners(OrderPlacedEvent::class),
+        );
 
         $event = $dispatcher->dispatch(new OrderPlacedEvent('ORD-4', 999));
 
@@ -324,7 +352,12 @@ the framework's auto-wiring — is what makes these answers reflexive under time
     use App\Event\OrderPlacedEvent;
     use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-    #[AsEventListener(event: OrderPlacedEvent::class, method: 'onOrderPlaced', priority: 50)]
+    // The attribute wires the listener at compile time (no YAML).
+    #[AsEventListener(
+        event: OrderPlacedEvent::class,
+        method: 'onOrderPlaced',
+        priority: 50,
+    )]
     final class AuditListener
     {
         public function onOrderPlaced(OrderPlacedEvent $event): void
@@ -354,7 +387,10 @@ the framework's auto-wiring — is what makes these answers reflexive under time
         public function place(string $orderId, int $totalCents): OrderPlacedEvent
         {
             // ... persist the order ...
-            return $this->dispatcher->dispatch(new OrderPlacedEvent($orderId, $totalCents));
+            // dispatch() returns the same event instance (PSR-14).
+            return $this->dispatcher->dispatch(
+                new OrderPlacedEvent($orderId, $totalCents),
+            );
         }
     }
     ```
