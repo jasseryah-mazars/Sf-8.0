@@ -53,6 +53,14 @@ You apply a theme:
 - **Per template** with `{% form_theme form 'theme.html.twig' %}`.
 - **Globally** via `twig.form_themes` in `config/packages/twig.yaml`.
 
+```yaml
+# config/packages/twig.yaml — global themes via twig.form_themes
+# (per template instead: {% form_theme form 'theme.html.twig' %} in the Twig file)
+twig:
+    form_themes:
+        - 'form/fields.html.twig'
+```
+
 !!! question "Predict first"
     A field has block prefix `rating` (parent `integer`). You define an `integer_widget`
     override but it never applies, while `rating_widget` does. Why?
@@ -87,6 +95,17 @@ The first block that exists wins. This is why you can override one field
 (`_registration_email_widget`) or every email field (`email_widget`) or all
 widgets (`form_widget`).
 
+```twig
+{# One field of one form (most specific) #}
+{% block _registration_email_widget %}{{ block('form_widget_simple') }}{% endblock %}
+
+{# Every EmailType field #}
+{% block email_widget %}{{ block('form_widget_simple') }}{% endblock %}
+
+{# Every widget of every form (least specific) #}
+{% block form_widget %}{{ block('form_widget_simple') }}{% endblock %}
+```
+
 ```mermaid
 flowchart TD
     A["Fragment: email widget"] --> B{_form_email_widget?}
@@ -107,6 +126,17 @@ flowchart TD
 - **Dedicated theme template** applied per view or globally.
 - **`use`** — inside a theme, `{% use 'form_div_layout.html.twig' %}` imports
   base blocks so you override selectively.
+
+```twig
+{# Same file as the form — this template must NOT extend another #}
+{% form_theme form _self %}
+
+{# Inside a dedicated theme: use imports base blocks, override only deltas #}
+{% use 'form_div_layout.html.twig' %}
+{% block form_errors %}
+    <ul class="errors">{# custom markup #}</ul>
+{% endblock %}
+```
 
 ## Configuration & code
 

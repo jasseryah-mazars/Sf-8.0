@@ -114,6 +114,30 @@ Step by step:
    redirect `Response`. On error, `LoginFailureEvent` fires and
    `onAuthenticationFailure()` may return a `Response`.
 
+```php
+// 1. supports(): true / false / null ("maybe, authenticate lazily")
+public function supports(Request $request): ?bool
+{
+    return $request->isMethod('POST') && $request->getPathInfo() === '/login';
+}
+
+// 2. authenticate(): build the Passport — badges are verified on CheckPassportEvent
+public function authenticate(Request $request): Passport
+{
+    return new Passport(
+        new UserBadge($request->request->getString('_username')),            // UserProviderListener
+        new PasswordCredentials($request->request->getString('_password')),  // CheckCredentialsListener
+        [new CsrfTokenBadge('authenticate', $request->request->getString('_csrf_token'))], // CsrfProtectionListener
+    );
+}
+
+// 4. createToken(): produce the TokenInterface stored in the TokenStorageInterface
+public function createToken(Passport $passport, string $firewallName): TokenInterface
+{
+    return new PostAuthenticationToken($passport->getUser(), $firewallName, $passport->getUser()->getRoles());
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\Security\Http\Authentication\AuthenticatorManager::authenticate()`
     — [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php).
@@ -131,6 +155,19 @@ Step by step:
   re-authenticate (e.g. via an access-token authenticator). `ContextListener`
   is not registered.
 
+```yaml
+security:
+    firewalls:
+        main:
+            provider: app_users   # stateful: ContextListener stores the token in the
+            form_login: ~         # session, then refreshUser() reloads the UserInterface
+        api:
+            pattern: ^/api
+            stateless: true       # no ContextListener → no session token, re-auth each request
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
+```
+
 ### Entry points
 
 When an **unauthenticated** user hits a protected resource, the
@@ -140,6 +177,19 @@ decides *how to start* authentication — e.g. redirect to a login form, or retu
 `401` with a `WWW-Authenticate` header. If a firewall has **more than one**
 authenticator that is also an entry point, you **must** name one explicitly via
 `entry_point:` in `security.yaml`, or the container throws.
+
+```php
+// AuthenticationEntryPointInterface decides how to START authentication;
+// with >1 candidate, pick one in security.yaml: firewalls.api.entry_point: App\Security\ApiEntryPoint
+final class ApiEntryPoint implements AuthenticationEntryPointInterface
+{
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
+    {
+        // API style: 401 with a WWW-Authenticate challenge (a form would redirect instead)
+        return new Response(null, 401, ['WWW-Authenticate' => 'Bearer']);
+    }
+}
+```
 
 ### Null behavior
 

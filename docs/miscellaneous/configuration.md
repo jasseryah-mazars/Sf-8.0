@@ -38,6 +38,17 @@ Three distinct components sit under "configuration":
 - **ExpressionLanguage** — a small, sandboxed expression engine used across
   Symfony (security, routing conditions, service definitions, validation).
 
+```php
+// Config: validate raw arrays against a bundle Configuration schema
+$config = (new Processor())->processConfiguration(new Configuration(), $rawConfigs);
+
+// DotEnv: load the .env* cascade into environment variables
+(new Dotenv())->loadEnv(__DIR__.'/.env');
+
+// ExpressionLanguage: evaluate a small sandboxed rule
+$allowed = (new ExpressionLanguage())->evaluate('user.age >= 18', ['user' => $user]);
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -59,6 +70,28 @@ constraints. Node types: `arrayNode`, `scalarNode`, `booleanNode`,
 `integerNode`, `enumNode`, with `->isRequired()`, `->defaultValue()`,
 `->cannotBeEmpty()`, `->validate()->ifTrue()->thenInvalid()`.
 
+```php
+// Inside ConfigurationInterface::getConfigTreeBuilder()
+$tb = new TreeBuilder('acme');
+$tb->getRootNode()
+    ->children()
+        ->scalarNode('endpoint')->isRequired()->cannotBeEmpty()->end()
+        ->integerNode('timeout')->defaultValue(30)->end()
+        ->booleanNode('enabled')->defaultValue(true)->end()
+        ->enumNode('mode')->values(['sync', 'async'])->end()
+        ->arrayNode('servers')->scalarPrototype()->end()->end()
+        ->scalarNode('dsn')
+            ->validate()
+                ->ifTrue(fn ($v) => !str_contains((string) $v, '://'))
+                ->thenInvalid('Invalid DSN %s.')
+            ->end()
+        ->end()
+    ->end();
+
+// Processor merges every source, applies defaults and validates
+$config = (new Processor())->processConfiguration($configuration, $rawConfigs);
+```
+
 ```mermaid
 flowchart LR
     S[Config sources: yaml/php/xml] --> P[Processor::processConfiguration]
@@ -70,6 +103,21 @@ The `Symfony\Component\Config\FileLocator` and loaders (`YamlFileLoader`,
 `PhpFileLoader`) read files; `ConfigCache`/`ConfigCacheFactory` cache the result
 and check freshness via `ResourceInterface` (e.g. `FileResource`) so debug mode
 rebuilds when sources change.
+
+```php
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
+
+// FileLocator resolves file names for loaders (YamlFileLoader, PhpFileLoader...)
+$locator = new FileLocator([__DIR__.'/config']);
+$path = $locator->locate('services.yaml'); // absolute path or exception
+
+$cache = new ConfigCache(__DIR__.'/var/cache/config.php', true); // debug = true
+if (!$cache->isFresh()) { // checks every tracked ResourceInterface
+    $cache->write($compiledPhp, [new FileResource($path)]); // FileResource = mtime check
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\Config\Definition\Processor::processConfiguration()` —

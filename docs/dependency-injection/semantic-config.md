@@ -68,6 +68,29 @@ app:                  # your own root key
   $configs, ContainerBuilder $container)` receives the *merged, processed* config
   and registers services/parameters into the builder.
 
+```php
+// Configuration (implements ConfigurationInterface): declares the schema.
+final class Configuration implements ConfigurationInterface
+{
+    public function getConfigTreeBuilder(): TreeBuilder
+    {
+        $treeBuilder = new TreeBuilder('acme_blog'); // TreeBuilder = keys/types/defaults
+        $treeBuilder->getRootNode()
+            ->children()
+                ->integerNode('per_page')->defaultValue(10)->end()
+            ->end();
+
+        return $treeBuilder;
+    }
+}
+
+// Extension: acts on the processed values.
+final class AcmeBlogExtension extends Extension
+{
+    public function load(array $configs, ContainerBuilder $container): void { /* ... */ }
+}
+```
+
 ### The load lifecycle
 
 During compilation the kernel calls each registered extension. Symfony merges the
@@ -75,6 +98,17 @@ config from every environment file, runs it through the `Configuration` tree
 (applying defaults, normalising, validating), then hands the processed array to
 `load()`. `load()` typically loads a services file and sets parameters from the
 config values.
+
+```php
+public function load(array $configs, ContainerBuilder $container): void
+{
+    // $configs is a LIST of arrays (one per config file / environment);
+    // processConfiguration() merges them through the Configuration tree.
+    $config = $this->processConfiguration(new Configuration(), $configs);
+
+    $container->setParameter('acme_blog.per_page', $config['per_page']);
+}
+```
 
 ```mermaid
 flowchart TD

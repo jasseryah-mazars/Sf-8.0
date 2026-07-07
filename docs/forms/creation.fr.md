@@ -84,6 +84,24 @@ Un form type étend `Symfony\Component\Form\AbstractType` (qui implémente
 - `configureOptions(OptionsResolver $resolver)` — déclare les options acceptées par
   le type et leurs valeurs par défaut, via `Symfony\Component\OptionsResolver\OptionsResolver`.
 
+```php
+// AbstractType already implements FormTypeInterface for you
+final class TaskType extends AbstractType
+{
+    // buildForm(): add fields, listeners, data mappers
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add('title', TextType::class);
+    }
+
+    // configureOptions(): declare options via the OptionsResolver
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['data_class' => Task::class]);
+    }
+}
+```
+
 `getBlockPrefix()` (par défaut le nom de la classe en snake case, sans le suffixe
 `Type`) pilote le nommage des blocs Twig — voir [theming](theming.md).
 
@@ -108,6 +126,16 @@ flowchart LR
 3. `getForm()` transforme récursivement l'arbre de builders en un arbre immuable de
    `FormInterface`. Chaque champ est lui-même un `Form` dont la config est une
    `Symfony\Component\Form\FormConfigInterface`.
+
+```php
+// Inside FormFactory::create() → createBuilder():
+$resolvedType = $registry->getType(TaskType::class);       // FormRegistry → ResolvedFormTypeInterface
+$builder = $resolvedType->createBuilder($factory, 'task'); // a FormBuilder
+// parent → child chain: each type's (and extension's) buildForm() runs
+$resolvedType->buildForm($builder, $builder->getOptions());
+$form = $builder->getForm();   // immutable FormInterface tree
+$config = $form->getConfig();  // each field exposes a FormConfigInterface
+```
 
 !!! note "Source reference"
     `Symfony\Component\Form\FormFactory` et `AbstractType` —

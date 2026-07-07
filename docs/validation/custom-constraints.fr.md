@@ -229,6 +229,22 @@ le `$value` d'un validator de portée **classe** est l'objet, qui n'est pas
 `null` à ce stade — mais ses *propriétés* peuvent l'être, lisez-les donc avec
 `?->` et `??`.
 
+```php
+public function validate(mixed $value, Constraint $constraint): void
+{
+    if (null === $value || '' === $value) {
+        return;                              // early return: no TypeError later
+    }
+    if (!\is_string($value)) {
+        throw new UnexpectedValueException($value, 'string');
+    }
+
+    // class-scoped variant: $value is the object, but its properties may be null
+    // $year = $value->end?->format('Y');    // ?-> null-safe call
+    // $days = $value->duration ?? 0;        // ?? fallback
+}
+```
+
 !!! note "Null in real life"
     Un scanner sur mesure ignore un emplacement vide sur le tapis — ce n'est pas
     son rôle de se plaindre qu'un bagage manque ; c'est celui du scanner de

@@ -69,6 +69,21 @@ l'argument (les resolvers variadiques en yieldent plusieurs) ; ne rien yielder
 passe au resolver suivant. Si aucun ne yield, une `\RuntimeException` explique
 que l'argument n'a pas pu être résolu.
 
+```php
+// ArgumentResolver::getArguments(), heavily simplified
+foreach ($this->argumentMetadataFactory->createArgumentMetadata($controller) as $metadata) {
+    foreach ($this->resolvers as $resolver) {
+        $resolved = [...$resolver->resolve($request, $metadata)]; // generator
+        if ($resolved !== []) {
+            $arguments = [...$arguments, ...$resolved]; // first to yield wins
+            continue 2;                                 // next parameter
+        }
+    }
+
+    throw new \RuntimeException('...requires that you provide a value...');
+}
+```
+
 ```mermaid
 flowchart TD
     K[HttpKernel] --> AR[ArgumentResolver]
@@ -119,6 +134,17 @@ Vous pouvez aussi épingler un resolver sur un argument avec
 `#[ValueResolver(MyResolver::class)]` (optionnellement `disabled: true`), ce
 qui restreint la résolution à ce seul resolver.
 
+```php
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+
+public function show(
+    // pin: only ClientLocaleResolver may resolve this argument
+    #[ValueResolver(ClientLocaleResolver::class)] ClientLocale $locale,
+    // disabled: true excludes that resolver for this argument
+    #[ValueResolver(SomeResolver::class, disabled: true)] string $raw,
+): Response { /* ... */ }
+```
+
 !!! note "Source reference"
     `ValueResolverInterface`, `ArgumentResolver`, et les resolvers intégrés —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver).
@@ -130,6 +156,16 @@ qui restreint la résolution à ce seul resolver.
 DTO et le **Validator** pour le valider, en lançant un `422`
 (`UnprocessableEntityHttpException`) en cas d'échec de validation ou un `400`
 si l'entrée est malformée.
+
+```php
+public function create(#[MapRequestPayload] CreateOrderInput $payload): JsonResponse
+{
+    // RequestPayloadValueResolver already ran before this line:
+    //   Serializer built $payload from the body — malformed JSON → 400
+    //   Validator checked constraints — violations → 422 UnprocessableEntityHttpException
+    return new JsonResponse(['ok' => true], 201);
+}
+```
 
 ### Performance
 

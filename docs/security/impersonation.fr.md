@@ -72,6 +72,21 @@ trois choses possibles :
 rôle `ROLE_PREVIOUS_ADMIN` est legacy et ne doit plus apparaître dans du code
 Symfony 8.
 
+```php
+// Modern check — true only while the active token is a SwitchUserToken:
+if ($this->isGranted('IS_IMPERSONATOR')) {
+    // show the "exit impersonation" banner
+}
+
+// The SwitchUserToken wraps the admin's original authentication:
+if ($token instanceof SwitchUserToken) {
+    $admin = $token->getOriginalToken()->getUserIdentifier(); // audit trail
+}
+
+// Legacy spelling — do NOT use in Symfony 8:
+// $this->isGranted('ROLE_PREVIOUS_ADMIN');
+```
+
 ## Deep Dive — how it works internally
 
 La fonctionnalité est implémentée par

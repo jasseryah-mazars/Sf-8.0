@@ -155,6 +155,15 @@ session/token for the *test client* directly (see
 Conversely, `loginUser()` is test-only tooling; production flows (register →
 auto-login, verification links…) belong to `Security::login()`.
 
+```php
+// Functional test: fabricate the client session — no real pipeline
+$client = static::createClient();
+$client->loginUser($testUser);   // KernelBrowser::loginUser(), tests only
+
+// Production code: the real pipeline, events and badges included
+$security->login($user);         // Security::login()
+```
+
 ## Configuration & code
 
 === "PHP (after registration)"

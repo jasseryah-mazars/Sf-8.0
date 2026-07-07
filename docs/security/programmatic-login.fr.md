@@ -59,17 +59,45 @@ public function logout(bool $validateCsrf = true): ?Response;
   `RememberMeBadge` pour que le cookie remember-me soit écrit exactement comme
   lors d'un login interactif.
 
+```php
+// All four parameters made explicit
+$security->login(
+    $user,                    // any UserInterface instance
+    'form_login',             // built-in authenticator → config key ('json_login', 'remember_me', ...)
+    'main',                   // target firewall (needed when not the current one)
+    [new RememberMeBadge()],  // extra badges: write the remember-me cookie too
+);
+```
+
 Point crucial : `login()` **dispatche les mêmes events d'authentification**
 qu'un login interactif (les listeners de `CheckPassportEvent` résolvent les
 badges, `LoginSuccessEvent` se déclenche, remember-me et les autres listeners
 réagissent). Vos journaux d'audit, remises à zéro de throttling et handlers de
 succès se comportent à l'identique.
 
+```php
+// Reacts to Security::login() exactly like to an interactive login
+#[AsEventListener]
+final class LoginAuditListener
+{
+    public function __invoke(LoginSuccessEvent $event): void
+    {
+        // runs after CheckPassportEvent listeners resolved the badges
+    }
+}
+```
+
 `logout()` invalide la session/le token courant et dispatche le `LogoutEvent`
 afin que tous les listeners de logout configurés (nettoyage des cookies,
 effacement du token CSRF…) s'exécutent. Par défaut, il **valide le token CSRF
 de logout** présent dans la request ; passez `false` pour sauter la validation
 quand l'appel ne provient pas du formulaire/lien de logout.
+
+```php
+// logout() dispatches LogoutEvent; CSRF is validated by default
+$security->logout();                     // expects the logout CSRF token in the request
+$security->logout(validateCsrf: false);  // programmatic flow → pass false to skip
+```
 
 ## Deep Dive — how it works internally
 
@@ -134,6 +162,15 @@ directement la session/le token pour le *client de test* (voir
 Inversement, `loginUser()` est un outillage réservé aux tests ; les flux de
 production (inscription → auto-login, liens de vérification…) relèvent de
 `Security::login()`.
+
+```php
+// Functional test: fabricate the client session — no real pipeline
+$client = static::createClient();
+$client->loginUser($testUser);   // KernelBrowser::loginUser(), tests only
+
+// Production code: the real pipeline, events and badges included
+$security->login($user);         // Security::login()
+```
 
 ## Configuration & code
 

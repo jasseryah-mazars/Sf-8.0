@@ -74,6 +74,15 @@ If a route defines `{_locale}` (or a default `_locale`), the Router writes it in
 subsequent requests keep it. Full routing behaviour is covered in
 [Locale Guessing](../routing/locale.md).
 
+```php
+// what LocaleListener does during kernel.request (simplified):
+if ($locale = $request->attributes->get('_locale')) {
+    $request->setLocale($locale);
+}
+
+$request->getLocale(); // 'fr' for /fr/articles, else the default locale
+```
+
 ```mermaid
 flowchart TD
     A[Request] --> B{_locale in attributes?}
@@ -110,6 +119,13 @@ generate (it also limits translation compilation and the special `_locale`
 requirement). Requesting a locale outside this list results in a 404 for locale
 routes. Set your default with `framework.default_locale`.
 
+```yaml
+# config/packages/framework.yaml
+framework:
+    default_locale: en             # fallback locale
+    enabled_locales: ['en', 'fr']  # '/de/...' on a {_locale} route -> 404
+```
+
 ### Propagation via `LocaleAware`
 
 Once the request locale is set, `LocaleAwareListener` pushes it into every service
@@ -117,6 +133,15 @@ implementing `Symfony\Contracts\Translation\LocaleAwareInterface` (e.g. the
 `Translator`). You can also switch locale programmatically for a block of code
 with `Symfony\Component\Translation\LocaleSwitcher` (covered under
 [Intl](../miscellaneous/intl.md)).
+
+```php
+// LocaleAwareListener propagates the request locale to such services:
+assert($translator instanceof LocaleAwareInterface);
+$translator->setLocale($request->getLocale());
+
+// LocaleSwitcher: run one block in another locale, then restore it
+$greeting = $localeSwitcher->runWithLocale('fr', fn () => $translator->trans('hello'));
+```
 
 ## Configuration & code
 

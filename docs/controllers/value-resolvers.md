@@ -149,6 +149,16 @@ event subscriber: it uses the **Serializer** to build the DTO and the
 **Validator** to validate it, throwing `422` (`UnprocessableEntityHttpException`)
 on validation failure or `400` on malformed input.
 
+```php
+public function create(#[MapRequestPayload] CreateOrderInput $payload): JsonResponse
+{
+    // RequestPayloadValueResolver already ran before this line:
+    //   Serializer built $payload from the body — malformed JSON → 400
+    //   Validator checked constraints — violations → 422 UnprocessableEntityHttpException
+    return new JsonResponse(['ok' => true], 201);
+}
+```
+
 ### Performance
 
 Resolution runs once per controller call. Resolvers are lazy services in a
@@ -165,6 +175,22 @@ same, and confusing them is the classic resolver bug:
   next one. `null` is never bound.
 - *Yielding `null`* (`yield null;`) means "the value is `null`" — a real,
   deliberate argument value, bound to a nullable parameter.
+
+```php
+public function resolve(Request $request, ArgumentMetadata $argument): iterable
+{
+    if (Money::class !== $argument->getType()) {
+        return []; // decline: "not my argument" — the chain moves on
+    }
+
+    if (!$request->query->has('amount')) {
+        yield null; // deliberate value: binds null to a nullable parameter
+        return;
+    }
+
+    yield new Money($request->query->getInt('amount'));
+}
+```
 
 Two traps follow. First, `return null;` instead of `return [];` is a `TypeError`:
 `resolve()` is declared `: iterable`, and `null` is not iterable. Always decline

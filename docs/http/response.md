@@ -46,6 +46,15 @@ Cache-Control: private, max-age=0
 - **Headers** — metadata (`Content-Type`, `Cache-Control`, `Set-Cookie`, …).
 - **Body** — the payload.
 
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8   ← what the body is
+Cache-Control: public, max-age=3600      ← who may cache it, for how long
+Set-Cookie: theme=dark; Path=/; HttpOnly ← one Set-Cookie header per cookie
+
+<!DOCTYPE html>
+```
+
 !!! question "Predict first"
     You `new Response('hi')` and set nothing else. Can a CDN store it, and what
     `Cache-Control` does it carry?
@@ -62,6 +71,17 @@ Cache-Control: private, max-age=0
 `Symfony\Component\HttpFoundation\Response` is the base class. Its constructor is
 `__construct(string $content = '', int $status = 200, array $headers = [])`.
 Specialised subclasses each set the right headers for their payload:
+
+```php
+use Symfony\Component\HttpFoundation\Response;
+
+// __construct(string $content = '', int $status = 200, array $headers = [])
+$response = new Response(
+    '<h1>Hello</h1>',
+    Response::HTTP_OK,
+    ['Content-Type' => 'text/html; charset=UTF-8'],
+);
+```
 
 | Class (FQCN under `Symfony\Component\HttpFoundation`) | Use for | Sets |
 |---|---|---|

@@ -78,6 +78,15 @@ session stocke pour recharger le user via `refreshUser()`. Elle doit être
 **stable et unique** (email, nom d'utilisateur, UUID). Elle alimente les logs,
 l'impersonation et le profiler.
 
+```php
+// Authentication: the UserBadge wraps the identifier the provider will load
+$badge = new UserBadge('jane@example.com');
+
+// Next stateful request: the provider reloads the user from the session copy,
+// matching it by getUserIdentifier()
+$fresh = $userProvider->refreshUser($sessionUser);
+```
+
 ### `eraseCredentials()` is gone in 8.0
 
 Historiquement, `UserInterface::eraseCredentials()` (et
@@ -132,6 +141,25 @@ flowchart LR
 lancez une `AccountStatusException` (p. ex. `DisabledException`,
 `AccountExpiredException`) pour bloquer un user pourtant chargé avec succès. Se
 configure par firewall avec `user_checker:`.
+
+```php
+// Implements UserCheckerInterface; enable per firewall with "user_checker:"
+final class AppUserChecker implements UserCheckerInterface
+{
+    public function checkPreAuth(UserInterface $user): void
+    {
+        // Any AccountStatusException subclass blocks the login
+        if ($user instanceof AppUser && $user->isDisabled()) {
+            throw new DisabledException();
+        }
+        if ($user instanceof AppUser && $user->isExpired()) {
+            throw new AccountExpiredException();
+        }
+    }
+
+    // checkPostAuth() also required by the interface (often a no-op)
+}
+```
 
 ### Null behavior
 

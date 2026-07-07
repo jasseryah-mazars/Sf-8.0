@@ -37,6 +37,18 @@ You declare it at class scope with `#[Assert\GroupSequence([...])]`. Each elemen
 is a group name; the special short **class-name** group represents "this class's
 own `Default` constraints".
 
+```php
+#[Assert\GroupSequence(['User', 'Strict'])] // class-name group, then 'Strict'
+class User
+{
+    #[Assert\NotBlank]                      // Default constraint => "User" step
+    public string $username = '';
+
+    #[Assert\Email(groups: ['Strict'])]     // runs only if the "User" step passed
+    public string $email = '';
+}
+```
+
 Each group is a **gate**: all of its constraints run, then the sequence halts on
 the first group that produced any violation — later groups are skipped.
 

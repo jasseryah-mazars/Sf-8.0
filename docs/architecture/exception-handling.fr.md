@@ -210,6 +210,20 @@ oublie `setResponse()` pour sa branche — la response de l'event reste `null`, 
 votre page personnalisée n'apparaît jamais et c'est la page par défaut (ou un 500)
 qui l'emporte.
 
+```php
+public function __invoke(ExceptionEvent $event): void
+{
+    $e = $event->getThrowable();
+
+    // getResponse() stays null until a listener calls setResponse()
+    if ($e instanceof PaymentFailedException) {
+        $event->setResponse(new JsonResponse(['error' => 'payment'], 402));
+    }
+    // no setResponse() here -> handleThrowable() sees hasResponse() === false
+    // and re-throws the original throwable (surfacing as a 500)
+}
+```
+
 !!! note "Null in real life"
     Un `kernel.exception` sans response définie est une **alarme incendie à
     laquelle aucun intervenant ne répond** : personne n'agissant, l'immeuble se

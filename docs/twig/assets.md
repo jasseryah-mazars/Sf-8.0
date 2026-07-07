@@ -110,6 +110,14 @@ flowchart LR
 - The generated URL is context-safe; combined with the request's base URL it
   works under subdirectory deployments.
 
+```twig
+{# manifest strategy: the logical name is looked up in manifest.json #}
+{{ asset('build/app.css') }}   {# -> /build/app.7f3c.css (cache busting) #}
+
+{# named package: same call, served from a CDN base URL #}
+{{ asset('logo.png', 'cdn') }} {# -> https://cdn.example.com/logo.png #}
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\AssetExtension`,
     `Symfony\Component\Asset\Packages`,

@@ -35,6 +35,22 @@ application-level problems you throw and catch) and `Error` (engine-level faults
 like `TypeError`, `ParseError`, `DivisionByZeroError`). Legacy **error levels**
 (`E_WARNING`, `E_NOTICE`, `E_DEPRECATED`…) are a separate, older mechanism.
 
+```php
+try {
+    intdiv(1, 0);                        // engine fault → DivisionByZeroError
+} catch (\Error $e) {                    // TypeError, ParseError… extend Error
+}
+
+try {
+    throw new \RuntimeException('oops'); // application-level Exception branch
+} catch (\Exception $e) {
+}
+
+$e instanceof \Throwable;                // true — both branches implement it
+
+error_reporting(E_ALL & ~E_DEPRECATED);  // legacy error levels: separate world
+```
+
 ```mermaid
 classDiagram
     class Throwable {
@@ -72,6 +88,18 @@ classDiagram
 
 To catch *anything*, type-hint `\Throwable`. Catching `\Exception` will **not**
 catch an `Error`.
+
+```php
+try {
+    strlen([]);                 // TypeError — Error branch, engine fault
+} catch (\Exception $e) {
+    // never reached: \Exception does not catch an Error
+} catch (\Throwable $t) {
+    // reached: \Throwable catches BOTH branches
+}
+
+throw new \InvalidArgumentException('bad'); // Exception branch (LogicException)
+```
 
 ### try / catch / finally
 

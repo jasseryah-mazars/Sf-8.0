@@ -113,6 +113,18 @@ Key `TwigFilter`/`TwigFunction` options:
 - **`is_variadic: true`** — collect extra args into an array.
 - **`deprecated`** — mark for the deprecation path.
 
+```php
+new TwigFilter('excerpt', $callable, [
+    'is_safe' => ['html'],        // output is trusted HTML → skips auto-escaping
+    'needs_environment' => true,  // callable receives Twig\Environment as 1st arg
+    'needs_context' => true,      // …then the render context array
+    'is_variadic' => true,        // extra template args collected into an array
+    'deprecated' => true,         // using the filter triggers a deprecation
+]);
+// resulting callable signature:
+// function (Environment $env, array $context, mixed $value, ...$args)
+```
+
 At compile time Twig resolves the name to the callable and inlines the call in
 the generated PHP, so filters/functions cost a normal function call at runtime.
 
@@ -195,6 +207,11 @@ With Symfony autoconfiguration, an `AbstractExtension` is auto-tagged
 `twig.extension`, and classes using `#[AsTwigFilter]`/`#[AsTwigFunction]` are
 registered automatically. Use `{{ 9.9|price }}` and `{{ vat(100) }}`.
 
+```twig
+{{ 9.9|price }}  {# custom filter — extension auto-tagged twig.extension #}
+{{ vat(100) }}   {# custom function — registered via #[AsTwigFunction] #}
+```
+
 !!! info "Runtime extensions"
     For heavy dependencies, put the logic in a **runtime** class (lazy-instantiated
     via `RuntimeExtensionInterface` / the attribute style) and reference it with a
@@ -207,6 +224,12 @@ substitutes when `name` is `null`, undefined **or** empty (`''`, `[]`, `false`).
 That is broader than `??`, which replaces only `null`/undefined —
 `{{ '' ?? 'x' }}` keeps the empty string, while `{{ ''|default('x') }}` returns
 `'x'`.
+
+```twig
+{{ '' ?? 'x' }}             {# '' — ?? only replaces null/undefined #}
+{{ ''|default('x') }}       {# 'x' — default also replaces empty values #}
+{{ name|default('Anon') }}  {# covers null, undefined, '' and [] #}
+```
 
 Most built-in filters tolerate `null`: `{{ null|length }}` is `0`,
 `{{ null|json_encode }}` is `null` (the JSON literal). A **custom** filter,

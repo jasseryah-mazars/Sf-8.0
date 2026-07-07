@@ -72,6 +72,18 @@ Vous l'enregistrez vous-même — il n'existe **pas d'attribut `#[CompilerPass]`
 `addCompilerPass()` accepte une **phase** et une **priority** (la plus élevée
 s'exécute en premier au sein de la phase).
 
+```php
+// src/Kernel.php — application hook (same call works in Bundle::build())
+protected function build(ContainerBuilder $container): void
+{
+    $container->addCompilerPass(
+        new MyPass(),
+        PassConfig::TYPE_BEFORE_OPTIMIZATION, // phase (this is the default)
+        priority: 10,                         // higher runs earlier in the phase
+    );
+}
+```
+
 ### The `PassConfig` phases
 
 `Symfony\Component\DependencyInjection\Compiler\PassConfig` exécute les passes dans
@@ -105,6 +117,18 @@ Dans `process()`, `$container->findTaggedServiceIds('app.handler')` renvoie
 `['service_id' => [['attr' => 'value'], ...]]` — l'id associé à chaque occurrence
 du tag avec ses attributs. Vous mutez ensuite la définition d'un collecteur, par ex.
 `$container->findDefinition('registry')->addMethodCall('add', [new Reference($id)])`.
+
+```php
+public function process(ContainerBuilder $container): void
+{
+    // ['service_id' => [['attr' => 'value'], ...]]
+    foreach ($container->findTaggedServiceIds('app.handler') as $id => $tags) {
+        // Mutate the collector definition: one addMethodCall() per tagged id
+        $container->findDefinition('registry')
+            ->addMethodCall('add', [new Reference($id)]);
+    }
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\PassConfig` définit l'ordre des

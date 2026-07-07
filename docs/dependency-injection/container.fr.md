@@ -151,6 +151,17 @@ l'autowiring, inlinent les services privés, suppriment les definitions inutilis
 (privées et non référencées) et valident les references. Voir
 [Compiler Passes](compiler-passes.md) pour l'ordre des phases.
 
+```php
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+
+// Passes are registered into a PassConfig phase…
+$containerBuilder->addCompilerPass(new AppPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
+
+// …then ContainerBuilder::compile() runs them all, freezes parameters
+// and marks the container compiled
+$containerBuilder->compile();
+```
+
 ```mermaid
 flowchart LR
     Y["YAML / PHP / attributes"] --> B[ContainerBuilder]
@@ -171,6 +182,24 @@ au runtime. À la requête suivante, le kernel charge directement cette classe ;
 `ContainerBuilder` n'est plus jamais sollicité. En `dev`, le `ConfigCache`
 vérifie les ressources suivies (fichiers de config) et ne reconstruit que
 lorsqu'elles changent ; en `prod`, vous le préchauffez une fois au déploiement.
+
+```php
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+
+$file = 'var/cache/dev/App_KernelDevContainer.php';
+$cache = new ConfigCache($file, true); // dev: tracks the config resources
+
+if (!$cache->isFresh()) {              // rebuild only when tracked config changed
+    $containerBuilder->compile();
+    $dumper = new PhpDumper($containerBuilder); // dumps the optimised PHP class
+    $code = $dumper->dump(['class' => 'App_KernelDevContainer']);
+    $cache->write($code, $containerBuilder->getResources());
+}
+
+require_once $file;
+$container = new \App_KernelDevContainer(); // hard-coded getXxxService() factories inside
+```
 
 ```mermaid
 flowchart TB
@@ -202,6 +231,20 @@ l'instance, les appels suivants retournent le même objet. Un service
 `shared: false` est reconstruit à chaque appel. Le second argument contrôle ce
 qui se passe pour un id manquant (`EXCEPTION_ON_INVALID_REFERENCE`,
 `NULL_ON_INVALID_REFERENCE`, etc.).
+
+```php
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+// Shared (default): first get() builds, later calls return the SAME object
+$a = $container->get('logger');
+$b = $container->get('logger'); // $a === $b — unless defined with `shared: false`
+
+// Second argument: EXCEPTION_ON_INVALID_REFERENCE (default) throws on a missing id
+$container->get('missing.id', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
+
+// NULL_ON_INVALID_REFERENCE returns null instead
+$maybe = $container->get('missing.id', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+```
 
 ### Public vs private — and why private is the default
 

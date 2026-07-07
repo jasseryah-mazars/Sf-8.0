@@ -150,6 +150,23 @@ fois par ligne. `#[TestWith]` inline une seule ligne sans méthode de provider.
 Le caractère statique des méthodes de provider est imposé depuis PHPUnit 10+
 (un provider non statique est une erreur).
 
+```php
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
+
+#[TestWith(['Hello World', 'hello-world'])]  // one inline row, no provider method
+#[DataProvider('provideSlugs')]              // rows come from the method below
+public function testSlugify(string $in, string $out): void
+{
+    self::assertSame($out, (new Slugger())->slugify($in));
+}
+
+public static function provideSlugs(): iterable  // MUST be public static (PHPUnit 10+)
+{
+    yield 'accents' => ['Éléphant', 'elephant'];
+}
+```
+
 ## Configuration & code
 
 === "Service under test"

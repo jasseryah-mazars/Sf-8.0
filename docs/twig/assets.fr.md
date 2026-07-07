@@ -52,6 +52,14 @@ appliquant tout base path et toute version configurés :
 Avec `public/css/app.css`, `asset('css/app.css')` peut rendre
 `/css/app.css?v=42` (avec versionnement) ou `/build/app.css` (avec un manifest).
 
+```twig
+{# one logical path, different output per configured strategy #}
+{{ asset('css/app.css') }}
+{# no versioning:        /css/app.css #}
+{# static version v42:   /css/app.css?v=42 #}
+{# JSON manifest:        /build/app.css (name looked up in the manifest) #}
+```
+
 !!! question "Predict first"
     Un manifest JSON associe `app.css` → `app.7f3c.css`. Vers quoi
     `{{ asset('css/app.css') }}` résout-il — le chemin littéral ou le nom hashé ?
@@ -73,6 +81,19 @@ associe un **base path/URL** à une **`VersionStrategyInterface`** :
 | `EmptyVersionStrategy` | pas de version (défaut) |
 | `StaticVersionStrategy` | ajoute un `?v=…` fixe (ou un format) |
 | `JsonManifestVersionStrategy` | cherche le chemin dans un `manifest.json` |
+
+```php
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\Packages;
+use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
+
+// a Package pairs a base path with a VersionStrategyInterface
+$package = new Package(new StaticVersionStrategy('v42'));
+
+// Packages is the service AssetExtension delegates asset() calls to
+$packages = new Packages($package);
+$packages->getUrl('css/app.css'); // "css/app.css?v42"
+```
 
 ```mermaid
 flowchart LR

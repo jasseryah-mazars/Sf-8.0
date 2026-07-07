@@ -67,6 +67,21 @@ things possible:
 `IS_IMPERSONATOR` is the modern attribute; the historic `ROLE_PREVIOUS_ADMIN`
 role-style check is legacy and must not appear in new Symfony 8 code.
 
+```php
+// Modern check — true only while the active token is a SwitchUserToken:
+if ($this->isGranted('IS_IMPERSONATOR')) {
+    // show the "exit impersonation" banner
+}
+
+// The SwitchUserToken wraps the admin's original authentication:
+if ($token instanceof SwitchUserToken) {
+    $admin = $token->getOriginalToken()->getUserIdentifier(); // audit trail
+}
+
+// Legacy spelling — do NOT use in Symfony 8:
+// $this->isGranted('ROLE_PREVIOUS_ADMIN');
+```
+
 ## Deep Dive — how it works internally
 
 The feature is implemented by

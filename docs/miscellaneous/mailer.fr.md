@@ -147,6 +147,16 @@ $mailer->send($email, $envelope);
 `BodyRenderer`/`MessageListener` conscient de Twig rend les templates en parts
 html/texte avant l'envoi — vous n'appelez donc jamais Twig vous-même.
 
+```php
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
+$email = (new TemplatedEmail())
+    ->to('ada@example.com')
+    ->htmlTemplate('emails/welcome.html.twig') // rendered by the BodyRenderer
+    ->textTemplate('emails/welcome.txt.twig')  // via MessageListener, before sending
+    ->context(['name' => 'Ada']);              // variables exposed to Twig
+```
+
 ### Async sending via Messenger
 
 Si Messenger est configuré pour router
@@ -155,6 +165,15 @@ Si Messenger est configuré pour router
 un worker le livre plus tard. Cela garde la latence de la request basse et
 offre gratuitement les retries et la gestion des échecs. Voir
 [Messenger](messenger.md).
+
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        routing:
+            # MailerInterface::send() now dispatches SendEmailMessage to "async"
+            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
+```
 
 !!! note "Source reference"
     `Symfony\Component\Mailer\Mailer::send()` et `Symfony\Component\Mime\Email` —

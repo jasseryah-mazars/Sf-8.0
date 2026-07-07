@@ -112,6 +112,13 @@ chaîne, se compose dans les expressions, et accepte les mêmes options en
 arguments nommés :
 `include('x', {a: 1}, with_context = false, ignore_missing = true)`.
 
+```twig
+{# include() returns a string, so it composes inside expressions #}
+{% set card = include('_card.html.twig', { title: 'Sales' }, with_context = false) %}
+{{ card|upper }}
+{{ include('_promo.html.twig', ignore_missing = true) }}  {# named-argument options #}
+```
+
 !!! note "Source reference"
     `Twig\Loader\FilesystemLoader`, include token parser & `include` function —
     [twigphp/Twig `3.x`](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php).

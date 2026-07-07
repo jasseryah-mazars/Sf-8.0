@@ -45,6 +45,15 @@ Elle peut provenir de plusieurs endroits, dans un ordre de précédence typique 
 La détection consiste à choisir la meilleure de ces sources, en se restreignant aux
 locales que vous supportez réellement.
 
+```php
+// 1. explicit route parameter (/fr/articles)
+$request->attributes->get('_locale');      // 'fr'
+// 3. browser preference
+$request->headers->get('Accept-Language'); // 'fr-FR, fr;q=0.8, en;q=0.5'
+// 4. fallback configured as framework.default_locale
+$request->getDefaultLocale();              // 'en'
+```
+
 !!! question "Predict first"
     Le navigateur envoie `Accept-Language: es, en;q=0.8` et votre application ne
     supporte que `en` et `fr`. Que renvoie `getPreferredLanguage(['en', 'fr'])` ?
@@ -65,6 +74,15 @@ Si une route définit `{_locale}` (ou un `_locale` par défaut), le Router l'éc
 `$request->getLocale()` la renvoie, et la valeur est stockée en session pour que les
 requests suivantes la conservent. Le comportement complet côté routing est couvert dans
 [Locale Guessing](../routing/locale.md).
+
+```php
+// what LocaleListener does during kernel.request (simplified):
+if ($locale = $request->attributes->get('_locale')) {
+    $request->setLocale($locale);
+}
+
+$request->getLocale(); // 'fr' for /fr/articles, else the default locale
+```
 
 ```mermaid
 flowchart TD
@@ -101,6 +119,13 @@ faire confiance aveuglément (ce peut être une locale que vous ne supportez pas
 génère (elle limite aussi la compilation des traductions et l'exigence spéciale
 `_locale`). Demander une locale hors de cette liste produit un 404 sur les routes
 localisées. Définissez votre valeur par défaut avec `framework.default_locale`.
+
+```yaml
+# config/packages/framework.yaml
+framework:
+    default_locale: en             # fallback locale
+    enabled_locales: ['en', 'fr']  # '/de/...' on a {_locale} route -> 404
+```
 
 ### Propagation via `LocaleAware`
 

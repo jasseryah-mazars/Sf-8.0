@@ -41,6 +41,30 @@ both driven by the **`#[AsCommand]`** attribute:
    `Symfony\Component\Console\Command\Command`, implementing `execute()` and
    (optionally) `configure()`.
 
+```php
+// 1. Invokable style: extends nothing
+#[AsCommand(name: 'app:greet')]
+final class GreetCommand
+{
+    public function __invoke(#[Argument] string $name, #[Option] bool $shout = false): int
+    {
+        return Command::SUCCESS;
+    }
+}
+
+// 2. Classic style: extends Command, overrides configure()/execute()
+#[AsCommand(name: 'app:greet-classic')]
+final class GreetClassicCommand extends Command
+{
+    protected function configure(): void { $this->addArgument('name'); }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        return Command::SUCCESS;
+    }
+}
+```
+
 Whichever style, the method returns an **`int` exit code**. Use the constants:
 
 | Constant | Value | Meaning |

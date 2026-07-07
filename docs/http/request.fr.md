@@ -108,6 +108,17 @@ ou null** — son `get()` lève `\TypeError`/`BadRequestException` si vous tente
 lire un tableau là où un scalaire est attendu, ce qui durcit l'application contre
 les entrées imbriquées malveillantes.
 
+```php
+// InputBag: scalars, arrays of scalars, or null only
+$request->query->get('page');       // scalar (or null) — OK
+// GET /?ids[]=1&ids[]=2 → get('ids') fails (\TypeError/BadRequestException):
+// an array where a scalar is expected. Read arrays with all():
+$ids = $request->query->all('ids'); // ['1', '2']
+
+// ParameterBag (attributes) accepts any value, objects included
+$request->attributes->set('deadline', new \DateTimeImmutable());
+```
+
 ```mermaid
 flowchart LR
     G[Superglobals] --> R[Request::createFromGlobals]
@@ -163,6 +174,20 @@ données soumises.
 | `getContent()` | Le body brut sous forme de chaîne |
 | `getContentTypeFormat()` | Le format issu de `Content-Type` (p. ex. `json`) |
 | `isXmlHttpRequest()` | `X-Requested-With: XMLHttpRequest` |
+
+```php
+// POST https://example.com/articles?draft=1 with X-HTTP-Method-Override: PUT
+$request->getMethod();            // 'PUT'  — honours the override
+$request->getRealMethod();        // 'POST' — raw method
+$request->getPathInfo();          // '/articles'
+$request->getRequestUri();        // '/articles?draft=1'
+$request->getUri();               // 'https://example.com/articles?draft=1'
+$request->getQueryString();       // 'draft=1'
+$request->getClientIp();          // e.g. '203.0.113.7' (needs trusted proxies)
+$request->getContent();           // raw body string
+$request->getContentTypeFormat(); // 'json' for Content-Type: application/json
+$request->isXmlHttpRequest();     // true if X-Requested-With: XMLHttpRequest
+```
 
 !!! info "Renamed in modern Symfony"
     `getContentType()` a été supprimé ; utilisez **`getContentTypeFormat()`**. Lire

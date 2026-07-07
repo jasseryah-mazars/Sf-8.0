@@ -60,6 +60,13 @@ cet ordre (le premier trouvé gagne) :
 
 Un cache **privé** (navigateur) ignore `s-maxage` et commence à `max-age`.
 
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=60, s-maxage=600
+Expires: Tue, 07 Jul 2026 12:00:00 GMT
+Content-Type: text/html; charset=UTF-8
+```
+
 ### The `Age` header
 
 Un cache partagé ajoute `Age: N` — le nombre de secondes que la response a
@@ -81,6 +88,14 @@ fraîcheur restant. Le reverse proxy de Symfony calcule et émet `Age` pour vous
   réutilisation (ce n'est *pas* « ne pas mettre en cache »).
 - `no-store` — ne doit **jamais** être stockée, nulle part. À utiliser pour les
   données réellement sensibles.
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+
+HTTP/1.1 200 OK
+Cache-Control: no-store
+```
 
 !!! question "Predict first"
     Vous appelez `$response->setSharedMaxAge(600)` et rien d'autre. La response
@@ -110,6 +125,18 @@ pour l'examen :
   `setCache(['must_revalidate' => true])` ou l'attribut
   `#[Cache(mustRevalidate: true)]`.
 
+```php
+$response->setMaxAge(60);                    // Cache-Control: max-age=60
+$response->setSharedMaxAge(600);             // s-maxage=600 + public
+$response->setStaleWhileRevalidate(30);      // stale-while-revalidate=30
+$response->setStaleIfError(3600);            // stale-if-error=3600
+$response->setImmutable(true);               // immutable
+
+// must-revalidate has no setter; mustRevalidate() only reads the flag:
+$response->setCache(['must_revalidate' => true]);
+$response->mustRevalidate();                 // true — or use #[Cache(mustRevalidate: true)]
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Response::setSharedMaxAge()` and
     `Response::setCache()` —
@@ -124,6 +151,17 @@ Clés autorisées :
 `etag`, `last_modified`, `max_age`, `s_maxage`, `public`, `private`, `immutable`,
 `must_revalidate`, `no_cache`, `no_store`, `no_transform`, `proxy_revalidate`,
 `stale_while_revalidate`, `stale_if_error`.
+
+```php
+// One atomic, validated call:
+$response->setCache([
+    'public'   => true,
+    's_maxage' => 3600,
+    'etag'     => 'v3',
+]);
+
+// Unknown key (e.g. 'smaxage') would throw InvalidArgumentException
+```
 
 ### The `#[Cache]` attribute lifecycle
 
@@ -151,6 +189,16 @@ retourne un **304 avant même l'exécution du controller** (voir
 [validation](validation.md)). Sur `RESPONSE` (priorité −10, c'est-à-dire
 tardive), il fusionne les directives d'expiration — **sans écraser** ce que le
 controller a déjà défini explicitement.
+
+```php
+// etag/lastModified expressions run on CONTROLLER_ARGUMENTS (may 304 early);
+// maxage/smaxage/public are merged later, on RESPONSE (priority -10).
+#[Cache(smaxage: 600, etag: 'post.getContent()', lastModified: 'post.getUpdatedAt()')]
+public function show(Post $post): Response
+{
+    return $this->render('post/show.html.twig', ['post' => $post]);
+}
+```
 
 !!! info "String durations"
     `maxage`, `smaxage`, `staleWhileRevalidate` et `staleIfError` acceptent un

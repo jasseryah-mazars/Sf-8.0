@@ -37,6 +37,13 @@
 
 Iterate arrays, `Traversable`, or key→value with `{% for key, value in map %}`.
 
+```twig
+{# works on arrays and any Traversable (e.g. a Doctrine Collection) #}
+{% for key, value in map %}
+    {{ key }}: {{ value }}
+{% endfor %}
+```
+
 The **`loop`** variable inside a `for`:
 
 | Member | Meaning |
@@ -46,6 +53,17 @@ The **`loop`** variable inside a `for`:
 | `loop.first` / `loop.last` | `bool` |
 | `loop.length` | total count |
 | `loop.parent` | context of the enclosing loop |
+
+```twig
+{% for group in groups %}
+    {% for user in group.users %}
+        {{ loop.parent.loop.index }}.{{ loop.index }}/{{ loop.length }}
+        {# outer index via loop.parent · 1-based index / total count #}
+        {{ loop.index0 }} {{ loop.revindex }} {{ loop.revindex0 }}  {# 0-based / from the end #}
+        {% if loop.first %}first{% elseif loop.last %}last{% endif %}  {# booleans #}
+    {% endfor %}
+{% endfor %}
+```
 
 ### `if`
 

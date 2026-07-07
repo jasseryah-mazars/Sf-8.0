@@ -92,6 +92,18 @@ sequenceDiagram
 4. Le proxy analyse le corps, émet une sub-request par include et met chaque
    fragment en cache indépendamment.
 
+```http
+# Proxy -> backend: advertise that a surrogate can process ESI
+GET / HTTP/1.1
+Surrogate-Capability: symfony="ESI/1.0"
+
+# Backend -> proxy: render_esi emitted a tag and signals ESI was used
+HTTP/1.1 200 OK
+Surrogate-Control: content="ESI/1.0"
+
+<esi:include src="/_fragment?_path=..." />
+```
+
 ### The classes
 
 - `Symfony\Component\HttpKernel\HttpCache\Esi` implémente `SurrogateInterface`
@@ -107,6 +119,19 @@ sequenceDiagram
   et le secret de l'application) afin que des appels `_fragment` arbitraires ne
   puissent pas être forgés. (L'URI est construite par
   `Symfony\Component\HttpKernel\Fragment\FragmentUriGenerator`.)
+
+```php
+use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Ssi;
+
+// Esi and Ssi both implement SurrogateInterface
+$cache = new HttpCache($kernel, $store, new Esi()); // the $surrogate argument
+
+// In Twig, render_esi delegates to FragmentHandler, which picks the "esi"
+// renderer (EsiFragmentRenderer); the fragment URI is built by
+// FragmentUriGenerator and signed by UriSigner (framework.fragments + secret).
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\HttpCache\Esi` et
@@ -128,6 +153,16 @@ Chaque `<esi:include src>` pointe vers la route `_fragment` de Symfony (gérée
 par le `FragmentListener`). Le controller référencé s'exécute comme une
 sub-request indépendante avec sa propre `Response` — il définit donc son propre
 `#[Cache(...)]`.
+
+```php
+// FragmentListener resolves the signed /_fragment URL to this controller,
+// which runs as its own sub-request and returns its own Response.
+#[Cache(smaxage: 30)]           // freshness for this fragment only
+public function newsTicker(): Response
+{
+    return $this->render('fragment/ticker.html.twig');
+}
+```
 
 ## Configuration & code
 
