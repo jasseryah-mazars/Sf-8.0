@@ -41,6 +41,21 @@ récursives). **Finder** est un builder fluide qui trouve les fichiers et
 répertoires correspondant à des critères et les renvoie sous forme d'objets
 `SplFileInfo`.
 
+```php
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+
+// Filesystem: cross-platform operations that throw on failure
+$fs = new Filesystem();
+$fs->mkdir('/tmp/reports');                    // recursive create
+$fs->dumpFile('/tmp/reports/r.txt', 'done');   // atomic write
+
+// Finder: fluent query yielding SplFileInfo objects
+foreach ((new Finder())->files()->in('/tmp/reports')->name('*.txt') as $file) {
+    echo $file->getFilename();
+}
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -69,11 +84,38 @@ lieu de retourner `false` :
 | `rename($origin, $target)` | Déplacement/renommage |
 | `symlink`, `chmod`, `chown` | Liens/permissions |
 
+```php
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
+
+$fs = new Filesystem();
+
+try {
+    $fs->mkdir('/srv/app/exports');                       // recursive create
+    $fs->copy('in.csv', '/srv/app/exports/in.csv', true); // overwrite = true
+    $fs->dumpFile('/srv/app/exports/status.txt', 'ok');   // atomic write
+    $fs->remove(['/srv/app/exports/tmp', '/srv/old.lock']); // recursive delete
+} catch (IOExceptionInterface $e) {
+    echo 'Failed at '.$e->getPath(); // no silent false returns
+}
+```
+
 `dumpFile()` écrit dans un fichier temporaire puis le renomme — les lecteurs ne
 voient donc jamais un fichier à moitié écrit. Le helper statique
 `Symfony\Component\Filesystem\Path` normalise et manipule des **chaînes** de
 chemins sans toucher au disque : `Path::canonicalize()`, `Path::makeAbsolute()`,
 `Path::makeRelative()`, `Path::join()`, `Path::isAbsolute()`.
+
+```php
+use Symfony\Component\Filesystem\Path;
+
+// Pure string manipulation — nothing on disk is read or written
+Path::canonicalize('/var/www/../log/./app.log'); // "/var/log/app.log"
+Path::makeAbsolute('config/app.yaml', '/srv');   // "/srv/config/app.yaml"
+Path::makeRelative('/srv/config', '/srv');       // "config"
+Path::join('/srv', 'config', 'app.yaml');        // "/srv/config/app.yaml"
+Path::isAbsolute('C:\\Programs');                // true (cross-platform aware)
+```
 
 ### Finder
 

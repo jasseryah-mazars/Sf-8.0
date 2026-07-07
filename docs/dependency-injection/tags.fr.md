@@ -137,6 +137,19 @@ bundle, vous enregistrez la correspondance via
 ou vous placez `#[AutoconfigureTag('app.handler')]` sur l'interface. Toute classe
 qui l'implémente est alors taguée automatiquement.
 
+```php
+// Option 1 — in Kernel::build() (or a bundle build method):
+protected function build(ContainerBuilder $container): void
+{
+    $container->registerForAutoconfiguration(HandlerInterface::class)
+        ->addTag('app.handler');
+}
+
+// Option 2 — directly on the interface (needs autoconfigure: true):
+#[AutoconfigureTag('app.handler')]
+interface HandlerInterface {}
+```
+
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait` &
     le value object `TaggedIteratorArgument` —
@@ -154,6 +167,20 @@ dynamique. Si `default_index_method` / `index_by` résout la *même* clé pour d
 services, le dernier gagne silencieusement — une surprise « mon handler a disparu »
 qui ressemble à un null mais est un écrasement. Le bug classique consiste à
 s'attendre à ce qu'une collection vide soit `null` et à appeler une méthode dessus.
+
+```php
+// Empty tag -> empty iterable, never null:
+$n = iterator_count($this->handlers);   // 0 — or count() on a materialised array
+if (0 === $n) { /* report "no handlers" only if that is an error */ }
+
+// tagged_locator = regular locator semantics:
+if ($this->locator->has($key)) {        // guard dynamic keys with has()
+    $handler = $this->locator->get($key);
+} // else: get($key) would throw ServiceNotFoundException
+
+// If index_by / default_index_method yields the SAME key twice,
+// the later service silently overwrites the earlier one.
+```
 
 !!! note "Null in real life"
     Un plateau de brunch vide (aucune fiche étiquetée) reste un plateau que vous

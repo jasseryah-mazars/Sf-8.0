@@ -67,6 +67,15 @@ to a storage backend (`FileProfilerStorage` by default) keyed by a token. The
 toolbar is injected into the HTML by `WebDebugToolbarListener` (a sub-request
 renders it). The full profiler UI at `/_profiler/{token}` reads stored profiles.
 
+```php
+// kernel.response: Profiler::collect() runs every collector's collect(),
+// then the Profile ($this->data of all collectors) is saved by
+// FileProfilerStorage under a token (the toolbar link you see).
+$profile = $profiler->loadProfile($token);          // what /_profiler/{token} reads
+$collector = $profile->getCollector('app.tenant');  // one panel's data
+// The toolbar itself is injected by WebDebugToolbarListener via a sub-request
+```
+
 ```mermaid
 flowchart LR
     RESP[kernel.response] --> P[Profiler::collect]
@@ -80,6 +89,26 @@ Collectors typically extend
 `Symfony\Component\HttpKernel\DataCollector\DataCollector` (which provides a
 `$this->data` array serialized via VarDumper's cloner, so it survives storage).
 `reset()` clears state between requests in long-running workers.
+
+```php
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+
+final class ApiCallsCollector extends DataCollector
+{
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
+    {
+        // $this->data is cloned by VarDumper — store serializable snapshots only
+        $this->data['calls'] = $this->client->getCallCount();
+    }
+
+    public function getName(): string { return 'app.api_calls'; }
+
+    public function reset(): void
+    {
+        $this->data = []; // clear state between requests in long-running workers
+    }
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface` and
