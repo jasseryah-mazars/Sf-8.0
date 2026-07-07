@@ -147,6 +147,16 @@ flowchart TD
 `is same as(x)` (identité `===`), `divisible by(n)`, `constant('X')`. Négation
 avec `is not`. `empty` est vrai pour `null`, `false`, `0`, `''`, `[]`.
 
+```twig
+{% if x is defined and x is not null %}has a real value{% endif %}
+{% if items is empty %}empty: null / false / 0 / '' / []{% endif %}
+{% if n is even %}even{% elseif n is odd %}odd{% endif %}
+{% if items is iterable %}can be looped{% endif %}
+{% if a is same as(b) %}identical (===){% endif %}
+{% if n is divisible by(3) %}multiple of 3{% endif %}
+{% if status == constant('App\\Entity\\Order::PAID') %}paid{% endif %}
+```
+
 ### Null behavior
 
 Itérer sur `null` est sans danger : `{% for x in items %}` quand `items` est

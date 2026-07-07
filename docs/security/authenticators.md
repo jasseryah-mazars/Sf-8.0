@@ -189,6 +189,28 @@ it to return a `UsernamePasswordToken`); it does **not** implement
 the login page — you implement `authenticate()`, `getLoginUrl()` and
 `onAuthenticationSuccess()`.
 
+```php
+// AbstractAuthenticator: only default is createToken() → PostAuthenticationToken
+// (FormLoginAuthenticator overrides it to return a UsernamePasswordToken);
+// onAuthenticationFailure() is NOT implemented for you
+final class ApiKeyAuthenticator extends AbstractAuthenticator
+{
+    public function supports(Request $request): ?bool { return $request->headers->has('X-API-KEY'); }
+    public function authenticate(Request $request): Passport { /* build the Passport */ }
+    public function onAuthenticationSuccess(Request $r, TokenInterface $t, string $fw): ?Response { return null; }
+    public function onAuthenticationFailure(Request $r, AuthenticationException $e): ?Response { return null; }
+}
+
+// AbstractLoginFormAuthenticator adds supports() (POST on the check path),
+// the entry point start() via getLoginUrl(), and a default failure redirect
+final class LoginAuthenticator extends AbstractLoginFormAuthenticator
+{
+    public function authenticate(Request $request): Passport { /* build the Passport */ }
+    protected function getLoginUrl(Request $request): string { return '/login'; }
+    public function onAuthenticationSuccess(Request $r, TokenInterface $t, string $fw): ?Response { return new RedirectResponse('/'); }
+}
+```
+
 ### Null behavior
 
 A `UserBadge` can be built with **no user loader** — just the identifier. That

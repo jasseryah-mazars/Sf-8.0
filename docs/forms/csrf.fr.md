@@ -145,6 +145,20 @@ un template manuel, si bien que le token est `null` à la soumission et que chaq
 POST échoue silencieusement à la validation — pas d'exception, juste un form qui
 ne valide jamais.
 
+```php
+// Missing/null _token -> a form error on PRE_SUBMIT, never an exception
+$form->handleRequest($request);
+if ($form->isSubmitted() && !$form->isValid()) {
+    // CsrfValidationListener added the csrf_message as a form error
+}
+
+// Controller helper: a null/empty token is invalid too
+$token = $request->getPayload()->get('_token'); // null if the template skipped form_rest()
+if (!$this->isCsrfTokenValid('delete_item', $token)) {
+    // quietly refused — re-render the form
+}
+```
+
 !!! note "Null in real life"
     `null` = un visiteur **sans badge** à l'accueil sécurité — pas expulsé de
     force, juste refusé poliment jusqu'à ce qu'il en présente un valide.

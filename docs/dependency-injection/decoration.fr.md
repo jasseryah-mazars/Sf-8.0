@@ -72,6 +72,21 @@ traite chaque définition ayant une cible `decorates`. Il :
 Ainsi, tous les consommateurs existants reçoivent le decorator de façon
 transparente ; le decorator détient l'original derrière `.inner`.
 
+```php
+use Symfony\Component\DependencyInjection\Reference;
+
+// What DecoratorServicePass does with a `decorates` target:
+$decorator = $containerBuilder->getDefinition(App\Mail\LoggingMailer::class);
+$decorator->setDecoratedService('mailer'); // YAML: decorates: 'mailer'
+
+// After the pass runs:
+// 1. the original is renamed to the inner id (decorator_id.inner):
+//    'App\Mail\LoggingMailer.inner' → the real implementation
+// 2. the decorator now owns the public id 'mailer'
+// 3. its '.inner' argument is rewritten to a Reference to the renamed original:
+new Reference('App\Mail\LoggingMailer.inner');
+```
+
 ```mermaid
 flowchart LR
     C["Consumer"] -->|before| O["mailer"]
@@ -89,6 +104,19 @@ premier = **le plus interne**. Le service effectivement résolu par les
 consommateurs est le dernier decorator (le plus externe). Retenez la règle exacte :
 une `decoration_priority` plus élevée est **plus proche de l'original** (interne),
 plus basse est externe.
+
+```yaml
+services:
+    # Higher decoration_priority = applied first = innermost (wraps the original)
+    App\Mail\CachingMailer:
+        decorates: mailer
+        decoration_priority: 20   # inner
+
+    # Lower priority (default 0) = outermost — what consumers actually receive
+    App\Mail\LoggingMailer:
+        decorates: mailer
+        decoration_priority: 10   # outer
+```
 
 ### Missing decorated service
 

@@ -34,6 +34,14 @@ A field stores its value in three shapes — **model**, **normalized (norm)**,
 between adjacent shapes. They are the mechanism that lets a `\DateTimeImmutable`
 model become a `"2026-07-06"` string in the browser and back.
 
+```php
+// transform(): model -> view, runs on display
+$view = $transformer->transform(new \DateTimeImmutable('2026-07-06')); // "2026-07-06"
+
+// reverseTransform(): view -> model, runs on submit
+$model = $transformer->reverseTransform('2026-07-06'); // \DateTimeImmutable object
+```
+
 Two transformer slots per field:
 
 | Slot | Converts | Added with |

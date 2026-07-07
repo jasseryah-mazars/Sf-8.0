@@ -108,6 +108,23 @@ and pushes it through an **ordered middleware stack**. Each middleware calls
 `$stack->next()->handle($envelope, $stack)`, so the stack is a **russian-doll**
 chain: middleware can act before *and* after the rest of the pipeline.
 
+```php
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
+
+final class AuditMiddleware implements MiddlewareInterface
+{
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
+    {
+        // code here runs BEFORE the rest of the pipeline
+        $envelope = $stack->next()->handle($envelope, $stack);
+        // code here runs AFTER (russian-doll, on the way back out)
+        return $envelope;
+    }
+}
+```
+
 ```mermaid
 flowchart LR
     D[dispatch] --> M1[Your middleware]
@@ -126,6 +143,20 @@ The two pivotal built-in middlewares run near the end:
    `sync` (or not routed), it passes through.
 2. **`HandleMessageMiddleware`** — locates handlers for the message type and
    invokes them, adding a `HandledStamp` per handler with the return value.
+
+```php
+use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Symfony\Component\Messenger\Stamp\SentStamp;
+
+$envelope = $bus->dispatch(new SendReminder(userId: 42));
+
+// Routed async: SendMessageMiddleware enqueued it and stopped the pipeline
+$envelope->last(SentStamp::class);    // SentStamp — proof it was sent to a transport
+$envelope->last(HandledStamp::class); // null — HandleMessageMiddleware never ran here
+
+// Routed to sync (or not routed): HandleMessageMiddleware calls the handler,
+// so last(HandledStamp::class)->getResult() holds the return value instead
+```
 
 !!! note "Source reference"
     `Symfony\Component\Messenger\MessageBus::dispatch()` and the middleware in

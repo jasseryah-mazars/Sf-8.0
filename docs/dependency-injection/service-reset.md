@@ -106,6 +106,21 @@ internals are exam-worthy:
    only called if it exists on the class — the leading `?` is stripped and
    guarded with `method_exists()` in the source.
 
+```php
+// Conceptually what ServicesResetter::reset() does:
+foreach ($this->resettableServices as $id => $service) { // INITIALIZED only
+    foreach ($this->resetMethods[$id] as $method) {
+        if (str_starts_with($method, '?')) {             // "?flush" = optional
+            $method = substr($method, 1);
+            if (!method_exists($service, $method)) {
+                continue;                                // guarded, skipped
+            }
+        }
+        $service->$method();                             // e.g. reset()
+    }
+}
+```
+
 ```mermaid
 flowchart LR
     A["Worker runtime<br/>(FrankenPHP worker / messenger:consume)"] --> B["Handle one request / message"]

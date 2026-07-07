@@ -76,6 +76,17 @@ définit une **group sequence** (voir [Group Sequence](group-sequence.md)) :
 C'est le piège classique : pour exécuter les constraints d'une classe en
 *ignorant* sa propre group sequence, ciblez le groupe `{ClassName}`.
 
+```php
+// class App\Entity\User carries #[Assert\GroupSequence(['User', 'Strict'])]
+
+// 'Default' triggers the sequence: stepwise, stop on first failing group
+$validator->validate($user, groups: ['Default']);
+
+// 'User' — the {ClassName} short-name group — runs the same constraints
+// flat, bypassing the sequence
+$validator->validate($user, groups: ['User']);
+```
+
 ```mermaid
 flowchart TD
     A["validate(user)"] --> B{Group requested}

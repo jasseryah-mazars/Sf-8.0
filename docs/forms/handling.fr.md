@@ -105,6 +105,15 @@ Les transformers convertissent entre elles — voir [data transformers](data-tra
 `transform()` s'exécute **model → view** (rendu) ; `reverseTransform()` s'exécute
 **view → model** (soumission).
 
+```php
+// transform(): model → view, when rendering
+$viewValue = $transformer->transform(new \DateTimeImmutable('2026-07-06'));
+// e.g. '2026-07-06' — a string ready for the HTML input
+
+// reverseTransform(): view → model, on submission
+$model = $transformer->reverseTransform('2026-07-06'); // \DateTimeImmutable
+```
+
 ```mermaid
 flowchart LR
     M[Model data] -- model transformer --> N[Norm data]

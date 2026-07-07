@@ -74,6 +74,20 @@ Two layers exist:
   `VarCloner`). This gives the collapsible, syntax-highlighted output and routes
   dumps to the **web debug toolbar / profiler** in dev.
 
+```php
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+
+// Twig core: DebugExtension = plain var_dump-based dump(), needs debug: true
+$twig = new \Twig\Environment($loader, ['debug' => true]);
+$twig->addExtension(new \Twig\Extension\DebugExtension());
+
+// Symfony's DumpExtension routes dump() through VarDumper instead:
+$cloner = new VarCloner();  // safely clones the variable graph
+$dumper = new HtmlDumper(); // renders the collapsible, highlighted view
+$dumper->dump($cloner->cloneVar($order));
+```
+
 ```mermaid
 flowchart LR
     T["dump(x)"] --> DE[DumpExtension]

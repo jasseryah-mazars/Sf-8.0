@@ -49,6 +49,17 @@ public function onAuthenticationFailure(Request $r, AuthenticationException $e):
 décrivant qui est l'utilisateur et ce qui doit être vérifié. Il ne vérifie
 **rien** lui-même ; la résolution des badges a lieu sur `CheckPassportEvent`.
 
+```php
+public function authenticate(Request $request): Passport
+{
+    // build only — badge verification happens later, on CheckPassportEvent
+    return new Passport(
+        new UserBadge($request->request->getString('email')),
+        new PasswordCredentials($request->request->getString('password')),
+    );
+}
+```
+
 !!! question "Predict first"
     Votre authenticator construit un `Passport` avec un `UserBadge`, mais vous
     oubliez d'ajouter le `CsrfTokenBadge` sur un form login. Que se passe-t-il à

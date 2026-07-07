@@ -57,6 +57,13 @@ Escaping is a Twig **extension**, `Twig\Extension\EscaperExtension`, backed by
 an implicit `|escape(strategy)` to every `{{ }}` unless the node is already
 marked *safe*.
 
+```php
+// EscaperExtension rewrites {{ value }} into {{ value|escape(strategy) }} at compile time.
+// The encoding itself runs in EscaperRuntime (the former twig_escape_filter logic):
+$escaped = $twig->getRuntime(\Twig\Runtime\EscaperRuntime::class)
+    ->escape('<b>hi</b>', 'html');  // &lt;b&gt;hi&lt;/b&gt;
+```
+
 The **strategy** is decided by Symfony's TwigBundle: it configures the
 environment with a callable strategy —
 `Twig\FileExtensionEscapingStrategy::guess()` — which maps the template name's
