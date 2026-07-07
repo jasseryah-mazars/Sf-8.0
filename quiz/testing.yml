@@ -1482,3 +1482,192 @@ categories:
           deprecations, and blanket #[IgnoreDeprecations] hides everything, including
           regressions.
         documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail"
+
+  - name: "Testing — Multiple Choice Drills"
+    questions:
+      - id: "TEST-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "testing/client"
+        concepts: ["KernelBrowser", "redirects", "crawler-return"]
+        syllabus: "Automated Tests → The Client"
+        question: "Which of the following statements are true about the test client returned by static::createClient()? (select all that apply)"
+        answers:
+          - value: "It is a KernelBrowser (extending AbstractBrowser) that calls the kernel in-process, not over the network"
+            correct: true
+          - value: "It does not follow redirects by default; you must call followRedirect() or followRedirects()"
+            correct: true
+          - value: "request() returns a Crawler; the Response is fetched separately via $client->getResponse()"
+            correct: true
+          - value: "It performs real HTTP requests against a running web server"
+            correct: false
+          - value: "request() returns the Response object directly"
+            correct: false
+        explanation: >-
+          The client is a KernelBrowser hitting the kernel in-process with a cookie
+          jar and history, so no web server or network round-trip is involved.
+          Navigation methods like request() return a Crawler — the Response must be
+          read via getResponse() — and redirects are only followed after calling
+          followRedirect() (once) or followRedirects() (toggle), never automatically.
+        documentation: "https://symfony.com/doc/current/testing.html#making-requests"
+
+      - id: "TEST-MC-02"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "testing/client-configuration"
+        concepts: ["server-parameters", "HTTP_-prefix", "loginUser", "insulate"]
+        syllabus: "Automated Tests → Client configuration"
+        question: "Which statements about configuring the test client are correct? (select all that apply)"
+        answers:
+          - value: "Request headers are passed as HTTP_-prefixed server parameters (e.g. HTTP_ACCEPT), while HTTPS, PHP_AUTH_USER and PHP_AUTH_PW stay unprefixed"
+            correct: true
+          - value: "loginUser() authenticates a real UserInterface instance without going through the login form"
+            correct: true
+          - value: "insulate() runs each request in a separate process, so you lose in-process profiler/container access"
+            correct: true
+          - value: "Server parameters are the first argument of createClient(), before the kernel options"
+            correct: false
+          - value: "loginUser() only needs the username string; the user object is loaded automatically"
+            correct: false
+        explanation: >-
+          Headers become HTTP_-prefixed server parameters, with CONTENT_TYPE, HTTPS
+          and PHP_AUTH_* as unprefixed exceptions; loginUser() sets the security
+          token directly from a real UserInterface object, skipping the login form;
+          and insulate() isolates each request in a subprocess at the cost of
+          profiler and container access. createClient() takes ($options, $server),
+          so server parameters are the second argument, and loginUser() requires an
+          actual user object, not just a username.
+        documentation: "https://symfony.com/doc/current/testing.html#logging-in-users-authentication"
+
+      - id: "TEST-MC-03"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "testing/crawler"
+        concepts: ["filter", "css-selector", "immutability", "text-attr"]
+        syllabus: "Automated Tests → The Crawler"
+        question: "Which statements about the DomCrawler used in functional tests are true? (select all that apply)"
+        answers:
+          - value: "filter() with CSS selectors requires the css-selector component; filterXPath() works without it"
+            correct: true
+          - value: "The Crawler is immutable: filter() returns a new node set instead of mutating the original"
+            correct: true
+          - value: "text() and attr() read the first node and throw on an empty set unless a default argument is provided"
+            correct: true
+          - value: "filterXPath() also requires the css-selector component because XPath is converted to CSS internally"
+            correct: false
+          - value: "filter() narrows the current Crawler in place and returns $this"
+            correct: false
+        explanation: >-
+          CSS selectors are translated to XPath by the css-selector component, so
+          only filter() needs it — filterXPath() speaks the native language directly.
+          Every filtering call returns a new immutable Crawler instance rather than
+          mutating the original, and text()/attr() operate on the first node,
+          throwing on an empty set unless a default value is passed. Nothing converts
+          XPath to CSS; the conversion goes the other way.
+        documentation: "https://symfony.com/doc/current/components/dom_crawler.html"
+
+      - id: "TEST-MC-04"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "testing/deprecations"
+        concepts: ["weak", "disabled", "baseline", "SYMFONY_DEPRECATIONS_HELPER"]
+        syllabus: "Automated Tests → Handling deprecated code"
+        question: "Which statements about SYMFONY_DEPRECATIONS_HELPER modes are correct? (select all that apply)"
+        answers:
+          - value: "weak keeps collecting and reporting deprecations but never fails the build"
+            correct: true
+          - value: "disabled=1 turns the handler off entirely, so nothing is collected or reported"
+            correct: true
+          - value: "A committed baseline file makes only NEW deprecations fail, ignoring the known ones it records"
+            correct: true
+          - value: "weak and disabled=1 are equivalent — both hide deprecations completely"
+            correct: false
+          - value: "max[self]=0 fails the build on deprecations from any bucket, including indirect ones"
+            correct: false
+        explanation: >-
+          weak still prints the grouped deprecation report and only removes the
+          failure threshold, whereas disabled=1 stops collection completely, so the
+          two are not equivalent. A baseline records currently-known deprecations so
+          later runs fail only on new ones. max[self]=0 constrains only the self
+          bucket — max[total]=0 is the mode that fails on any bucket.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+
+      - id: "TEST-MC-05"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "testing/framework-objects"
+        concepts: ["test-container", "private-services", "disableReboot"]
+        syllabus: "Automated Tests → Accessing framework services"
+        question: "Which statements about accessing and replacing services in tests are true? (select all that apply)"
+        answers:
+          - value: "self::getContainer() returns the special test container, which exposes private services that are used somewhere"
+            correct: true
+          - value: "A service replaced with $container->set() is lost when the kernel reboots between requests, unless you call disableReboot()"
+            correct: true
+          - value: "static::$kernel->getContainer() exposes the same private services as the test container"
+            correct: false
+          - value: "The old static::$container property is still the recommended way to get the container"
+            correct: false
+          - value: "Completely unused private services remain available in the test container"
+            correct: false
+        explanation: >-
+          Only the test container from self::getContainer() exposes private services,
+          and only those actually used somewhere — completely unused private services
+          are still optimised away, and $kernel->getContainer() keeps private
+          services hidden. Because the client reboots the kernel between requests,
+          set() replacements disappear unless disableReboot() is called, and the
+          removed static::$container property must not be used.
+        documentation: "https://symfony.com/doc/current/testing.html#retrieving-services-in-the-test"
+
+      - id: "TEST-MC-06"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "testing/introspection"
+        concepts: ["assertResponseIsSuccessful", "assertSelectorTextContains", "assertResponseRedirects"]
+        syllabus: "Automated Tests → Request/response introspection"
+        question: "Which statements about WebTestCase response assertions are correct? (select all that apply)"
+        answers:
+          - value: "assertResponseIsSuccessful() passes for any 2xx status code, not only 200"
+            correct: true
+          - value: "assertSelectorTextContains() checks a substring, while assertSelectorTextSame() requires an exact match"
+            correct: true
+          - value: "assertResponseRedirects() called without arguments only checks that the response is a redirect (3xx)"
+            correct: true
+          - value: "assertResponseIsSuccessful() fails unless the status code is exactly 200"
+            correct: false
+          - value: "Selector-based assertions work without the css-selector component installed"
+            correct: false
+        explanation: >-
+          assertResponseIsSuccessful() accepts any 2xx — use
+          assertResponseStatusCodeSame(200) for an exact code. The ...Contains
+          variants match substrings while ...Same demands exact equality, and
+          assertResponseRedirects() with no arguments only verifies a 3xx status
+          (pass a target and/or code to be more specific). Selector assertions use
+          CSS selectors, so they do require the css-selector component.
+        documentation: "https://symfony.com/doc/current/testing.html"
+
+      - id: "TEST-MC-07"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "testing/phpunit-bridge"
+        concepts: ["SymfonyExtension", "time-sensitive", "dns-sensitive", "env-var"]
+        syllabus: "Automated Tests → PHPUnit bridge"
+        question: "Which statements about the Symfony PHPUnit bridge are true? (select all that apply)"
+        answers:
+          - value: "Its features are wired by registering Symfony\\Bridge\\PhpUnit\\SymfonyExtension in the PHPUnit configuration"
+            correct: true
+          - value: "Clock and DNS mocking are opt-in per test via the time-sensitive and dns-sensitive groups"
+            correct: true
+          - value: "SYMFONY_DEPRECATIONS_HELPER is an environment/server variable, not a PHPUnit CLI flag"
+            correct: true
+          - value: "Clock mocking is applied automatically to every test once the bridge is installed"
+            correct: false
+          - value: "Deprecation reporting is tuned with the phpunit --deprecations-helper command-line option"
+            correct: false
+        explanation: >-
+          Deprecation collection and clock/DNS mocking only work once the
+          SymfonyExtension is registered in the PHPUnit configuration, and the
+          mocking is opt-in per group (time-sensitive / dns-sensitive) rather than
+          applied globally. Reporting is tuned through the SYMFONY_DEPRECATIONS_HELPER
+          env/server variable; no equivalent PHPUnit CLI flag exists.
+        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"

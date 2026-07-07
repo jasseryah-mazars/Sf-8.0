@@ -2326,3 +2326,194 @@ categories:
           remove debug dumps before deploy (use logging/profiler in non-prod envs) —
           not to enable the extension in production.
         documentation: "https://symfony.com/doc/current/components/var_dumper.html"
+
+  - name: "Twig — Multiple Choice Drills"
+    questions:
+      - id: "TWIG-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "twig/syntax"
+        concepts: ["delimiters", "floor-division", "filter-precedence"]
+        syllabus: "Templating (Twig) → Twig syntax"
+        question: "Which of the following statements are true about Twig syntax? (select all that apply)"
+        answers:
+          - value: "{{ }} prints (and escapes) a value, {% %} executes logic without printing, {# #} is a comment"
+            correct: true
+          - value: "// performs floor division, so {{ 7 // 2 }} outputs 3"
+            correct: true
+          - value: "Filters bind tighter than arithmetic: {{ 1 + 2|abs }} is evaluated as 1 + (2|abs)"
+            correct: true
+          - value: "{% %} statements also print their result into the output"
+            correct: false
+          - value: "{% spaceless %} is still the recommended tag for stripping whitespace"
+            correct: false
+        explanation: >-
+          The three delimiters split cleanly into print/do/comment: only {{ }}
+          produces (escaped) output while {% %} never prints. // is floor division
+          (7 // 2 gives 3, unlike / which yields a float), and filters have higher
+          precedence than arithmetic operators, so 1 + 2|abs applies abs to 2 first.
+          The standalone {% spaceless %} tag no longer exists — the modern form is
+          {% apply spaceless %}.
+        documentation: "https://symfony.com/doc/current/templates.html#twig-templating-language"
+
+      - id: "TWIG-MC-02"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "twig/auto-escaping"
+        concepts: ["escaping-strategy", "file-extension", "raw", "print-time"]
+        syllabus: "Templating (Twig) → Auto escaping"
+        question: "Which statements about Twig output escaping in Symfony are correct? (select all that apply)"
+        answers:
+          - value: "The default escaping strategy is chosen from the template file extension, so a .txt.twig template escapes nothing"
+            correct: true
+          - value: "Escaping is applied when a value is printed with {{ }}, not when it is assigned with {% set %}"
+            correct: true
+          - value: "|raw and {% autoescape false %} disable protection, so they must only wrap trusted content"
+            correct: true
+          - value: "The html_attr strategy is just an alias of html and produces identical output"
+            correct: false
+          - value: "All templates always use the html strategy regardless of their extension"
+            correct: false
+        explanation: >-
+          The auto-escaping context is derived from the file extension (html, js,
+          css, url, html_attr are available), which is why a .txt.twig template gets
+          no escaping at all — it is not a fixed html default. Escaping happens at
+          print time via the escaper, and |raw / {% autoescape false %} switch the
+          protection off entirely, making them XSS holes for untrusted data. The
+          html_attr strategy is a stricter encoder than html, not an alias.
+        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+
+      - id: "TWIG-MC-03"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "twig/inheritance"
+        concepts: ["extends", "use", "parent"]
+        syllabus: "Templating (Twig) → Template inheritance"
+        question: "Which statements about Twig template inheritance are true? (select all that apply)"
+        answers:
+          - value: "A template can extend exactly one parent, but can pull in blocks from many templates with {% use %}"
+            correct: true
+          - value: "A child template that extends a parent cannot output markup outside of blocks"
+            correct: true
+          - value: "parent() inside a block renders the parent template's version of that block"
+            correct: true
+          - value: "A template may list several parents in a single {% extends %} tag to combine layouts"
+            correct: false
+          - value: "{% use %} sets the referenced template as an additional parent for the hierarchy"
+            correct: false
+        explanation: >-
+          Inheritance is single and vertical: one parent per template, with blocks as
+          the overridable holes, and any child markup outside blocks is invalid.
+          parent() extends rather than replaces a block by rendering the parent's
+          version. {% use %} is horizontal reuse — it imports blocks only and does
+          not set a parent, and {% extends %} accepts a single parent, never several
+          to combine.
+        documentation: "https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts"
+
+      - id: "TWIG-MC-04"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "twig/includes"
+        concepts: ["include-context", "only", "ignore-missing"]
+        syllabus: "Templating (Twig) → Template includes"
+        question: "Which statements about {{ include() }} in Twig are correct? (select all that apply)"
+        answers:
+          - value: "Without the only keyword, the included template inherits the whole context of the parent template"
+            correct: true
+          - value: "With only, the local context is isolated, but the app global variable is still available"
+            correct: true
+          - value: "ignore missing skips a missing template but does not swallow errors raised inside an existing template"
+            correct: true
+          - value: "include can override blocks defined in the included template"
+            correct: false
+          - value: "Passing a list of templates renders every template in the list that exists"
+            correct: false
+        explanation: >-
+          By default the full parent context is merged into the include; only
+          isolates the local variables while globals such as app remain accessible.
+          ignore missing only prevents the error for a template that does not exist —
+          exceptions thrown inside the included template still propagate. Overriding
+          blocks is the job of {% embed %}, not include, and a template list renders
+          only the first template that exists.
+        documentation: "https://symfony.com/doc/current/templates.html#including-templates"
+
+      - id: "TWIG-MC-05"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "twig/globals"
+        concepts: ["app-variable", "app.user", "flashes", "session"]
+        syllabus: "Templating (Twig) → Global variables"
+        question: "Which statements about the app global variable are true? (select all that apply)"
+        answers:
+          - value: "app.user is null for anonymous/unauthenticated requests, so templates must not assume it exists"
+            correct: true
+          - value: "Reading app.flashes consumes the flash messages, so they are gone after being displayed"
+            correct: true
+          - value: "Accessing app.session can start the session as a side effect"
+            correct: true
+          - value: "app.environment exposes the operating-system environment variables"
+            correct: false
+          - value: "The app global can never be shadowed by a local template variable"
+            correct: false
+        explanation: >-
+          app is an AppVariable instance: app.user is null when nobody is
+          authenticated, app.flashes consumes messages when read, and app.session
+          starts the session on access (which can defeat HTTP caching). The
+          distractors are wrong because app.environment is the kernel environment
+          (dev/prod), not OS variables, and defining a local variable named app
+          shadows the global.
+        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+
+      - id: "TWIG-MC-06"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "twig/urls"
+        concepts: ["path", "url", "query-string", "RouteNotFoundException"]
+        syllabus: "Templating (Twig) → URLs generation"
+        question: "Which statements about generating URLs in Twig are correct? (select all that apply)"
+        answers:
+          - value: "path() generates a relative URL while url() generates an absolute URL, both from route names"
+            correct: true
+          - value: "Parameters that are not part of the route definition are appended to the URL as a query string"
+            correct: true
+          - value: "Using an unknown route name throws a RouteNotFoundException when the template is rendered"
+            correct: true
+          - value: "Extra parameters not defined in the route are silently dropped from the generated URL"
+            correct: false
+          - value: "path() is the right choice for links inside emails since mail clients resolve relative URLs"
+            correct: false
+        explanation: >-
+          path() and url() both take a route name (plus parameters): path() yields a
+          relative URL, url() an absolute one, and any parameter the route does not
+          declare ends up in the query string rather than being dropped. An unknown
+          route name fails at render time with RouteNotFoundException. Email bodies,
+          canonical links and feeds leave the page context, so they need url() —
+          relative links from path() break in mail clients.
+        documentation: "https://symfony.com/doc/current/templates.html#linking-to-pages"
+
+      - id: "TWIG-MC-07"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "twig/translations"
+        concepts: ["trans-arguments", "missing-key", "intl-icu"]
+        syllabus: "Templating (Twig) → Translations and pluralization"
+        question: "Which statements about translations in Twig are correct? (select all that apply)"
+        answers:
+          - value: "The trans filter arguments are ordered (parameters, domain, locale)"
+            correct: true
+          - value: "A missing translation key does not throw; the key string itself is returned"
+            correct: true
+          - value: "ICU MessageFormat pluralization is only parsed for catalogues in domains with the +intl-icu suffix"
+            correct: true
+          - value: "transchoice is the recommended filter for pluralization in current Symfony versions"
+            correct: false
+          - value: "Requesting a missing translation key raises an exception at render time"
+            correct: false
+        explanation: >-
+          The trans filter signature is message|trans(parameters, domain, locale) —
+          passing the domain first is a classic mistake. Missing keys fall back to
+          returning the key itself instead of erroring, and ICU {n, plural, ...}
+          syntax is only interpreted for domains suffixed with +intl-icu. The
+          transchoice filter was removed; ICU MessageFormat is the modern way to
+          pluralize.
+        documentation: "https://symfony.com/doc/current/translation.html"
