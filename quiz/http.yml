@@ -1601,3 +1601,179 @@ categories:
           with a 204/empty check before decoding, e.g. if (204 === $r->getStatusCode()
           || '' === $r->getContent(false)) return [];.
         documentation: "https://symfony.com/doc/current/http_client.html#processing-responses"
+  - name: "HTTP — Multiple Choice Drills"
+    questions:
+      - id: "HTTP-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "http/methods"
+        concepts: ["safe-methods", "idempotency", "cacheable-methods", "http_method_override"]
+        syllabus: "HTTP → HTTP methods"
+        question: "Which of the following statements are true about HTTP methods? (select all that apply)"
+        answers:
+          - value: "PUT and DELETE are idempotent but not safe"
+            correct: true
+          - value: "GET and HEAD are the methods that are cacheable by default"
+            correct: true
+          - value: "The _method override only applies to POST requests and is disabled by default"
+            correct: true
+          - value: "POST is idempotent, so repeating it is always harmless"
+            correct: false
+          - value: "Request::getMethod() returns the raw method and ignores any method override"
+            correct: false
+        explanation: >-
+          Safe methods are a subset of idempotent ones: PUT/DELETE change state but repeating them
+          yields the same result, and only GET/HEAD are cacheable by default. The _method override
+          requires http_method_override to be enabled and only fires on POST. POST (like PATCH) is
+          neither safe nor idempotent, and getMethod() is the override-aware effective method —
+          getRealMethod() returns the raw one.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#identifying-a-request"
+      - id: "HTTP-MC-02"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "http/status-codes"
+        concepts: ["redirects", "307", "303", "401-vs-403", "422"]
+        syllabus: "HTTP → Status codes"
+        question: "Which of the following statements are true about HTTP status codes? (select all that apply)"
+        answers:
+          - value: "307 and 308 redirects preserve the original request method and body"
+            correct: true
+          - value: "A 303 See Other redirect always forces the follow-up request to use GET"
+            correct: true
+          - value: "401 means the user is authenticated but lacks permission for the resource"
+            correct: false
+          - value: "422 Unprocessable Entity is meant for syntactically malformed requests"
+            correct: false
+          - value: "Response::setStatusCode() accepts any integer, including 999"
+            correct: false
+        explanation: >-
+          307/308 are the method-preserving redirects (unlike 301/302, which user agents may
+          rewrite to GET), and 303 explicitly forces GET — the classic POST/redirect/GET pattern.
+          401 means unauthenticated (403 is the not-authorized case), 422 targets well-formed but
+          semantically invalid requests (malformed syntax is 400), and setStatusCode() throws for
+          codes outside 100–599.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#response"
+      - id: "HTTP-MC-03"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "http/request"
+        concepts: ["parameter-bags", "attributes", "InputBag", "getPayload"]
+        syllabus: "HTTP → The HTTP request"
+        question: "Which of the following statements are true about the Symfony Request object and its parameter bags? (select all that apply)"
+        answers:
+          - value: "Route parameters are stored in the attributes bag, not in query"
+            correct: true
+          - value: "query, request and cookies are InputBag instances, while attributes is a ParameterBag"
+            correct: true
+          - value: "getPayload() reads the request body regardless of its content type"
+            correct: true
+          - value: "$request->request contains the $_GET query-string parameters"
+            correct: false
+          - value: "getContentType() is the current method for reading the request's format"
+            correct: false
+        explanation: >-
+          Route/application data lives in attributes (a ParameterBag), while the user-input bags
+          query/request/cookies are scalar-only InputBag instances, and getPayload() is the
+          content-type-agnostic body reader. $request->request maps to the $_POST body (query maps
+          to $_GET), and getContentType() was removed in favour of getContentTypeFormat().
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#request"
+      - id: "HTTP-MC-04"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "http/response"
+        concepts: ["prepare", "send", "ResponseHeaderBag", "default-cache-control"]
+        syllabus: "HTTP → The HTTP response"
+        question: "Which of the following statements are true about the Symfony Response object? (select all that apply)"
+        answers:
+          - value: "prepare() strips the body for HEAD requests and for 204/304 responses"
+            correct: true
+          - value: "A freshly created Response gets Cache-Control: no-cache, private by default"
+            correct: true
+          - value: "send() delegates to sendHeaders() and then sendContent()"
+            correct: true
+          - value: "$response->headers is a plain HeaderBag with no special cookie handling"
+            correct: false
+          - value: "makeDisposition() is a method on ResponseHeaderBag"
+            correct: false
+        explanation: >-
+          prepare() normalises the response against the request — including removing the body for
+          HEAD/204/304 — the conservative default Cache-Control is no-cache, private, and send()
+          is sendHeaders() followed by sendContent(). $response->headers is actually a
+          ResponseHeaderBag that manages cookies and normalises Cache-Control, and
+          makeDisposition() lives on HeaderUtils.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#response"
+      - id: "HTTP-MC-05"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "http/cookies"
+        concepts: ["SameSite", "Secure", "immutability", "session-cookie", "clearCookie"]
+        syllabus: "HTTP → Cookies"
+        question: "Which of the following statements are true about cookies in Symfony/HTTP? (select all that apply)"
+        answers:
+          - value: "A cookie with SameSite=None must also be marked Secure, or browsers drop it"
+            correct: true
+          - value: "The Symfony Cookie object is immutable — each with*() call returns a new instance"
+            correct: true
+          - value: "Omitting both Expires and Max-Age produces a session cookie deleted when the browser closes"
+            correct: true
+          - value: "clearCookie() deletes the cookie no matter which path/domain it was set with"
+            correct: false
+          - value: "Symfony session cookies default to SameSite=Strict"
+            correct: false
+        explanation: >-
+          SameSite=None is only valid together with Secure; the immutable Cookie API means
+          forgetting to reassign a with*() result is a silent no-op; and without Expires/Max-Age
+          the cookie only lives for the browser session. clearCookie() must match the original
+          path/domain or the cookie survives, and Symfony's session cookie defaults are
+          HttpOnly: true with SameSite=Lax, not Strict.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#setting-cookies"
+      - id: "HTTP-MC-06"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "http/content-negotiation"
+        concepts: ["Accept", "q-values", "getPreferredLanguage", "Vary"]
+        syllabus: "HTTP → Content negotiation"
+        question: "Which of the following statements are true about HTTP content negotiation? (select all that apply)"
+        answers:
+          - value: "A q=0 quality value in an Accept header means that representation is unacceptable"
+            correct: true
+          - value: "getPreferredLanguage($locales) returns the best match within the list you pass, not just the client's top language"
+            correct: true
+          - value: "getPreferredFormat() returns a raw MIME type string such as application/json"
+            correct: false
+          - value: "Shared caches parse the Accept header themselves, so a Vary header is unnecessary on negotiated responses"
+            correct: false
+          - value: "Response gzip compression should normally be implemented inside your PHP controllers"
+            correct: false
+        explanation: >-
+          q=0 explicitly marks a representation as unacceptable rather than merely low priority,
+          and getPreferredLanguage() intersects the client's preferences with the locale list you
+          provide. getPreferredFormat() maps Accept to a Symfony format name (json, html) — raw
+          MIME types come from getAcceptableContentTypes() — negotiated responses must send Vary
+          or shared caches will mis-serve, and gzip is typically handled by the web server/proxy.
+        documentation: "https://symfony.com/doc/current/components/http_foundation.html#accessing-accept-headers"
+      - id: "HTTP-MC-07"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "http/httpclient"
+        concepts: ["lazy-responses", "getContent-throws", "MockHttpClient", "HttpClientInterface"]
+        syllabus: "HTTP → HttpClient component"
+        question: "Which of the following statements are true about the Symfony HttpClient component? (select all that apply)"
+        answers:
+          - value: "request() is lazy/asynchronous — the transfer only completes when you first read the status, headers or content"
+            correct: true
+          - value: "getContent() and toArray() throw on 3xx–5xx responses by default, while getStatusCode() never throws"
+            correct: true
+          - value: "MockHttpClient with MockResponse lets you test HTTP interactions without any network access"
+            correct: true
+          - value: "You should type-hint the concrete CurlHttpClient class in your services for best performance"
+            correct: false
+          - value: "Options defined on a scoped client apply to every request the client makes, whatever the URL"
+            correct: false
+        explanation: >-
+          Responses are lazy so firing several requests before reading gives free concurrency;
+          the content readers throw HTTP exceptions by default (pass false / throw: false to read
+          error bodies) while getStatusCode() is always safe; and MockHttpClient keeps tests
+          offline. You should depend on the HttpClientInterface contract, not a concrete
+          transport, and scoped-client options only apply to URLs matching the scope/base URI.
+        documentation: "https://symfony.com/doc/current/http_client.html"

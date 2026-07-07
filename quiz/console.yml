@@ -1559,3 +1559,184 @@ categories:
           diagnostics. isVerbose() is true from -v upward (too broad here), isInteractive()
           is about prompting not verbosity, and isQuiet() is the opposite end of the scale.
         documentation: "https://symfony.com/doc/current/console/verbosity.html"
+  - name: "Console — Multiple Choice Drills"
+    questions:
+      - id: "CONS-MC-01"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "console/options-arguments"
+        concepts: ["arguments", "options", "VALUE_NONE", "NEGATABLE"]
+        syllabus: "Console → Arguments & Options"
+        question: "Which statements about console arguments and options are correct? (select all that apply)"
+        answers:
+          - value: "Arguments are positional, while options are named and may define a one-letter shortcut"
+            correct: true
+          - value: "An option defined with InputOption::VALUE_NONE acts as a flag: it accepts no value and has no default"
+            correct: true
+          - value: "InputOption::VALUE_NEGATABLE makes the option also accept a --no-* variant"
+            correct: true
+          - value: "Options are positional and must be passed in the order they were defined"
+            correct: false
+          - value: "An InputArgument::IS_ARRAY argument can be followed by additional arguments in the definition"
+            correct: false
+        explanation: >-
+          Arguments are bound by position while options are named (with optional -x
+          shortcuts) and can appear anywhere on the command line, so options are never
+          positional. VALUE_NONE options are pure presence flags with no value or
+          default, and VALUE_NEGATABLE (16) adds the negated --no-* form. An IS_ARRAY
+          argument swallows all remaining input, so it must be the last argument
+          defined.
+        documentation: "https://symfony.com/doc/current/console/input.html"
+      - id: "CONS-MC-02"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "console/verbosity"
+        concepts: ["verbosity", "quiet", "isDebug", "output"]
+        syllabus: "Console → Verbosity"
+        question: "Which statements about console verbosity are true? (select all that apply)"
+        answers:
+          - value: "-q suppresses normal output, but the command still executes fully and returns its real exit code"
+            correct: true
+          - value: "$output->isDebug() returns true only at the -vvv (DEBUG) level"
+            correct: true
+          - value: "Verbosity is a property of the input object, read via $input->getVerbosity()"
+            correct: false
+          - value: "-q also forces the command into non-interactive mode, exactly like -n"
+            correct: false
+          - value: "-v, -vv and -vvv only change the logger's log level, not what the console prints"
+            correct: false
+        explanation: >-
+          Quiet mode silences output only — execution and the exit code are untouched
+          — and isDebug() is the guard that matches exactly the -vvv/DEBUG level.
+          Verbosity is a property of the output (OutputInterface constants 16 to 256),
+          not of the input; non-interactivity is controlled separately by -n; and the
+          verbosity flags directly govern what the console output prints.
+        documentation: "https://symfony.com/doc/current/console/verbosity.html"
+      - id: "CONS-MC-03"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "console/events"
+        concepts: ["console-events", "disableCommand", "exit-codes", "terminate"]
+        syllabus: "Console → Events"
+        question: "Which statements about console events and exit codes are correct? (select all that apply)"
+        answers:
+          - value: "The TERMINATE event is dispatched whether the command succeeds or throws"
+            correct: true
+          - value: "Calling disableCommand() in a COMMAND event listener skips execution and yields exit code 113"
+            correct: true
+          - value: "A ConsoleErrorEvent listener can replace the throwable or set a custom exit code"
+            correct: true
+          - value: "The ERROR event is dispatched on every command run, right before TERMINATE"
+            correct: false
+          - value: "Exit codes returned by commands can be any integer and are passed to the shell unchanged"
+            correct: false
+        explanation: >-
+          ConsoleTerminateEvent always runs, after success and after errors alike, and
+          ConsoleErrorEvent listeners may swap the throwable or call setExitCode().
+          disableCommand() short-circuits execution with
+          ConsoleCommandEvent::RETURN_CODE_DISABLED (113). The ERROR event fires only
+          when a Throwable is thrown, and exit codes are clamped to the 0-255 range
+          before reaching the shell.
+        documentation: "https://symfony.com/doc/current/components/console/events.html"
+      - id: "CONS-MC-04"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "console/configuration"
+        concepts: ["lifecycle", "configure", "AsCommand", "lazy-loading"]
+        syllabus: "Console → Configuration"
+        question: "Which statements about command configuration and the command lifecycle are true? (select all that apply)"
+        answers:
+          - value: "configure() is called from the command's constructor, before any input is available"
+            correct: true
+          - value: "Putting the command name in the #[AsCommand] attribute keeps command loading lazy"
+            correct: true
+          - value: "interact() runs after execute() so it can ask follow-up questions about the result"
+            correct: false
+          - value: "initialize() is only invoked when the command runs in interactive mode"
+            correct: false
+        explanation: >-
+          configure() runs in the constructor, which is why it cannot read input, and
+          declaring the name in #[AsCommand] lets the application know the command
+          without instantiating it, enabling lazy loading. The lifecycle order is
+          configure, then initialize, then interact, then execute — interact() runs
+          before execute(), and initialize() runs on every execution regardless of
+          interactivity.
+        documentation: "https://symfony.com/doc/current/console.html"
+      - id: "CONS-MC-05"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "console/custom-commands"
+        concepts: ["invokable-commands", "exit-codes", "autoconfiguration", "console.command"]
+        syllabus: "Console → Custom commands"
+        question: "Which statements about writing custom commands in Symfony 8 are correct? (select all that apply)"
+        answers:
+          - value: "Invokable commands using __invoke() are the modern default; extending Command still works"
+            correct: true
+          - value: "Commands should return Command::SUCCESS (0), Command::FAILURE (1) or Command::INVALID (2)"
+            correct: true
+          - value: "With autoconfiguration, command classes are automatically tagged console.command"
+            correct: true
+          - value: "Commands must extend ContainerAwareCommand to access services"
+            correct: false
+          - value: "execute() may return null and the framework converts it to a success exit code"
+            correct: false
+        explanation: >-
+          Symfony 8 favors invokable commands built around __invoke() while the
+          classic extends-Command style remains valid, exit statuses use the
+          SUCCESS/FAILURE/INVALID constants (0, 1, 2), and autoconfiguration applies
+          the console.command tag so commands are registered and loaded lazily.
+          ContainerAwareCommand no longer exists — services are injected through the
+          constructor — and execute() must return an int, not null.
+        documentation: "https://symfony.com/doc/current/console.html"
+      - id: "CONS-MC-06"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "console/built-in-commands"
+        concepts: ["list", "maker-bundle", "framework-bundle", "cache-commands"]
+        syllabus: "Console → Built-in commands"
+        question: "Which statements about the commands available in bin/console are true? (select all that apply)"
+        answers:
+          - value: "Running bin/console with no command name executes the default list command"
+            correct: true
+          - value: "The make:* commands come from MakerBundle, not from Symfony core"
+            correct: true
+          - value: "cache:clear and the debug:* commands are added by FrameworkBundle, not by the standalone Console component"
+            correct: true
+          - value: "The completion command must be installed through a separate Composer package"
+            correct: false
+          - value: "help can only display documentation for built-in commands, not custom ones"
+            correct: false
+        explanation: >-
+          list is the default command (so a bare bin/console prints the command list),
+          make:* generators ship with MakerBundle rather than core, and cache:clear,
+          cache:warmup and debug:* come from FrameworkBundle on top of the component.
+          completion is one of the commands present in every Console application
+          without extra packages, and help works with any registered command,
+          including custom ones.
+        documentation: "https://symfony.com/doc/current/console.html"
+      - id: "CONS-MC-07"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "console/input-output"
+        concepts: ["SymfonyStyle", "stderr", "sections"]
+        syllabus: "Console → Input & Output"
+        question: "Which statements about console input and output handling are correct? (select all that apply)"
+        answers:
+          - value: "SymfonyStyle wraps the input and output and provides styled helpers such as title(), table() and ask()"
+            correct: true
+          - value: "STDERR is reached through ConsoleOutputInterface::getErrorOutput(), keeping pipeable data clean on STDOUT"
+            correct: true
+          - value: "Output sections allow parts of the output to be updated independently while the command runs"
+            correct: true
+          - value: "$output->writeln() writes to STDERR by default so it never pollutes piped output"
+            correct: false
+          - value: "Console sections require re-running the command to refresh their content"
+            correct: false
+        explanation: >-
+          SymfonyStyle is constructed from the input and output and is the go-to
+          styled UI layer; error/diagnostic text belongs on the dedicated error output
+          obtained via ConsoleOutputInterface::getErrorOutput(); and output sections
+          can be overwritten live and independently during a single run. writeln()
+          targets the normal STDOUT stream, which is exactly why diagnostics should be
+          sent to the error output instead.
+        documentation: "https://symfony.com/doc/current/console/style.html"

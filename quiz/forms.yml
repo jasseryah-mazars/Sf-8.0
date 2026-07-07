@@ -1570,3 +1570,177 @@ categories:
           from getExtendedTypes() in the manual case. form.type is for form types, and
           form.extension is not a real tag.
         documentation: "https://symfony.com/doc/current/form/create_form_type_extension.html"
+  - name: "Forms — Multiple Choice Drills"
+    questions:
+      - id: "FORM-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "forms/creation"
+        concepts: ["buildForm", "data_class", "getBlockPrefix", "OptionsResolver"]
+        syllabus: "Forms → Creating forms"
+        question: "Which of the following statements are true about creating a custom form type? (select all that apply)"
+        answers:
+          - value: "buildForm() receives a FormBuilderInterface — the form does not exist yet, so you cannot read submitted data there"
+            correct: true
+          - value: "Without a data_class option, a compound form's getData() returns an array, not an object"
+            correct: true
+          - value: "getBlockPrefix() — not getName() — determines the Twig block names used for theming"
+            correct: true
+          - value: "configureOptions() must return a plain array of default options"
+            correct: false
+          - value: "getName() is the method that controls Twig theming block names"
+            correct: false
+        explanation: >-
+          buildForm() works on a FormBuilderInterface before any FormInterface exists; without
+          data_class the data mapper falls back to an array; and getBlockPrefix() drives theming
+          block resolution. configureOptions() configures an OptionsResolver instance rather than
+          returning an array, and getName() was removed long ago in favour of getBlockPrefix().
+        documentation: "https://symfony.com/doc/current/forms.html"
+      - id: "FORM-MC-02"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "forms/handling"
+        concepts: ["handleRequest", "isSubmitted", "isValid", "clearMissing", "PATCH"]
+        syllabus: "Forms → Handling submissions"
+        question: "Which of the following statements are true about form submission handling? (select all that apply)"
+        answers:
+          - value: "Calling isValid() on a form that was never submitted throws a LogicException — guard with isSubmitted() first"
+            correct: true
+          - value: "handleRequest() silently ignores a request whose HTTP method does not match the form's method option"
+            correct: true
+          - value: "For a PATCH form, clearMissing is false, so fields missing from the submission keep their existing value"
+            correct: true
+          - value: "Validation runs while handleRequest() parses the request, before any form events fire"
+            correct: false
+          - value: "handleRequest() automatically redirects the user after a successful submission"
+            correct: false
+        explanation: >-
+          isValid() on an unsubmitted form throws a LogicException; a method mismatch means the
+          form is simply treated as not submitted; and PATCH implies clearMissing = false for
+          partial updates. Validation actually fires as a POST_SUBMIT listener, not during request
+          parsing, and the redirect after success is your controller's responsibility.
+        documentation: "https://symfony.com/doc/current/forms.html#processing-forms"
+      - id: "FORM-MC-03"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "forms/csrf"
+        concepts: ["csrf_protection", "_token", "PRE_SUBMIT", "stateless_token_ids"]
+        syllabus: "Forms → CSRF protection"
+        question: "Which of the following statements are true about CSRF protection in Symfony forms? (select all that apply)"
+        answers:
+          - value: "CSRF protection is enabled by default and adds a hidden _token field that is checked on submission"
+            correct: true
+          - value: "The CSRF token is validated on PRE_SUBMIT by the CsrfValidationListener, before data transformation"
+            correct: true
+          - value: "The default csrf_token_id is always the literal string 'form', regardless of the form type"
+            correct: false
+          - value: "Stateless CSRF tokens (stateless_token_ids) still require an active session to work"
+            correct: false
+          - value: "The default CSRF field name is 'csrf_token'"
+            correct: false
+        explanation: >-
+          CSRF protection is on by default via a hidden _token field, and the token check runs on
+          PRE_SUBMIT via CsrfValidationListener. The default token id is the form's block prefix
+          (not a fixed 'form' string) unless csrf_token_id is set, the default field name is
+          _token, and stateless_token_ids uses SameOriginCsrfTokenManager with no session needed.
+        documentation: "https://symfony.com/doc/current/security/csrf.html"
+      - id: "FORM-MC-04"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "forms/data-transformers"
+        concepts: ["transform", "reverseTransform", "model-transformer", "view-transformer", "TransformationFailedException"]
+        syllabus: "Forms → Data transformers"
+        question: "Which of the following statements are true about data transformers? (select all that apply)"
+        answers:
+          - value: "transform() converts model data to view data for display; reverseTransform() converts submitted view data back to model data"
+            correct: true
+          - value: "Model transformers bridge model↔norm data, while view transformers bridge norm↔view data"
+            correct: true
+          - value: "A TransformationFailedException thrown during reverseTransform() marks the field invalid instead of causing a 500 error"
+            correct: true
+          - value: "On submission, model transformers run before view transformers"
+            correct: false
+          - value: "transform() is the method invoked to process the user's submitted input"
+            correct: false
+        explanation: >-
+          transform() is the model→view direction and reverseTransform() the view→model direction;
+          model transformers sit between model and norm data while view transformers sit between
+          norm and view data; and a TransformationFailedException surfaces as the field's
+          invalid_message rather than a 500. On submit the order is view→norm→model, so view
+          transformers run first, and submitted input goes through reverseTransform(), not
+          transform().
+        documentation: "https://symfony.com/doc/current/form/data_transformers.html"
+      - id: "FORM-MC-05"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "forms/events"
+        concepts: ["FormEvents", "PRE_SUBMIT", "POST_SUBMIT", "dynamic-fields"]
+        syllabus: "Forms → Form events"
+        question: "Which of the following statements are true about form events? (select all that apply)"
+        answers:
+          - value: "The data available in PRE_SUBMIT is the raw view data (array/string), not your model object"
+            correct: true
+          - value: "Fields can only be added or removed in the PRE_* events, before submit binds them"
+            correct: true
+          - value: "FormEvents defines PRE_VALIDATE and POST_VALIDATE constants for hooking into validation"
+            correct: false
+          - value: "The submit sequence is SUBMIT → PRE_SUBMIT → POST_SUBMIT"
+            correct: false
+          - value: "POST_SET_DATA fires after the form has been submitted"
+            correct: false
+        explanation: >-
+          PRE_SUBMIT exposes the raw submitted array/string before any transformation, and dynamic
+          field changes are only possible in PRE_SET_DATA/PRE_SUBMIT before binding. There are no
+          PRE_VALIDATE/POST_VALIDATE events — validation is itself a POST_SUBMIT listener — the
+          submit order is PRE_SUBMIT → SUBMIT → POST_SUBMIT, and POST_SET_DATA belongs to the
+          data-setting sequence, not submission.
+        documentation: "https://symfony.com/doc/current/form/events.html"
+      - id: "FORM-MC-06"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "forms/rendering"
+        concepts: ["form_end", "form_row", "form_errors", "render_rest"]
+        syllabus: "Forms → Rendering"
+        question: "Which of the following statements are true about rendering forms in Twig? (select all that apply)"
+        answers:
+          - value: "form_end() renders all remaining unrendered fields by default, including the hidden CSRF token"
+            correct: true
+          - value: "form_row() renders the label, widget, errors and help text for a field"
+            correct: true
+          - value: "form_errors(form) on the root form shows form-level errors; per-field errors require form_errors(form.field)"
+            correct: true
+          - value: "form_widget() renders the field's label together with its control"
+            correct: false
+          - value: "Passing render_rest: false to form_end() still outputs the CSRF token automatically"
+            correct: false
+        explanation: >-
+          form_end() emits remaining fields (hidden ones and the CSRF _token) unless render_rest
+          is disabled; form_row() bundles label + widget + errors + help; and error display is
+          split between the root form and individual fields. form_widget() outputs only the
+          control itself, and with render_rest: false you must render the CSRF field yourself.
+        documentation: "https://symfony.com/doc/current/form/form_customization.html"
+      - id: "FORM-MC-07"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "forms/file-upload"
+        concepts: ["FileType", "UploadedFile", "multipart", "unmapped-field", "client-mime"]
+        syllabus: "Forms → File uploads"
+        question: "Which of the following statements are true about handling file uploads with Symfony forms? (select all that apply)"
+        answers:
+          - value: "form_start() adds enctype=\"multipart/form-data\" automatically, but only when the form contains a file field"
+            correct: true
+          - value: "getClientOriginalName() and getClientMimeType() return untrusted, client-supplied values"
+            correct: true
+          - value: "An unmapped FileType field is still validated, and you read it via $form->get('x')->getData()"
+            correct: true
+          - value: "FileType fields provide the upload as a plain string path to the temporary file"
+            correct: false
+          - value: "Setting maxSize on the File constraint raises PHP's upload_max_filesize ini limit"
+            correct: false
+        explanation: >-
+          Multipart encoding is only set when a file field is present; the client-provided name
+          and MIME type must never be trusted (use guessExtension()/getMimeType() instead); and
+          unmapped fields are validated and fetched with ->get('x')->getData(). FileType yields an
+          UploadedFile object (not a string path), and the File constraint is capped by — it can
+          never override — PHP's upload_max_filesize/post_max_size limits.
+        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
