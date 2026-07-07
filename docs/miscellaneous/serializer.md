@@ -37,6 +37,20 @@ back. Symfony splits this in two stages:
 
 `serialize()` = normalize → encode; `deserialize()` = decode → denormalize.
 
+```php
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+$serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+
+// serialize() = normalize (object → array) then encode (array → JSON string)
+$json = $serializer->serialize($user, 'json');
+
+// deserialize() = decode (JSON → array) then denormalize (array → object)
+$user = $serializer->deserialize($json, UserDto::class, 'json');
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -64,6 +78,21 @@ For a given value it picks the **first** normalizer whose
 `supportsNormalization()` returns true, and the encoder matching the requested
 format.
 
+```php
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+$serializer = new Serializer(
+    [new DateTimeNormalizer(), new ObjectNormalizer()], // Normalizer/DenormalizerInterface list
+    [new JsonEncoder(), new XmlEncoder()],              // Encoder/DecoderInterface list
+);
+// For a \DateTimeImmutable, DateTimeNormalizer::supportsNormalization() matches first;
+// the encoder is picked by the requested format ('json', 'xml', ...)
+```
+
 | Role | FQCN |
 |---|---|
 | Facade | `Symfony\Component\Serializer\Serializer` |
@@ -81,6 +110,22 @@ format.
 - **`PropertyNormalizer`** reads/writes object **properties directly** (including
   private, via reflection), ignoring accessors.
 - `GetSetMethodNormalizer` uses only get/set methods.
+
+```php
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
+
+// ObjectNormalizer (default): getters/setters/hassers/issers + constructor,
+// resolved through the PropertyAccess component
+(new ObjectNormalizer())->normalize($user);       // calls getName(), isAdmin()...
+
+// PropertyNormalizer: reflection on properties, even private — accessors ignored
+(new PropertyNormalizer())->normalize($user);
+
+// GetSetMethodNormalizer: strictly get*/set* methods
+(new GetSetMethodNormalizer())->normalize($user);
+```
 
 ### Attributes that shape output
 
