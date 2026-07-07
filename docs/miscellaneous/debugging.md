@@ -73,6 +73,18 @@ dd($user); // "dump and die": dumps, then exits
    `CliDumper` (ANSI terminal) or `HtmlDumper` (browser/toolbar). The chosen
    dumper is decided by the SAPI / context.
 
+```php
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+
+$cloner = new VarCloner();         // step 1: capture
+$data = $cloner->cloneVar($order); // immutable, depth-limited Data snapshot
+
+(new CliDumper())->dump($data);    // step 2: render for the terminal...
+(new HtmlDumper())->dump($data);   // ...or for the browser/toolbar
+```
+
 ```mermaid
 flowchart LR
     V[variable] --> C[VarCloner]
@@ -96,6 +108,13 @@ would otherwise corrupt a JSON response.
 `Symfony\Component\ErrorHandler\Debug::enable()` (called by the Runtime in debug
 mode) registers the ErrorHandler and DebugClassLoader (which flags deprecated /
 case-mismatched class usage). See [Error Handling](error-handling.md).
+
+```php
+use Symfony\Component\ErrorHandler\Debug;
+
+// Called for you by the Runtime when APP_DEBUG=1:
+Debug::enable(); // registers ErrorHandler + DebugClassLoader (deprecations, case checks)
+```
 
 ### Stopwatch
 

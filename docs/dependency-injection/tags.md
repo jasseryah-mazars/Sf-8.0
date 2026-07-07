@@ -72,6 +72,22 @@ services:
 Both are resolved at compile time into concrete argument definitions; the
 `PriorityTaggedServiceTrait` collects, orders and keys the services.
 
+```php
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+use Symfony\Component\DependencyInjection\ServiceLocator;
+
+public function __construct(
+    // tagged_iterator: already-instantiated services, iterated in order.
+    #[AutowireIterator('app.handler')]
+    private iterable $handlers,
+    // tagged_locator: a lazy ServiceLocator, one service built per get().
+    #[AutowireLocator('app.handler')]
+    private ServiceLocator $locator,
+) {}
+// At compile time PriorityTaggedServiceTrait collects, orders and keys both.
+```
+
 ### Priority and indexing
 
 - **`priority`** on the tag orders the collection — **higher priority comes

@@ -183,6 +183,15 @@ null — tout l'intérêt d'une mise à jour partielle. Le bug classique : envoy
 PATCH comme un simple POST, si bien que `clearMissing` reste `true` et que les
 champs non touchés sont silencieusement effacés en null/vide.
 
+```php
+$form->handleRequest($request);  // an empty POST still calls submit()
+// clearMissing = true: text fields become '', a data_class object is blanked
+$form->get('title')->getData();  // '' after an empty submission
+
+// A real PATCH request → handleRequest passes clearMissing: false,
+// so fields absent from the payload keep their value instead of going null
+```
+
 !!! note "Null in real life"
     `null`/vide = une ligne blanche sur le formulaire que le greffier a récupéré.
     Avec `clearMissing` activé, une ligne blanche **efface** ce qui était au dossier ;

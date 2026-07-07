@@ -197,6 +197,16 @@ An `Envelope` is immutable: `with()` returns a *new* envelope with an added
 stamp; `last(StampClass::class)` reads the most recent stamp of a type. Key
 stamps:
 
+```php
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
+
+$envelope = new Envelope(new SendReminder(userId: 42));
+$delayed = $envelope->with(new DelayStamp(5_000)); // with() returns a NEW envelope
+$envelope->last(DelayStamp::class);                // null — original unchanged
+$delayed->last(DelayStamp::class);                 // the DelayStamp instance
+```
+
 | Stamp | Purpose |
 |---|---|
 | `Stamp\SentStamp` | Marks the message was sent to a transport (async) |
@@ -243,6 +253,17 @@ A **transport** is defined by a **DSN** and implements `TransportInterface`
 By default the **PHP serializer** (`Transport\Serialization\PhpSerializer`)
 `serialize()`s the envelope. The **Symfony Serializer** transport serializer is
 recommended for interop across languages/apps.
+
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        transports:
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'  # builds a TransportInterface
+                # replace the default PhpSerializer (PHP serialize()) for interop:
+                serializer: messenger.transport.symfony_serializer
+```
 
 ### Worker lifecycle
 

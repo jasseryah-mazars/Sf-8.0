@@ -102,6 +102,15 @@ Built-in types register these for you: `IntegerType` adds a view transformer;
 - On **display**, transformers run in the order added (`transform`), model→view.
 - On **submit**, they run in reverse order (`reverseTransform`), view→model.
 
+```php
+// IntegerType registers one view transformer; DateType registers both kinds.
+$builder->addViewTransformer($first);   // added first
+$builder->addViewTransformer($second);  // added second
+
+// Display: $first->transform() then $second->transform()            (order added)
+// Submit:  $second->reverseTransform() then $first->reverseTransform() (reverse)
+```
+
 !!! note "Source reference"
     `Symfony\Component\Form\Form::modelToNorm()/normToView()` and their reverses —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php).
@@ -113,6 +122,20 @@ If input cannot be converted (e.g. an ID with no matching object), throw
 `reverseTransform()`. The form catches it, marks the field invalid, and shows the
 field's `invalid_message`. **Never** throw generic exceptions or return `null`
 silently — that hides errors from validation.
+
+```php
+// In reverseTransform(): signal a failed conversion, never return null silently
+public function reverseTransform(mixed $value): ?Item
+{
+    $item = $this->repository->find($value);
+    if (null === $item) {
+        // caught by the form -> field marked invalid, invalid_message shown
+        throw new TransformationFailedException(\sprintf('Item "%s" not found.', $value));
+    }
+
+    return $item;
+}
+```
 
 ### Null behavior
 

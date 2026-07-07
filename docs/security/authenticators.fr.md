@@ -169,6 +169,23 @@ Vous les écrivez rarement de zéro — configurez-les dans `security.yaml` :
   `SelfValidatingPassport`).
 - **`http_basic`**, **`login_link`**, **`remember_me`** — configurés, pas codés.
 
+```yaml
+security:
+    firewalls:
+        main:
+            form_login: ~      # FormLoginAuthenticator (session, CSRF, redirect to getLoginUrl())
+            # json_login: ~    # JsonLoginAuthenticator (credentials in a JSON body)
+            remember_me: { secret: '%kernel.secret%' }
+        api:
+            pattern: ^/api
+            stateless: true
+            access_token:      # AccessTokenAuthenticator → SelfValidatingPassport
+                token_handler: App\Security\AccessTokenHandler  # returns a UserBadge
+        docs:
+            pattern: ^/docs
+            http_basic: ~      # also available, config-only: login_link
+```
+
 ### `AbstractAuthenticator` and `AbstractLoginFormAuthenticator`
 
 `AbstractAuthenticator` ne fournit qu'un seul comportement par défaut :

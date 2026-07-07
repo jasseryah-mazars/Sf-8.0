@@ -46,6 +46,14 @@ l'équivalent côté template du `dump()`/`var_dump()` de PHP :
 (tag) envoie les données vers la destination de dump **sans** injecter de markup
 dans la page.
 
+```twig
+{# function form: prints the dump right here in the page #}
+{{ dump(order) }}
+
+{# tag form: nothing rendered here — data goes to the profiler/toolbar #}
+{% dump order %}
+```
+
 !!! question "Predict first"
     Un `{{ dump(order) }}` se glisse dans un template commité et atteint la
     **production**. Que se passe-t-il à la première request qui le rend ?
@@ -69,6 +77,20 @@ Deux couches existent :
   **VarDumper** (`Symfony\Component\VarDumper\Dumper\HtmlDumper` +
   `VarCloner`). Cela donne la sortie repliable avec coloration syntaxique et
   route les dumps vers la **web debug toolbar / le profiler** en dev.
+
+```php
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+
+// Twig core: DebugExtension = plain var_dump-based dump(), needs debug: true
+$twig = new \Twig\Environment($loader, ['debug' => true]);
+$twig->addExtension(new \Twig\Extension\DebugExtension());
+
+// Symfony's DumpExtension routes dump() through VarDumper instead:
+$cloner = new VarCloner();  // safely clones the variable graph
+$dumper = new HtmlDumper(); // renders the collapsible, highlighted view
+$dumper->dump($cloner->cloneVar($order));
+```
 
 ```mermaid
 flowchart LR

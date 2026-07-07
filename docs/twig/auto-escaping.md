@@ -123,6 +123,15 @@ strategy is a real XSS vector. See
 [Web Security Fundamentals](../php-web-security/web-security.md) for the attack
 model.
 
+```twig
+{# WRONG — HTML escaping inside a <script> block is still exploitable #}
+<script>const q = "{{ query|e('html') }}";</script>
+{# RIGHT — match the escaper to the context #}
+<script>const q = "{{ query|e('js') }}";</script>
+<div style="color: {{ color|e('css') }}"></div>
+<a href="/search?q={{ query|e('url') }}">search</a>
+```
+
 ### Null behavior
 
 The escaper is null-safe. Printing a `null` value — `{{ comment }}` when there is
@@ -132,6 +141,14 @@ implicit `|escape` simply has nothing to encode. The same holds for an explicit
 bio, an absent flash) is safe to print directly — escaping never turns `null`
 into visible text. If you want a placeholder instead of a blank, reach for
 `|default` **before** escaping: `{{ bio|default('—') }}`.
+
+```twig
+{% set comment = null %}
+{{ comment }}          {# '' — the implicit escape has nothing to encode #}
+{{ comment|e }}        {# '' — explicit escape on null is also empty #}
+{{ comment|e('js') }}  {# '' — same for any strategy #}
+{{ bio|default('—') }} {# placeholder applied BEFORE escaping #}
+```
 
 !!! note "Null in real life"
     A null value at the safety net is an empty trapeze: nothing falls, so there is

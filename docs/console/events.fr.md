@@ -119,6 +119,14 @@ Les codes de sortie sont bornés à **0–255** (`$code % 256` en cas de dépass
 un retour négatif ou `>255` est normalisé. Par convention, un processus terminé par
 un signal sort avec `128 + signalNumber`.
 
+```php
+// Out-of-range exit codes are normalised into 0-255: $code % 256
+return 300;   // the process actually exits with 300 % 256 = 44
+
+// Signal convention: exit code = 128 + signalNumber
+// SIGINT (2) -> 130, SIGTERM (15) -> 143
+```
+
 ### Signal handling
 
 Deux façons de réagir aux signaux (nécessite `ext-pcntl`) :
@@ -129,6 +137,23 @@ Deux façons de réagir aux signaux (nécessite `ext-pcntl`) :
    Retournez un int pour définir le code de sortie, ou `false` pour continuer.
 2. **Listener `ConsoleEvents::SIGNAL`** — un hook global, utile pour les
    préoccupations transverses (vider les logs sur `SIGTERM`).
+
+```php
+// 1) Per-command: implement SignalableCommandInterface
+public function getSubscribedSignals(): array
+{
+    return [\SIGINT, \SIGTERM];               // signals this command reacts to
+}
+
+public function handleSignal(int $signal, int|false $previousExitCode = 0): int|false
+{
+    return false;   // false = keep running; return an int to exit with that code
+}
+
+// 2) App-wide: listen to ConsoleEvents::SIGNAL (e.g. flush logs on SIGTERM)
+#[AsEventListener(event: ConsoleEvents::SIGNAL)]
+final class FlushLogsOnSignal { /* __invoke(ConsoleSignalEvent $event) */ }
+```
 
 !!! note "Source reference"
     `ConsoleEvents`, `ConsoleTerminateEvent`, `SignalableCommandInterface` —

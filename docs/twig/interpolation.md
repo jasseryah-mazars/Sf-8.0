@@ -47,6 +47,13 @@ Three ways to build a string from parts:
 - **`~`** joins values as strings (numbers are cast to string).
 - **`format`** applies `sprintf` placeholders (`%s`, `%d`, `%.2f`, `%1$s`).
 
+```twig
+{# the three tools side by side #}
+{{ "user #{name} (#{count})" }}             {# #{...}: any expression, double quotes only #}
+{{ 'user ' ~ name ~ ' (' ~ count ~ ')' }}   {# ~ casts values to string and joins them #}
+{{ '%s: %d items, %.2f kg (%1$s)'|format(name, count, weight) }}  {# %1$s reuses arg 1 #}
+```
+
 !!! question "Predict first"
     What does `{{ 1 + 2 ~ 3 }}` produce — `6`, `"123"`, or `"33"`?
 

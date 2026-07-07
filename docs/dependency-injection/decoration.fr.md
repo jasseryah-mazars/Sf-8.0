@@ -151,6 +151,23 @@ repli `??`. Le bug classique : déclarer `decoration_on_invalid: null` tout en
 gardant un type `.inner` non nullable, transformant un enrobage optionnel en
 `TypeError` dès que la cible est absente.
 
+```php
+// YAML: decoration_on_invalid: exception (default) | ignore | null
+final class LoggingMailer implements MailerInterface
+{
+    public function __construct(
+        #[AutowireDecorated]
+        private readonly ?MailerInterface $inner, // nullable: null may be injected as .inner
+    ) {}
+
+    public function send(RawMessage $message, ?Envelope $envelope = null): void
+    {
+        // Guard delegation: nullsafe operator (or a `??` fallback) — avoids a TypeError
+        $this->inner?->send($message, $envelope);
+    }
+}
+```
+
 !!! note "Null in real life"
     Un inner `null`, c'est un poste de garniture sans assiette qui descend la
     ligne — vous devez vérifier que le tapis est vide (`?->`) avant d'essayer
