@@ -40,6 +40,18 @@ Vous la déclarez au niveau de la classe avec `#[Assert\GroupSequence([...])]`.
 Chaque élément est un nom de groupe ; le groupe court spécial **class-name**
 représente « les propres constraints `Default` de cette classe ».
 
+```php
+#[Assert\GroupSequence(['User', 'Strict'])] // class-name group, then 'Strict'
+class User
+{
+    #[Assert\NotBlank]                      // Default constraint => "User" step
+    public string $username = '';
+
+    #[Assert\Email(groups: ['Strict'])]     // runs only if the "User" step passed
+    public string $email = '';
+}
+```
+
 Chaque groupe est une **porte** : toutes ses constraints s'exécutent, puis la
 séquence s'interrompt au premier groupe ayant produit une violation quelconque —
 les groupes suivants sont ignorés.
@@ -165,6 +177,17 @@ class Account implements GroupSequenceProviderInterface
 `getGroupSequence()` peut retourner un tableau de noms de groupes ou un objet
 `GroupSequence`. Elle s'exécute à chaque validation de l'objet, si bien que la
 séquence s'adapte à l'état.
+
+```php
+public function getGroupSequence(): array|Assert\GroupSequence
+{
+    // either a plain array of group names...
+    // return ['Account', 'Premium'];
+
+    // ...or a GroupSequence object — re-evaluated on every validation
+    return new Assert\GroupSequence(['Account', 'Premium']);
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\Validator\Constraints\GroupSequence` et

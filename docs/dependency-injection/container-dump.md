@@ -141,6 +141,19 @@ The dumped container extends the runtime `Container` class, not
   resource-tracked; editing `services.yaml` requires `cache:clear`/warmup for
   the container to be re-dumped.
 
+```php
+// The dump extends Container (runtime), not ContainerBuilder (build time)
+$container->getParameter('kernel.debug');   // OK: read-only access
+
+$container->setParameter('app.flag', true); // throws — FrozenParameterBag
+
+// set() is only for synthetic services and test doubles
+$container->set('kernel', $kernel);
+
+// Editing services.yaml in prod changes nothing until:
+//   php bin/console cache:clear
+```
+
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Dumper\PhpDumper` — the class that
     writes the compiled container (factory methods, proxy/lazy code paths,

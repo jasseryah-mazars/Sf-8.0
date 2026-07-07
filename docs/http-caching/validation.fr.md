@@ -140,6 +140,20 @@ L'attribut `#[Cache]` automatise exactement cela : ses **expressions**
 bien qu'une request correspondante produit un 304 **sans jamais entrer dans le
 corps du controller**.
 
+```php
+// Manual: cheap validator first, heavy work only on a miss
+$response = new Response();
+$response->setLastModified($post->getUpdatedAt());   // from the entity's updatedAt
+
+if ($response->isNotModified($request)) {
+    return $response;   // 304 — rendering is skipped entirely
+}
+
+// Automated: etag/lastModified expressions run on kernel.controller_arguments
+#[Cache(etag: 'post.getContent()', lastModified: 'post.getUpdatedAt()')]
+public function show(Post $post): Response { /* not entered on a 304 */ }
+```
+
 !!! info "ETag expressions are hashed"
     `#[Cache(etag: "post.getContent()")]` n'envoie **pas** la valeur brute : le
     `CacheAttributeListener` passe le résultat de l'expression par **SHA-256** et
@@ -160,6 +174,17 @@ deux** :
 `Cache-Control: no-cache` seul signifie « toujours revalider » — associez-le à un
 `ETag` pour que la revalidation soit un 304 rapide plutôt qu'un
 retéléchargement complet.
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, s-maxage=60
+ETag: "v3"
+Last-Modified: Mon, 06 Jul 2026 10:00:00 GMT
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+ETag: "v3"
+```
 
 ## Configuration & code
 

@@ -103,6 +103,21 @@ flowchart LR
 - Globals are resolved **at compile-safe runtime**: they are merged into the
   render context, so a local variable named `app` would shadow the global.
 
+```twig
+{# AppVariable throws \RuntimeException if e.g. no request was wired #}
+
+{# flashes by type — reading them clears them #}
+{% for message in app.flashes('notice') %}
+    <div class="notice">{{ message }}</div>
+{% endfor %}
+{% for label, messages in app.flashes(['notice', 'error']) %}
+    {% for message in messages %}<div class="{{ label }}">{{ message }}</div>{% endfor %}
+{% endfor %}
+
+{# a local variable named 'app' shadows the global — avoid #}
+{% set app = 'shadowed' %}
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\AppVariable` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php).
@@ -125,6 +140,15 @@ Reading `app.user.userIdentifier` without the guard prints empty in lenient mode
 but throws once `strict_variables` is on — and `app.user.roles` on a `null` user
 is the classic anonymous-page crash. `app.user is not null` and the ternary above
 are the safe idioms.
+
+```twig
+{# crashes for an anonymous visitor once strict_variables is on #}
+{{ app.user.userIdentifier }}
+
+{# safe idioms #}
+{% if app.user is not null %}{{ app.user.roles|join(', ') }}{% endif %}
+{{ app.user ? app.user.userIdentifier : 'Guest' }}
+```
 
 !!! note "Null in real life"
     `app.user` is the unknown visitor at the security desk: until someone signs in,

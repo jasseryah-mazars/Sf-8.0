@@ -157,6 +157,20 @@ Per-request or as client defaults via `withOptions()`:
 | `timeout` / `max_duration` | Idle timeout / total cap |
 | `max_redirects` | Follow limit |
 
+```php
+// client-wide defaults, then per-request options
+$client = $client->withOptions(['base_uri' => 'https://api.example.com', 'timeout' => 4.0]);
+
+$client->request('POST', '/articles', [
+    'query'         => ['page' => 2],          // ?page=2
+    'headers'       => ['Accept' => 'application/json'],
+    'json'          => ['title' => 'Hello'],   // or 'body' for a raw/streamed payload
+    'auth_bearer'   => $token,                 // or 'auth_basic' => 'user:pass'
+    'max_duration'  => 10.0,                   // total cap, unlike idle 'timeout'
+    'max_redirects' => 3,
+]);
+```
+
 ### Scoped clients & base URI
 
 A **scoped client** applies options (base URI, auth, headers) only to URLs
@@ -173,6 +187,18 @@ flowchart LR
 Programmatically, `ScopingHttpClient::forBaseUri($client, 'https://api.github.com')`
 or `$client->withOptions(['base_uri' => '...'])`.
 
+```php
+use Symfony\Component\HttpClient\ScopingHttpClient;
+
+// options apply only to URLs under this base URI
+$github = ScopingHttpClient::forBaseUri($client, 'https://api.github.com', [
+    'auth_bearer' => $token,
+]);
+
+// or derive a client with defaults bound to every request
+$api = $client->withOptions(['base_uri' => 'https://api.example.com']);
+```
+
 ### Retry & streaming decorators
 
 - `Symfony\Component\HttpClient\RetryableHttpClient` wraps any client and retries
@@ -180,6 +206,22 @@ or `$client->withOptions(['base_uri' => '...'])`.
 - `$client->stream($response)` returns a `ResponseStreamInterface`; iterate to get
   `ChunkInterface` pieces without buffering the whole body — for large downloads
   or Server-Sent Events (`EventSourceHttpClient`).
+
+```php
+use Symfony\Component\HttpClient\EventSourceHttpClient;
+use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
+use Symfony\Component\HttpClient\RetryableHttpClient;
+
+// retries failed/5xx/429 responses, honouring Retry-After
+$client = new RetryableHttpClient($inner, new GenericRetryStrategy(), 2);
+
+$response = $client->request('GET', $bigFileUrl);
+foreach ($client->stream($response) as $chunk) { // ResponseStreamInterface
+    $fragment = $chunk->getContent();            // ChunkInterface piece
+}
+
+$sse = new EventSourceHttpClient($client); // Server-Sent Events wrapper
+```
 
 ### Null behavior
 
@@ -205,6 +247,14 @@ To read a header that may be absent, header bags here are keyed arrays, so use
 `$response->getHeaders()['x-total'][0] ?? null` rather than a nullable getter. The
 common bug is calling `toArray()` on a `204` and being surprised by the decode
 exception instead of receiving `null`.
+
+```php
+$headers = $response->getHeaders(false); // arrays keyed by lowercased name
+$total = $headers['x-total'][0] ?? null; // null when the header is absent
+
+// guard before decoding: toArray() throws on an empty 204 body
+$data = 204 === $response->getStatusCode() ? [] : $response->toArray();
+```
 
 !!! note "Null in real life"
     An empty response is a **reply envelope that arrived empty** — the courier

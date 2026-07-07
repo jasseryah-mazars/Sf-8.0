@@ -44,6 +44,30 @@ styles, tous deux pilotés par l'attribut **`#[AsCommand]`** :
    `Symfony\Component\Console\Command\Command`, implémentant `execute()` et
    (optionnellement) `configure()`.
 
+```php
+// 1. Invokable style: extends nothing
+#[AsCommand(name: 'app:greet')]
+final class GreetCommand
+{
+    public function __invoke(#[Argument] string $name, #[Option] bool $shout = false): int
+    {
+        return Command::SUCCESS;
+    }
+}
+
+// 2. Classic style: extends Command, overrides configure()/execute()
+#[AsCommand(name: 'app:greet-classic')]
+final class GreetClassicCommand extends Command
+{
+    protected function configure(): void { $this->addArgument('name'); }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        return Command::SUCCESS;
+    }
+}
+```
+
 Quel que soit le style, la méthode retourne un **code de sortie `int`**. Utilisez
 les constantes :
 
@@ -55,6 +79,21 @@ les constantes :
 
 Ne faites jamais littéralement `return 0;` — utilisez les constantes pour la clarté
 et la compatibilité future.
+
+```php
+public function __invoke(SymfonyStyle $io): int
+{
+    if (!$this->inputLooksValid()) {
+        return Command::INVALID;   // 2: wrong usage/input
+    }
+
+    if (!$this->doWork()) {
+        return Command::FAILURE;   // 1: the command failed
+    }
+
+    return Command::SUCCESS;       // 0: never a bare "return 0;"
+}
+```
 
 !!! question "Predict first"
     Vous marquez une classe simple (elle n'étend rien) avec `#[AsCommand]` et lui
@@ -75,6 +114,19 @@ et la compatibilité future.
 de la **compilation du container**, si bien que le framework connaît le nom d'une
 commande *sans instancier la classe* — la base du [lazy loading](configuration.md).
 
+```php
+use Symfony\Component\Console\Attribute\AsCommand;
+
+#[AsCommand(
+    name: 'app:audit',              // known at container compile time
+    description: 'Runs the audit',  // shown by "list"
+    aliases: ['app:check'],         // alternative names
+    hidden: false,                  // set true to hide from "list"
+    help: 'Long help shown by "help app:audit".',
+)]
+final class AuditCommand { /* never instantiated just to read its name */ }
+```
+
 L'enregistrement est automatique via l'**autoconfiguration** : tout service qui
 étend `Command` **ou** porte `#[AsCommand]` est tagué `console.command`. La
 `Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass`
@@ -82,6 +134,16 @@ collecte ces tags et construit un
 `Symfony\Component\Console\CommandLoader\ContainerCommandLoader`, associant chaque
 nom à son id de service. La commande n'est instanciée que lorsqu'elle est
 réellement invoquée.
+
+```yaml
+# What autoconfiguration produces behind the scenes (you never write this):
+services:
+    App\Command\AuditCommand:
+        tags:
+            - { name: console.command, command: 'app:audit' }
+# AddConsoleCommandPass collects these tags and builds a ContainerCommandLoader
+# mapping 'app:audit' -> service id; instantiation happens only on invocation
+```
 
 Pour les commandes **invokables**, un adaptateur interne
 (`Symfony\Component\Console\Command\Command` enveloppant l'invokable via

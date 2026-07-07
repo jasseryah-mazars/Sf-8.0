@@ -132,6 +132,17 @@ flowchart TD
 - **Via `use`** — à l'intérieur d'un thème, `{% use 'form_div_layout.html.twig' %}`
   importe les blocs de base pour que vous ne surchargiez que ce qui change.
 
+```twig
+{# Same file as the form — this template must NOT extend another #}
+{% form_theme form _self %}
+
+{# Inside a dedicated theme: use imports base blocks, override only deltas #}
+{% use 'form_div_layout.html.twig' %}
+{% block form_errors %}
+    <ul class="errors">{# custom markup #}</ul>
+{% endblock %}
+```
+
 ## Configuration & code
 
 === "Per-template theme"

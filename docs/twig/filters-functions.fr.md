@@ -58,6 +58,18 @@ filtres s'enchaînent de gauche à droite : `{{ name|lower|capitalize }}`. Une
 **Fonctions** intégrées courantes : `path()`, `url()`, `asset()`, `range()`,
 `max()`, `min()`, `random()`, `include()`, `dump()`, `constant()`, `cycle()`.
 
+```twig
+{{ path('home') }} {{ url('home') }}       {# relative vs absolute route URL #}
+<img src="{{ asset('img/logo.png') }}">    {# public asset path #}
+{{ max(1, 5) }} {{ min(1, 5) }}            {# 5 and 1 #}
+{{ random(['a', 'b', 'c']) }}              {# random element #}
+{{ range(0, 6, 2)|join(',') }}             {# 0,2,4,6 #}
+{{ include('partials/_card.html.twig') }}  {# render another template inline #}
+{{ dump(user) }}                           {# debug output (dev only) #}
+{{ constant('App\\Entity\\Post::DRAFT') }} {# read a PHP constant #}
+{{ cycle(['odd', 'even'], loop.index0) }}  {# alternate values by index #}
+```
+
 !!! question "Predict first"
     Votre filtre personnalisé retourne la chaîne `<b>x</b>`, mais la page affiche
     le texte littéral `<b>x</b>` au lieu du gras. Pourquoi — et quelle option
@@ -76,6 +88,17 @@ Les filtres et fonctions sont fournis par des **extensions Twig** —
 bridge Symfony (`RoutingExtension` pour `path`/`url`, `AssetExtension` pour
 `asset`, `TranslationExtension` pour `trans`). Chacun est enregistré comme objet
 `Twig\TwigFilter` ou `Twig\TwigFunction`.
+
+```php
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+
+// every filter/function is a named callable wrapped in one of these objects
+$date  = new TwigFilter('date', $formatDate);      // CoreExtension: 'date', 'merge', 'default'…
+$path  = new TwigFunction('path', $generatePath);  // RoutingExtension: path()/url()
+$asset = new TwigFunction('asset', $resolveAsset); // AssetExtension: asset()
+$trans = new TwigFilter('trans', $translate);      // TranslationExtension: trans
+```
 
 ```mermaid
 flowchart LR

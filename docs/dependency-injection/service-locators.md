@@ -58,6 +58,18 @@ access and caches it; `has($id)` checks membership. Because the set is declared 
 compile time, the container knows exactly which services the locator can reach —
 they are *not* removed as "unused", and each is created only if actually requested.
 
+```php
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
+
+/** @var ServiceLocator $locator — implements PSR-11 ContainerInterface */
+$locator instanceof ContainerInterface; // true
+
+$locator->has('stripe');                // has($id): membership, builds nothing
+$gateway = $locator->get('stripe');     // get($id): built on FIRST access
+$same = $locator->get('stripe');        // cached — same instance returned
+```
+
 ### Locator vs injecting everything
 
 Injecting all candidate services eagerly instantiates them, even the ones you never

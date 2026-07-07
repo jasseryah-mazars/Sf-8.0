@@ -188,6 +188,19 @@ un firewall possède **plus d'un** authenticator qui est aussi un entry point,
 vous **devez** en désigner un explicitement via `entry_point:` dans
 `security.yaml`, sinon le container lève une exception.
 
+```php
+// AuthenticationEntryPointInterface decides how to START authentication;
+// with >1 candidate, pick one in security.yaml: firewalls.api.entry_point: App\Security\ApiEntryPoint
+final class ApiEntryPoint implements AuthenticationEntryPointInterface
+{
+    public function start(Request $request, ?AuthenticationException $authException = null): Response
+    {
+        // API style: 401 with a WWW-Authenticate challenge (a form would redirect instead)
+        return new Response(null, 401, ['WWW-Authenticate' => 'Bearer']);
+    }
+}
+```
+
 ### Null behavior
 
 Avant qu'un authenticator ne s'exécute — et indéfiniment sur une request

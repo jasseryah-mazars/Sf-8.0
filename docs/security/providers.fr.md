@@ -101,6 +101,16 @@ $fresh = $provider->refreshUser($sessionUser); // may throw UnsupportedUserExcep
 | Chain | `chain` | Essayer plusieurs providers dans l'ordre |
 | Custom | id de service | N'importe quel stockage (LDAP, API, fichier) |
 
+```yaml
+# config/packages/security.yaml — one provider per config key
+security:
+    providers:
+        backup_users: { memory: { users: { admin: { password: '...', roles: [ROLE_ADMIN] } } } }
+        main_users:   { entity: { class: App\Entity\User, property: email } }
+        api_users:    { id: App\Security\ApiUserProvider }        # custom service id
+        all_users:    { chain: { providers: [main_users, backup_users] } }
+```
+
 Le provider `entity` de Doctrine est **hors périmètre** à ce stade ; sachez
 seulement qu'il existe et charge les users depuis un repository/une propriété.
 
@@ -111,6 +121,19 @@ Si un provider implémente aussi
 (`upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword)`),
 le `PasswordMigratingListener` peut re-hacher un mot de passe de manière
 transparente lors d'un login réussi (voir [Password Hashers](password-hashers.md)).
+
+```php
+final class ApiUserProvider implements UserProviderInterface, PasswordUpgraderInterface
+{
+    // Called by PasswordMigratingListener after a successful login with a legacy hash
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        $this->client->storePasswordHash($user->getUserIdentifier(), $newHashedPassword);
+    }
+
+    // ... loadUserByIdentifier(), refreshUser(), supportsClass()
+}
+```
 
 ### Null behavior
 

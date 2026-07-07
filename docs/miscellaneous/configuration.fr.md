@@ -40,6 +40,17 @@ Trois composants distincts se rangent sous « configuration » :
 - **ExpressionLanguage** — un petit moteur d'expressions cloisonné, utilisé partout dans
   Symfony (sécurité, conditions de routing, définitions de services, validation).
 
+```php
+// Config: validate raw arrays against a bundle Configuration schema
+$config = (new Processor())->processConfiguration(new Configuration(), $rawConfigs);
+
+// DotEnv: load the .env* cascade into environment variables
+(new Dotenv())->loadEnv(__DIR__.'/.env');
+
+// ExpressionLanguage: evaluate a small sandboxed rule
+$allowed = (new ExpressionLanguage())->evaluate('user.age >= 18', ['user' => $user]);
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -60,6 +71,28 @@ configuration et les valide contre cet arbre, en appliquant valeurs par défaut,
 normalisation et contraintes. Types de nœuds : `arrayNode`, `scalarNode`, `booleanNode`,
 `integerNode`, `enumNode`, avec `->isRequired()`, `->defaultValue()`,
 `->cannotBeEmpty()`, `->validate()->ifTrue()->thenInvalid()`.
+
+```php
+// Inside ConfigurationInterface::getConfigTreeBuilder()
+$tb = new TreeBuilder('acme');
+$tb->getRootNode()
+    ->children()
+        ->scalarNode('endpoint')->isRequired()->cannotBeEmpty()->end()
+        ->integerNode('timeout')->defaultValue(30)->end()
+        ->booleanNode('enabled')->defaultValue(true)->end()
+        ->enumNode('mode')->values(['sync', 'async'])->end()
+        ->arrayNode('servers')->scalarPrototype()->end()->end()
+        ->scalarNode('dsn')
+            ->validate()
+                ->ifTrue(fn ($v) => !str_contains((string) $v, '://'))
+                ->thenInvalid('Invalid DSN %s.')
+            ->end()
+        ->end()
+    ->end();
+
+// Processor merges every source, applies defaults and validates
+$config = (new Processor())->processConfiguration($configuration, $rawConfigs);
+```
 
 ```mermaid
 flowchart LR

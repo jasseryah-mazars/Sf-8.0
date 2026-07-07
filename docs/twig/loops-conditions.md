@@ -160,6 +160,15 @@ Iterating `null` is safe: `{% for x in items %}` when `items` is `null` runs
 error in lenient mode. That makes `for … else` the natural guard for a
 possibly-null collection; you rarely need a wrapping `{% if items %}`.
 
+```twig
+{# items is null → zero iterations, straight to else — no wrapping if needed #}
+{% for x in items %}
+    {{ x }}
+{% else %}
+    <p>Nothing to show.</p>
+{% endfor %}
+```
+
 In conditions, keep the three tests distinct:
 
 - `x is defined` — the variable exists at all (undefined ≠ null).
@@ -170,6 +179,13 @@ The trap: `{% if items %}` treats `null`, `0` and `[]` alike as falsy, so use
 `is null` when you must tell "no value" apart from "empty list". Combine with
 `is defined` when a variable may be missing entirely:
 `{% if x is defined and x is not null %}`.
+
+```twig
+{% if items %}truthy{% endif %}             {# falsy for null, 0 and [] alike #}
+{% if items is null %}no value{% endif %}   {# "no value" only #}
+{% if items is empty %}nothing{% endif %}   {# null, false, 0, '', [] #}
+{% if x is defined and x is not null %}{{ x }}{% endif %}  {# may be missing entirely #}
+```
 
 !!! note "Null in real life"
     A null collection is an empty tour group: the guide has no one to walk through

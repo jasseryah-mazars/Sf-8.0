@@ -67,6 +67,21 @@ processes every definition with a `decorates` target. It:
 So all existing consumers transparently receive the decorator; the decorator
 holds the original behind `.inner`.
 
+```php
+use Symfony\Component\DependencyInjection\Reference;
+
+// What DecoratorServicePass does with a `decorates` target:
+$decorator = $containerBuilder->getDefinition(App\Mail\LoggingMailer::class);
+$decorator->setDecoratedService('mailer'); // YAML: decorates: 'mailer'
+
+// After the pass runs:
+// 1. the original is renamed to the inner id (decorator_id.inner):
+//    'App\Mail\LoggingMailer.inner' → the real implementation
+// 2. the decorator now owns the public id 'mailer'
+// 3. its '.inner' argument is rewritten to a Reference to the renamed original:
+new Reference('App\Mail\LoggingMailer.inner');
+```
+
 ```mermaid
 flowchart LR
     C["Consumer"] -->|before| O["mailer"]

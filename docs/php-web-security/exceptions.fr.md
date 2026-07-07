@@ -95,6 +95,18 @@ classDiagram
 Pour tout attraper, typez `\Throwable`. Attraper `\Exception` n'attrapera **pas**
 une `Error`.
 
+```php
+try {
+    strlen([]);                 // TypeError — Error branch, engine fault
+} catch (\Exception $e) {
+    // never reached: \Exception does not catch an Error
+} catch (\Throwable $t) {
+    // reached: \Throwable catches BOTH branches
+}
+
+throw new \InvalidArgumentException('bad'); // Exception branch (LogicException)
+```
+
 ### try / catch / finally
 
 `finally` s'exécute **toujours** — après un `catch` correspondant, après un throw

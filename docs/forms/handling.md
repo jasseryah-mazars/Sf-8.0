@@ -70,6 +70,21 @@ The handler:
 3. Guards `enctype` / oversized-POST (`post_max_size`) situations.
 4. Calls `$form->submit($data, clearMissing: $method !== 'PATCH')`.
 
+```php
+// FormInterface::handleRequest() delegates to a RequestHandlerInterface
+$form->handleRequest($request); // never reads $_POST directly
+
+// HttpFoundationRequestHandler (NativeRequestHandler without HttpFoundation):
+if ($request->getMethod() === $form->getConfig()->getMethod()) { // 'method' option
+    $data = array_replace_recursive(
+        $request->request->all()[$form->getName()] ?? [],  // fields
+        $request->files->all()[$form->getName()] ?? [],    // uploads
+    );
+    // (it also guards enctype and post_max_size oversized POSTs)
+    $form->submit($data, 'PATCH' !== $request->getMethod()); // clearMissing
+}
+```
+
 !!! note "Source reference"
     `HttpFoundationRequestHandler::handleRequest()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php).
@@ -87,6 +102,15 @@ Every field holds data in three shapes:
 Transformers convert between them — see [data transformers](data-transformers.md).
 `transform()` runs **model → view** (rendering); `reverseTransform()` runs
 **view → model** (submission).
+
+```php
+// transform(): model → view, when rendering
+$viewValue = $transformer->transform(new \DateTimeImmutable('2026-07-06'));
+// e.g. '2026-07-06' — a string ready for the HTML input
+
+// reverseTransform(): view → model, on submission
+$model = $transformer->reverseTransform('2026-07-06'); // \DateTimeImmutable
+```
 
 ```mermaid
 flowchart LR
