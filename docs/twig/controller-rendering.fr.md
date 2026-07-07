@@ -44,6 +44,14 @@ lui-même :
 controller ; `render()` l'exécute en **sous-request** et insère le contenu de la
 `Response` retournée.
 
+```twig
+{# controller() only builds a reference — nothing executes yet #}
+{% set ref = controller('App\\Controller\\CartController::summary', { max: 3 }) %}
+
+{# render() runs it as a sub-request and inlines the Response body #}
+{{ render(ref) }}
+```
+
 !!! question "Predict first"
     Vous livrez `render_esi(controller(...))` mais la production n'a **aucun**
     reverse proxy compatible ESI. Le fragment plante-t-il, se rend-il vide, ou
@@ -67,6 +75,19 @@ un **`FragmentRendererInterface`** par nom de stratégie :
 | `render(controller(...))` | `InlineFragmentRenderer` | sous-request immédiate, insérée |
 | `render_esi(controller(...))` | `EsiFragmentRenderer` | émet un tag `<esi:include>` |
 | `render_hinclude(...)` | `HIncludeFragmentRenderer` | émet un tag JS/hinclude |
+
+```php
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Symfony\Component\HttpKernel\Fragment\InlineFragmentRenderer;
+
+// FragmentHandler holds one FragmentRendererInterface per strategy name
+$handler = new FragmentHandler($requestStack, [new InlineFragmentRenderer($kernel)]);
+
+// what HttpKernelExtension does for {{ render(controller('C::m')) }}:
+$ref = new ControllerReference('App\\Controller\\NewsController::latest', ['max' => 3]);
+echo $handler->render($ref, 'inline');
+```
 
 ```mermaid
 flowchart LR

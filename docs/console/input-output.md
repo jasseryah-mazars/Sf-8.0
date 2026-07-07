@@ -43,6 +43,22 @@ On top sits **`Symfony\Component\Console\Style\SymfonyStyle`**, the recommended
 helper that wraps both into a consistent, styled API — the exam expects you to know
 it.
 
+```php
+// InputInterface: read what was typed
+$path  = $input->getArgument('path');     // positional value
+$force = $input->getOption('force');      // named value / flag
+$hasIt = $input->hasArgument('path');     // is it defined?
+$tty   = $input->isInteractive();         // can we prompt the user?
+
+// OutputInterface: write text
+$output->write('no newline');             // write()
+$output->writeln('with newline');         // writeln()
+
+// SymfonyStyle: the styled wrapper over both contracts
+$io = new SymfonyStyle($input, $output);
+$io->success('Done.');
+```
+
 !!! question "Predict first"
     You want progress messages on STDERR while piping data on STDOUT. Can you call
     `getErrorOutput()` on any `OutputInterface`?
@@ -66,6 +82,26 @@ standard Symfony look-and-feel (spacing, colored blocks). Key methods:
 | `progressBar()` / `progressStart/advance/finish` | Progress UI |
 | `ask()` / `askHidden()` / `confirm()` / `choice()` | Prompts |
 | `success()` / `warning()` / `error()` / `note()` / `caution()` | Result blocks |
+
+```php
+$io->title('Import');                          // heading
+$io->section('Validation');                    // sub-heading
+$io->text('Checking rows...');                 // paragraph
+$io->listing(['row 1', 'row 2']);              // bullet list
+$io->table(['Id', 'Name'], [[1, 'Ada']]);      // table(headers, rows)
+
+$io->progressStart(2);                         // progress UI
+$io->progressAdvance();
+$io->progressFinish();
+
+$answer = $io->ask('Name?', 'demo');           // prompts
+$secret = $io->askHidden('Password?');
+$ok     = $io->confirm('Proceed?', true);
+$env    = $io->choice('Env?', ['dev', 'prod']);
+
+$io->success('OK'); $io->warning('Careful');   // result blocks
+$io->error('Boom'); $io->note('FYI'); $io->caution('Danger');
+```
 
 The concrete CLI output is `Symfony\Component\Console\Output\ConsoleOutput`, which
 implements `ConsoleOutputInterface` and exposes **two streams**:

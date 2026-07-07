@@ -71,6 +71,17 @@ du `compile()`, il est **figé** en un `FrozenParameterBag` — après quoi les
 parameters sont en lecture seule. Un `%` de début/fin référence un parameter ; un
 pourcent littéral s'échappe en le doublant : `%%`.
 
+```php
+// ContainerBuilder starts with a mutable ParameterBag
+$container = new ContainerBuilder(new ParameterBag());
+$container->setParameter('app.ratio', 'ratio: 90%%'); // %% escapes a literal %
+
+$container->compile(); // freezes the bag
+
+$bag = $container->getParameterBag(); // ParameterBagInterface
+$bag instanceof FrozenParameterBag;   // true — read-only after compile()
+```
+
 ### Environment variables are lazy placeholders
 
 `%env(FOO)%` ne lit **pas** `$_ENV` à la compilation. Le compilateur le remplace
@@ -79,6 +90,15 @@ par un placeholder ; à l'exécution, le container le résout via
 variable d'env ne nécessite aucune reconstruction du cache. Les valeurs d'env
 peuvent provenir de vraies variables d'environnement, d'un fichier `.env` (via
 `symfony/dotenv`), ou des `secrets`.
+
+```yaml
+# config/services.yaml
+parameters:
+    # '%env(FOO)%' stays a placeholder at compile time — $_ENV is NOT read here.
+    app.foo: '%env(FOO)%'
+    # At runtime EnvVarProcessor resolves FOO from the real environment,
+    # from a .env file (loaded by symfony/dotenv), or from the secrets vault.
+```
 
 ### Env processors
 

@@ -161,6 +161,24 @@ ci-dessus. Le bug classique : `reverseTransform('')` qui lance le parseur sur un
 chaîne vide et déclenche une `TransformationFailedException` injustifiée sur un
 champ pourtant **optionnel**.
 
+```php
+public function transform(mixed $value): string
+{
+    if (null === $value) {
+        return '';   // display: empty widget — never return null here
+    }
+    // ... real conversion (as MinutesToClockTransformer does) ...
+}
+
+public function reverseTransform(mixed $value): ?int
+{
+    if ('' === $value || null === $value) {
+        return null; // submit: optional field — no TransformationFailedException
+    }
+    // ... parse only when non-empty ...
+}
+```
+
 !!! note "Null in real life"
     `null`/`''` = un bordereau vide au bureau de change — rendez un reçu vide,
     n'essayez pas de convertir zéro devise pour le tamponner « invalide ».

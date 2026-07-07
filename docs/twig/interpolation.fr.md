@@ -85,9 +85,23 @@ opérande en chaîne, d'où `1 ~ 1` donnant `"11"` tandis que `1 + 1` vaut `2`. 
 se situe *en dessous* de l'arithmétique dans la précédence (voir
 [Syntax](syntax.md)), donc `1 + 1 ~ "x"` vaut `"2x"`.
 
+```twig
+{# operands are cast to string, like PHP's "." operator #}
+{{ 1 ~ 1 }}         {# "11" #}
+{{ 1 + 1 }}         {# 2 — arithmetic #}
+{{ 1 + 1 ~ 'x' }}   {# ~ binds below +: (1 + 1) ~ 'x' → "2x" #}
+```
+
 `format` et son cousin **`replace`** vivent dans `Twig\Extension\CoreExtension`.
 `format` appelle le `vsprintf` de PHP sous le capot ; `replace` fait une
 substitution par clés : `{{ "%name%"|replace({ '%name%': n }) }}`.
+
+```twig
+{# both filters are registered by Twig\Extension\CoreExtension #}
+{{ "%s has %d points"|format(user, points) }}      {# format → PHP vsprintf #}
+{{ "Price: %.2f"|format(9.5) }}                    {# Price: 9.50 #}
+{{ "Hello %name%"|replace({ '%name%': name }) }}   {# replace → keyed substitution #}
+```
 
 ```mermaid
 flowchart LR

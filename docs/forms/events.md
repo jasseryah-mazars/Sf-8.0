@@ -36,6 +36,14 @@ fields based on data, sanitise raw input, or react after binding. All five
 constants live on `Symfony\Component\Form\FormEvents`; every listener receives a
 `Symfony\Component\Form\FormEvent`.
 
+```php
+// All five constants live on FormEvents; every listener receives a FormEvent
+$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+    $data = $event->getData();  // shape depends on the event (raw array here)
+    $form = $event->getForm();  // the form being built/submitted
+});
+```
+
 Two distinct sequences fire at two different times:
 
 | Phase | Sequence |
@@ -119,6 +127,21 @@ The killer use case: **change the form's fields based on data**.
 
 You can only add/remove fields **before** they are bound — that is why these two
 "PRE" events are the right hooks, not `SUBMIT`/`POST_SUBMIT`.
+
+```php
+// Depends on the initial object -> PRE_SET_DATA
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $e): void {
+    $e->getForm()->add('vatNumber', TextType::class);   // form still mutable
+});
+
+// Depends on the submitted value -> PRE_SUBMIT (raw array)
+$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $e): void {
+    $country = $e->getData()['country'] ?? null;
+    $e->getForm()->add('city', ChoiceType::class, ['choices' => []]);
+});
+
+// SUBMIT / POST_SUBMIT: too late — a field added here is never bound
+```
 
 ### Listener vs subscriber
 

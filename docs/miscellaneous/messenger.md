@@ -406,6 +406,12 @@ returns `null` when the handler genuinely returned nothing. The nullsafe `?->`
 guards the first case; don't confuse "not handled here" with "handled, returned
 null".
 
+```php
+$envelope = $bus->dispatch(new GetInvoiceTotal(orderId: 7)); // always an Envelope
+$stamp = $envelope->last(HandledStamp::class); // null: no handler ran in this process
+$total = $stamp?->getResult();                 // null may also mean "handler returned null"
+```
+
 !!! note "Null in real life"
     Null here is like a delivery receipt with the "reply" line left blank — the
     letter was delivered (you hold the envelope), the recipient just didn't send

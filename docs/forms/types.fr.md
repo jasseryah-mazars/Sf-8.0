@@ -44,6 +44,22 @@ comportements et les options s'accumulent le long de la chaîne.
 La racine commune est `Symfony\Component\Form\Extension\Core\Type\FormType`, et
 la base commune des *champs* est `TextType` pour les entrées scalaires.
 
+```php
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType; // built-in
+use Symfony\Component\Form\Extension\Core\Type\FormType;   // common root
+use Symfony\Component\Form\Extension\Core\Type\TextType;   // scalar field base
+
+// A custom type extends AbstractType and inherits behaviour via getParent()
+final class VatNumberType extends AbstractType
+{
+    public function getParent(): string
+    {
+        return TextType::class; // an FQCN string, never an instance
+    }
+}
+```
+
 !!! question "Predict first"
     Le `getParent()` de votre type personnalisé retourne `TextType::class`. Dans
     quel ordre s'exécutent les `configureOptions`/`buildForm` du parent et de
@@ -72,6 +88,15 @@ flowchart TD
 un type intégré pour hériter de ses `buildForm`, `buildView`, transformers et
 options — vous n'écrivez que le delta.
 
+```php
+public function getParent(): string
+{
+    return TextType::class; // default is FormType::class
+}
+// Inherits TextType's buildForm(), buildView(), transformers and
+// options — this type only writes the delta on top.
+```
+
 ### `ResolvedFormType` — how a type is "resolved"
 
 Un type brut n'est pas utilisable seul. Le
@@ -86,6 +111,17 @@ Lors de la construction d'un form, le type résolu invoque, **parent → enfant*
 `configureOptions` (fusionné dans un seul `OptionsResolver`), puis `buildForm`,
 puis à la création de la vue `buildView` et `finishView`. Les hooks de chaque
 type extension s'exécutent **après** ceux du type lui-même à chaque niveau.
+
+```php
+// The FormRegistry wraps the raw type into a ResolvedFormType
+$resolved = $registry->getType(VatNumberType::class);
+
+// Build order, parent → child (type extensions after the type, each level):
+// 1. configureOptions() — merged into one OptionsResolver
+// 2. buildForm()        — fields, listeners
+// 3. buildView() then finishView() — when the view is created
+$builder = $resolved->createBuilder($factory, 'vat');
+```
 
 !!! note "Source reference"
     `ResolvedFormType::buildForm()` et `FormRegistry::resolveType()` —

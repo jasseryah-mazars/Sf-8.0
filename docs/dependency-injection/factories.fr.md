@@ -102,6 +102,13 @@ d'être une expression via `expression:` en YAML, évaluée au build/runtime ave
 variables connues (`service('id')`, `parameter('x')`). À utiliser avec parcimonie —
 c'est plus difficile à déboguer que du PHP classique.
 
+```yaml
+services:
+    # Expression factory: service('id') fetches a service, parameter('x') a parameter
+    App\Payment\Gateway:
+        factory: '@=service("App\\Payment\\GatewayFactory").create(parameter("app.currency"))'
+```
+
 ### Attributes
 
 Sur un paramètre de constructeur, vous pouvez demander une valeur produite par une
@@ -110,6 +117,21 @@ pointer un service entier vers une factory avec l'attribut de service
 `#[Autowire]`. Il n'existe **pas d'attribut `#[Factory]` dédié** — les factories se
 configurent via `#[Autowire(factory:)]` ou la config YAML/PHP. (À ne pas confondre
 avec `#[AsAlias]`, qui crée un alias, pas une construction.)
+
+```php
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+final class Checkout
+{
+    public function __construct(
+        // There is NO #[Factory] attribute — use #[Autowire(factory: ...)]
+        #[Autowire(factory: [ClientFactory::class, 'create'])]
+        private readonly Client $client,
+    ) {}
+}
+
+// #[AsAlias] only makes a class the alias of an existing id — it builds nothing
+```
 
 !!! note "Source reference"
     La gestion des factories vit dans `Definition::setFactory()` et est dumpée par
@@ -131,6 +153,26 @@ produit une chaîne vide quand la variable n'est pas définie, donc testez-la
 explicitement plutôt que de supposer une valeur. Gardez les types de retour des
 factories explicites (`: Gateway` vs `: ?Gateway`) pour que l'intention soit
 appliquée.
+
+```php
+final class GatewayFactory
+{
+    public function __construct(
+        #[Autowire(env: 'GATEWAY_DSN')] private readonly string $dsn, // '' when unset
+    ) {}
+
+    // Explicit return type — `: ?Gateway` (not `: Gateway`) says null is allowed
+    public function create(): ?Gateway
+    {
+        return $this->dsn !== '' ? new Gateway($this->dsn) : null;
+    }
+}
+
+// Consumer side: nullable type + guarded calls
+public function __construct(private readonly ?Gateway $gateway) {}
+
+$receipt = $this->gateway?->charge($amount) ?? Receipt::skipped(); // ?-> and ?? guards
+```
 
 !!! note "Null in real life"
     Un plat à la commande qui revient en assiette vide (la factory retourne null)

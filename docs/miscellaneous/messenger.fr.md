@@ -54,6 +54,25 @@ Tout ce qui circule dans le bus est enveloppé dans une **`Envelope`** décorée
 de **stamps** (des métadonnées : quel transport, quand livrer, les résultats, le
 nombre de tentatives…).
 
+```php
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\MessageBusInterface;
+
+final readonly class SmsNotification           // Message: a plain DTO
+{
+    public function __construct(public string $content) {}
+}
+
+#[AsMessageHandler]
+final class SmsNotificationHandler             // Handler: acts on one message type
+{
+    public function __invoke(SmsNotification $message): void { /* ... */ }
+}
+
+// Bus: dispatch() wraps the DTO in an Envelope (stamps carry the metadata)
+$envelope = $bus->dispatch(new SmsNotification('hello'));
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
