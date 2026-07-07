@@ -8,6 +8,8 @@ is built), then layers features on top so no concept is used before it is taught
     Follow the stages top to bottom. Each stage links to its topic-area index.
     Difficulty is ★ (easy) to ★★★ (hard). **Revision priority** tells you what to
     drill last-minute. Two tracks (Advanced / Expert) are described at the bottom.
+    After each stage, self-assess with the [Exam Simulator](exam-simulator.md) —
+    filter it to the topic you just finished before moving on.
 
 ## Dependency graph
 
@@ -55,6 +57,24 @@ flowchart TD
 - **High / Medium** — proportional to exam weight. HTTP Caching is *Medium* due to
   its reduced weighting in the Symfony 8 exam.
 
+## Practice & self-assessment
+
+Study is only half the loop — test yourself as you go. The platform ships a full
+practice toolchain over a **1,179-question bank** covering all 154 sub-topics:
+
+| Tool | Use it for | When |
+|---|---|---|
+| [Exam Simulator](exam-simulator.md) — **Practice mode** | Instant feedback + explanations, filtered by topic/difficulty | After each stage above |
+| [Exam Simulator](exam-simulator.md) — **Exam mode** | Real exam shape: 75 questions, 90 min, hidden answers, scored report | Once a track is ~80% done |
+| [Chapter Exams](exams/index.md) | Fixed per-area sets to confirm a topic is solid | End of each stage |
+| [Mock Exams A/B/C](revision/mock-exam.md) | Full-length dry runs before the real thing | Final week |
+| [Revision Hub](revision/index.md) | Cheat sheets, traps, flashcards, study planner | Last-minute drilling |
+
+!!! tip "Exam format reminder"
+    Every question is **select-only** — True/False, Single answer, or Multiple
+    choice. You never write text or code. The simulator mirrors this exactly, so
+    practising in Exam mode also trains your pacing (≈72 seconds per question).
+
 ## Two tracks
 
 === "Advanced track"
@@ -88,7 +108,7 @@ flowchart TD
 
 ---
 
-<small>Related: [Exam Guide](exam-guide/index.md) · [Revision Hub](revision/index.md) · [Home](index.md)</small>
+<small>Related: [Exam Guide](exam-guide/index.md) · [Exam Simulator](exam-simulator.md) · [Revision Hub](revision/index.md) · [Home](index.md)</small>
 
 ## Official References
 
