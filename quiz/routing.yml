@@ -1860,3 +1860,156 @@ categories:
           The profiler's Routing panel shows the matched _route and its parameters for
           the current request, so you do not need dump() calls to find them.
         documentation: "https://symfony.com/doc/current/routing.html#debugging-routes"
+  - name: "Routing — Multiple Choice Drills"
+    questions:
+      - id: "ROUT-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "routing/requirements"
+        concepts: ["inline-requirements", "compiled-regex", "default-pattern"]
+        syllabus: "Routing → Restrict URL parameters"
+        question: "Which of the following statements are true about route parameter requirements? (select all that apply)"
+        answers:
+          - value: 'The inline syntax {id<\d+>} is exactly equivalent to requirements: {id: ''\d+''}'
+            correct: true
+          - value: "A URL that violates a requirement simply fails to match that route (typically ending in a 404), never a 400 from routing"
+            correct: true
+          - value: 'A placeholder without a requirement matches [^/]+ by default, so it cannot span path segments'
+            correct: true
+          - value: 'Requirement regexes must be anchored manually with ^ and $ to work'
+            correct: false
+          - value: "A failing requirement makes the router return a 400 Bad Request"
+            correct: false
+        explanation: >-
+          Inline <...> is syntactic sugar for a requirements entry, and because the
+          requirement is compiled into the route regex a violating value just does not
+          match — matching moves on and usually ends in a 404. The default token
+          pattern is [^/]+ (use .+ to cross slashes). Requirements are implicitly
+          anchored, so adding ^/$ is wrong, and routing never produces a 400 for a bad
+          parameter.
+        documentation: "https://symfony.com/doc/current/routing.html#parameters-validation"
+      - id: "ROUT-MC-02"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "routing/methods"
+        concepts: ["405", "head", "method-override"]
+        syllabus: "Routing → HTTP methods matching"
+        question: "Which of the following statements are true about HTTP method matching in Symfony routing? (select all that apply)"
+        answers:
+          - value: "A request whose path matches but whose verb is not allowed gets a 405 Method Not Allowed with an Allow header"
+            correct: true
+          - value: "A route declaring methods: ['GET'] also matches HEAD requests automatically"
+            correct: true
+          - value: "A scheme mismatch on an https-only route also returns a 405"
+            correct: false
+          - value: "A form's _method field overrides the HTTP method for routing by default, with no configuration"
+            correct: false
+        explanation: >-
+          When host and path match but the verb does not, the matcher throws
+          MethodNotAllowedException, surfaced as a 405 listing the allowed verbs, and
+          GET routes match HEAD because HttpKernel serves HEAD as a bodyless GET. A
+          scheme mismatch is handled differently — the redirectable matcher redirects
+          to the correct scheme — and the _method override only works after calling
+          Request::enableHttpMethodParameterOverride().
+        documentation: "https://symfony.com/doc/current/routing.html#matching-http-methods"
+      - id: "ROUT-MC-03"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "routing/url-generation"
+        concepts: ["reference-types", "query-string", "request-context"]
+        syllabus: "Routing → Generate URLs"
+        question: "Which of the following statements are true about URL generation? (select all that apply)"
+        answers:
+          - value: "The default reference type is ABSOLUTE_PATH, producing a root-relative path like /blog/42"
+            correct: true
+          - value: "Parameters that do not correspond to a route placeholder are appended to the generated URL as a query string"
+            correct: true
+          - value: "The reference-type constants (ABSOLUTE_URL, NETWORK_PATH, ...) are defined on UrlGeneratorInterface"
+            correct: true
+          - value: "The Twig functions path() and url() are interchangeable — both emit absolute URLs"
+            correct: false
+          - value: "In a console command, ABSOLUTE_URL automatically picks up the production host without any configuration"
+            correct: false
+        explanation: >-
+          generateUrl() defaults to ABSOLUTE_PATH, left-over (non-placeholder)
+          parameters become the ?key=value query string, and the constants live on
+          UrlGeneratorInterface. In Twig, path() maps to ABSOLUTE_PATH while url()
+          maps to ABSOLUTE_URL, and in CLI there is no request, so absolute URLs fall
+          back to http://localhost unless framework.router.default_uri is configured.
+        documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+      - id: "ROUT-MC-04"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "routing/special-attributes"
+        concepts: ["_route", "_format", "_fragment"]
+        syllabus: "Routing → Special internal attributes"
+        question: "Which of the following statements are true about the special underscore routing attributes? (select all that apply)"
+        answers:
+          - value: "_route and _route_params are read-only outputs injected by the matcher into the request attributes"
+            correct: true
+          - value: "_format sets the request format via Request::setRequestFormat(), influencing the response Content-Type"
+            correct: true
+          - value: "_fragment only takes effect during URL generation (appended as #fragment); it plays no role in matching"
+            correct: true
+          - value: "Setting _route in a route's defaults changes what $request->attributes->get('_route') returns"
+            correct: false
+          - value: "stateless: true hard-blocks all session usage in production"
+            correct: false
+        explanation: >-
+          The matcher injects _route/_route_params and RouterListener copies them into
+          request attributes for you to read, _format drives content negotiation and
+          the default Content-Type, and _fragment is honoured only by the generator.
+          You never set _route yourself, and stateless: true is an assertion that
+          raises an UnexpectedSessionUsageException warning in debug — not a hard
+          production block.
+        documentation: "https://symfony.com/doc/current/routing.html#special-parameters"
+      - id: "ROUT-MC-05"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "routing/locale"
+        concepts: ["localized-routes", "accept-language", "_locale"]
+        syllabus: "Routing → User's locale guessing & localized routes"
+        question: "Which of the following statements are true about localized routes and locale guessing? (select all that apply)"
+        answers:
+          - value: "A #[Route] whose path is a locale => path map expands into one route per locale, each carrying the matching _locale default"
+            correct: true
+          - value: "Symfony does not guess the locale from the Accept-Language header by default; that behaviour is opt-in"
+            correct: true
+          - value: "framework.default_locale takes precedence over a _locale parameter matched in the URL"
+            correct: false
+          - value: "generateUrl() always uses the default locale unless you rebuild the router"
+            correct: false
+        explanation: >-
+          Localized path arrays are expanded at load time into per-locale routes with
+          a _locale default, and Accept-Language parsing requires opting in via
+          set_locale_from_accept_language (or reading getPreferredLanguage()
+          yourself). The precedence is matched _locale first, then the sticky session
+          locale, then default_locale, and generation reuses the current request's
+          locale unless you pass _locale explicitly.
+        documentation: "https://symfony.com/doc/current/routing.html#localized-routes-i18n"
+      - id: "ROUT-MC-06"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "routing/host-matching"
+        concepts: ["host-placeholders", "match-order", "cross-host-generation"]
+        syllabus: "Routing → Domain name matching"
+        question: "Which of the following statements are true about host (domain) matching? (select all that apply)"
+        answers:
+          - value: 'A host placeholder like {tenant} matches [^.]+ by default — a single label that cannot contain dots'
+            correct: true
+          - value: "The host regex is tested before the path regex when matching a route"
+            correct: true
+          - value: "Generating a URL for a route on a different host produces an absolute (or network) URL automatically"
+            correct: true
+          - value: "Host placeholders cannot have requirements or defaults; only path placeholders support them"
+            correct: false
+          - value: "A path-only (relative) URL can switch subdomains as long as the route declares a host"
+            correct: false
+        explanation: >-
+          Host tokens use the dot as separator, so they default to [^.]+ instead of
+          [^/]+, and matchCollection() checks the compiled host regex before even
+          trying the path. Because a path-only URL cannot change host, the generator
+          upgrades cross-host links to absolute/network URLs. Host placeholders obey
+          the same requirements/defaults rules as path placeholders — that is how a
+          missing subdomain can default to www.
+        documentation: "https://symfony.com/doc/current/routing.html#sub-domain-routing"

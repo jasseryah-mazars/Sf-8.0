@@ -2291,3 +2291,177 @@ categories:
           known strings. === does not fix the timing leak, and md5 is broken.
           Misconception: treating password checking as a plain string comparison.
         documentation: "https://www.php.net/manual/en/function.password-verify.php"
+  - name: "PHP & Web Security — Multiple Choice Drills"
+    questions:
+      - id: "PHP-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "php-web-security/closures"
+        concepts: ["use-capture", "arrow-functions", "closure-bind"]
+        syllabus: "PHP → Anonymous functions & closures"
+        question: "Which of the following statements are true about PHP anonymous functions and closures? (select all that apply)"
+        answers:
+          - value: "function () use ($x) {} captures $x by value at definition time; use (&$x) captures by reference"
+            correct: true
+          - value: "Arrow functions (fn) auto-capture the enclosing scope by value and cannot capture by reference"
+            correct: true
+          - value: "Closure::bind() mutates the closure it receives and returns void"
+            correct: false
+          - value: "An arrow function body may contain multiple statements separated by semicolons"
+            correct: false
+        explanation: >-
+          A use clause copies the variable when the closure is defined (add & for a
+          live reference), and fn auto-captures by value only — it has no use list and
+          no by-reference form. Closure::bind() is static and returns a new closure,
+          leaving the original untouched, and an arrow function is limited to a single
+          expression.
+        documentation: "https://www.php.net/manual/en/functions.anonymous.php"
+      - id: "PHP-MC-02"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "php-web-security/traits"
+        concepts: ["precedence", "conflict-resolution", "static-state"]
+        syllabus: "PHP → Traits"
+        question: "Which of the following statements are true about PHP traits? (select all that apply)"
+        answers:
+          - value: "Method precedence is: the class's own method beats a trait method, which beats an inherited parent method"
+            correct: true
+          - value: "Two used traits defining the same method cause a fatal error unless resolved with insteadof/as"
+            correct: true
+          - value: "A static property declared in a trait is a separate copy for each class that uses the trait"
+            correct: true
+          - value: "You can type-hint a parameter against a trait, just like against an interface"
+            correct: false
+          - value: "When a trait and the using class define the same method, the trait version wins"
+            correct: false
+        explanation: >-
+          Precedence is class > trait > parent, unresolved same-name methods from two
+          traits are fatal (fix with insteadof and/or as), and static trait state is
+          bound to each using class independently. Traits are not types — you cannot
+          type-hint or instanceof them — and a trait method never overrides the using
+          class's own method.
+        documentation: "https://www.php.net/manual/en/language.oop5.traits.php"
+      - id: "PHP-MC-03"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "php-web-security/interfaces"
+        concepts: ["covariance", "contravariance", "instanceof"]
+        syllabus: "PHP → Interfaces"
+        question: "Which of the following statements are true about PHP interfaces and type variance? (select all that apply)"
+        answers:
+          - value: "Return types are covariant: an override may narrow the return type (Animal → Cat)"
+            correct: true
+          - value: "Parameter types are contravariant: an override may widen a parameter type"
+            correct: true
+          - value: "instanceof used on a non-object value returns false instead of throwing"
+            correct: true
+          - value: "A class can extend two classes as long as both are abstract"
+            correct: false
+          - value: "Intersection types (A&B) may combine interfaces with scalar types like int"
+            correct: false
+        explanation: >-
+          Variance follows Liskov substitution: overrides may narrow returns and widen
+          parameters (reversing either is a fatal error), and instanceof safely yields
+          false for non-objects. PHP has single class inheritance — only interfaces
+          can be multiply inherited — and intersection types accept only
+          class/interface names, never scalars.
+        documentation: "https://www.php.net/manual/en/language.oop5.variance.php"
+      - id: "PHP-MC-04"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "php-web-security/exceptions"
+        concepts: ["throwable", "finally", "error-vs-exception"]
+        syllabus: "PHP → Exception & error handling"
+        question: "Which of the following statements are true about PHP error and exception handling? (select all that apply)"
+        answers:
+          - value: "catch (\\Exception $e) does not catch a TypeError; you need \\Throwable (or an Error type) to catch engine errors"
+            correct: true
+          - value: "finally always executes, and a return inside finally overrides a return or throw from the try block"
+            correct: true
+          - value: "set_error_handler() is the mechanism that handles uncaught exceptions"
+            correct: false
+          - value: "DivisionByZeroError extends Exception, so catch (\\Exception) catches intdiv(1, 0)"
+            correct: false
+        explanation: >-
+          Error and Exception are separate branches under Throwable, so an Exception
+          catch block misses TypeError and friends, and finally runs on every exit
+          path — its return silently wins over the try block's outcome. Uncaught
+          exceptions are handled by set_exception_handler() (set_error_handler()
+          intercepts traditional warnings/notices), and DivisionByZeroError extends
+          Error, not Exception.
+        documentation: "https://www.php.net/manual/en/language.exceptions.php"
+      - id: "PHP-MC-05"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "php-web-security/spl"
+        concepts: ["generators", "iterator", "spl-object-storage"]
+        syllabus: "PHP → SPL"
+        question: "Which of the following statements are true about the SPL and generators? (select all that apply)"
+        answers:
+          - value: "A generator is a lazy, single-use Iterator: once fully consumed it cannot be rewound"
+            correct: true
+          - value: "SplObjectStorage keys entries by object identity and can attach data to each object"
+            correct: true
+          - value: "Iterator requires five methods (current/key/next/rewind/valid), while IteratorAggregate only requires getIterator()"
+            correct: true
+          - value: "SplPriorityQueue guarantees stable FIFO ordering among items with equal priority"
+            correct: false
+          - value: "Implementing ArrayAccess is what makes count($obj) work"
+            correct: false
+        explanation: >-
+          Generators produce values lazily and cannot be rewound after consumption,
+          SplObjectStorage maps data by object identity (something plain arrays cannot
+          do), and IteratorAggregate delegates iteration through a single
+          getIterator() method versus Iterator's five. SplPriorityQueue ordering among
+          equal priorities is not stable, and count($obj) requires Countable —
+          ArrayAccess only enables the $obj[$k] bracket syntax.
+        documentation: "https://www.php.net/manual/en/book.spl.php"
+      - id: "PHP-MC-06"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "php-web-security/oop"
+        concepts: ["late-static-binding", "clone", "magic-methods"]
+        syllabus: "PHP → Object-Oriented Programming"
+        question: "Which of the following statements are true about the PHP object model? (select all that apply)"
+        answers:
+          - value: "static:: resolves to the called class at runtime (late static binding), while self:: is fixed at compile time to the declaring class"
+            correct: true
+          - value: "clone performs a shallow copy: object-typed properties still reference the same objects unless __clone() deep-copies them"
+            correct: true
+          - value: "__get() is invoked on every property read, even for accessible public properties"
+            correct: false
+          - value: "A constructor parameter typed callable can be promoted to a property like any other type"
+            correct: false
+        explanation: >-
+          Late static binding makes new static() subclass-safe where new self() would
+          pin the parent class, and clone copies references shallowly until __clone()
+          duplicates them. __get() fires only for inaccessible or undefined properties
+          (accessible ones are read directly), and callable is not a valid property
+          type, so it cannot be used in constructor promotion.
+        documentation: "https://www.php.net/manual/en/language.oop5.late-static-bindings.php"
+      - id: "PHP-MC-07"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "php-web-security/web-security"
+        concepts: ["session-fixation", "cookie-flags", "password-hash"]
+        syllabus: "Web Security → Fundamentals"
+        question: "Which of the following statements are true about web security fundamentals? (select all that apply)"
+        answers:
+          - value: "The HttpOnly cookie flag prevents JavaScript from reading the session cookie, mitigating cookie theft via XSS"
+            correct: true
+          - value: "Regenerating the session id on login is the primary defence against session fixation"
+            correct: true
+          - value: "password_hash() embeds the generated salt in its output, so you must not prepend your own"
+            correct: true
+          - value: "HTML-escaping a value is sufficient protection when it is printed inside a <script> block or a URL"
+            correct: false
+          - value: "A valid CSRF token proves the user is authenticated"
+            correct: false
+        explanation: >-
+          HttpOnly blocks script access to cookies, a fresh session id at
+          authentication invalidates any attacker-planted id, and password_hash()
+          stores the salt inside the returned hash. Escaping must match the output
+          context — HTML entities do not neutralise script or URL contexts — and a
+          CSRF token only proves the request originated from your own form/session,
+          not who the user is.
+        documentation: "https://symfony.com/doc/current/security.html"

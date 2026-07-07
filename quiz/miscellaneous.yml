@@ -2068,3 +2068,177 @@ categories:
           (or directories()). name()/in() do not restrict the entry type. Iterated
           results are Finder SplFileInfo objects.
         documentation: "https://symfony.com/doc/current/components/finder.html"
+  - name: "Miscellaneous — Multiple Choice Drills"
+    questions:
+      - id: "MISC-MC-01"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "miscellaneous/cache"
+        concepts: ["cache-contracts", "tags", "stampede-protection"]
+        syllabus: "Miscellaneous → Cache"
+        question: "Which of the following statements are true about the Symfony Cache component? (select all that apply)"
+        answers:
+          - value: "CacheInterface::get($key, $callback) runs the callback only on a cache miss and stores its return value"
+            correct: true
+          - value: "Cache tags require a tag-aware pool (TagAwareAdapter or tags: true); calling $item->tag() on a plain pool does not work"
+            correct: true
+          - value: "If the callback returns null, that null is stored and later calls return it as a hit until it expires"
+            correct: true
+          - value: "PSR-16 (SimpleCache) supports cache tags and deferred saves just like PSR-6"
+            correct: false
+          - value: "CacheInterface::get() returns null to signal a cache miss"
+            correct: false
+        explanation: >-
+          The contracts get() computes-and-stores on miss, tags only work on a
+          TagAwareAdapter/pool configured with tags: true, and a stored null is a
+          valid cached value that counts as a hit. PSR-16 has no tags and no deferred
+          saves (those are PSR-6 features), and get() never returns null to mean
+          "miss" — on a miss it runs the callback and returns its result.
+        documentation: "https://symfony.com/doc/current/cache.html"
+      - id: "MISC-MC-02"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "miscellaneous/clock"
+        concepts: ["clock-interface", "mock-clock", "date-point"]
+        syllabus: "Miscellaneous → Clock"
+        question: "Which of the following statements are true about the Symfony Clock component? (select all that apply)"
+        answers:
+          - value: "ClockInterface::now() returns an immutable DatePoint (a \\DateTimeImmutable subclass), never a mutable \\DateTime"
+            correct: true
+          - value: "MockClock::sleep() advances virtual time instantly, with no real delay — ideal for TTL/expiry tests"
+            correct: true
+          - value: "The framework autowires MockClock as the default clock in the dev environment"
+            correct: false
+          - value: "MonotonicClock is meant for reading the wall-clock time and is affected by system clock (NTP) adjustments"
+            correct: false
+        explanation: >-
+          now() is typed to return a \DateTimeImmutable and yields a DatePoint, and
+          MockClock advances time virtually so tests never wait. The default framework
+          clock is NativeClock in every environment (tests swap in MockClock
+          themselves), and MonotonicClock is for measuring durations precisely because
+          it is immune to system clock changes.
+        documentation: "https://symfony.com/doc/current/components/clock.html"
+      - id: "MISC-MC-03"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "miscellaneous/lock"
+        concepts: ["acquire", "ttl", "stores"]
+        syllabus: "Miscellaneous → Lock"
+        question: "Which of the following statements are true about the Symfony Lock component? (select all that apply)"
+        answers:
+          - value: "acquire() is non-blocking by default: it returns false immediately when the lock is already held"
+            correct: true
+          - value: "FlockStore and SemaphoreStore only guarantee mutual exclusion on a single machine"
+            correct: true
+          - value: "Locks have a TTL (300 seconds by default), and long jobs must call refresh() to extend it"
+            correct: true
+          - value: "acquire() throws a LockConflictedException whenever the lock is already held"
+            correct: false
+          - value: "A FlockStore is a safe choice to serialise a cron job across multiple servers"
+            correct: false
+        explanation: >-
+          The default acquire(false) returns a plain false when the resource is busy,
+          local stores (flock/semaphore) never protect across machines, and the TTL
+          expires mid-job unless refresh() extends it. Non-blocking acquire() does not
+          throw on contention (only blocking acquisition can end in
+          LockConflictedException), and multi-server exclusion needs a shared store
+          such as Redis or a database.
+        documentation: "https://symfony.com/doc/current/lock.html"
+      - id: "MISC-MC-04"
+        type: "multiple"
+        difficulty: "medium"
+        subchapter: "miscellaneous/mailer"
+        concepts: ["send-email-message", "embedded-images", "twig-bridge"]
+        syllabus: "Miscellaneous → Mailer"
+        question: "Which of the following statements are true about the Symfony Mailer and Mime components? (select all that apply)"
+        answers:
+          - value: "When SendEmailMessage is routed to an async Messenger transport, MailerInterface::send() queues the email instead of delivering it inline"
+            correct: true
+          - value: "Images embedded with embedFromPath() are referenced in the HTML body via a cid: reference"
+            correct: true
+          - value: "TemplatedEmail lives in the Symfony\\Component\\Mime namespace, so no Twig bridge is needed to render templates"
+            correct: false
+          - value: "The Mailer Envelope is just another name for the visible message headers"
+            correct: false
+        explanation: >-
+          With Messenger routing configured, send() dispatches a SendEmailMessage that
+          a worker delivers later, and embedded parts are addressed with cid: in the
+          HTML body. TemplatedEmail is part of the Twig bridge
+          (Symfony\Bridge\Twig\Mime), and the Envelope (sender/recipients used for the
+          SMTP conversation) is distinct from the message headers rendered in the
+          visible email.
+        documentation: "https://symfony.com/doc/current/mailer.html"
+      - id: "MISC-MC-05"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "miscellaneous/process"
+        concepts: ["escaping", "timeout", "must-run"]
+        syllabus: "Miscellaneous → Process"
+        question: "Which of the following statements are true about the Symfony Process component? (select all that apply)"
+        answers:
+          - value: "new Process(['git', 'log', $input]) auto-escapes each array element, so $input cannot inject shell syntax"
+            correct: true
+          - value: "The default process timeout is 60 seconds; setTimeout(null) disables it"
+            correct: true
+          - value: "mustRun() throws a ProcessFailedException when the process exits with a non-zero code"
+            correct: true
+          - value: "Process::fromShellCommandline() escapes interpolated variables, making it safe with untrusted input"
+            correct: false
+          - value: "run() returns the process standard output as a string"
+            correct: false
+        explanation: >-
+          The array constructor escapes every argument, the timeout defaults to 60
+          seconds (nullable to disable), and mustRun() throws ProcessFailedException
+          on failure where run() only returns the exit code. fromShellCommandline()
+          runs a raw string through the shell with no escaping (a command-injection
+          risk), and stdout is read via getOutput(), not from run().
+        documentation: "https://symfony.com/doc/current/components/process.html"
+      - id: "MISC-MC-06"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "miscellaneous/serializer"
+        concepts: ["normalizers", "groups", "context"]
+        syllabus: "Miscellaneous → Serializer"
+        question: "Which of the following statements are true about the Symfony Serializer? (select all that apply)"
+        answers:
+          - value: "serialize() works in two stages: normalizers turn objects into arrays, then an encoder turns the array into a string"
+            correct: true
+          - value: "#[Groups] attributes only filter properties when a 'groups' key is passed in the serialization context"
+            correct: true
+          - value: "PropertyNormalizer reads and writes through getters and setters, respecting PropertyAccess"
+            correct: false
+          - value: "By default, null-valued properties are omitted from the JSON output"
+            correct: false
+        explanation: >-
+          Serialization is normalize-then-encode, and group filtering is inert until
+          you pass ['groups' => [...]] in the context — without it all readable fields
+          are emitted. PropertyNormalizer accesses properties directly via reflection
+          (ObjectNormalizer is the one using accessors), and null properties are
+          serialized as null unless you enable the skip_null_values context option.
+        documentation: "https://symfony.com/doc/current/serializer.html"
+      - id: "MISC-MC-07"
+        type: "multiple"
+        difficulty: "hard"
+        subchapter: "miscellaneous/messenger"
+        concepts: ["envelope", "send-message-middleware", "delay-stamp"]
+        syllabus: "Miscellaneous → Messenger"
+        question: "Which of the following statements are true about Symfony Messenger? (select all that apply)"
+        answers:
+          - value: "MessageBusInterface::dispatch() always returns an Envelope, never the handler's return value directly"
+            correct: true
+          - value: "When a message is routed to an async transport, SendMessageMiddleware enqueues it and stops the bus, so no handler runs in the dispatching process"
+            correct: true
+          - value: "DelayStamp(5000) delays delivery by 5000 milliseconds (5 seconds)"
+            correct: true
+          - value: "dispatch() returns the handler's result so a query bus needs no stamps"
+            correct: false
+          - value: "Once a message exhausts its retries, it is silently discarded"
+            correct: false
+        explanation: >-
+          dispatch() returns the (possibly stamped) Envelope, routed-async messages
+          are serialized and sent without invoking the handler in-process, and
+          DelayStamp is expressed in milliseconds. A query result must be read from
+          the HandledStamp via $envelope->last(HandledStamp::class)->getResult(), and
+          messages that exhaust max_retries go to the configured failure transport,
+          not into the void.
+        documentation: "https://symfony.com/doc/current/messenger.html"
