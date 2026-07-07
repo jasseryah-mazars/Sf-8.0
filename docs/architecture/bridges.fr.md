@@ -63,6 +63,16 @@ packages nommés `symfony/<name>-bridge`. Structurellement, un bridge n'est qu'u
 Composer de plus, qui dépend à la fois d'un composant Symfony (ou d'un contract) et de
 la bibliothèque externe qu'il cible.
 
+```console
+# In the monorepo, bridges have their own top-level directory
+$ ls src/Symfony/Bridge/
+Doctrine/  Monolog/  PsrHttpMessage/  Twig/
+
+# Each ships as a standalone Composer package named symfony/<name>-bridge
+$ composer show 'symfony/*-bridge' --direct
+symfony/monolog-bridge  v8.0.0  Provides integration for Monolog with various Symfony components
+```
+
 ```mermaid
 flowchart LR
     Lib[Third-party library] --- Bridge[symfony/*-bridge]

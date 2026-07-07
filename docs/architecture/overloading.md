@@ -61,6 +61,26 @@ Three tools, in increasing surgical precision:
    manipulates the `ContainerBuilder` at compile time. See
    [Compiler Passes](../dependency-injection/compiler-passes.md).
 
+```php
+// 1. Redefine: declare the same id in config/services.yaml — the later wins.
+// 2. Decorate: #[AsDecorator] (or the "decorates:" YAML key); the original
+//    is renamed and injected back as the ".inner" service:
+#[AsDecorator(decorates: 'acme.mailer')]
+final class TracingMailer
+{
+    public function __construct(#[AutowireDecorated] private object $inner) {}
+}
+
+// 3. Compiler pass: deep changes on the ContainerBuilder at compile time
+final class MailerPass implements CompilerPassInterface
+{
+    public function process(ContainerBuilder $container): void
+    {
+        $container->getDefinition('acme.mailer')->addTag('app.traced');
+    }
+}
+```
+
 ### Overriding templates
 
 Twig resolves templates through **namespaced paths**. To override a bundle template
@@ -69,11 +89,26 @@ Twig resolves templates through **namespaced paths**. To override a bundle templ
 directory takes precedence over the bundle's own `templates/`. This is exactly how
 you override [error pages](exception-handling.md).
 
+```twig
+{# templates/bundles/AcmeBlogBundle/post/show.html.twig #}
+{# takes precedence over @AcmeBlog/post/show.html.twig from the bundle #}
+{% extends '@!AcmeBlog/post/show.html.twig' %}
+
+{% block title %}My custom title{% endblock %}
+```
+
 ### Overriding translations
 
 The application `translations/` directory has **higher priority** than a bundle's
 translations. Provide a catalogue with the same domain/locale (e.g.
 `translations/messages.en.yaml`) and your strings win over the bundle's.
+
+```yaml
+# translations/messages.en.yaml — the app translations/ dir outranks the bundle's
+# (same "messages" domain + same "en" locale → your strings win)
+post.title: 'My custom post title'
+post.author: 'Written by %name%'
+```
 
 ### Overriding configuration
 
@@ -81,6 +116,15 @@ Each bundle exposes a config tree (its extension). Override defaults by writing
 `config/packages/<alias>.yaml` (e.g. `config/packages/twig.yaml`). Environment
 overrides go under `config/packages/<env>/`. Values you set replace or merge with the
 bundle's defaults according to the config definition.
+
+```yaml
+# config/packages/twig.yaml — <alias>.yaml overrides the bundle's defaults
+twig:
+    strict_variables: true
+
+# per-environment override lives under config/packages/<env>/,
+# e.g. config/packages/prod/twig.yaml
+```
 
 ```mermaid
 flowchart TD
@@ -98,6 +142,18 @@ In Symfony 8 there is **no** `getParent()`; use the per-resource overriding abov
 Bundles also no longer rely on the legacy `Resources/` folder — the modern layout
 uses top-level `config/`, `templates/`, `translations/` (see
 [Code Organization](code-organization.md)).
+
+```php
+// REMOVED — Symfony 8 bundles have no getParent() (gone since 5.0):
+// public function getParent(): string { return 'AcmeBlogBundle'; }
+
+// Modern bundle layout (no legacy Resources/ folder):
+//   acme-blog-bundle/
+//   ├── config/          # service definitions
+//   ├── templates/       # bundle templates
+//   ├── translations/    # bundle catalogues
+//   └── src/AcmeBlogBundle.php
+```
 
 !!! note "Source reference"
     Overriding mechanics live across FrameworkBundle/TwigBundle and the DI compiler —

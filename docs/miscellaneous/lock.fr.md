@@ -78,6 +78,13 @@ retourne un `Lock`. En interne, une `Key` identifie la resource ; le store
 persiste la propriété de cette clé. `autoRelease` libère le lock quand l'objet
 `Lock` est détruit (fin de la request ou du script).
 
+```php
+// createLock(resource, ttl = 300.0, autoRelease = true)
+$lock = $factory->createLock('report-nightly', ttl: 60.0, autoRelease: true);
+// Internally a Key('report-nightly') identifies the resource in the store;
+// with autoRelease the Lock is released when the object is destroyed
+```
+
 ### Acquire: blocking vs non-blocking
 
 - `acquire(false)` — **non-blocking** (par défaut) : retourne `true` si le lock
@@ -86,6 +93,16 @@ persiste la propriété de cette clé. `autoRelease` libère le lock quand l'obj
 - `acquire(true)` — **blocking** : attend que le lock soit libre (le store doit
   supporter le blocking, sinon le composant réessaie). À utiliser quand le
   travail doit finir par s'exécuter.
+
+```php
+// Non-blocking (default): bail out if another process is already working
+if (!$lock->acquire(false)) {
+    return; // held elsewhere — skip the duplicate work
+}
+
+// Blocking: wait until the lock becomes free, then proceed
+$lock->acquire(true);
+```
 
 ```mermaid
 stateDiagram-v2
@@ -105,6 +122,16 @@ lock comme expiré et laisser un autre processus l'acquérir — brisant
 l'exclusion mutuelle. Choisissez un TTL confortablement supérieur à la durée
 d'exécution attendue, et appelez `refresh()` dans les boucles longues.
 
+```php
+$lock = $factory->createLock('video-encode', ttl: 30.0); // TTL in seconds
+$lock->acquire();
+foreach ($chunks as $chunk) {
+    $encoder->process($chunk);
+    $lock->refresh(); // extend the TTL so the lock never expires mid-work
+}
+$lock->release();
+```
+
 ### Stores
 
 | Store | Scope |
@@ -122,12 +149,38 @@ une seule machine**. Pour les déploiements multi-serveurs, utilisez un store
 partagé (Redis, base de données). `CombinedStore` avec un quorum peut couvrir
 plusieurs serveurs Redis.
 
+```php
+use Symfony\Component\Lock\Store\CombinedStore;
+use Symfony\Component\Lock\Store\FlockStore;
+use Symfony\Component\Lock\Store\RedisStore;
+use Symfony\Component\Lock\Strategy\ConsensusStrategy;
+
+$local  = new FlockStore();                 // Flock: one machine only
+$shared = new RedisStore($redisConnection); // shared across servers
+// Quorum spanning several Redis servers:
+$quorum = new CombinedStore([$shared, $otherRedisStore], new ConsensusStrategy());
+```
+
 ### Shared (read/write) locks
 
 `SharedLockInterface` ajoute `acquireRead()` : plusieurs lecteurs peuvent
 détenir le lock simultanément, mais l'`acquire()` d'un écrivain est exclusif.
 Tous les stores ne supportent pas les locks partagés (Flock oui ; Redis via
 l'implémentation du composant).
+
+```php
+$lock = $factory->createLock('catalog'); // Lock implements SharedLockInterface
+// Readers: many processes may hold the read lock at the same time
+if ($lock->acquireRead()) {
+    // ... read the resource ...
+    $lock->release();
+}
+// Writer: acquire() stays exclusive
+if ($lock->acquire()) {
+    // ... write the resource ...
+    $lock->release();
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\Lock\LockFactory` et `Lock::acquire()` —
@@ -144,6 +197,15 @@ donc `if (!$lock->acquire()) { return; }` est la bonne garde. (Le blocking
 `acquire(true)` attend au contraire et finit par retourner `true` ou lever
 `LockConflictedException`.) Comme `false` est une valeur ordinaire, oublier de
 la vérifier signifie entrer dans la section critique sans protection.
+
+```php
+$lock = $factory->createLock('import');  // createLock() returns a Lock, never null
+if (!$lock->acquire(false)) {            // non-blocking: false means "busy", no throw
+    return;                              // the mandatory guard
+}
+// Blocking variant: waits, returns true or throws LockConflictedException
+// $ok = $lock->acquire(true);
+```
 
 !!! note "Null in real life"
     Une porte occupée ne vous donne pas *rien* — elle vous donne un « occupé »

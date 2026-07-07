@@ -35,6 +35,20 @@ HTML, attachments) that serialise to a MIME string. The **Mailer** component
 sends that message through a **transport** chosen by a DSN. You build a message
 (`Email`), hand it to `MailerInterface::send()`, and the transport delivers it.
 
+```php
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
+$email = (new Email())           // Mime: build the message
+    ->from('no-reply@example.com')
+    ->to('ada@example.com')
+    ->subject('Hello')
+    ->text('Plain body')
+    ->html('<p>HTML body</p>');
+
+$mailer->send($email);           // Mailer: delivered by the MAILER_DSN transport
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -61,6 +75,19 @@ sends that message through a **transport** chosen by a DSN. You build a message
 `Email::text()`/`html()`/`addPart()` assemble this tree; `attachFromPath()` and
 `embedFromPath()` add `DataPart`s. Embedded images are referenced via `cid:`.
 
+```php
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\File;
+
+$email = (new Email())
+    ->text('Plain-text body')                             // TextPart (text/plain)
+    ->html('<p>Hi <img src="cid:logo"></p>')              // TextPart (text/html)
+    ->addPart(new DataPart(new File('/data/report.csv'))) // manual DataPart
+    ->attachFromPath('/data/guide.pdf', 'guide.pdf')      // attachment DataPart
+    ->embedFromPath('/img/logo.png', 'logo');             // embedded, used as cid:logo
+```
+
 ```mermaid
 flowchart LR
     E[Email] --> M[Mailer::send]
@@ -79,9 +106,31 @@ is the entry point. `Symfony\Component\Mailer\Transport` builds a
 `sendmail://default`, `native://default`, or third-party providers via bridges
 (out of scope to teach). The `MAILER_DSN` env var configures it.
 
+```php
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+
+// Transport::fromDsn() builds a TransportInterface (usually from MAILER_DSN)
+$transport = Transport::fromDsn('smtp://user:pass@mail.example.com:465');
+$mailer = new Mailer($transport);
+$mailer->send($email); // send(RawMessage $message, ?Envelope $envelope = null)
+```
+
 The Mailer's `Envelope` (sender + recipients) is distinct from the message
 headers; the transport uses the envelope for the SMTP conversation while headers
 render in the visible message.
+
+```php
+use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mime\Address;
+
+// The Envelope drives the SMTP conversation, not the visible headers
+$envelope = new Envelope(
+    new Address('bounces@example.com'),          // MAIL FROM
+    [new Address('real-recipient@example.com')]  // RCPT TO (may differ from To:)
+);
+$mailer->send($email, $envelope);
+```
 
 ### TemplatedEmail
 
@@ -89,6 +138,16 @@ render in the visible message.
 `htmlTemplate()`/`textTemplate()` + `context()`. A Twig-aware
 `BodyRenderer`/`MessageListener` renders the templates into html/text parts
 before sending — so you never call Twig yourself.
+
+```php
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
+$email = (new TemplatedEmail())
+    ->to('ada@example.com')
+    ->htmlTemplate('emails/welcome.html.twig') // rendered by the BodyRenderer
+    ->textTemplate('emails/welcome.txt.twig')  // via MessageListener, before sending
+    ->context(['name' => 'Ada']);              // variables exposed to Twig
+```
 
 ### Async sending via Messenger
 

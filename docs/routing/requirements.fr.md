@@ -42,6 +42,14 @@ Symfony 8 offre deux syntaxes équivalentes : **en ligne** `{id<\d+>}` dans le c
 et le tableau **`requirements`**. La syntaxe en ligne est concise et garde la contrainte
 à côté du placeholder ; le tableau convient mieux quand la regex est longue ou réutilisée.
 
+```php
+// Inline syntax: the constraint lives next to the placeholder
+#[Route('/blog/{page<\d+>}', name: 'blog_paged')]
+
+// requirements array: strictly equivalent, better for long/reused regexes
+#[Route('/blog/{page}', name: 'blog_paged', requirements: ['page' => '\d+'])]
+```
+
 !!! question "Predict first"
     `/blog/{page<\d+>}` reçoit `/blog/latest`. Le router lève-t-il un 400, `page`
     devient-il `'latest'`, ou se passe-t-il autre chose ?
@@ -60,6 +68,16 @@ tableau `requirements`). Il remplace le placeholder par un **groupe de capture n
 utilisant cette regex ; les tokens sans requirement reçoivent le `[^/]+` par défaut (ou
 `.+` pour le catch-all spécial). Le résultat est une regex `CompiledRoute` unique comme
 `#^/blog/(?P<page>\d+)$#sD`.
+
+```php
+use Symfony\Component\Routing\Route;
+
+// Route::compile() delegates to RouteCompiler::compile()
+$route = new Route('/blog/{page}', requirements: ['page' => '\d+']);
+$compiled = $route->compile();  // returns a CompiledRoute
+echo $compiled->getRegex();     // #^/blog/(?P<page>\d+)$#sD
+// Without a requirement, the {page} token would default to [^/]+
+```
 
 Comme la contrainte est intégrée à la regex compilée, une URL non conforme **échoue
 simplement à correspondre à cette route** — le matcher passe à la route suivante ou finit
@@ -87,6 +105,14 @@ dans des groupes supplémentaires ; utilisez des groupes non capturants `(?:...)
 avez besoin de grouper. Le séparateur par défaut est `/`, donc `[^/]+` ne peut pas
 franchir plusieurs segments de chemin, sauf si vous optez pour `.+` (voir le pattern
 catch-all ci-dessous).
+
+```php
+// Implicitly anchored: '\d+' compiles to (?P<id>\d+) — never add ^ or $
+#[Route('/order/{id}', requirements: ['id' => '\d+'])]
+
+// Grouping: use a non-capturing (?:...) group, never a capturing (...)
+#[Route('/report/{period}', requirements: ['period' => '(?:day|week|month)'])]
+```
 
 ## Configuration & code
 

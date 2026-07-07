@@ -49,8 +49,25 @@ une séquence d'**events** qui permettent aux listeners d'observer ou de court-c
 le flux. Ce cœur piloté par les events est ce qui rend Symfony extensible sans avoir à
 patcher le framework.
 
+```php
+// What public/index.php does, spelled out (the Runtime automates this):
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']); // boot the Kernel
+$request = Request::createFromGlobals();  // Request built from PHP superglobals
+$response = $kernel->handle($request);    // handle(): HttpKernel dispatches the events here
+$response->send();                        // stream the Response to the client
+$kernel->terminate($request, $response);  // terminate(): after-send work
+```
+
 `self::MAIN_REQUEST` (valeur `1`) et `self::SUB_REQUEST` (valeur `2`) sont les deux
 types de request ; l'ancienne constante `MASTER_REQUEST` a été supprimée.
+
+```php
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+HttpKernelInterface::MAIN_REQUEST; // int 1 — the top-level HTTP request
+HttpKernelInterface::SUB_REQUEST;  // int 2 — nested requests (fragments)
+// HttpKernelInterface::MASTER_REQUEST — removed; use MAIN_REQUEST instead
+```
 
 ## Deep Dive — how it works internally
 
@@ -98,6 +115,17 @@ return function (array $context): Kernel {
 `Kernel::handle()` démarre le container (une seule fois) et délègue au service
 `http_kernel` — une instance de `HttpKernel`. Le vrai travail se trouve dans la
 méthode privée `HttpKernel::handleRaw()`.
+
+```php
+// Simplified: Kernel::handle() boots the container, then delegates
+public function handle(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = true): Response
+{
+    $this->boot();
+    // getHttpKernel() returns the 'http_kernel' service — an HttpKernel instance;
+    // HttpKernel::handle() itself just wraps the private handleRaw()
+    return $this->getHttpKernel()->handle($request, $type, $catch);
+}
+```
 
 ### The eight kernel events, in execution order
 
@@ -170,6 +198,20 @@ resolvers `ValueResolverInterface` (attributs de request, l'objet `Request`,
 `#[MapRequestPayload]`, `#[MapQueryString]`, services, variadiques, valeurs par
 défaut…). Voir [Argument Value Resolvers](../controllers/value-resolvers.md).
 
+```php
+// Inside handleRaw(), simplified:
+$controller = $this->resolver->getController($request);   // ControllerResolverInterface
+// ...which reads the '_controller' attribute set by the router:
+$request->attributes->get('_controller');                 // e.g. "App\Controller\PostController::show"
+$arguments = $this->argumentResolver->getArguments($request, $controller); // ArgumentResolverInterface
+$response = $controller(...$arguments);
+
+// The chain behind getArguments() is made of ValueResolverInterface implementations;
+// attributes select specific resolvers in your controllers:
+public function search(#[MapQueryString] SearchQuery $query): Response { /* ... */ }
+public function store(#[MapRequestPayload] PostPayload $payload): Response { /* ... */ }
+```
+
 ### Sub-requests
 
 Un controller (ou un listener) peut rendre un fragment en appelant à nouveau
@@ -178,6 +220,17 @@ Un controller (ou un listener) peut rendre un fragment en appelant à nouveau
 `kernel.terminate`. Le `RequestStack` suit l'imbrication afin que
 `getCurrentRequest()` et `getMainRequest()` restent corrects ;
 `kernel.finish_request` restaure l'état parent.
+
+```php
+// Render a fragment through a sub-request (same events, no kernel.terminate)
+$subRequest = Request::create('/_fragment/sidebar');
+$response = $httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+
+// RequestStack keeps the nesting straight while the sub-request runs:
+$requestStack->getCurrentRequest(); // the sub-request during handle()
+$requestStack->getMainRequest();    // still the top-level request
+// kernel.finish_request then restores the parent request's state
+```
 
 ```mermaid
 sequenceDiagram

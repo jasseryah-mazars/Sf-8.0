@@ -37,6 +37,16 @@ temps. Le Clock component injecte une **horloge** afin que la production utilise
 l'heure réelle tandis que les tests la figent ou l'avancent de manière
 déterministe. `now()` est un helper global adossé à la même abstraction.
 
+```php
+use function Symfony\Component\Clock\now;
+
+// Untestable: reads the real wall clock directly
+$deadline = new \DateTimeImmutable('+30 minutes');
+
+// Testable: now() reads the swappable global clock
+$deadline = now()->modify('+30 minutes');
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -63,11 +73,30 @@ déterministe. `now()` est un helper global adossé à la même abstraction.
 | `MockClock` | Heure fixe que vous réglez/avancez ; `sleep()` avance virtuellement |
 | `MonotonicClock` | Haute résolution, insensible aux changements d'horloge système (pour les durées) |
 
+```php
+// PSR-20 base contract: now() only
+$time = $clock->now(); // \DateTimeImmutable
+
+// Symfony's ClockInterface adds two methods:
+$clock->sleep(0.5);                                 // wait 0.5s (virtual on MockClock)
+$paris = $clock->withTimeZone('Europe/Paris');      // same clock, other timezone
+```
+
 Le framework autowire `ClockInterface` (le service `clock`) en `NativeClock`.
 La façade statique `Symfony\Component\Clock\Clock` enveloppe une instance
 d'horloge globale ; `now()` et `Clock::get()` la lisent, et
 `Clock::set(new MockClock(...))` la remplace globalement (utilisé dans les
 tests).
+
+```php
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\Clock\MockClock;
+use function Symfony\Component\Clock\now;
+
+Clock::get();                                  // global clock (NativeClock by default)
+Clock::set(new MockClock('2026-07-06 12:00')); // swap it globally (tests)
+now();                                         // reads the global clock -> 12:00
+```
 
 ```mermaid
 flowchart LR
@@ -84,6 +113,16 @@ dotée d'un constructeur plus strict qui lève des exceptions, et de modificateu
 pratiques ; `now()` retourne un `DatePoint`. Elle est interopérable partout où un
 `\DateTimeImmutable` est attendu.
 
+```php
+use Symfony\Component\Clock\DatePoint;
+use function Symfony\Component\Clock\now;
+
+$point = now();                                 // a DatePoint instance
+var_dump($point instanceof \DateTimeImmutable); // true — drop-in replacement
+
+new DatePoint('not a date'); // throws an exception (strict constructor)
+```
+
 ### Testing time
 
 Dans les tests, `Symfony\Component\Clock\Test\ClockSensitiveTrait`
@@ -93,11 +132,42 @@ sauvegarde/restaure l'horloge globale autour de chaque test et fournit
 tests d'expiration de token, de TTL et de planification. Voir
 [PHPUnit Bridge](../testing/phpunit-bridge.md).
 
+```php
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
+
+final class ExpiryTest extends TestCase
+{
+    use ClockSensitiveTrait; // saves/restores the global clock per test
+
+    public function testTokenExpires(): void
+    {
+        $clock = self::mockTime('2026-07-06 12:00'); // freeze "now" (MockClock)
+        $clock->sleep(3600);                         // jump 1 hour, no real delay
+
+        self::assertSame('13:00', $clock->now()->format('H:i'));
+    }
+}
+```
+
 ### ClockAwareTrait
 
 `Symfony\Component\Clock\ClockAwareTrait` ajoute un `setClock()` (autowiré) et un
 `now()` protégé à n'importe quel service : vous lisez l'heure via `$this->now()`
 et le test peut injecter une `MockClock`.
+
+```php
+use Symfony\Component\Clock\ClockAwareTrait;
+
+final class ReportScheduler
+{
+    use ClockAwareTrait; // provides setClock() (autowired) + protected now()
+
+    public function isDue(\DateTimeImmutable $at): bool
+    {
+        return $this->now() >= $at; // tests call setClock(new MockClock(...))
+    }
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\Clock\ClockInterface`, `MockClock`, `DatePoint` —
@@ -114,6 +184,15 @@ n'est jamais nulle. La leçon est l'inverse de la garde null habituelle : puisqu
 vous *pouvez* encore obtenir une valeur trompeuse si vous comparez l'heure d'une
 `MockClock` au vrai `new \DateTime()`. Lisez l'heure depuis l'horloge des deux
 côtés, pas depuis un mélange d'horloge et d'heure murale.
+
+```php
+$frozen = new MockClock('2026-07-06 12:00');
+
+$now = $frozen->now(); // always a DatePoint — never null, no ?-> needed
+
+// Anti-pattern: mixing the mocked clock with the real wall clock
+$drift = (new \DateTime())->getTimestamp() - $now->getTimestamp(); // flaky!
+```
 
 !!! note "Null in real life"
     Demander « quelle heure est-il ? » obtient toujours une réponse — l'horloge ne

@@ -45,6 +45,13 @@ Running `php bin/console` with **no arguments** runs `list`. Running
 `php bin/console help cache:clear` runs `help` for that command; `--help`/`-h` on
 any command does the same.
 
+```console
+$ php bin/console                     # no arguments -> runs "list"
+$ php bin/console help cache:clear    # runs "help" for cache:clear
+$ php bin/console cache:clear --help  # same result via --help
+$ php bin/console cache:clear -h      # same via the -h shortcut
+```
+
 The **FrameworkBundle** adds application commands. The exam-relevant ones:
 
 | Command | Purpose |
@@ -79,11 +86,32 @@ The **FrameworkBundle** adds application commands. The exam-relevant ones:
 console `Application`. The Runtime executes that closure and calls
 `Application::run()`.
 
+```php
+// bin/console (excerpt): the Runtime requires the autoloader, executes
+// the returned closure, then calls Application::run() on the result
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+return static function (array $context): Application {
+    return new Application(new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']));
+};
+```
+
 `Symfony\Bundle\FrameworkBundle\Console\Application` extends
 `Symfony\Component\Console\Application`. Its constructor takes the `KernelInterface`;
 on the first run it **boots the kernel**, then registers every service tagged
 `console.command` (see [custom commands](custom-commands.md)) plus each bundle's
 own commands.
+
+```php
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+// The framework Application takes the KernelInterface in its constructor
+$application = new Application($kernel);
+
+// run() boots the kernel on first use, then registers every service
+// tagged "console.command" plus each bundle's own commands
+$exitCode = $application->run();
+```
 
 `Application::run()` wraps `doRun()`:
 
@@ -104,6 +132,18 @@ flowchart TD
 `ca:cl` → `cache:clear`) using `Symfony\Component\Console\CommandLoader\CommandLoaderInterface`.
 Registering commands lazily means only the *chosen* command is instantiated.
 
+```php
+// find() resolves full names and unambiguous abbreviations
+$command = $application->find('ca:cl');   // -> the cache:clear Command
+echo $command->getName();                  // "cache:clear"
+
+// Lazy registration: a CommandLoaderInterface maps names to factories,
+// so only the chosen command is instantiated
+$application->setCommandLoader(new FactoryCommandLoader([
+    'app:report' => static fn () => new ReportCommand(),
+]));
+```
+
 !!! note "Source reference"
     `Symfony\Component\Console\Application::doRun()` handles global options
     (`--help`, `--version`, `-q`, `-v`) and default command —
@@ -115,6 +155,15 @@ Registering commands lazily means only the *chosen* command is instantiated.
 `--ansi`/`--no-ansi`, `--no-interaction`/`-n`, and (framework) `--env`/`-e`
 `--no-debug`. They live in the Application's `InputDefinition`, merged into every
 command — see [verbosity](verbosity.md).
+
+```console
+$ php bin/console cache:clear -h            # --help / -h
+$ php bin/console list --quiet              # --quiet / -q
+$ php bin/console app:sync -vv              # --verbose (-v | -vv | -vvv)
+$ php bin/console --version                 # --version / -V
+$ php bin/console app:sync --no-ansi -n     # disable colors + --no-interaction
+$ php bin/console cache:clear --env=prod --no-debug   # framework-only options
+```
 
 ## Configuration & code
 

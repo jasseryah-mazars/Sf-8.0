@@ -68,6 +68,14 @@ The single most important decision: **may a shared cache store this response?**
 - `Cache-Control: private` — **only** the browser may store it; shared caches
   must not. Use it for anything tied to a session or user.
 
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=3600
+
+HTTP/1.1 200 OK
+Cache-Control: private
+```
+
 !!! danger "The default is private"
     A Symfony `Response` with **no** cache-control set emits
     `Cache-Control: no-cache, private`. So *doing nothing* is safe (no shared
@@ -89,6 +97,17 @@ Freshness (`max-age`, `s-maxage`, `Expires`) is the [expiration](expiration.md)
 model; revalidation (`no-cache`, `ETag`, `Last-Modified`) is the
 [validation](validation.md) model.
 
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=60, s-maxage=600
+Expires: Tue, 07 Jul 2026 12:00:00 GMT
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+ETag: "a1b2c3"
+Last-Modified: Mon, 06 Jul 2026 10:00:00 GMT
+```
+
 !!! question "Predict first"
     A response carries `Cache-Control: public, max-age=60, s-maxage=600`. How long
     does the **browser** treat it as fresh, and how long does a **CDN**?
@@ -109,6 +128,16 @@ header lazily in `ResponseHeaderBag::computeCacheControlValue()`. That method is
 what produces `no-cache, private` when you set nothing, and what enforces the
 rule that **calling `setPublic()` strips `private`** (and vice-versa) so you can
 never emit the contradictory `public, private`.
+
+```php
+$response = new Response();
+
+// Nothing set: computeCacheControlValue() renders the safe default
+$response->headers->get('Cache-Control');   // "no-cache, private"
+
+$response->setPublic();                     // adds "public", strips "private"
+$response->headers->get('Cache-Control');   // "public"
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\ResponseHeaderBag::computeCacheControlValue()`
@@ -136,6 +165,14 @@ Without `Vary`, a shared cache that stored a French, gzipped page could hand it
 to an English client asking for identity encoding. `Vary: Accept-Language,
 Accept-Encoding` prevents that.
 
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+Content-Language: fr
+Content-Encoding: gzip
+Vary: Accept-Language, Accept-Encoding
+```
+
 !!! warning "`Vary: *` and `Vary: Cookie` kill caching"
     `Vary: *` means "every request is unique" — shared caches effectively cannot
     reuse anything. `Vary: Cookie` explodes the key space (one entry per cookie
@@ -148,6 +185,12 @@ Accept-Encoding` prevents that.
 honoured **only by shared caches** (proxies, the reverse proxy) — the browser
 ignores it. This split is the whole reason you can cache a page for 60 s in the
 CDN while telling browsers not to cache it at all.
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, s-maxage=60
+Content-Type: text/html; charset=UTF-8
+```
 
 ## Configuration & code
 

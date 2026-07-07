@@ -50,6 +50,14 @@ que les chemins restent corrects quand les routes changent :
 Utilisez `path()` pour les liens internes au site ; utilisez `url()` quand l'URL
 quitte la page — e-mails, RSS, balises canonical, redirections consommées ailleurs.
 
+```twig
+{# path(): relative URL — fine for on-site navigation #}
+<a href="{{ path('order_show', { id: order.id }) }}">Your order</a>
+
+{# url(): absolute URL — required when the link leaves the page (email, RSS) #}
+<a href="{{ url('order_show', { id: order.id }) }}">View your order</a>
+```
+
 !!! question "Predict first"
     Vous construisez le corps d'un e-mail avec `{{ path('order_show', { id: order.id }) }}`.
     Pourquoi les destinataires se plaignent-ils d'un lien cassé ?

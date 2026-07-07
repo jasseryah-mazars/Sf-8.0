@@ -36,8 +36,25 @@ serves different actions per verb — `GET /posts` lists, `POST /posts` creates.
 each verb its own route (or list several verbs on one route) rather than branching
 inside a single action.
 
+```php
+// One path, one route per verb
+#[Route('/posts', name: 'post_index', methods: ['GET'])]   // GET /posts -> list
+public function index(): Response { /* ... */ }
+
+#[Route('/posts', name: 'post_create', methods: ['POST'])] // POST /posts -> create
+public function create(): Response { /* ... */ }
+```
+
 The related `schemes` option restricts the URL scheme (`http`/`https`). Combining
 them expresses "POST, over HTTPS only" in the route definition.
+
+```yaml
+payment_create:
+    path: /payments
+    controller: App\Controller\PaymentController::create
+    methods: [POST]     # verb restriction
+    schemes: [https]    # "POST, over HTTPS only"
+```
 
 !!! question "Predict first"
     A route allows only `GET`. A `POST` hits that exact path. Is it a 404, a 405, or
@@ -59,6 +76,21 @@ after exhausting the collection, throws
 `RedirectableUrlMatcher` issues a **redirect to the correct scheme** (so an
 `http` request to an `https`-only route is redirected, not rejected).
 
+```php
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+
+// methods/schemes are stored on the Route object
+$route = new Route('/posts', methods: ['GET'], schemes: ['https']);
+
+// UrlMatcher::matchCollection(): host + path match, but the verb does not
+try {
+    $matcher->match('/posts');            // request method is POST
+} catch (MethodNotAllowedException $e) {
+    $e->getAllowedMethods();              // ['GET'] -> "Allow: GET" on the 405
+}
+// A scheme mismatch is different: RedirectableUrlMatcher redirects to https
+```
+
 Two subtleties:
 
 - **`GET` implies `HEAD`.** A route with `methods: ['GET']` also matches `HEAD`;
@@ -68,6 +100,17 @@ Two subtleties:
   `X-HTTP-Method-Override` header) **only if** `Request::enableHttpMethodParameterOverride()`
   is enabled. The matcher matches against `getMethod()`, so the override affects
   routing.
+
+```php
+// GET implies HEAD: this route also matches HEAD (HttpKernel strips the body)
+#[Route('/posts', name: 'post_index', methods: ['GET'])]
+
+// Method override is opt-in (e.g. in public/index.php):
+Request::enableHttpMethodParameterOverride();
+// POST form with <input type="hidden" name="_method" value="PUT">
+// or header "X-HTTP-Method-Override: PUT" now changes routing:
+$request->getMethod(); // 'PUT' -> the matcher sees PUT
+```
 
 ```mermaid
 flowchart TD

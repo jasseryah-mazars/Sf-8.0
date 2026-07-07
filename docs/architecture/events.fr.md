@@ -171,6 +171,19 @@ le dispatcher **au moment de la compilation du container**. Les listeners sont
 instanciés de manière **lazy** — le service n'est construit que lorsque son event
 se déclenche réellement, ce qui garde un démarrage peu coûteux.
 
+```yaml
+# config/services.yaml — tags scanned by RegisterListenersPass at compile time
+services:
+    App\EventListener\LegacyRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 5 }
+
+    App\EventSubscriber\AuditSubscriber:
+        tags: ['kernel.event_subscriber']
+
+# Modern equivalent: #[AsEventListener] on the class — no runtime addListener() calls
+```
+
 !!! note "Source reference"
     `Symfony\Component\EventDispatcher\EventDispatcher::dispatch()` et
     `RegisterListenersPass` —
@@ -204,6 +217,17 @@ jamais un setter — `setResponse()` sur un kernel event, par exemple — l'even
 revient simplement inchangé : pas d'erreur, pas de retour `null`. Le bug classique
 consiste à attendre que `dispatch()` renvoie la valeur de retour d'un listener ; ce
 n'est jamais le cas — il renvoie l'event que vous lui avez passé.
+
+```php
+// dispatch() always returns the SAME event object you passed in
+$event = new OrderPlacedEvent();
+$returned = $dispatcher->dispatch($event);
+
+var_dump($returned === $event); // true — even with zero listeners
+
+// results travel only by mutation, e.g. a kernel listener calling setResponse();
+// dispatch() never hands back a listener's return value
+```
 
 !!! note "Null in real life"
     Un event sans listener est un **appel radio de la tour auquel personne ne

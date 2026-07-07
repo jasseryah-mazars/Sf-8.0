@@ -43,6 +43,16 @@ code.
 
 A plain `\Exception` becomes **500**.
 
+```php
+// Throw — don't return — to produce the status code
+throw $this->createNotFoundException('Product not found.');   // 404
+throw $this->createAccessDeniedException('Owners only.');     // 403
+throw new BadRequestHttpException('Malformed payload.');      // 400
+throw new ConflictHttpException('Already processed.');        // 409
+throw new HttpException(503, 'Maintenance in progress.');     // any status
+throw new \RuntimeException('Boom');                          // no HttpExceptionInterface → 500
+```
+
 !!! question "Predict first"
     You write `$this->createNotFoundException('Nope');` on its own line and keep
     going. Does the visitor get a 404?

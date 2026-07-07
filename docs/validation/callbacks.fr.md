@@ -95,10 +95,33 @@ même objet couvert dans [Violations Builder](violations-builder.md). Vous
 pouvez y lire `getObject()`, `getRoot()`, `getGroup()` et appeler
 `buildViolation()`.
 
+```php
+#[Assert\Callback(payload: ['severity' => 'high'])] // payload option
+public function audit(ExecutionContextInterface $context, mixed $payload): void
+{
+    $object = $context->getObject(); // the object being validated
+    $root   = $context->getRoot();   // the top-level validated value
+    $group  = $context->getGroup();  // the currently validated group
+
+    if ('high' === $payload['severity'] && null === $object->reviewer) {
+        $context->buildViolation('A reviewer is required.')->addViolation();
+    }
+}
+```
+
 Comme `Callback` est de portée classe, le callback s'exécute dans le **groupe**
 que vous assignez à la constraint (option `groups`, `Default` par défaut) — les
 callbacks participent donc aux [group sequences](group-sequence.md) comme
 n'importe quelle autre constraint.
+
+```php
+// without the groups option, the Callback belongs to the Default group
+#[Assert\Callback(groups: ['checkout'])]
+public function checkStock(ExecutionContextInterface $context, mixed $payload): void
+{
+    // runs only when the 'checkout' group (or a sequence containing it) is validated
+}
+```
 
 ```mermaid
 sequenceDiagram
@@ -137,6 +160,16 @@ Le callback doit partir du principe qu'une valeur *peut* manquer et soit sortir
 tôt, soit utiliser `?->` / `??`. Lire l'instance via `$context->getObject()`
 peut également vous livrer un objet partiellement rempli, les mêmes gardes
 s'appliquent donc.
+
+```php
+$object = $context->getObject();          // may be partially populated
+$start  = $object?->start;                // ?-> is null-safe on the object
+$days   = $this->duration ?? 1;           // ?? supplies a fallback value
+
+if (null === $start) {
+    return; // bail early; let #[Assert\NotNull] report the missing value
+}
+```
 
 !!! note "Null in real life"
     Le superviseur qui examine tout le bagage ne doit pas supposer que chaque

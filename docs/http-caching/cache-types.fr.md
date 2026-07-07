@@ -76,6 +76,14 @@ cette response ?**
   caches partagés ne le doivent pas. Utilisez-la pour tout ce qui est lié à une
   session ou à un utilisateur.
 
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=3600
+
+HTTP/1.1 200 OK
+Cache-Control: private
+```
+
 !!! danger "The default is private"
     Une `Response` Symfony **sans** cache-control défini émet
     `Cache-Control: no-cache, private`. *Ne rien faire* est donc sûr (pas de

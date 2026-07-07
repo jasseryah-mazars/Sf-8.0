@@ -43,6 +43,21 @@ Security bundle. Five top-level keys matter for the exam:
 | `password_hashers` | How passwords are hashed ([Password Hashers](password-hashers.md)) |
 | `role_hierarchy` | Role inheritance ([Roles](roles.md)) |
 
+```yaml
+# config/packages/security.yaml — the five exam keys at a glance
+security:
+    providers:
+        app_users: { entity: { class: App\Entity\User } }
+    firewalls:
+        main: { lazy: true, provider: app_users }
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+```
+
 !!! question "Predict first"
     You define two `providers` but a firewall omits `provider:`. Does Symfony pick
     the first one?
@@ -79,6 +94,14 @@ Key generated services:
 - **`security.access.map`** → `AccessMap` (the compiled `access_control` rules)
 - **`security.password_hasher_factory`** → `PasswordHasherFactory`
 - **`security.role_hierarchy`** → `RoleHierarchy`
+
+```console
+# Each config key compiles to a container service — inspect them:
+$ php bin/console debug:container security.firewall.map            # FirewallMap
+$ php bin/console debug:container security.access.map              # AccessMap (access_control)
+$ php bin/console debug:container security.password_hasher_factory # PasswordHasherFactory
+$ php bin/console debug:container security.role_hierarchy          # RoleHierarchy
+```
 
 !!! note "Source reference"
     `Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension` —

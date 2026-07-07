@@ -55,6 +55,19 @@ The **default limiter** enforces two limits at once:
 | Targeted | username **+** IP | `max_attempts` failures per `interval` |
 | Wide | IP alone | `5 × max_attempts` failures per `interval` |
 
+```php
+// DefaultLoginRateLimiter (simplified): one request feeds two counters
+protected function getLimiters(Request $request): array
+{
+    $username = $request->attributes->get(SecurityRequestAttributes::LAST_USERNAME, '');
+
+    return [
+        $this->globalFactory->create($request->getClientIp()),               // IP alone: 5 x max_attempts
+        $this->localFactory->create($username.'-'.$request->getClientIp()),  // username+IP: max_attempts
+    ];
+}
+```
+
 The second, wider limit exists because an attacker could otherwise rotate
 usernames to keep every per-username counter below the threshold. Multiplying
 by 5 keeps normal offices behind one NAT IP usable while still capping sprays.
@@ -71,6 +84,19 @@ The feature is an event listener, not an authenticator:
 registers on **`CheckPassportEvent`** with a very high priority — it runs
 before credential verification, so throttled requests never even hit the
 password hasher (which also blunts timing/enumeration attacks and saves CPU).
+
+```php
+// LoginThrottlingListener (simplified) — registered on CheckPassportEvent
+public function checkPassport(CheckPassportEvent $event): void
+{
+    $limit = $this->limiter->consume($this->requestStack->getMainRequest());
+
+    if (!$limit->isAccepted()) {
+        // rejected before any credential is verified
+        throw new TooManyLoginAttemptsAuthenticationException();
+    }
+}
+```
 
 1. On `CheckPassportEvent`, it asks the limiter to `consume(request)`.
 2. If the limit is exceeded, it throws a
@@ -124,6 +150,16 @@ your own limiters under `framework.rate_limiter`:
 | `sliding_window` | Weighs the previous window to smooth the boundary burst |
 | `token_bucket` | Continuous refill rate + burst capacity |
 | `no_limit` | Unlimited (useful in tests) |
+
+```yaml
+# config/packages/rate_limiter.yaml — one limiter per policy
+framework:
+    rate_limiter:
+        api_fixed:   { policy: fixed_window,   limit: 100, interval: '1 hour' }
+        api_sliding: { policy: sliding_window, limit: 100, interval: '1 hour' }
+        api_bucket:  { policy: token_bucket,   limit: 500, rate: { interval: '1 minute', amount: 10 } }
+        test_only:   { policy: no_limit }
+```
 
 `login_throttling`'s simple `max_attempts`/`interval` pair is deliberately
 window-style counting ("N failures per interval"). If you need another policy

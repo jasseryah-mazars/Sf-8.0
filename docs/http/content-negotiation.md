@@ -38,6 +38,19 @@ advertises preferences via `Accept*` request headers; the server picks the best
 match and echoes its choice in the response (`Content-Type`, `Content-Language`,
 `Content-Encoding`) plus a `Vary` header so caches key correctly.
 
+```http
+GET /articles/7 HTTP/1.1
+Accept: application/json
+Accept-Language: fr-FR, en;q=0.5
+Accept-Encoding: gzip, br
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Language: fr
+Content-Encoding: gzip
+Vary: Accept, Accept-Language
+```
+
 | Request header | Negotiates | Response header |
 |---|---|---|
 | `Accept` | Media type (`application/json`) | `Content-Type` |
@@ -83,6 +96,22 @@ Higher `q` wins; `q=0` means "not acceptable". Ties break by specificity.
 
 `getPreferredLanguage(['en', 'fr'])` intersects the client's ordered languages
 with *your* whitelist and returns the best — see [Language Detection](language-detection.md).
+
+```php
+// Accept: application/json;q=0.9, text/html;q=0.8
+$request->getAcceptableContentTypes(); // ['application/json', 'text/html']
+$request->getPreferredFormat();        // 'json' ('html' default if no match)
+
+// Accept-Language: fr-FR, fr;q=0.8, en;q=0.5
+$request->getLanguages();                     // ['fr_FR', 'fr', 'en']
+$request->getPreferredLanguage(['en', 'fr']); // 'fr' — best within your list
+
+$request->getCharsets();  // from Accept-Charset
+$request->getEncodings(); // from Accept-Encoding, e.g. ['gzip', 'br']
+
+$request->getRequestFormat();       // '_format' attribute, default 'html'
+$request->setRequestFormat('json'); // force it for this request
+```
 
 ### Formats ↔ MIME types
 

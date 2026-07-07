@@ -65,6 +65,16 @@ The bag stores messages **per type** as arrays. Reading them **consumes** them â
 bag. The Twig helper `app.flashes` calls `get()`/`all()`, which is why a message
 shows exactly once. To read **without** consuming, use `peek()`/`peekAll()`.
 
+```php
+$bag = $request->getSession()->getFlashBag();
+
+$bag->peek('success');   // read ONE type without consuming
+$bag->peekAll();         // read EVERY type, nothing removed
+$bag->get('success');    // returns AND removes this type's messages
+$bag->all();             // drains the whole bag
+// Twig's app.flashes helper calls get()/all() â€” rendering consumes
+```
+
 ```mermaid
 sequenceDiagram
     participant P as POST action

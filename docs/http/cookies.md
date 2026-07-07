@@ -87,6 +87,15 @@ $cookie = Cookie::create('token')
 `Cookie::SAMESITE_NONE`. Its constructor also accepts everything positionally, but
 the fluent `with*` API is clearer and avoids argument order mistakes.
 
+```php
+// The three SameSite constants (Cookie is immutable: with* returns a new instance)
+$bank    = Cookie::create('bank')->withSameSite(Cookie::SAMESITE_STRICT);
+$session = Cookie::create('sid')->withSameSite(Cookie::SAMESITE_LAX);
+$embed   = Cookie::create('embed')
+    ->withSameSite(Cookie::SAMESITE_NONE)
+    ->withSecure(true); // SAMESITE_NONE requires Secure
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Cookie` and the `SAMESITE_*` constants —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php).
@@ -111,6 +120,17 @@ flowchart LR
   original.
 - On the way in, cookies are read from `$request->cookies` (an `InputBag`).
 
+```php
+// Queue a Set-Cookie header on the outgoing response
+$response->headers->setCookie($cookie);
+
+// Delete it: path and domain must match the original scope
+$response->headers->clearCookie('token', '/', '.example.com');
+
+// Read incoming cookies from the InputBag
+$token = $request->cookies->get('token'); // null when absent
+```
+
 ### `SameSite` semantics
 
 | Value | Sent on cross-site request? | Use for |
@@ -129,6 +149,13 @@ flowchart LR
 - **`SameSite`** is a CSRF mitigation (see [Web Security](../php-web-security/web-security.md)).
 - **Prefix `__Host-`**: a cookie named `__Host-...` must be `Secure`, have no
   `Domain`, and `Path=/` — the strongest scoping the browser enforces.
+
+```http
+Set-Cookie: sid=abc; Secure; HttpOnly; SameSite=Lax
+Set-Cookie: widget=1; SameSite=None; Secure
+Set-Cookie: bank=42; Secure; HttpOnly; SameSite=Strict
+Set-Cookie: __Host-token=xyz; Secure; Path=/; HttpOnly; SameSite=Strict
+```
 
 Session cookies in Symfony are configured under `framework.session.cookie_*` and
 default to `HttpOnly: true`, `SameSite: lax`.

@@ -40,10 +40,27 @@ celles-ci) :
 - **YAML** — des fichiers déclaratifs sous `config/routes/`, utiles pour des définitions
   tierces ou de simples préfixes, quand vous ne pouvez pas modifier le controller.
 
+```php
+// #[Route] attribute — the route sits next to the code it triggers
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Route('/blog/{slug}', name: 'blog_show', methods: ['GET'])]
+public function show(string $slug): Response { /* ... */ }
+
+// The YAML equivalent lives in a file under config/routes/ (see below)
+```
+
 Les trois éléments obligatoires d'une route sont son **nom** (une clé chaîne, utilisée
 pour la génération d'URL), son **path** (le motif d'URL avec des `{placeholders}`) et son
 **controller** (le callable à exécuter). Tout le reste — méthodes, host,
 requirements, defaults — est un raffinement optionnel.
+
+```yaml
+# config/routes/blog.yaml — the three mandatory pieces of a route
+blog_show:                                            # name (unique key)
+    path: /blog/{slug}                                # path with a {placeholder}
+    controller: App\Controller\BlogController::show   # controller to run
+```
 
 !!! question "Predict first"
     Deux routes matchent toutes deux `/blog/latest` — l'une est déclarée avant l'autre.
@@ -60,6 +77,16 @@ Chaque route déclarée devient un objet `Symfony\Component\Routing\Route`, coll
 dans une `Symfony\Component\Routing\RouteCollection` (une map ordonnée nom → Route).
 **L'ordre compte** : le matcher retourne la *première* route dont le path matche, donc
 les routes les plus spécifiques doivent précéder les routes fourre-tout.
+
+```php
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
+
+$routes = new RouteCollection();          // ordered map: name -> Route
+$routes->add('blog_latest', new Route('/blog/latest'));
+$routes->add('blog_show', new Route('/blog/{slug}'));
+// GET /blog/latest -> 'blog_latest' wins: first match in insertion order
+```
 
 Les loaders construisent la collection. Les attributs `#[Route]` sont lus par
 `Symfony\Component\Routing\Loader\AttributeClassLoader` (via
@@ -96,6 +123,19 @@ flowchart LR
 Si vous omettez `name:` sur un attribut, Symfony en génère un à partir de la classe et
 de la méthode (`app_blog_index`). Préférez des noms explicites — les noms générés sont
 fragiles et cassent les appels à `generateUrl()` quand vous renommez des méthodes.
+
+```php
+// No name: given -> Symfony generates "app_blog_index" from class + method
+#[Route('/blog')]
+public function index(): Response { /* ... */ }
+
+// Explicit name: survives a method rename
+#[Route('/blog', name: 'app_blog_index')]
+public function index(): Response { /* ... */ }
+
+// generateUrl() targets the name, not the method
+$url = $this->generateUrl('app_blog_index'); // "/blog"
+```
 
 ## Configuration & code
 

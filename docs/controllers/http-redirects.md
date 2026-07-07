@@ -42,6 +42,17 @@ is a real network round-trip: the response carries a `3xx` status and a
 Both build a `Symfony\Component\HttpFoundation\RedirectResponse`. Default status
 is **302 Found**.
 
+```php
+// Route name (+ params) — the router generates the URL
+return $this->redirectToRoute('order_show', ['id' => 42]);  // 302 Found by default
+
+// Any URL, with an explicit status
+return $this->redirect('https://symfony.com/', 302);
+
+// Both shortcuts return this object:
+return new RedirectResponse('/orders/42');                  // status defaults to 302
+```
+
 !!! question "Predict first"
     After a successful POST you call `redirectToRoute('show')` with no status
     argument. Which HTTP status does the browser receive, and does it keep the POST?
@@ -57,6 +68,15 @@ is **302 Found**.
 into a URL, then returns `new RedirectResponse($url, $status)`.
 `RedirectResponse` sets the `Location` header and a small HTML body (for legacy
 clients).
+
+```php
+// What redirectToRoute() does internally:
+$url = $this->generateUrl('order_show', ['id' => 42]); // router builds "/orders/42"
+$response = new RedirectResponse($url, 302);
+
+$response->headers->get('Location');  // "/orders/42"
+$response->getContent();              // small HTML page with a meta refresh + link
+```
 
 ```mermaid
 sequenceDiagram

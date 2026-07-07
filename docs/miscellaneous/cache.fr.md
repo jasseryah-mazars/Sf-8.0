@@ -105,6 +105,22 @@ ce qui évite un **cache stampede**, où de nombreuses requests concurrentes
 recalculent toutes en même temps une valeur coûteuse. Mettre `$beta = INF` force
 le recalcul ; `0` désactive l'expiration anticipée.
 
+```php
+// The callback receives the ItemInterface and a by-reference $save flag
+$rates = $cache->get('rates', function (ItemInterface $item, bool &$save): array {
+    $item->expiresAfter(300);
+    $rates = $this->api->fetchRates();
+    if ($rates === []) {
+        $save = false; // computed but NOT stored (retry on next call)
+    }
+
+    return $rates;
+});
+
+$cache->get('rates', $callback, INF); // $beta = INF: force recomputation now
+$cache->get('rates', $callback, 0);   // $beta = 0: disable early expiration
+```
+
 ```mermaid
 flowchart LR
     R[get key, callback] --> H{hit & fresh?}
@@ -141,6 +157,19 @@ Le `TagAwareAdapter` (qui enveloppe n'importe quel adapter) implémente
 évince **tous** les items portant ce tag — une invalidation par préoccupation
 plutôt que par clé.
 
+```php
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
+
+// $pool is a TagAwareCacheInterface (TagAwareAdapter, or a pool with tags: true)
+$price = $pool->get('product_42', function (ItemInterface $item): float {
+    $item->tag(['products']); // sticky label on this item
+
+    return 9.99;
+});
+
+$pool->invalidateTags(['products']); // evicts ALL items tagged "products"
+```
+
 ### PSR-6 vs PSR-16
 
 PSR-16 (`SimpleCache`) est une API clé→valeur minimaliste, sans objets item, sans
@@ -148,6 +177,17 @@ tags, sans sauvegardes différées — pratique mais limitée. PSR-6 prend en ch
 les sauvegardes différées (`saveDeferred`/`commit`) et les métadonnées. Les
 contracts Symfony enveloppent PSR-6 avec l'ergonomie du callback + la stampede
 protection.
+
+```php
+// PSR-16 (SimpleCache): plain key/value — no items, no tags, no deferred saves
+$simpleCache->set('color', 'blue', 3600);
+$color = $simpleCache->get('color', 'default');
+
+// PSR-6: deferred saves batched into one commit()
+$pool->saveDeferred($pool->getItem('a')->set(1));
+$pool->saveDeferred($pool->getItem('b')->set(2));
+$pool->commit(); // persists both items at once
+```
 
 ### Null behavior
 
@@ -161,6 +201,19 @@ retourne `null` aussi bien pour « absent » que pour « null stocké » — ave
 vous devez vérifier `isHit()` pour les distinguer. Mettre en cache « aucun
 résultat » sous forme de `null` est correct ; retenez simplement que cela compte
 comme un hit jusqu'à expiration.
+
+```php
+// Contracts: a stored null is a HIT — the callback will not run again
+$user = $cache->get('user_999', function (ItemInterface $item): ?array {
+    return $this->repo->find(999); // may return null ("not found")
+});
+
+// PSR-6 footgun: getItem($key)->get() is null for both "absent" and "stored null"
+$item = $pool->getItem('user_999');
+if ($item->isHit()) {     // the only reliable miss test
+    $user = $item->get(); // may legitimately be null
+}
+```
 
 !!! note "Null in real life"
     Un `null` stocké est une note sur le bloc qui dit « vérifié — rien ici ». Vous

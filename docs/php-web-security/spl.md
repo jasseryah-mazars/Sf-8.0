@@ -34,6 +34,15 @@ make your objects behave like native language constructs — indexable
 (`ArrayAccess`), countable (`Countable`), iterable (`Iterator`/
 `IteratorAggregate`) — plus ready-made structures (stacks, queues, heaps).
 
+```php
+$tags = new TagCollection();    // implements the SPL interfaces (see below)
+
+$tags[] = 'php';                // ArrayAccess  → offsetSet()
+isset($tags[0]);                // ArrayAccess  → offsetExists()
+count($tags);                   // Countable    → count()
+foreach ($tags as $tag) {}      // IteratorAggregate → getIterator()
+```
+
 | Interface | Enables | Key methods |
 |---|---|---|
 | `ArrayAccess` | `$obj[$k]` syntax | `offsetGet/Set/Exists/Unset` |
@@ -147,6 +156,27 @@ Values are produced **lazily**, one at a time, so you never materialise the
 whole sequence — huge memory wins for large/streamed data. `yield from`
 delegates to another iterable; a generator can also `return` a final value read
 via `getReturn()`.
+
+```php
+function inner(): \Generator
+{
+    yield 1;
+    yield 2;
+    return 'done';              // final value, read via getReturn()
+}
+
+function outer(): \Generator
+{
+    yield 0;
+    yield from inner();         // delegates to another iterable
+}
+
+foreach (outer() as $v) {}      // 0, 1, 2 — produced lazily
+
+$g = inner();
+foreach ($g as $v) {}           // consume the generator
+$g->getReturn();                // 'done'
+```
 
 ```php
 <?php

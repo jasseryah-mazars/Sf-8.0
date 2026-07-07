@@ -44,6 +44,18 @@ il conserve un **cookie jar** et un **historique**, suit ou retient les
 redirections, et retourne un [`Crawler`](crawler.md) sur le DOM de la response
 pour chaque appel de navigation.
 
+```php
+// static::createClient() returns a KernelBrowser (extends AbstractBrowser)
+$client = static::createClient();
+
+// every navigation call returns a Crawler over the response DOM
+$crawler = $client->request('GET', '/');
+
+// headless-browser state kept between requests
+$client->getCookieJar(); // cookie jar
+$client->getHistory();   // browsing history
+```
+
 !!! question "Predict first"
     Un controller retourne un 302. Vous appelez immédiatement
     `assertSelectorTextContains('h1', 'Dashboard')` et cela échoue. Pourquoi ?
@@ -65,11 +77,34 @@ la paire request/response dans son **historique** et fusionne tout `Set-Cookie`
 dans son **cookie jar**, si bien que les requests suivantes sont
 authentifiées/avec état, exactement comme une session de navigateur.
 
+```php
+// AbstractBrowser::request() -> BrowserKit Request -> KernelBrowser::doRequest()
+// -> HttpKernel::handle() -> Response
+$crawler = $client->request('GET', '/login'); // fresh Crawler from the HTML
+
+// the stored Response is available on the client
+$response = $client->getResponse();
+
+// history + cookie jar updated (Set-Cookie merged) => next request is stateful
+$client->request('GET', '/account'); // session cookie sent automatically
+```
+
 Par défaut, le `KernelBrowser` **redémarre le kernel** après chaque request afin
 que chaque request parte d'un container propre. `disableReboot()` désactive ce
 comportement : le container (et les services que vous avez remplacés) survit
 d'une request à l'autre au sein du test — essentiel quand vous installez un mock
 avant une request et voulez qu'il persiste.
+
+```php
+$client = static::createClient();
+$client->disableReboot(); // KernelBrowser keeps the same container
+
+// a service replaced before the request now survives it
+static::getContainer()->set('app.mailer', $mailerMock);
+
+$client->request('POST', '/order'); // mock still in place
+$client->request('GET', '/orders'); // same container, same mock
+```
 
 ```mermaid
 flowchart LR
@@ -94,6 +129,16 @@ pas — vous pouvez donc vérifier le `Location`. Appelez
 `$client->followRedirects()` (avant la request) pour suivre automatiquement
 toutes les redirections pour le reste du test. `followRedirects(false)` rétablit
 le comportement manuel.
+
+```php
+$client->request('POST', '/subscribe');   // controller returns a 302
+
+self::assertResponseRedirects('/thanks'); // assert the Location first
+$client->followRedirect();                // follow the last redirect, once
+
+$client->followRedirects();               // auto-follow all redirects from now on
+$client->followRedirects(false);          // restore manual behaviour
+```
 
 ## Configuration & code
 

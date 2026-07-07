@@ -41,6 +41,22 @@ Symfony 8 targets **PHPUnit 11/12**, which is fully **attribute-driven**:
 docblock annotations such as `@dataProvider` and `@covers` are removed. Test
 methods are discovered by the `test` prefix or the `#[Test]` attribute.
 
+```php
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+
+final class DiscoveryTest extends TestCase
+{
+    // discovered via the "test" prefix
+    public function testItWorks(): void { self::assertTrue(true); }
+
+    #[Test] // discovered via the attribute — no prefix needed
+    public function itAlsoWorks(): void { self::assertTrue(true); }
+
+    // @dataProvider / @covers docblock annotations: REMOVED in PHPUnit 11/12
+}
+```
+
 !!! question "Predict first"
     You `createStub(Foo::class)` but the class under test never actually calls it,
     and you assert nothing about the stub. Does the test fail?

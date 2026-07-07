@@ -62,8 +62,31 @@ private/removed, so `self::getContainer()->get(Foo::class)` works **even for
 private services** — but only for services that are actually **used** somewhere
 (unused private services are still optimised away).
 
+```php
+// framework.test: true (config/packages/test/framework.yaml) triggers the
+// TestServiceContainerRealRefPass / TestServiceContainerWeakRefPass passes,
+// which compile the TestContainer (service id "test.service_container")
+self::bootKernel();
+
+$container = self::getContainer();   // the TestContainer
+
+// works even for a PRIVATE service — as long as it is used somewhere
+$repository = $container->get(Foo::class);
+```
+
 `TestContainer::set()` lets you **replace** a service instance. Combined with the
 client's [`disableReboot()`](client.md), the replacement persists across requests.
+
+```php
+$client = static::createClient();
+$client->disableReboot();            // keep the kernel (and container) alive
+
+// TestContainer::set() swaps the real service for a double
+self::getContainer()->set(PaymentGateway::class, $this->createMock(PaymentGateway::class));
+
+$client->request('POST', '/checkout');     // first request uses the mock
+$client->request('GET', '/confirmation');  // still the mock — no reboot happened
+```
 
 ```mermaid
 flowchart TD
@@ -84,6 +107,18 @@ flowchart TD
 services are hidden and `get()` on them throws. Always use `self::getContainer()`
 in tests. (The historical `static::$container` property was removed; use the
 method.)
+
+```php
+self::bootKernel();
+
+// normal container: private services are hidden, get() throws
+static::$kernel->getContainer()->get(UserRepository::class); // ServiceNotFoundException
+
+// test container: private services are reachable
+self::getContainer()->get(UserRepository::class);            // OK
+
+// the removed static::$container property is NOT available anymore
+```
 
 ## Configuration & code
 

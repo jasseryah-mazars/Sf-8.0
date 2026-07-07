@@ -38,6 +38,15 @@ du langage — indexables (`ArrayAccess`), comptables (`Countable`), itérables
 (`Iterator`/`IteratorAggregate`) — ainsi que des structures prêtes à l'emploi
 (piles, files, tas).
 
+```php
+$tags = new TagCollection();    // implements the SPL interfaces (see below)
+
+$tags[] = 'php';                // ArrayAccess  → offsetSet()
+isset($tags[0]);                // ArrayAccess  → offsetExists()
+count($tags);                   // Countable    → count()
+foreach ($tags as $tag) {}      // IteratorAggregate → getIterator()
+```
+
 | Interface | Permet | Méthodes clés |
 |---|---|---|
 | `ArrayAccess` | La syntaxe `$obj[$k]` | `offsetGet/Set/Exists/Unset` |
@@ -154,6 +163,27 @@ Les valeurs sont produites **paresseusement**, une à la fois, si bien que vous
 ne matérialisez jamais la séquence entière — un gain de mémoire énorme pour les
 données volumineuses ou streamées. `yield from` délègue à un autre itérable ; un
 generator peut aussi `return` une valeur finale, lue via `getReturn()`.
+
+```php
+function inner(): \Generator
+{
+    yield 1;
+    yield 2;
+    return 'done';              // final value, read via getReturn()
+}
+
+function outer(): \Generator
+{
+    yield 0;
+    yield from inner();         // delegates to another iterable
+}
+
+foreach (outer() as $v) {}      // 0, 1, 2 — produced lazily
+
+$g = inner();
+foreach ($g as $v) {}           // consume the generator
+$g->getReturn();                // 'done'
+```
 
 ```php
 <?php

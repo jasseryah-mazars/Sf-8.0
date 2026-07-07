@@ -40,6 +40,22 @@ skill is telling *your* deprecations (which you must fix) from *third-party* one
 (which you tolerate until they release a fix), and quieting the ones you
 deliberately keep testing.
 
+```php
+// Library code signals a future removal:
+trigger_deprecation(
+    'acme/blog',                        // package
+    '2.4',                              // version that deprecated it
+    'Method "%s()" is deprecated.',     // message (sprintf-style)
+    'old',
+);
+
+// ...which internally triggers a silenced E_USER_DEPRECATED error:
+@trigger_error(
+    'Since acme/blog 2.4: Method "old()" is deprecated.',
+    \E_USER_DEPRECATED,
+);
+```
+
 !!! question "Predict first"
     Your CI runs with `max[self]=0`. A vendor library triggers a deprecation deep
     inside its own internals. Does the build go red?
@@ -65,6 +81,17 @@ At the end of the run the handler prints per-bucket counts and compares them wit
 the thresholds in `SYMFONY_DEPRECATIONS_HELPER` (`max[self]`, `max[direct]`, etc.).
 Exceeding any non-`legacy` threshold fails the suite with a non-zero exit code.
 
+```console
+$ # One threshold per bucket in SYMFONY_DEPRECATIONS_HELPER;
+$ # exceeding any non-legacy one fails the run
+$ SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[direct]=3&max[indirect]=999' \
+    php bin/phpunit
+
+$ # e.g. 1 self deprecation > max[self]=0 -> non-zero exit code
+$ echo $?
+1
+```
+
 ### Marking and asserting deprecations
 
 - `#[IgnoreDeprecations]` (`Symfony\Bridge\PhpUnit\Attribute\IgnoreDeprecations`)
@@ -74,6 +101,31 @@ Exceeding any non-`legacy` threshold fails the suite with a non-zero exit code.
   helper let a test **assert** that a specific deprecation message is emitted
   (useful when *you* add a `trigger_deprecation()` and want to prove it fires). The
   old `ExpectDeprecationTrait::expectDeprecation()` was removed in Symfony 7.0.
+
+```php
+use Symfony\Bridge\PhpUnit\Attribute\IgnoreDeprecations;
+use Symfony\Bridge\PhpUnit\ExpectUserDeprecationMessageTrait;
+
+final class LegacyPathTest extends TestCase
+{
+    use ExpectUserDeprecationMessageTrait;
+
+    #[IgnoreDeprecations]   // handler skips this test's deprecations
+    public function testDeprecatedPathStillWorks(): void
+    {
+        // exercising deprecated code here cannot fail the build
+    }
+
+    public function testEmitsDeprecation(): void
+    {
+        // asserts the message emitted by trigger_deprecation()
+        // (the old ExpectDeprecationTrait::expectDeprecation() is gone)
+        $this->expectUserDeprecationMessage('Since app 2.0: "foo()" is deprecated.');
+
+        trigger_deprecation('app', '2.0', '"foo()" is deprecated.');
+    }
+}
+```
 
 ```mermaid
 flowchart TD

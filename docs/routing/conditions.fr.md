@@ -37,6 +37,17 @@ vous permet de matcher sur une expression booléenne **ExpressionLanguage** arbi
 si une variable d'environnement de feature flag est activée, ou si un paramètre de query
 a une certaine valeur.
 
+```php
+// `condition` = a boolean ExpressionLanguage expression evaluated against the request
+#[Route(
+    '/beta',
+    name: 'app_beta',
+    // header present + feature-flag env var on + query parameter value
+    condition: "request.headers.has('X-Beta') and env('FEATURE_BETA') == '1' and request.query.get('preview') == '1'",
+)]
+public function beta(): Response { /* ... */ }
+```
+
 Une condition est un filtre de dernier recours : la route est considérée comme matchée
 **seulement si** l'expression retourne `true`. Comme elle peut inspecter n'importe quel
 élément de la request, elle est puissante — mais elle s'exécute sur chaque candidate au
@@ -74,6 +85,20 @@ Variables et fonctions disponibles dans l'expression :
 `routing.condition_service` (ajoutez-le avec l'attribut `#[AsRoutingConditionService]`)
 pour que le router sache qu'il peut être référencé. `env()` lit la valeur d'environnement
 résolue par le container.
+
+```php
+use Symfony\Component\Routing\Attribute\AsRoutingConditionService;
+
+// #[AsRoutingConditionService] applies the routing.condition_service tag
+#[AsRoutingConditionService(alias: 'flags')]
+final class FeatureFlags
+{
+    public function isOn(string $name): bool { return true; }
+}
+
+// service() calls the tagged service; env() reads the resolved container env value
+#[Route('/beta', condition: "service('flags').isOn('beta') and env('APP_ENV') == 'dev'")]
+```
 
 ```mermaid
 flowchart TD

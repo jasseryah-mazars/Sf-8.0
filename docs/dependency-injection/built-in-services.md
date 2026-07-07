@@ -69,6 +69,21 @@ adds **autowiring aliases**: an alias from an interface FQCN to a concrete servi
 id so `type-hint → service` resolution works. These aliases are what
 `debug:autowiring` lists.
 
+```php
+// Simplified sketch of what FrameworkBundle's Extension::load() does
+public function load(array $configs, ContainerBuilder $container): void
+{
+    // Concrete services, keyed by id
+    $container->register('router', Router::class);
+    $container->register('event_dispatcher', EventDispatcher::class);
+    $container->register('request_stack', RequestStack::class);
+    $container->register('http_kernel', HttpKernel::class);
+
+    // Autowiring alias: interface FQCN -> id (what debug:autowiring lists)
+    $container->setAlias(RouterInterface::class, 'router');
+}
+```
+
 ### id vs class vs alias
 
 - **id** — the string key in the container (`router`, `event_dispatcher`).
@@ -93,6 +108,24 @@ handled and it changes per sub-request). Inject
 `Symfony\Component\HttpFoundation\RequestStack` and call `getCurrentRequest()`, or
 use a controller argument / `#[MapRequestPayload]`. This is a classic trap.
 
+```php
+use Symfony\Component\HttpFoundation\RequestStack;
+
+public function __construct(
+    // Inject the stack — a raw Request is NOT a service
+    private RequestStack $requestStack,
+) {}
+
+public function currentHost(): ?string
+{
+    // getCurrentRequest() may be null outside the HTTP cycle
+    return $this->requestStack->getCurrentRequest()?->getHost();
+}
+
+// In a controller, map the payload instead of reading the Request:
+// public function create(#[MapRequestPayload] OrderInput $input) { ... }
+```
+
 !!! note "Source reference"
     FrameworkBundle wires the core services in
     `Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension` —
@@ -111,6 +144,19 @@ short-circuits to `null` instead of "method call on null". The same holds for
 which fatals the moment there is no request. Guard with `?->`, an early
 `if (null === $request) { return; }`, or keep request-agnostic services free of the
 request altogether.
+
+```php
+$request = $this->requestStack->getCurrentRequest(); // null in a command/worker
+
+// Explicit guard...
+if (null === $request) {
+    return;
+}
+
+// ...or nullsafe short-circuit; getMainRequest() is nullable too
+$path = $this->requestStack->getCurrentRequest()?->getPathInfo();
+$main = $this->requestStack->getMainRequest();
+```
 
 !!! note "Null in real life"
     Asking "what's the current table's order?" when the restaurant is closed (no

@@ -67,6 +67,16 @@ argument's type. It looks for a service whose id **equals the type** (FQCN) or a
 `App\:` glob create those ids; interfaces need an explicit or auto-generated alias
 (one implementation → auto-alias in some cases, otherwise you define it).
 
+```yaml
+# config/services.yaml
+services:
+    # The App\ glob registers each class with its FQCN as service id
+    App\:
+        resource: '../src/'
+    # Explicit alias so AutowirePass can resolve the interface type-hint
+    App\Payment\GatewayInterface: '@App\Payment\StripeGateway'
+```
+
 ### Ambiguity
 
 If a type has **multiple** candidate services and no default alias, autowiring
@@ -97,12 +107,38 @@ named `$requestLogger`. Because relying on the variable name is fragile,
 `#[Target('requestLogger')]` states the intended alias explicitly — renaming the
 parameter no longer breaks wiring.
 
+```php
+public function __construct(
+    // Matches the named alias 'Psr\Log\LoggerInterface $requestLogger'
+    // only because the parameter is named $requestLogger
+    private LoggerInterface $requestLogger,
+    // #[Target] names the alias explicitly — the parameter name is free
+    #[Target('requestLogger')]
+    private LoggerInterface $logger,
+) {}
+```
+
 ### `#[Autowire]` vs aliases
 
 `#[Autowire]` is the local, per-argument override (service, value, env, param,
 expression). Aliases are global type→id mappings. Prefer aliases/`#[Target]` for
 "which implementation of this interface"; use `#[Autowire]` for values or one-off
 pins.
+
+```php
+public function __construct(
+    // Global mapping: pick the implementation via a named alias
+    #[Target('smsTransport')]
+    private TransportInterface $transport,
+    // Local per-argument overrides with #[Autowire]
+    #[Autowire(service: 'app.rate_limiter')] // pin an exact service
+    private RateLimiterFactory $limiter,
+    #[Autowire(env: 'API_KEY')]              // environment variable
+    private string $apiKey,
+    #[Autowire(param: 'kernel.debug')]       // container parameter
+    private bool $debug,
+) {}
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\AutowirePass` &
@@ -121,6 +157,16 @@ distinction: a missing dependency is a build failure unless you explicitly opt i
 null via `?Type $x = null`. The common bug is expecting an interface with no
 implementation or alias to quietly become `null` — it breaks the container build
 instead.
+
+```php
+public function __construct(
+    // Nullable + default: a missing service becomes null, not a build error
+    private ?SomeInterface $dep = null,
+    // Pinned id on a nullable arg: null when 'app.maybe' does not exist
+    #[Autowire(service: 'app.maybe')]
+    private ?MaybeInterface $maybe = null,
+) {}
+```
 
 !!! note "Null in real life"
     Ordering a dish the kitchen doesn't stock stops the whole order (build error);

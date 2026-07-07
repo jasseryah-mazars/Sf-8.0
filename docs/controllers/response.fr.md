@@ -47,6 +47,15 @@ Les raccourcis d'`AbstractController` les enveloppent : `render()`→`Response`,
 `json()`→`JsonResponse`, `file()`→`BinaryFileResponse`, `stream()`→
 `StreamedResponse`, `redirectToRoute()`→`RedirectResponse`.
 
+```php
+// AbstractController shortcuts and the Response subclass each one builds
+return $this->render('page.html.twig');       // Response (HTML)
+return $this->json(['ok' => true]);           // JsonResponse
+return $this->file('/tmp/report.pdf');        // BinaryFileResponse
+return $this->stream('big_list.html.twig');   // StreamedResponse
+return $this->redirectToRoute('homepage');    // RedirectResponse
+```
+
 !!! question "Predict first"
     Une action retourne un simple tableau PHP au lieu d'une `Response`. Symfony le
     sérialise-t-il automatiquement en JSON, ou se passe-t-il autre chose ?
@@ -89,6 +98,22 @@ sequenceDiagram
 - `BinaryFileResponse` streame un fichier efficacement, prend en charge les range
   requests HTTP (téléchargements reprenables) et le délestage
   `X-Sendfile`/`X-Accel-Redirect`.
+
+```php
+// JsonResponse encodes for you; fromJsonString() skips re-encoding
+$auto = new JsonResponse(['id' => 1]);
+$raw  = JsonResponse::fromJsonString('{"id":1}');
+
+// StreamedResponse: the callback echoes and flushes chunks at send() time
+$stream = new StreamedResponse(function (): void {
+    echo 'chunk';
+    flush();
+});
+
+// BinaryFileResponse: efficient download, supports HTTP range requests
+$file = new BinaryFileResponse('/var/invoices/42.pdf');
+$file->setAutoLastModified();
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Response` et ses sous-classes —

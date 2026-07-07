@@ -73,6 +73,21 @@ puis ajoute des **autowiring aliases** : un alias du FQCN d'une interface vers u
 id de service concret pour que la résolution `type-hint → service` fonctionne. Ce
 sont ces alias que `debug:autowiring` liste.
 
+```php
+// Simplified sketch of what FrameworkBundle's Extension::load() does
+public function load(array $configs, ContainerBuilder $container): void
+{
+    // Concrete services, keyed by id
+    $container->register('router', Router::class);
+    $container->register('event_dispatcher', EventDispatcher::class);
+    $container->register('request_stack', RequestStack::class);
+    $container->register('http_kernel', HttpKernel::class);
+
+    // Autowiring alias: interface FQCN -> id (what debug:autowiring lists)
+    $container->setAlias(RouterInterface::class, 'router');
+}
+```
+
 ### id vs class vs alias
 
 - **id** — la clé texte dans le container (`router`, `event_dispatcher`).

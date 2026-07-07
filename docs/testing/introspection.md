@@ -38,6 +38,21 @@ After a request you can inspect two things: the raw **objects**
 for you. The helpers produce readable failure messages (they print the response on
 failure), so prefer them over hand-rolled `assertSame($response->getStatusCode())`.
 
+```php
+$client = static::createClient();
+$client->request('GET', '/');
+
+// Raw objects from the last request
+$request  = $client->getRequest();   // last Request
+$response = $client->getResponse();  // last Response
+
+// Hand-rolled assertion: terse failure message
+self::assertSame(200, $response->getStatusCode());
+
+// Idiomatic helper: prints the whole response on failure
+self::assertResponseIsSuccessful();
+```
+
 !!! question "Predict first"
     A controller returns `204 No Content`. Does `assertResponseIsSuccessful()`
     pass? What about `assertResponseStatusCodeSame(200)`?
@@ -54,6 +69,16 @@ request; `getRequest()` returns the `HttpFoundation\Request`. There are also
 BrowserKit-level `getInternalRequest()` / `getInternalResponse()` if you need the
 transport view.
 
+```php
+// Framework view: HttpFoundation objects
+$response = $client->getResponse();  // HttpFoundation\Response
+$request  = $client->getRequest();   // HttpFoundation\Request
+
+// Transport view: BrowserKit-level objects
+$rawRequest  = $client->getInternalRequest();   // BrowserKit\Request
+$rawResponse = $client->getInternalResponse();  // BrowserKit\Response
+```
+
 The assertions live in traits mixed into `WebTestCase`:
 
 - `Symfony\Bundle\FrameworkBundle\Test\WebTestAssertionsTrait` — the Symfony-flavoured
@@ -63,9 +88,29 @@ The assertions live in traits mixed into `WebTestCase`:
 - `Symfony\Bundle\FrameworkBundle\Test\DomCrawlerAssertionsTrait` — selector-based
   DOM assertions.
 
+```php
+// One assertion from each trait, all available on WebTestCase:
+self::assertRouteSame('app_home');                 // WebTestAssertionsTrait
+self::assertResponseHeaderSame(                    // BrowserKitAssertionsTrait
+    'Content-Type', 'text/html; charset=UTF-8'
+);
+self::assertSelectorTextContains('h1', 'Welcome'); // DomCrawlerAssertionsTrait
+```
+
 Each `assert*` is a thin wrapper delegating to a PHPUnit `Constraint`
 (e.g. `ResponseStatusCodeSame`, `ResponseIsSuccessful`), so failures integrate with
 PHPUnit's diff output.
+
+```php
+use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsSuccessful;
+use Symfony\Component\HttpFoundation\Test\Constraint\ResponseStatusCodeSame;
+
+// assertResponseIsSuccessful() is roughly this assert* wrapper:
+self::assertThat($client->getResponse(), new ResponseIsSuccessful());
+
+// assertResponseStatusCodeSame(200) delegates to another Constraint:
+self::assertThat($client->getResponse(), new ResponseStatusCodeSame(200));
+```
 
 ```mermaid
 flowchart LR

@@ -46,9 +46,29 @@ auparavant, décide de l'une de ces trois options :
 3. **Retélécharger** — rien d'utilisable n'est stocké, ou `no-store` ; effectuer
    une request complète.
 
+```http
+# 1. Fresh (max-age/Expires not elapsed): reuse silently, no request at all
+# 2. Stale or no-cache: revalidate with a conditional request
+GET /report.pdf HTTP/1.1
+If-None-Match: "abc123"
+If-Modified-Since: Tue, 30 Jun 2026 08:00:00 GMT
+
+HTTP/1.1 304 Not Modified
+
+# 3. Nothing stored (or no-store): full request, full 200 response
+```
+
 Comme il s'agit d'un cache *privé*, le navigateur respecte `max-age` mais
 **ignore `s-maxage`**, et il peut stocker des responses `private` (un cache
 partagé ne le peut pas).
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=600, s-maxage=3600
+
+# Browser (private cache): may store it, fresh for 600 s (max-age)
+# s-maxage=3600 is ignored -- it only targets shared caches
+```
 
 ### `Cache-Control` request directives
 
@@ -102,6 +122,17 @@ flowchart TD
 - **Précédent/suivant** peut utiliser le **bfcache** en mémoire, restaurant la
   page instantanément et contournant la validation habituelle.
 
+```http
+# Reload (F5): revalidate -- a 304 keeps the cached bytes
+GET /page HTTP/1.1
+Cache-Control: max-age=0
+
+# Hard reload (Ctrl+Shift+R): full refetch, no 304 possible
+GET /page HTTP/1.1
+Cache-Control: no-cache
+Pragma: no-cache
+```
+
 ### What the browser stores
 
 Le navigateur respecte les mêmes headers de response que Symfony émet :
@@ -116,6 +147,23 @@ Le navigateur respecte les mêmes headers de response que Symfony émet :
 - `immutable` → le navigateur saute la revalidation même au rechargement tant
   que c'est frais (idéal pour les assets avec empreinte).
 
+```http
+# Stored response (no `no-store`, so the browser may keep it)
+HTTP/1.1 200 OK
+Cache-Control: private, max-age=3600, immutable
+Expires: Tue, 07 Jul 2026 12:00:00 GMT
+ETag: "a1b2c3"
+Last-Modified: Mon, 06 Jul 2026 10:00:00 GMT
+Vary: Accept-Encoding
+
+# Once stale, the validators come back on the next conditional request
+# (which must also match the varied header, here Accept-Encoding):
+GET /app.css HTTP/1.1
+If-None-Match: "a1b2c3"
+If-Modified-Since: Mon, 06 Jul 2026 10:00:00 GMT
+Accept-Encoding: gzip
+```
+
 !!! note "Symfony's role is only to emit headers"
     Symfony ne dialogue jamais directement avec le cache du navigateur ; il se
     contente de définir les headers de la `Response` via
@@ -129,6 +177,13 @@ Les méthodes non sûres (`POST`, `PUT`, `PATCH`, `DELETE`) ne sont **pas**
 servies depuis le cache et peuvent invalider les entrées stockées pour l'URL
 cible. Seules les méthodes **sûres** (`GET`, `HEAD`) sont mises en cache. Voir
 [HTTP Methods](../http/methods.md).
+
+```php
+// Safe methods are cache candidates; unsafe ones always hit the origin
+$cacheable = in_array($request->getMethod(), ['GET', 'HEAD'], true);
+
+// POST, PUT, PATCH and DELETE bypass the cache and invalidate the URL's entry
+```
 
 ## Configuration & code
 

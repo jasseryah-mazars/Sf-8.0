@@ -72,6 +72,16 @@ Le bag stocke les messages **par type** sous forme de tableaux. Les lire les
 raison pour laquelle un message s'affiche exactement une fois. Pour lire **sans**
 consommer, utilisez `peek()`/`peekAll()`.
 
+```php
+$bag = $request->getSession()->getFlashBag();
+
+$bag->peek('success');   // read ONE type without consuming
+$bag->peekAll();         // read EVERY type, nothing removed
+$bag->get('success');    // returns AND removes this type's messages
+$bag->all();             // drains the whole bag
+// Twig's app.flashes helper calls get()/all() — rendering consumes
+```
+
 ```mermaid
 sequenceDiagram
     participant P as POST action

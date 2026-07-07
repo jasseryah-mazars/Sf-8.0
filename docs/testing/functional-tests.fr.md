@@ -51,6 +51,28 @@ deux classes de base :
 vous n'avez besoin que du container (par exemple pour tester un service avec le
 vrai câblage ou exécuter un handler Messenger), utilisez `KernelTestCase`.
 
+```php
+// KernelTestCase: boots the kernel only — no HTTP client
+final class InvoiceHandlerTest extends KernelTestCase
+{
+    public function testHandler(): void
+    {
+        self::bootKernel();
+        $handler = self::getContainer()->get(InvoiceHandler::class);
+    }
+}
+
+// WebTestCase extends KernelTestCase and adds the browser client
+final class HomeTest extends WebTestCase
+{
+    public function testHome(): void
+    {
+        $client = static::createClient(); // the only addition
+        $client->request('GET', '/');
+    }
+}
+```
+
 !!! question "Predict first"
     Vous appelez `self::getContainer()->get()` dans un `WebTestCase` et
     récupérez avec succès un service qui est `private` à l'exécution. D'où vient
@@ -72,10 +94,32 @@ démarre le kernel **puis** récupère le service `test.client` — un
 `framework.test: true`, ce que le fichier par défaut
 `config/packages/test/framework.yaml` active.
 
+```php
+// In a KernelTestCase: bootKernel() calls static::createKernel() internally
+self::bootKernel();
+$kernel = static::$kernel;          // the booted kernel is stored statically
+
+// In a WebTestCase: createClient() boots the kernel then fetches "test.client"
+$client = static::createClient();   // a KernelBrowser instance
+
+// test.client exists only with framework.test: true
+// (enabled by config/packages/test/framework.yaml)
+```
+
 `createClient()` **redémarre le kernel** avant de retourner (état frais), et le
 client le redémarre encore après chaque request, sauf si vous appelez
 [`disableReboot()`](client.md). Un **seul** client/kernel peut être actif par
 test ; appeler `createClient()` une seconde fois lève une exception.
+
+```php
+$client = static::createClient();   // reboots the kernel: fresh state
+$client->disableReboot();           // keep the same kernel across requests
+
+$client->request('GET', '/first');
+$client->request('GET', '/second'); // same container — no reboot in between
+
+// static::createClient();          // second call in the same test: throws
+```
 
 ### The test container and private services
 
@@ -86,6 +130,18 @@ service `test.service_container`) qui expose aussi les services **privés** et
 **non partagés**, afin que les tests puissent récupérer et remplacer des
 collaborateurs invisibles à l'exécution. C'est le fait le plus testé de cette
 étape.
+
+```php
+self::bootKernel();
+
+// getContainer() returns the TestContainer ("test.service_container"),
+// NOT the runtime container
+$container = self::getContainer();
+
+// private / non-shared services are reachable and replaceable
+$mailer = $container->get(NewsletterMailer::class);
+$container->set(NewsletterMailer::class, $this->createMock(NewsletterMailer::class));
+```
 
 ```mermaid
 sequenceDiagram

@@ -65,6 +65,17 @@ During build the `ContainerBuilder` uses a mutable
 `FrozenParameterBag` — after that, parameters are read-only. A leading/trailing
 `%` references a parameter; a literal percent is escaped by doubling: `%%`.
 
+```php
+// ContainerBuilder starts with a mutable ParameterBag
+$container = new ContainerBuilder(new ParameterBag());
+$container->setParameter('app.ratio', 'ratio: 90%%'); // %% escapes a literal %
+
+$container->compile(); // freezes the bag
+
+$bag = $container->getParameterBag(); // ParameterBagInterface
+$bag instanceof FrozenParameterBag;   // true — read-only after compile()
+```
+
 ### Environment variables are lazy placeholders
 
 `%env(FOO)%` does **not** read `$_ENV` at compile time. The compiler replaces it
@@ -72,6 +83,15 @@ with a placeholder; at runtime the container resolves it through
 `Symfony\Component\DependencyInjection\EnvVarProcessor`. This is why changing an
 env var needs no cache rebuild. Env values may be sourced from real environment
 variables, a `.env` file (via `symfony/dotenv`), or `secrets`.
+
+```yaml
+# config/services.yaml
+parameters:
+    # '%env(FOO)%' stays a placeholder at compile time — $_ENV is NOT read here.
+    app.foo: '%env(FOO)%'
+    # At runtime EnvVarProcessor resolves FOO from the real environment,
+    # from a .env file (loaded by symfony/dotenv), or from the secrets vault.
+```
 
 ### Env processors
 
@@ -81,6 +101,25 @@ A processor casts/transforms the raw string: `int:`, `float:`, `bool:`, `string:
 `%env(int:default:fallback_param:MAX_ITEMS)%` reads `MAX_ITEMS`, falls back to a
 parameter, then casts to int. Processors implement
 `EnvVarProcessorInterface`; you can add your own.
+
+```yaml
+parameters:
+    app.max: '%env(int:MAX_ITEMS)%'               # int: cast
+    app.rate: '%env(float:RATE)%'                 # float: cast
+    app.debug: '%env(bool:APP_DEBUG)%'            # bool: cast (not: negates it)
+    app.name: '%env(string:trim:APP_NAME)%'       # trim: first, then string:
+    app.opts: '%env(json:OPTIONS)%'               # json: decode
+    app.hosts: '%env(csv:HOSTS)%'                 # csv: split
+    app.dsn: '%env(resolve:DB_DSN)%'              # resolve: %params% inside value
+    app.cert: '%env(base64:file:CERT_PATH)%'      # file: read it, base64: decode
+    app.db: '%env(key:path:url:DATABASE_URL)%'    # url: parse, key: pick one part
+    app.qs: '%env(query_string:QS)%'              # query_string: parse
+    app.cfg: '%env(require:PHP_FILE)%'            # require: the PHP file
+    app.level: '%env(enum:App\Enum\Level:LEVEL)%' # enum: backed enum case
+    # default: chains right-to-left — read MAX_ITEMS, else the parameter, cast:
+    app.limit: '%env(int:default:fallback_param:MAX_ITEMS)%'
+    # Custom processors implement EnvVarProcessorInterface.
+```
 
 ```mermaid
 flowchart LR
@@ -100,6 +139,22 @@ Three ways, all resolved at compile time into the definition:
 3. **`ParameterBagInterface`** injected as a service, read at runtime with
    `->get('app.name')` — for when the value must vary or be dynamic.
 
+```php
+// bind (services.yaml): _defaults: { bind: { $projectDir: '%kernel.project_dir%' } }
+public function __construct(
+    string $projectDir,                              // 1. filled by bind
+    #[Autowire('%kernel.debug%')] bool $debug,       // 2. parameter expression
+    #[Autowire(env: 'DATABASE_URL')] string $dsn,    //    env var
+    #[Autowire(param: 'app.name')] string $appName,  //    named parameter
+    private ParameterBagInterface $params,           // 3. runtime bag
+) {}
+
+public function dynamic(): mixed
+{
+    return $this->params->get('app.name');           // runtime read
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\EnvVarProcessor` implements the
     built-in processors —
@@ -118,6 +173,19 @@ optional lookups. Watch the casts: `%env(int:MISSING)%` with no default errors, 
 `%env(int:default::MISSING)%` casts empty/`null` to `0`, which can hide a
 misconfiguration. The common bug is assuming an absent env var silently becomes
 `null` everywhere; without a `default:` processor it is a hard failure.
+
+```php
+// Env fallbacks (resolved at runtime):
+'%env(default::SOME_VAR)%';             // null when SOME_VAR is unset
+'%env(default:app.fallback:SOME_VAR)%'; // falls back to the app.fallback parameter
+'%env(int:MISSING)%';                   // unset + no default: -> hard failure
+'%env(int:default::MISSING)%';          // unset -> null -> cast to 0 (careful!)
+
+// Parameter bag at runtime (app.optional: null declared in YAML):
+$params->get('app.optional');           // null — parameter declared as null
+$params->has('nope');                   // false — check first for optional lookups
+$params->get('nope');                   // throws ParameterNotFoundException
+```
 
 !!! note "Null in real life"
     A recipe step reading "salt to taste" with the jar missing (unset env): either

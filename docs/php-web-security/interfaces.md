@@ -36,6 +36,21 @@ An **interface** is a pure contract: method signatures and constants (implicitly
 interfaces — this is how PHP gets multiple inheritance of *type* without
 multiple inheritance of *state*.
 
+```php
+interface Timestamped
+{
+    public const string FORMAT = 'Y-m-d';  // constant: implicitly public, typed (8.3)
+
+    public function touchedAt(): \DateTimeImmutable;  // signature only, no body
+}
+
+// An interface may extend SEVERAL parent interfaces…
+interface Auditable extends Timestamped, \Stringable {}
+
+// …and a class may implement MANY interfaces at once.
+final class Invoice implements Timestamped, \Countable { /* ... */ }
+```
+
 | Feature | Interface | Abstract class |
 |---|---|---|
 | Multiple inheritance | Yes | No |
@@ -113,6 +128,20 @@ classDiagram
 | DNF | `(A&B)\|null` | Combine both, 8.2+ |
 | `void` / `never` | — | No return / never returns |
 | `static` / `self` | — | LSB / declaring class |
+
+```php
+final class Repo
+{
+    public function flush(int $n, bool $force): void {}           // scalar + void
+    public function maybe(?string $s): self { return $this; }     // ?T + self
+    public function find(int|string $id): static { return $this; }// union + LSB
+    public function walk(\Countable&\Traversable $c): void {}     // intersection
+    public function dnf((\Countable&\Traversable)|null $c): never // DNF + never
+    {
+        throw new \LogicException('always throws');
+    }
+}
+```
 
 ### `instanceof`
 

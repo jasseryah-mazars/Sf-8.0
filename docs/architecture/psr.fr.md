@@ -77,6 +77,24 @@ conforme). Connaître cette correspondance est une matière d'examen de premier 
   `Psr\Log\LoggerInterface`, donc tout logger PSR-3 fonctionne (la bibliothèque de
   logging concrète est hors de notre propos ici).
 
+```php
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\Clock;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+// Implements — these Symfony objects ARE valid PSR instances:
+$container = new Container();        // Psr\Container\ContainerInterface (PSR-11)
+$dispatcher = new EventDispatcher(); // Psr\EventDispatcher\EventDispatcherInterface (PSR-14)
+$clock = new Clock();                // Psr\Clock\ClockInterface (PSR-20)
+
+// Consumes — Symfony type-hints the PSR, so ANY PSR-3 logger fits:
+final class Importer
+{
+    public function __construct(private readonly LoggerInterface $logger) {}
+}
+```
+
 ### HttpFoundation is not PSR-7
 
 Les `Request`/`Response` de Symfony (`HttpFoundation`) ne sont **pas** des objets
@@ -85,6 +103,19 @@ Quand une bibliothèque a besoin de PSR-7, le **bridge psr-http-message** conver
 entre HttpFoundation et PSR-7 (`HttpFoundationFactory` / `PsrHttpFactory`). Les
 middlewares PSR-15 s'intègrent de même via ce bridge. Considérez le bridge comme un
 *adaptateur d'interopérabilité*, pas comme un remplaçant de HttpFoundation.
+
+```php
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+
+// HttpFoundation Request -> PSR-7 ServerRequestInterface
+$psrRequest = $psrHttpFactory->createRequest($request);   // PsrHttpFactory
+
+// ...hand $psrRequest to any PSR-7 / PSR-15 library...
+
+// PSR-7 response -> back to an HttpFoundation Response
+$response = $httpFoundationFactory->createResponse($psrResponse); // HttpFoundationFactory
+```
 
 ```mermaid
 flowchart LR

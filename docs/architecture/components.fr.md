@@ -40,6 +40,15 @@ versionnement sémantique, utilisable **sans** le framework complet. Laravel, Dr
 et bien d'autres s'appuient sur les components Symfony précisément pour cette
 raison.
 
+```console
+# Each component is its own SemVer-versioned Composer package
+$ composer require symfony/http-foundation   # OO Request/Response, standalone
+$ composer require symfony/routing           # URL matching, no kernel needed
+
+# The framework wiring only arrives with FrameworkBundle
+$ composer require symfony/framework-bundle
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -62,6 +71,25 @@ interfaces stables, si bien que les consommateurs peuvent typer sur le contract 
 changer d'implémentation. C'est pour cela que vous pouvez dépendre de
 `Psr\Log\LoggerInterface` ou de
 `Symfony\Contracts\HttpClient\HttpClientInterface` sans tirer une classe concrète.
+
+```php
+// Contracts packages ship interfaces only — type-hint them, not concrete classes
+use Psr\Log\LoggerInterface;                                    // PSR-3
+use Symfony\Contracts\Cache\CacheInterface;                     // symfony/cache-contracts
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface; // symfony/event-dispatcher-contracts
+use Symfony\Contracts\HttpClient\HttpClientInterface;           // symfony/http-client-contracts
+
+final class ReleaseNotifier
+{
+    public function __construct(
+        private HttpClientInterface $http,        // any implementation can be swapped in
+        private CacheInterface $cache,
+        private EventDispatcherInterface $events,
+        private LoggerInterface $logger,
+    ) {
+    }
+}
+```
 
 ```mermaid
 flowchart TD
@@ -107,6 +135,25 @@ l'**extension** de chaque bundle charge ses services, les compiler passes optimi
 le tout, et le container est déversé dans `var/cache`. À l'exécution, les components
 ne sont que des services que vous récupérez ou faites injecter par autowiring — voir
 [Dependency Injection](../dependency-injection/index.md).
+
+```php
+use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
+
+// The Kernel builds a ContainerBuilder; FrameworkBundle's extension loads the
+// services enabled under the "framework:" config tree; compiler passes optimise;
+// the compiled container is dumped to var/cache.
+final class Kernel extends BaseKernel
+{
+    use MicroKernelTrait;
+
+    protected function build(ContainerBuilder $container): void
+    {
+        // add compiler passes here, before compilation
+    }
+}
+```
 
 !!! note "Source reference"
     Liste et organisation des components —

@@ -36,6 +36,16 @@ developers know where things live. The skeleton created by `symfony new` /
 `composer create-project symfony/skeleton` gives you a small, predictable tree.
 Conventions here are strong but not magic — they are wired by the `Kernel` and Flex.
 
+```console
+# Both commands create the same conventional skeleton tree
+$ symfony new my_app
+$ composer create-project symfony/skeleton my_app
+
+# The conventions are wired by src/Kernel.php (the Kernel class) and Flex
+$ ls my_app/
+bin/  config/  public/  src/  var/  vendor/  composer.json  symfony.lock
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -118,6 +128,32 @@ A modern bundle uses the **new** directory layout and often extends
 Bundle **inheritance** (`getParent()`) was removed in Symfony 5; override behaviour
 via [Framework Overloading](overloading.md) instead.
 
+```php
+// src/AcmeBlogBundle.php — a modern bundle class
+final class AcmeBlogBundle extends AbstractBundle
+{
+    // Bundle::build(): add compiler passes to the container
+    public function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new CollectBlogWidgetsPass());
+    }
+
+    // AbstractBundle::configure(): define the bundle's config tree
+    public function configure(DefinitionConfigurator $definition): void
+    {
+        $definition->rootNode()->children()->booleanNode('enabled')->defaultTrue()->end();
+    }
+
+    // loadExtension(): load services — no hand-written getContainerExtension() needed
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $container->import('../config/services.php');
+    }
+
+    // getParent() bundle inheritance was removed in Symfony 5 — do not use it
+}
+```
+
 ```mermaid
 flowchart TD
     FC[public/index.php] --> K[App\Kernel]
@@ -136,6 +172,15 @@ flowchart TD
 `config/` is parsed at **compile time** into the dumped container in
 `var/cache/<env>/`. At runtime the app loads that cache; `public/index.php` stays
 tiny and no YAML is parsed on the hot path (in `prod`).
+
+```console
+# Compile time: config/ is parsed once and dumped into var/cache/<env>/
+$ php bin/console cache:warmup --env=prod
+$ ls var/cache/prod/
+App_KernelProdContainer.php  ...
+
+# Runtime: public/index.php only boots this cached container (no YAML parsing)
+```
 
 ## Configuration & code
 

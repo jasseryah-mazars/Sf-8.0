@@ -35,6 +35,17 @@ you match on an arbitrary boolean **ExpressionLanguage** expression evaluated
 against the request. Examples: only match when a specific header is present, when a
 feature-flag env var is on, or when a query parameter has a value.
 
+```php
+// `condition` = a boolean ExpressionLanguage expression evaluated against the request
+#[Route(
+    '/beta',
+    name: 'app_beta',
+    // header present + feature-flag env var on + query parameter value
+    condition: "request.headers.has('X-Beta') and env('FEATURE_BETA') == '1' and request.query.get('preview') == '1'",
+)]
+public function beta(): Response { /* ... */ }
+```
+
 A condition is a last-mile filter: the route is considered matched **only if** the
 expression returns `true`. Because it can inspect anything on the request, it is
 powerful — but it runs on every candidate match, so keep it cheap.
@@ -70,6 +81,20 @@ Available variables and functions in the expression:
 `routing.condition_service` tag (add it with the `#[AsRoutingConditionService]`
 attribute) so the router knows it may be referenced. `env()` reads the resolved
 container env value.
+
+```php
+use Symfony\Component\Routing\Attribute\AsRoutingConditionService;
+
+// #[AsRoutingConditionService] applies the routing.condition_service tag
+#[AsRoutingConditionService(alias: 'flags')]
+final class FeatureFlags
+{
+    public function isOn(string $name): bool { return true; }
+}
+
+// service() calls the tagged service; env() reads the resolved container env value
+#[Route('/beta', condition: "service('flags').isOn('beta') and env('APP_ENV') == 'dev'")]
+```
 
 ```mermaid
 flowchart TD

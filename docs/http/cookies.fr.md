@@ -90,6 +90,15 @@ Constantes `SameSite` : `Cookie::SAMESITE_STRICT`, `Cookie::SAMESITE_LAX`,
 `Cookie::SAMESITE_NONE`. Son constructeur accepte aussi tout en positionnel, mais
 l'API fluide `with*` est plus claire et évite les erreurs d'ordre des arguments.
 
+```php
+// The three SameSite constants (Cookie is immutable: with* returns a new instance)
+$bank    = Cookie::create('bank')->withSameSite(Cookie::SAMESITE_STRICT);
+$session = Cookie::create('sid')->withSameSite(Cookie::SAMESITE_LAX);
+$embed   = Cookie::create('embed')
+    ->withSameSite(Cookie::SAMESITE_NONE)
+    ->withSecure(true); // SAMESITE_NONE requires Secure
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Cookie` et les constantes `SAMESITE_*` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php).
@@ -114,6 +123,17 @@ flowchart LR
   la définition, sinon le navigateur conserve l'original.
 - À l'entrée, les cookies se lisent depuis `$request->cookies` (un `InputBag`).
 
+```php
+// Queue a Set-Cookie header on the outgoing response
+$response->headers->setCookie($cookie);
+
+// Delete it: path and domain must match the original scope
+$response->headers->clearCookie('token', '/', '.example.com');
+
+// Read incoming cookies from the InputBag
+$token = $request->cookies->get('token'); // null when absent
+```
+
 ### `SameSite` semantics
 
 | Value | Sent on cross-site request? | Use for |
@@ -135,6 +155,13 @@ CSRF via cookies.
 - **Préfixe `__Host-`** : un cookie nommé `__Host-...` doit être `Secure`, sans
   `Domain`, et avec `Path=/` — le périmètre le plus strict que le navigateur
   impose.
+
+```http
+Set-Cookie: sid=abc; Secure; HttpOnly; SameSite=Lax
+Set-Cookie: widget=1; SameSite=None; Secure
+Set-Cookie: bank=42; Secure; HttpOnly; SameSite=Strict
+Set-Cookie: __Host-token=xyz; Secure; Path=/; HttpOnly; SameSite=Strict
+```
 
 Les cookies de session de Symfony se configurent sous
 `framework.session.cookie_*` et valent par défaut `HttpOnly: true`,

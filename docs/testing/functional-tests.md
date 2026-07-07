@@ -46,6 +46,28 @@ Twig → security) and asserts on the response. There are two base classes:
 need the container (e.g. to test a service with real wiring or run a Messenger
 handler), use `KernelTestCase`.
 
+```php
+// KernelTestCase: boots the kernel only — no HTTP client
+final class InvoiceHandlerTest extends KernelTestCase
+{
+    public function testHandler(): void
+    {
+        self::bootKernel();
+        $handler = self::getContainer()->get(InvoiceHandler::class);
+    }
+}
+
+// WebTestCase extends KernelTestCase and adds the browser client
+final class HomeTest extends WebTestCase
+{
+    public function testHome(): void
+    {
+        $client = static::createClient(); // the only addition
+        $client->request('GET', '/');
+    }
+}
+```
+
 !!! question "Predict first"
     You call `self::getContainer()->get()` in a `WebTestCase` and successfully
     fetch a service that is `private` at runtime. Where did that service come from?
@@ -65,10 +87,32 @@ boots the kernel **then** fetches the `test.client` service — a
 `framework.test: true`, which the default `config/packages/test/framework.yaml`
 enables.
 
+```php
+// In a KernelTestCase: bootKernel() calls static::createKernel() internally
+self::bootKernel();
+$kernel = static::$kernel;          // the booted kernel is stored statically
+
+// In a WebTestCase: createClient() boots the kernel then fetches "test.client"
+$client = static::createClient();   // a KernelBrowser instance
+
+// test.client exists only with framework.test: true
+// (enabled by config/packages/test/framework.yaml)
+```
+
 `createClient()` **reboots the kernel** before returning (fresh state), and the
 client reboots it again after each request unless you call
 [`disableReboot()`](client.md). Only **one** client/kernel may be live per test;
 calling `createClient()` a second time throws.
+
+```php
+$client = static::createClient();   // reboots the kernel: fresh state
+$client->disableReboot();           // keep the same kernel across requests
+
+$client->request('GET', '/first');
+$client->request('GET', '/second'); // same container — no reboot in between
+
+// static::createClient();          // second call in the same test: throws
+```
 
 ### The test container and private services
 
@@ -78,6 +122,18 @@ calling `createClient()` a second time throws.
 `test.service_container`) that also exposes **private** and **non-shared**
 services, so tests can fetch and replace collaborators that are invisible at
 runtime. This is the single most-tested fact of the stage.
+
+```php
+self::bootKernel();
+
+// getContainer() returns the TestContainer ("test.service_container"),
+// NOT the runtime container
+$container = self::getContainer();
+
+// private / non-shared services are reachable and replaceable
+$mailer = $container->get(NewsletterMailer::class);
+$container->set(NewsletterMailer::class, $this->createMock(NewsletterMailer::class));
+```
 
 ```mermaid
 sequenceDiagram

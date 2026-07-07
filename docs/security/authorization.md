@@ -42,6 +42,19 @@ The single entry point is `AuthorizationCheckerInterface::isGranted($attribute,
 $subject = null)`. Everything — `#[IsGranted]`, `denyAccessUnlessGranted()`,
 Twig's `is_granted()`, `access_control` — funnels through it.
 
+```php
+// Single entry point — every check funnels through isGranted():
+$authChecker->isGranted('ROLE_ADMIN');          // role attribute
+$authChecker->isGranted('EDIT', $post);         // custom attribute + subject
+
+// Same funnel from a controller:
+#[IsGranted('POST_VIEW', subject: 'post')]      // declarative attribute
+$this->denyAccessUnlessGranted('EDIT', $post);  // imperative, throws on failure
+
+// Twig: {% if is_granted('EDIT', post) %} ... {% endif %}
+// security.yaml: access_control rules run the same voters (URL-based only)
+```
+
 !!! question "Predict first"
     You call `isGranted('ROLE_ADMIN')` on a logged-out visitor. Does it throw, or
     return a value?
@@ -82,6 +95,15 @@ Built-in voters include `RoleVoter` and `RoleHierarchyVoter` (roles),
 `AuthenticatedVoter` (the `IS_AUTHENTICATED_*` attributes) and
 `ExpressionVoter` (`allow_if` expressions).
 
+```yaml
+# Which built-in voter handles which attribute:
+access_control:
+    - { path: ^/admin,   roles: ROLE_ADMIN }              # RoleVoter / RoleHierarchyVoter
+    - { path: ^/profile, roles: IS_AUTHENTICATED_FULLY }  # AuthenticatedVoter
+    # allow_if expressions are evaluated by ExpressionVoter:
+    - { path: ^/reports, allow_if: "is_granted('ROLE_AUDITOR') and request.isSecure()" }
+```
+
 !!! note "Source reference"
     `Symfony\Component\Security\Core\Authorization\AccessDecisionManager::decide()`
     — [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php).
@@ -99,6 +121,18 @@ anonymous request to a protected resource, the thrown `AccessDeniedException`
 is caught and turned into the **entry point** (login redirect) if the user is
 not authenticated, or a **403** if they are but lack the attribute.
 
+```php
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[IsGranted('ROLE_ADMIN')]   // throws AccessDeniedException when denied
+public function dashboard(): Response
+{
+    // anonymous user -> AccessDeniedException -> entry point (login redirect)
+    // authenticated user without ROLE_ADMIN -> 403 response
+    return $this->render('admin/dashboard.html.twig');
+}
+```
+
 ### Roles vs attributes
 
 - **Roles** are the coarse layer: `ROLE_*` strings carried on the token,
@@ -115,6 +149,13 @@ reads a `null` token from storage; rather than crash, it substitutes a
 and votes as usual. So `isGranted('ROLE_ADMIN')` on a logged-out user is a clean
 `false`, not an error: `AuthenticatedVoter` denies the `IS_AUTHENTICATED_*`
 attributes for a `NullToken`, while `PUBLIC_ACCESS` still grants.
+
+```php
+// Anonymous request: storage holds null, the checker substitutes a NullToken
+$authChecker->isGranted('ROLE_ADMIN');             // false — clean denial, no error
+$authChecker->isGranted('IS_AUTHENTICATED_FULLY'); // false — AuthenticatedVoter denies
+$authChecker->isGranted('PUBLIC_ACCESS');          // true — always granted
+```
 
 Where `null` actually bites is *inside* a voter: `$token->getUser()` is `null`
 for an unauthenticated token, so guard with an `instanceof` check before touching

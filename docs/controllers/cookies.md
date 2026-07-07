@@ -40,6 +40,19 @@ the response.
   response header bag: `$response->headers->setCookie($cookie)`.
 - **Delete:** `$response->headers->clearCookie('name')` sends an expired cookie.
 
+```php
+// Read — Request side, a ParameterBag
+$theme = $request->cookies->get('theme', 'light');
+$hasConsent = $request->cookies->has('consent');
+$all = $request->cookies->all();
+
+// Write — Response side
+$response->headers->setCookie(Cookie::create('theme', 'dark'));
+
+// Delete — sends an expired cookie to the browser
+$response->headers->clearCookie('theme');
+```
+
 !!! question "Predict first"
     You set a cookie with `SameSite=None` but leave `Secure` at its default. Does a
     modern browser store it?
@@ -55,6 +68,19 @@ A `Response`'s cookies live in `Symfony\Component\HttpFoundation\ResponseHeaderB
 which keeps them separate from ordinary headers and emits one `Set-Cookie` line
 per cookie when the response is sent. `Cookie::create()` is the fluent factory;
 its constructor validates the name and captures every attribute.
+
+```php
+// Cookie::create() — fluent factory; each with*() returns a NEW immutable Cookie
+$cookie = Cookie::create('consent')
+    ->withValue('yes')
+    ->withExpires(new \DateTimeImmutable('+1 year'))
+    ->withPath('/')
+    ->withSecure(true)
+    ->withHttpOnly(true)
+    ->withSameSite(Cookie::SAMESITE_STRICT);
+
+$response->headers->setCookie($cookie); // ResponseHeaderBag emits one Set-Cookie line
+```
 
 Key `Cookie` attributes and their secure defaults in Symfony 8:
 
@@ -78,6 +104,16 @@ flowchart LR
 `sameSite='none'` **requires** `secure=true` or modern browsers reject the
 cookie. `httpOnly=true` blocks `document.cookie` access, mitigating XSS token
 theft. These are security-critical defaults the exam expects you to know.
+
+```php
+// SameSite=None is only accepted together with Secure=true
+$crossSite = Cookie::create('tracker', '1')
+    ->withSameSite(Cookie::SAMESITE_NONE)
+    ->withSecure(true); // mandatory here — otherwise the browser drops the cookie
+
+// httpOnly defaults to true (hidden from document.cookie); opt out explicitly
+$jsReadable = Cookie::create('ui_state', 'open')->withHttpOnly(false);
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Cookie` —

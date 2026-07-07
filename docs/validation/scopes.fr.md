@@ -42,6 +42,28 @@ au niveau de la classe (p. ex. `#[Assert\Callback]`, `#[Assert\Expression]`, ou
 une constraint de classe personnalisée) voient l'objet entier — idéal pour les
 règles **inter-champs**.
 
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+// Class scope: #[Assert\Expression] sees the whole object (cross-field rule)
+#[Assert\Expression('this.start < this.end', message: 'Start must be before end.')]
+class Slot
+{
+    public \DateTimeImmutable $start;
+    public \DateTimeImmutable $end;
+
+    // #[Assert\Callback] is also a class-target constraint: plain PHP cross-field logic
+    #[Assert\Callback]
+    public function check(ExecutionContextInterface $context): void
+    {
+        if ($this->start >= $this->end) {
+            $context->buildViolation('Start must be before end.')->atPath('start')->addViolation();
+        }
+    }
+}
+```
+
 !!! question "Predict first"
     Un `Order` possède une `?Address $shippingAddress` dont les propres
     constraints `#[Assert\NotBlank]` ne se déclenchent jamais. Que manque-t-il ?
@@ -108,6 +130,21 @@ cascade est récursive : un graphe est donc entièrement parcouru — attention 
 cycles (le validator se protège contre la revalidation de la même instance
 d'objet au sein d'une même exécution).
 
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Cart
+{
+    // traverse: true (default) — the Traversable is iterated, each element cascaded
+    #[Assert\Valid(traverse: true)]
+    public \ArrayObject $lines;
+
+    // traverse: false — the collection object itself is validated, not its elements
+    #[Assert\Valid(traverse: false)]
+    public \ArrayObject $archivedLines;
+}
+```
+
 **Les groupes se propagent.** Lors de la cascade, le groupe de validation
 *courant* est transmis à l'objet imbriqué (voir [Groups](groups.md)). Surprise
 fréquente : l'objet imbriqué est validé dans le groupe que vous exécutez, qui
@@ -126,12 +163,48 @@ violation ni erreur. Si un objet lié est *requis*, le contrôle de présence et
 cascade sont orthogonaux : protégez la propriété avec `#[Assert\NotNull]` **et**
 `#[Assert\Valid]`.
 
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Order
+{
+    // Valid silently skips null — nothing to recurse into.
+    // Presence and cascade are orthogonal: NotNull requires the object,
+    // Valid descends into it when it is there.
+    #[Assert\NotNull]
+    #[Assert\Valid]
+    public ?Address $billingAddress = null;
+}
+```
+
 Pour une collection cascadée, les *éléments* `null` sont visités comme toute
 valeur, leurs constraints d'élément s'appliquent donc toujours. Lorsque vous
 validez un tableau associatif avec `Collection`, utilisez `Required` vs
 `Optional` pour décider si une clé manquante est une erreur. La portée getter a
 sa propre subtilité : un getter retournant `null` alimente ses constraints avec
 `null`, qu'elles ignorent (sauf `NotNull`/`NotBlank`).
+
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Customer
+{
+    // Collection: a Required key must exist, an Optional key may be missing
+    #[Assert\Collection(fields: [
+        'email' => new Assert\Required([new Assert\Email()]),
+        'phone' => new Assert\Optional([new Assert\Length(min: 6)]),
+    ])]
+    public array $contact = [];
+
+    // Getter returning null: Email would skip it, NotNull/NotBlank still fail
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    public function getNickname(): ?string
+    {
+        return null;
+    }
+}
+```
 
 !!! note "Null in real life"
     Un objet imbriqué `null` est une étiquette de bagage sans bagage attaché — le

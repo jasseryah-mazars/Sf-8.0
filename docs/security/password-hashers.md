@@ -34,6 +34,13 @@ salted, one-way function. Symfony's PasswordHasher component wraps PHP's
 `Symfony\Component\PasswordHasher\PasswordHasherInterface`
 (`hash()`, `verify()`, `needsRehash()`).
 
+```php
+// PasswordHasherInterface — wraps password_hash() / libsodium
+$hash = $hasher->hash('S3cr3t!');    // hash(): slow, salted, one-way
+$hasher->verify($hash, 'S3cr3t!');   // verify(): true on match
+$hasher->needsRehash($hash);         // needsRehash(): true after an algo/cost bump
+```
+
 | Algorithm | Backed by | Note |
 |---|---|---|
 | `auto` | best available | **Default & recommended**; currently bcrypt |
@@ -83,6 +90,16 @@ You do **not** verify passwords by hand. The authenticator adds a
 `CheckCredentialsListener` calls the hasher's `verify($hash, $plain)`. See
 [Authenticators, Passports & Badges](authenticators.md).
 
+```php
+// Authenticator: hand over the plaintext via a badge — never verify it yourself
+return new Passport(
+    new UserBadge($email),
+    new PasswordCredentials($plaintextPassword)
+);
+// Then, on CheckPassportEvent, CheckCredentialsListener runs:
+// $hasher->verify($user->getPassword(), $plaintextPassword)
+```
+
 ### Migration & rehash (`needsRehash`)
 
 Algorithms and costs improve over time. `migrate_from` lets you accept old
@@ -93,6 +110,19 @@ hashes while upgrading them on the next successful login:
    `PasswordMigratingListener` (triggered by the **`PasswordUpgradeBadge`**)
    rehashes the plaintext and calls
    `PasswordUpgraderInterface::upgradePassword()` on the provider to persist it.
+
+```php
+// security.yaml: App\Security\AppUser: { algorithm: sodium, migrate_from: ['bcrypt'] }
+final class UserRepository implements PasswordUpgraderInterface
+{
+    // Called by PasswordMigratingListener (via the PasswordUpgradeBadge)
+    // when needsRehash() returned true for the legacy hash
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        $user->setPassword($newHashedPassword); // persist the new sodium hash
+    }
+}
+```
 
 This is transparent to the user — no password reset needed.
 

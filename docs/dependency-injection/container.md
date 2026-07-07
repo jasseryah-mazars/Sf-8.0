@@ -37,11 +37,30 @@ A **service** is any object that performs a job and is managed by the container:
 a mailer, a logger, a repository, your own `InvoiceGenerator`. Value objects
 (an `Order`, a `Money`) are *not* services — they carry data, they are not wired.
 
+```php
+// A service: does a job, has dependencies, is wired by the container
+final class InvoiceGenerator { /* logger injected, registered once */ }
+
+// Value objects: carry data, built with `new`, NOT services
+$order = new Order(42);
+$price = new Money(1999, 'EUR');
+```
+
 The **service container** (also *DI container*) is the object that instantiates
 services, injects their dependencies, and hands them out on demand. In Symfony it
 is defined by `Symfony\Component\DependencyInjection\ContainerInterface`. You
 almost never build services with `new`; you describe *how* they are built and let
 the container do it — lazily, once, and shared by default.
+
+```php
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+// Manual wiring with `new` — what you almost never do:
+$generator = new InvoiceGenerator(new Logger());
+
+// The container (ContainerInterface) builds it for you — lazily, once, shared:
+$generator = $container->get(InvoiceGenerator::class);
+```
 
 The crucial idea: there are **two containers**.
 
@@ -72,6 +91,24 @@ arguments, method calls, tags, `public`/`shared`/`lazy` flags and factory. A
 a `Symfony\Component\DependencyInjection\Alias` makes one id resolve to another;
 a `Symfony\Component\DependencyInjection\Parameter` references a container
 parameter. All of these are pure metadata objects.
+
+```php
+use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Parameter;
+use Symfony\Component\DependencyInjection\Reference;
+
+// Definition: the recipe — nothing is instantiated here
+$def = new Definition(App\Invoice\InvoiceGenerator::class);
+$def->setArgument(0, new Reference('logger'));       // Reference: points to another service id
+$def->setArgument(1, new Parameter('kernel.debug')); // Parameter: references a container parameter
+$def->setPublic(false);  // public flag
+$def->setShared(true);   // shared flag
+$def->setLazy(false);    // lazy flag
+
+// Alias: makes one id resolve to another
+$containerBuilder->setAlias('app.invoices', new Alias(App\Invoice\InvoiceGenerator::class));
+```
 
 `ContainerBuilder` extends `Container` and additionally stores these definitions,
 aliases, extensions and compiler passes.
@@ -107,6 +144,17 @@ parameters and marks the container compiled. Passes resolve autowiring, inline
 private services, remove unused (private, unreferenced) definitions, and validate
 references. See [Compiler Passes](compiler-passes.md) for the phase order.
 
+```php
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+
+// Passes are registered into a PassConfig phase…
+$containerBuilder->addCompilerPass(new AppPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
+
+// …then ContainerBuilder::compile() runs them all, freezes parameters
+// and marks the container compiled
+$containerBuilder->compile();
+```
+
 ```mermaid
 flowchart LR
     Y["YAML / PHP / attributes"] --> B[ContainerBuilder]
@@ -127,6 +175,24 @@ next request the kernel loads that class directly; the `ContainerBuilder` is nev
 touched again. In `dev`, the `ConfigCache` checks the tracked resources (config
 files) and rebuilds only when they change; in `prod` you warm it once during
 deploy.
+
+```php
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+
+$file = 'var/cache/dev/App_KernelDevContainer.php';
+$cache = new ConfigCache($file, true); // dev: tracks the config resources
+
+if (!$cache->isFresh()) {              // rebuild only when tracked config changed
+    $containerBuilder->compile();
+    $dumper = new PhpDumper($containerBuilder); // dumps the optimised PHP class
+    $code = $dumper->dump(['class' => 'App_KernelDevContainer']);
+    $cache->write($code, $containerBuilder->getResources());
+}
+
+require_once $file;
+$container = new \App_KernelDevContainer(); // hard-coded getXxxService() factories inside
+```
 
 ```mermaid
 flowchart TB
@@ -158,6 +224,20 @@ calls return the same object. A `shared: false` service is rebuilt each time.
 The second argument controls what happens for a missing id
 (`EXCEPTION_ON_INVALID_REFERENCE`, `NULL_ON_INVALID_REFERENCE`, etc.).
 
+```php
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+// Shared (default): first get() builds, later calls return the SAME object
+$a = $container->get('logger');
+$b = $container->get('logger'); // $a === $b — unless defined with `shared: false`
+
+// Second argument: EXCEPTION_ON_INVALID_REFERENCE (default) throws on a missing id
+$container->get('missing.id', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
+
+// NULL_ON_INVALID_REFERENCE returns null instead
+$maybe = $container->get('missing.id', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+```
+
 ### Public vs private — and why private is the default
 
 A **public** service can be fetched with `$container->get('id')`. A **private**
@@ -173,6 +253,22 @@ service cannot; it may only be *injected* into other services. Since Symfony 4,
 Fetching a private (or removed) service by id throws
 `ServiceNotFoundException`. That is why controllers use autowiring or the
 `ServiceSubscriberInterface`, not `$container->get()`.
+
+```php
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
+// Private (or removed) id: $container->get() throws ServiceNotFoundException
+$container->get(App\Invoice\InvoiceGenerator::class); // ServiceNotFoundException!
+
+// Sanctioned alternative: declare the needed services explicitly
+final class InvoiceController implements ServiceSubscriberInterface
+{
+    public static function getSubscribedServices(): array
+    {
+        return ['generator' => App\Invoice\InvoiceGenerator::class];
+    }
+}
+```
 
 ### Null behavior
 

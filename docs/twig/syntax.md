@@ -50,10 +50,30 @@ Twig has exactly **three delimiters**:
 array/`ArrayAccess` lookup, and `{{ attribute(obj, method, args) }}` when the
 name is dynamic. A missing attribute yields `null` (or throws under `strict_variables`).
 
+```twig
+{# user.name tries: $user['name'], ->name, ->name(), getName(), isName(), hasName() #}
+{{ user.name }}
+{# subscript form: forces the array / ArrayAccess lookup #}
+{{ user['name'] }}
+{# dynamic attribute name #}
+{{ attribute(user, method) }}
+{# missing attribute: null on print (or throws with strict_variables) #}
+{{ user.nickname ?? 'n/a' }}
+```
+
 ### Expressions & literals
 
 Strings `"hi"`/`'hi'`, numbers `42`/`4.2`, booleans `true`/`false`, `null`,
 arrays `[1, 2]`, hashes `{ key: 'v', (expr): 'v2' }`, and ranges `1..5`.
+
+```twig
+{% set s = "hi" %}                    {# strings: "hi" or 'hi' #}
+{% set n = 42 %}{% set f = 4.2 %}     {# numbers #}
+{% set flags = [true, false, null] %} {# booleans and null in an array #}
+{% set list = [1, 2] %}               {# array literal #}
+{% set map = { key: 'v', ('k' ~ 2): 'v2' } %} {# hash, (expr) as dynamic key #}
+{% set steps = 1..5 %}                {# range: 1, 2, 3, 4, 5 #}
+```
 
 !!! question "Predict first"
     What does `{{ 7 // 2 }}` output — `3.5`, `3`, or `4`?
@@ -91,6 +111,18 @@ flowchart LR
   and reused on every subsequent request — templates cost nothing to "parse" at
   runtime after the first compile.
 
+```php
+$source = new \Twig\Source('Hello {{ name }}!', 'demo.twig');
+
+// Lexer (Twig\Lexer): source → token stream
+$tokens = $twig->tokenize($source);
+// Parser (Twig\Parser) + token parsers (Twig\TokenParser\*) + Twig\ExpressionParser:
+// tokens → AST of Twig\Node\Node objects
+$ast = $twig->parse($tokens);
+// Compiler (Twig\Compiler): AST → PHP class extending Twig\Template (doDisplay())
+$php = $twig->compile($ast);  // written once to Twig\Cache\FilesystemCache
+```
+
 !!! note "Source reference"
     `Twig\Environment`, `Twig\Lexer`, `Twig\Parser`, `Twig\Compiler` —
     [twigphp/Twig `3.x`](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php).
@@ -114,11 +146,30 @@ From **lowest** to **highest** binding:
 `{{ 2 + 3 * 4 }}` → `14`. `{{ "a" ~ 1 + 1 }}` → `a2` (`+` binds tighter than `~`).
 Filters (`|`) bind tighter than any operator: `{{ -x|abs }}` is `-(x|abs)`.
 
+```twig
+{{ 2 + 3 * 4 }}    {# 14 — * binds tighter than + #}
+{{ "a" ~ 1 + 1 }}  {# 'a2' — + binds tighter than ~ #}
+{{ 7 // 2 }}       {# 3 — floor division, unlike / #}
+{{ 2 ** 3 ** 2 }}  {# 512 — ** is right-associative: 2 ** (3 ** 2) #}
+{{ -3|abs }}       {# -3 — parsed as -(3|abs): filters bind tightest #}
+```
+
 ### Tests
 
 Tests use `is`: `{{ x is defined }}`, `is null`, `is empty`, `is even`/`odd`,
 `is iterable`, `is same as(y)`, `divisible by(3)`, `constant('App\\Foo::BAR')`.
 Negate with `is not`: `{% if x is not null %}`.
+
+```twig
+{% if x is defined and x is not null %}   {# defined test + `is not` negation #}
+    {{ x is empty ? 'empty' : x }}
+{% endif %}
+{{ 4 is even }} {{ 3 is odd }}            {# parity tests #}
+{{ items is iterable }}
+{{ flag is same as(false) }}              {# strict identity (===) #}
+{{ 9 is divisible by(3) }}
+{{ status is constant('App\\Foo::BAR') }} {# compare against a PHP constant #}
+```
 
 ### Null behavior
 
@@ -128,6 +179,12 @@ never an error: `{{ missing }}` renders nothing. (With `strict_variables` on, an
 empty.) Reading an attribute **on** `null` — `{{ user.name }}` when `user` is
 `null` — yields `null` (again, empty on print) unless `strict_variables` is on.
 
+```twig
+{{ missing }}    {# undefined: prints '' (throws only if strict_variables is on) #}
+{% set user = null %}
+{{ user.name }}  {# attribute on null: null → empty on print in lenient mode #}
+```
+
 Handle it explicitly with three tools:
 
 - **`??`** — null-coalescing: `{{ count ?? 0 }}` replaces `null`/undefined only.
@@ -135,6 +192,13 @@ Handle it explicitly with three tools:
   empty (`''`, `[]`).
 - **tests** — `{% if x is defined %}`, `{% if x is null %}`, `is not null` to
   branch before you touch a value.
+
+```twig
+{{ count ?? 0 }}                          {# ?? replaces null/undefined only #}
+{{ name|default('Anon') }}                {# |default also replaces '' and [] #}
+{% if x is defined %}...{% endif %}       {# branch before touching x #}
+{% if x is not null %}{{ x }}{% endif %}  {# print only when non-null #}
+```
 
 The classic bug: assuming `{{ a.b.c }}` throws when `a.b` is `null`. In lenient
 mode it quietly prints empty and the typo only surfaces once `strict_variables`

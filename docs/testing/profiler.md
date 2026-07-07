@@ -38,6 +38,14 @@ In the `test` environment collection is **off by default** for speed; you turn i
 on per request with `$client->enableProfiler()` **before** the request, then read
 the profile afterwards to assert on internals a plain response can't reveal.
 
+```php
+$client = static::createClient();
+$client->enableProfiler();          // BEFORE the request (collection is off in test)
+$client->request('GET', '/');
+
+$profile = $client->getProfile();   // the recorded Profile, made of data collectors
+```
+
 !!! question "Predict first"
     You call `$client->request('GET', '/')` then `$client->getProfile()`,
     expecting a `Profile`. You get `false`. Why?
@@ -56,9 +64,25 @@ profile instead of discarding it. During `kernel.response` the
 `DataCollectorInterface` snapshots its slice of state into a
 `Symfony\Component\HttpKernel\Profiler\Profile`.
 
+```php
+// KernelBrowser::enableProfiler() flags the NEXT request only
+$client->enableProfiler();
+$client->request('GET', '/');
+// during kernel.response, ProfilerListener asks the Profiler to collect():
+// each registered DataCollectorInterface snapshots its state into a Profile
+```
+
 After the request, `$client->getProfile()` returns that `Profile` (or `false` if
 profiling wasn't enabled or the collector was disabled). You then fetch individual
 collectors by name:
+
+```php
+$profile = $client->getProfile();            // Profile, or false if not enabled
+self::assertNotFalse($profile);
+
+$time = $profile->getCollector('time');      // TimeDataCollector
+$mailer = $profile->getCollector('mailer');  // MessageDataCollector
+```
 
 | Collector name | Class (approx.) | Exposes |
 |---|---|---|
@@ -94,6 +118,17 @@ For emails you rarely need the raw collector. `WebTestCase` mixes in
 `assertEmailCount()`, `assertQueuedEmailCount()`, `getMailerMessage()` and
 `assertEmailHtmlBodyContains()` — these read the mailer collector for you and do
 **not** require `enableProfiler()` when the profiler is available in test.
+
+```php
+// MailerAssertionsTrait is already mixed into WebTestCase — no enableProfiler() needed
+$client->request('POST', '/register', ['email' => 'ada@example.com']);
+
+self::assertEmailCount(1);         // emails sent during the request
+self::assertQueuedEmailCount(0);   // emails still queued (not sent)
+
+$email = self::getMailerMessage(); // first collected Email
+self::assertEmailHtmlBodyContains($email, 'Welcome');
+```
 
 ## Configuration & code
 

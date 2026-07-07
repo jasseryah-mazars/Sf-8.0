@@ -88,6 +88,16 @@ branch receives only bug/security fixes. Fixes are merged **up** from the oldest
 supported branch to newer ones, so a patch to `8.0` also lands in `8.1`, etc. This
 merge-up model keeps behaviour consistent across maintained branches.
 
+```console
+# A fix lands on the oldest maintained branch first (e.g. 8.0)...
+$ git switch 8.0
+$ git commit -m "[HttpKernel] Fix ..."
+
+# ...then maintainers merge it UP into the newer branches (8.1, 8.2, ...)
+$ git switch 8.1
+$ git merge 8.0
+```
+
 !!! note "Source reference"
     Release process is documented at
     [symfony.com/releases](https://symfony.com/releases) and enforced across

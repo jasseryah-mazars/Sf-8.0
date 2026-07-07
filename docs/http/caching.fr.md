@@ -89,6 +89,24 @@ flowchart TD
   request et, si rien n'a changé, transforme la response en **304** sans corps.
 - `setCache([...])` en définit plusieurs à la fois.
 
+```php
+// Freshness: how long may caches reuse this response?
+$response->setMaxAge(600);        // Cache-Control: max-age=600 (any cache)
+$response->setSharedMaxAge(3600); // Cache-Control: s-maxage=3600 (shared caches)
+$response->setPublic();           // opposite: setPrivate()
+$response->setExpires(new \DateTimeImmutable('+1 hour')); // Expires header
+
+// Validation: has the resource changed since?
+$response->setEtag('"v3"');
+$response->setLastModified(new \DateTimeImmutable('2026-01-01'));
+if ($response->isNotModified($request)) {
+    return $response; // mutated into a bodyless 304
+}
+
+// Or set several directives at once
+$response->setCache(['public' => true, 'max_age' => 600, 's_maxage' => 3600]);
+```
+
 `Cache-Control: public` autorise les caches **partagés** (CDN/proxy) à la
 stocker ; `private` la réserve au navigateur de l'utilisateur final. Une response
 par défaut est `no-cache, private` — voir [HTTP Response](response.md).

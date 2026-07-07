@@ -45,6 +45,15 @@ les seuils configurés. Il fournit aussi le **mocking de l'horloge** et le
 **mocking du DNS** afin de rendre déterministe le code sensible au temps et au
 réseau.
 
+```php
+// symfony/phpunit-bridge intercepts every E_USER_DEPRECATED raised in the suite...
+@trigger_error('Since acme/lib 2.1: "legacyCall()" is deprecated.', E_USER_DEPRECATED);
+
+// ...and prints a grouped report at the end, failing on configured thresholds:
+//   Remaining direct deprecations (1)
+//     1x: Since acme/lib 2.1: "legacyCall()" is deprecated.
+```
+
 !!! question "Predict first"
     Vous ajoutez `sleep(61)` à un test en espérant qu'il s'exécute
     instantanément grâce au mocking de l'horloge, mais la suite attend vraiment
@@ -73,9 +82,43 @@ XML de PHPUnit. L'extension câble :
 - `Symfony\Bridge\PhpUnit\DnsMock` — pour le groupe `dns-sensitive`, remplace
   `dns_get_record()`, `checkdnsrr()`, `gethostbyname()`, etc.
 
+```php
+// Everything below is wired by SymfonyExtension (registered in phpunit XML).
+
+// 1) DeprecationErrorHandler: intercepts E_USER_DEPRECATED,
+//    thresholds read from SYMFONY_DEPRECATIONS_HELPER (e.g. "max[direct]=0")
+@trigger_error('Since acme/lib 2.1: X is deprecated.', E_USER_DEPRECATED);
+
+// 2) ClockMock ("time-sensitive" group): virtual time, no real waits
+ClockMock::register(Rate::class);   // override time() etc. in Rate's namespace
+ClockMock::withClockMock(true);
+sleep(60);                          // instant: advances the virtual clock
+usleep(500);                        // mocked too
+echo time(), microtime(true), date('H:i'); // all read the virtual clock
+
+// 3) DnsMock ("dns-sensitive" group): stubbed DNS, no network
+DnsMock::withMockedHosts(['example.com' => [['type' => 'A', 'ip' => '1.2.3.4']]]);
+checkdnsrr('example.com', 'A');        // true (stubbed)
+gethostbyname('example.com');          // "1.2.3.4"
+dns_get_record('example.com', DNS_A);  // stubbed records
+```
+
 Le regroupement utilise les attributs PHPUnit `#[Group('time-sensitive')]` /
 `#[Group('dns-sensitive')]` (ou le docblock `@group` sur les installations plus
 anciennes).
+
+```php
+use PHPUnit\Framework\Attributes\Group;
+
+#[Group('time-sensitive')]   // ClockMock activates for this class
+final class ExpiryTest extends TestCase { /* ... */ }
+
+#[Group('dns-sensitive')]    // DnsMock activates for this class
+final class MxLookupTest extends TestCase { /* ... */ }
+
+// Older setups: docblock equivalent of the attribute
+/** @group time-sensitive */
+```
 
 ```mermaid
 flowchart TD

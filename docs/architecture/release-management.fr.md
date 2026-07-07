@@ -96,6 +96,16 @@ correctifs sont fusionnés **vers le haut**, de la branche supportée la plus an
 vers les plus récentes : un patch sur `8.0` atterrit donc aussi dans `8.1`, etc. Ce
 modèle de merge-up garde un comportement cohérent entre les branches maintenues.
 
+```console
+# A fix lands on the oldest maintained branch first (e.g. 8.0)...
+$ git switch 8.0
+$ git commit -m "[HttpKernel] Fix ..."
+
+# ...then maintainers merge it UP into the newer branches (8.1, 8.2, ...)
+$ git switch 8.1
+$ git merge 8.0
+```
+
 !!! note "Source reference"
     Le processus de release est documenté sur
     [symfony.com/releases](https://symfony.com/releases) et appliqué sur les

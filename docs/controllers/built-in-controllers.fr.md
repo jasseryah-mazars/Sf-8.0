@@ -43,6 +43,15 @@ nécessitent **aucune classe PHP** :
 Vous les référencez dans la clé `controller` (ou `_controller`) de la route et
 passez leurs paramètres via les **defaults** de la route.
 
+```yaml
+# config/routes.yaml — 'controller' is sugar for the '_controller' default
+terms:
+    path: /terms
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:                                # parameters travel as route defaults
+        template: 'static/terms.html.twig'
+```
+
 !!! question "Predict first"
     Une route pointe vers `RedirectController::urlRedirectAction` avec un default
     `path` **vide**. Quel statut reçoit le visiteur — 404, 500, ou autre chose ?
@@ -65,6 +74,19 @@ framework et taggés pour que leurs arguments soient résolubles.
 HTTP — pratique pour des pages quasi statiques servies avec du cache mais sans
 logique.
 
+```yaml
+status:
+    path: /status
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'static/status.html.twig'  # template (required)
+        context: { region: 'eu-west' }       # extra variables for the template
+        maxAge: 300                          # Cache-Control: max-age=300
+        sharedAge: 600                       # s-maxage for shared caches
+        private: false                       # allow shared caching
+        statusCode: 200                      # response status code
+```
+
 ### RedirectController
 
 Deux points d'entrée :
@@ -73,6 +95,28 @@ Deux points d'entrée :
   `ignoreAttributes`, `keepRequestMethod`, `keepQueryParams`).
 - `urlRedirectAction` — redirige vers un **chemin/une URL** (`path`, `permanent`,
   `scheme`, `httpPort`, `httpsPort`, `keepRequestMethod`).
+
+```yaml
+old_route:
+    path: /old
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: new_route          # target route name
+        permanent: true           # 301 (308 with keepRequestMethod)
+        keepRequestMethod: true   # preserve POST/PUT... across the redirect
+        keepQueryParams: true     # forward the query string
+        ignoreAttributes: true    # drop extra route attributes from the target URL
+
+old_url:
+    path: /old-url
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: '/new-url'          # target path or absolute URL
+        scheme: https             # force the scheme
+        httpPort: 80              # used when scheme is http
+        httpsPort: 443            # used when scheme is https
+        permanent: true
+```
 
 `permanent: true` fait passer de 302 à **301** (ou de 307 à **308** quand
 `keepRequestMethod: true`). Une `route`/un `path` vide produit un **410 Gone**.

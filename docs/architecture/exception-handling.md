@@ -37,6 +37,20 @@ kernel must still produce a `Response`. It does this by dispatching the
 The candidate response otherwise defaults to `500`, unless the exception carries
 its own status code.
 
+```php
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+
+// A kernel.exception listener turns the throwable into a Response
+final class FallbackExceptionListener
+{
+    public function __invoke(ExceptionEvent $event): void
+    {
+        $event->setResponse(new Response('Something broke.', 500));
+    }
+}
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"

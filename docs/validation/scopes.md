@@ -39,6 +39,28 @@ Property and getter constraints target *one* value. Class-level constraints
 (e.g. `#[Assert\Callback]`, `#[Assert\Expression]`, or a custom class constraint)
 see the whole object — ideal for **cross-field** rules.
 
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+// Class scope: #[Assert\Expression] sees the whole object (cross-field rule)
+#[Assert\Expression('this.start < this.end', message: 'Start must be before end.')]
+class Slot
+{
+    public \DateTimeImmutable $start;
+    public \DateTimeImmutable $end;
+
+    // #[Assert\Callback] is also a class-target constraint: plain PHP cross-field logic
+    #[Assert\Callback]
+    public function check(ExecutionContextInterface $context): void
+    {
+        if ($this->start >= $this->end) {
+            $context->buildViolation('Start must be before end.')->atPath('start')->addViolation();
+        }
+    }
+}
+```
+
 !!! question "Predict first"
     An `Order` has a `?Address $shippingAddress` whose own `#[Assert\NotBlank]`
     constraints never fire. What is missing?
@@ -101,6 +123,21 @@ unless you also add element constraints. Cascading is recursive, so a graph is
 fully walked — mind cycles (the validator guards against re-validating the same
 object instance within one run).
 
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Cart
+{
+    // traverse: true (default) — the Traversable is iterated, each element cascaded
+    #[Assert\Valid(traverse: true)]
+    public \ArrayObject $lines;
+
+    // traverse: false — the collection object itself is validated, not its elements
+    #[Assert\Valid(traverse: false)]
+    public \ArrayObject $archivedLines;
+}
+```
+
 **Groups propagate.** When you cascade, the *current* validation group is passed
 to the nested object (see [Groups](groups.md)). A common surprise: the nested
 object is validated in the group you are running, which may differ from its own
@@ -118,11 +155,47 @@ Cascading is null-safe. A `#[Assert\Valid]` property that is `null` is simply
 error. If a related object is *required*, the presence check and the cascade are
 orthogonal: guard the property with `#[Assert\NotNull]` **and** `#[Assert\Valid]`.
 
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Order
+{
+    // Valid silently skips null — nothing to recurse into.
+    // Presence and cascade are orthogonal: NotNull requires the object,
+    // Valid descends into it when it is there.
+    #[Assert\NotNull]
+    #[Assert\Valid]
+    public ?Address $billingAddress = null;
+}
+```
+
 For a cascaded collection, `null` *elements* are visited like any value, so their
 element constraints still apply. When you validate an associative array with
 `Collection`, use `Required` vs `Optional` to decide whether a missing key is an
 error. Getter scope has its own twist: a getter returning `null` feeds `null`
 into its constraints, which (except `NotNull`/`NotBlank`) skip it.
+
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Customer
+{
+    // Collection: a Required key must exist, an Optional key may be missing
+    #[Assert\Collection(fields: [
+        'email' => new Assert\Required([new Assert\Email()]),
+        'phone' => new Assert\Optional([new Assert\Length(min: 6)]),
+    ])]
+    public array $contact = [];
+
+    // Getter returning null: Email would skip it, NotNull/NotBlank still fail
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    public function getNickname(): ?string
+    {
+        return null;
+    }
+}
+```
 
 !!! note "Null in real life"
     A `null` nested object is a bag tag with no bag attached — screening has

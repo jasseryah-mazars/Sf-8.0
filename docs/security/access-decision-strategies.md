@@ -46,12 +46,30 @@ with the configured **strategy**:
 | `unanimous` | **no voter denies** and at least one grants | one deny vetoes everything |
 | `priority` | the **first non-abstaining** voter grants | voter order (service priority) decides |
 
+```php
+// VoterInterface constants collected by the AccessDecisionManager
+VoterInterface::ACCESS_GRANTED; //  1
+VoterInterface::ACCESS_ABSTAIN; //  0
+VoterInterface::ACCESS_DENIED;  // -1
+
+// every isGranted() ends in decide(), reduced by the configured strategy
+$granted = $accessDecisionManager->decide($token, ['POST_EDIT'], $post);
+```
+
 Two flags refine the edge cases:
 
 - **`allow_if_all_abstain`** (default **`false`**): the outcome when *every*
   voter abstains — by default that is a **deny**, for all strategies.
 - **`allow_if_equal_granted_denied`** (default **`true`**): consensus-only tie
   breaker.
+
+```yaml
+security:
+    access_decision_manager:
+        strategy: consensus
+        allow_if_all_abstain: false          # every voter abstains → deny (default)
+        allow_if_equal_granted_denied: true  # consensus tie → grant (default)
+```
 
 Abstentions are neutral everywhere: they never count as denies. Under
 `unanimous`, "A grants, B abstains" still **grants** — the classic exam trick.
@@ -63,6 +81,17 @@ Since Symfony 5.4 the strategies are real classes implementing
 (`AffirmativeStrategy`, `ConsensusStrategy`, `UnanimousStrategy`,
 `PriorityStrategy`). The manager streams voter results into
 `$strategy->decide($results)`, which returns the final boolean.
+
+```php
+use Symfony\Component\Security\Core\Authorization\Strategy\AffirmativeStrategy;
+use Symfony\Component\Security\Core\Authorization\Strategy\ConsensusStrategy;
+use Symfony\Component\Security\Core\Authorization\Strategy\PriorityStrategy;
+use Symfony\Component\Security\Core\Authorization\Strategy\UnanimousStrategy;
+
+// each implements AccessDecisionStrategyInterface::decide(\Traversable $results): bool
+$strategy = new UnanimousStrategy();
+$granted = $strategy->decide(new \ArrayIterator([1, 0, 0])); // GRANTED + 2 ABSTAIN → true
+```
 
 Key behavioural details, straight from the implementations:
 

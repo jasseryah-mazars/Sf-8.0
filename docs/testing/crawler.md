@@ -38,6 +38,19 @@
 Crawler over the current page, so it is the bridge between "I loaded a page" and
 "I assert what's on it".
 
+```php
+$crawler = $client->request('GET', '/blog');   // fresh Crawler per navigation
+
+// Query it (CSS or XPath) and extract text/attributes
+$title = $crawler->filter('h1')->text();
+$year  = $crawler->filterXPath('//footer')->attr('data-year');
+
+// Derive the higher-level objects
+$link  = $crawler->selectLink('Read more')->link();   // Link
+$form  = $crawler->selectButton('Search')->form();    // Form
+$image = $crawler->filter('img.cover')->image();      // Image
+```
+
 A Crawler is an **immutable, iterable set of nodes**: filtering returns a *new*
 Crawler holding the matched subset.
 
@@ -60,14 +73,58 @@ delegates to `filterXPath()`. `selectLink()` and `selectButton()` are convenienc
 filters matching anchor text/`img alt` and button text/`name`/`value`
 respectively.
 
+```php
+use Symfony\Component\CssSelector\CssSelectorConverter;
+
+// filter() converts the CSS selector to XPath...
+// (CssSelectorConverter ships with css-selector, part of symfony/test-pack)
+$xpath = new CssSelectorConverter()->toXPath('div.item > a');
+
+// ...then delegates to filterXPath(); these two lines are equivalent:
+$links = $crawler->filter('div.item > a');
+$links = $crawler->filterXPath($xpath);
+
+// Underneath: \DOMNode objects from a parsed \DOMDocument
+$domNode = $links->getNode(0);          // ?\DOMNode
+
+// Convenience filters
+$crawler->selectLink('Home');           // anchor text or img alt
+$crawler->selectButton('Save');         // button text, name or value
+```
+
 `text()`, `attr()`, `html()`, and `nodeName()` read from the **first** node of the
 set (calling them on an empty Crawler throws unless you pass a default). `each()`
 and `extract()` iterate all nodes.
+
+```php
+$item = $crawler->filter('article');
+
+// Read from the FIRST node (pass a default to avoid the empty-set throw)
+$text = $item->text('n/a');              // normalized text
+$id   = $item->attr('data-id', '0');     // attribute value
+$html = $item->html();                   // inner HTML
+$tag  = $item->nodeName();               // "article"
+
+// Iterate ALL nodes
+$titles = $crawler->filter('h2')->each(fn (Crawler $n): string => $n->text());
+$pairs  = $crawler->filter('li')->extract(['data-id', '_text']);
+```
 
 - `->link()` builds a `Symfony\Component\DomCrawler\Link` from an `<a>` — pass it
   to `$client->click()`.
 - `->form()` builds a `Symfony\Component\DomCrawler\Form` from the enclosing
   `<form>`, pre-filled with the page's current values; you can override fields.
+
+```php
+// Link built from an <a> — pass it to $client->click()
+$link = $crawler->selectLink('Next')->link();       // DomCrawler\Link
+$crawler = $client->click($link);
+
+// Form built from the enclosing <form>, pre-filled with current values
+$form = $crawler->selectButton('Save')->form();     // DomCrawler\Form
+$form['post[title]'] = 'Updated title';             // override one field
+$client->submit($form);
+```
 
 ```mermaid
 flowchart LR

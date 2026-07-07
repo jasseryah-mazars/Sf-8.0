@@ -39,6 +39,15 @@ report, failing the build if you exceed configured thresholds. It also provides
 **clock mocking** and **DNS mocking** so time- and network-sensitive code becomes
 deterministic.
 
+```php
+// symfony/phpunit-bridge intercepts every E_USER_DEPRECATED raised in the suite...
+@trigger_error('Since acme/lib 2.1: "legacyCall()" is deprecated.', E_USER_DEPRECATED);
+
+// ...and prints a grouped report at the end, failing on configured thresholds:
+//   Remaining direct deprecations (1)
+//     1x: Since acme/lib 2.1: "legacyCall()" is deprecated.
+```
+
 !!! question "Predict first"
     You add `sleep(61)` to a test expecting it to run instantly via clock mocking,
     but the suite really waits 61 seconds. What is missing?
@@ -65,8 +74,42 @@ The extension wires:
 - `Symfony\Bridge\PhpUnit\DnsMock` — for the `dns-sensitive` group, stubs
   `dns_get_record()`, `checkdnsrr()`, `gethostbyname()`, etc.
 
+```php
+// Everything below is wired by SymfonyExtension (registered in phpunit XML).
+
+// 1) DeprecationErrorHandler: intercepts E_USER_DEPRECATED,
+//    thresholds read from SYMFONY_DEPRECATIONS_HELPER (e.g. "max[direct]=0")
+@trigger_error('Since acme/lib 2.1: X is deprecated.', E_USER_DEPRECATED);
+
+// 2) ClockMock ("time-sensitive" group): virtual time, no real waits
+ClockMock::register(Rate::class);   // override time() etc. in Rate's namespace
+ClockMock::withClockMock(true);
+sleep(60);                          // instant: advances the virtual clock
+usleep(500);                        // mocked too
+echo time(), microtime(true), date('H:i'); // all read the virtual clock
+
+// 3) DnsMock ("dns-sensitive" group): stubbed DNS, no network
+DnsMock::withMockedHosts(['example.com' => [['type' => 'A', 'ip' => '1.2.3.4']]]);
+checkdnsrr('example.com', 'A');        // true (stubbed)
+gethostbyname('example.com');          // "1.2.3.4"
+dns_get_record('example.com', DNS_A);  // stubbed records
+```
+
 Grouping uses PHPUnit's `#[Group('time-sensitive')]` /
 `#[Group('dns-sensitive')]` attributes (or the `@group` docblock on older setups).
+
+```php
+use PHPUnit\Framework\Attributes\Group;
+
+#[Group('time-sensitive')]   // ClockMock activates for this class
+final class ExpiryTest extends TestCase { /* ... */ }
+
+#[Group('dns-sensitive')]    // DnsMock activates for this class
+final class MxLookupTest extends TestCase { /* ... */ }
+
+// Older setups: docblock equivalent of the attribute
+/** @group time-sensitive */
+```
 
 ```mermaid
 flowchart TD
@@ -97,6 +140,17 @@ This env var (set in `phpunit.dist.xml` or the shell) tunes the handler:
 `self`, `direct`, `indirect` classify *whose* code triggered the deprecation
 (yours, a dependency you call directly, or deep inside a dependency) — see the
 [deprecations chapter](deprecations.md).
+
+```console
+# self: your own code triggers the deprecation
+$ SYMFONY_DEPRECATIONS_HELPER='max[self]=0' php bin/phpunit
+
+# direct: your code calls a deprecated API of a direct dependency
+$ SYMFONY_DEPRECATIONS_HELPER='max[direct]=0' php bin/phpunit
+
+# indirect: triggered deep inside a dependency calling another dependency
+$ SYMFONY_DEPRECATIONS_HELPER='max[indirect]=5' php bin/phpunit
+```
 
 ## Configuration & code
 

@@ -47,6 +47,14 @@ when routes change:
 Use `path()` for on-site links; use `url()` when the URL leaves the page —
 emails, RSS, canonical tags, redirects consumed elsewhere.
 
+```twig
+{# path(): relative URL — fine for on-site navigation #}
+<a href="{{ path('order_show', { id: order.id }) }}">Your order</a>
+
+{# url(): absolute URL — required when the link leaves the page (email, RSS) #}
+<a href="{{ url('order_show', { id: order.id }) }}">View your order</a>
+```
+
 !!! question "Predict first"
     You build an email body with `{{ path('order_show', { id: order.id }) }}`.
     Why do recipients complain the link is broken?
@@ -62,6 +70,16 @@ emails, RSS, canonical tags, redirects consumed elsewhere.
 Both functions come from **`Symfony\Bridge\Twig\Extension\RoutingExtension`**,
 which delegates to the **`Symfony\Component\Routing\Generator\UrlGeneratorInterface`**
 (the same generator controllers use via `generateUrl()`).
+
+```php
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+// RoutingExtension receives this generator and exposes it as path()/url()
+public function __construct(private UrlGeneratorInterface $generator) {}
+
+// generateUrl() in a controller uses the very same service
+$relative = $this->generateUrl('article_show', ['slug' => 'hello']);
+```
 
 ```mermaid
 flowchart LR
@@ -83,6 +101,22 @@ flowchart LR
   environment.
 - `RoutingExtension` marks its output `is_safe: ['html']` for the appropriate
   context; the generated URL is still properly encoded by the generator.
+
+```php
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
+
+// path() → ABSOLUTE_PATH; extra params ('page') go to the query string
+$rel = $generator->generate('search', ['q' => 'a', 'page' => 2], UrlGeneratorInterface::ABSOLUTE_PATH);
+// $rel = '/search?q=a&page=2'
+
+// url() → ABSOLUTE_URL; scheme + host come from the RequestContext
+$generator->setContext(new RequestContext(host: 'example.com', scheme: 'https'));
+$abs = $generator->generate('search', ['q' => 'a'], UrlGeneratorInterface::ABSOLUTE_URL);
+// $abs = 'https://example.com/search?q=a'
+
+// RoutingExtension declares these functions is_safe: ['html'] — no double escaping
+```
 
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\RoutingExtension`,

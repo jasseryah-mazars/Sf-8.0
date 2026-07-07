@@ -82,6 +82,23 @@ Points clés :
   retourne pendant son exécution, puis elle est dépilée et la requête principale
   reprend.
 
+```php
+// Listeners (kernel.controller, kernel.view, kernel.response) also fire for
+// sub-requests — they can tell them apart from the main request:
+public function onKernelResponse(ResponseEvent $event): void
+{
+    // false during forward(): dispatched with HttpKernelInterface::SUB_REQUEST,
+    // not MAIN_REQUEST (the old MASTER_REQUEST constant no longer exists)
+    if (!$event->isMainRequest()) {
+        return; // skip work for sub-requests
+    }
+}
+
+// While the sub-request runs, it sits on top of the RequestStack:
+$requestStack->getCurrentRequest()->attributes->get('_controller');
+// => "App\Controller\ReportController::monthly"
+```
+
 ```mermaid
 sequenceDiagram
     participant M as Main request
@@ -108,6 +125,14 @@ controller.
 Le `{{ render(controller(...)) }}` de Twig et `render_esi()` produisent aussi des
 sub-requests via le fragment handler — le même mécanisme, utilisé pour intégrer
 la sortie d'un controller dans un template.
+
+```twig
+{# render() embeds a controller's output via a sub-request #}
+{{ render(controller('App\\Controller\\ReportController::monthly', { month: 3 })) }}
+
+{# render_esi() lets a reverse proxy cache the fragment when ESI is enabled #}
+{{ render_esi(controller('App\\Controller\\ReportController::monthly', { month: 3 })) }}
+```
 
 ## Configuration & code
 

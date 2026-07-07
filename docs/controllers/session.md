@@ -66,6 +66,24 @@ request-scoped). Instead:
   `Symfony\Component\HttpKernel\Controller\ArgumentResolver\SessionValueResolver`
   (priority **120**) supplies it, or call `$request->getSession()`.
 
+```php
+// In a service: inject RequestStack, then call getSession()
+public function __construct(private RequestStack $requestStack) {}
+
+public function cartCount(): int
+{
+    return \count($this->requestStack->getSession()->get('cart', []));
+}
+
+// In an action: SessionValueResolver (priority 120) fills the type-hint
+public function show(SessionInterface $session, Request $request): Response
+{
+    $session->set('last_seen', time());
+    $same = $request->getSession();   // same session instance
+    // ...
+}
+```
+
 ```mermaid
 flowchart LR
     RS[RequestStack] -->|getSession| S[Session]
@@ -84,6 +102,15 @@ default; Redis/PDO configurable). Symfony sessions are **lazy**: the underlying
 `session_start()` and the `Set-Cookie` header fire only when you actually read or
 write the session. A request that never touches the session sends no session
 cookie — important for HTTP caching and privacy.
+
+```php
+// Session delegates to a SessionStorageInterface implementation
+$storage = new NativeSessionStorage(['cookie_samesite' => 'lax']); // default storage
+$session = new Session($storage);
+
+// Lazy: no session_start(), no Set-Cookie has happened yet...
+$session->set('seen', true); // ...first write starts the session + emits the cookie
+```
 
 ### Security operations
 

@@ -81,6 +81,13 @@ Quand vous appelez `new Response($body, Response::HTTP_CREATED)`,
 n'en fournissez pas. Si vous passez un code inconnu, `$statusTexts` n'a pas
 d'entrée et la phrase est vide (toujours valide).
 
+```php
+$response = new Response('Created!', Response::HTTP_CREATED); // phrase from $statusTexts
+$response->setStatusCode(404); // reason phrase auto-filled: 'Not Found'
+$response->setStatusCode(599); // unknown code -> empty reason phrase, still valid
+$response->setStatusCode(999); // throws \InvalidArgumentException (outside 100-599)
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Response::$statusTexts` et les constantes
     `HTTP_*` —
@@ -128,6 +135,16 @@ flowchart TD
 authentifié*. Dans Symfony, l'entry point du firewall produit un 401 ; un voter
 en échec / `denyAccessUnlessGranted()` produit un 403 via
 `AccessDeniedException`.
+
+```php
+// In a controller: authenticated but lacking the role -> 403
+$this->denyAccessUnlessGranted('ROLE_ADMIN'); // throws AccessDeniedException
+
+// Explicit equivalent
+if (!$this->isGranted('ROLE_ADMIN')) {
+    throw new AccessDeniedException('Admins only.'); // converted to a 403 response
+}
+```
 
 ### Not found vs gone
 

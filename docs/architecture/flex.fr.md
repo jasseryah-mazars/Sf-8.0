@@ -60,12 +60,39 @@ câblée plutôt qu'en simple téléchargement de bibliothèque.
 package est installé, Flex recherche une **recipe** correspondante et applique ses
 **configurators**.
 
+```json
+{
+    "require": {
+        "symfony/flex": "^2"
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true
+        }
+    },
+    "scripts": {
+        "post-install-cmd": ["@auto-scripts"],
+        "post-update-cmd": ["@auto-scripts"]
+    }
+}
+```
+
 ### Aliases
 
 Les alias sont des noms courts résolus auprès du serveur de recipes de Symfony.
 `composer require orm` se résout en `doctrine/orm` (+ sa recipe) ;
 `composer require logger` se résout en un package de logging. Les alias ne sont
 qu'une commodité — c'est le vrai nom du package qui finit dans `composer.json`.
+
+```console
+$ composer require orm      # alias resolved to doctrine/orm (+ recipe)
+$ composer require logger   # alias resolved to a logging package
+
+# composer.json ends up with the real package names, not the aliases:
+$ grep -E 'doctrine/orm|monolog' composer.json
+    "doctrine/orm": "^3.3",
+    "symfony/monolog-bundle": "^3.10",
+```
 
 ### Recipes and the manifest
 
@@ -80,6 +107,29 @@ décrivant les **configurators** à exécuter :
 | `makefile`, `gitignore`, `composer-scripts` | Échafaudage du projet |
 | `container` | Définit des paramètres du container |
 
+```json
+{
+    "bundles": {
+        "Acme\\BlogBundle\\AcmeBlogBundle": ["all"]
+    },
+    "copy-from-recipe": {
+        "config/": "%CONFIG_DIR%/"
+    },
+    "env": {
+        "ACME_BLOG_TITLE": "My Blog"
+    },
+    "container": {
+        "locale": "en"
+    },
+    "composer-scripts": {
+        "cache:clear": "symfony-cmd"
+    },
+    "gitignore": [
+        "/.env.local"
+    ]
+}
+```
+
 Les recipes proviennent de deux dépôts : `symfony/recipes`, sélectionné avec soin,
 et `symfony/recipes-contrib`, alimenté par la communauté. Les recipes contrib
 nécessitent une activation explicite.
@@ -91,6 +141,15 @@ Flex enregistre les recipes appliquées et leurs versions dans **`symfony.lock`*
 installées, de détecter les mises à jour (`composer recipes` /
 `composer recipes:update`) et d'annuler proprement une recipe quand vous retirez
 un package. Il complète `composer.lock` — il ne le remplace pas.
+
+```console
+$ composer recipes            # list recipes recorded in symfony.lock
+$ composer recipes:update     # re-apply newer recipe versions
+
+$ composer remove acme/blog-bundle
+# Flex reads symfony.lock to reverse the recipe (config files, .env lines);
+# composer.lock still tracks package versions — a separate concern
+```
 
 ```mermaid
 flowchart LR

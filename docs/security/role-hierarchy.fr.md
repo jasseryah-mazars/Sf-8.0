@@ -48,6 +48,15 @@ La résolution est **transitive** : `ROLE_SUPER_ADMIN` atteint `ROLE_ADMIN`,
 qui atteint `ROLE_USER`, donc un super-admin passe `isGranted('ROLE_USER')`
 tout en ne stockant qu'un seul rôle.
 
+```php
+// Stored on the user: one single role
+$user->getRoles();                              // ['ROLE_SUPER_ADMIN'] — raw
+
+// Authorization time: ROLE_SUPER_ADMIN → ROLE_ADMIN → ROLE_USER (transitive)
+$authorizationChecker->isGranted('ROLE_ADMIN'); // true
+$authorizationChecker->isGranted('ROLE_USER');  // true — reached through ROLE_ADMIN
+```
+
 **Où la hiérarchie s'applique — et où elle ne s'applique pas :**
 
 | Contrôle | Hiérarchie appliquée ? |
@@ -118,6 +127,20 @@ liste les permissions *effectives* d'un utilisateur — autowirez
 utilisé par le voter, donc les résultats correspondent toujours au
 comportement d'autorisation.
 
+```php
+public function __construct(
+    private readonly RoleHierarchyInterface $roleHierarchy, // autowired
+) {}
+
+/** @return list<string> */
+public function effectiveRoles(UserInterface $user): array
+{
+    // Same expansion isGranted() relies on internally
+    return $this->roleHierarchy->getReachableRoleNames($user->getRoles());
+    // ['ROLE_SUPER_ADMIN'] → ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', ...]
+}
+```
+
 ### Interaction with access_control and voters
 
 Les règles `access_control` avec `roles:` sont appliquées via le même
@@ -126,6 +149,24 @@ personnalisés, en revanche, reçoivent le token brut — si un voter
 personnalisé inspecte lui-même les rôles, il doit injecter
 `RoleHierarchyInterface`, sans quoi il ignorera silencieusement la
 hiérarchie.
+
+```php
+// access_control's "roles:" entries go through the AccessDecisionManager,
+// so the hierarchy applies there. A custom voter sees RAW roles instead:
+final class ReportVoter extends Voter
+{
+    public function __construct(private readonly RoleHierarchyInterface $roleHierarchy) {}
+
+    // supports() omitted for brevity
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    {
+        // Expand manually — otherwise roles granted via the hierarchy are missed
+        $roles = $this->roleHierarchy->getReachableRoleNames($token->getRoleNames());
+
+        return \in_array('ROLE_EMPLOYEE', $roles, true);
+    }
+}
+```
 
 ## Configuration & code
 

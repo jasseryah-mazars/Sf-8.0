@@ -51,6 +51,16 @@ des superglobales de PHP. Dans un controller, vous ne touchez presque jamais
 Les bags `query` et `request` sont des `InputBag` et exposent des getters typés
 (`getString`, `getInt`, `getBoolean`, `getEnum`, `getAlpha`, `getDigits`).
 
+```php
+// InputBag typed getters — on the query and request bags only
+$q     = $request->query->getString('q');        // '' when missing, never null
+$page  = $request->query->getInt('page', 1);     // cast to int, defaulted
+$debug = $request->query->getBoolean('debug');   // false when missing
+$sort  = $request->query->getEnum('sort', SortOrder::class, SortOrder::Asc);
+$name  = $request->query->getAlpha('name');      // keeps letters only
+$zip   = $request->query->getDigits('zip');      // keeps digits only
+```
+
 !!! question "Predict first"
     Une route est `/users/{id}`. Lisez-vous `$id` depuis `$request->query`,
     `$request->request` ou `$request->attributes` ?
@@ -73,6 +83,22 @@ Vous obtenez la `Request` de deux façons :
    injectez `Symfony\Component\HttpFoundation\RequestStack` et appelez
    `getCurrentRequest()`. Pendant une [sub-request](internal-redirects.md), la
    pile contient plusieurs requests ; celle du sommet est la request active.
+
+```php
+// 1. In an action: RequestValueResolver fills the type-hint
+public function search(Request $request): Response
+{
+    // ...
+}
+
+// 2. In a service: inject RequestStack, read the current request lazily
+public function __construct(private RequestStack $requestStack) {}
+
+public function referer(): ?string
+{
+    return $this->requestStack->getCurrentRequest()?->headers->get('referer');
+}
+```
 
 ```mermaid
 flowchart LR
@@ -97,6 +123,18 @@ attributes de mapping — `#[MapQueryParameter]`, `#[MapQueryString]`,
 `#[MapRequestPayload]` — qui valident et castent pour vous. Voir
 [Value Resolvers](value-resolvers.md).
 
+```php
+// Mapping attributes: validated, typed input instead of manual bag reads
+public function search(
+    #[MapQueryParameter] int $page = 1,               // one query param, typed
+    #[MapQueryString] ?SearchFilters $filters = null, // whole query string → DTO
+): Response { /* ... */ }
+
+public function create(
+    #[MapRequestPayload] CreateItemInput $payload,    // JSON body → validated DTO
+): Response { /* ... */ }
+```
+
 ### Null behavior
 
 Les deux familles de getters d'un `InputBag` divergent sur `null`, et l'examen
@@ -110,6 +148,14 @@ adore cette différence :
   `getInt('page', 1)` retourne `1`, `getString('q')` retourne `''`,
   `getBoolean('flag')` retourne `false`. Vous fournissez la valeur par défaut ;
   ils coercent et garantissent le type.
+
+```php
+// URL: /search  (no ?page=, ?q= or ?flag= at all)
+$request->query->get('page');         // null  (nullable get, ?string)
+$request->query->getInt('page', 1);   // 1     (typed getter, defaulted)
+$request->query->getString('q');      // ''    (never null)
+$request->query->getBoolean('flag');  // false (never null)
+```
 
 Le bug null classique est `(int) $request->query->get('page')` — quand `page`
 est absent, le cast transforme `null` en `0`, pas en une valeur par défaut

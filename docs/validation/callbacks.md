@@ -89,9 +89,32 @@ The `$payload` argument carries the constraint's optional `payload` option
 covered in [Violations Builder](violations-builder.md). From it you can read
 `getObject()`, `getRoot()`, `getGroup()` and call `buildViolation()`.
 
+```php
+#[Assert\Callback(payload: ['severity' => 'high'])] // payload option
+public function audit(ExecutionContextInterface $context, mixed $payload): void
+{
+    $object = $context->getObject(); // the object being validated
+    $root   = $context->getRoot();   // the top-level validated value
+    $group  = $context->getGroup();  // the currently validated group
+
+    if ('high' === $payload['severity'] && null === $object->reviewer) {
+        $context->buildViolation('A reviewer is required.')->addViolation();
+    }
+}
+```
+
 Because `Callback` is class-scoped, the callback runs in whichever **group** you
 assign to the constraint (`groups` option, default `Default`) — so callbacks
 participate in [group sequences](group-sequence.md) like any other constraint.
+
+```php
+// without the groups option, the Callback belongs to the Default group
+#[Assert\Callback(groups: ['checkout'])]
+public function checkStock(ExecutionContextInterface $context, mixed $payload): void
+{
+    // runs only when the 'checkout' group (or a sequence containing it) is validated
+}
+```
 
 ```mermaid
 sequenceDiagram
@@ -128,6 +151,16 @@ if (null !== $this->start && null !== $this->end && $this->start >= $this->end) 
 The callback should assume a value *might* be missing and either bail early or use
 `?->` / `??`. Reading the instance via `$context->getObject()` can likewise hand
 you a partially populated object, so the same guards apply there.
+
+```php
+$object = $context->getObject();          // may be partially populated
+$start  = $object?->start;                // ?-> is null-safe on the object
+$days   = $this->duration ?? 1;           // ?? supplies a fallback value
+
+if (null === $start) {
+    return; // bail early; let #[Assert\NotNull] report the missing value
+}
+```
 
 !!! note "Null in real life"
     The supervisor eyeballing the whole bag must not assume every item is present

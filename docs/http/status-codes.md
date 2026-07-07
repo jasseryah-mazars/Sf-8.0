@@ -76,6 +76,13 @@ looks up `$statusTexts` to fill the reason phrase if you do not supply one. If y
 pass an unknown code, `$statusTexts` has no entry and the phrase is empty (still
 valid).
 
+```php
+$response = new Response('Created!', Response::HTTP_CREATED); // phrase from $statusTexts
+$response->setStatusCode(404); // reason phrase auto-filled: 'Not Found'
+$response->setStatusCode(599); // unknown code -> empty reason phrase, still valid
+$response->setStatusCode(999); // throws \InvalidArgumentException (outside 100-599)
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Response::$statusTexts` and the
     `HTTP_*` constants —
@@ -120,6 +127,16 @@ flowchart TD
 "Unauthorized" is a misnomer: 401 is really *unauthenticated*. In Symfony the
 firewall entry point produces 401; a failed voter/`denyAccessUnlessGranted()`
 produces 403 via `AccessDeniedException`.
+
+```php
+// In a controller: authenticated but lacking the role -> 403
+$this->denyAccessUnlessGranted('ROLE_ADMIN'); // throws AccessDeniedException
+
+// Explicit equivalent
+if (!$this->isGranted('ROLE_ADMIN')) {
+    throw new AccessDeniedException('Admins only.'); // converted to a 403 response
+}
+```
 
 ### Not found vs gone
 

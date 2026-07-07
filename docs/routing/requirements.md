@@ -104,6 +104,14 @@ groups; use non-capturing `(?:...)` if you need grouping. The default separator 
 `/`, so `[^/]+` cannot span path segments unless you opt into `.+` (see the
 catch-all pattern below).
 
+```php
+// Implicitly anchored: '\d+' compiles to (?P<id>\d+) — never add ^ or $
+#[Route('/order/{id}', requirements: ['id' => '\d+'])]
+
+// Grouping: use a non-capturing (?:...) group, never a capturing (...)
+#[Route('/report/{period}', requirements: ['period' => '(?:day|week|month)'])]
+```
+
 ## Configuration & code
 
 === "PHP Attributes"

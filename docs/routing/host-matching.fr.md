@@ -37,6 +37,16 @@ ajoute une contrainte sur le nom de host de la request, de sorte que `admin.exam
 host peut lui-même contenir des **placeholders** (`{subdomain}.example.com`), transformant le
 sous-domaine en paramètre du controller — la base des apps multi-tenant.
 
+```php
+// Same path, different host -> different controller
+#[Route('/', name: 'main_home', host: 'example.com')]
+public function main(): Response { /* ... */ }
+
+// Host placeholder: the subdomain becomes a controller parameter
+#[Route('/', name: 'tenant_home', host: '{subdomain}.example.com')]
+public function tenant(string $subdomain): Response { /* ... */ }
+```
+
 !!! question "Predict first"
     Dans `host: '{tenant}.example.com'` sans `requirements`, que matche `{tenant}`
     — et le host est-il testé avant ou après le chemin ?
@@ -55,6 +65,22 @@ sous-domaine en paramètre du controller — la base des apps multi-tenant.
 placeholders de host obéissent aux mêmes règles `requirements`/`defaults` que les placeholders de
 chemin, mais leur séparateur par défaut est `.` plutôt que `/` (un token de host matche donc
 `[^.]+` par défaut).
+
+```php
+// RouteCompiler folds the host into a second regex on the CompiledRoute
+$route = new Route(
+    '/',
+    defaults: ['tenant' => 'www'],            // host placeholders accept defaults...
+    requirements: ['tenant' => '[a-z0-9]+'],  // ...and requirements, like path ones
+    host: '{tenant}.example.com',
+);
+$compiled = $route->compile();
+$compiled->getHostRegex();  // host regex, separate from $compiled->getRegex() (path)
+
+// UrlMatcher::matchCollection() tests it against RequestContext::getHost() first
+$context = new RequestContext(host: 'acme.example.com');
+$context->getHost();        // 'acme.example.com'
+```
 
 Le host de contexte vient du `RequestContext`, alimenté depuis la request entrante
 (et normalisé en minuscules). Comme les contraintes de host vivent dans les données compilées,

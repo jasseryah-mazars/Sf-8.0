@@ -37,6 +37,16 @@ déclarez une route dont le `path` est une **map de locale → chemin**, et elle
 route par locale, chacune portant le default `_locale` correspondant. La `_locale`
 matchée pilote ensuite les traductions et le formatage pour toute la request.
 
+```php
+// 'path' as a locale => path map: one action, one URL per language
+#[Route(path: ['en' => '/about', 'fr' => '/a-propos'], name: 'app_about')]
+public function about(): Response
+{
+    // the matched _locale ('en' or 'fr') drives translations from here on
+    return $this->render('about.html.twig');
+}
+```
+
 La locale peut aussi venir d'un **préfixe de chemin** (`/{_locale}/blog`) ou être **devinée**
 depuis la request. Quelle que soit la source, le framework la stocke sur la request et
 la mémorise pour la session afin que les liens restent dans la langue de l'utilisateur.
@@ -57,6 +67,14 @@ objets `Route` partageant un nom suffixé en interne par la locale, chacun avec
 `defaults['_locale']` défini et un requirement `_locale`. Au match, l'attribut `_locale`
 est copié dans la request (voir [Special attributes](special-attributes.md)).
 
+```console
+# One localized path array expands into one Route per locale at load time
+$ php bin/console debug:router
+  Name           Method   Path
+  app_about.en   ANY      /about       <- defaults['_locale'] = 'en' + requirement
+  app_about.fr   ANY      /a-propos    <- defaults['_locale'] = 'fr' + requirement
+```
+
 Deux listeners coopèrent :
 
 - `Symfony\Component\HttpKernel\EventListener\LocaleListener` — sur `kernel.request`,
@@ -66,11 +84,31 @@ Deux listeners coopèrent :
 - `Symfony\Component\HttpKernel\EventListener\LocaleAwareListener` — propage la
   locale aux services locale-aware (translator, etc.).
 
+```php
+// Simplified: what LocaleListener does on kernel.request
+public function onKernelRequest(RequestEvent $event): void
+{
+    $request = $event->getRequest();
+    if ($locale = $request->attributes->get('_locale')) {
+        $request->setLocale($locale);   // Request::setLocale()
+    }
+    // it also seeds the router's RequestContext so path() keeps this locale
+}
+// LocaleAwareListener then forwards the locale to the translator & co.
+```
+
 **Précédence de détection** (du plus fort au plus faible) : un paramètre de route `_locale` matché →
 la locale persistante stockée en session → `framework.default_locale`. Symfony n'analyse
 **pas** automatiquement `Accept-Language` pour vous ; pour l'honorer, lisez
 `Request::getPreferredLanguage($available)` dans un controller/listener et définissez la
 locale vous-même.
+
+```php
+// Precedence: matched _locale -> sticky session -> framework.default_locale
+// Accept-Language is NOT parsed automatically; honour it yourself:
+$preferred = $request->getPreferredLanguage(['en', 'fr', 'de']); // best match
+$request->setLocale($preferred);
+```
 
 Pour la **génération**, `_locale` est un paramètre spécial ordinaire : passez-le pour sélectionner une
 variante localisée, ou omettez-le pour réutiliser la locale de la request courante (le

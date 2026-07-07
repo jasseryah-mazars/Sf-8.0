@@ -44,6 +44,21 @@ les **exigences** (que doit satisfaire le token ?).
 |---|---|
 | `path`, `host`, `port`, `ip`/`ips`, `methods` | `roles`, `allow_if`, `requires_channel` |
 
+```yaml
+# security.yaml — one rule = matchers (does it apply?) + requirements (what must hold?)
+access_control:
+    # matchers: path, host, port, ips, methods
+    - path: ^/admin
+      host: admin\.example\.com
+      port: 443
+      ips: [10.0.0.0/8]
+      methods: [GET, POST]
+      # requirements: roles, allow_if, requires_channel
+      roles: ROLE_ADMIN
+      allow_if: "is_fully_authenticated()"
+      requires_channel: https
+```
+
 !!! question "Predict first"
     Votre liste contient `{ path: ^/, roles: PUBLIC_ACCESS }` en premier, puis
     `{ path: ^/admin, roles: ROLE_ADMIN }`. `/admin` est-il protégé ?
@@ -103,6 +118,17 @@ Elle a accès à `user`, `token`, `request`, `subject`, et à des fonctions comm
 `is_remember_me()`. Quand `roles` et `allow_if` sont tous deux définis, **les
 deux** doivent passer.
 
+```yaml
+access_control:
+    # allow_if is evaluated by the ExpressionVoter; variables: user, token, request, subject
+    - { path: ^/api, allow_if: "is_granted('ROLE_API') and is_authenticated()" }
+    - { path: ^/settings, allow_if: "is_fully_authenticated() and not is_remember_me()" }
+    # request (and token/user/subject) are usable directly in the expression
+    - { path: ^/health, allow_if: "request.getClientIp() == '127.0.0.1'" }
+    # roles + allow_if together: BOTH must pass (AND)
+    - { path: ^/vault, roles: ROLE_USER, allow_if: "user.isVerified()" }
+```
+
 ### `requires_channel`
 
 `requires_channel: https` force une redirection vers HTTPS pour les chemins
@@ -110,12 +136,28 @@ correspondants (et `http` force le clair). C'est appliqué par le
 `ChannelListener` **avant** l'authentification, donc cela protège même la page
 de login.
 
+```yaml
+access_control:
+    # ChannelListener redirects to HTTPS before authentication runs
+    - { path: ^/login, requires_channel: https }
+    # 'http' forces the plain channel instead
+    - { path: ^/legacy, requires_channel: http }
+```
+
 ### IP / host / methods / port
 
 - `ips` accepte des adresses simples ou des plages CIDR ; une règle avec `ips`
   ne s'applique qu'aux clients correspondants (utile avec `PUBLIC_ACCESS` pour
   autoriser un réseau interne).
 - `methods`, `host`, `port` restreignent encore les cas où la règle s'applique.
+
+```yaml
+access_control:
+    # ips: single address or CIDR range; whitelist an internal net with PUBLIC_ACCESS
+    - { path: ^/internal, roles: PUBLIC_ACCESS, ips: [127.0.0.1, 10.0.0.0/8] }
+    # methods, host and port narrow when the rule applies
+    - { path: ^/api, methods: [POST, PUT], host: api\.example\.com, port: 8443, roles: ROLE_API }
+```
 
 !!! info "Expert note"
     `access_control` appelle le *même* `AccessDecisionManager` et les mêmes

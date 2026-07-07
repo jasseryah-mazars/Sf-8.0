@@ -61,6 +61,18 @@ Quand `UrlMatcher::match()` réussit, il retourne un **tableau de paramètres** 
 du framework (un subscriber de `kernel.request`) copie chaque paramètre retourné dans
 le sac d'attributs de la `Request` (`$request->attributes`).
 
+```php
+// UrlMatcher::match() output for GET /blog/42:
+[
+    '_controller' => 'App\Controller\BlogController::show',
+    'id' => '42',
+    '_route' => 'blog_show',            // injected by the matcher
+    '_route_params' => ['id' => '42'],  // injected too
+];
+// RouterListener (kernel.request) then copies every entry into the Request:
+$request->attributes->get('_route'); // 'blog_show'
+```
+
 À partir de là :
 
 - `_controller` est résolu par le `ControllerResolver` en un callable.
@@ -70,6 +82,20 @@ le sac d'attributs de la `Request` (`$request->attributes`).
   `LocaleListener` puisse aussi le définir comme valeur par défaut pour les requests
   suivantes (voir [Locale](locale.md)).
 - `_fragment` est pris en compte par le **generator**, ajouté sous la forme `#fragment`.
+
+```php
+// _controller -> ControllerResolver turns it into a callable
+$controller = $controllerResolver->getController($request);
+
+// _format -> Request::setRequestFormat(), drives the Response Content-Type
+$request->setRequestFormat('json');
+
+// _locale -> Request::setLocale() (LocaleListener re-applies it later)
+$request->setLocale('fr');
+
+// _fragment -> only used by the generator: /blog/42#comments
+$url = $generator->generate('blog_show', ['id' => 42, '_fragment' => 'comments']);
+```
 
 `_route` et `_route_params` sont des **sorties** — ne les définissez jamais vous-même ;
 lisez-les (p. ex. pour du logging ou dans un subscriber) via
@@ -98,6 +124,17 @@ un avertissement `Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageE
 est levé afin de repérer une statefulness accidentelle — important pour les endpoints
 cacheables et les API. C'est un contrat/une assertion, pas une interdiction silencieuse
 en prod.
+
+```php
+#[Route('/api/status', name: 'api_status', stateless: true)]
+public function status(Request $request): Response
+{
+    // In debug, touching the session here is reported
+    // via UnexpectedSessionUsageException:
+    // $request->getSession()->get('user'); // would trigger the warning
+    return new Response('OK');
+}
+```
 
 ## Configuration & code
 

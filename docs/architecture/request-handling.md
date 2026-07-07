@@ -48,8 +48,25 @@ from PHP superglobals, calls `handle()`, sends the returned `Response`, then cal
 sequence of **events** that let listeners observe or short-circuit the flow. This
 event-driven core is what makes Symfony extensible without patching.
 
+```php
+// What public/index.php does, spelled out (the Runtime automates this):
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']); // boot the Kernel
+$request = Request::createFromGlobals();  // Request built from PHP superglobals
+$response = $kernel->handle($request);    // handle(): HttpKernel dispatches the events here
+$response->send();                        // stream the Response to the client
+$kernel->terminate($request, $response);  // terminate(): after-send work
+```
+
 `self::MAIN_REQUEST` (value `1`) and `self::SUB_REQUEST` (value `2`) are the two
 request types; the old `MASTER_REQUEST` constant was removed.
+
+```php
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+HttpKernelInterface::MAIN_REQUEST; // int 1 — the top-level HTTP request
+HttpKernelInterface::SUB_REQUEST;  // int 2 — nested requests (fragments)
+// HttpKernelInterface::MASTER_REQUEST — removed; use MAIN_REQUEST instead
+```
 
 ## Deep Dive — how it works internally
 
@@ -97,6 +114,17 @@ return function (array $context): Kernel {
 `Kernel::handle()` boots the container (once) and delegates to the
 `http_kernel` service — an instance of `HttpKernel`. The real work lives in the
 private `HttpKernel::handleRaw()`.
+
+```php
+// Simplified: Kernel::handle() boots the container, then delegates
+public function handle(Request $request, int $type = HttpKernelInterface::MAIN_REQUEST, bool $catch = true): Response
+{
+    $this->boot();
+    // getHttpKernel() returns the 'http_kernel' service — an HttpKernel instance;
+    // HttpKernel::handle() itself just wraps the private handleRaw()
+    return $this->getHttpKernel()->handle($request, $type, $catch);
+}
+```
 
 ### The eight kernel events, in execution order
 
@@ -166,6 +194,20 @@ then builds the ordered argument list by running a chain of
 `#[MapRequestPayload]`, `#[MapQueryString]`, services, variadics, defaults…). See
 [Argument Value Resolvers](../controllers/value-resolvers.md).
 
+```php
+// Inside handleRaw(), simplified:
+$controller = $this->resolver->getController($request);   // ControllerResolverInterface
+// ...which reads the '_controller' attribute set by the router:
+$request->attributes->get('_controller');                 // e.g. "App\Controller\PostController::show"
+$arguments = $this->argumentResolver->getArguments($request, $controller); // ArgumentResolverInterface
+$response = $controller(...$arguments);
+
+// The chain behind getArguments() is made of ValueResolverInterface implementations;
+// attributes select specific resolvers in your controllers:
+public function search(#[MapQueryString] SearchQuery $query): Response { /* ... */ }
+public function store(#[MapRequestPayload] PostPayload $payload): Response { /* ... */ }
+```
+
 ### Sub-requests
 
 A controller (or listener) can render a fragment by calling `handle()` again with
@@ -173,6 +215,17 @@ A controller (or listener) can render a fragment by calling `handle()` again wit
 (`kernel.request` … `kernel.finish_request`) but **not** `kernel.terminate`.
 `RequestStack` tracks the nesting so `getCurrentRequest()` and
 `getMainRequest()` stay correct; `kernel.finish_request` restores parent state.
+
+```php
+// Render a fragment through a sub-request (same events, no kernel.terminate)
+$subRequest = Request::create('/_fragment/sidebar');
+$response = $httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+
+// RequestStack keeps the nesting straight while the sub-request runs:
+$requestStack->getCurrentRequest(); // the sub-request during handle()
+$requestStack->getMainRequest();    // still the top-level request
+// kernel.finish_request then restores the parent request's state
+```
 
 ```mermaid
 sequenceDiagram
@@ -223,6 +276,19 @@ but it returned null. Did you forget to add a return statement somewhere in your
 controller?"* Handle it by returning a real `Response`, or by registering a
 `kernel.view` listener that calls `$event->setResponse()` (e.g. serializing the
 value to a `JsonResponse`).
+
+```php
+// Simplified handleRaw() logic after the controller returned $response:
+if (!$response instanceof Response) {
+    $event = new ViewEvent($this, $request, $type, $response);
+    $this->dispatcher->dispatch($event, KernelEvents::VIEW);   // kernel.view
+    if (!$event->hasResponse()) {
+        // a LogicException: "The controller must return a ... Response object..."
+        throw new ControllerDoesNotReturnResponseException(/* ... */);
+    }
+    $response = $event->getResponse(); // e.g. a JsonResponse a listener passed to $event->setResponse()
+}
+```
 
 !!! note "Null in real life"
     A controller returning `null` is a **parcel that reached the wrapping station

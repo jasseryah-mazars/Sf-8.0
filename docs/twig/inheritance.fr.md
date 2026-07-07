@@ -81,6 +81,24 @@ parent afin que le rendu démarre à l'ancêtre **racine** et descende, laissant
 méthodes de l'enfant surcharger celles du parent — exactement comme la surcharge
 de méthodes en PHP.
 
+```php
+// page.html.twig compiles (simplified) to a class extending Twig\Template
+class __TwigTemplate_page extends Template
+{
+    // {% extends 'base.html.twig' %} → declares base as the parent template
+    protected function doGetParent(array $context): string
+    {
+        return 'base.html.twig';
+    }
+
+    // {% block title %} becomes a block_<name>() method the child overrides
+    public function block_title(array $context, array $blocks = [])
+    {
+        yield 'Dashboard';
+    }
+}
+```
+
 ```mermaid
 flowchart TD
     C[page.html.twig] -->|extends| S[section.html.twig]
@@ -102,6 +120,21 @@ flowchart TD
 - Le moteur de rendu résout chaque block via la **table des blocks** de la classe
   compilée (`$this->blocks`), de sorte qu'une surcharge n'importe où dans la
   chaîne l'emporte.
+
+```twig
+{# extends: first tag, may be a dynamic expression — resolved at runtime #}
+{% extends ajax ? '_modal.html.twig' : 'base.html.twig' %}
+
+{% block title %}
+    Docs — {{ parent() }}                    {# parent(): the parent's version of this block #}
+{% endblock %}
+
+{% block footer %}
+    {{ block('title') }}                     {# block('name'): a block of the current hierarchy #}
+    {{ block('legal', 'legal.html.twig') }}  {# read a block from another template #}
+    {# every lookup goes through the compiled class's block table ($this->blocks) #}
+{% endblock %}
+```
 
 !!! note "Source reference"
     `Twig\Template`, `Twig\Node\ModuleNode`, block token parsers —
@@ -126,6 +159,13 @@ conflit sont renommés avec `as`.
 
 Ici, `_sidebar.html.twig` ne contient que des définitions
 `{% block sidebar %}…{% endblock %}` — pas d'`extends`, pas de HTML autour.
+
+```twig
+{# blocks/_sidebar.html.twig — block definitions only: no extends, no top-level markup #}
+{% block sidebar %}
+    <nav>default sidebar</nav>
+{% endblock %}
+```
 
 ## Configuration & code
 

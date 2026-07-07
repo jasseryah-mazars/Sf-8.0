@@ -39,6 +39,21 @@ implémentation. Une classe peut implémenter **plusieurs** interfaces, et une
 interface peut `extends` **plusieurs** interfaces parentes — c'est ainsi que PHP
 obtient l'héritage multiple de *type* sans héritage multiple d'*état*.
 
+```php
+interface Timestamped
+{
+    public const string FORMAT = 'Y-m-d';  // constant: implicitly public, typed (8.3)
+
+    public function touchedAt(): \DateTimeImmutable;  // signature only, no body
+}
+
+// An interface may extend SEVERAL parent interfaces…
+interface Auditable extends Timestamped, \Stringable {}
+
+// …and a class may implement MANY interfaces at once.
+final class Invoice implements Timestamped, \Countable { /* ... */ }
+```
+
 | Feature | Interface | Abstract class |
 |---|---|---|
 | Héritage multiple | Oui | Non |
@@ -117,6 +132,20 @@ classDiagram
 | DNF | `(A&B)\|null` | Combine les deux, 8.2+ |
 | `void` / `never` | — | Pas de retour / ne retourne jamais |
 | `static` / `self` | — | LSB / classe déclarante |
+
+```php
+final class Repo
+{
+    public function flush(int $n, bool $force): void {}           // scalar + void
+    public function maybe(?string $s): self { return $this; }     // ?T + self
+    public function find(int|string $id): static { return $this; }// union + LSB
+    public function walk(\Countable&\Traversable $c): void {}     // intersection
+    public function dnf((\Countable&\Traversable)|null $c): never // DNF + never
+    {
+        throw new \LogicException('always throws');
+    }
+}
+```
 
 ### `instanceof`
 

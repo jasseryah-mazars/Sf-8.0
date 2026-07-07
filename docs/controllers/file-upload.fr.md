@@ -42,6 +42,20 @@ Un fichier uploadé arrive dans le bag `files` sous forme de
 Ne faites jamais confiance au nom de fichier fourni par le client — générez un
 nom sûr.
 
+```php
+// 1. Read: the upload comes from the "files" bag
+$file = $request->files->get('avatar');            // ?UploadedFile
+
+// 2. Validate: error state (and size/MIME) before anything else
+if (null === $file || !$file->isValid()) {
+    throw new BadRequestHttpException('Invalid upload.');
+}
+
+// 3. Move: never keep the client filename — generate a safe one
+$newName = bin2hex(random_bytes(8)).'.'.$file->guessExtension();
+$file->move($targetDir, $newName);
+```
+
 !!! question "Predict first"
     Pour décider si un upload est réellement un PDF, faites-vous confiance à
     `getClientMimeType()`, à l'extension du fichier, ou à `getMimeType()` ?
@@ -64,6 +78,20 @@ nom sûr.
   puis le déplace ; lève une `FileException` en cas d'échec.
 - `getClientOriginalExtension()` vs `guessExtension()` (depuis le vrai MIME).
 
+```php
+$file->getClientOriginalName();      // "report.pdf"  — client-supplied, spoofable
+$file->getClientMimeType();          // claimed by the browser, spoofable
+$file->getClientOriginalExtension(); // "pdf" — from the client name, spoofable
+
+$file->getMimeType();                // "application/pdf" — MimeTypes guesser, content-based
+$file->guessExtension();             // "pdf" — derived from the real MIME type
+$file->getSize();                    // size in bytes
+$file->getError();                   // UPLOAD_ERR_OK (0) or another UPLOAD_ERR_* code
+$file->isValid();                    // true only for a successful upload
+
+$file->move('/var/data/uploads', 'a1b2c3.pdf'); // throws FileException on failure
+```
+
 ```mermaid
 flowchart LR
     Br[Browser multipart POST] --> F["$_FILES"]
@@ -83,6 +111,12 @@ flowchart LR
   `.php` uploadé dans un répertoire servi équivaut à de l'exécution de code à distance.
 - Assainissez le nom cible (par ex. slug + identifiant unique) ; utilisez
   `guessExtension()` issu du MIME détecté, pas l'extension du client.
+
+```ini
+; php.ini — PHP-level bounds, enforced before Symfony ever runs
+upload_max_filesize = 2M   ; max size of a single uploaded file
+post_max_size = 8M         ; max size of the whole POST body (fields + files)
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\File\UploadedFile` —

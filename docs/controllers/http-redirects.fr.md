@@ -45,6 +45,17 @@ Les raccourcis d'`AbstractController` :
 Les deux construisent une `Symfony\Component\HttpFoundation\RedirectResponse`.
 Le statut par défaut est **302 Found**.
 
+```php
+// Route name (+ params) — the router generates the URL
+return $this->redirectToRoute('order_show', ['id' => 42]);  // 302 Found by default
+
+// Any URL, with an explicit status
+return $this->redirect('https://symfony.com/', 302);
+
+// Both shortcuts return this object:
+return new RedirectResponse('/orders/42');                  // status defaults to 302
+```
+
 !!! question "Predict first"
     Après un POST réussi, vous appelez `redirectToRoute('show')` sans argument de
     statut. Quel statut HTTP le navigateur reçoit-il, et conserve-t-il le POST ?
@@ -61,6 +72,15 @@ Le statut par défaut est **302 Found**.
 et ses paramètres en URL, puis retourne `new RedirectResponse($url, $status)`.
 `RedirectResponse` définit le header `Location` et un petit corps HTML (pour les
 clients anciens).
+
+```php
+// What redirectToRoute() does internally:
+$url = $this->generateUrl('order_show', ['id' => 42]); // router builds "/orders/42"
+$response = new RedirectResponse($url, 302);
+
+$response->headers->get('Location');  // "/orders/42"
+$response->getContent();              // small HTML page with a meta refresh + link
+```
 
 ```mermaid
 sequenceDiagram

@@ -97,6 +97,16 @@ flowchart TD
 - `isMethodSafe()`, `isMethodIdempotent()`, `isMethodCacheable()` — encodent
   directement la classification de la RFC 9110.
 
+```php
+// For an incoming "POST /articles" request:
+$request->getMethod();          // 'POST' — effective method (override-aware)
+$request->getRealMethod();      // 'POST' — raw transport method
+$request->isMethod('post');     // true  — case-insensitive comparison
+$request->isMethodSafe();       // false — POST changes server state
+$request->isMethodIdempotent(); // false — repeating a POST creates duplicates
+$request->isMethodCacheable();  // false — only GET and HEAD are cacheable
+```
+
 !!! note "Source reference"
     `Request::isMethodSafe()`, `isMethodIdempotent()`, `isMethodCacheable()`,
     `getMethod()` et la logique d'override —
@@ -128,6 +138,16 @@ sequenceDiagram
   acceptées.
 - Après l'override, `getMethod()` retourne le verbe substitué tandis que
   `getRealMethod()` retourne toujours `POST`.
+
+```php
+// Enable in code (equivalent to framework.http_method_override: true)
+Request::enableHttpMethodParameterOverride();
+
+// Incoming: POST /articles/42 with body "_method=DELETE"
+// (the X-HTTP-Method-Override header works the same way)
+$request->getMethod();     // 'DELETE' — overridden verb
+$request->getRealMethod(); // 'POST'   — raw transport method
+```
 
 ## Configuration & code
 

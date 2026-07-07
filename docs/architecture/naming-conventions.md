@@ -64,6 +64,25 @@ These are not cosmetic: autoconfiguration keys behaviour off interfaces (e.g.
 implementing `EventSubscriberInterface` auto-tags the service), so the `Interface`
 suffix is part of a working contract.
 
+```php
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+// The "Interface" suffix is a working contract: implementing
+// EventSubscriberInterface is what triggers the automatic tagging.
+final class RequestLogger implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return ['kernel.request' => 'onRequest'];
+    }
+
+    public function onRequest(): void
+    {
+        // ...
+    }
+}
+```
+
 ### Service and parameter names
 
 - **Service IDs**: the **FQCN** is the id (`App\Service\Importer`). Autowiring
@@ -74,6 +93,24 @@ suffix is part of a working contract.
   (`kernel.project_dir`, `kernel.debug`).
 - **Tags**: lowercase, dot-separated (`kernel.event_listener`, `controller.service_arguments`).
 
+```yaml
+# config/services.yaml
+parameters:
+    app.page_size: 25                           # snake_case, "app." namespaced
+    app.debug_banner: '%kernel.debug%'          # framework params use "kernel."
+    app.import_dir: '%kernel.project_dir%/var'  # e.g. kernel.project_dir
+
+services:
+    App\Service\Importer: ~                     # service id = the FQCN
+    app.importer:                               # legacy dotted id → alias the FQCN
+        alias: App\Service\Importer
+
+    App\EventListener\RequestListener:
+        tags: ['kernel.event_listener']         # lowercase dotted tag
+    App\Controller\ImportController:
+        tags: ['controller.service_arguments']  # lowercase dotted tag
+```
+
 ### Route names
 
 Routes use lowercase **snake_case**, typically `entity_action`:
@@ -81,11 +118,40 @@ Routes use lowercase **snake_case**, typically `entity_action`:
 `make:controller` follow `app_<controller>_<action>`. Keep them stable — they are
 referenced by `generateUrl()`/`path()`.
 
+```php
+// snake_case route names, typically entity_action:
+// blog_show, invoice_list, app_login
+// (make:controller generates names like app_blog_index)
+#[Route('/blog/{slug}', name: 'blog_show')]
+public function show(string $slug): Response
+{
+    // referenced by name in PHP via generateUrl():
+    $url = $this->generateUrl('blog_show', ['slug' => $slug]);
+    // and in Twig via path(): {{ path('blog_show', {slug: post.slug}) }}
+    // ...
+}
+```
+
 ### Config keys
 
 Bundle config uses **snake_case** keys under the bundle **alias** (the extension's
 alias, e.g. `framework`, `twig`, `security`). Nested keys stay snake_case:
 `framework.http_method_override`.
+
+```yaml
+# config/packages/framework.yaml — snake_case keys under the "framework" alias
+framework:
+    http_method_override: false
+
+# config/packages/twig.yaml — the "twig" alias
+twig:
+    strict_variables: true
+
+# config/packages/security.yaml — the "security" alias
+security:
+    firewalls:
+        main: { lazy: true }
+```
 
 ### Environment variables
 
@@ -93,6 +159,16 @@ Env vars are **UPPER_SNAKE_CASE**, conventionally prefixed **`APP_`** for
 application vars (`APP_ENV`, `APP_DEBUG`, `APP_SECRET`). In config they are read via
 processors: `%env(APP_ENV)%`, `%env(int:APP_PAGE_SIZE)%`,
 `%env(bool:APP_FEATURE_X)%`.
+
+```yaml
+# .env: APP_ENV=dev  APP_DEBUG=1  APP_SECRET=s3cr3t  (UPPER_SNAKE, APP_-prefixed)
+
+# config/services.yaml — read env vars through processors
+parameters:
+    app.env: '%env(APP_ENV)%'                   # raw string
+    app.page_size: '%env(int:APP_PAGE_SIZE)%'   # int processor
+    app.feature_x: '%env(bool:APP_FEATURE_X)%'  # bool processor
+```
 
 ```mermaid
 flowchart LR

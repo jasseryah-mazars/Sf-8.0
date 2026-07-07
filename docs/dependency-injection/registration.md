@@ -37,6 +37,16 @@ glob registers a whole directory, `autowire` supplies constructor arguments by
 type, and `autoconfigure` applies tags by implemented interface. You drop to
 manual definitions only when the conventions cannot express something.
 
+```yaml
+# config/services.yaml
+services:
+    _defaults:
+        autowire: true        # fill constructor args by type
+        autoconfigure: true   # apply tags based on implemented interfaces
+    App\:
+        resource: '../src/'   # one resource glob registers the whole directory
+```
+
 !!! question "Predict first"
     Using the `App\:` resource glob, what is a service's id — a short name or
     something else? And are `autowire` and `autoconfigure` the same switch?

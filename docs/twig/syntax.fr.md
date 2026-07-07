@@ -53,10 +53,30 @@ forcer un accès tableau/`ArrayAccess`, et `{{ attribute(obj, method, args) }}`
 quand le nom est dynamique. Un attribut manquant produit `null` (ou lève une
 exception avec `strict_variables`).
 
+```twig
+{# user.name tries: $user['name'], ->name, ->name(), getName(), isName(), hasName() #}
+{{ user.name }}
+{# subscript form: forces the array / ArrayAccess lookup #}
+{{ user['name'] }}
+{# dynamic attribute name #}
+{{ attribute(user, method) }}
+{# missing attribute: null on print (or throws with strict_variables) #}
+{{ user.nickname ?? 'n/a' }}
+```
+
 ### Expressions & literals
 
 Chaînes `"hi"`/`'hi'`, nombres `42`/`4.2`, booléens `true`/`false`, `null`,
 tableaux `[1, 2]`, hashes `{ key: 'v', (expr): 'v2' }`, et plages `1..5`.
+
+```twig
+{% set s = "hi" %}                    {# strings: "hi" or 'hi' #}
+{% set n = 42 %}{% set f = 4.2 %}     {# numbers #}
+{% set flags = [true, false, null] %} {# booleans and null in an array #}
+{% set list = [1, 2] %}               {# array literal #}
+{% set map = { key: 'v', ('k' ~ 2): 'v2' } %} {# hash, (expr) as dynamic key #}
+{% set steps = 1..5 %}                {# range: 1, 2, 3, 4, 5 #}
+```
 
 !!! question "Predict first"
     Que produit `{{ 7 // 2 }}` — `3.5`, `3` ou `4` ?
@@ -97,6 +117,18 @@ flowchart LR
   à chaque requête suivante — après la première compilation, le « parsing » des
   templates ne coûte rien à l'exécution.
 
+```php
+$source = new \Twig\Source('Hello {{ name }}!', 'demo.twig');
+
+// Lexer (Twig\Lexer): source → token stream
+$tokens = $twig->tokenize($source);
+// Parser (Twig\Parser) + token parsers (Twig\TokenParser\*) + Twig\ExpressionParser:
+// tokens → AST of Twig\Node\Node objects
+$ast = $twig->parse($tokens);
+// Compiler (Twig\Compiler): AST → PHP class extending Twig\Template (doDisplay())
+$php = $twig->compile($ast);  // written once to Twig\Cache\FilesystemCache
+```
+
 !!! note "Source reference"
     `Twig\Environment`, `Twig\Lexer`, `Twig\Parser`, `Twig\Compiler` —
     [twigphp/Twig `3.x`](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php).
@@ -120,11 +152,30 @@ De la priorité la **plus faible** à la **plus forte** :
 `{{ 2 + 3 * 4 }}` → `14`. `{{ "a" ~ 1 + 1 }}` → `a2` (`+` est prioritaire sur `~`).
 Les filtres (`|`) sont prioritaires sur tout opérateur : `{{ -x|abs }}` équivaut à `-(x|abs)`.
 
+```twig
+{{ 2 + 3 * 4 }}    {# 14 — * binds tighter than + #}
+{{ "a" ~ 1 + 1 }}  {# 'a2' — + binds tighter than ~ #}
+{{ 7 // 2 }}       {# 3 — floor division, unlike / #}
+{{ 2 ** 3 ** 2 }}  {# 512 — ** is right-associative: 2 ** (3 ** 2) #}
+{{ -3|abs }}       {# -3 — parsed as -(3|abs): filters bind tightest #}
+```
+
 ### Tests
 
 Les tests utilisent `is` : `{{ x is defined }}`, `is null`, `is empty`, `is even`/`odd`,
 `is iterable`, `is same as(y)`, `divisible by(3)`, `constant('App\\Foo::BAR')`.
 La négation s'écrit `is not` : `{% if x is not null %}`.
+
+```twig
+{% if x is defined and x is not null %}   {# defined test + `is not` negation #}
+    {{ x is empty ? 'empty' : x }}
+{% endif %}
+{{ 4 is even }} {{ 3 is odd }}            {# parity tests #}
+{{ items is iterable }}
+{{ flag is same as(false) }}              {# strict identity (===) #}
+{{ 9 is divisible by(3) }}
+{{ status is constant('App\\Foo::BAR') }} {# compare against a PHP constant #}
+```
 
 ### Null behavior
 
@@ -134,6 +185,12 @@ chaîne vide, jamais une erreur : `{{ missing }}` ne rend rien. (Avec
 une variable qui vaut `null` s'affiche quand même vide.) Lire un attribut **sur**
 `null` — `{{ user.name }}` quand `user` est `null` — produit `null` (à nouveau,
 vide à l'affichage) sauf si `strict_variables` est activé.
+
+```twig
+{{ missing }}    {# undefined: prints '' (throws only if strict_variables is on) #}
+{% set user = null %}
+{{ user.name }}  {# attribute on null: null → empty on print in lenient mode #}
+```
 
 Gérez-le explicitement avec trois outils :
 

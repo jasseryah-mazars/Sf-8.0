@@ -37,6 +37,14 @@ in the next major**. It gives you a whole major cycle to migrate. Symfony emits
 deprecations as `E_USER_DEPRECATED` notices via a tiny, dependency-free helper from
 the `symfony/deprecation-contracts` package.
 
+```php
+// symfony/deprecation-contracts provides one global helper function
+trigger_deprecation('acme/sdk', '2.4', 'Method "%s()" is deprecated.', 'legacyCall');
+
+// which internally boils down to an E_USER_DEPRECATED notice:
+@trigger_error('Since acme/sdk 2.4: Method "legacyCall()" is deprecated.', \E_USER_DEPRECATED);
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -96,11 +104,36 @@ by the `SYMFONY_DEPRECATIONS_HELPER` environment variable — you can set thresh
 (e.g. `max[total]=0`), make the suite **fail** on deprecations, or ignore specific
 ones via a regex/baseline file. This is the standard CI gate for a clean upgrade.
 
+```console
+# DeprecationErrorHandler reads SYMFONY_DEPRECATIONS_HELPER:
+$ SYMFONY_DEPRECATIONS_HELPER="max[total]=0" php bin/phpunit   # fail on any deprecation
+
+# Ignore deprecations matching the regexes listed in a baseline file
+$ SYMFONY_DEPRECATIONS_HELPER="ignoreFile=./tests/deprecations-baseline" php bin/phpunit
+```
+
 ### Marking your own deprecations
 
 Combine the `@deprecated` docblock (and, in PHP 8.4, the native `#[\Deprecated]`
 attribute where appropriate) with a runtime `trigger_deprecation()` so both static
 analysis and runtime tooling see it.
+
+```php
+final class Mailer
+{
+    /**
+     * @deprecated since app 8.1, use send() instead.
+     */
+    #[\Deprecated(message: 'use send() instead', since: 'app 8.1')] // native PHP 8.4 attribute
+    public function dispatch(): void
+    {
+        // runtime notice for logs, profiler and the PHPUnit bridge
+        trigger_deprecation('app/mailer', '8.1', 'Method "%s()" is deprecated, use "send()".', __METHOD__);
+
+        $this->send();
+    }
+}
+```
 
 !!! note "Source reference"
     `trigger_deprecation()` —
@@ -114,6 +147,15 @@ Some deprecations fire at **container compile time** (e.g. a deprecated config k
 or service alias marked with `Definition::setDeprecated()`); others at **runtime**
 (a deprecated method call). Config-level deprecations surface during `cache:clear`;
 runtime ones during actual execution and tests.
+
+```php
+// Compile-time: deprecate a service definition (surfaces during cache:clear)
+$container->getDefinition('app.legacy_mailer')
+    ->setDeprecated('app/mailer', '8.1', 'The "%service_id%" service is deprecated.');
+
+// Runtime: notice fires only when the deprecated method is actually called
+trigger_deprecation('app/mailer', '8.1', 'Calling "%s()" is deprecated.', __METHOD__);
+```
 
 ## Configuration & code
 

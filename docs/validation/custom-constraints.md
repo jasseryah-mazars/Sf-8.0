@@ -39,6 +39,24 @@ When a rule is **reusable** across classes, promote it from a callback to a
 The constraint links to its validator via `validatedBy()`, which by convention
 returns `static::class . 'Validator'`.
 
+```php
+// 1) the declarative marker: a Constraint subclass holding options + message
+final class Uuid4 extends Constraint
+{
+    public string $message = 'This is not a UUID v4.';
+}
+
+// 2) the logic: a ConstraintValidator subclass, found via validatedBy(),
+//    which by default returns static::class . 'Validator' => Uuid4Validator
+final class Uuid4Validator extends ConstraintValidator
+{
+    public function validate(mixed $value, Constraint $constraint): void
+    {
+        // inspect $value and add violations through $this->context
+    }
+}
+```
+
 !!! question "Predict first"
     You add `#[\Attribute(\Attribute::TARGET_CLASS)]` to a custom constraint but the
     validator still treats it as a property constraint. What did you forget?
@@ -89,6 +107,19 @@ Key mechanics:
   **class-level** constraint.
 - `validatedBy()` defaults to `static::class . 'Validator'`; override only when
   the validator's service id differs.
+
+```php
+// inside the Constraint subclass
+public function getTargets(): string
+{
+    return Constraint::CLASS_CONSTRAINT; // default: Constraint::PROPERTY_CONSTRAINT
+}
+
+public function validatedBy(): string
+{
+    return LegacyRuleChecker::class; // default: static::class . 'Validator'
+}
+```
 
 ### The Validator
 
@@ -143,6 +174,20 @@ Contract points:
   `validator.constraint_validator` tag (thanks to `ConstraintValidatorInterface`),
   so you can inject dependencies (a repository, the `Security` service, etc.).
 
+```php
+// the validator is a regular service: constructor injection just works.
+// It is autoconfigured with the validator.constraint_validator tag because
+// ConstraintValidator implements ConstraintValidatorInterface.
+final class UniqueEmailValidator extends ConstraintValidator
+{
+    public function __construct(
+        private UserRepository $users,   // repository dependency
+        private Security $security,      // current user, roles...
+    ) {
+    }
+}
+```
+
 ```mermaid
 flowchart LR
     A["#[ContainsAlphanumeric]"] --> B[Constraint object]
@@ -174,6 +219,22 @@ methods — otherwise you risk a `TypeError`. A `mixed $value` signature plus an
 early null return (then a `!\is_string($value)` throw) keeps it safe. Second, a
 **class-scoped** validator's `$value` is the object, which is not `null` at that
 point — but its *properties* may be, so read them with `?->` and `??`.
+
+```php
+public function validate(mixed $value, Constraint $constraint): void
+{
+    if (null === $value || '' === $value) {
+        return;                              // early return: no TypeError later
+    }
+    if (!\is_string($value)) {
+        throw new UnexpectedValueException($value, 'string');
+    }
+
+    // class-scoped variant: $value is the object, but its properties may be null
+    // $year = $value->end?->format('Y');    // ?-> null-safe call
+    // $days = $value->duration ?? 0;        // ?? fallback
+}
+```
 
 !!! note "Null in real life"
     A custom scanner ignores an empty slot on the belt — it is not its job to

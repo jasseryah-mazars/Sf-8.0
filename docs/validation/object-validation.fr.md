@@ -92,6 +92,23 @@ implémenté par `RecursiveValidator`. Ses quatre méthodes de lecture :
 Toutes retournent une
 `Symfony\Component\Validator\ConstraintViolationListInterface`.
 
+```php
+// All four read methods return a ConstraintViolationListInterface
+$violations = $validator->validate($author);                  // whole object
+$violations = $validator->validateProperty($author, 'email'); // one property, current value
+$violations = $validator->validatePropertyValue(
+    Author::class, 'email', 'not-an-email'                    // hypothetical value
+);
+
+// startContext() opens a manual validation context
+$violations = $validator->startContext()
+    ->validate($author->name, new Assert\NotBlank())
+    ->getViolations();
+
+// inContext() runs validations inside an existing ExecutionContext
+$validator->inContext($context)->validate($author->email, new Assert\Email());
+```
+
 **Chargement des métadonnées.** Les constraints ne sont pas lues à chaque appel.
 Le validator demande à une
 `Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface`
@@ -102,6 +119,17 @@ réflexion sur la classe et lit chaque attribut `#[Assert\...]` sur les
 propriétés, les getters et la classe elle-même. Les résultats sont mis en cache
 dans un pool PSR-6 (`validator.mapping.cache.adapter`), de sorte que la réflexion
 ne se produit qu'une fois par classe.
+
+```php
+use Symfony\Component\Validator\Mapping\Factory\MetadataFactoryInterface;
+
+// LazyLoadingMetadataFactory implements MetadataFactoryInterface
+$metadata = $metadataFactory->getMetadataFor(Author::class); // returns ClassMetadata
+
+// AttributeLoader populated it from the #[Assert\...] attributes; the result
+// is cached in the "validator.mapping.cache.adapter" PSR-6 pool
+$metadata->getConstrainedProperties(); // ['name', 'email', 'active']
+```
 
 ```mermaid
 flowchart LR
@@ -121,6 +149,15 @@ Pour chaque constraint, le validator résout son `ConstraintValidator` (voir
 `validate($value, $constraint)`. Les violations sont collectées dans la liste
 liée au
 `Symfony\Component\Validator\Context\ExecutionContextInterface` courant.
+
+```php
+// What the validator does for each constraint (simplified)
+$constraint          = new Assert\NotBlank();
+$constraintValidator = new NotBlankValidator();  // the resolved ConstraintValidator
+
+$constraintValidator->initialize($context);      // injects the ExecutionContextInterface
+$constraintValidator->validate($author->name, $constraint); // may add violations to the context
+```
 
 !!! note "Source reference"
     `Symfony\Component\Validator\Validator\RecursiveValidator` et
@@ -169,6 +206,13 @@ nœud et ne trouve aucune métadonnée de classe, si bien que vous récupérez u
 validation, c'est *des valeurs contre des constraints*, et un simple `null` ne
 porte aucune constraint qui lui soit propre.
 
+```php
+// Passing null to validate() is legal: no metadata, no constraints, no TypeError
+$violations = $validator->validate(null);
+
+count($violations); // 0 — an empty ConstraintViolationListInterface
+```
+
 Le cas le plus courant est une *propriété* à `null`. Le validator la visite quand
 même, mais la plupart des constraints ignorent `null` (voir
 [Built-in Constraints](built-in-constraints.md)) : une propriété nullable ne
@@ -176,6 +220,21 @@ portant que `#[Assert\Email]` passe donc quand elle n'est pas renseignée. Ajout
 `#[Assert\NotNull]` ou `#[Assert\NotBlank]` quand l'absence doit être une erreur
 en soi. Une constraint de getter peut de même retourner `null` ; la même règle
 d'exemption s'applique à la valeur retournée.
+
+```php
+class Profile
+{
+    // null passes: Email skips null values
+    #[Assert\Email]
+    public ?string $contact = null;
+
+    // make "missing" an error: NotNull (or NotBlank, which also rejects '')
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    public ?string $email = null;
+}
+```
 
 !!! note "Null in real life"
     Un objet `null`, c'est un tapis vide : les scanners tournent mais ne trouvent

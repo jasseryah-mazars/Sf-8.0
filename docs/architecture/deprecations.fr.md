@@ -41,6 +41,14 @@ majeur entier pour migrer. Symfony émet les dépréciations sous forme de notic
 `E_USER_DEPRECATED` via un petit helper sans dépendance fourni par le package
 `symfony/deprecation-contracts`.
 
+```php
+// symfony/deprecation-contracts provides one global helper function
+trigger_deprecation('acme/sdk', '2.4', 'Method "%s()" is deprecated.', 'legacyCall');
+
+// which internally boils down to an E_USER_DEPRECATED notice:
+@trigger_error('Since acme/sdk 2.4: Method "legacyCall()" is deprecated.', \E_USER_DEPRECATED);
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -104,11 +112,36 @@ définir des seuils (p. ex. `max[total]=0`), faire **échouer** la suite de test
 les dépréciations, ou en ignorer certaines via une regex/un fichier de baseline.
 C'est la barrière CI standard pour une montée de version propre.
 
+```console
+# DeprecationErrorHandler reads SYMFONY_DEPRECATIONS_HELPER:
+$ SYMFONY_DEPRECATIONS_HELPER="max[total]=0" php bin/phpunit   # fail on any deprecation
+
+# Ignore deprecations matching the regexes listed in a baseline file
+$ SYMFONY_DEPRECATIONS_HELPER="ignoreFile=./tests/deprecations-baseline" php bin/phpunit
+```
+
 ### Marking your own deprecations
 
 Combinez le docblock `@deprecated` (et, en PHP 8.4, l'attribut natif
 `#[\Deprecated]` lorsque c'est approprié) avec un `trigger_deprecation()` à
 l'exécution, afin que l'analyse statique comme l'outillage runtime la voient.
+
+```php
+final class Mailer
+{
+    /**
+     * @deprecated since app 8.1, use send() instead.
+     */
+    #[\Deprecated(message: 'use send() instead', since: 'app 8.1')] // native PHP 8.4 attribute
+    public function dispatch(): void
+    {
+        // runtime notice for logs, profiler and the PHPUnit bridge
+        trigger_deprecation('app/mailer', '8.1', 'Method "%s()" is deprecated, use "send()".', __METHOD__);
+
+        $this->send();
+    }
+}
+```
 
 !!! note "Source reference"
     `trigger_deprecation()` —
@@ -123,6 +156,15 @@ une clé de configuration dépréciée ou un alias de service marqué avec
 `Definition::setDeprecated()`) ; d'autres à l'**exécution** (l'appel d'une méthode
 dépréciée). Les dépréciations de configuration apparaissent lors de `cache:clear` ;
 celles d'exécution, pendant l'exécution réelle et les tests.
+
+```php
+// Compile-time: deprecate a service definition (surfaces during cache:clear)
+$container->getDefinition('app.legacy_mailer')
+    ->setDeprecated('app/mailer', '8.1', 'The "%service_id%" service is deprecated.');
+
+// Runtime: notice fires only when the deprecated method is actually called
+trigger_deprecation('app/mailer', '8.1', 'Calling "%s()" is deprecated.', __METHOD__);
+```
 
 ## Configuration & code
 

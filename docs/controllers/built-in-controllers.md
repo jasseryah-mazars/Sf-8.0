@@ -70,6 +70,19 @@ tagged so their arguments are resolvable.
 if `maxAge`/`sharedAge`/`private` are given, sets HTTP cache headers — handy for
 static-ish pages served with caching but no logic.
 
+```yaml
+status:
+    path: /status
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'static/status.html.twig'  # template (required)
+        context: { region: 'eu-west' }       # extra variables for the template
+        maxAge: 300                          # Cache-Control: max-age=300
+        sharedAge: 600                       # s-maxage for shared caches
+        private: false                       # allow shared caching
+        statusCode: 200                      # response status code
+```
+
 ### RedirectController
 
 Two entry points:
@@ -78,6 +91,28 @@ Two entry points:
   `ignoreAttributes`, `keepRequestMethod`, `keepQueryParams`).
 - `urlRedirectAction` — redirect to a **path/URL** (`path`, `permanent`,
   `scheme`, `httpPort`, `httpsPort`, `keepRequestMethod`).
+
+```yaml
+old_route:
+    path: /old
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: new_route          # target route name
+        permanent: true           # 301 (308 with keepRequestMethod)
+        keepRequestMethod: true   # preserve POST/PUT... across the redirect
+        keepQueryParams: true     # forward the query string
+        ignoreAttributes: true    # drop extra route attributes from the target URL
+
+old_url:
+    path: /old-url
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: '/new-url'          # target path or absolute URL
+        scheme: https             # force the scheme
+        httpPort: 80              # used when scheme is http
+        httpsPort: 443            # used when scheme is https
+        permanent: true
+```
 
 `permanent: true` switches 302 → **301** (or 307 → **308** when
 `keepRequestMethod: true`). An empty `route`/`path` yields a **410 Gone**.

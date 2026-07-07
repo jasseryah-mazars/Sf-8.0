@@ -76,6 +76,24 @@ becomes a `block_<name>()` method; `{% extends %}` sets the parent so that
 rendering starts at the **root** ancestor and walks **down**, letting child
 methods override parent ones — exactly like PHP method overriding.
 
+```php
+// page.html.twig compiles (simplified) to a class extending Twig\Template
+class __TwigTemplate_page extends Template
+{
+    // {% extends 'base.html.twig' %} → declares base as the parent template
+    protected function doGetParent(array $context): string
+    {
+        return 'base.html.twig';
+    }
+
+    // {% block title %} becomes a block_<name>() method the child overrides
+    public function block_title(array $context, array $blocks = [])
+    {
+        yield 'Dashboard';
+    }
+}
+```
+
 ```mermaid
 flowchart TD
     C[page.html.twig] -->|extends| S[section.html.twig]
@@ -94,6 +112,21 @@ flowchart TD
   hierarchy; `block('name', 'other.html.twig')` reads it from another template.
 - The renderer resolves each block via the compiled class's **block table**
   (`$this->blocks`), so an override anywhere in the chain wins.
+
+```twig
+{# extends: first tag, may be a dynamic expression — resolved at runtime #}
+{% extends ajax ? '_modal.html.twig' : 'base.html.twig' %}
+
+{% block title %}
+    Docs — {{ parent() }}                    {# parent(): the parent's version of this block #}
+{% endblock %}
+
+{% block footer %}
+    {{ block('title') }}                     {# block('name'): a block of the current hierarchy #}
+    {{ block('legal', 'legal.html.twig') }}  {# read a block from another template #}
+    {# every lookup goes through the compiled class's block table ($this->blocks) #}
+{% endblock %}
+```
 
 !!! note "Source reference"
     `Twig\Template`, `Twig\Node\ModuleNode`, block token parsers —
@@ -117,6 +150,13 @@ templates, and it does not set a parent. Conflicting names are aliased with `as`
 
 `_sidebar.html.twig` here only contains `{% block sidebar %}…{% endblock %}`
 definitions — no `extends`, no surrounding HTML.
+
+```twig
+{# blocks/_sidebar.html.twig — block definitions only: no extends, no top-level markup #}
+{% block sidebar %}
+    <nav>default sidebar</nav>
+{% endblock %}
+```
 
 ## Configuration & code
 

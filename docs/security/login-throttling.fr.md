@@ -57,6 +57,19 @@ Le **limiter par défaut** applique deux limites à la fois :
 | Ciblée | username **+** IP | `max_attempts` échecs par `interval` |
 | Large | IP seule | `5 × max_attempts` échecs par `interval` |
 
+```php
+// DefaultLoginRateLimiter (simplified): one request feeds two counters
+protected function getLimiters(Request $request): array
+{
+    $username = $request->attributes->get(SecurityRequestAttributes::LAST_USERNAME, '');
+
+    return [
+        $this->globalFactory->create($request->getClientIp()),               // IP alone: 5 x max_attempts
+        $this->localFactory->create($username.'-'.$request->getClientIp()),  // username+IP: max_attempts
+    ];
+}
+```
+
 La seconde limite, plus large, existe parce qu'un attaquant pourrait sinon
 faire tourner les usernames pour maintenir chaque compteur par username sous
 le seuil. Le multiplicateur de 5 garde les bureaux normaux derrière une même
@@ -76,6 +89,19 @@ s'enregistre sur **`CheckPassportEvent`** avec une priorité très élevée — 
 s'exécute avant la vérification des identifiants, donc les requêtes limitées
 n'atteignent même jamais le password hasher (ce qui atténue aussi les attaques
 par timing/énumération et économise du CPU).
+
+```php
+// LoginThrottlingListener (simplified) — registered on CheckPassportEvent
+public function checkPassport(CheckPassportEvent $event): void
+{
+    $limit = $this->limiter->consume($this->requestStack->getMainRequest());
+
+    if (!$limit->isAccepted()) {
+        // rejected before any credential is verified
+        throw new TooManyLoginAttemptsAuthenticationException();
+    }
+}
+```
 
 1. Sur `CheckPassportEvent`, il demande au limiter de `consume(request)`.
 2. Si la limite est dépassée, il lève une
@@ -131,6 +157,16 @@ lorsque vous définissez vos propres limiters sous `framework.rate_limiter` :
 | `sliding_window` | Pondère la fenêtre précédente pour lisser les rafales de frontière |
 | `token_bucket` | Taux de recharge continu + capacité de rafale |
 | `no_limit` | Illimité (utile dans les tests) |
+
+```yaml
+# config/packages/rate_limiter.yaml — one limiter per policy
+framework:
+    rate_limiter:
+        api_fixed:   { policy: fixed_window,   limit: 100, interval: '1 hour' }
+        api_sliding: { policy: sliding_window, limit: 100, interval: '1 hour' }
+        api_bucket:  { policy: token_bucket,   limit: 500, rate: { interval: '1 minute', amount: 10 } }
+        test_only:   { policy: no_limit }
+```
 
 La simple paire `max_attempts`/`interval` de `login_throttling` est
 délibérément un comptage de type fenêtre (« N échecs par intervalle »). Si

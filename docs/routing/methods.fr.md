@@ -37,8 +37,25 @@ chemin sert des actions différentes selon le verbe — `GET /posts` liste, `POS
 crée. Donnez à chaque verbe sa propre route (ou listez plusieurs verbes sur une même
 route) plutôt que de faire des branchements dans une seule action.
 
+```php
+// One path, one route per verb
+#[Route('/posts', name: 'post_index', methods: ['GET'])]   // GET /posts -> list
+public function index(): Response { /* ... */ }
+
+#[Route('/posts', name: 'post_create', methods: ['POST'])] // POST /posts -> create
+public function create(): Response { /* ... */ }
+```
+
 L'option associée `schemes` restreint le scheme de l'URL (`http`/`https`). Les combiner
 permet d'exprimer « POST, en HTTPS uniquement » directement dans la définition de la route.
+
+```yaml
+payment_create:
+    path: /payments
+    controller: App\Controller\PaymentController::create
+    methods: [POST]     # verb restriction
+    schemes: [https]    # "POST, over HTTPS only"
+```
 
 !!! question "Predict first"
     Une route n'autorise que `GET`. Un `POST` arrive sur ce chemin exact. Est-ce un 404,

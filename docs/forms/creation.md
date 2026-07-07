@@ -33,6 +33,15 @@ instances built by a `Symfony\Component\Form\FormFactory`. You rarely touch the
 factory directly. Instead you describe *what* the form contains in a **form type
 class** and let the framework assemble it.
 
+```php
+// The FormFactory builds the object graph...
+$form = $formFactory->create(TaskType::class);
+
+// ...and returns the root of a FormInterface tree
+assert($form instanceof \Symfony\Component\Form\FormInterface);
+$title = $form->get('title'); // each child is also a FormInterface
+```
+
 Two ways to create a form:
 
 | Approach | Use when |
@@ -43,6 +52,14 @@ Two ways to create a form:
 The controller helper `AbstractController::createForm(FqcnType::class, $data, $options)`
 is the everyday entry point. Under the hood it calls
 `FormFactoryInterface::create(...)`.
+
+```php
+// Everyday entry point (AbstractController::createForm):
+$form = $this->createForm(RegistrationType::class, $data, $options);
+
+// What it calls under the hood (FormFactoryInterface::create):
+$form = $formFactory->create(RegistrationType::class, $data, $options);
+```
 
 !!! question "Predict first"
     You call `createForm(RegistrationType::class)` on a compound form that does **not**
@@ -64,6 +81,24 @@ A form type extends `Symfony\Component\Form\AbstractType` (which implements
   configure behaviour (event listeners, data mappers).
 - `configureOptions(OptionsResolver $resolver)` — declare the options the type
   accepts and their defaults, using `Symfony\Component\OptionsResolver\OptionsResolver`.
+
+```php
+// AbstractType already implements FormTypeInterface for you
+final class TaskType extends AbstractType
+{
+    // buildForm(): add fields, listeners, data mappers
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->add('title', TextType::class);
+    }
+
+    // configureOptions(): declare options via the OptionsResolver
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['data_class' => Task::class]);
+    }
+}
+```
 
 `getBlockPrefix()` (defaults to the snake-cased class name without the `Type`
 suffix) drives Twig block naming — see [theming](theming.md).

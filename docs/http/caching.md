@@ -81,9 +81,35 @@ flowchart TD
   headers and, if unchanged, mutates the response into a bodyless **304**.
 - `setCache([...])` sets several at once.
 
+```php
+// Freshness: how long may caches reuse this response?
+$response->setMaxAge(600);        // Cache-Control: max-age=600 (any cache)
+$response->setSharedMaxAge(3600); // Cache-Control: s-maxage=3600 (shared caches)
+$response->setPublic();           // opposite: setPrivate()
+$response->setExpires(new \DateTimeImmutable('+1 hour')); // Expires header
+
+// Validation: has the resource changed since?
+$response->setEtag('"v3"');
+$response->setLastModified(new \DateTimeImmutable('2026-01-01'));
+if ($response->isNotModified($request)) {
+    return $response; // mutated into a bodyless 304
+}
+
+// Or set several directives at once
+$response->setCache(['public' => true, 'max_age' => 600, 's_maxage' => 3600]);
+```
+
 `Cache-Control: public` allows **shared** caches (CDN/proxy) to store it;
 `private` restricts to the end user's browser. A default response is
 `no-cache, private` — see [HTTP Response](response.md).
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=600, s-maxage=3600
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache, private
+```
 
 !!! note "Source reference"
     `Response::setCache()`, `isNotModified()`, `setSharedMaxAge()` —

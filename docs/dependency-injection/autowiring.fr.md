@@ -40,6 +40,17 @@ erreurs apparaissent comme des erreurs de build, pas comme des surprises à
 l'exécution. L'autowiring gère les *objets par type* ; il ne peut pas deviner les
 scalaires — ceux-ci viennent de `bind` ou de `#[Autowire]`.
 
+```php
+public function __construct(
+    // Object: resolved by its type-hint at compile time
+    private MailerInterface $mailer,
+    // Scalar: never guessed — inject it with #[Autowire]...
+    #[Autowire('%kernel.environment%')]
+    private string $env,
+    // ...or with a YAML bind: `string $env: '%kernel.environment%'`
+) {}
+```
+
 !!! question "Predict first"
     Deux services implémentent `TransportInterface` et aucun alias par défaut n'est
     défini. Vous type-hintez `TransportInterface`. Que fait le container à la
@@ -60,6 +71,16 @@ ou un **alias** de cette interface/classe vers un id concret. FrameworkBundle et
 votre glob `App\:` créent ces ids ; les interfaces nécessitent un alias explicite
 ou auto-généré (une seule implémentation → auto-alias dans certains cas, sinon
 c'est à vous de le définir).
+
+```yaml
+# config/services.yaml
+services:
+    # The App\ glob registers each class with its FQCN as service id
+    App\:
+        resource: '../src/'
+    # Explicit alias so AutowirePass can resolve the interface type-hint
+    App\Payment\GatewayInterface: '@App\Payment\StripeGateway'
+```
 
 ### Ambiguity
 
@@ -92,12 +113,38 @@ correspond quand votre paramètre s'appelle `$requestLogger`. Comme s'appuyer su
 nom de la variable est fragile, `#[Target('requestLogger')]` énonce explicitement
 l'alias visé — renommer le paramètre ne casse plus le câblage.
 
+```php
+public function __construct(
+    // Matches the named alias 'Psr\Log\LoggerInterface $requestLogger'
+    // only because the parameter is named $requestLogger
+    private LoggerInterface $requestLogger,
+    // #[Target] names the alias explicitly — the parameter name is free
+    #[Target('requestLogger')]
+    private LoggerInterface $logger,
+) {}
+```
+
 ### `#[Autowire]` vs aliases
 
 `#[Autowire]` est la surcharge locale, par argument (service, value, env, param,
 expression). Les alias sont des correspondances globales type→id. Préférez les
 alias/`#[Target]` pour « quelle implémentation de cette interface » ; utilisez
 `#[Autowire]` pour des valeurs ou des épinglages ponctuels.
+
+```php
+public function __construct(
+    // Global mapping: pick the implementation via a named alias
+    #[Target('smsTransport')]
+    private TransportInterface $transport,
+    // Local per-argument overrides with #[Autowire]
+    #[Autowire(service: 'app.rate_limiter')] // pin an exact service
+    private RateLimiterFactory $limiter,
+    #[Autowire(env: 'API_KEY')]              // environment variable
+    private string $apiKey,
+    #[Autowire(param: 'kernel.debug')]       // container parameter
+    private bool $debug,
+) {}
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\AutowirePass` &
@@ -117,6 +164,16 @@ dépendance manquante est un échec de build sauf si vous optez explicitement po
 null via `?Type $x = null`. Le bug classique consiste à s'attendre à ce qu'une
 interface sans implémentation ni alias devienne discrètement `null` — elle casse la
 construction du container à la place.
+
+```php
+public function __construct(
+    // Nullable + default: a missing service becomes null, not a build error
+    private ?SomeInterface $dep = null,
+    // Pinned id on a nullable arg: null when 'app.maybe' does not exist
+    #[Autowire(service: 'app.maybe')]
+    private ?MaybeInterface $maybe = null,
+) {}
+```
 
 !!! note "Null in real life"
     Commander un plat que la cuisine n'a pas en stock bloque toute la commande

@@ -43,6 +43,18 @@ Le contrat est `Symfony\Component\Routing\Generator\UrlGeneratorInterface`.
 Dans un controller vous appelez `$this->generateUrl($name, $params, $referenceType)` ;
 dans Twig les fonctions `path()` et `url()` ; dans un service vous injectez l'interface.
 
+```php
+// Controller: helper from AbstractController
+$url = $this->generateUrl('blog_show', ['id' => 42]); // /blog/42
+
+// Service: inject the contract and call generate()
+public function __construct(private UrlGeneratorInterface $urlGenerator) {}
+$this->urlGenerator->generate('blog_show', ['id' => 42]);
+
+// Twig: path() for a path, url() for an absolute URL
+// {{ path('blog_show', {id: 42}) }}   {{ url('blog_show', {id: 42}) }}
+```
+
 Un **reference type** décide quelle portion de l'URL est émise :
 
 | Constante | Exemple de sortie |
@@ -69,6 +81,16 @@ du fichier dumpé `url_generating_routes.php` (compilé par `CompiledUrlGenerato
 La génération est donc une simple recherche rapide dans un tableau, par nom de route —
 aucun objet route n'est re-parsé.
 
+```php
+// The framework 'router' service implements UrlGeneratorInterface:
+public function __construct(private UrlGeneratorInterface $urlGenerator) {}
+
+// At runtime it delegates to CompiledUrlGenerator, which reads the
+// url_generating_routes.php file dumped by CompiledUrlGeneratorDumper —
+// resolving the name is a plain array lookup:
+$url = $this->urlGenerator->generate('blog_show', ['id' => 42]);
+```
+
 Pour chaque route, le generator détient la liste des tokens, les defaults, les
 requirements et les métadonnées host/scheme. `generate()` :
 
@@ -80,11 +102,34 @@ requirements et les métadonnées host/scheme. `generate()` :
 4. Ajoute tout **paramètre restant** en **query string** `?key=value`.
 5. Préfixe scheme/host depuis le `RequestContext` selon le reference type.
 
+```php
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+try {
+    // 'ref' is not a placeholder -> appended as ?ref=footer (step 4)
+    $url = $generator->generate('blog_show', ['id' => 42, 'ref' => 'footer']);
+} catch (RouteNotFoundException) {
+    // step 1: unknown route name
+} catch (InvalidParameterException) {
+    // step 2: e.g. id 'abc' fails the \d+ requirement
+}
+```
+
 `Symfony\Component\Routing\RequestContext` porte le scheme courant, le host, la base
 URL, les ports HTTP/HTTPS et la méthode. Pendant une request, il est alimenté depuis la
 `Request` entrante ; en CLI (p. ex. Messenger, emails, console) il n'y a **pas de
 request**, donc le context retombe sur la config `router.request_context.*`
 (`default_uri`) — configurez-la, sinon les URLs absolues sortent en `http://localhost`.
+
+```yaml
+# config/packages/routing.yaml
+# With no incoming Request (CLI, Messenger), the RequestContext
+# falls back to the router.request_context.* values derived from:
+framework:
+    router:
+        default_uri: 'https://example.com/'
+```
 
 ```mermaid
 sequenceDiagram
@@ -109,6 +154,14 @@ Si une route déclare `schemes: ['https']` et que le context courant est `http`,
 génération est **automatiquement promue en URL absolue** avec le scheme `https`,
 même si vous avez demandé `ABSOLUTE_PATH` — sinon le lien ne pourrait pas changer
 de scheme.
+
+```php
+#[Route('/checkout', name: 'checkout', schemes: ['https'])]
+
+// Current context is plain http; ABSOLUTE_PATH (the default) is requested...
+$url = $this->generateUrl('checkout');
+// ...but generation upgrades the scheme: 'https://example.com/checkout'
+```
 
 ## Configuration & code
 

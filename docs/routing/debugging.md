@@ -38,6 +38,15 @@ Two console commands answer the everyday routing questions:
   including *why* others were rejected. It accepts `--method`, `--host` and
   `--scheme` to reproduce the exact request conditions.
 
+```console
+# debug:router — list everything, or show one route's full definition
+$ php bin/console debug:router
+$ php bin/console debug:router blog_show
+
+# router:match — simulate a request with exact conditions
+$ php bin/console router:match /blog/hello --method=POST --host=example.com --scheme=https
+```
+
 Both read the same compiled `RouteCollection` the app uses, so what they report is
 what production does.
 
@@ -58,6 +67,20 @@ from your options and runs a `Symfony\Component\Routing\Matcher\TraceableUrlMatc
 — a matcher that records each route it tried and the reason it passed or failed
 (path mismatch, method not allowed, host mismatch, failed condition). That trace is
 what lets it tell you a route "almost matched but the method was wrong".
+
+```php
+use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+
+// What RouterMatchCommand does (RouterDebugCommand just dumps the collection);
+// $routes is the RouteCollection from the framework's `router` service
+$context = new RequestContext(method: 'POST');   // built from --method/--host/--scheme
+$matcher = new TraceableUrlMatcher($routes, $context);
+
+foreach ($matcher->getTraces('/blog/hello') as $trace) {
+    // $trace['name'] + $trace['log'], e.g. "Method 'POST' does not match: GET, HEAD"
+}
+```
 
 Remember the [compiled cache](configuration.md): routes are dumped to
 `{cache_dir}/url_matching_routes.php` and `url_generating_routes.php`. In `dev`,

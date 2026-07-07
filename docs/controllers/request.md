@@ -49,6 +49,16 @@ directly — you read the **parameter bags**:
 Query and request bags are `InputBag` and expose type-safe getters
 (`getString`, `getInt`, `getBoolean`, `getEnum`, `getAlpha`, `getDigits`).
 
+```php
+// InputBag typed getters — on the query and request bags only
+$q     = $request->query->getString('q');        // '' when missing, never null
+$page  = $request->query->getInt('page', 1);     // cast to int, defaulted
+$debug = $request->query->getBoolean('debug');   // false when missing
+$sort  = $request->query->getEnum('sort', SortOrder::class, SortOrder::Asc);
+$name  = $request->query->getAlpha('name');      // keeps letters only
+$zip   = $request->query->getDigits('zip');      // keeps digits only
+```
+
 !!! question "Predict first"
     A route is `/users/{id}`. Do you read `$id` from `$request->query`,
     `$request->request`, or `$request->attributes`?
@@ -70,6 +80,22 @@ You get the `Request` two ways:
    inject `Symfony\Component\HttpFoundation\RequestStack` and call
    `getCurrentRequest()`. During a [sub-request](internal-redirects.md) the stack
    holds several requests; the top is the active one.
+
+```php
+// 1. In an action: RequestValueResolver fills the type-hint
+public function search(Request $request): Response
+{
+    // ...
+}
+
+// 2. In a service: inject RequestStack, read the current request lazily
+public function __construct(private RequestStack $requestStack) {}
+
+public function referer(): ?string
+{
+    return $this->requestStack->getCurrentRequest()?->headers->get('referer');
+}
+```
 
 ```mermaid
 flowchart LR
@@ -93,6 +119,18 @@ Reading `$request->query->get('page')` works, but Symfony 8 favours mapping
 attributes — `#[MapQueryParameter]`, `#[MapQueryString]`, `#[MapRequestPayload]`
 — which validate and cast for you. See [Value Resolvers](value-resolvers.md).
 
+```php
+// Mapping attributes: validated, typed input instead of manual bag reads
+public function search(
+    #[MapQueryParameter] int $page = 1,               // one query param, typed
+    #[MapQueryString] ?SearchFilters $filters = null, // whole query string → DTO
+): Response { /* ... */ }
+
+public function create(
+    #[MapRequestPayload] CreateItemInput $payload,    // JSON body → validated DTO
+): Response { /* ... */ }
+```
+
 ### Null behavior
 
 The two families of getters on an `InputBag` disagree about `null`, and the exam
@@ -104,6 +142,14 @@ loves the difference:
 - The typed getters never hand back `null` for a missing key: `getInt('page', 1)`
   returns `1`, `getString('q')` returns `''`, `getBoolean('flag')` returns
   `false`. You give the default; they coerce and guarantee the type.
+
+```php
+// URL: /search  (no ?page=, ?q= or ?flag= at all)
+$request->query->get('page');         // null  (nullable get, ?string)
+$request->query->getInt('page', 1);   // 1     (typed getter, defaulted)
+$request->query->getString('q');      // ''    (never null)
+$request->query->getBoolean('flag');  // false (never null)
+```
 
 The common null bug is `(int) $request->query->get('page')` — when `page` is
 absent that casts `null` to `0`, not to a sensible default. Either supply a

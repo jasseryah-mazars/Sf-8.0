@@ -42,6 +42,14 @@ composé de **data collectors**. Dans l'environnement `test`, la collecte est
 avec `$client->enableProfiler()` **avant** la request, puis lisez le profile
 ensuite pour vérifier des internes qu'une simple response ne peut pas révéler.
 
+```php
+$client = static::createClient();
+$client->enableProfiler();          // BEFORE the request (collection is off in test)
+$client->request('GET', '/');
+
+$profile = $client->getProfile();   // the recorded Profile, made of data collectors
+```
+
 !!! question "Predict first"
     Vous appelez `$client->request('GET', '/')` puis `$client->getProfile()`,
     en attendant un `Profile`. Vous obtenez `false`. Pourquoi ?
@@ -61,9 +69,25 @@ conserve son profile au lieu de le jeter. Pendant `kernel.response`, le
 `DataCollectorInterface` enregistré capture sa tranche d'état dans un
 `Symfony\Component\HttpKernel\Profiler\Profile`.
 
+```php
+// KernelBrowser::enableProfiler() flags the NEXT request only
+$client->enableProfiler();
+$client->request('GET', '/');
+// during kernel.response, ProfilerListener asks the Profiler to collect():
+// each registered DataCollectorInterface snapshots its state into a Profile
+```
+
 Après la request, `$client->getProfile()` retourne ce `Profile` (ou `false` si
 le profiling n'était pas activé ou si le collector était désactivé). Vous
 récupérez ensuite les collectors individuels par nom :
+
+```php
+$profile = $client->getProfile();            // Profile, or false if not enabled
+self::assertNotFalse($profile);
+
+$time = $profile->getCollector('time');      // TimeDataCollector
+$mailer = $profile->getCollector('mailer');  // MessageDataCollector
+```
 
 | Collector name | Class (approx.) | Exposes |
 |---|---|---|
@@ -101,6 +125,17 @@ intègre le trait
 `assertEmailHtmlBodyContains()` — ces méthodes lisent le collector mailer pour
 vous et n'exigent **pas** `enableProfiler()` quand le profiler est disponible en
 test.
+
+```php
+// MailerAssertionsTrait is already mixed into WebTestCase — no enableProfiler() needed
+$client->request('POST', '/register', ['email' => 'ada@example.com']);
+
+self::assertEmailCount(1);         // emails sent during the request
+self::assertQueuedEmailCount(0);   // emails still queued (not sent)
+
+$email = self::getMailerMessage(); // first collected Email
+self::assertEmailHtmlBodyContains($email, 'Welcome');
+```
 
 ## Configuration & code
 

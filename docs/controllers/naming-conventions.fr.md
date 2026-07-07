@@ -80,6 +80,21 @@ Formats acceptés pour `_controller` :
 - `service_id::method` ou le `service_id` seul.
 - Une closure ou un first-class callable (surtout dans les tests/la config).
 
+```yaml
+# config/routes.yaml — the accepted _controller formats side by side
+product_show:
+    path: /products/{id}
+    controller: App\Controller\ProductController::show   # class + method
+
+homepage:
+    path: /
+    controller: App\Controller\HomepageController        # invokable (__invoke)
+
+legacy:
+    path: /legacy
+    controller: app.legacy_controller::process           # service_id::method
+```
+
 ```mermaid
 flowchart LR
     R[Router sets<br>_controller attr] --> CR[ControllerResolver]
@@ -98,6 +113,18 @@ Les controllers dans `src/Controller/` sont auto-enregistrés comme services (vi
 la définition de service `App\` dans `config/services.yaml`) et tagués
 `controller.service_arguments`, ce qui permet l'autowiring des arguments d'action
 et donne à `AbstractController` son service locator.
+
+```yaml
+# config/services.yaml — default skeleton
+services:
+    App\:                                   # the App\ service definition
+        resource: '../src/'                 # auto-registers src/Controller/ too
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']  # action-argument autowiring
+        # (also what lets AbstractController get its service locator)
+```
 
 ## Configuration & code
 

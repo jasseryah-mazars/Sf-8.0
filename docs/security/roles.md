@@ -34,8 +34,23 @@ A **role** is a plain string carried by the user and the token. By convention it
 prefix. Anything else (`EDIT`, `IS_AUTHENTICATED_FULLY`) is handled by other
 voters.
 
+```php
+// RoleVoter only votes on attributes starting with the ROLE_ prefix
+$authChecker->isGranted('ROLE_ADMIN');             // RoleVoter decides
+$authChecker->isGranted('EDIT', $post);            // RoleVoter abstains → custom voter
+$authChecker->isGranted('IS_AUTHENTICATED_FULLY'); // AuthenticatedVoter decides
+```
+
 Roles come from `UserInterface::getRoles()`. Best practice: always include
 `ROLE_USER` for any authenticated user, and let the **hierarchy** add the rest.
+
+```php
+// UserInterface::getRoles() — always guarantee ROLE_USER for logged-in users
+public function getRoles(): array
+{
+    return array_unique([...$this->roles, 'ROLE_USER']); // hierarchy adds the rest
+}
+```
 
 !!! question "Predict first"
     A user has `ROLE_USER` and the hierarchy says `ROLE_ADMIN: [ROLE_USER]`. Is
@@ -91,6 +106,15 @@ on *how* the token was obtained, not on `getRoles()`:
 fully-authenticated users satisfy both, remember-me users satisfy only the
 former. Use `_REMEMBERED` for "logged in at all", `_FULLY` for sensitive actions
 (change password, payment) that must not accept a remember-me cookie.
+
+```yaml
+security:
+    access_control:
+        # _FULLY: sensitive action — a remember-me cookie is not enough
+        - { path: ^/account/password, roles: IS_AUTHENTICATED_FULLY }
+        # _REMEMBERED: "logged in at all" (fresh login OR remember-me)
+        - { path: ^/account, roles: IS_AUTHENTICATED_REMEMBERED }
+```
 
 !!! info "No more `IS_AUTHENTICATED_ANONYMOUSLY`"
     Symfony 8 has **no anonymous tokens**. The old
