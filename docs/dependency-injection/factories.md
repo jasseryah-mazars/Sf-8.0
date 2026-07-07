@@ -146,6 +146,26 @@ yields an empty string when unset, so branch on it explicitly rather than assumi
 value. Keep factory return types explicit (`: Gateway` vs `: ?Gateway`) so the
 intent is enforced.
 
+```php
+final class GatewayFactory
+{
+    public function __construct(
+        #[Autowire(env: 'GATEWAY_DSN')] private readonly string $dsn, // '' when unset
+    ) {}
+
+    // Explicit return type — `: ?Gateway` (not `: Gateway`) says null is allowed
+    public function create(): ?Gateway
+    {
+        return $this->dsn !== '' ? new Gateway($this->dsn) : null;
+    }
+}
+
+// Consumer side: nullable type + guarded calls
+public function __construct(private readonly ?Gateway $gateway) {}
+
+$receipt = $this->gateway?->charge($amount) ?? Receipt::skipped(); // ?-> and ?? guards
+```
+
 !!! note "Null in real life"
     A made-to-order dish that comes back an empty plate (factory returns null) isn't
     caught at the pass — the diner discovers it later, so declare up front whether

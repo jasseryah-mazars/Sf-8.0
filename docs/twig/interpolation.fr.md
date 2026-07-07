@@ -73,6 +73,13 @@ compile en concaténation. Elle ne fonctionne **que** dans les guillemets
 doubles — les chaînes à guillemets simples sont littérales, donc `'#{x}'`
 affiche le texte brut.
 
+```twig
+{% set who = 'Ada' %}
+{{ "Hi #{who}" }}       {# lexer opens an expression at #{ → Hi Ada #}
+{{ "Hi #{1 + 1}" }}     {# compiled into a concatenation → Hi 2 #}
+{{ 'Hi #{who}' }}       {# single quotes are literal → Hi #{who} #}
+```
+
 `~` compile en concaténation de chaînes PHP (`.`) après conversion de chaque
 opérande en chaîne, d'où `1 ~ 1` donnant `"11"` tandis que `1 + 1` vaut `2`. `~`
 se situe *en dessous* de l'arithmétique dans la précédence (voir

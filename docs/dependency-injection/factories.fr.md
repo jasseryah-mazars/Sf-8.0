@@ -69,6 +69,21 @@ container dumpé appelle alors la factory au lieu de `new`. Formes de factory :
 Les `arguments` de la definition sont passés à la méthode de la factory (pas au
 constructeur).
 
+```php
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
+
+// The Definition carries the factory; the dumped container calls it instead of `new`
+$def = new Definition(App\Payment\Gateway::class);
+
+$def->setFactory([App\Payment\Gateway::class, 'fromDsn']);                // static: Gateway::fromDsn(...)
+$def->setFactory([new Reference('App\Payment\GatewayFactory'), 'create']); // instance: $factory->create(...)
+$def->setFactory(new Reference('App\Payment\GatewayFactory'));             // invokable: $factory(...)
+
+// arguments go to the factory method, NOT to the constructor
+$def->setArguments(['EUR']);
+```
+
 ```mermaid
 flowchart LR
     D["Definition + factory"] --> B{"factory type"}

@@ -383,6 +383,17 @@ defers its delivery until the **current** message finishes handling
 successfully. This prevents dispatching an "email confirmation" event before the
 surrounding database transaction commits.
 
+```php
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
+
+// Inside a handler: defer until the current message finishes successfully
+$this->eventBus->dispatch(
+    (new Envelope(new OrderPlacedEvent($orderId)))
+        ->with(new DispatchAfterCurrentBusStamp())
+);
+```
+
 ### Null behavior
 
 A handler that returns nothing (`void`) or explicitly `null` still produces a

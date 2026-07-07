@@ -149,6 +149,14 @@ affichée directement — l'échappement ne transforme jamais `null` en texte
 visible. Si vous voulez un texte de substitution plutôt qu'un blanc, utilisez
 `|default` **avant** l'échappement : `{{ bio|default('—') }}`.
 
+```twig
+{% set comment = null %}
+{{ comment }}          {# '' — the implicit escape has nothing to encode #}
+{{ comment|e }}        {# '' — explicit escape on null is also empty #}
+{{ comment|e('js') }}  {# '' — same for any strategy #}
+{{ bio|default('—') }} {# placeholder applied BEFORE escaping #}
+```
+
 !!! note "Null in real life"
     Une valeur null au filet de sécurité, c'est un trapèze vide : rien ne tombe,
     donc rien à rattraper — le filet reste silencieux et la page rend un blanc.

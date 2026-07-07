@@ -132,6 +132,20 @@ correspondant), lancez
 `invalid_message` du champ. Ne lancez **jamais** d'exception générique et ne
 retournez jamais `null` en silence — cela masque les erreurs à la validation.
 
+```php
+// In reverseTransform(): signal a failed conversion, never return null silently
+public function reverseTransform(mixed $value): ?Item
+{
+    $item = $this->repository->find($value);
+    if (null === $item) {
+        // caught by the form -> field marked invalid, invalid_message shown
+        throw new TransformationFailedException(\sprintf('Item "%s" not found.', $value));
+    }
+
+    return $item;
+}
+```
+
 ### Null behavior
 
 Les champs sont souvent vides, donc les deux sens rencontrent le vide. À

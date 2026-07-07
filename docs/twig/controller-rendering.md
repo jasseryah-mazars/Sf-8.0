@@ -107,6 +107,19 @@ flowchart LR
   ESI/hinclude URLs you enable the **`fragments`** listener/route
   (`framework.fragments`).
 
+```yaml
+# config/packages/framework.yaml
+framework:
+    # ESI: defer fragments to a reverse proxy (Symfony HttpCache or Varnish);
+    # inline stays the fallback via HttpKernel::handle(..., SUB_REQUEST)
+    esi: { enabled: true }
+    # fragments listener/route: allow direct (signed) ESI/hinclude URLs;
+    # hinclude placeholders are resolved by the browser via JavaScript
+    fragments:
+        enabled: true
+        path: /_fragment
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\HttpKernelExtension`,
     `Symfony\Component\HttpKernel\Fragment\FragmentHandler` —

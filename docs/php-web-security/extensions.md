@@ -99,6 +99,17 @@ without them, and `--ignore-platform-req` can override in edge cases.
   per request — the single biggest production speedup. Enable
   `opcache.enable=1` and, for immutable deploys, `opcache.validate_timestamps=0`.
 
+```php
+strlen('café');              // 5 — counts BYTES (é is 2 bytes in UTF-8)
+mb_strlen('café', 'UTF-8');  // 4 — counts CHARACTERS (needs ext-mbstring)
+```
+
+```ini
+; php.ini — production settings
+opcache.enable=1
+opcache.validate_timestamps=0  ; immutable deploys: never re-stat files
+```
+
 ```mermaid
 flowchart LR
     A[composer install] --> B{ext-* present?}

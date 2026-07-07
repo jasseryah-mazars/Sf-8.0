@@ -157,6 +157,20 @@ services into a type's constructor and it is available by FQCN. There is **no**
 `getName()` any more — the FQCN is the identifier and `getBlockPrefix()` names
 the Twig block.
 
+```php
+// Autoconfiguration: any FormTypeInterface gets the form.type tag
+final class VatNumberType extends AbstractType
+{
+    public function __construct(private VatChecker $checker) {} // DI works
+
+    // no getName() any more — the FQCN identifies the type
+    public function getBlockPrefix(): string
+    {
+        return 'vat_number'; // names the Twig theme block
+    }
+}
+```
+
 ## Configuration & code
 
 === "Custom type via getParent"

@@ -73,6 +73,15 @@ Une `Command` classique obtient ses helpers depuis
 `Symfony\Component\Console\Helper\QuestionHelper` enregistré. L'ensemble est indexé
 par nom de helper (`question`, `formatter`, `process`, `debug_formatter`).
 
+```php
+// Inside a classic Command::execute(): fetch a helper by its string name
+/** @var QuestionHelper $helper */
+$helper = $this->getHelper('question');      // resolved from the HelperSet
+
+// Other registered names: 'formatter', 'process', 'debug_formatter'
+$formatter = $this->getHelper('formatter');
+```
+
 `QuestionHelper::ask(InputInterface, OutputInterface, Question)` lit depuis STDIN. Il
 accepte :
 
@@ -85,10 +94,31 @@ accepte :
 La saisie masquée (`setHidden(true)`) empêche le terminal d'afficher les caractères —
 pour les mots de passe.
 
+```php
+$q1 = new Question('Project name?', 'demo');            // free text with a default
+$q2 = new ConfirmationQuestion('Continue?', true);      // yes/no
+$q3 = new ChoiceQuestion('Env?', ['dev', 'prod'], 0);   // pick from a list
+
+$secret = new Question('API token?');
+$secret->setHidden(true);                               // no terminal echo (passwords)
+
+// QuestionHelper::ask(InputInterface, OutputInterface, Question) reads STDIN
+$name = $helper->ask($input, $output, $q1);
+```
+
 `Symfony\Component\Console\Helper\ProgressBar` suit un compteur d'étapes ; appelez
 `start($max)`, `advance()`, `setProgress($n)`, `finish()`. Elle se redessine sur place
 et son redessin peut être limité (`setRedrawFrequency()`), ce qui est important pour
 des millions de petites étapes afin d'éviter la surcharge d'I/O.
+
+```php
+$bar = new ProgressBar($output);
+$bar->setRedrawFrequency(100);   // redraw every 100 steps only (I/O throttle)
+$bar->start(1_000_000);          // start($max): begin tracking the step count
+$bar->advance();                 // +1 step
+$bar->setProgress(500_000);      // jump to an absolute step
+$bar->finish();                  // complete and render the final state
+```
 
 `Symfony\Component\Console\Cursor` émet des séquences d'échappement ANSI pour
 déplacer, masquer/afficher le curseur ou effacer des lignes — la primitive derrière
