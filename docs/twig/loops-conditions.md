@@ -59,8 +59,10 @@ The **`loop`** variable inside a `for`:
     {% for user in group.users %}
         {{ loop.parent.loop.index }}.{{ loop.index }}/{{ loop.length }}
         {# outer index via loop.parent · 1-based index / total count #}
-        {{ loop.index0 }} {{ loop.revindex }} {{ loop.revindex0 }}  {# 0-based / from the end #}
-        {% if loop.first %}first{% elseif loop.last %}last{% endif %}  {# booleans #}
+        {# 0-based / from the end #}
+        {{ loop.index0 }} {{ loop.revindex }} {{ loop.revindex0 }}
+        {# booleans #}
+        {% if loop.first %}first{% elseif loop.last %}last{% endif %}
     {% endfor %}
 {% endfor %}
 ```
@@ -184,7 +186,8 @@ The trap: `{% if items %}` treats `null`, `0` and `[]` alike as falsy, so use
 {% if items %}truthy{% endif %}             {# falsy for null, 0 and [] alike #}
 {% if items is null %}no value{% endif %}   {# "no value" only #}
 {% if items is empty %}nothing{% endif %}   {# null, false, 0, '', [] #}
-{% if x is defined and x is not null %}{{ x }}{% endif %}  {# may be missing entirely #}
+{# may be missing entirely #}
+{% if x is defined and x is not null %}{{ x }}{% endif %}
 ```
 
 !!! note "Null in real life"

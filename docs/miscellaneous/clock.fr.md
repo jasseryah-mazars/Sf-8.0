@@ -78,8 +78,8 @@ $deadline = now()->modify('+30 minutes');
 $time = $clock->now(); // \DateTimeImmutable
 
 // Symfony's ClockInterface adds two methods:
-$clock->sleep(0.5);                                 // wait 0.5s (virtual on MockClock)
-$paris = $clock->withTimeZone('Europe/Paris');      // same clock, other timezone
+$clock->sleep(0.5); // wait 0.5s (virtual on MockClock)
+$paris = $clock->withTimeZone('Europe/Paris'); // same clock, other timezone
 ```
 
 Le framework autowire `ClockInterface` (le service `clock`) en `NativeClock`.
@@ -93,9 +93,9 @@ use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
 use function Symfony\Component\Clock\now;
 
-Clock::get();                                  // global clock (NativeClock by default)
+Clock::get(); // global clock (NativeClock by default)
 Clock::set(new MockClock('2026-07-06 12:00')); // swap it globally (tests)
-now();                                         // reads the global clock -> 12:00
+now(); // reads the global clock -> 12:00
 ```
 
 ```mermaid

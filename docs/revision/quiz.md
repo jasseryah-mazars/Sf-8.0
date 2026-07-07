@@ -73,7 +73,9 @@ categories:
           Compiler passes are registered programmatically via
           ContainerBuilder::addCompilerPass(), typically in Kernel::build()
           or a bundle's build() method. There is no core attribute for this.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        # folded scalar keeps the single-line URL within 80 columns
+        documentation: >-
+          https://symfony.com/doc/current/service_container/compiler_passes.html
 ```
 
 !!! info "Authoring rules (see `quiz/README.md`)"

@@ -46,7 +46,10 @@ controller ; `render()` l'exécute en **sous-request** et insère le contenu de 
 
 ```twig
 {# controller() only builds a reference — nothing executes yet #}
-{% set ref = controller('App\\Controller\\CartController::summary', { max: 3 }) %}
+{% set ref = controller(
+    'App\\Controller\\CartController::summary',
+    { max: 3 }
+) %}
 
 {# render() runs it as a sub-request and inlines the Response body #}
 {{ render(ref) }}

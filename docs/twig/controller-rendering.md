@@ -41,7 +41,10 @@ executes it as a **sub-request** and inlines the returned `Response` content.
 
 ```twig
 {# controller() only builds a reference — nothing executes yet #}
-{% set ref = controller('App\\Controller\\CartController::summary', { max: 3 }) %}
+{% set ref = controller(
+    'App\\Controller\\CartController::summary',
+    { max: 3 }
+) %}
 
 {# render() runs it as a sub-request and inlines the Response body #}
 {{ render(ref) }}
@@ -76,10 +79,16 @@ use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Symfony\Component\HttpKernel\Fragment\InlineFragmentRenderer;
 
 // FragmentHandler holds one FragmentRendererInterface per strategy name
-$handler = new FragmentHandler($requestStack, [new InlineFragmentRenderer($kernel)]);
+$handler = new FragmentHandler(
+    $requestStack,
+    [new InlineFragmentRenderer($kernel)],
+);
 
 // what HttpKernelExtension does for {{ render(controller('C::m')) }}:
-$ref = new ControllerReference('App\\Controller\\NewsController::latest', ['max' => 3]);
+$ref = new ControllerReference(
+    'App\\Controller\\NewsController::latest',
+    ['max' => 3],
+);
 echo $handler->render($ref, 'inline');
 ```
 
@@ -134,7 +143,10 @@ framework:
     {{ render(controller('App\\Controller\\CartController::summary')) }}
 
     {# cached independently by a reverse proxy #}
-    {{ render_esi(controller('App\\Controller\\NewsController::latest', { max: 5 })) }}
+    {{ render_esi(controller(
+        'App\\Controller\\NewsController::latest',
+        { max: 5 }
+    )) }}
     ```
 
 === "The embedded controller"
