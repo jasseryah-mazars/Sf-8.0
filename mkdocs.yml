@@ -21,8 +21,8 @@ theme:
   name: material
   language: en
   features:
-    - navigation.instant
-    - navigation.instant.progress
+    # navigation.instant removed: incompatible with the i18n language switcher's
+    # contextual links (mkdocs-static-i18n).
     - navigation.tracking
     - navigation.tabs
     - navigation.tabs.sticky
@@ -63,6 +63,24 @@ plugins:
   - search
   - tags:
       tags_file: tags.md
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          name: English
+          default: true
+          build: true
+        - locale: fr
+          name: Français
+          build: true
+          site_description: >-
+            La plateforme open-source de préparation à la Certification
+            Symfony 8 (Advanced & Expert). Deep dives, diagrammes, exercices,
+            pièges de certification et révision de dernière minute pour chaque
+            sujet officiel du syllabus.
   - git-revision-date-localized:
       enable_creation_date: false
       fallback_to_build_date: true

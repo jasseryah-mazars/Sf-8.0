@@ -90,7 +90,7 @@ def find_content_chapters(docs_dir: Path) -> list[Path]:
         if top and top[0] in _EXCLUDE_DIRS:
             continue
         for f in fnames:
-            if not f.endswith(".md"):
+            if not f.endswith(".md") or f.endswith(".fr.md"):
                 continue
             if f in _EXCLUDE_NAMES or "hub" in f:
                 continue

@@ -490,10 +490,17 @@
     root.dataset.mounted = "1";
     var src = root.getAttribute("data-src");
     root.appendChild(el("p", "sfq__muted", "Loading question bank…"));
-    fetch(src).then(function (r) {
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.json();
-    }).then(function (data) {
+    // On localized pages (/fr/...), the dataset lives one level up — retry there.
+    function load(url, canRetry) {
+      return fetch(url).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      }).catch(function (e) {
+        if (canRetry) return load("../" + url, false);
+        throw e;
+      });
+    }
+    load(src, true).then(function (data) {
       root.innerHTML = "";
       root.className = "sfq";
       new Player(root, data);

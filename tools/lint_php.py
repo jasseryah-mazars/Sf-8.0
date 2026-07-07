@@ -30,6 +30,8 @@ def main() -> int:
     linted = 0
     fails = []
     for f in glob.glob(os.path.join(ROOT, "docs", "**", "*.md"), recursive=True):
+        if f.endswith(".fr.md"):
+            continue  # FR translations carry the same verbatim snippets as the EN canon
         if "/_meta/" in f:
             continue
         for m in BLOCK.finditer(open(f, encoding="utf-8").read()):

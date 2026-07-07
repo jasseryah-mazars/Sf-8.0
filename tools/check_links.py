@@ -105,7 +105,7 @@ def iter_markdown_files() -> list[str]:
     out: list[str] = []
     for dirpath, _dirs, files in os.walk(DOCS_DIR):
         for name in files:
-            if name.endswith(".md"):
+            if name.endswith(".md") and not name.endswith(".fr.md"):
                 out.append(os.path.join(dirpath, name))
     return sorted(out)
 
