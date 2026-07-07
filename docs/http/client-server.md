@@ -97,6 +97,13 @@ sequenceDiagram
    `Symfony\Component\HttpFoundation\Response`, and `Response::send()` writes the
    status line, headers and body back over the socket.
 
+```php
+// public/index.php (simplified): the raw exchange becomes objects
+$request = Request::createFromGlobals();  // wraps $_GET, $_POST, $_SERVER…
+$response = $kernel->handle($request);    // kernel produces a Response
+$response->send();                        // writes status line, headers, body
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Request::createFromGlobals()` and
     `Symfony\Component\HttpKernel\HttpKernel::handle()` —
@@ -145,11 +152,27 @@ The version is chosen by the web server / reverse proxy, **not** by PHP. Symfony
 sees the negotiated protocol via `$request->getProtocolVersion()` (from the
 `SERVER_PROTOCOL` server variable) but does not itself terminate TLS or HTTP/2.
 
+```php
+// PHP only *observes* the version negotiated by the web server
+$request->getProtocolVersion(); // e.g. "HTTP/2.0"
+$_SERVER['SERVER_PROTOCOL'];    // raw source of that value
+```
+
 ### Statelessness and state
 
 Because HTTP is stateless, session continuity is layered on top with **cookies**
 ([Cookies](cookies.md)) and server-side **sessions**. This is why the
 `Set-Cookie`/`Cookie` header pair is central to authentication.
+
+```http
+HTTP/1.1 200 OK
+Set-Cookie: PHPSESSID=abc123; Path=/; HttpOnly; SameSite=lax
+```
+
+```http
+GET /account HTTP/1.1
+Cookie: PHPSESSID=abc123
+```
 
 ## Configuration & code
 

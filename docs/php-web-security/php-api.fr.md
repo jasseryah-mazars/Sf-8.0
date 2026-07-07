@@ -74,6 +74,35 @@ implémenter des interfaces, mais **ne peuvent pas** avoir d'état (non constant
 toujours.
 
 ```php
+enum Level                        // pure enum: cases only
+{
+    case Low;
+    case High;
+}
+
+enum Status: string               // backed enum: each case has a string value
+{
+    case Draft = 'draft';
+    case Published = 'published';
+
+    public const DEFAULT = self::Draft;          // constants allowed
+
+    public function label(): string              // methods allowed
+    {
+        return ucfirst($this->value);            // ->value is read-only
+    }
+}
+
+Status::from('draft');            // Status::Draft — throws ValueError if unknown
+Status::tryFrom('nope');          // null instead of throwing
+Status::Draft->value;             // 'draft'
+Status::Draft instanceof UnitEnum;    // true — every enum implements it
+Status::Draft instanceof BackedEnum;  // true — backed enums also implement it
+Level::Low instanceof BackedEnum;     // false — pure enums don't
+Status::Draft === Status::from('draft'); // true — cases are singletons
+```
+
+```php
 <?php
 declare(strict_types=1);
 
@@ -131,6 +160,14 @@ final readonly class Money
 Réassigner une propriété readonly lève `Error: Cannot modify readonly property`.
 `clone` produit une copie dont les propriétés readonly restent gelées — avant
 PHP 8.3+, vous ne pouviez pas les modifier même à l'intérieur de `__clone`.
+
+```php
+$a = new Money(100, 'EUR');
+// $a->amount = 200;   // Error: Cannot modify readonly property Money::$amount
+
+$b = clone $a;         // the copy keeps its readonly props frozen too
+// PHP 8.3+ only: __clone() may reassign readonly props (deep-clone support)
+```
 
 ### First-class callable syntax (8.1)
 

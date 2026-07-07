@@ -65,6 +65,35 @@ interfaces, but **cannot** have (non-constant) state — cases are singletons, s
 `===` identity comparison always works.
 
 ```php
+enum Level                        // pure enum: cases only
+{
+    case Low;
+    case High;
+}
+
+enum Status: string               // backed enum: each case has a string value
+{
+    case Draft = 'draft';
+    case Published = 'published';
+
+    public const DEFAULT = self::Draft;          // constants allowed
+
+    public function label(): string              // methods allowed
+    {
+        return ucfirst($this->value);            // ->value is read-only
+    }
+}
+
+Status::from('draft');            // Status::Draft — throws ValueError if unknown
+Status::tryFrom('nope');          // null instead of throwing
+Status::Draft->value;             // 'draft'
+Status::Draft instanceof UnitEnum;    // true — every enum implements it
+Status::Draft instanceof BackedEnum;  // true — backed enums also implement it
+Level::Low instanceof BackedEnum;     // false — pure enums don't
+Status::Draft === Status::from('draft'); // true — cases are singletons
+```
+
+```php
 <?php
 declare(strict_types=1);
 
@@ -121,6 +150,14 @@ Reassigning a readonly property throws `Error: Cannot modify readonly property`.
 `clone` produces a copy whose readonly props are still frozen — until PHP 8.3+
 you could not modify them even inside `__clone`.
 
+```php
+$a = new Money(100, 'EUR');
+// $a->amount = 200;   // Error: Cannot modify readonly property Money::$amount
+
+$b = clone $a;         // the copy keeps its readonly props frozen too
+// PHP 8.3+ only: __clone() may reassign readonly props (deep-clone support)
+```
+
 ### First-class callable syntax (8.1)
 
 `f(...)` creates a `Closure` from any callable without the old
@@ -174,6 +211,14 @@ $label = match (true) {
 Short-circuits the *rest of the chain* to `null` if the operand is `null`; it is
 not a `??` replacement and cannot be an lvalue:
 `$c = $session?->getUser()?->getAddress()?->country;`.
+
+```php
+$country = $session?->getUser()?->getAddress()?->country;
+// null as soon as one link is null — the rest of the chain is skipped
+
+$name = $user?->name ?? 'anonymous';  // ?? still supplies the default
+// $user?->name = 'x';                // compile error: ?-> is not an lvalue
+```
 
 ### Typed class constants (8.3)
 
