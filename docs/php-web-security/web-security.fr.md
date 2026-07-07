@@ -111,6 +111,18 @@ privilège** (login) — Symfony le fait automatiquement à l'authentification.
 **Détournement (hijacking) :** vol du cookie ; atténué par `Secure` (HTTPS
 uniquement), `HttpOnly` (pas d'accès JS) et `SameSite`.
 
+```php
+// Defeat fixation: new session id on login (Symfony does this for you)
+$request->getSession()->migrate();
+
+// Mitigate hijacking with cookie flags:
+session_set_cookie_params([
+    'secure'   => true,   // Secure: sent over HTTPS only
+    'httponly' => true,   // HttpOnly: invisible to JavaScript
+    'samesite' => 'Lax',  // SameSite: withheld on cross-site requests
+]);
+```
+
 ```mermaid
 sequenceDiagram
     participant U as User

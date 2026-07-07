@@ -308,6 +308,21 @@ Les events du worker (namespace `Symfony\Component\Messenger\Event\`) :
 `WorkerMessageFailedEvent`, `WorkerRunningEvent`, `WorkerStoppedEvent`,
 `WorkerRateLimitedEvent`.
 
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
+
+#[AsEventListener]
+final class LogFailedMessage
+{
+    public function __invoke(WorkerMessageFailedEvent $event): void
+    {
+        // fired by the Worker when handling a received message threw
+        $event->getThrowable(); // the handler exception
+    }
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\Messenger\Worker::run()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Worker.php).

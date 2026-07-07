@@ -77,16 +77,51 @@ validator/serializer. `cache:warmup` préchauffe sans vider. Préchauffez pendan
 le build afin que la première vraie request soit rapide et que l'utilisateur web
 n'ait aucun droit d'écriture sur `var/cache`.
 
+```php
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+
+// Runs during cache:clear (by default) and cache:warmup
+final class ReportCacheWarmer implements CacheWarmerInterface
+{
+    public function isOptional(): bool
+    {
+        return true; // optional warmers may be skipped and lazily built later
+    }
+
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
+    {
+        file_put_contents($cacheDir.'/report.meta', 'built at deploy');
+
+        return []; // list of classes to preload
+    }
+}
+```
+
 ### Dependencies & autoloader
 
 `composer install --no-dev --optimize-autoloader` (ou
 `--classmap-authoritative`) ignore les paquets de dev et construit une classmap
 optimisée, évitant les appels stat au filesystem à chaque chargement de classe.
 
+```console
+# Skip require-dev packages and generate an optimized classmap
+$ composer install --no-dev --optimize-autoloader
+
+# Stricter: the classmap is the ONLY source, no filesystem checks at all
+$ composer install --no-dev --classmap-authoritative
+```
+
 ### DotEnv dump
 
 `composer dump-env prod` compile la cascade `.env*` en `.env.local.php`, si bien
 que la production évite le parsing DotEnv (voir [Configuration](configuration.md)).
+
+```console
+# Compile the .env* cascade once, at deploy time
+$ composer dump-env prod
+Successfully dumped .env files in .env.local.php
+# When .env.local.php exists, the .env* files are no longer parsed
+```
 
 ### Opcache & preload
 
@@ -96,6 +131,13 @@ Opcache met en cache le bytecode compilé. Symfony génère
 une seule fois au démarrage du process manager PHP, réduisant le chargement de
 classes par request. Assurez-vous que `opcache.validate_timestamps=0` est activé
 en prod et réinitialisez opcache à chaque déploiement.
+
+```ini
+; php.ini (prod)
+opcache.preload=/srv/app/var/cache/prod/App_KernelProdContainer.preload.php
+opcache.preload_user=www-data
+opcache.validate_timestamps=0 ; never stat files — reset opcache on each deploy
+```
 
 ```mermaid
 flowchart LR

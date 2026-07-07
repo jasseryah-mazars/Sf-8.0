@@ -45,6 +45,14 @@ Signature : `message|trans(parameters = {}, domain = 'messages', locale = null)`
 La clé (`welcome.title`) est cherchée dans le catalogue de la locale courante ;
 si elle manque, la clé elle-même est retournée.
 
+```twig
+{# full argument order: parameters, then domain, then locale #}
+{{ 'welcome.title'|trans({}, 'messages', 'fr') }}
+
+{# key missing from the catalogue: 'welcome.title' is rendered as-is #}
+{{ 'welcome.title'|trans }}
+```
+
 !!! question "Predict first"
     Vous avez besoin de la pluralisation « 1 message / 5 messages » dans un
     template Symfony 8. Vous cherchez `transchoice` ? Quelle est la voie actuelle ?
@@ -64,6 +72,19 @@ charge les catalogues (YAML/XLIFF sous `translations/`) dans un
 `MessageCatalogue`, résout le message, substitue les paramètres et — quand le
 message est ICU — le passe par l'**`IntlFormatter`** (le `MessageFormatter` de
 l'extension PHP `intl`).
+
+```php
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+// the service TranslationExtension delegates to
+public function __construct(private TranslatorInterface $translator) {}
+
+// same lookup the |trans filter performs
+$text = $this->translator->trans('welcome.hello', ['%name%' => 'Ada'], 'messages');
+
+// catalogues load into a MessageCatalogue per locale; ICU messages are
+// rendered by IntlFormatter (php-intl MessageFormatter) instead of strtr
+```
 
 ```mermaid
 flowchart LR

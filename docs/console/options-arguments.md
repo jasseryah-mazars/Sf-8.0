@@ -54,6 +54,14 @@ $ php bin/console app:deploy -f                                     # -f shortcu
 
 Combine with a bitmask, e.g. `IS_ARRAY | OPTIONAL`.
 
+```php
+use Symfony\Component\Console\Input\InputArgument;
+
+$this->addArgument('path', InputArgument::REQUIRED);                          // 1
+$this->addArgument('format', InputArgument::OPTIONAL, 'Format', 'json');      // 2, with default
+$this->addArgument('files', InputArgument::IS_ARRAY | InputArgument::OPTIONAL); // 4|2, last
+```
+
 **Option modes** (`Symfony\Component\Console\Input\InputOption`):
 
 | Mode | Value | Meaning |
@@ -63,6 +71,16 @@ Combine with a bitmask, e.g. `IS_ARRAY | OPTIONAL`.
 | `VALUE_OPTIONAL` | 4 | Value optional (`--yell` or `--yell=loud`) |
 | `VALUE_IS_ARRAY` | 8 | Repeatable (`--id=1 --id=2`) |
 | `VALUE_NEGATABLE` | 16 | Adds a `--no-…` twin (`--ansi`/`--no-ansi`) |
+
+```php
+use Symfony\Component\Console\Input\InputOption;
+
+$this->addOption('force', 'f', InputOption::VALUE_NONE);                          // 1: flag
+$this->addOption('iter', null, InputOption::VALUE_REQUIRED, 'Iterations', 1);     // 2
+$this->addOption('yell', null, InputOption::VALUE_OPTIONAL);                      // 4
+$this->addOption('id', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED); // 8|2
+$this->addOption('color', null, InputOption::VALUE_NEGATABLE, 'Colorize', true);  // 16: --no-color
+```
 
 !!! question "Predict first"
     You declare `--force` as `VALUE_NONE` and try to give it a default of `false`.
@@ -83,6 +101,17 @@ set of `InputArgument`s and the map of `InputOption`s. When `run()` executes,
 `Symfony\Component\Console\Exception\RuntimeException` if a `REQUIRED` argument or
 `VALUE_REQUIRED` option value is missing.
 
+```php
+$definition = new InputDefinition([
+    new InputArgument('path', InputArgument::REQUIRED),
+    new InputOption('depth', null, InputOption::VALUE_REQUIRED, 'Max depth', 1),
+]);
+
+$input = new ArgvInput();     // raw argv tokens
+$input->bind($definition);    // match tokens against the definition
+$input->validate();           // throws RuntimeException if "path" is missing
+```
+
 Rules the definition enforces:
 
 - **Only one** `IS_ARRAY` argument, and it must be **last** (it greedily consumes
@@ -92,6 +121,13 @@ Rules the definition enforces:
   present, then `true`.
 - A `VALUE_NEGATABLE` option is `true` with `--foo`, `false` with `--no-foo`, and
   its default otherwise.
+
+```console
+$ php bin/console app:notify --color      # NEGATABLE -> true
+$ php bin/console app:notify --no-color   # NEGATABLE -> false
+$ php bin/console app:notify              # neither -> the declared default
+$ php bin/console app:notify --force      # VALUE_NONE -> true (false when absent)
+```
 
 ```mermaid
 flowchart LR
@@ -105,6 +141,18 @@ In **invokable** commands you skip `addArgument`/`addOption`: the `#[Argument]` 
 `#[Option]` attributes on `__invoke()` parameters build the definition. Parameter
 type and default decide the mode: a `bool` option → `VALUE_NONE`; an `array` →
 `VALUE_IS_ARRAY`; a parameter with a default → optional.
+
+```php
+public function __invoke(
+    #[Argument] string $path,          // required argument (no default)
+    #[Argument] array $files = [],     // IS_ARRAY argument, must stay last
+    #[Option] bool $force = false,     // bool -> VALUE_NONE flag
+    #[Option] array $tags = [],        // array -> VALUE_IS_ARRAY
+    #[Option] int $depth = 1,          // default -> optional, value required
+): int {
+    return Command::SUCCESS;
+}
+```
 
 !!! note "Source reference"
     `InputArgument`, `InputOption`, `InputDefinition` —

@@ -77,6 +77,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;       // text/scalar
 in the browser maps to a numeric model value (see
 [data transformers](data-transformers.md)).
 
+```php
+// IntegerType / NumberType / MoneyType attach view transformers:
+$builder
+    ->add('quantity', IntegerType::class)                 // '3'     ↔ 3 (int)
+    ->add('rating', NumberType::class, ['scale' => 1])    // '4.5'   ↔ 4.5
+    ->add('price', MoneyType::class, ['divisor' => 100]); // '19.99' ↔ 1999 (cents)
+```
+
 ### Choice family
 
 `Symfony\Component\Form\Extension\Core\Type\ChoiceType` is the workhorse.
@@ -94,12 +102,33 @@ Key options: `choices` (label ⇒ value map), `choice_value`, `choice_label`,
 primitive single-boolean/single-choice inputs `ChoiceType` builds on when
 expanded.
 
+```php
+$builder->add('country', ChoiceType::class, [
+    'choices'           => ['France' => 'fr', 'Belgium' => 'be'], // label => value
+    'choice_value'      => fn (?string $code) => $code,           // form value per choice
+    'choice_label'      => fn (?string $code) => strtoupper((string) $code),
+    'placeholder'       => 'Pick a country',
+    'preferred_choices' => ['fr'],  // listed first
+    'expanded'          => true,    // built on RadioType (CheckboxType if multiple)
+]);
+```
+
 ### Date & time
 
 `DateType`, `TimeType`, `DateTimeType` support three `widget` modes:
 `choice` (dropdowns), `text` (a single text field), `single_text` (one
 `type="date"` input — best with HTML5). `input` chooses the model type:
 `datetime_immutable` (recommended), `datetime`, `string`, `timestamp`, `array`.
+
+```php
+$builder
+    ->add('day', DateType::class, [
+        'widget' => 'single_text',        // or 'choice' / 'text'
+        'input'  => 'datetime_immutable', // model type (recommended)
+    ])
+    ->add('at', TimeType::class, ['widget' => 'choice'])     // dropdowns
+    ->add('when', DateTimeType::class, ['input' => 'string']);
+```
 
 ### Compound helpers
 

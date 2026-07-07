@@ -148,6 +148,15 @@ to refuse plain HTTP for a period. Core response headers:
 | `X-Frame-Options: DENY` | Anti-clickjacking |
 | `Referrer-Policy` | Limit referer leakage |
 
+```php
+$h = $response->headers;
+$h->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+$h->set('Content-Security-Policy', "default-src 'self'");
+$h->set('X-Content-Type-Options', 'nosniff');
+$h->set('X-Frame-Options', 'DENY');
+$h->set('Referrer-Policy', 'same-origin');
+```
+
 ### Password storage
 
 Never store plaintext or fast hashes (MD5/SHA1). Use a **slow, salted, adaptive**

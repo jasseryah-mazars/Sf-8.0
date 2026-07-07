@@ -124,6 +124,22 @@ Au lieu d'un bloc YAML, `#[Autoconfigure]` sur la classe fixe ses drapeaux —
 compilation et se révèle pratique pour les classes de bibliothèque qui embarquent
 leur propre câblage.
 
+```php
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+
+#[Autoconfigure(
+    public: false,                                 // visibility flag
+    shared: true,                                  // one instance per container
+    lazy: true,                                    // proxy until first use
+    tags: ['app.report'],                          // extra tags
+    bind: ['$dir' => '%kernel.project_dir%/var'],  // named-argument binding
+    calls: [['setLogger', ['@logger']]],           // setter calls
+    properties: ['timeout' => 30],                 // property injection
+    constructor: 'create',                         // static factory method
+)]
+final class PdfReporter { /* ... */ }
+```
+
 !!! note "Source reference"
     Attribute autoconfiguration is handled during compilation via
     `Symfony\Component\DependencyInjection\Attribute\Autoconfigure` and
@@ -143,6 +159,24 @@ défaut et que la classe vérifie avant d'appeler. Le bug classique : une propri
 nullable par défaut qu'un chemin de code obligatoire suppose toujours renseignée —
 injectez-la plutôt par le constructeur, pour que le container prouve son existence
 au build time.
+
+```php
+// services.yaml: calls: [ setLogger: ['@?logger'] ]  — '@?' = optional reference
+final class ReportRunner
+{
+    private ?LoggerInterface $logger = null;   // stays null if 'logger' is absent
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    public function run(): void
+    {
+        $this->logger?->info('running');       // null-guard every use
+    }
+}
+```
 
 !!! note "Null in real life"
     Un cuisinier optionnel qui peut ne pas venir (dépendance optionnelle par
