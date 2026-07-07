@@ -88,6 +88,17 @@ flowchart LR
    app and returns the exit code (for `Kernel`: `handle()` → `send()` →
    `terminate()`).
 
+```php
+use Symfony\Component\Runtime\SymfonyRuntime;
+
+// What autoload_runtime.php does, simplified:
+$runtime = new SymfonyRuntime();                         // class named by APP_RUNTIME
+$app = require 'public/index.php';                       // the returned callable
+[$app, $args] = $runtime->getResolver($app)->resolve();  // autowire array $context, Request…
+$application = $app(...$args);                           // e.g. a Kernel
+exit($runtime->getRunner($application)->run());          // handle() → send() → terminate()
+```
+
 !!! note "Source reference"
     `Symfony\Component\Runtime\RuntimeInterface`, `SymfonyRuntime`, `GenericRuntime` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php).
@@ -99,6 +110,15 @@ flowchart LR
 - **`SymfonyRuntime`** — extends `GenericRuntime` with Symfony-aware resolvers and
   runners: it can inject a `Request`, `SymfonyStyle`, console `Input`/`Output`,
   and run a `HttpKernelInterface`/`Kernel` or a console `Application`/`Command`.
+
+```php
+// SymfonyRuntime resolvers can inject Symfony objects into the callable:
+return static function (Request $request): Response {
+    // the SymfonyRuntime runner will send() this Response for you
+    return new Response('Hello '.$request->query->get('name', 'world'));
+};
+// GenericRuntime only resolves plain values (array $context from $_SERVER, etc.)
+```
 
 ### Selecting a runtime
 
