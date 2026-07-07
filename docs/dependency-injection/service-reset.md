@@ -148,6 +148,12 @@ process exit periodically so a supervisor restarts it fresh. Reset handles
 *correctness* between messages; recycling the process handles *leaks* that
 reset cannot reach.
 
+```console
+$ php bin/console messenger:consume async --limit=100        # exit after 100 messages
+$ php bin/console messenger:consume async --time-limit=3600  # or after one hour
+$ php bin/console messenger:consume async --memory-limit=128M # or past 128 MB
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter` — the
     loop over initialized services and the `?method` guard —

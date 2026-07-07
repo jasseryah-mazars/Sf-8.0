@@ -49,6 +49,13 @@ Two transformer slots per field:
 | **Model transformer** | model ↔ norm | `addModelTransformer()` |
 | **View transformer** | norm ↔ view | `addViewTransformer()` |
 
+```php
+// Two slots, two adders — on the field's builder
+$builder->get('issuedAt')
+    ->addModelTransformer($modelToNorm)   // model <-> norm
+    ->addViewTransformer($normToView);    // norm <-> view
+```
+
 !!! question "Predict first"
     A field converts a `DateTimeImmutable` model into a `"2026-07-06"` string in the
     browser. Which method runs when the page is **displayed**, and in which direction?

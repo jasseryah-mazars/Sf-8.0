@@ -146,11 +146,29 @@ L'ordre des events au submit est **PRE_SUBMIT → SUBMIT → POST_SUBMIT**
 listener sur `POST_SUBMIT` enregistré par la form extension du validator, raison
 pour laquelle `isValid()` n'est fiable qu'après une soumission.
 
+```php
+// The validator extension registers a POST_SUBMIT listener:
+$builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {
+    // runs the Validator against the mapped model data
+});
+
+// ...which is why isValid() is only meaningful once the form was submitted:
+if ($form->isSubmitted() && $form->isValid()) { /* safe */ }
+```
+
 ### `clearMissing` and PATCH
 
 `submit($data, $clearMissing = true)` remet à vide les champs absents du payload.
 `handleRequest` passe `clearMissing = false` pour `PATCH`, ce qui permet les mises
 à jour partielles — le détail de `handleRequest` préféré de l'examen.
+
+```php
+// Full update: fields absent from the payload are reset to empty
+$form->submit($data);        // $clearMissing defaults to true
+
+// Partial update: absent fields keep their current value
+$form->submit($data, false); // what handleRequest does for PATCH
+```
 
 ### Null behavior
 

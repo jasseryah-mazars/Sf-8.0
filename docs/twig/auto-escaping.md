@@ -95,6 +95,20 @@ flowchart LR
   `ENT_QUOTES|ENT_SUBSTITUTE`, `html_attr` → an attribute-safe escaper,
   `js` → `\xNN` hex encoding, `css` → CSS hex encoding, `url` → `rawurlencode`.
 
+```twig
+{# three ways a value counts as safe #}
+{{ trusted|raw }}                                       {# 1. |raw #}
+{% autoescape false %}{{ trusted }}{% endautoescape %}  {# 2. autoescape off #}
+{# 3. output of a filter/function declared is_safe: ['html'] #}
+
+{# each strategy maps to a real PHP escaper #}
+{{ v|e('html') }}       {# htmlspecialchars with ENT_QUOTES|ENT_SUBSTITUTE #}
+{{ v|e('html_attr') }}  {# attribute-safe escaper #}
+{{ v|e('js') }}         {# \xNN hex encoding #}
+{{ v|e('css') }}        {# CSS hex encoding #}
+{{ v|e('url') }}        {# rawurlencode #}
+```
+
 !!! note "Source reference"
     `Twig\Extension\EscaperExtension`, `Twig\Runtime\EscaperRuntime`,
     `Twig\FileExtensionEscapingStrategy` —

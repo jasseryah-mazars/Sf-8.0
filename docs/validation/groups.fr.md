@@ -103,6 +103,21 @@ groupe du parent est `Default` ; un groupe *personnalisé* est propagé tel quel
 Un objet imbriqué ne valide donc les constraints de son groupe personnalisé que
 si ce groupe personnalisé l'atteint effectivement.
 
+```php
+class Order
+{
+    #[Assert\Valid]              // cascades the *current* group to Address
+    public ?Address $address = null;
+}
+
+// group 'Default' reaches Address as its own Default group
+$validator->validate($order, groups: ['Default']);
+
+// a custom group is propagated as-is: only Address constraints
+// tagged groups: ['checkout'] will run on the nested object
+$validator->validate($order, groups: ['checkout']);
+```
+
 !!! note "Source reference"
     `Symfony\Component\Validator\Constraint::DEFAULT_GROUP` (`'Default'`) et la
     résolution des groupes dans `RecursiveContextualValidator` —

@@ -125,6 +125,16 @@ services:
 `null` en tant que `.inner`). Utilisez `ignore`/`null` pour la decoration
 optionnelle de services potentiellement absents.
 
+```yaml
+services:
+    App\Mail\LoggingMailer:
+        decorates: maybe_absent_mailer
+        # exception (default): compilation fails if the decorated id is missing
+        # ignore: the decorator definition is dropped entirely
+        # null: null is injected as the .inner argument
+        decoration_on_invalid: ignore
+```
+
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/DecoratorServicePass.php).

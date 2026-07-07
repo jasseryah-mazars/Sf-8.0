@@ -36,6 +36,17 @@ output and integrates with the profiler. `dump()` records a variable; `dd()`
 ("dump and die") dumps then `exit`s. The Stopwatch component measures elapsed
 time and memory for named **events**, powering the profiler's timeline.
 
+```php
+$user = $repository->find(42);
+
+// var_dump() alternative: styled, structured, profiler-aware
+dump($user);      // records the variable, execution continues
+dump($user, $id); // several values at once
+
+dd($user); // "dump and die": dumps, then exits
+// this line is never reached
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"

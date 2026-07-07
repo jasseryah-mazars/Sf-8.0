@@ -132,6 +132,17 @@ trait Counter
 `use Some\Class;` en **tête de fichier** est un import de namespace. Même
 mot-clé, contexte différent — un distracteur d'examen classique.
 
+```php
+namespace App\Service;
+
+use App\Logging\LoggerTrait;   // top of file: namespace import (alias)
+
+final class Mailer
+{
+    use LoggerTrait;           // inside the class body: trait composition
+}
+```
+
 !!! note "Source reference"
     Symfony embarque de nombreux traits, par exemple les adapters de
     `Symfony\Component\Cache\Traits\` et

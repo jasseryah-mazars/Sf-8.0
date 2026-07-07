@@ -38,6 +38,18 @@ either a [compiler pass](compiler-passes.md) or the built-in
 tag and injects them as a group. This is how Symfony wires "all voters", "all
 event subscribers", "all Messenger handlers".
 
+```yaml
+services:
+    App\Handler\EmailHandler:
+        tags: ['app.handler']       # inert label until something collects it
+
+    App\HandlerRunner:
+        arguments:
+            # Collectors: all instances vs a lazy keyed set.
+            $handlers: !tagged_iterator app.handler
+            $locator: !tagged_locator app.handler
+```
+
 !!! question "Predict first"
     You inject `#[AutowireLocator('app.handler')]` but nothing implements the tagged
     interface. At runtime you `get('missing')` on the locator. Empty result or error?

@@ -89,6 +89,22 @@ Utilisez `SelfValidatingPassport` lorsqu'il n'y a **aucun credential à
 vérifier** (p. ex. un API token valide identifie déjà l'utilisateur) — il ne
 requiert qu'un `UserBadge`.
 
+```php
+// full Passport: UserBadge + credentials + optional badges
+new Passport(
+    new UserBadge('alice@example.com'),
+    new PasswordCredentials($plaintext),  // or: new CustomCredentials(fn ($cred, $user) => ..., $apiKey)
+    [
+        new CsrfTokenBadge('authenticate', $csrfToken),
+        new RememberMeBadge(),
+        new PasswordUpgradeBadge($plaintext),  // rehash on login
+    ],
+);
+
+// SelfValidatingPassport: no credentials to check — a UserBadge is enough
+new SelfValidatingPassport(new UserBadge('api-client'), [new PreAuthenticatedUserBadge()]);
+```
+
 | Badge (FQCN suffix) | Résolu par | Rôle |
 |---|---|---|
 | `Badge\UserBadge` | `UserProviderListener` / `CheckCredentialsListener` | Charger l'utilisateur |

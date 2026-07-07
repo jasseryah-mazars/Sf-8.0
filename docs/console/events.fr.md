@@ -48,6 +48,16 @@ quatre :
 Chacun transporte un objet event dédié exposant la commande, l'input, l'output et —
 pour error/terminate — le code de sortie.
 
+```php
+use Symfony\Component\Console\ConsoleEvents;
+
+// The four constants the Application dispatches on the event dispatcher
+ConsoleEvents::COMMAND;     // "console.command"   - before execution
+ConsoleEvents::SIGNAL;      // "console.signal"    - an OS signal was received
+ConsoleEvents::ERROR;       // "console.error"     - a Throwable was thrown
+ConsoleEvents::TERMINATE;   // "console.terminate" - after the command, always
+```
+
 !!! question "Predict first"
     Une commande lève une exception au milieu d'`execute()`. Quels events console
     se déclenchent, dans quel ordre, et `TERMINATE` s'exécute-t-il quand même ?
@@ -85,6 +95,25 @@ flowchart TD
   code de sortie du processus. Idéal pour le nettoyage/les métriques.
 - **`ConsoleSignalEvent`** — déclenché quand un signal POSIX souscrit arrive ;
   expose `getHandlingSignal()` et permet `setExitCode()` / `abortExit()`.
+
+```php
+// ConsoleCommandEvent: skip execution -> run() returns 113
+$commandEvent->disableCommand();   // ConsoleCommandEvent::RETURN_CODE_DISABLED
+
+// ConsoleErrorEvent: replace the failure code (TERMINATE still runs after)
+$errorEvent->setExitCode(3);
+
+// ConsoleTerminateEvent: last chance to inspect/override the exit code
+if (0 !== $terminateEvent->getExitCode()) {
+    $terminateEvent->setExitCode(0);          // e.g. downgrade a known benign failure
+}
+
+// ConsoleSignalEvent: which signal arrived, then choose the outcome
+$signal = $signalEvent->getHandlingSignal();  // e.g. \SIGTERM
+$signalEvent->setExitCode(128 + $signal);     // exit with the signal convention
+// ...or keep the command running instead of exiting:
+$signalEvent->abortExit();
+```
 
 Les codes de sortie sont bornés à **0–255** (`$code % 256` en cas de dépassement) ;
 un retour négatif ou `>255` est normalisé. Par convention, un processus terminé par

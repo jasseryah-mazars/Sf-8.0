@@ -177,6 +177,20 @@ Each bus is an independent `MessageBus` with its **own middleware list**, so a
 command bus can wrap handlers in a Doctrine transaction while an event bus does
 not.
 
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        default_bus: command.bus       # instead of messenger.bus.default
+        buses:
+            command.bus:
+                middleware: [doctrine_transaction]  # own middleware list
+            query.bus: ~               # one handler; result read via HandledStamp
+            event.bus:
+                default_middleware:
+                    allow_no_handlers: true          # fire-and-forget
+```
+
 ### Envelopes & stamps
 
 An `Envelope` is immutable: `with()` returns a *new* envelope with an added
