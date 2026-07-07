@@ -134,10 +134,29 @@ files):
 3. `.env.<APP_ENV>` — e.g. `.env.prod` (committed).
 4. `.env.<APP_ENV>.local` — env-specific machine overrides (git-ignored).
 
+```php
+use Symfony\Component\Dotenv\Dotenv;
+
+// Bootstrap: populate $_ENV / $_SERVER from the .env* cascade
+(new Dotenv())->loadEnv(dirname(__DIR__).'/.env'); // reads APP_ENV to pick .env.<env>*
+
+$env = $_ENV['APP_ENV'];           // also mirrored into $_SERVER
+$dsn = $_SERVER['DATABASE_URL'];   // real OS env vars are never overridden
+```
+
 `APP_ENV` selects the environment; `APP_DEBUG` toggles debug. In production run
 `composer dump-env prod`, which compiles all of the above into a single
 **`.env.local.php`** (a plain PHP array). When present, Symfony loads *only* that
 file and skips parsing `.env*`, saving I/O on every request.
+
+```console
+# APP_ENV selects the environment, APP_DEBUG toggles debug
+$ APP_ENV=prod APP_DEBUG=0 php bin/console about
+
+# Deploy step: compile the whole cascade into .env.local.php
+$ composer dump-env prod
+Successfully dumped .env files in .env.local.php
+```
 
 ### ExpressionLanguage
 

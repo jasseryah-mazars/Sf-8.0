@@ -99,6 +99,14 @@ Twig maintains per iteration. Crucially, `loop.length`, `loop.last`,
 or a `Countable`/`Traversable` Twig can count) — for a bare `Generator` Twig may
 buffer or omit them. `loop.first`/`loop.index` are always available.
 
+```twig
+{% for row in rows %}  {# compiles to a PHP foreach #}
+    {{ loop.index }} {{ loop.first ? 'first' }}    {# always available #}
+    {{ loop.length }} {{ loop.revindex }} {{ loop.last ? 'last' }}
+    {# ^ need a countable iterable (array/Countable) — not a bare Generator #}
+{% endfor %}
+```
+
 ```mermaid
 flowchart TD
     F["for x in items"] --> Cnt{Countable?}
@@ -116,6 +124,15 @@ flowchart TD
 - You **cannot `break`/`continue`** in Twig — filter the source or use `if`
   inside the body instead. This is deliberate (keeps templates declarative).
 
+```twig
+{# no break/continue: filter and slice the source instead #}
+{% for x in items|slice(0, 10) if x.active %}
+    {{ x.name }}
+{% else %}
+    No active items.   {# else: runs only on zero iterations #}
+{% endfor %}
+```
+
 !!! note "Source reference"
     `for`/`if` token parsers, `Twig\Node\ForNode`, `Twig\Node\ForLoopNode` —
     [twigphp/Twig `3.x`](https://github.com/twigphp/Twig/blob/3.x/src/Node/ForNode.php).
@@ -125,6 +142,16 @@ flowchart TD
 `is defined`, `is null`, `is empty`, `is even`/`odd`, `is iterable`,
 `is same as(x)` (identity `===`), `divisible by(n)`, `constant('X')`. Negate with
 `is not`. `empty` is true for `null`, `false`, `0`, `''`, `[]`.
+
+```twig
+{% if x is defined and x is not null %}has a real value{% endif %}
+{% if items is empty %}empty: null / false / 0 / '' / []{% endif %}
+{% if n is even %}even{% elseif n is odd %}odd{% endif %}
+{% if items is iterable %}can be looped{% endif %}
+{% if a is same as(b) %}identical (===){% endif %}
+{% if n is divisible by(3) %}multiple of 3{% endif %}
+{% if status == constant('App\\Entity\\Order::PAID') %}paid{% endif %}
+```
 
 ### Null behavior
 

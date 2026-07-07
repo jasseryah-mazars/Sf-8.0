@@ -76,6 +76,15 @@ flowchart LR
   `UnsupportedUserException` or returns a user the checker rejects, the token is
   discarded (effective logout).
 
+```php
+// Login: UserProviderListener attaches the firewall's provider to a bare badge,
+// then CheckCredentialsListener resolves the user from it
+new UserBadge($identifier); // no loader → provider's loadUserByIdentifier() is used
+
+// Every stateful request: ContextListener re-syncs the session user
+$fresh = $provider->refreshUser($sessionUser); // may throw UnsupportedUserException
+```
+
 !!! note "Source reference"
     `Symfony\Component\Security\Core\User\InMemoryUserProvider` and
     `ChainUserProvider` —
@@ -90,6 +99,16 @@ flowchart LR
 | Chain | `chain` | Try several providers in order |
 | Custom | service id | Any store (LDAP, API, file) |
 
+```yaml
+# config/packages/security.yaml — one provider per config key
+security:
+    providers:
+        backup_users: { memory: { users: { admin: { password: '...', roles: [ROLE_ADMIN] } } } }
+        main_users:   { entity: { class: App\Entity\User, property: email } }
+        api_users:    { id: App\Security\ApiUserProvider }        # custom service id
+        all_users:    { chain: { providers: [main_users, backup_users] } }
+```
+
 Doctrine's `entity` provider is **out of scope** for this stage; know only that
 it exists and loads users from a repository/property.
 
@@ -100,6 +119,19 @@ If a provider also implements
 (`upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword)`),
 the `PasswordMigratingListener` can transparently rehash a password on
 successful login (see [Password Hashers](password-hashers.md)).
+
+```php
+final class ApiUserProvider implements UserProviderInterface, PasswordUpgraderInterface
+{
+    // Called by PasswordMigratingListener after a successful login with a legacy hash
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        $this->client->storePasswordHash($user->getUserIdentifier(), $newHashedPassword);
+    }
+
+    // ... loadUserByIdentifier(), refreshUser(), supportsClass()
+}
+```
 
 ### Null behavior
 

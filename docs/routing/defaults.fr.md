@@ -107,6 +107,16 @@ flowchart TD
 `_format`, `_locale`, ou un `_controller`. Elles sont transmises directement aux
 attributs de la request. Voir [Special attributes](special-attributes.md).
 
+```yaml
+# defaults may carry values that never appear in the path
+legacy_home:
+    path: /home
+    defaults:
+        _controller: App\Controller\HomeController::index  # callable to run
+        _format: json    # request format
+        _locale: en      # request locale
+```
+
 ## Configuration & code
 
 === "PHP Attributes"

@@ -36,6 +36,15 @@ votes avec une **stratégie**. Les voters sont le point d'extension de
 l'authorization **par objet** — ce que les rôles et `access_control` ne peuvent
 pas exprimer.
 
+```php
+// Controller: attribute 'EDIT' + subject $post → the AccessDecisionManager
+// polls every voter and combines their votes with the configured strategy
+$this->denyAccessUnlessGranted('EDIT', $post);
+
+// access_control can only match the URL — it never sees the Post object:
+//     - { path: ^/posts, roles: ROLE_USER }
+```
+
 Chaque voter retourne l'un de trois votes :
 
 | Vote | Constante | Signification |
@@ -97,6 +106,15 @@ L'`AccessDecisionManager` combine les votes selon une stratégie
 | **consensus** | Plus de grants que de denies (égalité → `allowIfEqualGrantedDenied`) |
 | **unanimous** | **Aucun** voter ne refuse (grants ≥ 1, ou tous abstenus selon la config) |
 | **priority** | Le **premier** voter non abstenu décide |
+
+```php
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use Symfony\Component\Security\Core\Authorization\Strategy\UnanimousStrategy;
+
+// Standalone: the manager reduces all collected votes with a strategy object
+$adm = new AccessDecisionManager($voters, new UnanimousStrategy());
+$granted = $adm->decide($token, ['EDIT'], $post); // true only if no voter denied
+```
 
 `allow_if_all_abstain` (défaut `false`) contrôle ce qui se passe quand **tous**
 les voters s'abstiennent — par défaut, l'accès est **refusé**.

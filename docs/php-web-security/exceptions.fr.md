@@ -39,6 +39,22 @@ niveau du moteur comme `TypeError`, `ParseError`, `DivisionByZeroError`). Les
 **niveaux d'erreur** historiques (`E_WARNING`, `E_NOTICE`, `E_DEPRECATED`…)
 constituent un mécanisme distinct, plus ancien.
 
+```php
+try {
+    intdiv(1, 0);                        // engine fault → DivisionByZeroError
+} catch (\Error $e) {                    // TypeError, ParseError… extend Error
+}
+
+try {
+    throw new \RuntimeException('oops'); // application-level Exception branch
+} catch (\Exception $e) {
+}
+
+$e instanceof \Throwable;                // true — both branches implement it
+
+error_reporting(E_ALL & ~E_DEPRECATED);  // legacy error levels: separate world
+```
+
 ```mermaid
 classDiagram
     class Throwable {

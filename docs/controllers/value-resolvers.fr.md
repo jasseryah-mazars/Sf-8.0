@@ -185,6 +185,22 @@ pas la même chose, et les confondre est le bug de resolver classique :
 - *Yielder `null`* (`yield null;`) signifie « la valeur est `null` » — une
   vraie valeur d'argument, délibérée, liée à un paramètre nullable.
 
+```php
+public function resolve(Request $request, ArgumentMetadata $argument): iterable
+{
+    if (Money::class !== $argument->getType()) {
+        return []; // decline: "not my argument" — the chain moves on
+    }
+
+    if (!$request->query->has('amount')) {
+        yield null; // deliberate value: binds null to a nullable parameter
+        return;
+    }
+
+    yield new Money($request->query->getInt('amount'));
+}
+```
+
 Deux pièges en découlent. Premièrement, `return null;` au lieu de `return [];`
 est un `TypeError` : `resolve()` est déclaré `: iterable`, et `null` n'est pas
 itérable. Déclinez toujours avec un tableau vide. Deuxièmement, si aucun

@@ -44,6 +44,15 @@ Two transports back it:
 
 `HttpClient::create()` picks the best available automatically.
 
+```php
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+// CurlHttpClient when ext-curl is available, NativeHttpClient otherwise
+$client = HttpClient::create();
+assert($client instanceof HttpClientInterface); // always code against the contract
+```
+
 !!! question "Predict first"
     You call `$client->request('GET', $url)` three times in a loop without reading
     any response. How many HTTP transfers have completed?
@@ -68,6 +77,23 @@ The contract lives in `Symfony\Contracts\HttpClient`:
 `ResponseInterface`. The HTTP exchange is only *completed* when you first read the
 status/headers/content. This makes concurrency free — fire many requests, then
 read them:
+
+```php
+$response = $client->request('GET', 'https://api.example.com/users');
+
+$response->getStatusCode();       // 200 — first read completes the transfer
+$response->getHeaders();          // ['content-type' => ['application/json'], ...]
+$response->getContent();          // raw body string
+$response->toArray();             // JSON-decoded array
+$response->getInfo('total_time'); // transport metadata
+
+// ResponseStreamInterface yields ChunkInterface objects
+foreach ($client->stream($response) as $chunk) {
+    if ($chunk->isLast()) { /* transfer finished */ }
+}
+
+$client->request('GET', 'https://api.example.com/slow')->cancel(); // abort
+```
 
 ```mermaid
 sequenceDiagram
@@ -96,6 +122,25 @@ sequenceDiagram
 
 Pass `getContent(false)` (or the `throw` option) to inspect error bodies yourself.
 `toArray()` JSON-decodes and returns an array.
+
+```php
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+
+try {
+    $data = $response->toArray(); // throws on 3xx/4xx/5xx (throw: true)
+} catch (ClientExceptionInterface $e) {           // 4xx
+    $body = $e->getResponse()->getContent(false); // inspect the error body
+} catch (ServerExceptionInterface|RedirectionExceptionInterface $e) { // 5xx / 3xx
+    throw $e;
+} catch (TransportExceptionInterface $e) {        // network failure
+    throw $e;
+}
+
+$response->getStatusCode(); // never throws
+```
 
 ### Options that matter
 

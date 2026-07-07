@@ -135,6 +135,15 @@ service implémentant `Symfony\Contracts\Translation\LocaleAwareInterface` (p. e
 code avec `Symfony\Component\Translation\LocaleSwitcher` (couvert dans
 [Intl](../miscellaneous/intl.md)).
 
+```php
+// LocaleAwareListener propagates the request locale to such services:
+assert($translator instanceof LocaleAwareInterface);
+$translator->setLocale($request->getLocale());
+
+// LocaleSwitcher: run one block in another locale, then restore it
+$greeting = $localeSwitcher->runWithLocale('fr', fn () => $translator->trans('hello'));
+```
+
 ## Configuration & code
 
 === "PHP Attributes"

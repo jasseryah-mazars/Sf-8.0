@@ -127,6 +127,23 @@ bundle (e.g. set a `framework` option) via
 `$container->prependExtensionConfig('framework', [...])`. Order matters: prepend
 happens first, then every extension loads with the combined config.
 
+```php
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+
+final class AcmeBlogExtension extends Extension implements PrependExtensionInterface
+{
+    // Runs BEFORE every extension's load().
+    public function prepend(ContainerBuilder $container): void
+    {
+        // Inject default config into ANOTHER bundle (the framework root key).
+        $container->prependExtensionConfig('framework', [
+            'http_method_override' => false,
+        ]);
+    }
+}
+```
+
 ### Bundle extension conventions
 
 A bundle named `AcmeBlogBundle` auto-discovers `AcmeBlogExtension` and its root
@@ -134,6 +151,24 @@ key `acme_blog` (snake_case of the bundle name minus `Bundle`). Symfony 8 also
 supports the streamlined `AbstractBundle` where `configure()` and
 `loadExtension()` live on the bundle class itself — no separate Extension file
 needed.
+
+```php
+// Convention: AcmeBlogBundle -> AcmeBlogExtension -> root key "acme_blog"
+// ("Bundle" stripped, remainder snake_cased). With AbstractBundle both
+// hooks live on the bundle class itself:
+final class AcmeBlogBundle extends AbstractBundle
+{
+    public function configure(DefinitionConfigurator $definition): void
+    {
+        $definition->rootNode()->children()->scalarNode('title')->end()->end();
+    }
+
+    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        $builder->setParameter('acme_blog.title', $config['title'] ?? null);
+    }
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Extension\Extension` and
@@ -152,6 +187,22 @@ autowiring that parameter into a non-nullable arg then fails at build. The commo
 bug is trusting `$config['optional']` to exist: without a tree default it is `null`,
 and passing that straight into `setParameter()` + `#[Autowire(param:)]` surfaces as
 a `TypeError` far from the config file.
+
+```php
+// Tree: title required, icon optional (arrives as null when omitted).
+$definition->rootNode()
+    ->children()
+        ->scalarNode('title')->isRequired()->end()          // must be present
+        ->scalarNode('icon')->defaultNull()->end()          // explicit null default
+        ->integerNode('per_page')->defaultValue(10)->end()  // always defaulted
+    ->end();
+
+// In load()/loadExtension():
+$builder->setParameter('acme_blog.title', $config['title']);       // safe: required
+$builder->setParameter('acme_blog.icon', $config['icon'] ?? null); // guard optionals
+// A null parameter fed via #[Autowire(param: 'acme_blog.icon')] into a
+// non-nullable string argument fails with a TypeError at container build.
+```
 
 !!! note "Null in real life"
     A blank optional field on the order form (omitted config key) reaches the clerk

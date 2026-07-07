@@ -57,6 +57,16 @@ compilation pipeline:
 3. **Dump** — `PhpDumper` turns the surviving definitions into PHP code and
    writes it under `var/cache/{env}/`.
 
+```php
+$builder = new ContainerBuilder(); // build-time object, never runs in prod
+// 1. extensions load() their definitions into $builder ...
+
+$builder->compile();               // 2. runs the PassConfig phases in order
+
+$dumper = new PhpDumper($builder); // 3. dump plain PHP under var/cache/{env}/
+$code = $dumper->dump();           //    generated factories use `new` inside
+```
+
 What you find there after `cache:warmup` (names vary with kernel class, env
 and a content hash, so treat these as shapes, not exact strings):
 
@@ -74,6 +84,13 @@ container file instead of per-service files) and
 `.container.dumper.inline_class_loader` (let the dumped code inline class
 loading hints). They are build-time knobs — the leading dot marks parameters
 that never reach the runtime container.
+
+```yaml
+# config/services.yaml — build-time only (the leading dot never reaches runtime)
+parameters:
+    .container.dumper.inline_factories: true     # single file, factories inlined
+    .container.dumper.inline_class_loader: true  # inline class-loading hints
+```
 
 ## Deep Dive — how it works internally
 

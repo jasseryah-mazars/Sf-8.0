@@ -154,6 +154,15 @@ elle est définie :
   qui utilise PropertyAccess). Sans `data_class`, un form composé produit un
   **array** associatif.
 
+```php
+// data_class binds the model; empty_data materialises it when input is missing
+$form = $this->createForm(RegistrationType::class); // data_class = RegistrationData::class
+$data = $form->getData(); // RegistrationData instance, never an array here
+
+// On submit, the DataMapper writes values back via PropertyAccess, roughly:
+// $accessor->setValue($data, 'username', $form->get('username')->getData());
+```
+
 ### Null behavior
 
 Juste après `createForm()` — **avant tout submit** — `getData()` retourne ce que
@@ -165,6 +174,17 @@ mappés (`'mapped' => false`, comme `plainPassword`) ne sont jamais écrits sur
 l'objet — lisez-les via `$form->get('plainPassword')->getData()`, pas via le
 modèle. Le bug classique : typer `getData()` comme votre DTO et le déréférencer sur
 un form **non lié et sans `data_class`**, et tomber sur `null`.
+
+```php
+$form = $this->createForm(FilterType::class);       // no data_class in this type
+$form->getData();  // null (or the initial array you passed)
+
+$form = $this->createForm(RegistrationType::class); // data_class is set
+$form->getData();  // fresh RegistrationData built via empty_data — never null
+
+// 'mapped' => false fields never reach the model — read them on the form:
+$plain = $form->get('plainPassword')->getData();
+```
 
 !!! note "Null in real life"
     `null` = une fiche vierge sur laquelle le greffier n'a encore rien classé — avec

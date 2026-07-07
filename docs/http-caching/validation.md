@@ -55,6 +55,17 @@ Two validators exist:
 (semantically equivalent — e.g. same content, different compression). Conditional
 GETs (`If-None-Match`) use *weak comparison*, so weak tags are fine for caching.
 
+```http
+HTTP/1.1 200 OK
+ETag: "abc"
+
+HTTP/1.1 200 OK
+ETag: W/"abc"
+
+GET /post/42 HTTP/1.1
+If-None-Match: W/"abc"
+```
+
 !!! question "Predict first"
     `Response::isNotModified($request)` returns `true`. What is now in `$response`,
     and what must you still do?
@@ -98,6 +109,15 @@ Precedence rule: if the request carries `If-None-Match`, the **ETag wins**;
 `If-Modified-Since` is only decisive when no ETag is supplied. When both are sent,
 both must agree for a 304.
 
+```php
+// Compares ETag vs If-None-Match and Last-Modified vs If-Modified-Since;
+// when both conditional headers are sent, the ETag comparison wins.
+if ($response->isNotModified($request)) {
+    // Mutated in place: status 304, body and content headers stripped
+    return $response;
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Response::isNotModified()` and
     `Response::setEtag()` —
@@ -111,6 +131,20 @@ validator, call `isNotModified()`, and `return` early on a match. The
 `#[Cache]` attribute automates exactly this: its `etag`/`lastModified`
 **expressions** are evaluated on `kernel.controller_arguments`, so a matching
 request yields a 304 **without ever entering the controller body**.
+
+```php
+// Manual: cheap validator first, heavy work only on a miss
+$response = new Response();
+$response->setLastModified($post->getUpdatedAt());   // from the entity's updatedAt
+
+if ($response->isNotModified($request)) {
+    return $response;   // 304 — rendering is skipped entirely
+}
+
+// Automated: etag/lastModified expressions run on kernel.controller_arguments
+#[Cache(etag: 'post.getContent()', lastModified: 'post.getUpdatedAt()')]
+public function show(Post $post): Response { /* not entered on a 304 */ }
+```
 
 !!! info "ETag expressions are hashed"
     `#[Cache(etag: "post.getContent()")]` does **not** send the raw value: the
@@ -127,6 +161,17 @@ They are not exclusive — the best setups use **both**:
 
 `Cache-Control: no-cache` on its own says "always revalidate" — pair it with an
 `ETag` so the revalidation is a fast 304 rather than a full re-download.
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, s-maxage=60
+ETag: "v3"
+Last-Modified: Mon, 06 Jul 2026 10:00:00 GMT
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+ETag: "v3"
+```
 
 ## Configuration & code
 

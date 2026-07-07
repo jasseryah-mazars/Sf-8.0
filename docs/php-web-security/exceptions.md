@@ -152,6 +152,22 @@ need it.
 - `register_shutdown_function()` + `error_get_last()` catches fatal errors.
 
 ```php
+error_reporting(E_ALL);                       // what gets reported
+ini_set('display_errors', '0');               // never leak errors to output
+
+set_exception_handler(static function (\Throwable $e): void {
+    error_log('Uncaught: '.$e->getMessage()); // last resort for uncaught
+});
+
+register_shutdown_function(static function (): void {
+    $err = error_get_last();                  // non-null after a fatal error
+    if ($err !== null) {
+        error_log('Fatal: '.$err['message']);
+    }
+});
+```
+
+```php
 <?php
 declare(strict_types=1);
 

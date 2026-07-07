@@ -78,6 +78,15 @@ flowchart LR
   lance une `UnsupportedUserException` ou retourne un user que le checker
   rejette, le token est abandonné (déconnexion de fait).
 
+```php
+// Login: UserProviderListener attaches the firewall's provider to a bare badge,
+// then CheckCredentialsListener resolves the user from it
+new UserBadge($identifier); // no loader → provider's loadUserByIdentifier() is used
+
+// Every stateful request: ContextListener re-syncs the session user
+$fresh = $provider->refreshUser($sessionUser); // may throw UnsupportedUserException
+```
+
 !!! note "Source reference"
     `Symfony\Component\Security\Core\User\InMemoryUserProvider` et
     `ChainUserProvider` —

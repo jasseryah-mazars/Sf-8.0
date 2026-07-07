@@ -76,6 +76,21 @@ Whichever style, the method returns an **`int` exit code**. Use the constants:
 Never `return 0;` literally — use the constants for clarity and forward
 compatibility.
 
+```php
+public function __invoke(SymfonyStyle $io): int
+{
+    if (!$this->inputLooksValid()) {
+        return Command::INVALID;   // 2: wrong usage/input
+    }
+
+    if (!$this->doWork()) {
+        return Command::FAILURE;   // 1: the command failed
+    }
+
+    return Command::SUCCESS;       // 0: never a bare "return 0;"
+}
+```
+
 !!! question "Predict first"
     You mark a plain class (it extends nothing) with `#[AsCommand]` and give it an
     `__invoke(): int` method. Will Symfony register and run it, or must it extend
@@ -94,12 +109,35 @@ compatibility.
 compile time**, so the framework knows a command's name *without instantiating the
 class* — the basis of [lazy loading](configuration.md).
 
+```php
+use Symfony\Component\Console\Attribute\AsCommand;
+
+#[AsCommand(
+    name: 'app:audit',              // known at container compile time
+    description: 'Runs the audit',  // shown by "list"
+    aliases: ['app:check'],         // alternative names
+    hidden: false,                  // set true to hide from "list"
+    help: 'Long help shown by "help app:audit".',
+)]
+final class AuditCommand { /* never instantiated just to read its name */ }
+```
+
 Registration is automatic via **autoconfiguration**: any service that extends
 `Command` **or** carries `#[AsCommand]` is tagged `console.command`. The
 `Symfony\Component\Console\DependencyInjection\AddConsoleCommandPass`
 collects those tags and builds a
 `Symfony\Component\Console\CommandLoader\ContainerCommandLoader`, mapping each name
 to its service id. The command is instantiated only when actually invoked.
+
+```yaml
+# What autoconfiguration produces behind the scenes (you never write this):
+services:
+    App\Command\AuditCommand:
+        tags:
+            - { name: console.command, command: 'app:audit' }
+# AddConsoleCommandPass collects these tags and builds a ContainerCommandLoader
+# mapping 'app:audit' -> service id; instantiation happens only on invocation
+```
 
 For **invokable** commands, an internal adapter
 (`Symfony\Component\Console\Command\Command` wrapping the invokable via
@@ -109,6 +147,19 @@ For **invokable** commands, an internal adapter
 - `#[Argument]` parameters become `InputArgument`s (required if no default).
 - `#[Option]` parameters become `InputOption`s (a `bool` becomes a `VALUE_NONE`
   flag; an array becomes `VALUE_IS_ARRAY`).
+
+```php
+public function __invoke(
+    InputInterface $input,            // injected by type
+    OutputInterface $output,          // injected by type
+    SymfonyStyle $io,                 // injected by type
+    #[Argument] string $username,     // InputArgument, required (no default)
+    #[Option] bool $force = false,    // InputOption VALUE_NONE flag
+    #[Option] array $tags = [],       // InputOption VALUE_IS_ARRAY
+): int {
+    return Command::SUCCESS;
+}
+```
 
 ```mermaid
 flowchart LR
@@ -123,6 +174,12 @@ Once instantiated, the **run-time order** is driven by `Command::run()`. The ful
 lifecycle (with the overridable hooks) is detailed in
 [Configuration](configuration.md); here is the compact call order, showing that
 `configure()` has already run once in the constructor:
+
+```php
+// Runtime order driven by Command::run() (configure() already ran in the constructor)
+$exitCode = $command->run($input, $output);
+// -> initialize() -> interact() if interactive -> input->validate() -> execute()
+```
 
 ```mermaid
 sequenceDiagram

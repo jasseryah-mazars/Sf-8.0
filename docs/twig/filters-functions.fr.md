@@ -35,6 +35,13 @@ filtres s'enchaînent de gauche à droite : `{{ name|lower|capitalize }}`. Une
 **fonction** s'appelle par son nom et retourne une valeur : `{{ max(a, b) }}`,
 `{{ path('home') }}`.
 
+```twig
+{{ price|round(2) }}         {# filter: value|filter(args) #}
+{{ name|lower|capitalize }}  {# filters chain left to right #}
+{{ max(a, b) }}              {# function: called by name #}
+{{ path('home') }}           {# function generating a route URL #}
+```
+
 **Filtres** intégrés courants :
 
 | Filtre | Rôle |

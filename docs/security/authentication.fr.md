@@ -53,6 +53,13 @@ contient le `UserInterface`, le nom du firewall et les rôles. Une fois qu'il
 est dans le `TokenStorageInterface`, l'utilisateur est « connecté » pour cette
 request.
 
+```php
+// TokenStorageInterface holds the authenticated TokenInterface
+$token = $tokenStorage->getToken();     // ?TokenInterface
+$user  = $token?->getUser();            // ?UserInterface
+$roles = $token?->getRoleNames() ?? []; // roles carried by the token, e.g. ['ROLE_USER']
+```
+
 !!! question "Predict first"
     Une request atteint un firewall `lazy`, mais le controller ne lit jamais
     l'utilisateur. L'authenticator s'exécute-t-il réellement ?
@@ -116,6 +123,30 @@ sequenceDiagram
    `LoginFailureEvent` se déclenche et `onAuthenticationFailure()` peut
    retourner une `Response`.
 
+```php
+// 1. supports(): true / false / null ("maybe, authenticate lazily")
+public function supports(Request $request): ?bool
+{
+    return $request->isMethod('POST') && $request->getPathInfo() === '/login';
+}
+
+// 2. authenticate(): build the Passport — badges are verified on CheckPassportEvent
+public function authenticate(Request $request): Passport
+{
+    return new Passport(
+        new UserBadge($request->request->getString('_username')),            // UserProviderListener
+        new PasswordCredentials($request->request->getString('_password')),  // CheckCredentialsListener
+        [new CsrfTokenBadge('authenticate', $request->request->getString('_csrf_token'))], // CsrfProtectionListener
+    );
+}
+
+// 4. createToken(): produce the TokenInterface stored in the TokenStorageInterface
+public function createToken(Passport $passport, string $firewallName): TokenInterface
+{
+    return new PostAuthenticationToken($passport->getUser(), $firewallName, $passport->getUser()->getRoles());
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\Security\Http\Authentication\AuthenticatorManager::authenticate()`
     — [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php).
@@ -132,6 +163,19 @@ sequenceDiagram
   écrite**, le token ne vit que le temps de la request courante, et chaque
   request doit se ré-authentifier (par exemple via un authenticator
   access-token). Le `ContextListener` n'est pas enregistré.
+
+```yaml
+security:
+    firewalls:
+        main:
+            provider: app_users   # stateful: ContextListener stores the token in the
+            form_login: ~         # session, then refreshUser() reloads the UserInterface
+        api:
+            pattern: ^/api
+            stateless: true       # no ContextListener → no session token, re-auth each request
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
+```
 
 ### Entry points
 

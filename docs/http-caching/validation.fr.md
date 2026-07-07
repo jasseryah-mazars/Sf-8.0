@@ -60,6 +60,17 @@ Deux validateurs existent :
 différente). Les GET conditionnels (`If-None-Match`) utilisent la *comparaison
 faible*, donc les weak ETags conviennent parfaitement au cache.
 
+```http
+HTTP/1.1 200 OK
+ETag: "abc"
+
+HTTP/1.1 200 OK
+ETag: W/"abc"
+
+GET /post/42 HTTP/1.1
+If-None-Match: W/"abc"
+```
+
 !!! question "Predict first"
     `Response::isNotModified($request)` retourne `true`. Que contient désormais
     `$response`, et que devez-vous encore faire ?
@@ -103,6 +114,15 @@ puissiez la retourner en toute sécurité.
 Règle de priorité : si la request transporte `If-None-Match`, **l'ETag
 l'emporte** ; `If-Modified-Since` n'est décisif qu'en l'absence d'ETag. Quand les
 deux sont envoyés, les deux doivent concorder pour obtenir un 304.
+
+```php
+// Compares ETag vs If-None-Match and Last-Modified vs If-Modified-Since;
+// when both conditional headers are sent, the ETag comparison wins.
+if ($response->isNotModified($request)) {
+    // Mutated in place: status 304, body and content headers stripped
+    return $response;
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Response::isNotModified()` et

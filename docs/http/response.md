@@ -129,6 +129,15 @@ $response->headers->getCookies();             // Cookie[]
 none, it becomes `no-cache, private`; setting `max-age`/`public` adjusts it. This
 is why the *default* response is not cacheable by shared caches.
 
+```php
+$response = new Response('hi');
+$response->headers->get('Cache-Control'); // "no-cache, private" — computed default
+
+$response->setPublic();
+$response->setMaxAge(3600);
+$response->headers->get('Cache-Control'); // "max-age=3600, public"
+```
+
 ### `prepare()` and `send()` — the lifecycle
 
 ```mermaid
@@ -149,12 +158,43 @@ sequenceDiagram
   `sendContent()` (echoes the body). `StreamedResponse::sendContent()` invokes the
   callback so nothing is buffered in memory.
 
+```php
+// What the kernel runs at the end of every request:
+$response->prepare($request); // HEAD/204/304 -> body stripped; charset,
+                              // Content-Type and Content-Length fixed
+$response->send();            // sendHeaders() first, then sendContent()
+
+// StreamedResponse overrides sendContent() to invoke your callback
+(new StreamedResponse(fn () => print('chunk')))->send();
+```
+
 ### Response-building helpers
 
 `setStatusCode(int $code, ?string $text = null)`, `setContent()`,
 `setCharset('UTF-8')`, and the caching setters `setPublic()`, `setPrivate()`,
 `setMaxAge()`, `setSharedMaxAge()`, `setEtag()`, `setLastModified()`,
 `isNotModified(Request)`, `setCache([...])` — see [Caching Overview](caching.md).
+
+```php
+$response->setStatusCode(Response::HTTP_OK);
+$response->setContent('<p>cached page</p>');
+$response->setCharset('UTF-8');
+
+$response->setPrivate();          // one user only
+$response->setPublic();           // shared caches may store it
+$response->setMaxAge(60);         // browser TTL (seconds)
+$response->setSharedMaxAge(3600); // proxy/CDN TTL — implies public
+$response->setEtag('v1');         // validator: ETag
+$response->setLastModified(new \DateTimeImmutable('2026-01-01')); // validator: date
+
+// Same, in one call
+$response->setCache(['public' => true, 'max_age' => 60, 's_maxage' => 3600]);
+
+// True when the client cache is still fresh — body stripped, 304 sent
+if ($response->isNotModified($request)) {
+    return $response;
+}
+```
 
 ### Streaming vs buffering (memory)
 

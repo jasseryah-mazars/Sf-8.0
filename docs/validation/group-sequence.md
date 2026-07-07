@@ -170,6 +170,17 @@ class Account implements GroupSequenceProviderInterface
 object. It runs each time the object is validated, so the sequence adapts to
 state.
 
+```php
+public function getGroupSequence(): array|Assert\GroupSequence
+{
+    // either a plain array of group names...
+    // return ['Account', 'Premium'];
+
+    // ...or a GroupSequence object — re-evaluated on every validation
+    return new Assert\GroupSequence(['Account', 'Premium']);
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\Validator\Constraints\GroupSequence` and
     `GroupSequenceProviderInterface` —

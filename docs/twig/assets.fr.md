@@ -115,6 +115,14 @@ flowchart LR
 - L'URL générée est sûre selon le contexte ; combinée à l'URL de base de la
   request, elle fonctionne dans les déploiements en sous-répertoire.
 
+```twig
+{# manifest strategy: the logical name is looked up in manifest.json #}
+{{ asset('build/app.css') }}   {# -> /build/app.7f3c.css (cache busting) #}
+
+{# named package: same call, served from a CDN base URL #}
+{{ asset('logo.png', 'cdn') }} {# -> https://cdn.example.com/logo.png #}
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\AssetExtension`,
     `Symfony\Component\Asset\Packages`,

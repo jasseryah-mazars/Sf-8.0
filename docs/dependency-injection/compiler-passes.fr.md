@@ -150,6 +150,22 @@ cible manquante se résolve en `null` à l'exécution au lieu de lever une excep
 Le bug classique est de sauter la garde `has()` et de laisser le pass exploser dès
 que le service cible n'est pas enregistré.
 
+```php
+// findDefinition()/getDefinition() throw ServiceNotFoundException — guard first
+if (!$container->hasDefinition('app.registry')) { // or has() for aliases too
+    return;
+}
+$registry = $container->getDefinition('app.registry');
+
+// Empty array (never null) when nothing carries the tag — plain foreach is safe
+foreach ($container->findTaggedServiceIds('app.handler') as $id => $tags) {
+    // Optional collaborator: a missing target resolves to null at runtime
+    $registry->addMethodCall('add', [
+        new Reference($id, ContainerInterface::NULL_ON_INVALID_REFERENCE),
+    ]);
+}
+```
+
 !!! note "Null in real life"
     Attraper une fiche recette qui n'est pas sur le tableau lève une exception
     (un get sans garde) ; vérifier le tableau d'abord (`has()`) et hausser les

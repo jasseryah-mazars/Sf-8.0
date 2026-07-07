@@ -262,6 +262,22 @@ Récupérer un service privé (ou supprimé) par id lève une
 `ServiceNotFoundException`. C'est pourquoi les controllers utilisent l'autowiring
 ou la `ServiceSubscriberInterface`, et non `$container->get()`.
 
+```php
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
+// Private (or removed) id: $container->get() throws ServiceNotFoundException
+$container->get(App\Invoice\InvoiceGenerator::class); // ServiceNotFoundException!
+
+// Sanctioned alternative: declare the needed services explicitly
+final class InvoiceController implements ServiceSubscriberInterface
+{
+    public static function getSubscribedServices(): array
+    {
+        return ['generator' => App\Invoice\InvoiceGenerator::class];
+    }
+}
+```
+
 ### Null behavior
 
 `ContainerInterface::get($id, $invalidBehavior)` décide de ce que fait un id
@@ -275,6 +291,23 @@ dépendance injectée comme nullable (`?LoggerInterface $logger = null`) pour qu
 reference résolue à `null` soit légale. Le bug classique : laisser remonter une
 `ServiceNotFoundException` parce que vous supposiez qu'un service optionnel était
 toujours présent.
+
+```php
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+// EXCEPTION_ON_INVALID_REFERENCE (default): missing id → ServiceNotFoundException
+$container->get('app.reporter');
+
+// NULL_ON_INVALID_REFERENCE: missing id → null (optional dependency)
+$reporter = $container->get('app.reporter', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+
+// Guard with has() before get()…
+$reporter = $container->has('app.reporter') ? $container->get('app.reporter') : null;
+
+// …or make the injected dependency nullable
+public function __construct(private ?LoggerInterface $logger = null) {}
+```
 
 !!! note "Null in real life"
     Un id de service manquant, c'est le serveur qui annonce « nous n'en avons plus

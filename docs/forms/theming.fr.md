@@ -39,10 +39,30 @@ Bootstrap/Tailwind ne fournissent que le markup (aucun CSS/JS livré ; ce n'est 
 le rôle du composant Form, et les frameworks CSS sortent par ailleurs du cadre de
 ce chapitre).
 
+```twig
+{# A theme is a set of Twig {% block %}s; the default one is form_div_layout.html.twig #}
+{% use 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+    <div class="field-row">
+        {{ form_label(form) }}
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+```
+
 Vous appliquez un thème :
 
 - **Par template** avec `{% form_theme form 'theme.html.twig' %}`.
 - **Globalement** via `twig.form_themes` dans `config/packages/twig.yaml`.
+
+```yaml
+# config/packages/twig.yaml — global themes via twig.form_themes
+# (per template instead: {% form_theme form 'theme.html.twig' %} in the Twig file)
+twig:
+    form_themes:
+        - 'form/fields.html.twig'
+```
 
 !!! question "Predict first"
     Un champ a le block prefix `rating` (parent `integer`). Vous définissez une
@@ -79,6 +99,17 @@ form_widget
 Le premier bloc qui existe l'emporte. C'est ce qui vous permet de surcharger un
 seul champ (`_registration_email_widget`), tous les champs email
 (`email_widget`) ou tous les widgets (`form_widget`).
+
+```twig
+{# One field of one form (most specific) #}
+{% block _registration_email_widget %}{{ block('form_widget_simple') }}{% endblock %}
+
+{# Every EmailType field #}
+{% block email_widget %}{{ block('form_widget_simple') }}{% endblock %}
+
+{# Every widget of every form (least specific) #}
+{% block form_widget %}{{ block('form_widget_simple') }}{% endblock %}
+```
 
 ```mermaid
 flowchart TD

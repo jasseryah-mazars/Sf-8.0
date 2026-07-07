@@ -238,6 +238,13 @@ though, receives `null` as-is — if your callable is typed `string $s` it will
 the value can be missing, and pair it with `|default` at the call site:
 `{{ bio|default('')|excerpt }}`.
 
+```twig
+{{ null|length }}              {# 0 — most built-ins tolerate null #}
+{{ null|json_encode }}         {# prints the JSON literal null #}
+{# a custom filter typed `string $s` would TypeError on null: #}
+{{ bio|default('')|excerpt }}  {# guard with |default (or type the param ?string) #}
+```
+
 !!! note "Null in real life"
     `|default` is the "N/A" stamp a clerk puts on any form field left blank, so the
     rest of the paperwork never stalls on a missing entry.
