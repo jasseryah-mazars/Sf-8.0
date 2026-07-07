@@ -150,6 +150,24 @@ method with an emptiness check before any real conversion — exactly what the
 running the parser on an empty string and raising a spurious
 `TransformationFailedException` on an otherwise **optional** field.
 
+```php
+public function transform(mixed $value): string
+{
+    if (null === $value) {
+        return '';   // display: empty widget — never return null here
+    }
+    // ... real conversion (as MinutesToClockTransformer does) ...
+}
+
+public function reverseTransform(mixed $value): ?int
+{
+    if ('' === $value || null === $value) {
+        return null; // submit: optional field — no TransformationFailedException
+    }
+    // ... parse only when non-empty ...
+}
+```
+
 !!! note "Null in real life"
     `null`/`''` = an empty slip at the exchange booth — hand back an empty receipt,
     don't try to convert zero currency and stamp it "invalid".

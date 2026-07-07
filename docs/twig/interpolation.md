@@ -69,13 +69,34 @@ embedded expression that the lexer tokenises and the parser compiles into a
 concatenation. It works **only** in double quotes — single-quoted strings are
 literal, so `'#{x}'` prints the raw text.
 
+```twig
+{% set who = 'Ada' %}
+{{ "Hi #{who}" }}       {# lexer opens an expression at #{ → Hi Ada #}
+{{ "Hi #{1 + 1}" }}     {# compiled into a concatenation → Hi 2 #}
+{{ 'Hi #{who}' }}       {# single quotes are literal → Hi #{who} #}
+```
+
 `~` compiles to PHP string concatenation (`.`) after casting each operand to
 string, which is why `1 ~ 1` is `"11"` while `1 + 1` is `2`. `~` sits *below*
 arithmetic in precedence (see [Syntax](syntax.md)), so `1 + 1 ~ "x"` is `"2x"`.
 
+```twig
+{# operands are cast to string, like PHP's "." operator #}
+{{ 1 ~ 1 }}         {# "11" #}
+{{ 1 + 1 }}         {# 2 — arithmetic #}
+{{ 1 + 1 ~ 'x' }}   {# ~ binds below +: (1 + 1) ~ 'x' → "2x" #}
+```
+
 `format` and its cousin **`replace`** live in `Twig\Extension\CoreExtension`.
 `format` calls PHP `vsprintf` under the hood; `replace` does keyed substitution:
 `{{ "%name%"|replace({ '%name%': n }) }}`.
+
+```twig
+{# both filters are registered by Twig\Extension\CoreExtension #}
+{{ "%s has %d points"|format(user, points) }}      {# format → PHP vsprintf #}
+{{ "Price: %.2f"|format(9.5) }}                    {# Price: 9.50 #}
+{{ "Hello %name%"|replace({ '%name%': name }) }}   {# replace → keyed substitution #}
+```
 
 ```mermaid
 flowchart LR

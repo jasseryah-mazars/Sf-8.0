@@ -41,6 +41,22 @@ chain.
 The common root is `Symfony\Component\Form\Extension\Core\Type\FormType`, and the
 common *field* base is `TextType` for scalar inputs.
 
+```php
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType; // built-in
+use Symfony\Component\Form\Extension\Core\Type\FormType;   // common root
+use Symfony\Component\Form\Extension\Core\Type\TextType;   // scalar field base
+
+// A custom type extends AbstractType and inherits behaviour via getParent()
+final class VatNumberType extends AbstractType
+{
+    public function getParent(): string
+    {
+        return TextType::class; // an FQCN string, never an instance
+    }
+}
+```
+
 !!! question "Predict first"
     Your custom type's `getParent()` returns `TextType::class`. In what order do the
     parent's and child's `configureOptions`/`buildForm` run — and what does
@@ -68,6 +84,15 @@ flowchart TD
 built-in type to inherit its `buildForm`, `buildView`, transformers and options —
 you write only the delta.
 
+```php
+public function getParent(): string
+{
+    return TextType::class; // default is FormType::class
+}
+// Inherits TextType's buildForm(), buildView(), transformers and
+// options — this type only writes the delta on top.
+```
+
 ### `ResolvedFormType` — how a type is "resolved"
 
 A raw type is not usable alone. The `Symfony\Component\Form\FormRegistry` wraps
@@ -81,6 +106,17 @@ When building a form, the resolved type invokes, **parent → child**:
 `configureOptions` (merged into one `OptionsResolver`), then `buildForm`,
 then on view creation `buildView` and `finishView`. Each type extension's hooks
 run **after** the type's own at each level.
+
+```php
+// The FormRegistry wraps the raw type into a ResolvedFormType
+$resolved = $registry->getType(VatNumberType::class);
+
+// Build order, parent → child (type extensions after the type, each level):
+// 1. configureOptions() — merged into one OptionsResolver
+// 2. buildForm()        — fields, listeners
+// 3. buildView() then finishView() — when the view is created
+$builder = $resolved->createBuilder($factory, 'vat');
+```
 
 !!! note "Source reference"
     `ResolvedFormType::buildForm()` and `FormRegistry::resolveType()` —
@@ -96,6 +132,19 @@ run **after** the type's own at each level.
 - `setNormalizer('opt', fn ($opts, $value) => ...)` — derive one option from
   others;
 - `setDeprecated(...)` — mark an option deprecated.
+
+```php
+public function configureOptions(OptionsResolver $resolver): void
+{
+    $resolver->setDefaults(['multiple' => false]);             // default values
+    $resolver->setRequired(['choices']);                       // caller must pass
+    $resolver->setAllowedTypes('multiple', 'bool');            // type validation
+    $resolver->setAllowedValues('mode', ['strict', 'loose']);  // value validation
+    $resolver->setNormalizer('expanded',                       // derive from others
+        static fn (Options $o, bool $v): bool => $o['multiple'] ? true : $v);
+    $resolver->setDeprecated('legacy', 'app/forms', '2.0');    // deprecated option
+}
+```
 
 Because parent `configureOptions` runs first, a child can *override* a parent
 default and reference the parent's option in a normalizer.

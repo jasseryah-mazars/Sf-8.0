@@ -60,6 +60,13 @@ adossée à `Twig\Runtime\EscaperRuntime` (la logique de `twig_escape_filter`). 
 moteur ajoute un `|escape(strategy)` implicite à chaque `{{ }}` sauf si le nœud
 est déjà marqué *safe*.
 
+```php
+// EscaperExtension rewrites {{ value }} into {{ value|escape(strategy) }} at compile time.
+// The encoding itself runs in EscaperRuntime (the former twig_escape_filter logic):
+$escaped = $twig->getRuntime(\Twig\Runtime\EscaperRuntime::class)
+    ->escape('<b>hi</b>', 'html');  // &lt;b&gt;hi&lt;/b&gt;
+```
+
 La **stratégie** est décidée par le TwigBundle de Symfony : il configure
 l'environnement avec une stratégie sous forme de callable —
 `Twig\FileExtensionEscapingStrategy::guess()` — qui associe l'extension du nom du
@@ -93,6 +100,20 @@ flowchart LR
   sûr pour les attributs, `js` → encodage hexadécimal `\xNN`, `css` → encodage
   hexadécimal CSS, `url` → `rawurlencode`.
 
+```twig
+{# three ways a value counts as safe #}
+{{ trusted|raw }}                                       {# 1. |raw #}
+{% autoescape false %}{{ trusted }}{% endautoescape %}  {# 2. autoescape off #}
+{# 3. output of a filter/function declared is_safe: ['html'] #}
+
+{# each strategy maps to a real PHP escaper #}
+{{ v|e('html') }}       {# htmlspecialchars with ENT_QUOTES|ENT_SUBSTITUTE #}
+{{ v|e('html_attr') }}  {# attribute-safe escaper #}
+{{ v|e('js') }}         {# \xNN hex encoding #}
+{{ v|e('css') }}        {# CSS hex encoding #}
+{{ v|e('url') }}        {# rawurlencode #}
+```
+
 !!! note "Source reference"
     `Twig\Extension\EscaperExtension`, `Twig\Runtime\EscaperRuntime`,
     `Twig\FileExtensionEscapingStrategy` —
@@ -107,6 +128,15 @@ exige à chaque fois son propre encodage. Utiliser la mauvaise stratégie est un
 vrai vecteur XSS. Voir
 [Web Security Fundamentals](../php-web-security/web-security.md) pour le modèle
 d'attaque.
+
+```twig
+{# WRONG — HTML escaping inside a <script> block is still exploitable #}
+<script>const q = "{{ query|e('html') }}";</script>
+{# RIGHT — match the escaper to the context #}
+<script>const q = "{{ query|e('js') }}";</script>
+<div style="color: {{ color|e('css') }}"></div>
+<a href="/search?q={{ query|e('url') }}">search</a>
+```
 
 ### Null behavior
 

@@ -47,6 +47,14 @@ commande via le **`HelperSet`**. Ceux qui comptent pour l'examen :
 `SymfonyStyle` enveloppe la plupart d'entre eux, mais vous pouvez les utiliser
 directement pour un contrôle plus fin.
 
+```php
+// SymfonyStyle wraps the widgets from the HelperSet behind one styled API
+$name = $io->ask('Name?');                  // QuestionHelper under the hood
+$io->progressStart(10);                     // ProgressBar under the hood
+$io->progressFinish();
+$io->table(['Id'], [[1], [2]]);             // Table under the hood
+```
+
 !!! question "Predict first"
     Dans un `Command::execute()` classique, comment obtenez-vous le
     `QuestionHelper` pour interroger l'utilisateur — et d'où vient-il ?

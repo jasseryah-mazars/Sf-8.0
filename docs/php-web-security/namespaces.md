@@ -37,6 +37,16 @@ name collisions. PHP resolves names using rules that depend on whether a name is
 qualified** (`\App\Service\Mailer`). **Autoloading** turns a class name into a
 file path so you never write `require`.
 
+```php
+namespace App\Controller;
+
+use App\Service\Mailer;      // import once at the top
+
+new \App\Service\Mailer();   // fully qualified — absolute from the root
+new Service\Mailer();        // qualified — App\Controller\Service\Mailer !
+new Mailer();                // unqualified — resolved via the use import
+```
+
 | Form | Example | Resolution |
 |---|---|---|
 | Fully qualified | `\App\Foo` | Absolute, from global root |

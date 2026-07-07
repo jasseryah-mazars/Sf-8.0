@@ -44,6 +44,14 @@ Helpers are reusable UI utilities available to every command through the
 
 `SymfonyStyle` wraps most of these, but you can use them directly for finer control.
 
+```php
+// SymfonyStyle wraps the widgets from the HelperSet behind one styled API
+$name = $io->ask('Name?');                  // QuestionHelper under the hood
+$io->progressStart(10);                     // ProgressBar under the hood
+$io->progressFinish();
+$io->table(['Id'], [[1], [2]]);             // Table under the hood
+```
+
 !!! question "Predict first"
     Inside a classic `Command::execute()`, how do you get hold of the
     `QuestionHelper` to prompt the user — and where does it come from?
@@ -61,6 +69,15 @@ A classic `Command` gets its helpers from
 `Symfony\Component\Console\Helper\QuestionHelper`. The set is keyed by helper name
 (`question`, `formatter`, `process`, `debug_formatter`).
 
+```php
+// Inside a classic Command::execute(): fetch a helper by its string name
+/** @var QuestionHelper $helper */
+$helper = $this->getHelper('question');      // resolved from the HelperSet
+
+// Other registered names: 'formatter', 'process', 'debug_formatter'
+$formatter = $this->getHelper('formatter');
+```
+
 `QuestionHelper::ask(InputInterface, OutputInterface, Question)` reads from STDIN. It
 accepts:
 
@@ -72,10 +89,31 @@ accepts:
 
 Hidden input (`setHidden(true)`) stops the terminal echoing — for passwords.
 
+```php
+$q1 = new Question('Project name?', 'demo');            // free text with a default
+$q2 = new ConfirmationQuestion('Continue?', true);      // yes/no
+$q3 = new ChoiceQuestion('Env?', ['dev', 'prod'], 0);   // pick from a list
+
+$secret = new Question('API token?');
+$secret->setHidden(true);                               // no terminal echo (passwords)
+
+// QuestionHelper::ask(InputInterface, OutputInterface, Question) reads STDIN
+$name = $helper->ask($input, $output, $q1);
+```
+
 `Symfony\Component\Console\Helper\ProgressBar` tracks a step count; call
 `start($max)`, `advance()`, `setProgress($n)`, `finish()`. It redraws in place and
 can be redraw-throttled (`setRedrawFrequency()`), important for millions of tiny
 steps to avoid I/O overhead.
+
+```php
+$bar = new ProgressBar($output);
+$bar->setRedrawFrequency(100);   // redraw every 100 steps only (I/O throttle)
+$bar->start(1_000_000);          // start($max): begin tracking the step count
+$bar->advance();                 // +1 step
+$bar->setProgress(500_000);      // jump to an absolute step
+$bar->finish();                  // complete and render the final state
+```
 
 `Symfony\Component\Console\Cursor` issues ANSI escapes to move, hide/show, or clear
 lines — the primitive behind live-updating output.

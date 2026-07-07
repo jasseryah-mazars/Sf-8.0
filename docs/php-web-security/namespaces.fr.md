@@ -40,6 +40,16 @@ forme du nom : **non qualifié** (`Mailer`), **qualifié** (`Service\Mailer`) ou
 **pleinement qualifié** (`\App\Service\Mailer`). L'**autoloading** transforme un
 nom de classe en chemin de fichier, si bien que vous n'écrivez jamais `require`.
 
+```php
+namespace App\Controller;
+
+use App\Service\Mailer;      // import once at the top
+
+new \App\Service\Mailer();   // fully qualified — absolute from the root
+new Service\Mailer();        // qualified — App\Controller\Service\Mailer !
+new Mailer();                // unqualified — resolved via the use import
+```
+
 | Forme | Exemple | Résolution |
 |---|---|---|
 | Pleinement qualifié | `\App\Foo` | Absolue, depuis la racine globale |

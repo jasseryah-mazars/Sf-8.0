@@ -111,6 +111,15 @@ flowchart LR
   est sûr (il limite la profondeur) mais peut être gourmand en mémoire sur de
   très grosses structures.
 
+```twig
+{# dev (kernel.debug = true): both forms are available #}
+{{ dump(user) }}
+{{ dump() }}   {# no args: the whole context, variables + globals #}
+
+{# prod: DumpExtension is not registered — this template fails
+   to compile with: Unknown "dump" function #}
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\DumpExtension`,
     `Symfony\Component\VarDumper\Cloner\VarCloner` —

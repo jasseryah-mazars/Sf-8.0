@@ -126,6 +126,19 @@ section per request). In the framework, autowire
 `Symfony\Component\Stopwatch\Stopwatch` (the `debug.stopwatch` service; only
 present in debug).
 
+```php
+use Symfony\Component\Stopwatch\Stopwatch;
+
+$stopwatch = new Stopwatch(); // framework: autowire Stopwatch (debug.stopwatch)
+
+$event = $stopwatch->start('import', 'business'); // returns a StopwatchEvent
+// ... code to measure ...
+$stopwatch->stop('import'); // closes the last StopwatchPeriod
+
+$event->getDuration(); // sum of all periods, in milliseconds
+$event->getMemory();   // memory usage, in bytes
+```
+
 ## Configuration & code
 
 === "PHP Attributes"

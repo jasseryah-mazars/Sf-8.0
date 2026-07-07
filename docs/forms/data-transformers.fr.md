@@ -37,12 +37,27 @@ convertissent entre formes adjacentes. C'est le mécanisme qui permet à un mod�
 `\DateTimeImmutable` de devenir la chaîne `"2026-07-06"` dans le navigateur, et
 inversement.
 
+```php
+// transform(): model -> view, runs on display
+$view = $transformer->transform(new \DateTimeImmutable('2026-07-06')); // "2026-07-06"
+
+// reverseTransform(): view -> model, runs on submit
+$model = $transformer->reverseTransform('2026-07-06'); // \DateTimeImmutable object
+```
+
 Deux emplacements de transformer par champ :
 
 | Emplacement | Convertit | Ajouté avec |
 |---|---|---|
 | **Model transformer** | model ↔ norm | `addModelTransformer()` |
 | **View transformer** | norm ↔ view | `addViewTransformer()` |
+
+```php
+// Two slots, two adders — on the field's builder
+$builder->get('issuedAt')
+    ->addModelTransformer($modelToNorm)   // model <-> norm
+    ->addViewTransformer($normToView);    // norm <-> view
+```
 
 !!! question "Predict first"
     Un champ convertit un modèle `DateTimeImmutable` en chaîne `"2026-07-06"` dans le
@@ -94,6 +109,15 @@ compte :
   (`transform`), model→view.
 - À la **soumission**, ils s'exécutent dans l'ordre inverse (`reverseTransform`),
   view→model.
+
+```php
+// IntegerType registers one view transformer; DateType registers both kinds.
+$builder->addViewTransformer($first);   // added first
+$builder->addViewTransformer($second);  // added second
+
+// Display: $first->transform() then $second->transform()            (order added)
+// Submit:  $second->reverseTransform() then $first->reverseTransform() (reverse)
+```
 
 !!! note "Source reference"
     `Symfony\Component\Form\Form::modelToNorm()/normToView()` et leurs inverses —

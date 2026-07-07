@@ -38,6 +38,17 @@ variable ; `dd()` (« dump and die ») dumpe puis appelle `exit`. Le composant
 Stopwatch mesure le temps écoulé et la mémoire pour des **events** nommés, et
 alimente la timeline du profiler.
 
+```php
+$user = $repository->find(42);
+
+// var_dump() alternative: styled, structured, profiler-aware
+dump($user);      // records the variable, execution continues
+dump($user, $id); // several values at once
+
+dd($user); // "dump and die": dumps, then exits
+// this line is never reached
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -65,6 +76,18 @@ alimente la timeline du profiler.
    `CliDumper` (terminal ANSI) ou `HtmlDumper` (navigateur/toolbar). Le dumper
    choisi est déterminé par la SAPI / le contexte.
 
+```php
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+
+$cloner = new VarCloner();         // step 1: capture
+$data = $cloner->cloneVar($order); // immutable, depth-limited Data snapshot
+
+(new CliDumper())->dump($data);    // step 2: render for the terminal...
+(new HtmlDumper())->dump($data);   // ...or for the browser/toolbar
+```
+
 ```mermaid
 flowchart LR
     V[variable] --> C[VarCloner]
@@ -89,6 +112,13 @@ profiler, même lorsque la sortie corromprait autrement une réponse JSON.
 debug) enregistre l'ErrorHandler et le DebugClassLoader (qui signale l'usage de
 classes dépréciées ou avec une casse incorrecte). Voir
 [Error Handling](error-handling.md).
+
+```php
+use Symfony\Component\ErrorHandler\Debug;
+
+// Called for you by the Runtime when APP_DEBUG=1:
+Debug::enable(); // registers ErrorHandler + DebugClassLoader (deprecations, case checks)
+```
 
 ### Stopwatch
 

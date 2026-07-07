@@ -50,6 +50,13 @@ Trois façons de construire une chaîne à partir de morceaux :
 - **`~`** joint des valeurs comme des chaînes (les nombres sont convertis en chaîne).
 - **`format`** applique les placeholders `sprintf` (`%s`, `%d`, `%.2f`, `%1$s`).
 
+```twig
+{# the three tools side by side #}
+{{ "user #{name} (#{count})" }}             {# #{...}: any expression, double quotes only #}
+{{ 'user ' ~ name ~ ' (' ~ count ~ ')' }}   {# ~ casts values to string and joins them #}
+{{ '%s: %d items, %.2f kg (%1$s)'|format(name, count, weight) }}  {# %1$s reuses arg 1 #}
+```
+
 !!! question "Predict first"
     Que produit `{{ 1 + 2 ~ 3 }}` — `6`, `"123"` ou `"33"` ?
 

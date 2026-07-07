@@ -97,6 +97,23 @@ public function __construct(
   (commonly `getDefaultName()`/`getDefaultIndexName()`), or a
   `#[AsTaggedItem(index: '...', priority: N)]` attribute on the class.
 
+```php
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+
+// index + priority in one attribute (higher priority = earlier in iterator):
+#[AsTaggedItem(index: 'email', priority: 10)]
+final class EmailHandler implements HandlerInterface
+{
+    // Alternative index source, named by default_index_method — e.g.
+    // !tagged_locator { tag: app.handler, index_by: key,
+    //                   default_index_method: getDefaultName }
+    public static function getDefaultName(): string   // or getDefaultIndexName()
+    {
+        return 'email';
+    }
+}
+```
+
 ```mermaid
 flowchart TD
     S1["Handler A #[AutoconfigureTag]"] --> COL["collector<br/>(PriorityTaggedServiceTrait)"]
@@ -114,6 +131,19 @@ tag — you never tag manually. In `Kernel` or a bundle you register the mapping
 or put `#[AutoconfigureTag('app.handler')]` on the interface. Then any class
 implementing it is tagged automatically.
 
+```php
+// Option 1 — in Kernel::build() (or a bundle build method):
+protected function build(ContainerBuilder $container): void
+{
+    $container->registerForAutoconfiguration(HandlerInterface::class)
+        ->addTag('app.handler');
+}
+
+// Option 2 — directly on the interface (needs autoconfigure: true):
+#[AutoconfigureTag('app.handler')]
+interface HandlerInterface {}
+```
+
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait` &
     the `TaggedIteratorArgument` value object —
@@ -130,6 +160,20 @@ itself an error worth reporting. A `tagged_locator` behaves like any locator:
 resolves the *same* key for two services, the later one silently wins — a "my
 handler vanished" surprise that looks like a null but is an overwrite. The common
 bug is expecting an empty collection to be `null` and calling a method on it.
+
+```php
+// Empty tag -> empty iterable, never null:
+$n = iterator_count($this->handlers);   // 0 — or count() on a materialised array
+if (0 === $n) { /* report "no handlers" only if that is an error */ }
+
+// tagged_locator = regular locator semantics:
+if ($this->locator->has($key)) {        // guard dynamic keys with has()
+    $handler = $this->locator->get($key);
+} // else: get($key) would throw ServiceNotFoundException
+
+// If index_by / default_index_method yields the SAME key twice,
+// the later service silently overwrites the earlier one.
+```
 
 !!! note "Null in real life"
     An empty brunch tray (no cards stickered) is still a tray you can carry — it

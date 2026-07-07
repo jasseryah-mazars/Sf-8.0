@@ -271,6 +271,11 @@ framework:
 through the bus (with `ReceivedStamp`) → ack on success / reject on failure**.
 Events dispatched around each step:
 
+```console
+# Starts a Worker: receive → dispatch (with ReceivedStamp) → ack/reject loop
+$ php bin/console messenger:consume async -vv --time-limit=3600
+```
+
 ```mermaid
 sequenceDiagram
     participant W as Worker
@@ -296,6 +301,21 @@ Worker events (namespace `Symfony\Component\Messenger\Event\`):
 `WorkerMessageFailedEvent`, `WorkerRunningEvent`, `WorkerStoppedEvent`,
 `WorkerRateLimitedEvent`.
 
+```php
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
+
+#[AsEventListener]
+final class LogFailedMessage
+{
+    public function __invoke(WorkerMessageFailedEvent $event): void
+    {
+        // fired by the Worker when handling a received message threw
+        $event->getThrowable(); // the handler exception
+    }
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\Messenger\Worker::run()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Worker.php).
@@ -310,8 +330,38 @@ is exhausted, the envelope is sent to the configured **failure transport**,
 inspected with `messenger:failed:show` and retried with
 `messenger:failed:retry`.
 
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        failure_transport: failed   # inspect with messenger:failed:show / retry
+        transports:
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:     # default: MultiplierRetryStrategy
+                    max_retries: 3  # exhausted → failure transport
+                    delay: 1000     # ms; each retry re-sent with a RedeliveryStamp
+                    multiplier: 2   # exponential backoff
+```
+
 Throwing `UnrecoverableMessageHandlingException` skips retries entirely and goes
 straight to the failure transport.
+
+```php
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
+
+#[AsMessageHandler]
+final class ChargeCardHandler
+{
+    public function __invoke(ChargeCard $message): void
+    {
+        if ($message->amount <= 0) {
+            // no retry — goes straight to the failure transport
+            throw new UnrecoverableMessageHandlingException('Invalid amount');
+        }
+    }
+}
+```
 
 ```mermaid
 flowchart TD

@@ -65,6 +65,21 @@ then calls the factory instead of `new`. Forms of factory:
 `arguments` on the definition are passed to the factory method (not the
 constructor).
 
+```php
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
+
+// The Definition carries the factory; the dumped container calls it instead of `new`
+$def = new Definition(App\Payment\Gateway::class);
+
+$def->setFactory([App\Payment\Gateway::class, 'fromDsn']);                // static: Gateway::fromDsn(...)
+$def->setFactory([new Reference('App\Payment\GatewayFactory'), 'create']); // instance: $factory->create(...)
+$def->setFactory(new Reference('App\Payment\GatewayFactory'));             // invokable: $factory(...)
+
+// arguments go to the factory method, NOT to the constructor
+$def->setArguments(['EUR']);
+```
+
 ```mermaid
 flowchart LR
     D["Definition + factory"] --> B{"factory type"}
@@ -83,6 +98,13 @@ expression via `expression:` in YAML, evaluated at build/runtime against known
 variables (`service('id')`, `parameter('x')`). Use sparingly — it is harder to
 debug than plain PHP.
 
+```yaml
+services:
+    # Expression factory: service('id') fetches a service, parameter('x') a parameter
+    App\Payment\Gateway:
+        factory: '@=service("App\\Payment\\GatewayFactory").create(parameter("app.currency"))'
+```
+
 ### Attributes
 
 On a constructor parameter you can request a value produced by a factory with
@@ -90,6 +112,21 @@ On a constructor parameter you can request a value produced by a factory with
 at a factory with the `#[Autowire]` service attribute. There is **no dedicated
 `#[Factory]` attribute** — factories are configured via `#[Autowire(factory:)]` or
 YAML/PHP config. (Do not confuse with `#[AsAlias]`, which aliases, not builds.)
+
+```php
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+final class Checkout
+{
+    public function __construct(
+        // There is NO #[Factory] attribute — use #[Autowire(factory: ...)]
+        #[Autowire(factory: [ClientFactory::class, 'create'])]
+        private readonly Client $client,
+    ) {}
+}
+
+// #[AsAlias] only makes a class the alias of an existing id — it builds nothing
+```
 
 !!! note "Source reference"
     Factory handling lives in `Definition::setFactory()` and is dumped by
