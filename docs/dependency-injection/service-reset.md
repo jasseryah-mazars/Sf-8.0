@@ -61,10 +61,35 @@ Symfony's answer is a contract plus a tag:
   worker resets container services between messages (disable with the
   `--no-reset` option of `messenger:consume`).
 
+```yaml
+# config/services.yaml
+services:
+    # Implements Symfony\Contracts\Service\ResetInterface (a single reset()
+    # method): autoconfiguration adds the kernel.reset tag automatically.
+    App\Pricing\ExchangeRateMemoizer: ~
+
+    # Explicit tag — the "method" attribute lets any method name work:
+    App\Legacy\ConnectionPool:
+        tags:
+            - { name: 'kernel.reset', method: 'closeIdleConnections' }
+
+# Between requests/messages the services_resetter service calls these methods.
+# A Messenger worker does it per message: messenger:consume (--no-reset disables).
+```
+
 Symfony core is full of examples: the `Stopwatch` implements `ResetInterface`,
 profiler data collectors are reset so one request's panels don't show another
 request's data, and buffering/memoizing services (log buffers, request-scoped
 caches) conceptually follow the same pattern.
+
+```php
+use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Contracts\Service\ResetInterface;
+
+$stopwatch = new Stopwatch();
+$stopwatch instanceof ResetInterface; // true — a resettable core service
+$stopwatch->reset();                  // drops all recorded events between requests
+```
 
 ## Deep Dive — how it works internally
 

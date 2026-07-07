@@ -143,6 +143,23 @@ operator (`$this->inner?->send(...)`) or a `??` fallback. The common bug is
 declaring `decoration_on_invalid: null` but keeping a non-nullable `.inner` type,
 turning an optional wrap into a `TypeError` the moment the target is absent.
 
+```php
+// YAML: decoration_on_invalid: exception (default) | ignore | null
+final class LoggingMailer implements MailerInterface
+{
+    public function __construct(
+        #[AutowireDecorated]
+        private readonly ?MailerInterface $inner, // nullable: null may be injected as .inner
+    ) {}
+
+    public function send(RawMessage $message, ?Envelope $envelope = null): void
+    {
+        // Guard delegation: nullsafe operator (or a `??` fallback) — avoids a TypeError
+        $this->inner?->send($message, $envelope);
+    }
+}
+```
+
 !!! note "Null in real life"
     A `null` inner is a garnish station with no plate coming down the line — you
     must check the belt is empty (`?->`) before you try to season nothing.

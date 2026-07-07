@@ -179,6 +179,27 @@ $response->send();            // sendHeaders() first, then sendContent()
 `setMaxAge()`, `setSharedMaxAge()`, `setEtag()`, `setLastModified()`,
 `isNotModified(Request)`, `setCache([...])` — voir [Caching Overview](caching.md).
 
+```php
+$response->setStatusCode(Response::HTTP_OK);
+$response->setContent('<p>cached page</p>');
+$response->setCharset('UTF-8');
+
+$response->setPrivate();          // one user only
+$response->setPublic();           // shared caches may store it
+$response->setMaxAge(60);         // browser TTL (seconds)
+$response->setSharedMaxAge(3600); // proxy/CDN TTL — implies public
+$response->setEtag('v1');         // validator: ETag
+$response->setLastModified(new \DateTimeImmutable('2026-01-01')); // validator: date
+
+// Same, in one call
+$response->setCache(['public' => true, 'max_age' => 60, 's_maxage' => 3600]);
+
+// True when the client cache is still fresh — body stripped, 304 sent
+if ($response->isNotModified($request)) {
+    return $response;
+}
+```
+
 ### Streaming vs buffering (memory)
 
 `StreamedResponse` et `BinaryFileResponse` évitent de charger tout le payload en

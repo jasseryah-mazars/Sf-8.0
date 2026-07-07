@@ -89,6 +89,13 @@ indications de chargement de classes). Ce sont des réglages de build — le
 point de tête marque les paramètres qui n'atteignent jamais le container
 d'exécution.
 
+```yaml
+# config/services.yaml — build-time only (the leading dot never reaches runtime)
+parameters:
+    .container.dumper.inline_factories: true     # single file, factories inlined
+    .container.dumper.inline_class_loader: true  # inline class-loading hints
+```
+
 ## Deep Dive — how it works internally
 
 ### Why `debug:container` shows what the dump doesn't contain
@@ -140,6 +147,19 @@ Le container dumpé étend la classe `Container` d'exécution, pas
 - **Les modifications de config ne font rien avant la reconstruction** — en
   prod, la config n'est pas suivie comme ressource ; modifier `services.yaml`
   exige un `cache:clear`/warmup pour que le container soit re-dumpé.
+
+```php
+// The dump extends Container (runtime), not ContainerBuilder (build time)
+$container->getParameter('kernel.debug');   // OK: read-only access
+
+$container->setParameter('app.flag', true); // throws — FrozenParameterBag
+
+// set() is only for synthetic services and test doubles
+$container->set('kernel', $kernel);
+
+// Editing services.yaml in prod changes nothing until:
+//   php bin/console cache:clear
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Dumper\PhpDumper` — la classe qui

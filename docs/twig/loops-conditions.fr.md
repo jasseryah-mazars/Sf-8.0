@@ -56,6 +56,17 @@ La variable **`loop`** dans un `for` :
 | `loop.length` | total |
 | `loop.parent` | contexte de la boucle englobante |
 
+```twig
+{% for group in groups %}
+    {% for user in group.users %}
+        {{ loop.parent.loop.index }}.{{ loop.index }}/{{ loop.length }}
+        {# outer index via loop.parent · 1-based index / total count #}
+        {{ loop.index0 }} {{ loop.revindex }} {{ loop.revindex0 }}  {# 0-based / from the end #}
+        {% if loop.first %}first{% elseif loop.last %}last{% endif %}  {# booleans #}
+    {% endfor %}
+{% endfor %}
+```
+
 ### `if`
 
 ```twig
@@ -92,6 +103,14 @@ tableau que Twig maintient à chaque itération. Point crucial : `loop.length`,
 compter) — pour un simple `Generator`, Twig peut les mettre en mémoire tampon ou
 les omettre. `loop.first`/`loop.index` sont toujours disponibles.
 
+```twig
+{% for row in rows %}  {# compiles to a PHP foreach #}
+    {{ loop.index }} {{ loop.first ? 'first' }}    {# always available #}
+    {{ loop.length }} {{ loop.revindex }} {{ loop.last ? 'last' }}
+    {# ^ need a countable iterable (array/Countable) — not a bare Generator #}
+{% endfor %}
+```
+
 ```mermaid
 flowchart TD
     F["for x in items"] --> Cnt{Countable?}
@@ -108,6 +127,15 @@ flowchart TD
   `{% for x in items if x.active %}` et `{% for x in items|slice(0, 10) %}`.
 - Vous **ne pouvez pas `break`/`continue`** en Twig — filtrez la source ou
   utilisez un `if` dans le corps. C'est délibéré (garde les templates déclaratifs).
+
+```twig
+{# no break/continue: filter and slice the source instead #}
+{% for x in items|slice(0, 10) if x.active %}
+    {{ x.name }}
+{% else %}
+    No active items.   {# else: runs only on zero iterations #}
+{% endfor %}
+```
 
 !!! note "Source reference"
     `for`/`if` token parsers, `Twig\Node\ForNode`, `Twig\Node\ForLoopNode` —

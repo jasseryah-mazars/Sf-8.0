@@ -180,6 +180,15 @@ payload keep their current value instead of going null — the whole point of a
 partial update. The classic bug: sending a PATCH as a plain POST, so `clearMissing`
 stays `true` and untouched fields are silently wiped to null/empty.
 
+```php
+$form->handleRequest($request);  // an empty POST still calls submit()
+// clearMissing = true: text fields become '', a data_class object is blanked
+$form->get('title')->getData();  // '' after an empty submission
+
+// A real PATCH request → handleRequest passes clearMissing: false,
+// so fields absent from the payload keep their value instead of going null
+```
+
 !!! note "Null in real life"
     `null`/empty = a blank line on the form the clerk got back. With `clearMissing`
     on, a blank line **erases** what was on file; a PATCH tells the clerk to leave

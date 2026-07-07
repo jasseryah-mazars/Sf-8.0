@@ -70,6 +70,17 @@ sequence** (see [Group Sequence](group-sequence.md)):
 This is the classic trap: to run a class's constraints *ignoring* its own group
 sequence, target the `{ClassName}` group.
 
+```php
+// class App\Entity\User carries #[Assert\GroupSequence(['User', 'Strict'])]
+
+// 'Default' triggers the sequence: stepwise, stop on first failing group
+$validator->validate($user, groups: ['Default']);
+
+// 'User' — the {ClassName} short-name group — runs the same constraints
+// flat, bypassing the sequence
+$validator->validate($user, groups: ['User']);
+```
+
 ```mermaid
 flowchart TD
     A["validate(user)"] --> B{Group requested}
@@ -84,6 +95,21 @@ the *current* group is passed down. But there is a subtlety: the nested object's
 `Default` group is used when the parent group is `Default`; a *custom* group is
 propagated as-is. So a nested object only validates its custom-group constraints
 if that custom group actually reaches it.
+
+```php
+class Order
+{
+    #[Assert\Valid]              // cascades the *current* group to Address
+    public ?Address $address = null;
+}
+
+// group 'Default' reaches Address as its own Default group
+$validator->validate($order, groups: ['Default']);
+
+// a custom group is propagated as-is: only Address constraints
+// tagged groups: ['checkout'] will run on the nested object
+$validator->validate($order, groups: ['checkout']);
+```
 
 !!! note "Source reference"
     `Symfony\Component\Validator\Constraint::DEFAULT_GROUP` (`'Default'`) and the

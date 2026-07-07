@@ -45,6 +45,16 @@ event dispatcher. `Symfony\Component\Console\ConsoleEvents` defines four:
 Each carries a dedicated event object exposing the command, input, output and — for
 error/terminate — the exit code.
 
+```php
+use Symfony\Component\Console\ConsoleEvents;
+
+// The four constants the Application dispatches on the event dispatcher
+ConsoleEvents::COMMAND;     // "console.command"   - before execution
+ConsoleEvents::SIGNAL;      // "console.signal"    - an OS signal was received
+ConsoleEvents::ERROR;       // "console.error"     - a Throwable was thrown
+ConsoleEvents::TERMINATE;   // "console.terminate" - after the command, always
+```
+
 !!! question "Predict first"
     A command throws halfway through `execute()`. Which console events fire, in
     which order, and does `TERMINATE` still run?
@@ -80,6 +90,25 @@ flowchart TD
   cleanup/metrics.
 - **`ConsoleSignalEvent`** — fired when a subscribed POSIX signal arrives; exposes
   `getHandlingSignal()` and can `setExitCode()` / `abortExit()`.
+
+```php
+// ConsoleCommandEvent: skip execution -> run() returns 113
+$commandEvent->disableCommand();   // ConsoleCommandEvent::RETURN_CODE_DISABLED
+
+// ConsoleErrorEvent: replace the failure code (TERMINATE still runs after)
+$errorEvent->setExitCode(3);
+
+// ConsoleTerminateEvent: last chance to inspect/override the exit code
+if (0 !== $terminateEvent->getExitCode()) {
+    $terminateEvent->setExitCode(0);          // e.g. downgrade a known benign failure
+}
+
+// ConsoleSignalEvent: which signal arrived, then choose the outcome
+$signal = $signalEvent->getHandlingSignal();  // e.g. \SIGTERM
+$signalEvent->setExitCode(128 + $signal);     // exit with the signal convention
+// ...or keep the command running instead of exiting:
+$signalEvent->abortExit();
+```
 
 Exit codes are clamped to **0–255** (`$code % 256` when out of range); a negative or
 `>255` return is normalised. By convention a signal-terminated process exits with

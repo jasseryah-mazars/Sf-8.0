@@ -161,6 +161,23 @@ You rarely write these from scratch — configure them in `security.yaml`:
   `token_handler` returning a `UserBadge`; typically a `SelfValidatingPassport`).
 - **`http_basic`**, **`login_link`**, **`remember_me`** — configured, not coded.
 
+```yaml
+security:
+    firewalls:
+        main:
+            form_login: ~      # FormLoginAuthenticator (session, CSRF, redirect to getLoginUrl())
+            # json_login: ~    # JsonLoginAuthenticator (credentials in a JSON body)
+            remember_me: { secret: '%kernel.secret%' }
+        api:
+            pattern: ^/api
+            stateless: true
+            access_token:      # AccessTokenAuthenticator → SelfValidatingPassport
+                token_handler: App\Security\AccessTokenHandler  # returns a UserBadge
+        docs:
+            pattern: ^/docs
+            http_basic: ~      # also available, config-only: login_link
+```
+
 ### `AbstractAuthenticator` and `AbstractLoginFormAuthenticator`
 
 `AbstractAuthenticator` provides a single default: `createToken()` returning a

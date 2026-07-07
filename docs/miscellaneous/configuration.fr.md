@@ -151,6 +151,15 @@ exécutez `composer dump-env prod`, qui compile tout ce qui précède en un uniq
 **`.env.local.php`** (un simple tableau PHP). Lorsqu'il est présent, Symfony charge
 *uniquement* ce fichier et saute le parsing des `.env*`, économisant des I/O à chaque request.
 
+```console
+# APP_ENV selects the environment, APP_DEBUG toggles debug
+$ APP_ENV=prod APP_DEBUG=0 php bin/console about
+
+# Deploy step: compile the whole cascade into .env.local.php
+$ composer dump-env prod
+Successfully dumped .env files in .env.local.php
+```
+
 ### ExpressionLanguage
 
 `Symfony\Component\ExpressionLanguage\ExpressionLanguage` parse une expression

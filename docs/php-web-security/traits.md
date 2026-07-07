@@ -125,6 +125,17 @@ trait Counter
 the **top of a file** is a namespace import. Same keyword, different context —
 a classic exam distractor.
 
+```php
+namespace App\Service;
+
+use App\Logging\LoggerTrait;   // top of file: namespace import (alias)
+
+final class Mailer
+{
+    use LoggerTrait;           // inside the class body: trait composition
+}
+```
+
 !!! note "Source reference"
     Symfony ships many traits, e.g. `Symfony\Component\Cache\Traits\` adapters and
     `Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait` —

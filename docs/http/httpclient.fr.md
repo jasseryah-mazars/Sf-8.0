@@ -125,6 +125,25 @@ sur les 3xx/4xx/5xx** par défaut (`throw: true`) :
 Passez `getContent(false)` (ou l'option `throw`) pour inspecter vous-même les corps
 d'erreur. `toArray()` décode le JSON et renvoie un tableau.
 
+```php
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+
+try {
+    $data = $response->toArray(); // throws on 3xx/4xx/5xx (throw: true)
+} catch (ClientExceptionInterface $e) {           // 4xx
+    $body = $e->getResponse()->getContent(false); // inspect the error body
+} catch (ServerExceptionInterface|RedirectionExceptionInterface $e) { // 5xx / 3xx
+    throw $e;
+} catch (TransportExceptionInterface $e) {        // network failure
+    throw $e;
+}
+
+$response->getStatusCode(); // never throws
+```
+
 ### Options that matter
 
 Par request ou comme valeurs par défaut du client via `withOptions()` :
@@ -139,6 +158,20 @@ Par request ou comme valeurs par défaut du client via `withOptions()` :
 | `base_uri` | Préfixé aux URLs relatives |
 | `timeout` / `max_duration` | Timeout d'inactivité / plafond total |
 | `max_redirects` | Limite de redirections suivies |
+
+```php
+// client-wide defaults, then per-request options
+$client = $client->withOptions(['base_uri' => 'https://api.example.com', 'timeout' => 4.0]);
+
+$client->request('POST', '/articles', [
+    'query'         => ['page' => 2],          // ?page=2
+    'headers'       => ['Accept' => 'application/json'],
+    'json'          => ['title' => 'Hello'],   // or 'body' for a raw/streamed payload
+    'auth_bearer'   => $token,                 // or 'auth_basic' => 'user:pass'
+    'max_duration'  => 10.0,                   // total cap, unlike idle 'timeout'
+    'max_redirects' => 3,
+]);
+```
 
 ### Scoped clients & base URI
 
@@ -157,6 +190,18 @@ flowchart LR
 Programmatiquement, `ScopingHttpClient::forBaseUri($client, 'https://api.github.com')`
 ou `$client->withOptions(['base_uri' => '...'])`.
 
+```php
+use Symfony\Component\HttpClient\ScopingHttpClient;
+
+// options apply only to URLs under this base URI
+$github = ScopingHttpClient::forBaseUri($client, 'https://api.github.com', [
+    'auth_bearer' => $token,
+]);
+
+// or derive a client with defaults bound to every request
+$api = $client->withOptions(['base_uri' => 'https://api.example.com']);
+```
+
 ### Retry & streaming decorators
 
 - `Symfony\Component\HttpClient\RetryableHttpClient` enveloppe n'importe quel client et
@@ -165,6 +210,22 @@ ou `$client->withOptions(['base_uri' => '...'])`.
 - `$client->stream($response)` renvoie une `ResponseStreamInterface` ; itérez pour
   obtenir des morceaux `ChunkInterface` sans mettre tout le corps en mémoire — pour les
   gros téléchargements ou les Server-Sent Events (`EventSourceHttpClient`).
+
+```php
+use Symfony\Component\HttpClient\EventSourceHttpClient;
+use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
+use Symfony\Component\HttpClient\RetryableHttpClient;
+
+// retries failed/5xx/429 responses, honouring Retry-After
+$client = new RetryableHttpClient($inner, new GenericRetryStrategy(), 2);
+
+$response = $client->request('GET', $bigFileUrl);
+foreach ($client->stream($response) as $chunk) { // ResponseStreamInterface
+    $fragment = $chunk->getContent();            // ChunkInterface piece
+}
+
+$sse = new EventSourceHttpClient($client); // Server-Sent Events wrapper
+```
 
 ### Null behavior
 
@@ -190,6 +251,14 @@ Pour lire un header potentiellement absent, les sacs de headers sont ici des tab
 indexés par clé, utilisez donc `$response->getHeaders()['x-total'][0] ?? null` plutôt
 qu'un getter nullable. Le bug classique est d'appeler `toArray()` sur un `204` et
 d'être surpris par l'exception de décodage au lieu de recevoir `null`.
+
+```php
+$headers = $response->getHeaders(false); // arrays keyed by lowercased name
+$total = $headers['x-total'][0] ?? null; // null when the header is absent
+
+// guard before decoding: toArray() throws on an empty 204 body
+$data = 204 === $response->getStatusCode() ? [] : $response->toArray();
+```
 
 !!! note "Null in real life"
     Une response vide est une **enveloppe-réponse arrivée vide** — le coursier l'a

@@ -139,6 +139,20 @@ submitted token as invalid too. The common bug: skipping `form_rest`/`_token` in
 manual template, so the token is `null` on submit and every post silently fails
 validation — no exception, just a form that never validates.
 
+```php
+// Missing/null _token -> a form error on PRE_SUBMIT, never an exception
+$form->handleRequest($request);
+if ($form->isSubmitted() && !$form->isValid()) {
+    // CsrfValidationListener added the csrf_message as a form error
+}
+
+// Controller helper: a null/empty token is invalid too
+$token = $request->getPayload()->get('_token'); // null if the template skipped form_rest()
+if (!$this->isCsrfTokenValid('delete_item', $token)) {
+    // quietly refused — re-render the form
+}
+```
+
 !!! note "Null in real life"
     `null` = a visitor with **no badge** at the security desk — not thrown out with
     force, just quietly refused entry until they present a valid one.

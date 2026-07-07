@@ -108,6 +108,21 @@ flowchart LR
   contexte de rendu, si bien qu'une variable locale nommée `app` masquerait la
   globale.
 
+```twig
+{# AppVariable throws \RuntimeException if e.g. no request was wired #}
+
+{# flashes by type — reading them clears them #}
+{% for message in app.flashes('notice') %}
+    <div class="notice">{{ message }}</div>
+{% endfor %}
+{% for label, messages in app.flashes(['notice', 'error']) %}
+    {% for message in messages %}<div class="{{ label }}">{{ message }}</div>{% endfor %}
+{% endfor %}
+
+{# a local variable named 'app' shadows the global — avoid #}
+{% set app = 'shadowed' %}
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\AppVariable` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php).
@@ -131,6 +146,15 @@ Lire `app.user.userIdentifier` sans garde affiche vide en mode tolérant mais l�
 une exception une fois `strict_variables` activé — et `app.user.roles` sur un
 utilisateur `null` est le crash classique de la page anonyme.
 `app.user is not null` et le ternaire ci-dessus sont les idiomes sûrs.
+
+```twig
+{# crashes for an anonymous visitor once strict_variables is on #}
+{{ app.user.userIdentifier }}
+
+{# safe idioms #}
+{% if app.user is not null %}{{ app.user.roles|join(', ') }}{% endif %}
+{{ app.user ? app.user.userIdentifier : 'Guest' }}
+```
 
 !!! note "Null in real life"
     `app.user` est le visiteur inconnu à l'accueil sécurité : tant que personne ne

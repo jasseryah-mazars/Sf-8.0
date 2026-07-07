@@ -43,6 +43,14 @@ equivalent of PHP's `dump()`/`var_dump()`:
 `dump()` (function) **outputs** the dump where it is called; `{% dump %}` (tag)
 sends data to the dump destination **without** injecting markup into the page.
 
+```twig
+{# function form: prints the dump right here in the page #}
+{{ dump(order) }}
+
+{# tag form: nothing rendered here — data goes to the profiler/toolbar #}
+{% dump order %}
+```
+
 !!! question "Predict first"
     A `{{ dump(order) }}` slips into a committed template and reaches **production**.
     What happens on the first request that renders it?

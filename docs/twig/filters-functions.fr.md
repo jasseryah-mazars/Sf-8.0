@@ -232,12 +232,25 @@ vide (`''`, `[]`, `false`). C'est plus large que `??`, qui ne remplace que
 `null`/non défini — `{{ '' ?? 'x' }}` conserve la chaîne vide, tandis que
 `{{ ''|default('x') }}` retourne `'x'`.
 
+```twig
+{{ '' ?? 'x' }}             {# '' — ?? only replaces null/undefined #}
+{{ ''|default('x') }}       {# 'x' — default also replaces empty values #}
+{{ name|default('Anon') }}  {# covers null, undefined, '' and [] #}
+```
+
 La plupart des filtres intégrés tolèrent `null` : `{{ null|length }}` vaut `0`,
 `{{ null|json_encode }}` vaut `null` (le littéral JSON). Un filtre
 **personnalisé**, en revanche, reçoit `null` tel quel — si votre callable est
 typé `string $s`, il lèvera une `TypeError` sur un argument null ; typez donc le
 paramètre `?string` (ou protégez-le) quand la valeur peut manquer, et associez-le
 à `|default` au point d'appel : `{{ bio|default('')|excerpt }}`.
+
+```twig
+{{ null|length }}              {# 0 — most built-ins tolerate null #}
+{{ null|json_encode }}         {# prints the JSON literal null #}
+{# a custom filter typed `string $s` would TypeError on null: #}
+{{ bio|default('')|excerpt }}  {# guard with |default (or type the param ?string) #}
+```
 
 !!! note "Null in real life"
     `|default` est le tampon « N/A » qu'un commis appose sur tout champ de
