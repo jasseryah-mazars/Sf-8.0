@@ -41,6 +41,16 @@ de parameters bruts, le bundle définit un **schéma** (`Configuration`) et une
 services et parameters. C'est ainsi que les options d'un bundle deviennent des
 services opérationnels.
 
+```yaml
+# config/packages/*.yaml — each bundle owns one root key
+framework:            # FrameworkBundle's semantic config
+    secret: '%env(APP_SECRET)%'
+security:             # SecurityBundle's semantic config
+    firewalls: { main: { lazy: true } }
+app:                  # your own root key
+    per_page: 10      # validated by Configuration, consumed by Extension
+```
+
 !!! question "Predict first"
     Votre bundle doit définir une valeur par défaut pour un *autre* bundle (par
     exemple une option `framework`). Dans quelle méthode le faites-vous, et
@@ -63,6 +73,29 @@ services opérationnels.
 - `Symfony\Component\DependencyInjection\Extension\Extension` — son `load(array
   $configs, ContainerBuilder $container)` reçoit la config *fusionnée et traitée*
   et enregistre services/parameters dans le builder.
+
+```php
+// Configuration (implements ConfigurationInterface): declares the schema.
+final class Configuration implements ConfigurationInterface
+{
+    public function getConfigTreeBuilder(): TreeBuilder
+    {
+        $treeBuilder = new TreeBuilder('acme_blog'); // TreeBuilder = keys/types/defaults
+        $treeBuilder->getRootNode()
+            ->children()
+                ->integerNode('per_page')->defaultValue(10)->end()
+            ->end();
+
+        return $treeBuilder;
+    }
+}
+
+// Extension: acts on the processed values.
+final class AcmeBlogExtension extends Extension
+{
+    public function load(array $configs, ContainerBuilder $container): void { /* ... */ }
+}
+```
 
 ### The load lifecycle
 

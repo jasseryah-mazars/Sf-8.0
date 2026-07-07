@@ -108,6 +108,17 @@ flowchart LR
 - `{% trans_default_domain 'admin' %}` définit le domaine par défaut pour le
   reste du template, ce qui permet d'omettre l'argument de domaine.
 
+```twig
+{# file naming: translations/messages.en.yaml, admin.fr.xlf,
+   messages+intl-icu.en.yaml (ICU: plural, select, intl formatting) #}
+
+{% trans_default_domain 'admin' %}
+{{ 'dashboard.title'|trans }}            {# domain 'admin' implied now #}
+{{ 'error.required'|trans({}, 'validators') }}
+
+{# transchoice() and |transchoice are removed — use ICU plural instead #}
+```
+
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\TranslationExtension`,
     `Symfony\Contracts\Translation\TranslatorInterface` —
@@ -132,6 +143,16 @@ notifications: >-
 `#` affiche le nombre ; `one`/`other` sont des catégories de pluriel CLDR
 (propres à la locale) ; `=0` correspond à la valeur exacte. `select` fonctionne
 de la même façon pour le genre/les énumérations.
+
+```yaml
+# translations/messages+intl-icu.en.yaml — select: like plural, but by keyword
+invitation: >-
+    {gender, select,
+        female {She is invited}
+        male   {He is invited}
+        other  {They are invited}
+    }
+```
 
 ## Configuration & code
 

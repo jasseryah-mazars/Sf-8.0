@@ -138,10 +138,37 @@ $builder
 - **`RepeatedType`** — renders `type` twice (e.g. password + confirmation) and
   passes only if both match. `first_name`/`second_name`, `invalid_message`.
 
+```php
+$builder
+    ->add('tags', CollectionType::class, [
+        'entry_type'   => TagType::class, // each row is a TagType sub-form
+        'allow_add'    => true,
+        'allow_delete' => true,
+        'by_reference' => false, // call adder/remover on the parent object
+        'prototype'    => true,  // template row for JS to clone
+    ])
+    ->add('plainPassword', RepeatedType::class, [
+        'type'            => PasswordType::class, // rendered twice
+        'first_name'      => 'password',
+        'second_name'     => 'confirm',
+        'invalid_message' => 'Both entries must match.',
+    ]);
+```
+
 ### Buttons
 
 `SubmitType`, `ButtonType`, `ResetType` — not mapped to data; `SubmitType` lets
 you detect *which* button was clicked via `$form->getClickedButton()`.
+
+```php
+$builder
+    ->add('save',    SubmitType::class)  // submits the form
+    ->add('preview', SubmitType::class)  // a second submit button
+    ->add('clear',   ResetType::class);  // ButtonType is the unmapped base
+
+// After submission, detect which button was used:
+if ('preview' === $form->getClickedButton()?->getName()) { /* ... */ }
+```
 
 ```mermaid
 flowchart TD

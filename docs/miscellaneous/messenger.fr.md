@@ -337,8 +337,38 @@ exponentiel. Une fois `max_retries` épuisé, l'envelope est envoyée vers le
 **failure transport** configuré, inspectée avec `messenger:failed:show` et
 rejouée avec `messenger:failed:retry`.
 
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        failure_transport: failed   # inspect with messenger:failed:show / retry
+        transports:
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:     # default: MultiplierRetryStrategy
+                    max_retries: 3  # exhausted → failure transport
+                    delay: 1000     # ms; each retry re-sent with a RedeliveryStamp
+                    multiplier: 2   # exponential backoff
+```
+
 Lancer `UnrecoverableMessageHandlingException` court-circuite complètement les
 retries et va directement vers le failure transport.
+
+```php
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
+
+#[AsMessageHandler]
+final class ChargeCardHandler
+{
+    public function __invoke(ChargeCard $message): void
+    {
+        if ($message->amount <= 0) {
+            // no retry — goes straight to the failure transport
+            throw new UnrecoverableMessageHandlingException('Invalid amount');
+        }
+    }
+}
+```
 
 ```mermaid
 flowchart TD
@@ -359,6 +389,17 @@ Ajouter `DispatchAfterCurrentBusStamp` à un message dispatché *à l'intérieur
 d'un handler diffère sa livraison jusqu'à ce que le message **en cours** soit
 traité avec succès. Cela évite de dispatcher un event « email de confirmation »
 avant que la transaction de base de données englobante ne soit commitée.
+
+```php
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
+
+// Inside a handler: defer until the current message finishes successfully
+$this->eventBus->dispatch(
+    (new Envelope(new OrderPlacedEvent($orderId)))
+        ->with(new DispatchAfterCurrentBusStamp())
+);
+```
 
 ### Null behavior
 

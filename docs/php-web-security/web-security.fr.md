@@ -139,6 +139,12 @@ Le site est chargé dans une `<iframe>` invisible superposée à une interface
 appât. Défense : `X-Frame-Options: DENY` ou une Content-Security-Policy
 `frame-ancestors 'none'`.
 
+```php
+// Either response header blocks framing:
+$response->headers->set('X-Frame-Options', 'DENY');
+$response->headers->set('Content-Security-Policy', "frame-ancestors 'none'");
+```
+
 ### HTTPS, HSTS & security headers
 
 Servez tout en TLS. **HSTS** (`Strict-Transport-Security`) indique aux
@@ -152,6 +158,15 @@ response essentiels :
 | `X-Content-Type-Options: nosniff` | Empêcher le MIME sniffing |
 | `X-Frame-Options: DENY` | Anti-clickjacking |
 | `Referrer-Policy` | Limiter la fuite du referer |
+
+```php
+$h = $response->headers;
+$h->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+$h->set('Content-Security-Policy', "default-src 'self'");
+$h->set('X-Content-Type-Options', 'nosniff');
+$h->set('X-Frame-Options', 'DENY');
+$h->set('Referrer-Policy', 'same-origin');
+```
 
 ### Password storage
 

@@ -39,6 +39,12 @@ Il existe deux types d'entrées :
 - **Options** — *nommées*, sans contrainte d'ordre, préfixées `--` (ou un raccourci `-x`) :
   `--force`, `-f`, `--env=prod`.
 
+```console
+$ php bin/console app:clone https://example.com/repo.git ./target   # 2 positional arguments
+$ php bin/console app:deploy --force --env=prod                     # named options, any order
+$ php bin/console app:deploy -f                                     # -f shortcut for --force
+```
+
 **Modes d'argument** (`Symfony\Component\Console\Input\InputArgument`) :
 
 | Mode | Valeur | Signification |
@@ -49,6 +55,14 @@ Il existe deux types d'entrées :
 
 Combinez-les avec un bitmask, par exemple `IS_ARRAY | OPTIONAL`.
 
+```php
+use Symfony\Component\Console\Input\InputArgument;
+
+$this->addArgument('path', InputArgument::REQUIRED);                          // 1
+$this->addArgument('format', InputArgument::OPTIONAL, 'Format', 'json');      // 2, with default
+$this->addArgument('files', InputArgument::IS_ARRAY | InputArgument::OPTIONAL); // 4|2, last
+```
+
 **Modes d'option** (`Symfony\Component\Console\Input\InputOption`) :
 
 | Mode | Valeur | Signification |
@@ -58,6 +72,16 @@ Combinez-les avec un bitmask, par exemple `IS_ARRAY | OPTIONAL`.
 | `VALUE_OPTIONAL` | 4 | Valeur optionnelle (`--yell` ou `--yell=loud`) |
 | `VALUE_IS_ARRAY` | 8 | Répétable (`--id=1 --id=2`) |
 | `VALUE_NEGATABLE` | 16 | Ajoute un jumeau `--no-…` (`--ansi`/`--no-ansi`) |
+
+```php
+use Symfony\Component\Console\Input\InputOption;
+
+$this->addOption('force', 'f', InputOption::VALUE_NONE);                          // 1: flag
+$this->addOption('iter', null, InputOption::VALUE_REQUIRED, 'Iterations', 1);     // 2
+$this->addOption('yell', null, InputOption::VALUE_OPTIONAL);                      // 4
+$this->addOption('id', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED); // 8|2
+$this->addOption('color', null, InputOption::VALUE_NEGATABLE, 'Colorize', true);  // 16: --no-color
+```
 
 !!! question "Predict first"
     Vous déclarez `--force` en `VALUE_NONE` et tentez de lui donner `false` comme valeur

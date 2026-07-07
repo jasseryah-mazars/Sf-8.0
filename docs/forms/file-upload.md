@@ -36,6 +36,14 @@ An HTML file input arrives in `$_FILES`, which Symfony exposes as
 binary upload is not something you usually store *as-is* on your model, the field
 is frequently **unmapped** — the form validates it, you handle persistence.
 
+```php
+// The raw $_FILES entry is exposed as an UploadedFile on the request
+$file = $request->files->get('brochure');   // ?UploadedFile
+
+// FileType binds a form field to that object — usually unmapped
+$builder->add('brochure', FileType::class, ['mapped' => false]);
+```
+
 !!! question "Predict first"
     An uploaded file arrives with `getClientOriginalName()` = `"../../evil.php"`. Is
     that value safe to use as the stored filename?
