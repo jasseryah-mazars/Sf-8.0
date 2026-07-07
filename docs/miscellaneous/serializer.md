@@ -138,12 +138,52 @@ use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
 Metadata is read by `ClassMetadataFactory` from attributes (Symfony 8 uses PHP
 attributes, not annotations).
 
+```php
+use Symfony\Component\Serializer\Attribute\Context;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
+final class ArticleDto
+{
+    #[Groups(['read'])]           // emitted only with ['groups' => ['read']] in context
+    #[SerializedName('headline')] // renamed in the payload
+    public string $title;
+
+    #[Ignore]                     // never (de)serialized
+    public string $internalToken;
+
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])] // per-property context
+    public \DateTimeImmutable $publishedAt;
+
+    #[MaxDepth(2)]                // depth limit (needs enable_max_depth)
+    public ?ArticleDto $parent = null;
+}
+```
+
 ### Context
 
 The `$context` array tunes behaviour: `groups`, `AbstractObjectNormalizer::SKIP_NULL_VALUES`,
 `DateTimeNormalizer::FORMAT_KEY`, `AbstractNormalizer::ATTRIBUTES` (field
 whitelist), `AbstractNormalizer::IGNORED_ATTRIBUTES`, and
 `AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER`.
+
+```php
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
+$json = $serializer->serialize($user, 'json', [
+    'groups' => ['read'],                                       // activate #[Groups]
+    AbstractObjectNormalizer::SKIP_NULL_VALUES => true,         // drop null keys
+    DateTimeNormalizer::FORMAT_KEY => \DateTimeInterface::ATOM, // date format
+    AbstractNormalizer::ATTRIBUTES => ['name', 'email'],        // field whitelist
+    AbstractNormalizer::IGNORED_ATTRIBUTES => ['passwordHash'], // field blacklist
+    AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($o) => $o->getId(),
+]);
+```
 
 ### Circular references
 
@@ -152,6 +192,19 @@ via a **circular reference limit** (default 1) and throws
 `CircularReferenceException` unless you set a
 `CIRCULAR_REFERENCE_HANDLER` (e.g. return the entity id) or limit depth with
 `#[MaxDepth]` + `enable_max_depth` context.
+
+```php
+// Option A: handler — replace the repeated object instead of throwing
+// CircularReferenceException (ObjectNormalizer's limit defaults to 1)
+$context = [
+    AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn (object $o) => $o->getId(),
+];
+
+// Option B: cap the graph with #[MaxDepth(1)] on the property, then enable it
+$context = [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]; // 'enable_max_depth'
+
+$json = $serializer->serialize($category, 'json', $context);
+```
 
 !!! note "Source reference"
     `Symfony\Component\Serializer\Serializer::serialize()` and
@@ -168,6 +221,18 @@ Going the other way, a **missing** JSON key denormalizes to the property's
 default (or `null` for a nullable typed property with no default); a present
 `null` sets it to null. The classic bug: enabling `skip_null_values`, then a
 consumer treating an absent key as an error rather than "the value was null".
+
+```php
+$dto = new UserDto(name: 'Ada', nickname: null);
+
+$serializer->serialize($dto, 'json');
+// {"name":"Ada","nickname":null}  — ObjectNormalizer emits null by default
+
+$serializer->serialize($dto, 'json', [
+    AbstractObjectNormalizer::SKIP_NULL_VALUES => true, // = 'skip_null_values'
+]);
+// {"name":"Ada"} — the null-valued key is omitted entirely
+```
 
 !!! note "Null in real life"
     A null property is an **empty slot in the suitcase**: `skip_null_values`

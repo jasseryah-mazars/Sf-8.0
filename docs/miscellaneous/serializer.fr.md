@@ -37,6 +37,20 @@ inversement. Symfony scinde ce processus en deux étapes :
 
 `serialize()` = normalize → encode ; `deserialize()` = decode → denormalize.
 
+```php
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+$serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+
+// serialize() = normalize (object → array) then encode (array → JSON string)
+$json = $serializer->serialize($user, 'json');
+
+// deserialize() = decode (JSON → array) then denormalize (array → object)
+$user = $serializer->deserialize($json, UserDto::class, 'json');
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -64,6 +78,21 @@ Pour une valeur donnée, il choisit le **premier** normalizer dont
 `supportsNormalization()` retourne true, et l'encoder correspondant au format
 demandé.
 
+```php
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+$serializer = new Serializer(
+    [new DateTimeNormalizer(), new ObjectNormalizer()], // Normalizer/DenormalizerInterface list
+    [new JsonEncoder(), new XmlEncoder()],              // Encoder/DecoderInterface list
+);
+// For a \DateTimeImmutable, DateTimeNormalizer::supportsNormalization() matches first;
+// the encoder is picked by the requested format ('json', 'xml', ...)
+```
+
 | Role | FQCN |
 |---|---|
 | Facade | `Symfony\Component\Serializer\Serializer` |
@@ -82,6 +111,22 @@ demandé.
   privées, via la réflexion), en ignorant les accesseurs.
 - `GetSetMethodNormalizer` n'utilise que les méthodes get/set.
 
+```php
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\PropertyNormalizer;
+
+// ObjectNormalizer (default): getters/setters/hassers/issers + constructor,
+// resolved through the PropertyAccess component
+(new ObjectNormalizer())->normalize($user);       // calls getName(), isAdmin()...
+
+// PropertyNormalizer: reflection on properties, even private — accessors ignored
+(new PropertyNormalizer())->normalize($user);
+
+// GetSetMethodNormalizer: strictly get*/set* methods
+(new GetSetMethodNormalizer())->normalize($user);
+```
+
 ### Attributes that shape output
 
 - `#[Groups(['read'])]` — inclut une propriété uniquement lorsque ce groupe figure dans le
@@ -93,12 +138,52 @@ demandé.
 Les métadonnées sont lues par la `ClassMetadataFactory` depuis les attributs (Symfony 8
 utilise les attributs PHP, pas les annotations).
 
+```php
+use Symfony\Component\Serializer\Attribute\Context;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
+final class ArticleDto
+{
+    #[Groups(['read'])]           // emitted only with ['groups' => ['read']] in context
+    #[SerializedName('headline')] // renamed in the payload
+    public string $title;
+
+    #[Ignore]                     // never (de)serialized
+    public string $internalToken;
+
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d'])] // per-property context
+    public \DateTimeImmutable $publishedAt;
+
+    #[MaxDepth(2)]                // depth limit (needs enable_max_depth)
+    public ?ArticleDto $parent = null;
+}
+```
+
 ### Context
 
 Le tableau `$context` ajuste le comportement : `groups`, `AbstractObjectNormalizer::SKIP_NULL_VALUES`,
 `DateTimeNormalizer::FORMAT_KEY`, `AbstractNormalizer::ATTRIBUTES` (liste blanche
 de champs), `AbstractNormalizer::IGNORED_ATTRIBUTES`, et
 `AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER`.
+
+```php
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
+$json = $serializer->serialize($user, 'json', [
+    'groups' => ['read'],                                       // activate #[Groups]
+    AbstractObjectNormalizer::SKIP_NULL_VALUES => true,         // drop null keys
+    DateTimeNormalizer::FORMAT_KEY => \DateTimeInterface::ATOM, // date format
+    AbstractNormalizer::ATTRIBUTES => ['name', 'email'],        // field whitelist
+    AbstractNormalizer::IGNORED_ATTRIBUTES => ['passwordHash'], // field blacklist
+    AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn ($o) => $o->getId(),
+]);
+```
 
 ### Circular references
 
@@ -107,6 +192,19 @@ via une **limite de références circulaires** (1 par défaut) et lève une
 `CircularReferenceException`, sauf si vous définissez un
 `CIRCULAR_REFERENCE_HANDLER` (par exemple retourner l'id de l'entité) ou limitez la
 profondeur avec `#[MaxDepth]` + le contexte `enable_max_depth`.
+
+```php
+// Option A: handler — replace the repeated object instead of throwing
+// CircularReferenceException (ObjectNormalizer's limit defaults to 1)
+$context = [
+    AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => fn (object $o) => $o->getId(),
+];
+
+// Option B: cap the graph with #[MaxDepth(1)] on the property, then enable it
+$context = [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]; // 'enable_max_depth'
+
+$json = $serializer->serialize($category, 'json', $context);
+```
 
 !!! note "Source reference"
     `Symfony\Component\Serializer\Serializer::serialize()` et
@@ -123,6 +221,18 @@ Dans l'autre sens, une clé JSON **absente** se dénormalise vers la valeur par 
 propriété (ou `null` pour une propriété typée nullable sans valeur par défaut) ; un
 `null` présent la met à null. Le bug classique : activer `skip_null_values`, puis un
 consommateur qui traite une clé absente comme une erreur au lieu de « la valeur était null ».
+
+```php
+$dto = new UserDto(name: 'Ada', nickname: null);
+
+$serializer->serialize($dto, 'json');
+// {"name":"Ada","nickname":null}  — ObjectNormalizer emits null by default
+
+$serializer->serialize($dto, 'json', [
+    AbstractObjectNormalizer::SKIP_NULL_VALUES => true, // = 'skip_null_values'
+]);
+// {"name":"Ada"} — the null-valued key is omitted entirely
+```
 
 !!! note "Null in real life"
     Une propriété null est un **emplacement vide dans la valise** : `skip_null_values`
