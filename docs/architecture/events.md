@@ -68,12 +68,40 @@ Two ways to attach behaviour:
 so `dispatch()` takes the **event object first**: `dispatch(object $event, ?string $eventName = null): object`.
 When no name is given, the event's class name is used.
 
+```php
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+final class OrderService
+{
+    public function __construct(private EventDispatcherInterface $dispatcher) {}
+
+    public function place(): void
+    {
+        // PSR-14 order: event object first, name optional
+        $event = $this->dispatcher->dispatch(new OrderPlacedEvent());
+        // no name given -> the class name OrderPlacedEvent::class was used
+    }
+}
+```
+
 ### How listeners are stored and sorted
 
 Internally the dispatcher keeps `listeners[eventName][priority][] = callable` and a
 parallel `sorted[eventName]` cache. On first dispatch for an event it sorts by
 **priority descending** — *higher priority runs first*; equal priorities run in
 registration order. The sorted list is memoised until a listener is added/removed.
+
+```php
+$dispatcher = new EventDispatcher();
+
+// stored as listeners['app.order'][priority][] = callable
+$dispatcher->addListener('app.order', $auditListener, 10);    // runs first
+$dispatcher->addListener('app.order', $mailListener);         // default priority 0
+$dispatcher->addListener('app.order', $cleanupListener, -10); // runs last
+
+// first dispatch sorts by priority desc and memoises into sorted['app.order']
+$dispatcher->dispatch(new OrderEvent(), 'app.order');
+```
 
 ```mermaid
 flowchart LR
@@ -91,6 +119,20 @@ flowchart LR
 Any listener can call `$event->stopPropagation()`. Before invoking each listener
 the dispatcher checks `$event->isPropagationStopped()` and stops the loop. The
 event object itself carries this flag — it must extend the contracts `Event`.
+
+```php
+use Symfony\Contracts\EventDispatcher\Event;
+
+// The event must extend the contracts Event to carry the flag
+final class OrderPlacedEvent extends Event {}
+
+$listener = function (OrderPlacedEvent $event): void {
+    $event->stopPropagation(); // remaining listeners will be skipped
+};
+
+// checked by the dispatcher before invoking each listener:
+// if ($event->isPropagationStopped()) { break; }
+```
 
 ```mermaid
 sequenceDiagram
@@ -120,6 +162,19 @@ pass scans services tagged `kernel.event_listener` / `kernel.event_subscriber`
 (and `#[AsEventListener]` attributes) and wires them into the dispatcher **at
 container compile time**. Listeners are instantiated **lazily** — the service is
 only constructed when its event actually fires, which keeps boot cheap.
+
+```yaml
+# config/services.yaml — tags scanned by RegisterListenersPass at compile time
+services:
+    App\EventListener\LegacyRequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 5 }
+
+    App\EventSubscriber\AuditSubscriber:
+        tags: ['kernel.event_subscriber']
+
+# Modern equivalent: #[AsEventListener] on the class — no runtime addListener() calls
+```
 
 !!! note "Source reference"
     `Symfony\Component\EventDispatcher\EventDispatcher::dispatch()` and

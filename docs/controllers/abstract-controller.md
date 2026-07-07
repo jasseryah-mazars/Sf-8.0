@@ -61,6 +61,17 @@ The helpers it exposes (all `protected`):
 | `getParameter()` | scalar/array/enum | Read a container parameter |
 | `addLink()` / `sendEarlyHints()` | `void` / `Response` | HTTP `Link` / 103 Early Hints |
 
+```php
+// A sample of the protected helpers, always called on $this
+$this->addFlash('success', 'Saved.');                   // queue a flash message
+$url = $this->generateUrl('order_show', ['id' => 42]);  // string URL
+
+return $this->json(['url' => $url]);                              // JsonResponse
+// or: return $this->render('order/show.html.twig', ['id' => 42]); // Response
+// or: return $this->redirectToRoute('order_show', ['id' => 42]);  // RedirectResponse
+// or: throw $this->createNotFoundException('No such order.');     // build, then throw
+```
+
 !!! question "Predict first"
     Your controller extends `AbstractController` and calls `$this->render(...)`.
     Where did the Twig service come from — a constructor argument, the global
@@ -105,6 +116,13 @@ The `?` prefix marks each service **optional**: if Twig is not installed,
 Twig is not available") rather than a container error. This is why a fresh
 project can extend `AbstractController` before adding the form or security
 components.
+
+```php
+// Inside the render() machinery — the '?' optional subscription guard, simplified
+if (!$this->container->has('twig')) {
+    throw new \LogicException('You cannot use the "render" method if the Twig Bundle is not available. Try running "composer require symfony/twig-bundle".');
+}
+```
 
 ```mermaid
 flowchart TD
@@ -155,6 +173,15 @@ the moment an anonymous visitor arrives. Handle it deliberately:
 - Guard first with `denyAccessUnlessGranted('ROLE_USER')` (or `#[IsGranted]`) so
   the action only runs for authenticated users, after which `getUser()` is safe.
 - Or read defensively: `$this->getUser()?->getUserIdentifier() ?? 'guest'`.
+
+```php
+// Option 1 — guard first, then getUser() is guaranteed non-null
+$this->denyAccessUnlessGranted('ROLE_USER'); // throws 403 for anonymous visitors
+$email = $this->getUser()->getUserIdentifier();
+
+// Option 2 — read defensively on a public page
+$name = $this->getUser()?->getUserIdentifier() ?? 'guest';
+```
 
 Note the sibling trap: `createNotFoundException()` does not *return* `null` and
 does not abort — it returns a `NotFoundHttpException` you must `throw`. See

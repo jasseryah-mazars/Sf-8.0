@@ -41,6 +41,20 @@ Symfony Cache offers three overlapping APIs:
 The **contracts** API is the recommended one: `get($key, callable $callback)`
 computes-and-stores on miss in a single call.
 
+```php
+// PSR-6 (Psr\Cache\CacheItemPoolInterface): explicit item objects
+$item = $pool->getItem('stats');
+if (!$item->isHit()) {
+    $pool->save($item->set(computeStats()));
+}
+
+// PSR-16 (Psr\SimpleCache\CacheInterface): simple get/set by key
+$stats = $simpleCache->get('stats') ?? computeStats();
+
+// Symfony contracts: get($key, callable $callback) computes-and-stores on miss
+$stats = $cache->get('stats', fn (ItemInterface $item) => computeStats());
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -59,6 +73,17 @@ computes-and-stores on miss in a single call.
 `$item->set($value)->expiresAfter($ttl)` then `$pool->save($item)`. Items are
 stateful objects — this is verbose but explicit.
 
+```php
+// Full PSR-6 lifecycle: getItem() -> isHit() -> set()/expiresAfter() -> save()
+$item = $pool->getItem('user_42');   // always returns a CacheItemInterface
+if (!$item->isHit()) {               // true only when a value is stored
+    $item->set($this->loadUser(42))  // put the computed value in the item
+         ->expiresAfter(3600);       // 1 hour TTL
+    $pool->save($item);              // nothing is stored until save()
+}
+$user = $item->get();
+```
+
 ### The contracts API and stampede protection
 
 `Symfony\Contracts\Cache\CacheInterface::get()`:
@@ -74,6 +99,22 @@ is chosen (via the `$beta` factor) to recompute *early* while others still serve
 the cached value — preventing a **cache stampede** where many concurrent
 requests all recompute an expensive value at once. Setting `$beta = INF` forces
 recomputation; `0` disables early expiration.
+
+```php
+// The callback receives the ItemInterface and a by-reference $save flag
+$rates = $cache->get('rates', function (ItemInterface $item, bool &$save): array {
+    $item->expiresAfter(300);
+    $rates = $this->api->fetchRates();
+    if ($rates === []) {
+        $save = false; // computed but NOT stored (retry on next call)
+    }
+
+    return $rates;
+});
+
+$cache->get('rates', $callback, INF); // $beta = INF: force recomputation now
+$cache->get('rates', $callback, 0);   // $beta = 0: disable early expiration
+```
 
 ```mermaid
 flowchart LR
@@ -109,6 +150,19 @@ The concrete pools implement both PSR-6 and the contracts interface (e.g.
 `Symfony\Contracts\Cache\TagAwareCacheInterface`. In the callback you call
 `$item->tag(['products'])`; later `$pool->invalidateTags(['products'])` evicts
 **all** items carrying that tag — invalidation by concern instead of by key.
+
+```php
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
+
+// $pool is a TagAwareCacheInterface (TagAwareAdapter, or a pool with tags: true)
+$price = $pool->get('product_42', function (ItemInterface $item): float {
+    $item->tag(['products']); // sticky label on this item
+
+    return 9.99;
+});
+
+$pool->invalidateTags(['products']); // evicts ALL items tagged "products"
+```
 
 ### PSR-6 vs PSR-16
 

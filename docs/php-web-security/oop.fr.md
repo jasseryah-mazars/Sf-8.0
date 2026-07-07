@@ -38,6 +38,19 @@ d'interfaces, traits pour la réutilisation horizontale. Les membres ont une
 **statiques**, et les classes peuvent être `final`, `abstract` ou (8.2+)
 `readonly`.
 
+```php
+abstract class Shape {}            // abstract: cannot be instantiated
+final class Circle extends Shape   // final: cannot be extended further
+{
+    public float $radius = 1.0;    // public: accessible everywhere
+    protected string $unit = 'cm'; // protected: class + subclasses
+    private bool $cached = false;  // private: declaring class only
+
+    public static int $count = 0;  // static: belongs to the class itself
+}
+readonly class Money {}            // 8.2+: every instance property readonly
+```
+
 | Concept | En une phrase |
 |---|---|
 | `public` | Accessible partout |
@@ -151,6 +164,24 @@ final class Order
 | `__toString` | Objet utilisé comme chaîne (implique `Stringable`) |
 | `__clone` | Après que `clone` a copié l'objet |
 | `__debugInfo` | `var_dump()` |
+
+```php
+class Bag
+{
+    private array $data = [];
+
+    public function __get(string $k): mixed { return $this->data[$k] ?? null; }
+    public function __set(string $k, mixed $v): void { $this->data[$k] = $v; }
+    public function __isset(string $k): bool { return isset($this->data[$k]); }
+    public function __invoke(): string { return 'called like a function'; }
+}
+
+$b = new Bag();
+$b->color = 'red';   // __set (color is undefined → magic fires)
+$b->color;           // __get  → 'red'
+isset($b->color);    // __isset → true
+$b();                // __invoke → 'called like a function'
+```
 
 ```mermaid
 flowchart TD

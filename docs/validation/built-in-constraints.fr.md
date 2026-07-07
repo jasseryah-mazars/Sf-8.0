@@ -36,6 +36,18 @@ Toutes les constraints intégrées vivent dans
 value object ; ses options sont des arguments de constructeur. Vous l'attachez en
 attribut sur la valeur qu'elle protège.
 
+```php
+// all built-in constraints live in Symfony\Component\Validator\Constraints\
+use Symfony\Component\Validator\Constraints as Assert; // conventional alias
+
+class Product
+{
+    // the constraint is a small value object; options are constructor arguments
+    #[Assert\Length(min: 3, max: 50)]
+    public string $name = '';
+}
+```
+
 Le catalogue est vaste — l'examen teste les **constraints courantes et leurs cas
 limites**, pas les options obscures. Apprenez les catégories ci-dessous.
 
@@ -62,6 +74,14 @@ limites**, pas les options obscures. Apprenez les catégories ci-dessous.
 
 La distinction la plus testée de toutes : **`NotBlank` rejette la chaîne vide ;
 `NotNull` l'accepte.**
+
+```php
+#[Assert\NotBlank]      // '' => violation
+public string $title = '';
+
+#[Assert\NotNull]       // '' passes, only a real null fails
+public ?string $subtitle = '';
+```
 
 ### String
 
@@ -129,6 +149,21 @@ natif.
 
 `Date`, `Time`, `DateTime` valident le format d'une chaîne ; `Range` compare des
 valeurs `\DateTimeInterface` (ex. `min: 'today'` via une chaîne relative).
+
+```php
+#[Assert\Date]                      // string in 'Y-m-d' format
+public string $birthday = '';
+
+#[Assert\Time]                      // string in 'H:i:s' format
+public string $openingTime = '';
+
+#[Assert\DateTime]                  // string in 'Y-m-d H:i:s' format
+public string $loggedAt = '';
+
+// Range compares \DateTimeInterface values; relative strings allowed
+#[Assert\Range(min: 'today')]
+public ?\DateTimeInterface $deliveryDate = null;
+```
 
 ### Collection & iterable
 
@@ -198,6 +233,17 @@ Les trois constraints de « présence » sont délibérément différentes :
   `null` tout en rejetant `''`.
 - **`IsNull`** — l'inverse : ne passe que lorsque la valeur **est** `null`.
 
+```php
+#[Assert\NotNull]                   // only null fails; '' / 0 / [] pass
+public ?string $nickname = '';
+
+#[Assert\NotBlank(allowNull: true)] // null is allowed, but '' still fails
+public ?string $bio = null;
+
+#[Assert\IsNull]                    // passes only when the value IS null
+public ?string $legacyField = null;
+```
+
 Presque toutes les *autres* constraints (`Email`, `Url`, `Length`, `Regex`,
 `Range`, `Choice`, `Type`, les comparaisons…) **ignorent `null` et ne produisent
 aucune violation** — leurs validators s'arrêtent tôt sur une valeur vide. C'est
@@ -215,6 +261,16 @@ public ?string $email = null;
 enveloppes `Required` et `Optional` : un champ `Required` absent échoue, tandis
 qu'un champ `Optional` est ignoré quand il est absent mais reste validé quand il
 est présent.
+
+```php
+#[Assert\Collection(fields: [
+    // Required: an absent key is a violation
+    'email' => new Assert\Required([new Assert\Email()]),
+    // Optional: skipped when absent, validated when present
+    'phone' => new Assert\Optional([new Assert\Regex('/^\+?\d+$/')]),
+])]
+public array $contact = [];
+```
 
 !!! note "Null in real life"
     `NotNull` = un bagage doit être sur le tapis (un bagage vide compte quand

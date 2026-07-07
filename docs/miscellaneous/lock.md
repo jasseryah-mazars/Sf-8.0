@@ -36,6 +36,17 @@ once (e.g. two cron runs, two workers). You get a `LockInterface` from a
 `release()`. A **store** backs the lock; its scope (local vs shared) decides
 whether mutual exclusion holds across servers.
 
+```php
+$lock = $lockFactory->createLock('nightly-report'); // LockInterface from the LockFactory
+if ($lock->acquire()) {          // got it — no other process holds the resource
+    try {
+        // ... critical work ...
+    } finally {
+        $lock->release();        // hand the resource back
+    }
+}
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -61,6 +72,13 @@ returns a `Lock`. Internally a `Key` identifies the resource; the store persists
 that key's ownership. `autoRelease` releases the lock when the `Lock` object is
 destroyed (end of request/script).
 
+```php
+// createLock(resource, ttl = 300.0, autoRelease = true)
+$lock = $factory->createLock('report-nightly', ttl: 60.0, autoRelease: true);
+// Internally a Key('report-nightly') identifies the resource in the store;
+// with autoRelease the Lock is released when the object is destroyed
+```
+
 ### Acquire: blocking vs non-blocking
 
 - `acquire(false)` — **non-blocking** (default): returns `true` if acquired,
@@ -69,6 +87,16 @@ destroyed (end of request/script).
 - `acquire(true)` — **blocking**: waits until the lock is free (the store must
   support blocking, or the component retries). Use when the work must eventually
   run.
+
+```php
+// Non-blocking (default): bail out if another process is already working
+if (!$lock->acquire(false)) {
+    return; // held elsewhere — skip the duplicate work
+}
+
+// Blocking: wait until the lock becomes free, then proceed
+$lock->acquire(true);
+```
 
 ```mermaid
 stateDiagram-v2
@@ -87,6 +115,16 @@ the store may consider the lock expired and let another process acquire it —
 breaking mutual exclusion. Choose a TTL comfortably above expected runtime, and
 `refresh()` in long loops.
 
+```php
+$lock = $factory->createLock('video-encode', ttl: 30.0); // TTL in seconds
+$lock->acquire();
+foreach ($chunks as $chunk) {
+    $encoder->process($chunk);
+    $lock->refresh(); // extend the TTL so the lock never expires mid-work
+}
+$lock->release();
+```
+
 ### Stores
 
 | Store | Scope |
@@ -103,11 +141,37 @@ Local stores (`Flock`, `Semaphore`) only guarantee exclusion **on one machine**.
 For multi-server deployments use a shared store (Redis, DB). `CombinedStore` with
 a quorum can span multiple Redis servers.
 
+```php
+use Symfony\Component\Lock\Store\CombinedStore;
+use Symfony\Component\Lock\Store\FlockStore;
+use Symfony\Component\Lock\Store\RedisStore;
+use Symfony\Component\Lock\Strategy\ConsensusStrategy;
+
+$local  = new FlockStore();                 // Flock: one machine only
+$shared = new RedisStore($redisConnection); // shared across servers
+// Quorum spanning several Redis servers:
+$quorum = new CombinedStore([$shared, $otherRedisStore], new ConsensusStrategy());
+```
+
 ### Shared (read/write) locks
 
 `SharedLockInterface` adds `acquireRead()`: many readers may hold the lock
 simultaneously, but a writer's `acquire()` is exclusive. Not all stores support
 shared locks (Flock does; Redis via the component's implementation).
+
+```php
+$lock = $factory->createLock('catalog'); // Lock implements SharedLockInterface
+// Readers: many processes may hold the read lock at the same time
+if ($lock->acquireRead()) {
+    // ... read the resource ...
+    $lock->release();
+}
+// Writer: acquire() stays exclusive
+if ($lock->acquire()) {
+    // ... write the resource ...
+    $lock->release();
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\Lock\LockFactory` and `Lock::acquire()` —

@@ -253,6 +253,16 @@ Inside a `Collection`, missing keys are governed by the `Required` and `Optional
 wrappers: a `Required` field that is absent fails, while an `Optional` field is
 skipped when absent but still validated when present.
 
+```php
+#[Assert\Collection(fields: [
+    // Required: an absent key is a violation
+    'email' => new Assert\Required([new Assert\Email()]),
+    // Optional: skipped when absent, validated when present
+    'phone' => new Assert\Optional([new Assert\Regex('/^\+?\d+$/')]),
+])]
+public array $contact = [];
+```
+
 !!! note "Null in real life"
     `NotNull` = a bag must be on the belt (an empty bag still counts); `NotBlank`
     = the bag must actually contain something; most other scanners simply wave an

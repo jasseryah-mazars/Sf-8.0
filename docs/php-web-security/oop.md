@@ -158,6 +158,24 @@ final class Order
 | `__clone` | After `clone` copies the object |
 | `__debugInfo` | `var_dump()` |
 
+```php
+class Bag
+{
+    private array $data = [];
+
+    public function __get(string $k): mixed { return $this->data[$k] ?? null; }
+    public function __set(string $k, mixed $v): void { $this->data[$k] = $v; }
+    public function __isset(string $k): bool { return isset($this->data[$k]); }
+    public function __invoke(): string { return 'called like a function'; }
+}
+
+$b = new Bag();
+$b->color = 'red';   // __set (color is undefined → magic fires)
+$b->color;           // __get  → 'red'
+isset($b->color);    // __isset → true
+$b();                // __invoke → 'called like a function'
+```
+
 ```mermaid
 flowchart TD
     A["$obj->foo access"] --> B{foo accessible?}

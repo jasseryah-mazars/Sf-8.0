@@ -64,6 +64,17 @@ Les helpers qu'elle expose (tous `protected`) :
 | `getParameter()` | scalar/array/enum | Lire un paramètre du container |
 | `addLink()` / `sendEarlyHints()` | `void` / `Response` | HTTP `Link` / 103 Early Hints |
 
+```php
+// A sample of the protected helpers, always called on $this
+$this->addFlash('success', 'Saved.');                   // queue a flash message
+$url = $this->generateUrl('order_show', ['id' => 42]);  // string URL
+
+return $this->json(['url' => $url]);                              // JsonResponse
+// or: return $this->render('order/show.html.twig', ['id' => 42]); // Response
+// or: return $this->redirectToRoute('order_show', ['id' => 42]);  // RedirectResponse
+// or: throw $this->createNotFoundException('No such order.');     // build, then throw
+```
+
 !!! question "Predict first"
     Votre controller étend `AbstractController` et appelle `$this->render(...)`.
     D'où vient le service Twig — d'un argument de constructeur, du container
@@ -110,6 +121,13 @@ installé, `render()` lance une `\LogicException` explicite (« You cannot use
 the render method if Twig is not available ») plutôt qu'une erreur du
 container. C'est pourquoi un projet tout neuf peut étendre
 `AbstractController` avant d'ajouter les composants form ou security.
+
+```php
+// Inside the render() machinery — the '?' optional subscription guard, simplified
+if (!$this->container->has('twig')) {
+    throw new \LogicException('You cannot use the "render" method if the Twig Bundle is not available. Try running "composer require symfony/twig-bundle".');
+}
+```
 
 ```mermaid
 flowchart TD
