@@ -306,4 +306,3 @@ auto-escaped unless declared `is_safe: ['html']`. This lab drills all three, and
 ---
 
 <small>Theory: [Filters & Functions](../twig/filters-functions.md) · Labs: [all labs](index.md)</small>
-</invoke>

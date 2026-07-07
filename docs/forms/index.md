@@ -80,7 +80,6 @@ Work through them roughly in order:
 [Validation](../validation/index.md) ·
 [Web Security Fundamentals](../php-web-security/web-security.md) ·
 [Controllers](../controllers/index.md)</small>
-</invoke>
 
 ## Official References
 

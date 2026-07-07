@@ -69,7 +69,6 @@ first for the mental model, then [Configuration](configuration.md) to see it in
 [Authenticators, Passports & Badges](authenticators.md) and
 [Voters](voters.md). Finish with [Roles](roles.md) and
 [Access Control Rules](access-control.md), which are dense with exam traps.
-</invoke>
 
 ## Official References
 

@@ -81,7 +81,6 @@ Parcourez-les à peu près dans l'ordre :
 [Validation](../validation/index.md) ·
 [Web Security Fundamentals](../php-web-security/web-security.md) ·
 [Controllers](../controllers/index.md)</small>
-</invoke>
 
 ## Official References
 
