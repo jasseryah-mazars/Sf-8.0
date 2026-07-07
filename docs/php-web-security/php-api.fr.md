@@ -225,6 +225,14 @@ Court-circuite le *reste de la chaîne* vers `null` si l'opérande est `null` ; 
 n'est pas un remplaçant de `??` et il ne peut pas être une lvalue :
 `$c = $session?->getUser()?->getAddress()?->country;`.
 
+```php
+$country = $session?->getUser()?->getAddress()?->country;
+// null as soon as one link is null — the rest of the chain is skipped
+
+$name = $user?->name ?? 'anonymous';  // ?? still supplies the default
+// $user?->name = 'x';                // compile error: ?-> is not an lvalue
+```
+
 ### Typed class constants (8.3)
 
 Les constantes peuvent désormais déclarer un type, appliqué aux constantes qui
