@@ -142,6 +142,22 @@ Key builders: `files()`/`directories()`, `in($dirs)`, `name()/notName()`,
 `filter(callable)`. `count($finder)` gives the match count; `hasResults()` tests
 non-empty.
 
+```php
+$finder = (new Finder())
+    ->files()                                 // or directories()
+    ->in([__DIR__.'/src', __DIR__.'/config']) // in() is mandatory
+    ->name('*.php')->notName('*Test.php')
+    ->contains('interface')                   // filter on file content
+    ->path('Controller')                      // filter on the relative path
+    ->depth('< 3')->exclude('vendor')
+    ->ignoreDotFiles(true)->ignoreVCS(true)
+    ->sortByName()                            // or sortByModifiedTime()
+    ->filter(fn (\SplFileInfo $f) => $f->getSize() > 0);
+
+count($finder);        // number of matches (Finder is Countable)
+$finder->hasResults(); // true if anything matched
+```
+
 ```mermaid
 flowchart LR
     F[Finder] --> IN[in dirs] --> FL[filters: name/size/date] --> IT[iterate SplFileInfo]

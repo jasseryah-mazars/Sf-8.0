@@ -119,11 +119,26 @@ Si vous rendez les champs manuellement et définissez `render_rest: false`, vous
 devez rendre `form_rest(form)` (ou le champ CSRF) vous-même, sinon la validation
 CSRF échoue.
 
+```twig
+{{ form_start(form) }}
+    {{ form_row(form.email) }}
+    {{ form_rest(form) }}  {# emit the hidden CSRF token yourself #}
+{{ form_end(form, {'render_rest': false}) }}
+```
+
 ### The "rendered" flag
 
 Chaque `FormView` porte un drapeau `isRendered()`. Appeler
 `form_row`/`form_widget` le marque comme rendu, si bien que `form_rest` le
 saute. C'est ainsi que rendu partiel + rest coexistent sans doublon.
+
+```twig
+{{ form_start(form) }}
+{{ form_row(form.name) }}     {# this FormView now returns isRendered() = true #}
+{{ form_widget(form.email) }} {# marked as rendered too #}
+{{ form_rest(form) }}         {# skips rendered views — no duplication #}
+{{ form_end(form) }}
+```
 
 ## Configuration & code
 

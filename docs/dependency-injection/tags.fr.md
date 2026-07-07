@@ -77,6 +77,22 @@ services:
 Les deux sont résolus à la compilation en définitions d'argument concrètes ; le
 `PriorityTaggedServiceTrait` collecte, ordonne et indexe les services.
 
+```php
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+use Symfony\Component\DependencyInjection\ServiceLocator;
+
+public function __construct(
+    // tagged_iterator: already-instantiated services, iterated in order.
+    #[AutowireIterator('app.handler')]
+    private iterable $handlers,
+    // tagged_locator: a lazy ServiceLocator, one service built per get().
+    #[AutowireLocator('app.handler')]
+    private ServiceLocator $locator,
+) {}
+// At compile time PriorityTaggedServiceTrait collects, orders and keys both.
+```
+
 ### Priority and indexing
 
 - **`priority`** sur le tag ordonne la collection — **la priorité la plus élevée
@@ -85,6 +101,23 @@ Les deux sont résolus à la compilation en définitions d'argument concrètes ;
   attribut du tag, ou d'une **méthode statique** nommée par `default_index_method`
   (généralement `getDefaultName()`/`getDefaultIndexName()`), ou d'un attribut
   `#[AsTaggedItem(index: '...', priority: N)]` sur la classe.
+
+```php
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+
+// index + priority in one attribute (higher priority = earlier in iterator):
+#[AsTaggedItem(index: 'email', priority: 10)]
+final class EmailHandler implements HandlerInterface
+{
+    // Alternative index source, named by default_index_method — e.g.
+    // !tagged_locator { tag: app.handler, index_by: key,
+    //                   default_index_method: getDefaultName }
+    public static function getDefaultName(): string   // or getDefaultIndexName()
+    {
+        return 'email';
+    }
+}
+```
 
 ```mermaid
 flowchart TD
