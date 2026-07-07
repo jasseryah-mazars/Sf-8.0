@@ -414,6 +414,12 @@ ce processus), tandis que `getResult()` retourne `null` quand le handler n'a
 véritablement rien retourné. Le nullsafe `?->` protège du premier cas ; ne
 confondez pas « pas traité ici » avec « traité, a retourné null ».
 
+```php
+$envelope = $bus->dispatch(new GetInvoiceTotal(orderId: 7)); // always an Envelope
+$stamp = $envelope->last(HandledStamp::class); // null: no handler ran in this process
+$total = $stamp?->getResult();                 // null may also mean "handler returned null"
+```
+
 !!! note "Null in real life"
     Ici, null est comme un accusé de réception dont la ligne « réponse » est
     restée vide — la lettre a bien été livrée (vous tenez l'envelope), le

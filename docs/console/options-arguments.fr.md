@@ -102,6 +102,17 @@ cette définition ; puis `$input->validate()` lève une
 `Symfony\Component\Console\Exception\RuntimeException` si un argument `REQUIRED` ou la
 valeur d'une option `VALUE_REQUIRED` est manquant.
 
+```php
+$definition = new InputDefinition([
+    new InputArgument('path', InputArgument::REQUIRED),
+    new InputOption('depth', null, InputOption::VALUE_REQUIRED, 'Max depth', 1),
+]);
+
+$input = new ArgvInput();     // raw argv tokens
+$input->bind($definition);    // match tokens against the definition
+$input->validate();           // throws RuntimeException if "path" is missing
+```
+
 Règles imposées par la définition :
 
 - **Un seul** argument `IS_ARRAY`, et il doit être en **dernier** (il consomme
@@ -111,6 +122,13 @@ Règles imposées par la définition :
   toujours `false` sauf si présentes, alors `true`.
 - Une option `VALUE_NEGATABLE` vaut `true` avec `--foo`, `false` avec `--no-foo`, et sa
   valeur par défaut sinon.
+
+```console
+$ php bin/console app:notify --color      # NEGATABLE -> true
+$ php bin/console app:notify --no-color   # NEGATABLE -> false
+$ php bin/console app:notify              # neither -> the declared default
+$ php bin/console app:notify --force      # VALUE_NONE -> true (false when absent)
+```
 
 ```mermaid
 flowchart LR
@@ -125,6 +143,18 @@ Dans les commandes **invokables**, vous sautez `addArgument`/`addOption` : les a
 Le type et la valeur par défaut du paramètre déterminent le mode : une option `bool` →
 `VALUE_NONE` ; un `array` → `VALUE_IS_ARRAY` ; un paramètre avec valeur par défaut →
 optionnel.
+
+```php
+public function __invoke(
+    #[Argument] string $path,          // required argument (no default)
+    #[Argument] array $files = [],     // IS_ARRAY argument, must stay last
+    #[Option] bool $force = false,     // bool -> VALUE_NONE flag
+    #[Option] array $tags = [],        // array -> VALUE_IS_ARRAY
+    #[Option] int $depth = 1,          // default -> optional, value required
+): int {
+    return Command::SUCCESS;
+}
+```
 
 !!! note "Source reference"
     `InputArgument`, `InputOption`, `InputDefinition` —

@@ -105,6 +105,17 @@ fusionne la config de chaque fichier d'environnement, la fait passer par l'arbre
 puis remet le tableau traité à `load()`. `load()` charge généralement un fichier
 de services et définit des parameters à partir des valeurs de config.
 
+```php
+public function load(array $configs, ContainerBuilder $container): void
+{
+    // $configs is a LIST of arrays (one per config file / environment);
+    // processConfiguration() merges them through the Configuration tree.
+    $config = $this->processConfiguration(new Configuration(), $configs);
+
+    $container->setParameter('acme_blog.per_page', $config['per_page']);
+}
+```
+
 ```mermaid
 flowchart TD
     Y["app.yaml (root: app)"] --> M["merge per env"]

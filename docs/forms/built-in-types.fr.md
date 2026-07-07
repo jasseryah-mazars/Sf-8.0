@@ -37,6 +37,15 @@ Symfony fournit un catalogue de types de champs sous
 framework). Ils se regroupent en : **texte/scalaire**, **choice**, **date/heure**,
 **compound à usage spécifique** (`collection`, `repeated`) et **boutons**.
 
+```php
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;     // choice
+use Symfony\Component\Form\Extension\Core\Type\CollectionType; // 'collection' compound
+use Symfony\Component\Form\Extension\Core\Type\DateType;       // date/time
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;   // 'repeated' compound
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;     // buttons
+use Symfony\Component\Form\Extension\Core\Type\TextType;       // text/scalar
+```
+
 !!! info "Doctrine out of scope"
     `EntityType` (`Symfony\Bridge\Doctrine\Form\Type\EntityType`) est un type du
     bridge Doctrine et est **hors périmètre** pour ce support. Utilisez `ChoiceType`

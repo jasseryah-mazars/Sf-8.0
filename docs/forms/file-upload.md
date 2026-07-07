@@ -70,6 +70,18 @@ string transformation. The mapped model value (if mapped) becomes that
 - `getSize()`, `isValid()`, `getError()`.
 - `move(string $dir, ?string $name = null): File` — relocate out of the temp dir.
 
+```php
+// HttpFoundationRequestHandler merged $request->files into the submitted data;
+// for a FileType field the view data IS the UploadedFile (File -> \SplFileInfo).
+$file->getClientOriginalName();  // untrusted (client-sent)
+$file->getClientMimeType();      // untrusted (client-sent)
+$file->getMimeType();            // guessed from content — trustworthy
+$file->getSize();                // bytes
+$file->isValid();                // upload completed without error?
+$file->getError();               // raw UPLOAD_ERR_* code
+$moved = $file->move('/var/app/uploads', 'doc-64f2a1.pdf'); // returns a File
+```
+
 !!! danger "Never trust the client filename"
     `getClientOriginalName()` can contain path traversal or scripts. Always
     generate a safe name (e.g. slug + `uniqid()` + guessed extension) before
@@ -98,6 +110,15 @@ Setting `'mapped' => false` on a field:
 You retrieve it explicitly: `$form->get('brochure')->getData()`. This is the
 standard pattern for uploads, plain-password fields, and "accept terms"
 checkboxes.
+
+```php
+$builder->add('brochure', FileType::class, [
+    'mapped' => false,   // rendered, submitted, validated — never touches the model
+]);
+
+// After a valid submit, fetch it explicitly:
+$file = $form->get('brochure')->getData();   // ?UploadedFile
+```
 
 ### Constraints
 
