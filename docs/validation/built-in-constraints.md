@@ -72,6 +72,14 @@ not obscure options. Learn the categories below.
 The single most tested distinction: **`NotBlank` rejects the empty string;
 `NotNull` accepts it.**
 
+```php
+#[Assert\NotBlank]      // '' => violation
+public string $title = '';
+
+#[Assert\NotNull]       // '' passes, only a real null fails
+public ?string $subtitle = '';
+```
+
 ### String
 
 ```php
@@ -136,6 +144,21 @@ and a `callback` returning the allowed set. For enum-backed values prefer
 
 `Date`, `Time`, `DateTime` validate string format; `Range` compares
 `\DateTimeInterface` values (e.g. `min: 'today'` via a relative string).
+
+```php
+#[Assert\Date]                      // string in 'Y-m-d' format
+public string $birthday = '';
+
+#[Assert\Time]                      // string in 'H:i:s' format
+public string $openingTime = '';
+
+#[Assert\DateTime]                  // string in 'Y-m-d H:i:s' format
+public string $loggedAt = '';
+
+// Range compares \DateTimeInterface values; relative strings allowed
+#[Assert\Range(min: 'today')]
+public ?\DateTimeInterface $deliveryDate = null;
+```
 
 ### Collection & iterable
 
@@ -202,6 +225,17 @@ constraints are deliberately different:
 - **`NotBlank`** — fails on `null`, `''`, `[]` and (by default) whitespace-only
   strings. Set `allowNull: true` to let `null` through while still rejecting `''`.
 - **`IsNull`** — the inverse: passes only when the value **is** `null`.
+
+```php
+#[Assert\NotNull]                   // only null fails; '' / 0 / [] pass
+public ?string $nickname = '';
+
+#[Assert\NotBlank(allowNull: true)] // null is allowed, but '' still fails
+public ?string $bio = null;
+
+#[Assert\IsNull]                    // passes only when the value IS null
+public ?string $legacyField = null;
+```
 
 Almost every *other* constraint (`Email`, `Url`, `Length`, `Regex`, `Range`,
 `Choice`, `Type`, the comparisons…) **skips `null` and returns no violation** —

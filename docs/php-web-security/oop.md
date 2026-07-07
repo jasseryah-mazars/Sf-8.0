@@ -34,6 +34,19 @@ implementation, traits for horizontal reuse. Members have **visibility**
 (`public`/`protected`/`private`), may be **instance** or **static**, and classes
 may be `final`, `abstract`, or (8.2+) `readonly`.
 
+```php
+abstract class Shape {}            // abstract: cannot be instantiated
+final class Circle extends Shape   // final: cannot be extended further
+{
+    public float $radius = 1.0;    // public: accessible everywhere
+    protected string $unit = 'cm'; // protected: class + subclasses
+    private bool $cached = false;  // private: declaring class only
+
+    public static int $count = 0;  // static: belongs to the class itself
+}
+readonly class Money {}            // 8.2+: every instance property readonly
+```
+
 | Concept | One-liner |
 |---|---|
 | `public` | Accessible everywhere |
