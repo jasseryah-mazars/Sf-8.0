@@ -90,6 +90,18 @@ tweaks one service.
 - **aliases** — a second id (or an interface) pointing at a service, so it can be
   fetched/autowired under another name.
 
+```yaml
+services:
+    App\Report\PdfReporter:
+        arguments:
+            $logger: '@monolog.logger'    # argument by name
+        calls:
+            - setLogger: ['@logger']      # setter injection after construction
+
+    # Alias: the interface id points at the concrete service.
+    App\Report\ReporterInterface: '@App\Report\PdfReporter'
+```
+
 ```mermaid
 flowchart TD
     G["App\\: resource glob"] --> D["Definition per class (id = FQCN)"]
@@ -104,6 +116,22 @@ Instead of a YAML block, `#[Autoconfigure]` on the class sets its flags —
 `public`, `shared`, `lazy`, `tags`, `bind`, `calls`, `properties`,
 `constructor`. It is applied by the attribute-autoconfiguration pass at compile
 time and is handy for library classes that carry their own wiring.
+
+```php
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+
+#[Autoconfigure(
+    public: false,                                 // visibility flag
+    shared: true,                                  // one instance per container
+    lazy: true,                                    // proxy until first use
+    tags: ['app.report'],                          // extra tags
+    bind: ['$dir' => '%kernel.project_dir%/var'],  // named-argument binding
+    calls: [['setLogger', ['@logger']]],           // setter calls
+    properties: ['timeout' => 30],                 // property injection
+    constructor: 'create',                         // static factory method
+)]
+final class PdfReporter { /* ... */ }
+```
 
 !!! note "Source reference"
     Attribute autoconfiguration is handled during compilation via

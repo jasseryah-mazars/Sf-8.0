@@ -40,6 +40,15 @@ Deux commandes console répondent aux questions de routing du quotidien :
   y compris *pourquoi* les autres ont été rejetées. Elle accepte `--method`, `--host` et
   `--scheme` pour reproduire les conditions exactes de la request.
 
+```console
+# debug:router — list everything, or show one route's full definition
+$ php bin/console debug:router
+$ php bin/console debug:router blog_show
+
+# router:match — simulate a request with exact conditions
+$ php bin/console router:match /blog/hello --method=POST --host=example.com --scheme=https
+```
+
 Les deux lisent la même `RouteCollection` compilée que l'application utilise : ce
 qu'elles rapportent est ce que fait la production.
 
@@ -63,6 +72,20 @@ qu'elles rapportent est ce que fait la production.
 échec (path non conforme, méthode non autorisée, host non conforme, condition échouée).
 C'est cette trace qui lui permet de vous dire qu'une route « a presque matché mais la
 méthode était mauvaise ».
+
+```php
+use Symfony\Component\Routing\Matcher\TraceableUrlMatcher;
+use Symfony\Component\Routing\RequestContext;
+
+// What RouterMatchCommand does (RouterDebugCommand just dumps the collection);
+// $routes is the RouteCollection from the framework's `router` service
+$context = new RequestContext(method: 'POST');   // built from --method/--host/--scheme
+$matcher = new TraceableUrlMatcher($routes, $context);
+
+foreach ($matcher->getTraces('/blog/hello') as $trace) {
+    // $trace['name'] + $trace['log'], e.g. "Method 'POST' does not match: GET, HEAD"
+}
+```
 
 Souvenez-vous du [cache compilé](configuration.md) : les routes sont dumpées vers
 `{cache_dir}/url_matching_routes.php` et `url_generating_routes.php`. En `dev`,

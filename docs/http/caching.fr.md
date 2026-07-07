@@ -111,6 +111,14 @@ $response->setCache(['public' => true, 'max_age' => 600, 's_maxage' => 3600]);
 stocker ; `private` la réserve au navigateur de l'utilisateur final. Une response
 par défaut est `no-cache, private` — voir [HTTP Response](response.md).
 
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=600, s-maxage=3600
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache, private
+```
+
 !!! note "Source reference"
     `Response::setCache()`, `isNotModified()`, `setSharedMaxAge()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php).

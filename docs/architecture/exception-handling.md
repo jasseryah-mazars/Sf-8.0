@@ -71,6 +71,17 @@ via `$event->setResponse()`, that response is returned (still passing through
 `kernel.response`); otherwise the exception is re-thrown. With `catch: false`
 (often used in sub-requests and tests) the exception simply propagates.
 
+```php
+// HttpKernel::handle() — catch: true wraps handleRaw() in a try/catch
+$response = $kernel->handle($request, HttpKernelInterface::MAIN_REQUEST, catch: true);
+
+// On a throwable, handleThrowable() dispatches an ExceptionEvent;
+// a listener may convert it by calling $event->setResponse($response)
+
+// with catch: false the exception simply propagates to the caller
+$response = $kernel->handle($request, HttpKernelInterface::SUB_REQUEST, catch: false);
+```
+
 ### ErrorListener — the default converter
 
 `Symfony\Component\HttpKernel\EventListener\ErrorListener` is registered on
@@ -111,6 +122,19 @@ produces the fallback error page (or re-throw path when `catch` is `false`).
 `ErrorListener`/the error controller use that status code and headers; otherwise
 the response is `500`. Common built-ins:
 
+```php
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
+$e = new HttpException(429, 'Too Many Requests', headers: ['Retry-After' => '60']);
+
+if ($e instanceof HttpExceptionInterface) {
+    $status  = $e->getStatusCode(); // 429 — used by ErrorListener
+    $headers = $e->getHeaders();    // ['Retry-After' => '60']
+}
+// any other throwable -> 500
+```
+
 | Exception | Status |
 |---|---|
 | `NotFoundHttpException` | 404 |
@@ -132,6 +156,17 @@ via the configured error renderer. In `dev` you get the rich exception page; in
 `prod` you get a clean status-code page. TwigBundle lets you override templates by
 path: `templates/bundles/TwigBundle/Exception/error404.html.twig` (fallback:
 `error.html.twig`).
+
+```yaml
+# config/packages/framework.yaml
+framework:
+    # default: Symfony\Component\HttpKernel\Controller\ErrorController
+    error_controller: App\Controller\ApiErrorController
+
+# Twig template overrides (TwigBundle):
+#   templates/bundles/TwigBundle/Exception/error404.html.twig  # status-specific
+#   templates/bundles/TwigBundle/Exception/error.html.twig     # generic fallback
+```
 
 ```mermaid
 flowchart TD
@@ -165,6 +200,20 @@ still unset, the kernel **re-throws** the original throwable, which — with
 disable it. The classic bug: a listener that inspects `getThrowable()` but forgets
 `setResponse()` for its branch — the event's response stays `null`, so your custom
 page never appears and the default (or a 500) wins instead.
+
+```php
+public function __invoke(ExceptionEvent $event): void
+{
+    $e = $event->getThrowable();
+
+    // getResponse() stays null until a listener calls setResponse()
+    if ($e instanceof PaymentFailedException) {
+        $event->setResponse(new JsonResponse(['error' => 'payment'], 402));
+    }
+    // no setResponse() here -> handleThrowable() sees hasResponse() === false
+    // and re-throws the original throwable (surfacing as a 500)
+}
+```
 
 !!! note "Null in real life"
     A `kernel.exception` with no response set is a **fire alarm that no responder

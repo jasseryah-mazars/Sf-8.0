@@ -106,6 +106,17 @@ La fraîcheur (`max-age`, `s-maxage`, `Expires`) relève du modèle
 d'[expiration](expiration.md) ; la revalidation (`no-cache`, `ETag`,
 `Last-Modified`) relève du modèle de [validation](validation.md).
 
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=60, s-maxage=600
+Expires: Tue, 07 Jul 2026 12:00:00 GMT
+
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+ETag: "a1b2c3"
+Last-Modified: Mon, 06 Jul 2026 10:00:00 GMT
+```
+
 !!! question "Predict first"
     Une response porte `Cache-Control: public, max-age=60, s-maxage=600`.
     Combien de temps le **navigateur** la considère-t-il comme fraîche, et
@@ -130,6 +141,16 @@ produit `no-cache, private` quand vous ne définissez rien, et qui applique la
 règle selon laquelle **appeler `setPublic()` retire `private`** (et
 inversement), de sorte que vous ne pouvez jamais émettre le contradictoire
 `public, private`.
+
+```php
+$response = new Response();
+
+// Nothing set: computeCacheControlValue() renders the safe default
+$response->headers->get('Cache-Control');   // "no-cache, private"
+
+$response->setPublic();                     // adds "public", strips "private"
+$response->headers->get('Cache-Control');   // "public"
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\ResponseHeaderBag::computeCacheControlValue()`
@@ -158,6 +179,14 @@ Sans `Vary`, un cache partagé qui aurait stocké une page française gzippée
 pourrait la remettre à un client anglophone demandant un encodage identity.
 `Vary: Accept-Language, Accept-Encoding` empêche cela.
 
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+Content-Language: fr
+Content-Encoding: gzip
+Vary: Accept-Language, Accept-Encoding
+```
+
 !!! warning "`Vary: *` and `Vary: Cookie` kill caching"
     `Vary: *` signifie « chaque request est unique » — les caches partagés ne
     peuvent en pratique rien réutiliser. `Vary: Cookie` fait exploser l'espace
@@ -172,6 +201,12 @@ n'est honoré **que par les caches partagés** (proxies, reverse proxy) — le
 navigateur l'ignore. Cette séparation est précisément ce qui vous permet de
 mettre une page en cache 60 s dans le CDN tout en disant aux navigateurs de ne
 pas la mettre en cache du tout.
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=0, s-maxage=60
+Content-Type: text/html; charset=UTF-8
+```
 
 ## Configuration & code
 

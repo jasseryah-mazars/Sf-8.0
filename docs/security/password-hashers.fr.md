@@ -37,6 +37,13 @@ enveloppe le `password_hash()` de PHP et libsodium derrière
 `Symfony\Component\PasswordHasher\PasswordHasherInterface`
 (`hash()`, `verify()`, `needsRehash()`).
 
+```php
+// PasswordHasherInterface — wraps password_hash() / libsodium
+$hash = $hasher->hash('S3cr3t!');    // hash(): slow, salted, one-way
+$hasher->verify($hash, 'S3cr3t!');   // verify(): true on match
+$hasher->needsRehash($hash);         // needsRehash(): true after an algo/cost bump
+```
+
 | Algorithm | Backed by | Note |
 |---|---|---|
 | `auto` | le meilleur disponible | **Par défaut et recommandé** ; actuellement bcrypt |
@@ -88,6 +95,16 @@ un badge `PasswordCredentials` (le mot de passe en clair) ; sur
 `CheckPassportEvent`, le `CheckCredentialsListener` appelle le
 `verify($hash, $plain)` du hasher. Voir
 [Authenticators, Passports & Badges](authenticators.md).
+
+```php
+// Authenticator: hand over the plaintext via a badge — never verify it yourself
+return new Passport(
+    new UserBadge($email),
+    new PasswordCredentials($plaintextPassword)
+);
+// Then, on CheckPassportEvent, CheckCredentialsListener runs:
+// $hasher->verify($user->getPassword(), $plaintextPassword)
+```
 
 ### Migration & rehash (`needsRehash`)
 

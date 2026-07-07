@@ -200,6 +200,13 @@ Gérez-le explicitement avec trois outils :
 - **les tests** — `{% if x is defined %}`, `{% if x is null %}`, `is not null`
   pour brancher avant de toucher une valeur.
 
+```twig
+{{ count ?? 0 }}                          {# ?? replaces null/undefined only #}
+{{ name|default('Anon') }}                {# |default also replaces '' and [] #}
+{% if x is defined %}...{% endif %}       {# branch before touching x #}
+{% if x is not null %}{{ x }}{% endif %}  {# print only when non-null #}
+```
+
 Le bug classique : croire que `{{ a.b.c }}` lève une erreur quand `a.b` est
 `null`. En mode tolérant, il affiche silencieusement vide et la coquille ne se
 révèle qu'une fois `strict_variables` activé — gardez-le donc activé en dev.

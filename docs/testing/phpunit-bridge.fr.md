@@ -151,6 +151,17 @@ règle le gestionnaire :
 dépréciation (le vôtre, une dépendance appelée directement, ou au fond d'une
 dépendance) — voir le [chapitre sur les dépréciations](deprecations.md).
 
+```console
+# self: your own code triggers the deprecation
+$ SYMFONY_DEPRECATIONS_HELPER='max[self]=0' php bin/phpunit
+
+# direct: your code calls a deprecated API of a direct dependency
+$ SYMFONY_DEPRECATIONS_HELPER='max[direct]=0' php bin/phpunit
+
+# indirect: triggered deep inside a dependency calling another dependency
+$ SYMFONY_DEPRECATIONS_HELPER='max[indirect]=5' php bin/phpunit
+```
+
 ## Configuration & code
 
 === "phpunit.dist.xml"

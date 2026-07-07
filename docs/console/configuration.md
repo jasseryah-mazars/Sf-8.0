@@ -49,6 +49,20 @@ Two places can configure a command:
   **arguments and options** in the classic style, and where you can call
   `setHelp()`, `setAliases()`, etc.
 
+```php
+#[AsCommand(name: 'app:report', description: 'Generates the report')] // declarative, compile time
+final class ReportCommand extends Command
+{
+    protected function configure(): void            // imperative, classic style
+    {
+        $this
+            ->addArgument('period', InputArgument::REQUIRED)  // args/options: classic style only
+            ->setHelp('Shown by "help app:report".')          // setHelp()
+            ->setAliases(['app:rep']);                        // setAliases()
+    }
+}
+```
+
 !!! question "Predict first"
     In what order do `configure()`, `initialize()`, `interact()` and `execute()`
     run — and which one has already happened before any input exists?
@@ -63,6 +77,15 @@ Two places can configure a command:
 `configure()` is called from the `Command` **constructor**, so it runs the moment a
 command is instantiated — *before* any input exists. That is why it may only
 declare *structure* (name, definition, help), never touch input/output.
+
+```php
+// configure() is invoked by the Command constructor - no input exists yet
+protected function configure(): void
+{
+    $this->setDescription('Structure only: name, definition, help');
+    // Never read input here: $input->getArgument() is impossible, nothing is bound
+}
+```
 
 The runtime path is the **command lifecycle**, executed by
 `Symfony\Component\Console\Command\Command::run()`:
@@ -87,6 +110,27 @@ Order of methods you can override:
 4. **validation** — `$input->validate()` checks required arguments are present.
 5. **`execute(InputInterface, OutputInterface): int`** — the actual work.
 
+```php
+protected function initialize(InputInterface $input, OutputInterface $output): void
+{
+    $this->io = new SymfonyStyle($input, $output);   // shared setup, input is bound
+}
+
+protected function interact(InputInterface $input, OutputInterface $output): void
+{
+    // runs only when $input->isInteractive() (skipped with -n)
+    if (null === $input->getArgument('name')) {
+        $input->setArgument('name', $this->io->ask('Name?'));
+    }
+}
+
+protected function execute(InputInterface $input, OutputInterface $output): int
+{
+    // $input->validate() has already checked required arguments
+    return Command::SUCCESS;
+}
+```
+
 ### Lazy loading
 
 Because `#[AsCommand]` exposes the **name (and aliases) without instantiating** the
@@ -95,6 +139,19 @@ command object is created only when that name is invoked. Defining the name *onl
 inside `configure()` (via `setName()`) would defeat lazy loading, because the
 Application would have to instantiate every command to learn its name. In Symfony 8
 you therefore put the **name in the attribute**.
+
+```php
+// The attribute exposes the name without instantiating the class
+#[AsCommand(name: 'app:report')]
+final class ReportCommand extends Command { /* ... */ }
+
+// The ContainerCommandLoader maps "name => service id"; instantiation is on demand
+$application->setCommandLoader(
+    new ContainerCommandLoader($container, ['app:report' => ReportCommand::class])
+);
+
+// Anti-pattern: setName() inside configure() forces instantiating every command
+```
 
 !!! note "Source reference"
     `Command::run()` orders `initialize → interact → validate → execute` —

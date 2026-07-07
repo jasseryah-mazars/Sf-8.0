@@ -42,6 +42,24 @@ classes :
 La constraint se lie à son validator via `validatedBy()`, qui par convention
 retourne `static::class . 'Validator'`.
 
+```php
+// 1) the declarative marker: a Constraint subclass holding options + message
+final class Uuid4 extends Constraint
+{
+    public string $message = 'This is not a UUID v4.';
+}
+
+// 2) the logic: a ConstraintValidator subclass, found via validatedBy(),
+//    which by default returns static::class . 'Validator' => Uuid4Validator
+final class Uuid4Validator extends ConstraintValidator
+{
+    public function validate(mixed $value, Constraint $constraint): void
+    {
+        // inspect $value and add violations through $this->context
+    }
+}
+```
+
 !!! question "Predict first"
     Vous ajoutez `#[\Attribute(\Attribute::TARGET_CLASS)]` à une constraint
     personnalisée, mais le validator la traite toujours comme une constraint de

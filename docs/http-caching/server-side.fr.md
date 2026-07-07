@@ -43,10 +43,30 @@ transmet au backend que les miss. Symfony en fournit un écrit en PHP :
 `HttpKernelInterface` prêt à l'emploi qui **enveloppe** votre vrai kernel, de
 sorte qu'une request atteint d'abord le kernel de cache.
 
+```php
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+// HttpCache is itself an HttpKernelInterface that wraps the real kernel
+$cachingKernel = new HttpCache($appKernel, $store);
+$response = $cachingKernel->handle($request); // on a fresh hit, the app never runs
+```
+
 Il obéit aux headers standards que vous connaissez déjà — `Cache-Control` (en
 particulier `s-maxage`, puisque c'est un cache *partagé*), `Expires`, `ETag`,
 `Last-Modified`, `Vary` — sans langage de configuration maison. Il comprend
 aussi [ESI](esi.md).
+
+```http
+HTTP/1.1 200 OK
+Cache-Control: public, s-maxage=3600
+Expires: Tue, 07 Jul 2026 12:00:00 GMT
+ETag: "v42"
+Last-Modified: Mon, 06 Jul 2026 10:00:00 GMT
+Vary: Accept-Encoding
+
+# Standard headers only -- as a shared cache it prefers s-maxage over max-age
+```
 
 !!! info "Development convenience, not always production"
     Le reverse proxy PHP est un vrai cache HTTP/1.1 correct — pratique en dev et
@@ -100,6 +120,20 @@ public function __construct(
 - `$surrogate` — une instance `Esi` ou `Ssi` pour le traitement des
   [fragments](esi.md).
 - `$options` — les réglages de comportement (ci-dessous).
+
+```php
+use Symfony\Component\HttpKernel\HttpCache\Esi;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Store;
+
+$store = new Store(__DIR__.'/../var/cache/http_cache'); // filesystem Store
+$cache = new HttpCache(
+    $kernel,              // the backend app kernel it protects
+    $store,               // entries keyed by URL + Vary
+    new Esi(),            // $surrogate: Esi (or new Ssi())
+    ['default_ttl' => 0], // $options: behavioural knobs
+);
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\HttpCache\HttpCache`,
@@ -167,6 +201,18 @@ Chaque response transporte un header de trace (par défaut `X-Symfony-Cache`)
 décrivant ce qui s'est passé : `fresh`, `stale`, `miss`, `store`, `invalid`,
 p. ex. `X-Symfony-Cache: GET /: fresh`. C'est votre principal outil de débogage
 — inspectez-le pour confirmer les hits.
+
+```http
+# First request: nothing stored yet, response written to the Store
+HTTP/1.1 200 OK
+X-Symfony-Cache: GET /articles: miss, store
+
+# Second request within the TTL: served without running the app
+HTTP/1.1 200 OK
+X-Symfony-Cache: GET /articles: fresh
+
+# Other values you may see: stale, invalid
+```
 
 !!! danger "`allow_reload`/`allow_revalidate` are off by default"
     Parce que laisser n'importe quel client forcer un contournement du cache

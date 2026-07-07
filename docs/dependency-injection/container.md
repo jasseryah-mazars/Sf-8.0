@@ -283,6 +283,23 @@ the injected dependency as nullable (`?LoggerInterface $logger = null`) so a
 `ServiceNotFoundException` bubble up because you assumed an optional service was
 always present.
 
+```php
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+// EXCEPTION_ON_INVALID_REFERENCE (default): missing id → ServiceNotFoundException
+$container->get('app.reporter');
+
+// NULL_ON_INVALID_REFERENCE: missing id → null (optional dependency)
+$reporter = $container->get('app.reporter', ContainerInterface::NULL_ON_INVALID_REFERENCE);
+
+// Guard with has() before get()…
+$reporter = $container->has('app.reporter') ? $container->get('app.reporter') : null;
+
+// …or make the injected dependency nullable
+public function __construct(private ?LoggerInterface $logger = null) {}
+```
+
 !!! note "Null in real life"
     A missing service id is the waiter saying "we're out of that tonight" — with
     `NULL_ON_INVALID_REFERENCE` you get an empty plate (null) instead of an argument.

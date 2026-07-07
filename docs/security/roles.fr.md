@@ -35,9 +35,24 @@ Par convention, elle **doit commencer par `ROLE_`** — le `RoleVoter` ne vote q
 les attributs qui portent ce préfixe. Tout le reste (`EDIT`, `IS_AUTHENTICATED_FULLY`)
 est géré par d'autres voters.
 
+```php
+// RoleVoter only votes on attributes starting with the ROLE_ prefix
+$authChecker->isGranted('ROLE_ADMIN');             // RoleVoter decides
+$authChecker->isGranted('EDIT', $post);            // RoleVoter abstains → custom voter
+$authChecker->isGranted('IS_AUTHENTICATED_FULLY'); // AuthenticatedVoter decides
+```
+
 Les roles proviennent de `UserInterface::getRoles()`. Bonne pratique : incluez toujours
 `ROLE_USER` pour tout utilisateur authentifié, et laissez la **hiérarchie** ajouter le
 reste.
+
+```php
+// UserInterface::getRoles() — always guarantee ROLE_USER for logged-in users
+public function getRoles(): array
+{
+    return array_unique([...$this->roles, 'ROLE_USER']); // hierarchy adds the rest
+}
+```
 
 !!! question "Predict first"
     Un utilisateur possède `ROLE_USER` et la hiérarchie indique `ROLE_ADMIN: [ROLE_USER]`.
@@ -95,6 +110,15 @@ les utilisateurs pleinement authentifiés satisfont les deux, les utilisateurs
 remember-me ne satisfont que le premier. Utilisez `_REMEMBERED` pour « connecté,
 peu importe comment », et `_FULLY` pour les actions sensibles (changement de mot
 de passe, paiement) qui ne doivent pas accepter un cookie remember-me.
+
+```yaml
+security:
+    access_control:
+        # _FULLY: sensitive action — a remember-me cookie is not enough
+        - { path: ^/account/password, roles: IS_AUTHENTICATED_FULLY }
+        # _REMEMBERED: "logged in at all" (fresh login OR remember-me)
+        - { path: ^/account, roles: IS_AUTHENTICATED_REMEMBERED }
+```
 
 !!! info "No more `IS_AUTHENTICATED_ANONYMOUSLY`"
     Symfony 8 n'a **plus de tokens anonymes**. L'ancien

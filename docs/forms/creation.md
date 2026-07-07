@@ -125,6 +125,16 @@ flowchart LR
    `FormInterface` tree. Each field is itself a `Form` whose config is a
    `Symfony\Component\Form\FormConfigInterface`.
 
+```php
+// Inside FormFactory::create() → createBuilder():
+$resolvedType = $registry->getType(TaskType::class);       // FormRegistry → ResolvedFormTypeInterface
+$builder = $resolvedType->createBuilder($factory, 'task'); // a FormBuilder
+// parent → child chain: each type's (and extension's) buildForm() runs
+$resolvedType->buildForm($builder, $builder->getOptions());
+$form = $builder->getForm();   // immutable FormInterface tree
+$config = $form->getConfig();  // each field exposes a FormConfigInterface
+```
+
 !!! note "Source reference"
     `Symfony\Component\Form\FormFactory` and `AbstractType` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php).
@@ -140,6 +150,15 @@ flowchart LR
   **data mapper** (`Symfony\Component\Form\Extension\Core\DataMapper\DataMapper`,
   which uses PropertyAccess). Without `data_class`, a compound form yields an
   associative **array**.
+
+```php
+// data_class binds the model; empty_data materialises it when input is missing
+$form = $this->createForm(RegistrationType::class); // data_class = RegistrationData::class
+$data = $form->getData(); // RegistrationData instance, never an array here
+
+// On submit, the DataMapper writes values back via PropertyAccess, roughly:
+// $accessor->setValue($data, 'username', $form->get('username')->getData());
+```
 
 ### Null behavior
 

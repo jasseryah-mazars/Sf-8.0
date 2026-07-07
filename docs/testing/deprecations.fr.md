@@ -44,6 +44,22 @@ consiste à distinguer *vos* deprecations (que vous devez corriger) de celles de
 *tiers* (que vous tolérez en attendant qu'ils publient un correctif), et à faire
 taire celles que vous testez délibérément.
 
+```php
+// Library code signals a future removal:
+trigger_deprecation(
+    'acme/blog',                        // package
+    '2.4',                              // version that deprecated it
+    'Method "%s()" is deprecated.',     // message (sprintf-style)
+    'old',
+);
+
+// ...which internally triggers a silenced E_USER_DEPRECATED error:
+@trigger_error(
+    'Since acme/blog 2.4: Method "old()" is deprecated.',
+    \E_USER_DEPRECATED,
+);
+```
+
 !!! question "Predict first"
     Votre CI tourne avec `max[self]=0`. Une librairie vendor déclenche une
     deprecation au fin fond de ses propres entrailles. Le build passe-t-il au
@@ -70,6 +86,17 @@ d'appels :
 compare aux seuils de `SYMFONY_DEPRECATIONS_HELPER` (`max[self]`, `max[direct]`,
 etc.). Dépasser n'importe quel seuil autre que `legacy` fait échouer la suite avec
 un code de sortie non nul.
+
+```console
+$ # One threshold per bucket in SYMFONY_DEPRECATIONS_HELPER;
+$ # exceeding any non-legacy one fails the run
+$ SYMFONY_DEPRECATIONS_HELPER='max[self]=0&max[direct]=3&max[indirect]=999' \
+    php bin/phpunit
+
+$ # e.g. 1 self deprecation > max[self]=0 -> non-zero exit code
+$ echo $?
+1
+```
 
 ### Marking and asserting deprecations
 

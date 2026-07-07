@@ -40,6 +40,15 @@ container : un mailer, un logger, un repository, votre propre `InvoiceGenerator`
 Les value objects (un `Order`, un `Money`) ne sont *pas* des services — ils
 transportent des données, ils ne sont pas câblés.
 
+```php
+// A service: does a job, has dependencies, is wired by the container
+final class InvoiceGenerator { /* logger injected, registered once */ }
+
+// Value objects: carry data, built with `new`, NOT services
+$order = new Order(42);
+$price = new Money(1999, 'EUR');
+```
+
 Le **service container** (aussi appelé *DI container*) est l'objet qui instancie
 les services, injecte leurs dépendances et les fournit à la demande. Dans Symfony,
 il est défini par `Symfony\Component\DependencyInjection\ContainerInterface`. Vous

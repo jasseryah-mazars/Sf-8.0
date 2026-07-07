@@ -44,6 +44,21 @@ Security. Cinq clés de premier niveau comptent pour l'examen :
 | `password_hashers` | Comment les mots de passe sont hachés ([Password Hashers](password-hashers.md)) |
 | `role_hierarchy` | Héritage des roles ([Roles](roles.md)) |
 
+```yaml
+# config/packages/security.yaml — the five exam keys at a glance
+security:
+    providers:
+        app_users: { entity: { class: App\Entity\User } }
+    firewalls:
+        main: { lazy: true, provider: app_users }
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+```
+
 !!! question "Predict first"
     Vous définissez deux `providers` mais un firewall omet `provider:`. Symfony
     choisit-il le premier ?
@@ -81,6 +96,14 @@ Principaux services générés :
 - **`security.access.map`** → `AccessMap` (les règles `access_control` compilées)
 - **`security.password_hasher_factory`** → `PasswordHasherFactory`
 - **`security.role_hierarchy`** → `RoleHierarchy`
+
+```console
+# Each config key compiles to a container service — inspect them:
+$ php bin/console debug:container security.firewall.map            # FirewallMap
+$ php bin/console debug:container security.access.map              # AccessMap (access_control)
+$ php bin/console debug:container security.password_hasher_factory # PasswordHasherFactory
+$ php bin/console debug:container security.role_hierarchy          # RoleHierarchy
+```
 
 !!! note "Source reference"
     `Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension` —

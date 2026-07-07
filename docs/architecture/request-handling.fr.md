@@ -288,6 +288,19 @@ controller?"* Corrigez en retournant une vraie `Response`, ou en enregistrant un
 listener `kernel.view` qui appelle `$event->setResponse()` (p. ex. en sérialisant
 la valeur en `JsonResponse`).
 
+```php
+// Simplified handleRaw() logic after the controller returned $response:
+if (!$response instanceof Response) {
+    $event = new ViewEvent($this, $request, $type, $response);
+    $this->dispatcher->dispatch($event, KernelEvents::VIEW);   // kernel.view
+    if (!$event->hasResponse()) {
+        // a LogicException: "The controller must return a ... Response object..."
+        throw new ControllerDoesNotReturnResponseException(/* ... */);
+    }
+    $response = $event->getResponse(); // e.g. a JsonResponse a listener passed to $event->setResponse()
+}
+```
+
 !!! note "Null in real life"
     Un controller qui retourne `null` est un **colis arrivé à la station
     d'emballage sans boîte** : `kernel.view` est l'ouvrier qui le met en boîte, et

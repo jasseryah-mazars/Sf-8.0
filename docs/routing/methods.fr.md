@@ -77,6 +77,21 @@ autorisées de la route et, après avoir épuisé la collection, lève
 `RedirectableUrlMatcher` émet une **redirection vers le bon scheme** (une request
 `http` vers une route en `https` uniquement est donc redirigée, pas rejetée).
 
+```php
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+
+// methods/schemes are stored on the Route object
+$route = new Route('/posts', methods: ['GET'], schemes: ['https']);
+
+// UrlMatcher::matchCollection(): host + path match, but the verb does not
+try {
+    $matcher->match('/posts');            // request method is POST
+} catch (MethodNotAllowedException $e) {
+    $e->getAllowedMethods();              // ['GET'] -> "Allow: GET" on the 405
+}
+// A scheme mismatch is different: RedirectableUrlMatcher redirects to https
+```
+
 Deux subtilités :
 
 - **`GET` implique `HEAD`.** Une route avec `methods: ['GET']` correspond aussi à `HEAD` ;
@@ -86,6 +101,17 @@ Deux subtilités :
   `X-HTTP-Method-Override`) **seulement si** `Request::enableHttpMethodParameterOverride()`
   est activé. Le matcher compare avec `getMethod()`, donc l'override affecte
   le routing.
+
+```php
+// GET implies HEAD: this route also matches HEAD (HttpKernel strips the body)
+#[Route('/posts', name: 'post_index', methods: ['GET'])]
+
+// Method override is opt-in (e.g. in public/index.php):
+Request::enableHttpMethodParameterOverride();
+// POST form with <input type="hidden" name="_method" value="PUT">
+// or header "X-HTTP-Method-Override: PUT" now changes routing:
+$request->getMethod(); // 'PUT' -> the matcher sees PUT
+```
 
 ```mermaid
 flowchart TD

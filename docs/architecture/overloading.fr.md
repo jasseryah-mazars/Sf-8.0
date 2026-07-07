@@ -65,6 +65,26 @@ Trois outils, par précision chirurgicale croissante :
    `CompilerPass` manipule le `ContainerBuilder` au moment de la compilation. Voir
    [Compiler Passes](../dependency-injection/compiler-passes.md).
 
+```php
+// 1. Redefine: declare the same id in config/services.yaml — the later wins.
+// 2. Decorate: #[AsDecorator] (or the "decorates:" YAML key); the original
+//    is renamed and injected back as the ".inner" service:
+#[AsDecorator(decorates: 'acme.mailer')]
+final class TracingMailer
+{
+    public function __construct(#[AutowireDecorated] private object $inner) {}
+}
+
+// 3. Compiler pass: deep changes on the ContainerBuilder at compile time
+final class MailerPass implements CompilerPassInterface
+{
+    public function process(ContainerBuilder $container): void
+    {
+        $container->getDefinition('acme.mailer')->addTag('app.traced');
+    }
+}
+```
+
 ### Overriding templates
 
 Twig résout les templates via des **chemins avec namespace**. Pour surcharger un
@@ -73,6 +93,14 @@ template de bundle `@AcmeBlog/post/show.html.twig`, placez votre version dans
 `templates/bundles/<BundleName>/` prend le pas sur le répertoire `templates/` du bundle
 lui-même. C'est exactement ainsi que vous surchargez les
 [error pages](exception-handling.md).
+
+```twig
+{# templates/bundles/AcmeBlogBundle/post/show.html.twig #}
+{# takes precedence over @AcmeBlog/post/show.html.twig from the bundle #}
+{% extends '@!AcmeBlog/post/show.html.twig' %}
+
+{% block title %}My custom title{% endblock %}
+```
 
 ### Overriding translations
 

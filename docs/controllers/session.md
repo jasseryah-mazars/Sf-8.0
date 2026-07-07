@@ -119,6 +119,14 @@ $session->set('seen', true); // ...first write starts the session + emits the co
   do this automatically).
 - **`invalidate()`** — clears data *and* regenerates the id; use on logout.
 
+```php
+// After login: new session id, data kept — defeats session fixation
+$session->migrate();       // migrate(bool $destroy = false)
+
+// On logout: wipe all data and regenerate the id
+$session->invalidate();
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpFoundation\Session\Session` and `SessionInterface` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php).
@@ -141,6 +149,16 @@ you reach the session:
 - Inside the bag, `$session->get('cart')` returns `null` for a missing key unless
   you pass a default — `$session->get('cart', [])` is the safe idiom before a
   `count()` or iteration.
+
+```php
+// CLI-safe access: guard the request before touching the session
+$request = $this->requestStack->getCurrentRequest(); // ?Request — null on the CLI
+if (!$request || !$request->hasSession()) {
+    return 0; // without this guard, getSession() throws SessionNotFoundException
+}
+
+return \count($request->getSession()->get('cart', [])); // default avoids null
+```
 
 Guard the request first: `$request = $rs->getCurrentRequest();` then
 `if (!$request || !$request->hasSession()) { return $fallback; }`. The nullsafe

@@ -74,6 +74,21 @@ PHPUnit builds a **test suite** by reflecting over classes that extend
 Assertions throw `PHPUnit\Framework\ExpectationFailedException`; an uncaught
 throwable marks the test *errored* rather than *failed*.
 
+```php
+final class LifecycleTest extends TestCase   // a fresh instance per test method
+{
+    protected function setUp(): void { /* runs before EACH test */ }
+    protected function tearDown(): void { /* runs after EACH test */ }
+
+    public function testExample(): void
+    {
+        // a failing assertion throws ExpectationFailedException => test "fails";
+        // any other uncaught throwable marks the test as "errored"
+        self::assertTrue(true);
+    }
+}
+```
+
 Test doubles come from PHPUnit's **MockObject** machinery
 (`PHPUnit\Framework\MockObject\MockBuilder`). `createStub()` and `createMock()`
 generate a subclass of the target type at runtime:
@@ -85,6 +100,20 @@ generate a subclass of the target type at runtime:
 Both are configured with `method()`, `willReturn()`, `willReturnCallback()`,
 `willThrowException()`, and matchers like `$this->once()`,
 `$this->exactly(2)`, `$this->never()`.
+
+```php
+// createStub() / createMock() generate a runtime subclass (MockBuilder machinery)
+$stub = $this->createStub(Mailer::class);
+$stub->method('send')->willReturn(true);                              // canned value
+$stub->method('render')->willReturnCallback(fn (string $t): string => "<p>$t</p>");
+$stub->method('connect')->willThrowException(new \RuntimeException('down'));
+
+// A mock adds verified expectations, checked automatically at teardown
+$mock = $this->createMock(Mailer::class);
+$mock->expects($this->once())->method('connect');    // exactly one call
+$mock->expects($this->exactly(2))->method('send');   // exactly two calls
+$mock->expects($this->never())->method('render');    // must never be called
+```
 
 ```mermaid
 flowchart LR
@@ -107,6 +136,23 @@ A `#[DataProvider('methodName')]` names a **public static** method returning an
 iterable of argument arrays; PHPUnit runs the test once per row. `#[TestWith]`
 inlines a single row without a provider method. Provider methods being static is
 enforced in PHPUnit 10+ (a non-static provider is an error).
+
+```php
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
+
+#[TestWith(['Hello World', 'hello-world'])]  // one inline row, no provider method
+#[DataProvider('provideSlugs')]              // rows come from the method below
+public function testSlugify(string $in, string $out): void
+{
+    self::assertSame($out, (new Slugger())->slugify($in));
+}
+
+public static function provideSlugs(): iterable  // MUST be public static (PHPUnit 10+)
+{
+    yield 'accents' => ['Éléphant', 'elephant'];
+}
+```
 
 ## Configuration & code
 

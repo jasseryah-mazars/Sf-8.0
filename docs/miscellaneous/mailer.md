@@ -156,6 +156,15 @@ to a transport, `MailerInterface::send()` **dispatches** it instead of sending
 inline; a worker delivers it later. This keeps request latency low and gives
 retries/failure handling for free. See [Messenger](messenger.md).
 
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        routing:
+            # MailerInterface::send() now dispatches SendEmailMessage to "async"
+            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
+```
+
 !!! note "Source reference"
     `Symfony\Component\Mailer\Mailer::send()` and `Symfony\Component\Mime\Email` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Mailer/Mailer.php).

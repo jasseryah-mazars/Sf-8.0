@@ -127,6 +127,13 @@ $request->getMimeType('json');   // 'application/json'
 The `_format` route attribute (e.g. `/api/users.{_format}`) sets
 `getRequestFormat()`, and the kernel uses it to pick a response `Content-Type`.
 
+```php
+// route: #[Route('/api/users.{_format}', defaults: ['_format' => 'json'])]
+// incoming URL: GET /api/users.xml
+$request->attributes->get('_format'); // 'xml'
+$request->getRequestFormat();         // 'xml' — kernel derives the Content-Type
+```
+
 ```mermaid
 flowchart LR
     A[Accept header] --> P[Request parses q-values]
@@ -165,6 +172,13 @@ proxy**, not PHP. Whenever a response varies by a request header, add
 `$response->setVary(['Accept', 'Accept-Language'])` so shared caches store one
 entry per variant — otherwise a cache may serve JSON to an HTML client.
 
+```php
+// gzip/br negotiation itself is done by nginx/Apache/CDN, not PHP;
+// your job is to declare which request headers the response depends on
+$response->setVary(['Accept', 'Accept-Language']);
+$response->headers->get('Vary'); // 'Accept, Accept-Language'
+```
+
 ### Null behavior
 
 When the client sends **no `Accept` header at all**, there is nothing to
@@ -184,6 +198,17 @@ $locale = $request->getPreferredLanguage(['en', 'fr']) ?? 'en';
 The common bug is passing `null` as the default to `getPreferredFormat()` and then
 using `match` with no fallback arm, hitting an `UnhandledMatchError` the first
 time a client omits `Accept`.
+
+```php
+$item = AcceptHeader::fromString($request->headers->get('Accept'))->first();
+$quality = $item?->getQuality(); // null-safe: header may be empty
+
+// keep a default arm when the negotiated format may be null
+$response = match ($request->getPreferredFormat(null)) {
+    'json' => $this->json($data),
+    default => $this->render('show.html.twig'), // no UnhandledMatchError
+};
+```
 
 !!! note "Null in real life"
     No `Accept` header is a letter that **states no language preference** — the

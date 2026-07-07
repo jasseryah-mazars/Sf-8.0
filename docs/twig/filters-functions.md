@@ -32,6 +32,13 @@ A **filter** transforms a value with the pipe: `{{ price|round(2) }}`. Filters
 chain left-to-right: `{{ name|lower|capitalize }}`. A **function** is called by
 name and returns a value: `{{ max(a, b) }}`, `{{ path('home') }}`.
 
+```twig
+{{ price|round(2) }}         {# filter: value|filter(args) #}
+{{ name|lower|capitalize }}  {# filters chain left to right #}
+{{ max(a, b) }}              {# function: called by name #}
+{{ path('home') }}           {# function generating a route URL #}
+```
+
 Common built-in **filters**:
 
 | Filter | Purpose |

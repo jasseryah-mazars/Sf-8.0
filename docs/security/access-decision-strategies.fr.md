@@ -49,6 +49,16 @@ la **stratégie** configurée :
 | `unanimous` | **aucun voter ne refuse** et au moins un accorde | un seul refus met son veto à tout |
 | `priority` | le **premier** voter **non-abstentionniste** accorde | l'ordre des voters (priorité de service) décide |
 
+```php
+// VoterInterface constants collected by the AccessDecisionManager
+VoterInterface::ACCESS_GRANTED; //  1
+VoterInterface::ACCESS_ABSTAIN; //  0
+VoterInterface::ACCESS_DENIED;  // -1
+
+// every isGranted() ends in decide(), reduced by the configured strategy
+$granted = $accessDecisionManager->decide($token, ['POST_EDIT'], $post);
+```
+
 Deux flags affinent les cas limites :
 
 - **`allow_if_all_abstain`** (par défaut **`false`**) : l'issue lorsque *tous*
@@ -56,6 +66,14 @@ Deux flags affinent les cas limites :
   stratégies.
 - **`allow_if_equal_granted_denied`** (par défaut **`true`**) : départage des
   égalités, propre à consensus.
+
+```yaml
+security:
+    access_decision_manager:
+        strategy: consensus
+        allow_if_all_abstain: false          # every voter abstains → deny (default)
+        allow_if_equal_granted_denied: true  # consensus tie → grant (default)
+```
 
 Les abstentions sont neutres partout : elles ne comptent jamais comme des
 refus. Sous `unanimous`, « A accorde, B s'abstient » **accorde** quand même —

@@ -135,6 +135,16 @@ hash means "no password on file", so verification **fails cleanly** instead of
 calling `verify()` against nothing, and `needsRehash()` short-circuits when there
 is no hash to inspect.
 
+```php
+// PasswordAuthenticatedUserInterface::getPassword() is typed ?string
+public function getPassword(): ?string
+{
+    return $this->passwordHash; // null = passwordless / SSO / token-only account
+}
+// CheckCredentialsListener: a null hash fails cleanly — verify() is never
+// called against nothing, and needsRehash() is skipped
+```
+
 Never feed a `null` (or empty) plaintext into `hashPassword()` expecting a
 "blank" account — hash a real secret, or leave the field `null` and let the login
 fail. Treat `getPassword()` as `?string` at every call site.

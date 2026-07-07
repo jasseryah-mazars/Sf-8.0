@@ -113,6 +113,24 @@ qu'une request n'est pas traitée et elle change à chaque sub-request). Injecte
 ou utilisez un argument de controller / `#[MapRequestPayload]`. C'est un piège
 classique.
 
+```php
+use Symfony\Component\HttpFoundation\RequestStack;
+
+public function __construct(
+    // Inject the stack — a raw Request is NOT a service
+    private RequestStack $requestStack,
+) {}
+
+public function currentHost(): ?string
+{
+    // getCurrentRequest() may be null outside the HTTP cycle
+    return $this->requestStack->getCurrentRequest()?->getHost();
+}
+
+// In a controller, map the payload instead of reading the Request:
+// public function create(#[MapRequestPayload] OrderInput $input) { ... }
+```
+
 !!! note "Source reference"
     FrameworkBundle câble les services de base dans
     `Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension` —
@@ -132,6 +150,19 @@ service qui s'exécute *aussi* dans une commande et à appeler
 qu'il n'y a pas de request. Protégez-vous avec `?->`, un
 `if (null === $request) { return; }` en amont, ou gardez les services indépendants
 de la request totalement libres de celle-ci.
+
+```php
+$request = $this->requestStack->getCurrentRequest(); // null in a command/worker
+
+// Explicit guard...
+if (null === $request) {
+    return;
+}
+
+// ...or nullsafe short-circuit; getMainRequest() is nullable too
+$path = $this->requestStack->getCurrentRequest()?->getPathInfo();
+$main = $this->requestStack->getMainRequest();
+```
 
 !!! note "Null in real life"
     Demander « quelle est la commande de la table en cours ? » quand le restaurant

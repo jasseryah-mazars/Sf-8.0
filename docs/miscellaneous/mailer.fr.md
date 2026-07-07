@@ -38,6 +38,20 @@ composant **Mailer** envoie ce message à travers un **transport** choisi par un
 DSN. Vous construisez un message (`Email`), vous le confiez à
 `MailerInterface::send()`, et le transport le livre.
 
+```php
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
+$email = (new Email())           // Mime: build the message
+    ->from('no-reply@example.com')
+    ->to('ada@example.com')
+    ->subject('Hello')
+    ->text('Plain body')
+    ->html('<p>HTML body</p>');
+
+$mailer->send($email);           // Mailer: delivered by the MAILER_DSN transport
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"

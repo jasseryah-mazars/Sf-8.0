@@ -116,12 +116,42 @@ $ php bin/console debug:container security.role_hierarchy          # RoleHierarc
 - `UserInterface::eraseCredentials()` was removed; there is no config for it —
   erase sensitive data via `__serialize()` on your user class (see [Users](users.md)).
 
+```php
+// Symfony 8: enable_authenticator_manager, anonymous and guard keys are GONE.
+// eraseCredentials() was removed too — scrub secrets via __serialize():
+final class User implements UserInterface
+{
+    public ?string $plainPassword = null;
+
+    public function __serialize(): array
+    {
+        $data = (array) $this;
+        unset($data['plainPassword']); // never written to the session
+        return $data;
+    }
+    // ...getRoles(), getUserIdentifier()
+}
+```
+
 ### Ordering matters
 
 Both `firewalls` and `access_control` are matched **top-to-bottom, first match
 wins**. Put the most specific patterns first; the catch-all firewall (often
 `main`, no `pattern`) goes last. The `dev` firewall (with `security: false`)
 must come first so profiler/assets are never intercepted.
+
+```yaml
+# Both lists are evaluated top-to-bottom — first match wins:
+firewalls:
+    dev:                          # must be FIRST: security: false zone
+        pattern: ^/(_(profiler|wdt)|css|images|js)/
+        security: false
+    main:                         # no pattern → catch-all, always LAST
+        lazy: true
+access_control:
+    - { path: ^/admin/users, roles: ROLE_SUPER_ADMIN }  # most specific first
+    - { path: ^/admin, roles: ROLE_ADMIN }              # broader rule after
+```
 
 ## Configuration & code
 

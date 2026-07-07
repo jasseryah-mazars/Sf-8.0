@@ -75,6 +75,16 @@ Les deux fonctions proviennent de
 **`Symfony\Component\Routing\Generator\UrlGeneratorInterface`** (le même
 générateur que les controllers utilisent via `generateUrl()`).
 
+```php
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+// RoutingExtension receives this generator and exposes it as path()/url()
+public function __construct(private UrlGeneratorInterface $generator) {}
+
+// generateUrl() in a controller uses the very same service
+$relative = $this->generateUrl('article_show', ['slug' => 'hello']);
+```
+
 ```mermaid
 flowchart LR
     T["path('r', {id:1})"] --> RE[RoutingExtension::getPath]
@@ -96,6 +106,22 @@ flowchart LR
 - `RoutingExtension` marque sa sortie `is_safe: ['html']` pour le contexte
   approprié ; l'URL générée est de toute façon correctement encodée par le
   générateur.
+
+```php
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RequestContext;
+
+// path() → ABSOLUTE_PATH; extra params ('page') go to the query string
+$rel = $generator->generate('search', ['q' => 'a', 'page' => 2], UrlGeneratorInterface::ABSOLUTE_PATH);
+// $rel = '/search?q=a&page=2'
+
+// url() → ABSOLUTE_URL; scheme + host come from the RequestContext
+$generator->setContext(new RequestContext(host: 'example.com', scheme: 'https'));
+$abs = $generator->generate('search', ['q' => 'a'], UrlGeneratorInterface::ABSOLUTE_URL);
+// $abs = 'https://example.com/search?q=a'
+
+// RoutingExtension declares these functions is_safe: ['html'] — no double escaping
+```
 
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\RoutingExtension`,

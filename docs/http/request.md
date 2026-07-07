@@ -46,6 +46,19 @@ Content-Type: application/json
 - **Headers** — metadata (`Host`, `Content-Type`, `Accept`, `Cookie`, …).
 - **Body** — payload for POST/PUT/PATCH (form data, JSON, uploaded files).
 
+```http
+GET /articles?draft=1 HTTP/1.1       ← GET: read-only, no body
+Host: example.com
+Accept: application/json             ← headers: metadata about the exchange
+Cookie: PHPSESSID=abc123
+
+POST /articles HTTP/1.1              ← POST: sends a payload
+Host: example.com
+Content-Type: application/json       ← describes the body below
+
+{"title":"Hello"}
+```
+
 !!! question "Predict first"
     For `GET /users/42?draft=1`, which bag holds `42` and which holds `draft`?
 
@@ -60,6 +73,17 @@ Content-Type: application/json
 the PHP superglobals** (`$_GET`, `$_POST`, `$_SERVER`, `$_COOKIE`, `$_FILES`).
 `Request::createFromGlobals()` reads them once at the front controller; you never
 touch superglobals again.
+
+```php
+use Symfony\Component\HttpFoundation\Request;
+
+// public/index.php — wrap $_GET, $_POST, $_SERVER, $_COOKIE, $_FILES once
+$request = Request::createFromGlobals();
+
+$request->query->get('draft');      // was: $_GET['draft']
+$request->request->get('title');    // was: $_POST['title']
+$request->server->get('HTTP_HOST'); // was: $_SERVER['HTTP_HOST']
+```
 
 ### The parameter bags
 
@@ -79,6 +103,17 @@ All FQCNs live under `Symfony\Component\HttpFoundation\`. `InputBag` extends
 `ParameterBag` but **restricts values to scalars, arrays of scalars, or null** —
 its `get()` throws `\TypeError`/`BadRequestException` if you try to read an array
 where a scalar is expected, hardening against malicious nested input.
+
+```php
+// InputBag: scalars, arrays of scalars, or null only
+$request->query->get('page');       // scalar (or null) — OK
+// GET /?ids[]=1&ids[]=2 → get('ids') fails (\TypeError/BadRequestException):
+// an array where a scalar is expected. Read arrays with all():
+$ids = $request->query->all('ids'); // ['1', '2']
+
+// ParameterBag (attributes) accepts any value, objects included
+$request->attributes->set('deadline', new \DateTimeImmutable());
+```
 
 ```mermaid
 flowchart LR

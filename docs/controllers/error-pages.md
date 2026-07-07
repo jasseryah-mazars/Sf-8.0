@@ -72,6 +72,20 @@ the **error controller** (`error_controller`, default
 page via `Symfony\Bundle\TwigBundle\ErrorRenderer\...` / the
 `ErrorRendererInterface`.
 
+```php
+// A kernel.exception listener may short-circuit the ErrorController
+#[AsEventListener]
+final class ApiExceptionListener
+{
+    public function __invoke(ExceptionEvent $event): void
+    {
+        $e = $event->getThrowable();
+        // setting a Response stops the fallback to error_controller
+        $event->setResponse(new JsonResponse(['error' => $e->getMessage()], 500));
+    }
+}
+```
+
 ```mermaid
 flowchart LR
     C[Controller throws] --> EX[kernel.exception]
@@ -87,6 +101,17 @@ flowchart LR
 - In `dev`, you get the rich exception page (stack trace); in `prod`, the clean
   error template for that status.
 - `FlattenException` normalises the thrown exception for rendering/logging.
+
+```php
+// What the kernel reads from a thrown HttpExceptionInterface
+$e = new MethodNotAllowedHttpException(['POST'], 'Use POST.');
+$e->getStatusCode(); // 405 → becomes the response status
+$e->getHeaders();    // ['Allow' => 'POST'] → merged into the response headers
+
+// Normalised copy used by the error renderer and logs
+$flat = FlattenException::createFromThrowable($e);
+$flat->getStatusCode(); // 405
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\Exception\NotFoundHttpException` and

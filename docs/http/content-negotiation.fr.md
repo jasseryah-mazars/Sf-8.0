@@ -42,6 +42,19 @@ représentations. Le client annonce ses préférences via les headers de request
 dans la response (`Content-Type`, `Content-Language`, `Content-Encoding`) plus un
 header `Vary` pour que les caches indexent correctement.
 
+```http
+GET /articles/7 HTTP/1.1
+Accept: application/json
+Accept-Language: fr-FR, en;q=0.5
+Accept-Encoding: gzip, br
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Language: fr
+Content-Encoding: gzip
+Vary: Accept, Accept-Language
+```
+
 | Request header | Negotiates | Response header |
 |---|---|---|
 | `Accept` | Type de média (`application/json`) | `Content-Type` |

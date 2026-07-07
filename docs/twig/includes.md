@@ -61,6 +61,13 @@ in Symfony) resolves the logical name to a file, and the sub-template is compile
 and cached exactly like any other template — includes are not "inlined", they are
 separate compiled classes invoked at runtime.
 
+```php
+// simplified view of what an include does at runtime
+$sub = $twig->load('partials/_card.html.twig'); // Twig\Loader\FilesystemLoader resolves the name
+$sub->display($context);          // tag form: Twig\Template::display() echoes the output
+$html = $sub->render($context);   // function form: render() returns the string
+```
+
 ```mermaid
 flowchart LR
     P[Parent render] --> I["include 'x'"]
@@ -81,6 +88,17 @@ Context rules:
   from the parent scope.
 - **`ignore missing`** — if the template does not exist, render nothing instead
   of throwing `LoaderError`.
+
+```twig
+{# default: the partial sees the caller's vars plus the `with` ones #}
+{% include '_card.html.twig' with { title: 'Sales' } %}
+
+{# only: the partial sees just title — parent scope hidden #}
+{% include '_card.html.twig' with { title: 'Sales' } only %}
+
+{# missing template: render nothing instead of throwing LoaderError #}
+{% include '_promo.html.twig' ignore missing %}
+```
 
 The `include()` **function** is preferred in modern Twig because it returns a
 string, composes in expressions, and takes the same options as named arguments:

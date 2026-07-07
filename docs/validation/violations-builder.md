@@ -34,6 +34,17 @@ callers read them back from a
 `Symfony\Component\Validator\ConstraintViolationListInterface`. Understanding
 both ends is essential for custom constraints and API error responses.
 
+```php
+// Producer side — inside a validator/callback, via the ExecutionContextInterface
+$this->context->buildViolation('Invalid SKU.')->addViolation();
+
+// Consumer side — read the ConstraintViolationListInterface back
+$violations = $validator->validate($product);
+foreach ($violations as $violation) {
+    echo $violation->getMessage();
+}
+```
+
 !!! question "Predict first"
     A custom validator calls `$this->context->buildViolation('Bad SKU')` and sets a
     few parameters, but the field always validates. What is wrong?
@@ -89,6 +100,21 @@ case (no extra setters). The context also exposes read helpers: `getObject()`,
 `getRoot()`, `getValue()`, `getPropertyPath()`, `getGroup()`, `getClassName()`,
 `getConstraint()` and `getViolations()`.
 
+```php
+// Shortcut: build + commit in one call (no extra setters)
+$this->context->addViolation('Invalid value.', ['{{ value }}' => 'x']);
+
+// Read helpers on the ExecutionContext
+$this->context->getObject();       // object owning the validated property
+$this->context->getRoot();         // value originally passed to validate()
+$this->context->getValue();        // value currently being validated
+$this->context->getPropertyPath(); // e.g. "items[0].price"
+$this->context->getGroup();        // active validation group, e.g. "Default"
+$this->context->getClassName();    // class of the current object
+$this->context->getConstraint();   // constraint being validated
+$this->context->getViolations();   // violations collected so far
+```
+
 ```mermaid
 flowchart LR
     A["context.buildViolation(msg)"] --> B[ConstraintViolationBuilder]
@@ -128,6 +154,22 @@ Useful reads on a violation: `getMessage()`, `getMessageTemplate()` (before
 interpolation), `getParameters()`, `getPropertyPath()`, `getInvalidValue()`,
 `getCode()`, `getConstraint()`, `getRoot()`, `getCause()`. The list also supports
 `findByCodes()` to filter by code, and `__toString()` for a readable dump.
+
+```php
+$violation = $violations->get(0);
+$violation->getMessage();         // '"X-1" must start with SKU-.' (interpolated)
+$violation->getMessageTemplate(); // '"{{ sku }}" must start with SKU-.' (raw)
+$violation->getParameters();      // ['{{ sku }}' => '"X-1"']
+$violation->getPropertyPath();    // 'code'
+$violation->getInvalidValue();    // 'X-1'
+$violation->getCode();            // 'a1b2c3'
+$violation->getConstraint();      // the constraint instance
+$violation->getRoot();            // the object originally validated
+$violation->getCause();           // whatever setCause() attached, or null
+
+$violations->findByCodes('a1b2c3'); // sub-list filtered by code
+echo (string) $violations;          // readable dump via __toString()
+```
 
 !!! note "Source reference"
     `Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface`
