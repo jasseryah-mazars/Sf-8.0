@@ -72,6 +72,15 @@ collector ; le `Profile` résultant (un ensemble de collectors avec leur
 dans le HTML par `WebDebugToolbarListener` (une sub-request la rend). L'interface
 complète du profiler à `/_profiler/{token}` lit les profils stockés.
 
+```php
+// kernel.response: Profiler::collect() runs every collector's collect(),
+// then the Profile ($this->data of all collectors) is saved by
+// FileProfilerStorage under a token (the toolbar link you see).
+$profile = $profiler->loadProfile($token);          // what /_profiler/{token} reads
+$collector = $profile->getCollector('app.tenant');  // one panel's data
+// The toolbar itself is injected by WebDebugToolbarListener via a sub-request
+```
+
 ```mermaid
 flowchart LR
     RESP[kernel.response] --> P[Profiler::collect]
