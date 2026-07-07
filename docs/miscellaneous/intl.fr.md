@@ -67,6 +67,15 @@ Les catalogues sont chargés depuis les fichiers
 `translations/<domain>.<locale>.<format>` (`yaml`, `xlf`/XLIFF, `php`) par des
 loaders, puis mis en cache (compilés) par locale.
 
+```php
+// trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
+$text = $translator->trans('order.summary', ['name' => 'Ada'], 'checkout', 'fr');
+// 1. locale: the explicit 'fr' argument wins over the request locale
+// 2. the fr MessageCatalogue (+ fallbacks) is loaded from translations/checkout.fr.yaml
+// 3. "order.summary" is looked up in the "checkout" domain
+// 4. parameters are substituted by the ICU IntlFormatter
+```
+
 ```mermaid
 flowchart LR
     T[trans id, params] --> L[resolve locale + fallbacks]
@@ -94,6 +103,14 @@ Passez `['count' => 3]` ; ICU choisit la bonne catégorie de pluriel selon la
 locale (`one`, `few`, `many`, `other` varient selon la langue).
 `{gender, select, …}` gère le choix par valeur.
 
+```php
+// Patterns live in translations/messages+intl-icu.<locale>.yaml
+$translator->trans('apple_count', ['count' => 3]); // "3 apples" (plural rule)
+
+// invite: "{gender, select, female {She comes} male {He comes} other {They come}}"
+$translator->trans('invite', ['gender' => 'female']); // "She comes"
+```
+
 ### Domains & fallback
 
 - Les **domaines** regroupent les messages (`messages`, `validators`,
@@ -104,6 +121,13 @@ locale (`one`, `few`, `many`, `other` varient selon la langue).
 - Les traductions manquantes retournent l'**id** lui-même (et sont
   journalisées en dev).
 
+```yaml
+# config/packages/translation.yaml
+framework:
+    translator:
+        fallbacks: ['fr', 'en']   # tried in order: fr_CA -> fr -> en
+```
+
 ### Intl data component
 
 `Symfony\Component\Intl` fournit des classes statiques :
@@ -111,6 +135,21 @@ locale (`one`, `few`, `many`, `other` varient selon la langue).
 `Currencies::getSymbol('EUR')`, `Timezones`. Elles lisent les données ICU
 embarquées et respectent la locale courante ou demandée pour les noms
 d'affichage.
+
+```php
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Currencies;
+use Symfony\Component\Intl\Languages;
+use Symfony\Component\Intl\Locales;
+use Symfony\Component\Intl\Timezones;
+
+Countries::getName('FR');           // "France" (in the current locale)
+Languages::getName('de');           // "German"
+Locales::getName('pt_BR');          // "Portuguese (Brazil)"
+Currencies::getSymbol('EUR');       // "€"
+Timezones::getName('Europe/Paris'); // "Central European Time (Paris)"
+Countries::getName('FR', 'de');     // "Frankreich" — explicit display locale
+```
 
 !!! note "Source reference"
     `Symfony\Component\Translation\Translator::trans()` —

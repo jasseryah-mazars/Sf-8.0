@@ -37,6 +37,16 @@ it — creating the `Request`, sending the `Response`, reading env/args. This le
 the *same* app boot under PHP-FPM, the CLI, or alternative runtimes (Swoole,
 RoadRunner) by only swapping the runtime.
 
+```php
+// public/index.php — the whole entry point
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+return static function (array $context) {
+    // the runtime creates the Request and sends the Response — not you
+    return new App\Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
