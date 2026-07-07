@@ -88,6 +88,16 @@ A `Closure` carries a **bound object** (`$this`) and a **scope** (which controls
 - `$closure->call($newThis, ...$args)` — bind **and** invoke in one step.
 
 ```php
+$peek = function () { return $this->n; };
+$counter = new Counter();
+
+$b1 = Closure::bind($peek, $counter, Counter::class);  // static, new closure
+$b2 = $peek->bindTo($counter, Counter::class);         // instance, same effect
+
+$peek->call($counter);   // bind + invoke in one step (scope = Counter)
+```
+
+```php
 <?php
 declare(strict_types=1);
 

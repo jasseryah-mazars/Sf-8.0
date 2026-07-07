@@ -46,6 +46,16 @@ choose it with global flags; commands respect it when writing output.
 diagnostic detail. The constants live on
 `Symfony\Component\Console\Output\OutputInterface`.
 
+```php
+use Symfony\Component\Console\Output\OutputInterface;
+
+OutputInterface::VERBOSITY_QUIET;         // 16  (-q)
+OutputInterface::VERBOSITY_NORMAL;        // 32  (default)
+OutputInterface::VERBOSITY_VERBOSE;       // 64  (-v)
+OutputInterface::VERBOSITY_VERY_VERBOSE;  // 128 (-vv)
+OutputInterface::VERBOSITY_DEBUG;         // 256 (-vvv)
+```
+
 !!! question "Predict first"
     To decide whether to print a diagnostic line, do you check the verbosity on the
     `InputInterface` or the `OutputInterface`?
@@ -61,6 +71,12 @@ The `Application` parses the global `-v/-vv/-vvv/-q` flags **before** dispatchin
 a command and calls `$output->setVerbosity()` accordingly. Verbosity is therefore a
 property of the **output**, not the input.
 
+```php
+// What the Application does from the flags, before your command runs
+$output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);   // user passed -v
+$output->getVerbosity();                                     // 64
+```
+
 Two ways to honour it:
 
 1. **Guards** — `isQuiet()`, `isVerbose()`, `isVeryVerbose()`, `isDebug()` on the
@@ -74,10 +90,24 @@ Two ways to honour it:
 $output->writeln('debug detail', OutputInterface::VERBOSITY_DEBUG);
 ```
 
+```php
+// Guards on the output (mirrored on SymfonyStyle)
+if ($output->isQuiet())       { /* -q */ }
+if ($output->isVerbose())     { /* -v, -vv and -vvv */ }
+if ($output->isVeryVerbose()) { /* -vv and -vvv */ }
+if ($output->isDebug())       { /* -vvv only */ }
+```
+
 Because the constants are ordered integers (16 < 32 < 64 < 128 < 256), a message
 tagged `VERBOSITY_VERBOSE` (64) shows at `-v`, `-vv` and `-vvv`, but not at normal
 (32) or quiet (16). Internally `write()` compares
 `$this->verbosity >= $messageVerbosity`.
+
+```php
+// -v sets the level to VERBOSITY_VERBOSE (64): 64 >= 64 -> printed
+$output->writeln('shown at -v, -vv and -vvv', OutputInterface::VERBOSITY_VERBOSE);
+// at the default level (32): 32 >= 64 is false -> suppressed
+```
 
 ```mermaid
 flowchart LR

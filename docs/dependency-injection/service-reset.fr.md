@@ -65,11 +65,36 @@ La réponse de Symfony est un contrat plus un tag :
   le worker Messenger réinitialise les services du container entre les
   messages (désactivable avec l'option `--no-reset` de `messenger:consume`).
 
+```yaml
+# config/services.yaml
+services:
+    # Implements Symfony\Contracts\Service\ResetInterface (a single reset()
+    # method): autoconfiguration adds the kernel.reset tag automatically.
+    App\Pricing\ExchangeRateMemoizer: ~
+
+    # Explicit tag — the "method" attribute lets any method name work:
+    App\Legacy\ConnectionPool:
+        tags:
+            - { name: 'kernel.reset', method: 'closeIdleConnections' }
+
+# Between requests/messages the services_resetter service calls these methods.
+# A Messenger worker does it per message: messenger:consume (--no-reset disables).
+```
+
 Le cœur de Symfony regorge d'exemples : le `Stopwatch` implémente
 `ResetInterface`, les data collectors du profiler sont réinitialisés pour que
 les panneaux d'une request n'affichent pas les données d'une autre, et les
 services qui bufferisent/mémoïsent (buffers de log, caches par request)
 suivent conceptuellement le même pattern.
+
+```php
+use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Contracts\Service\ResetInterface;
+
+$stopwatch = new Stopwatch();
+$stopwatch instanceof ResetInterface; // true — a resettable core service
+$stopwatch->reset();                  // drops all recorded events between requests
+```
 
 ## Deep Dive — how it works internally
 
@@ -87,6 +112,21 @@ internes valent des points à l'examen :
 2. **Méthodes optionnelles avec `?`.** Une méthode de reset configurée comme
    `"?flush"` n'est appelée que si elle existe sur la classe — le `?` de tête
    est retiré et gardé par un `method_exists()` dans les sources.
+
+```php
+// Conceptually what ServicesResetter::reset() does:
+foreach ($this->resettableServices as $id => $service) { // INITIALIZED only
+    foreach ($this->resetMethods[$id] as $method) {
+        if (str_starts_with($method, '?')) {             // "?flush" = optional
+            $method = substr($method, 1);
+            if (!method_exists($service, $method)) {
+                continue;                                // guarded, skipped
+            }
+        }
+        $service->$method();                             // e.g. reset()
+    }
+}
+```
 
 ```mermaid
 flowchart LR
@@ -117,6 +157,12 @@ workers Messenger associent le reset à une **stratégie de redémarrage** —
 le processus se terminer périodiquement pour qu'un superviseur le relance à
 neuf. Le reset assure la *justesse* entre les messages ; le recyclage du
 processus gère les *fuites* que le reset ne peut pas atteindre.
+
+```console
+$ php bin/console messenger:consume async --limit=100        # exit after 100 messages
+$ php bin/console messenger:consume async --time-limit=3600  # or after one hour
+$ php bin/console messenger:consume async --memory-limit=128M # or past 128 MB
+```
 
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter` — la

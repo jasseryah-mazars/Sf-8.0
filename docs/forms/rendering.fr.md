@@ -35,6 +35,15 @@
 Les fonctions de form Twig transforment un `FormView` (l'instantané de rendu
 issu de `createView()`) en HTML. Vous choisissez la granularité :
 
+```php
+// createView() produces the render-time FormView snapshot
+$view = $form->createView();
+assert($view instanceof \Symfony\Component\Form\FormView);
+
+// In Twig you pass the form itself; Symfony calls createView() for you
+return $this->render('contact/index.html.twig', ['form' => $form]);
+```
+
 | Fonction | Rend |
 |---|---|
 | `form(form)` | Le form entier (start, toutes les rows, end) |
@@ -63,9 +72,25 @@ Le rendu opère sur `Symfony\Component\Form\FormView`, produit par
 `Symfony\Component\Form\FormRendererInterface`
 (`Symfony\Bridge\Twig\Form\TwigRendererEngine`).
 
+```php
+// FormInterface::createView() builds the FormView tree
+$view = $form->createView();
+
+// Twig's FormExtension functions delegate to a FormRendererInterface,
+// whose engine (TwigRendererEngine) loads the form theme templates
+$html = $renderer->searchAndRenderBlock($view, 'widget');
+```
+
 Le renderer résout, pour chaque fonction + champ, un **bloc** dans le thème de
 form actif (p. ex. `form_row`, `text_widget`) via la *hiérarchie de block
 prefixes* du champ — traitée dans [theming](theming.md).
+
+```twig
+{# form_row on a text field resolves blocks by block-prefix hierarchy: #}
+{{ form_row(form.name) }}
+{# looks for 'text_row' first, falls back to the generic 'form_row';
+   the widget inside resolves 'text_widget' → 'form_widget_simple' #}
+```
 
 ```mermaid
 flowchart LR

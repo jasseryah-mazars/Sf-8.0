@@ -41,6 +41,18 @@ tous les services portant un tag et les injecte en groupe. C'est ainsi que Symfo
 câble « tous les voters », « tous les event subscribers », « tous les handlers
 Messenger ».
 
+```yaml
+services:
+    App\Handler\EmailHandler:
+        tags: ['app.handler']       # inert label until something collects it
+
+    App\HandlerRunner:
+        arguments:
+            # Collectors: all instances vs a lazy keyed set.
+            $handlers: !tagged_iterator app.handler
+            $locator: !tagged_locator app.handler
+```
+
 !!! question "Predict first"
     Vous injectez `#[AutowireLocator('app.handler')]` mais rien n'implémente
     l'interface taguée. À l'exécution, vous appelez `get('missing')` sur le locator.

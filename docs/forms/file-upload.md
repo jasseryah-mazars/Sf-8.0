@@ -129,6 +129,21 @@ property). Use:
   `extensions`.
 - `Symfony\Component\Validator\Constraints\Image` — plus width/height/ratio.
 
+```php
+$builder->add('brochure', FileType::class, [
+    'constraints' => [
+        // File: maxSize + content-based mimeTypes
+        new File(maxSize: '5m', mimeTypes: ['application/pdf']),
+        // or: new File(extensions: ['pdf']) — checks extension AND matching MIME
+    ],
+]);
+
+$builder->add('avatar', FileType::class, [
+    // Image adds width/height/ratio checks on top of File
+    'constraints' => [new Image(maxSize: '2m', maxWidth: 1024, maxHeight: 1024)],
+]);
+```
+
 ## Configuration & code
 
 === "Form type"

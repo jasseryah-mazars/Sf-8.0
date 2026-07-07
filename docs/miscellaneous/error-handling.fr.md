@@ -43,6 +43,22 @@ attrape les exceptions qui s'échappent d'une request et dispatche
 chapitre se concentre sur le composant ; le flux d'events du kernel est couvert
 dans [Exception Handling](../architecture/exception-handling.md).
 
+```php
+// Low-level component: PHP errors become catchable exceptions
+try {
+    file_get_contents('/missing-file'); // PHP warning -> \ErrorException
+} catch (\ErrorException $e) {
+    // handled like any exception
+}
+
+// High-level kernel flow: a kernel.exception listener builds the Response
+#[AsEventListener(event: 'kernel.exception')]
+public function onException(ExceptionEvent $event): void
+{
+    $event->setResponse(new Response('Something went wrong', 500));
+}
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -64,6 +80,19 @@ Runtime / `Debug::enable()` en mode debug). Il :
 - configure `set_exception_handler()` pour rendre les throwables non attrapés,
 - enregistre une fonction de shutdown pour attraper les erreurs fatales.
 
+```php
+use Symfony\Component\ErrorHandler\ErrorHandler;
+
+// set_error_handler() + set_exception_handler() + shutdown function, in one call
+ErrorHandler::register();
+
+try {
+    trigger_error('boom', E_USER_WARNING); // would be a plain PHP error...
+} catch (\ErrorException $e) {
+    // ...now it is a catchable \ErrorException
+}
+```
+
 Le rendu est délégué à des **error renderers** implémentant
 `Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface` :
 `HtmlErrorRenderer` (la page dev enrichie avec stack traces),
@@ -72,6 +101,21 @@ sont d'abord normalisés en une
 `Symfony\Component\ErrorHandler\Exception\FlattenException`, un snapshot
 sérialisable (classe, message, status code, trace) qui peut être rendu ou loggé
 sans risque.
+
+```php
+use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
+
+// Any throwable is normalised into a serializable snapshot
+$flat = FlattenException::createFromThrowable($throwable);
+$flat->getStatusCode(); // e.g. 500
+$flat->getClass();      // original exception class
+
+// An ErrorRendererInterface implementation renders it
+// (SerializerErrorRenderer would negotiate JSON/XML instead)
+$html = (new HtmlErrorRenderer(true))->render($throwable);
+echo $html->getAsString(); // rich debug page with stack traces
+```
 
 ```mermaid
 flowchart LR
@@ -97,6 +141,16 @@ code : `HttpExceptionInterface::getStatusCode()` s'il s'agit d'une
 `Symfony\Component\HttpKernel\Exception\HttpException` (p. ex.
 `NotFoundHttpException` → 404), sinon **500**.
 
+```php
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+// Status mapping performed by the error controller:
+throw new NotFoundHttpException('No such product'); // getStatusCode() -> 404
+throw new HttpException(429, 'Slow down');          // explicit status code
+throw new \RuntimeException('DB down');             // no HttpExceptionInterface -> 500
+```
+
 ### Prod vs dev
 
 | | dev (`APP_DEBUG=1`) | prod |
@@ -108,6 +162,15 @@ code : `HttpExceptionInterface::getStatusCode()` s'il s'agit d'une
 Surchargez les pages de prod avec des templates Twig sous
 `templates/bundles/TwigBundle/Exception/`
 (`error404.html.twig`, `error500.html.twig`, ou le générique `error.html.twig`).
+
+```twig
+{# templates/bundles/TwigBundle/Exception/error404.html.twig #}
+<h1>Page not found</h1>
+
+{# templates/bundles/TwigBundle/Exception/error.html.twig — generic fallback
+   (error500.html.twig would override it for 500s) #}
+<h1>Error {{ status_code }}: {{ status_text }}</h1>
+```
 
 ## Configuration & code
 

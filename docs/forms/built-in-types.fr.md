@@ -80,6 +80,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;       // text/scalar
 que la chaîne saisie dans le navigateur corresponde à une valeur numérique côté
 modèle (voir [data transformers](data-transformers.md)).
 
+```php
+// IntegerType / NumberType / MoneyType attach view transformers:
+$builder
+    ->add('quantity', IntegerType::class)                 // '3'     ↔ 3 (int)
+    ->add('rating', NumberType::class, ['scale' => 1])    // '4.5'   ↔ 4.5
+    ->add('price', MoneyType::class, ['divisor' => 100]); // '19.99' ↔ 1999 (cents)
+```
+
 ### Choice family
 
 `Symfony\Component\Form\Extension\Core\Type\ChoiceType` est le cheval de trait.
@@ -97,12 +105,33 @@ Options clés : `choices` (map libellé ⇒ valeur), `choice_value`, `choice_lab
 primitifs booléen-simple/choix-simple sur lesquels `ChoiceType` s'appuie en mode
 déplié.
 
+```php
+$builder->add('country', ChoiceType::class, [
+    'choices'           => ['France' => 'fr', 'Belgium' => 'be'], // label => value
+    'choice_value'      => fn (?string $code) => $code,           // form value per choice
+    'choice_label'      => fn (?string $code) => strtoupper((string) $code),
+    'placeholder'       => 'Pick a country',
+    'preferred_choices' => ['fr'],  // listed first
+    'expanded'          => true,    // built on RadioType (CheckboxType if multiple)
+]);
+```
+
 ### Date & time
 
 `DateType`, `TimeType`, `DateTimeType` acceptent trois modes de `widget` :
 `choice` (menus déroulants), `text` (un seul champ texte), `single_text` (un seul
 champ `type="date"` — idéal avec HTML5). `input` choisit le type côté modèle :
 `datetime_immutable` (recommandé), `datetime`, `string`, `timestamp`, `array`.
+
+```php
+$builder
+    ->add('day', DateType::class, [
+        'widget' => 'single_text',        // or 'choice' / 'text'
+        'input'  => 'datetime_immutable', // model type (recommended)
+    ])
+    ->add('at', TimeType::class, ['widget' => 'choice'])     // dropdowns
+    ->add('when', DateTimeType::class, ['input' => 'string']);
+```
 
 ### Compound helpers
 
@@ -113,11 +142,38 @@ champ `type="date"` — idéal avec HTML5). `input` choisit le type côté modè
   confirmation) et ne passe que si les deux correspondent.
   `first_name`/`second_name`, `invalid_message`.
 
+```php
+$builder
+    ->add('tags', CollectionType::class, [
+        'entry_type'   => TagType::class, // each row is a TagType sub-form
+        'allow_add'    => true,
+        'allow_delete' => true,
+        'by_reference' => false, // call adder/remover on the parent object
+        'prototype'    => true,  // template row for JS to clone
+    ])
+    ->add('plainPassword', RepeatedType::class, [
+        'type'            => PasswordType::class, // rendered twice
+        'first_name'      => 'password',
+        'second_name'     => 'confirm',
+        'invalid_message' => 'Both entries must match.',
+    ]);
+```
+
 ### Buttons
 
 `SubmitType`, `ButtonType`, `ResetType` — non mappés aux données ; `SubmitType`
 vous permet de détecter *quel* bouton a été cliqué via
 `$form->getClickedButton()`.
+
+```php
+$builder
+    ->add('save',    SubmitType::class)  // submits the form
+    ->add('preview', SubmitType::class)  // a second submit button
+    ->add('clear',   ResetType::class);  // ButtonType is the unmapped base
+
+// After submission, detect which button was used:
+if ('preview' === $form->getClickedButton()?->getName()) { /* ... */ }
+```
 
 ```mermaid
 flowchart TD

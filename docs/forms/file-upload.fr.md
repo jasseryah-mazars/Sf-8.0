@@ -39,6 +39,14 @@ binaire n'est pas quelque chose que vous stockez habituellement *tel quel* sur
 votre modèle, le champ est fréquemment **unmapped** — le form le valide, vous
 gérez la persistance.
 
+```php
+// The raw $_FILES entry is exposed as an UploadedFile on the request
+$file = $request->files->get('brochure');   // ?UploadedFile
+
+// FileType binds a form field to that object — usually unmapped
+$builder->add('brochure', FileType::class, ['mapped' => false]);
+```
+
 !!! question "Predict first"
     Un fichier uploadé arrive avec `getClientOriginalName()` = `"../../evil.php"`.
     Cette valeur est-elle sûre à utiliser comme nom de fichier stocké ?
@@ -65,6 +73,18 @@ devient elle aussi cet `UploadedFile`.
 - `getMimeType()` — deviné à partir du contenu (fiable).
 - `getSize()`, `isValid()`, `getError()`.
 - `move(string $dir, ?string $name = null): File` — déplacer hors du répertoire temporaire.
+
+```php
+// HttpFoundationRequestHandler merged $request->files into the submitted data;
+// for a FileType field the view data IS the UploadedFile (File -> \SplFileInfo).
+$file->getClientOriginalName();  // untrusted (client-sent)
+$file->getClientMimeType();      // untrusted (client-sent)
+$file->getMimeType();            // guessed from content — trustworthy
+$file->getSize();                // bytes
+$file->isValid();                // upload completed without error?
+$file->getError();               // raw UPLOAD_ERR_* code
+$moved = $file->move('/var/app/uploads', 'doc-64f2a1.pdf'); // returns a File
+```
 
 !!! danger "Never trust the client filename"
     `getClientOriginalName()` peut contenir du path traversal ou des scripts.
@@ -95,6 +115,15 @@ Vous le récupérez explicitement : `$form->get('brochure')->getData()`. C'est l
 pattern standard pour les uploads, les champs de mot de passe en clair et les
 cases « j'accepte les conditions ».
 
+```php
+$builder->add('brochure', FileType::class, [
+    'mapped' => false,   // rendered, submitted, validated — never touches the model
+]);
+
+// After a valid submit, fetch it explicitly:
+$file = $form->get('brochure')->getData();   // ?UploadedFile
+```
+
 ### Constraints
 
 Attachez la validation au champ via l'option `constraints` (ou à la propriété du
@@ -103,6 +132,21 @@ modèle). Utilisez :
 - `Symfony\Component\Validator\Constraints\File` — `maxSize`, `mimeTypes`,
   `extensions`.
 - `Symfony\Component\Validator\Constraints\Image` — plus largeur/hauteur/ratio.
+
+```php
+$builder->add('brochure', FileType::class, [
+    'constraints' => [
+        // File: maxSize + content-based mimeTypes
+        new File(maxSize: '5m', mimeTypes: ['application/pdf']),
+        // or: new File(extensions: ['pdf']) — checks extension AND matching MIME
+    ],
+]);
+
+$builder->add('avatar', FileType::class, [
+    // Image adds width/height/ratio checks on top of File
+    'constraints' => [new Image(maxSize: '2m', maxWidth: 1024, maxHeight: 1024)],
+]);
+```
 
 ## Configuration & code
 

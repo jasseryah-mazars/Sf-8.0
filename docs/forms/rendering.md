@@ -32,6 +32,15 @@
 Twig form functions turn a `FormView` (the render-time snapshot from
 `createView()`) into HTML. You choose the granularity:
 
+```php
+// createView() produces the render-time FormView snapshot
+$view = $form->createView();
+assert($view instanceof \Symfony\Component\Form\FormView);
+
+// In Twig you pass the form itself; Symfony calls createView() for you
+return $this->render('contact/index.html.twig', ['form' => $form]);
+```
+
 | Function | Renders |
 |---|---|
 | `form(form)` | The entire form (start, all rows, end) |
@@ -59,9 +68,25 @@ Rendering operates on `Symfony\Component\Form\FormView`, produced by
 a `Symfony\Component\Form\FormRendererInterface`
 (`Symfony\Bridge\Twig\Form\TwigRendererEngine`).
 
+```php
+// FormInterface::createView() builds the FormView tree
+$view = $form->createView();
+
+// Twig's FormExtension functions delegate to a FormRendererInterface,
+// whose engine (TwigRendererEngine) loads the form theme templates
+$html = $renderer->searchAndRenderBlock($view, 'widget');
+```
+
 The renderer resolves, for each function + field, a **block** in the active form
 theme (e.g. `form_row`, `text_widget`) using the field's *block prefix hierarchy*
 — covered in [theming](theming.md).
+
+```twig
+{# form_row on a text field resolves blocks by block-prefix hierarchy: #}
+{{ form_row(form.name) }}
+{# looks for 'text_row' first, falls back to the generic 'form_row';
+   the widget inside resolves 'text_widget' → 'form_widget_simple' #}
+```
 
 ```mermaid
 flowchart LR
@@ -88,11 +113,26 @@ token** and any hidden fields. Pass `{'render_rest': false}` to suppress that:
 If you render fields manually and set `render_rest: false`, you must render
 `form_rest(form)` (or the CSRF field) yourself, or CSRF validation fails.
 
+```twig
+{{ form_start(form) }}
+    {{ form_row(form.email) }}
+    {{ form_rest(form) }}  {# emit the hidden CSRF token yourself #}
+{{ form_end(form, {'render_rest': false}) }}
+```
+
 ### The "rendered" flag
 
 Each `FormView` has an `isRendered()` flag. Calling `form_row`/`form_widget`
 marks it rendered so `form_rest` skips it. That is how partial + rest rendering
 coexist without duplication.
+
+```twig
+{{ form_start(form) }}
+{{ form_row(form.name) }}     {# this FormView now returns isRendered() = true #}
+{{ form_widget(form.email) }} {# marked as rendered too #}
+{{ form_rest(form) }}         {# skips rendered views — no duplication #}
+{{ form_end(form) }}
+```
 
 ## Configuration & code
 

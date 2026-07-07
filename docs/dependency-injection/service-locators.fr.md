@@ -62,6 +62,18 @@ l'ensemble est déclaré à la compilation, le container sait exactement quels
 services le locator peut atteindre — ils ne sont *pas* supprimés comme
 « inutilisés », et chacun n'est créé que s'il est réellement demandé.
 
+```php
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
+
+/** @var ServiceLocator $locator — implements PSR-11 ContainerInterface */
+$locator instanceof ContainerInterface; // true
+
+$locator->has('stripe');                // has($id): membership, builds nothing
+$gateway = $locator->get('stripe');     // get($id): built on FIRST access
+$same = $locator->get('stripe');        // cached — same instance returned
+```
+
 ### Locator vs injecting everything
 
 Injecter tous les services candidats les instancie immédiatement, même ceux que
@@ -89,6 +101,26 @@ et le container injecte un locator dans une propriété `$container` (via
 le type du service. C'est ainsi que l'`AbstractController` de base obtient `twig`,
 `router`, etc. en lazy.
 
+```php
+use Symfony\Contracts\Service\Attribute\SubscribedService;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait; // NOT ServiceSubscriberTrait (deprecated 6.4)
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
+final class Dashboard implements ServiceSubscriberInterface
+{
+    // Provides getSubscribedServices() and the $container locator property.
+    use ServiceMethodsSubscriberTrait;
+
+    // Return type = service type; fetched lazily,
+    // like AbstractController does for twig / router.
+    #[SubscribedService]
+    private function twig(): \Twig\Environment
+    {
+        return $this->container->get(__FUNCTION__);
+    }
+}
+```
+
 ### `#[AutowireLocator]`
 
 Le raccourci moderne : `#[AutowireLocator([...])]` sur un paramètre de
@@ -114,6 +146,15 @@ absent » comme sur le container principal. Le bug classique consiste à appeler
 `get($userSuppliedKey)` sur une valeur non fiable et à obtenir une exception pour
 les clés hors de la liste blanche — validez avec `has()` (ou la liste des clés
 connues) avant de récupérer.
+
+```php
+$this->locator->get('unknown'); // throws ServiceNotFoundException — never null
+
+// Safe pattern for dynamic / user-supplied keys: has() before get().
+$gateway = $this->locator->has($id)
+    ? $this->locator->get($id)  // declared: built (or reused) and returned
+    : $fallback;
+```
 
 !!! note "Null in real life"
     Demander à l'ardoise des plats du jour un plat qui n'y a jamais été inscrit

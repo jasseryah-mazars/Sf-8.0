@@ -141,6 +141,27 @@ final class TagCollection implements \IteratorAggregate, \Countable, \ArrayAcces
 | `SplObjectStorage` | Ensemble/map indexé par **objet** | Attache des données par objet |
 
 ```php
+$s = new \SplStack();
+$s->push('a'); $s->push('b');
+$s->pop();                       // 'b' — LIFO
+
+$q = new \SplQueue();
+$q->enqueue('job1');
+$q->dequeue();                   // 'job1' — FIFO
+
+$f = new \SplFixedArray(2);      // fixed size, int keys, compact memory
+$f[0] = 'x';
+
+$pq = new \SplPriorityQueue();
+$pq->insert('low', 1); $pq->insert('high', 9);
+$pq->extract();                  // 'high' — highest priority first
+
+$h = new \SplMinHeap();
+$h->insert(5); $h->insert(1);
+$h->top();                       // 1 — smallest on top
+```
+
+```php
 <?php
 declare(strict_types=1);
 

@@ -34,6 +34,22 @@ own — without subclassing them. One extension can target many types at once. T
 canonical example: add an `help_inline` option, or a file-upload helper, to every
 `FileType` in the app.
 
+```php
+// One extension adds a help_inline option to every FileType in the app
+final class FileHelpExtension extends AbstractTypeExtension
+{
+    public static function getExtendedTypes(): iterable
+    {
+        return [FileType::class];   // the types to augment — no subclassing
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['help_inline' => null]);   // the new option
+    }
+}
+```
+
 Create a custom type when you need a *new field identity*; use a type extension
 when you want to *augment existing types* uniformly.
 
@@ -71,6 +87,18 @@ runs first, then each registered extension's matching hook. So an extension's
 `buildForm` runs **after** the extended type's `buildForm`, letting you add
 listeners or fields on top.
 
+```php
+// ResolvedFormType executes, per hierarchy level:
+//   1. FileType::buildForm(...)          — the type's own hook first
+//   2. FileHelpExtension::buildForm(...) — then each matching extension
+
+public function buildForm(FormBuilderInterface $builder, array $options): void
+{
+    // runs AFTER FileType::buildForm — build on top of what the type set up
+    $builder->addEventListener(FormEvents::POST_SUBMIT, $this->logUpload(...));
+}
+```
+
 ```mermaid
 flowchart TD
     A["ResolvedFormType(FileType)"] --> B["FileType::buildForm"]
@@ -88,6 +116,19 @@ With **service autoconfiguration** enabled (default), Symfony auto-tags any
 service implementing `FormTypeExtensionInterface` with **`form.type_extension`**;
 `getExtendedTypes()` tells the registry which types to attach it to. You write no
 config.
+
+```php
+// No YAML, no attribute — the interface IS the registration
+final class FileHelpExtension extends AbstractTypeExtension // implements FormTypeExtensionInterface
+{
+    // autoconfiguration tags the service `form.type_extension`;
+    // getExtendedTypes() tells the registry where to attach it
+    public static function getExtendedTypes(): iterable
+    {
+        return [FileType::class];
+    }
+}
+```
 
 !!! warning "There is no `#[AsFormTypeExtension]` attribute"
     Unlike listeners (`#[AsEventListener]`) or commands (`#[AsCommand]`), form type

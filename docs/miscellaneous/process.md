@@ -35,6 +35,17 @@ Construct `Symfony\Component\Process\Process` with an **array of arguments**
 (each auto-escaped), then run synchronously or asynchronously and inspect the
 exit code, stdout and stderr.
 
+```php
+use Symfony\Component\Process\Process;
+
+$process = new Process(['ls', '-la']); // array form: each argument auto-escaped
+$process->run();                       // blocking; returns the exit code
+
+$process->isSuccessful();              // true when exit code === 0
+$process->getOutput();                 // stdout
+$process->getErrorOutput();            // stderr
+```
+
 ## Deep Dive — how it works internally
 
 !!! question "Predict first"
@@ -57,6 +68,14 @@ exit code, stdout and stderr.
   expansion) but you are responsible for escaping — **command-injection risk** if
   you interpolate untrusted input.
 
+```php
+// Array form — auto-escaped, safe with untrusted input
+$safe = new Process(['git', 'log', $userInput]); // $userInput = one literal argument
+
+// Shell string — runs through /bin/sh, NOT escaped (pipes work, injection risk)
+$shell = Process::fromShellCommandline('git log | head -n 5');
+```
+
 ### Sync vs async
 
 - `run(?callable $callback = null): int` — starts and **blocks** until the
@@ -66,6 +85,22 @@ exit code, stdout and stderr.
   **non-blocking**; do other work and `wait()` (or poll `isRunning()`) later.
 - `mustRun()` — like `run()` but throws
   `Symfony\Component\Process\Exception\ProcessFailedException` on a non-zero exit.
+
+```php
+// Blocking: run() returns the exit code once the process ends
+$exitCode = $process->run();
+
+// Non-blocking: start(), keep working, then wait() (or poll isRunning())
+$process->start();
+while ($process->isRunning()) {
+    // ... do other work ...
+}
+$process->wait();
+
+// mustRun(): like run() but throws ProcessFailedException on non-zero exit
+$other = new Process(['pg_dump', 'app']);
+$other->mustRun();
+```
 
 ```mermaid
 sequenceDiagram
@@ -87,6 +122,18 @@ returns only new data since the last call. `getIterator()` streams output chunks
 lazily (great for long-running commands / large output without buffering it all
 in memory). `getExitCode()` returns the code; `isSuccessful()` is `code === 0`.
 
+```php
+$process->getOutput();            // full stdout buffer
+$process->getErrorOutput();       // full stderr buffer
+$process->getIncrementalOutput(); // only what is new since the last call
+$process->getExitCode();          // int (null while still running)
+$process->isSuccessful();         // exit code === 0
+
+foreach ($process->getIterator() as $type => $chunk) {
+    echo $chunk;                  // streamed lazily, no full buffering
+}
+```
+
 ### Timeouts
 
 `setTimeout(float $seconds)` limits total runtime; `setIdleTimeout()` limits time
@@ -94,6 +141,18 @@ without output. Exceeding either throws
 `Symfony\Component\Process\Exception\ProcessTimedOutException`. **You must call
 `checkTimeout()` periodically** in an async loop, or use `wait()`/`run()` which
 check for you. Default timeout is 60 s; `setTimeout(null)` disables it.
+
+```php
+$process->setTimeout(120);     // max total runtime in seconds (default 60)
+$process->setIdleTimeout(10);  // max seconds without any new output
+// $process->setTimeout(null); // disables the timeout entirely
+
+$process->start();
+while ($process->isRunning()) {
+    $process->checkTimeout();  // throws ProcessTimedOutException when exceeded
+    usleep(100_000);
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\Process\Process` —
