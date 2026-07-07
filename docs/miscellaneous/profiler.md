@@ -122,12 +122,47 @@ via the profiler) for data not available during `kernel.response` (e.g. the fina
 list of dumps, cache calls). Implement it when your metric is only complete
 post-response.
 
+```php
+use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
+
+final class CacheStatsCollector extends DataCollector implements LateDataCollectorInterface
+{
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
+    {
+        // kernel.response — too early: cache calls may still happen
+    }
+
+    public function lateCollect(): void
+    {
+        // kernel.terminate — totals are final now
+        $this->data['hits'] = $this->pool->getHits();
+    }
+}
+```
+
 ### Custom template
 
 A collector's panel is a Twig template extending
 `@WebProfiler/Profiler/layout.html.twig`, associated via the
 `data_collector` service tag's `template` attribute. It renders the toolbar
 badge (`block toolbar`) and the panel (`block panel`).
+
+```twig
+{# templates/data_collector/tenant.html.twig — referenced by the
+   data_collector tag's "template" attribute #}
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {# the small badge shown in the debug toolbar #}
+    {% set text %}Tenant: {{ collector.tenant }}{% endset %}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+{% endblock %}
+
+{% block panel %}
+    <h2>Tenant</h2>
+    <p>{{ collector.tenant }}</p>
+{% endblock %}
+```
 
 ## Configuration & code
 
