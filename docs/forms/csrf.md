@@ -61,6 +61,18 @@ and renders a hidden `_token` field.
   validates tokens. Stateful default `CsrfTokenManager` stores tokens via a
   `TokenStorageInterface` (session) using a `UriSafeTokenGenerator`.
 
+```php
+// CsrfTokenManagerInterface: mints and checks tokens
+$token = $tokenManager->getToken('task_item');   // default CsrfTokenManager stores it
+                                                 // via TokenStorageInterface (session),
+                                                 // values from UriSafeTokenGenerator
+$ok = $tokenManager->isTokenValid(new CsrfToken('task_item', $submitted));
+
+// FormTypeCsrfExtension wires this into every FormType:
+//  - buildForm()  -> registers CsrfValidationListener (runs on PRE_SUBMIT)
+//  - finishView() -> injects the hidden field named by csrf_field_name ('_token')
+```
+
 ```mermaid
 sequenceDiagram
     participant V as finishView

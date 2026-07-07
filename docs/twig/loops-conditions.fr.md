@@ -39,6 +39,13 @@
 Itérez des tableaux, des `Traversable`, ou en clé→valeur avec
 `{% for key, value in map %}`.
 
+```twig
+{# works on arrays and any Traversable (e.g. a Doctrine Collection) #}
+{% for key, value in map %}
+    {{ key }}: {{ value }}
+{% endfor %}
+```
+
 La variable **`loop`** dans un `for` :
 
 | Membre | Signification |

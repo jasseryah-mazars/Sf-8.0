@@ -45,6 +45,15 @@ Deux transports le sous-tendent :
 
 `HttpClient::create()` choisit automatiquement le meilleur disponible.
 
+```php
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
+// CurlHttpClient when ext-curl is available, NativeHttpClient otherwise
+$client = HttpClient::create();
+assert($client instanceof HttpClientInterface); // always code against the contract
+```
+
 !!! question "Predict first"
     Vous appelez `$client->request('GET', $url)` trois fois dans une boucle sans lire
     aucune response. Combien de transferts HTTP se sont terminés ?
@@ -70,6 +79,23 @@ Le contrat vit dans `Symfony\Contracts\HttpClient` :
 `ResponseInterface` lazy. L'échange HTTP n'est *terminé* que lorsque vous lisez pour la
 première fois le statut/les headers/le contenu. Cela rend la concurrence gratuite —
 lancez de nombreuses requests, puis lisez-les :
+
+```php
+$response = $client->request('GET', 'https://api.example.com/users');
+
+$response->getStatusCode();       // 200 — first read completes the transfer
+$response->getHeaders();          // ['content-type' => ['application/json'], ...]
+$response->getContent();          // raw body string
+$response->toArray();             // JSON-decoded array
+$response->getInfo('total_time'); // transport metadata
+
+// ResponseStreamInterface yields ChunkInterface objects
+foreach ($client->stream($response) as $chunk) {
+    if ($chunk->isLast()) { /* transfer finished */ }
+}
+
+$client->request('GET', 'https://api.example.com/slow')->cancel(); // abort
+```
 
 ```mermaid
 sequenceDiagram

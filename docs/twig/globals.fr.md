@@ -77,6 +77,18 @@ container dont elle a besoin (token storage, request stack, locale). Chaque appe
 | `app.flashes` | `getFlashes()` | `FlashBagInterface` de la session |
 | `app.token` | `getToken()` | `TokenStorageInterface` |
 
+```php
+// TwigBundle wires AppVariable and registers it as the 'app' global
+$app = new AppVariable();
+$app->setTokenStorage($tokenStorage);   // backs app.user / app.token
+$app->setRequestStack($requestStack);   // backs app.request / app.session
+$twig->addGlobal('app', $app);
+
+// every app.X access is a getter call on AppVariable
+$app->getUser();    // {{ app.user }}
+$app->getRequest(); // {{ app.request }}
+```
+
 ```mermaid
 flowchart LR
     T["{{ app.user }}"] --> AV[AppVariable::getUser]

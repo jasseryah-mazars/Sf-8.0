@@ -106,6 +106,21 @@ Le `Symfony\Component\Config\FileLocator` et les loaders (`YamlFileLoader`,
 résultat en cache et vérifient sa fraîcheur via `ResourceInterface` (par exemple
 `FileResource`), de sorte que le mode debug reconstruit quand les sources changent.
 
+```php
+use Symfony\Component\Config\ConfigCache;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
+
+// FileLocator resolves file names for loaders (YamlFileLoader, PhpFileLoader...)
+$locator = new FileLocator([__DIR__.'/config']);
+$path = $locator->locate('services.yaml'); // absolute path or exception
+
+$cache = new ConfigCache(__DIR__.'/var/cache/config.php', true); // debug = true
+if (!$cache->isFresh()) { // checks every tracked ResourceInterface
+    $cache->write($compiledPhp, [new FileResource($path)]); // FileResource = mtime check
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\Config\Definition\Processor::processConfiguration()` —
     [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Config/Definition/Processor.php).
@@ -120,6 +135,16 @@ fichiers précédents) :
 2. `.env.local` — surcharges propres à la machine (ignorées par git ; **ignorées en `test`**).
 3. `.env.<APP_ENV>` — par exemple `.env.prod` (committé).
 4. `.env.<APP_ENV>.local` — surcharges machine spécifiques à l'environnement (ignorées par git).
+
+```php
+use Symfony\Component\Dotenv\Dotenv;
+
+// Bootstrap: populate $_ENV / $_SERVER from the .env* cascade
+(new Dotenv())->loadEnv(dirname(__DIR__).'/.env'); // reads APP_ENV to pick .env.<env>*
+
+$env = $_ENV['APP_ENV'];           // also mirrored into $_SERVER
+$dsn = $_SERVER['DATABASE_URL'];   // real OS env vars are never overridden
+```
 
 `APP_ENV` sélectionne l'environnement ; `APP_DEBUG` active ou non le debug. En production,
 exécutez `composer dump-env prod`, qui compile tout ce qui précède en un unique

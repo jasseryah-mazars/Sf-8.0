@@ -47,6 +47,17 @@ public function onAuthenticationFailure(Request $r, AuthenticationException $e):
 who the user is and what must be verified. It does **not** verify anything
 itself; badge resolution happens on `CheckPassportEvent`.
 
+```php
+public function authenticate(Request $request): Passport
+{
+    // build only — badge verification happens later, on CheckPassportEvent
+    return new Passport(
+        new UserBadge($request->request->getString('email')),
+        new PasswordCredentials($request->request->getString('password')),
+    );
+}
+```
+
 !!! question "Predict first"
     Your authenticator builds a `Passport` with a `UserBadge` but you forget to
     add the `CsrfTokenBadge` on a form login. What happens on submit?
@@ -71,6 +82,22 @@ A `Symfony\Component\Security\Http\Authenticator\Passport\Passport` bundles:
 
 Use `SelfValidatingPassport` when there are **no credentials to check** (e.g. a
 valid API token already identifies the user) — it needs only a `UserBadge`.
+
+```php
+// full Passport: UserBadge + credentials + optional badges
+new Passport(
+    new UserBadge('alice@example.com'),
+    new PasswordCredentials($plaintext),  // or: new CustomCredentials(fn ($cred, $user) => ..., $apiKey)
+    [
+        new CsrfTokenBadge('authenticate', $csrfToken),
+        new RememberMeBadge(),
+        new PasswordUpgradeBadge($plaintext),  // rehash on login
+    ],
+);
+
+// SelfValidatingPassport: no credentials to check — a UserBadge is enough
+new SelfValidatingPassport(new UserBadge('api-client'), [new PreAuthenticatedUserBadge()]);
+```
 
 | Badge (FQCN suffix) | Resolved by | Purpose |
 |---|---|---|

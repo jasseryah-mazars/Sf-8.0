@@ -118,6 +118,18 @@ Options clés de `TwigFilter`/`TwigFunction` :
 - **`is_variadic: true`** — regroupe les arguments supplémentaires dans un tableau.
 - **`deprecated`** — marque le chemin de dépréciation.
 
+```php
+new TwigFilter('excerpt', $callable, [
+    'is_safe' => ['html'],        // output is trusted HTML → skips auto-escaping
+    'needs_environment' => true,  // callable receives Twig\Environment as 1st arg
+    'needs_context' => true,      // …then the render context array
+    'is_variadic' => true,        // extra template args collected into an array
+    'deprecated' => true,         // using the filter triggers a deprecation
+]);
+// resulting callable signature:
+// function (Environment $env, array $context, mixed $value, ...$args)
+```
+
 À la compilation, Twig résout le nom vers le callable et inline l'appel dans le
 PHP généré, si bien que les filtres/fonctions ne coûtent qu'un appel de fonction
 normal à l'exécution.
@@ -200,6 +212,11 @@ Deux styles d'enregistrement équivalents en Twig 3.x actuel :
 Avec l'autoconfiguration de Symfony, une `AbstractExtension` est auto-taguée
 `twig.extension`, et les classes utilisant `#[AsTwigFilter]`/`#[AsTwigFunction]`
 sont enregistrées automatiquement. Utilisez `{{ 9.9|price }}` et `{{ vat(100) }}`.
+
+```twig
+{{ 9.9|price }}  {# custom filter — extension auto-tagged twig.extension #}
+{{ vat(100) }}   {# custom function — registered via #[AsTwigFunction] #}
+```
 
 !!! info "Runtime extensions"
     Pour les dépendances lourdes, placez la logique dans une classe **runtime**

@@ -133,6 +133,15 @@ vous n'en définissez aucun, il devient `no-cache, private` ; définir
 `max-age`/`public` l'ajuste. C'est pourquoi la response *par défaut* n'est pas
 cacheable par les caches partagés.
 
+```php
+$response = new Response('hi');
+$response->headers->get('Cache-Control'); // "no-cache, private" — computed default
+
+$response->setPublic();
+$response->setMaxAge(3600);
+$response->headers->get('Cache-Control'); // "max-age=3600, public"
+```
+
 ### `prepare()` and `send()` — the lifecycle
 
 ```mermaid
@@ -152,6 +161,16 @@ sequenceDiagram
 - **`send()`** appelle `sendHeaders()` (status line + headers + cookies) puis
   `sendContent()` (affiche le body avec echo). `StreamedResponse::sendContent()`
   invoque le callback, donc rien n'est mis en buffer en mémoire.
+
+```php
+// What the kernel runs at the end of every request:
+$response->prepare($request); // HEAD/204/304 -> body stripped; charset,
+                              // Content-Type and Content-Length fixed
+$response->send();            // sendHeaders() first, then sendContent()
+
+// StreamedResponse overrides sendContent() to invoke your callback
+(new StreamedResponse(fn () => print('chunk')))->send();
+```
 
 ### Response-building helpers
 

@@ -98,12 +98,35 @@ higher priority = applied first = **innermost**. The service actually resolved b
 consumers is the last (outermost) decorator. Know the exact rule: higher
 `decoration_priority` is **closer to the original** (inner), lower is outer.
 
+```yaml
+services:
+    # Higher decoration_priority = applied first = innermost (wraps the original)
+    App\Mail\CachingMailer:
+        decorates: mailer
+        decoration_priority: 20   # inner
+
+    # Lower priority (default 0) = outermost — what consumers actually receive
+    App\Mail\LoggingMailer:
+        decorates: mailer
+        decoration_priority: 10   # outer
+```
+
 ### Missing decorated service
 
 `decoration_on_invalid` controls behaviour when the decorated id does not exist:
 `exception` (default), `ignore` (drop the decorator), or `null` (inject `null` as
 `.inner`). Use `ignore`/`null` for optional decoration of services that may be
 absent.
+
+```yaml
+services:
+    App\Mail\LoggingMailer:
+        decorates: maybe_absent_mailer
+        # exception (default): compilation fails if the decorated id is missing
+        # ignore: the decorator definition is dropped entirely
+        # null: null is injected as the .inner argument
+        decoration_on_invalid: ignore
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\Compiler\DecoratorServicePass` —

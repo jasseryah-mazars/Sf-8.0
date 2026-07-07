@@ -96,6 +96,26 @@ with `#[SubscribedService]` and use the trait — the return type of the method 
 the service type. This is how the base `AbstractController` gets `twig`, `router`,
 etc. lazily.
 
+```php
+use Symfony\Contracts\Service\Attribute\SubscribedService;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait; // NOT ServiceSubscriberTrait (deprecated 6.4)
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
+final class Dashboard implements ServiceSubscriberInterface
+{
+    // Provides getSubscribedServices() and the $container locator property.
+    use ServiceMethodsSubscriberTrait;
+
+    // Return type = service type; fetched lazily,
+    // like AbstractController does for twig / router.
+    #[SubscribedService]
+    private function twig(): \Twig\Environment
+    {
+        return $this->container->get(__FUNCTION__);
+    }
+}
+```
+
 ### `#[AutowireLocator]`
 
 The modern shortcut: `#[AutowireLocator([...])]` on a constructor parameter builds a
@@ -118,6 +138,15 @@ builds and returns a *declared* service; there is no "null on miss" mode as ther
 on the main container. The common bug is calling `get($userSuppliedKey)` on an
 untrusted value and getting an exception for keys outside the whitelist — validate
 against `has()` (or the known key list) before fetching.
+
+```php
+$this->locator->get('unknown'); // throws ServiceNotFoundException — never null
+
+// Safe pattern for dynamic / user-supplied keys: has() before get().
+$gateway = $this->locator->has($id)
+    ? $this->locator->get($id)  // declared: built (or reused) and returned
+    : $fallback;
+```
 
 !!! note "Null in real life"
     Asking the specials board for a dish that was never chalked up gets you "no such

@@ -59,6 +59,16 @@ générée contenant des expressions `new`. Le pipeline de compilation :
 3. **Dump** — `PhpDumper` transforme les définitions survivantes en code PHP
    et l'écrit sous `var/cache/{env}/`.
 
+```php
+$builder = new ContainerBuilder(); // build-time object, never runs in prod
+// 1. extensions load() their definitions into $builder ...
+
+$builder->compile();               // 2. runs the PassConfig phases in order
+
+$dumper = new PhpDumper($builder); // 3. dump plain PHP under var/cache/{env}/
+$code = $dumper->dump();           //    generated factories use `new` inside
+```
+
 Voici ce que vous y trouvez après `cache:warmup` (les noms varient selon la
 classe du kernel, l'env et un hash de contenu ; considérez-les comme des
 formes, pas des chaînes exactes) :

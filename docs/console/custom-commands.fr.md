@@ -156,6 +156,19 @@ paramètres typés :
 - Les paramètres `#[Option]` deviennent des `InputOption` (un `bool` devient un
   drapeau `VALUE_NONE` ; un tableau devient `VALUE_IS_ARRAY`).
 
+```php
+public function __invoke(
+    InputInterface $input,            // injected by type
+    OutputInterface $output,          // injected by type
+    SymfonyStyle $io,                 // injected by type
+    #[Argument] string $username,     // InputArgument, required (no default)
+    #[Option] bool $force = false,    // InputOption VALUE_NONE flag
+    #[Option] array $tags = [],       // InputOption VALUE_IS_ARRAY
+): int {
+    return Command::SUCCESS;
+}
+```
+
 ```mermaid
 flowchart LR
     A["#[AsCommand] class"] --> B["autoconfigure: tag console.command"]
@@ -169,6 +182,12 @@ Une fois la commande instanciée, l'**ordre d'exécution** est piloté par
 `Command::run()`. Le cycle de vie complet (avec les hooks redéfinissables) est
 détaillé dans [Configuration](configuration.md) ; voici l'ordre d'appel compact,
 montrant que `configure()` s'est déjà exécutée une fois dans le constructeur :
+
+```php
+// Runtime order driven by Command::run() (configure() already ran in the constructor)
+$exitCode = $command->run($input, $output);
+// -> initialize() -> interact() if interactive -> input->validate() -> execute()
+```
 
 ```mermaid
 sequenceDiagram
