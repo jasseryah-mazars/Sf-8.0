@@ -36,6 +36,16 @@ par une instance de la classe `Closure`. Quand elle *capture* des variables du
 scope englobant, c'est une **closure**. Les **arrow functions** (`fn`) sont une
 forme concise qui capture le scope parent **automatiquement, par valeur**.
 
+```php
+$anon = function (string $n) { return 'Hi '.$n; };  // anonymous function
+
+$prefix  = 'Hi ';
+$closure = function (string $n) use ($prefix) { return $prefix.$n; }; // captures
+$arrow   = fn (string $n) => $prefix.$n;  // fn auto-captures $prefix by value
+
+$anon instanceof Closure;    // true — all three are Closure instances
+```
+
 | Form | Capture | Body | `$this` |
 |---|---|---|---|
 | `function () use ($x) {}` | `use` explicite | Bloc | Lié si dans une méthode |

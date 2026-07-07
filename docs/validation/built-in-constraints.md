@@ -34,6 +34,18 @@ are imported as `use Symfony\Component\Validator\Constraints as Assert;`. Each i
 a small value object; its options are constructor arguments. You attach it as an
 attribute on the value it guards.
 
+```php
+// all built-in constraints live in Symfony\Component\Validator\Constraints\
+use Symfony\Component\Validator\Constraints as Assert; // conventional alias
+
+class Product
+{
+    // the constraint is a small value object; options are constructor arguments
+    #[Assert\Length(min: 3, max: 50)]
+    public string $name = '';
+}
+```
+
 The catalogue is large — the exam tests the **common ones and their edge cases**,
 not obscure options. Learn the categories below.
 
