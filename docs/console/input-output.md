@@ -112,9 +112,29 @@ implements `ConsoleOutputInterface` and exposes **two streams**:
 Routing errors and progress to STDERR keeps piped STDOUT clean (e.g.
 `bin/console app:export > data.csv` still shows progress on the terminal).
 
+```php
+if ($output instanceof ConsoleOutputInterface) {
+    // STDERR: status that must not pollute piped STDOUT data
+    $output->getErrorOutput()->writeln('Exporting...');
+}
+
+// Same idea through SymfonyStyle
+$io->getErrorStyle()->writeln('Exporting...');   // writes to STDERR
+```
+
 **Output sections** (`ConsoleSectionOutput`, created by `$output->section()`) are
 independently re-writable regions: you can `overwrite()` or `clear()` one section
 without disturbing others — the basis for multiple concurrent progress bars.
+
+```php
+$progress = $output->section();            // ConsoleSectionOutput
+$log      = $output->section();
+
+$progress->writeln('Progress: 0%');
+$log->writeln('Started');
+$progress->overwrite('Progress: 100%');    // rewrites only this section
+$log->clear();                             // clears only the log section
+```
 
 ```mermaid
 flowchart LR

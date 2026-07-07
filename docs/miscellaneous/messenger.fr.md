@@ -112,6 +112,23 @@ middleware appelle `$stack->next()->handle($envelope, $stack)` : la pile forme
 donc une chaîne en **poupées russes** — un middleware peut agir avant *et*
 après le reste du pipeline.
 
+```php
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
+
+final class AuditMiddleware implements MiddlewareInterface
+{
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
+    {
+        // code here runs BEFORE the rest of the pipeline
+        $envelope = $stack->next()->handle($envelope, $stack);
+        // code here runs AFTER (russian-doll, on the way back out)
+        return $envelope;
+    }
+}
+```
+
 ```mermaid
 flowchart LR
     D[dispatch] --> M1[Your middleware]
@@ -131,6 +148,20 @@ Les deux middleware intégrés qui font pivot s'exécutent près de la fin :
 2. **`HandleMessageMiddleware`** — localise les handlers pour le type de message
    et les invoque, en ajoutant un `HandledStamp` par handler avec la valeur de
    retour.
+
+```php
+use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Symfony\Component\Messenger\Stamp\SentStamp;
+
+$envelope = $bus->dispatch(new SendReminder(userId: 42));
+
+// Routed async: SendMessageMiddleware enqueued it and stopped the pipeline
+$envelope->last(SentStamp::class);    // SentStamp — proof it was sent to a transport
+$envelope->last(HandledStamp::class); // null — HandleMessageMiddleware never ran here
+
+// Routed to sync (or not routed): HandleMessageMiddleware calls the handler,
+// so last(HandledStamp::class)->getResult() holds the return value instead
+```
 
 !!! note "Source reference"
     `Symfony\Component\Messenger\MessageBus::dispatch()` et les middleware dans
@@ -152,11 +183,35 @@ Chaque bus est un `MessageBus` indépendant avec sa **propre liste de
 middleware** : un command bus peut donc envelopper les handlers dans une
 transaction Doctrine tandis qu'un event bus ne le fait pas.
 
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        default_bus: command.bus       # instead of messenger.bus.default
+        buses:
+            command.bus:
+                middleware: [doctrine_transaction]  # own middleware list
+            query.bus: ~               # one handler; result read via HandledStamp
+            event.bus:
+                default_middleware:
+                    allow_no_handlers: true          # fire-and-forget
+```
+
 ### Envelopes & stamps
 
 Une `Envelope` est immuable : `with()` retourne une *nouvelle* envelope avec un
 stamp ajouté ; `last(StampClass::class)` lit le stamp le plus récent d'un type
 donné. Les stamps clés :
+
+```php
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
+
+$envelope = new Envelope(new SendReminder(userId: 42));
+$delayed = $envelope->with(new DelayStamp(5_000)); // with() returns a NEW envelope
+$envelope->last(DelayStamp::class);                // null — original unchanged
+$delayed->last(DelayStamp::class);                 // the DelayStamp instance
+```
 
 | Stamp | Rôle |
 |---|---|

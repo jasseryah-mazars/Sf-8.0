@@ -138,6 +138,19 @@ $builder = $resolved->createBuilder($factory, 'vat');
   autre ;
 - `setDeprecated(...)` — marquez une option comme dépréciée.
 
+```php
+public function configureOptions(OptionsResolver $resolver): void
+{
+    $resolver->setDefaults(['multiple' => false]);             // default values
+    $resolver->setRequired(['choices']);                       // caller must pass
+    $resolver->setAllowedTypes('multiple', 'bool');            // type validation
+    $resolver->setAllowedValues('mode', ['strict', 'loose']);  // value validation
+    $resolver->setNormalizer('expanded',                       // derive from others
+        static fn (Options $o, bool $v): bool => $o['multiple'] ? true : $v);
+    $resolver->setDeprecated('legacy', 'app/forms', '2.0');    // deprecated option
+}
+```
+
 Comme le `configureOptions` du parent s'exécute d'abord, un enfant peut
 *surcharger* une valeur par défaut du parent et référencer l'option du parent
 dans un normalizer.
@@ -149,6 +162,20 @@ autoconfigure les classes implémentant `FormTypeInterface` avec le tag
 `form.type` ; vous pouvez donc injecter des services dans le constructeur d'un
 type, et il est disponible par son FQCN. Il n'y a **plus** de `getName()` — le
 FQCN est l'identifiant et `getBlockPrefix()` nomme le bloc Twig.
+
+```php
+// Autoconfiguration: any FormTypeInterface gets the form.type tag
+final class VatNumberType extends AbstractType
+{
+    public function __construct(private VatChecker $checker) {} // DI works
+
+    // no getName() any more — the FQCN identifies the type
+    public function getBlockPrefix(): string
+    {
+        return 'vat_number'; // names the Twig theme block
+    }
+}
+```
 
 ## Configuration & code
 

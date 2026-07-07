@@ -102,6 +102,18 @@ it. Defence: **regenerate the session id on privilege change** (login) — Symfo
 does this automatically on authentication. **Hijacking:** stealing the cookie;
 mitigated by `Secure` (HTTPS only), `HttpOnly` (no JS access) and `SameSite`.
 
+```php
+// Defeat fixation: new session id on login (Symfony does this for you)
+$request->getSession()->migrate();
+
+// Mitigate hijacking with cookie flags:
+session_set_cookie_params([
+    'secure'   => true,   // Secure: sent over HTTPS only
+    'httponly' => true,   // HttpOnly: invisible to JavaScript
+    'samesite' => 'Lax',  // SameSite: withheld on cross-site requests
+]);
+```
+
 ```mermaid
 sequenceDiagram
     participant U as User

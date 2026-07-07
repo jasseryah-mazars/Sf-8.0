@@ -39,6 +39,14 @@ brute, ou réagir après la liaison. Les cinq constantes vivent sur
 `Symfony\Component\Form\FormEvents` ; chaque listener reçoit un
 `Symfony\Component\Form\FormEvent`.
 
+```php
+// All five constants live on FormEvents; every listener receives a FormEvent
+$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+    $data = $event->getData();  // shape depends on the event (raw array here)
+    $form = $event->getForm();  // the form being built/submitted
+});
+```
+
 Deux séquences distinctes se déclenchent à deux moments différents :
 
 | Phase | Séquence |

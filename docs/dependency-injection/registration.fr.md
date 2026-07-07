@@ -40,6 +40,16 @@ configuration** : un seul glob `resource` enregistre tout un répertoire,
 applique les tags selon les interfaces implémentées. Vous ne passez aux
 définitions manuelles que lorsque les conventions ne suffisent plus.
 
+```yaml
+# config/services.yaml
+services:
+    _defaults:
+        autowire: true        # fill constructor args by type
+        autoconfigure: true   # apply tags based on implemented interfaces
+    App\:
+        resource: '../src/'   # one resource glob registers the whole directory
+```
+
 !!! question "Predict first"
     Using the `App\:` resource glob, what is a service's id — a short name or
     something else? And are `autowire` and `autoconfigure` the same switch?

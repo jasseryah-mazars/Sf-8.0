@@ -44,6 +44,22 @@ Au-dessus se trouve **`Symfony\Component\Console\Style\SymfonyStyle`**, le helpe
 recommandé qui enveloppe les deux dans une API cohérente et stylée — l'examen attend
 de vous que vous la connaissiez.
 
+```php
+// InputInterface: read what was typed
+$path  = $input->getArgument('path');     // positional value
+$force = $input->getOption('force');      // named value / flag
+$hasIt = $input->hasArgument('path');     // is it defined?
+$tty   = $input->isInteractive();         // can we prompt the user?
+
+// OutputInterface: write text
+$output->write('no newline');             // write()
+$output->writeln('with newline');         // writeln()
+
+// SymfonyStyle: the styled wrapper over both contracts
+$io = new SymfonyStyle($input, $output);
+$io->success('Done.');
+```
+
 !!! question "Predict first"
     Vous voulez des messages de progression sur STDERR tout en envoyant des données
     dans un pipe sur STDOUT. Pouvez-vous appeler `getErrorOutput()` sur n'importe
@@ -70,6 +86,26 @@ le rendu standard de Symfony (espacement, blocs colorés). Méthodes clés :
 | `ask()` / `askHidden()` / `confirm()` / `choice()` | Prompts |
 | `success()` / `warning()` / `error()` / `note()` / `caution()` | Blocs de résultat |
 
+```php
+$io->title('Import');                          // heading
+$io->section('Validation');                    // sub-heading
+$io->text('Checking rows...');                 // paragraph
+$io->listing(['row 1', 'row 2']);              // bullet list
+$io->table(['Id', 'Name'], [[1, 'Ada']]);      // table(headers, rows)
+
+$io->progressStart(2);                         // progress UI
+$io->progressAdvance();
+$io->progressFinish();
+
+$answer = $io->ask('Name?', 'demo');           // prompts
+$secret = $io->askHidden('Password?');
+$ok     = $io->confirm('Proceed?', true);
+$env    = $io->choice('Env?', ['dev', 'prod']);
+
+$io->success('OK'); $io->warning('Careful');   // result blocks
+$io->error('Boom'); $io->note('FYI'); $io->caution('Danger');
+```
+
 La sortie CLI concrète est `Symfony\Component\Console\Output\ConsoleOutput`, qui
 implémente `ConsoleOutputInterface` et expose **deux flux** :
 
@@ -80,10 +116,30 @@ Router les erreurs et la progression vers STDERR garde propre le STDOUT envoyé 
 un pipe (par exemple `bin/console app:export > data.csv` affiche quand même la
 progression dans le terminal).
 
+```php
+if ($output instanceof ConsoleOutputInterface) {
+    // STDERR: status that must not pollute piped STDOUT data
+    $output->getErrorOutput()->writeln('Exporting...');
+}
+
+// Same idea through SymfonyStyle
+$io->getErrorStyle()->writeln('Exporting...');   // writes to STDERR
+```
+
 Les **output sections** (`ConsoleSectionOutput`, créées par `$output->section()`) sont
 des zones réinscriptibles indépendamment : vous pouvez `overwrite()` ou `clear()` une
 section sans perturber les autres — la base de plusieurs barres de progression
 simultanées.
+
+```php
+$progress = $output->section();            // ConsoleSectionOutput
+$log      = $output->section();
+
+$progress->writeln('Progress: 0%');
+$log->writeln('Started');
+$progress->overwrite('Progress: 100%');    // rewrites only this section
+$log->clear();                             // clears only the log section
+```
 
 ```mermaid
 flowchart LR

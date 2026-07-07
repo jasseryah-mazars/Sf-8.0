@@ -109,6 +109,25 @@ droite à gauche : `%env(int:default:fallback_param:MAX_ITEMS)%` lit `MAX_ITEMS`
 se replie sur un parameter, puis caste en int. Les processors implémentent
 `EnvVarProcessorInterface` ; vous pouvez ajouter les vôtres.
 
+```yaml
+parameters:
+    app.max: '%env(int:MAX_ITEMS)%'               # int: cast
+    app.rate: '%env(float:RATE)%'                 # float: cast
+    app.debug: '%env(bool:APP_DEBUG)%'            # bool: cast (not: negates it)
+    app.name: '%env(string:trim:APP_NAME)%'       # trim: first, then string:
+    app.opts: '%env(json:OPTIONS)%'               # json: decode
+    app.hosts: '%env(csv:HOSTS)%'                 # csv: split
+    app.dsn: '%env(resolve:DB_DSN)%'              # resolve: %params% inside value
+    app.cert: '%env(base64:file:CERT_PATH)%'      # file: read it, base64: decode
+    app.db: '%env(key:path:url:DATABASE_URL)%'    # url: parse, key: pick one part
+    app.qs: '%env(query_string:QS)%'              # query_string: parse
+    app.cfg: '%env(require:PHP_FILE)%'            # require: the PHP file
+    app.level: '%env(enum:App\Enum\Level:LEVEL)%' # enum: backed enum case
+    # default: chains right-to-left — read MAX_ITEMS, else the parameter, cast:
+    app.limit: '%env(int:default:fallback_param:MAX_ITEMS)%'
+    # Custom processors implement EnvVarProcessorInterface.
+```
+
 ```mermaid
 flowchart LR
     R["raw env string"] --> P1["default: (fallback)"]
@@ -126,6 +145,22 @@ Trois manières, toutes résolues à la compilation dans la definition :
    ou `#[Autowire(env: 'DATABASE_URL')]` ou `#[Autowire(param: 'app.name')]`.
 3. **`ParameterBagInterface`** injecté comme service, lu à l'exécution avec
    `->get('app.name')` — pour quand la valeur doit varier ou être dynamique.
+
+```php
+// bind (services.yaml): _defaults: { bind: { $projectDir: '%kernel.project_dir%' } }
+public function __construct(
+    string $projectDir,                              // 1. filled by bind
+    #[Autowire('%kernel.debug%')] bool $debug,       // 2. parameter expression
+    #[Autowire(env: 'DATABASE_URL')] string $dsn,    //    env var
+    #[Autowire(param: 'app.name')] string $appName,  //    named parameter
+    private ParameterBagInterface $params,           // 3. runtime bag
+) {}
+
+public function dynamic(): mixed
+{
+    return $this->params->get('app.name');           // runtime read
+}
+```
 
 !!! note "Source reference"
     `Symfony\Component\DependencyInjection\EnvVarProcessor` implémente les
@@ -147,6 +182,19 @@ optionnelles. Attention aux casts : `%env(int:MISSING)%` sans défaut échoue, e
 mauvaise configuration. Le bug classique consiste à supposer qu'une variable d'env
 absente devient silencieusement `null` partout ; sans processor `default:`, c'est
 un échec pur et dur.
+
+```php
+// Env fallbacks (resolved at runtime):
+'%env(default::SOME_VAR)%';             // null when SOME_VAR is unset
+'%env(default:app.fallback:SOME_VAR)%'; // falls back to the app.fallback parameter
+'%env(int:MISSING)%';                   // unset + no default: -> hard failure
+'%env(int:default::MISSING)%';          // unset -> null -> cast to 0 (careful!)
+
+// Parameter bag at runtime (app.optional: null declared in YAML):
+$params->get('app.optional');           // null — parameter declared as null
+$params->has('nope');                   // false — check first for optional lookups
+$params->get('nope');                   // throws ParameterNotFoundException
+```
 
 !!! note "Null in real life"
     Une étape de recette indiquant « saler à votre goût » avec le pot manquant

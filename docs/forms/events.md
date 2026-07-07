@@ -153,6 +153,26 @@ $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $e): void
 
 Subscribers are reusable across forms and testable in isolation.
 
+```php
+// Closure listener, inline on the builder
+$builder->addEventListener(FormEvents::PRE_SUBMIT, fn (FormEvent $e) => $e->setData(
+    array_map(trim(...), $e->getData()),
+));
+
+// Subscriber: EventSubscriberInterface + getSubscribedEvents(), reusable/testable
+final class TrimCodeSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents(): array
+    {
+        return [FormEvents::PRE_SUBMIT => 'onPreSubmit'];
+    }
+
+    public function onPreSubmit(FormEvent $event): void { /* ... */ }
+}
+
+$builder->addEventSubscriber(new TrimCodeSubscriber());
+```
+
 ### Null behavior
 
 `PRE_SET_DATA` can carry `null`: a form created without initial data (no
@@ -165,6 +185,22 @@ absent key: read it with `$data['country'] ?? null`, not `$data['country']`, or 
 trip an undefined-key warning. `POST_SUBMIT` sees the bound model, which is
 `null`/empty for an empty submission. Never assume a key or object is present inside
 a listener.
+
+```php
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $e): void {
+    $article = $e->getData();   // null on a "new entity" form (no initial data_class value)
+    if ($article instanceof Article && null !== $article->getId()) {
+        // guarded: only call $data->getId() after the instanceof check
+    }
+});
+
+$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $e): void {
+    $data = $e->getData();                 // raw array: a blank field = absent key
+    $country = $data['country'] ?? null;   // never bare $data['country']
+});
+
+// POST_SUBMIT: bound model — may be null/empty for an empty submission
+```
 
 !!! note "Null in real life"
     `null` = a checkpoint waving through someone with **no papers yet** — check

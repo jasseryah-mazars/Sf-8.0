@@ -54,6 +54,12 @@ debug ErrorHandler's verbose page, and cache freshness checks. In prod the
 compiled container in `var/cache/prod/` is loaded as-is — Symfony assumes it is
 fresh, so you **must** warm/clear the cache on deploy.
 
+```ini
+; real env vars (or .env.local.php) on the prod server
+APP_ENV=prod   ; selects the prod config tree
+APP_DEBUG=0    ; no profiler, no verbose errors, no freshness checks
+```
+
 ### Cache warmup
 
 `cache:clear` removes stale cache and (by default) runs the **cache warmers**
@@ -62,16 +68,51 @@ Twig template cache, validator/serializer metadata. `cache:warmup` warms without
 clearing. Warm during build so the first real request is fast and the web user
 has no write access to `var/cache`.
 
+```php
+use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
+
+// Runs during cache:clear (by default) and cache:warmup
+final class ReportCacheWarmer implements CacheWarmerInterface
+{
+    public function isOptional(): bool
+    {
+        return true; // optional warmers may be skipped and lazily built later
+    }
+
+    public function warmUp(string $cacheDir, ?string $buildDir = null): array
+    {
+        file_put_contents($cacheDir.'/report.meta', 'built at deploy');
+
+        return []; // list of classes to preload
+    }
+}
+```
+
 ### Dependencies & autoloader
 
 `composer install --no-dev --optimize-autoloader` (or
 `--classmap-authoritative`) skips dev packages and builds an optimised classmap,
 avoiding filesystem stat calls per class load.
 
+```console
+# Skip require-dev packages and generate an optimized classmap
+$ composer install --no-dev --optimize-autoloader
+
+# Stricter: the classmap is the ONLY source, no filesystem checks at all
+$ composer install --no-dev --classmap-authoritative
+```
+
 ### DotEnv dump
 
 `composer dump-env prod` compiles the `.env*` cascade into `.env.local.php`, so
 production skips DotEnv parsing (see [Configuration](configuration.md)).
+
+```console
+# Compile the .env* cascade once, at deploy time
+$ composer dump-env prod
+Successfully dumped .env files in .env.local.php
+# When .env.local.php exists, the .env* files are no longer parsed
+```
 
 ### Opcache & preload
 
@@ -80,6 +121,13 @@ Opcache caches compiled bytecode. Symfony generates
 `opcache.preload` to it loads core classes into shared memory once per PHP
 process manager start, cutting per-request class loading. Ensure
 `opcache.validate_timestamps=0` in prod and reset opcache on each deploy.
+
+```ini
+; php.ini (prod)
+opcache.preload=/srv/app/var/cache/prod/App_KernelProdContainer.preload.php
+opcache.preload_user=www-data
+opcache.validate_timestamps=0 ; never stat files — reset opcache on each deploy
+```
 
 ```mermaid
 flowchart LR

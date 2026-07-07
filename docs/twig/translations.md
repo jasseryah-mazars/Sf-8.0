@@ -43,6 +43,14 @@ Signature: `message|trans(parameters = {}, domain = 'messages', locale = null)`.
 The key (`welcome.title`) is looked up in the catalogue for the current locale;
 if missing, the key itself is returned.
 
+```twig
+{# full argument order: parameters, then domain, then locale #}
+{{ 'welcome.title'|trans({}, 'messages', 'fr') }}
+
+{# key missing from the catalogue: 'welcome.title' is rendered as-is #}
+{{ 'welcome.title'|trans }}
+```
+
 !!! question "Predict first"
     You need "1 message / 5 messages" pluralization in a Symfony 8 template.
     Reaching for `transchoice`? What is the current path?
@@ -62,6 +70,19 @@ loads catalogues (YAML/XLIFF under `translations/`) into a
 `MessageCatalogue`, resolves the message, substitutes parameters, and — when the
 message is ICU — runs it through the **`IntlFormatter`** (PHP `intl`
 `MessageFormatter`).
+
+```php
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+// the service TranslationExtension delegates to
+public function __construct(private TranslatorInterface $translator) {}
+
+// same lookup the |trans filter performs
+$text = $this->translator->trans('welcome.hello', ['%name%' => 'Ada'], 'messages');
+
+// catalogues load into a MessageCatalogue per locale; ICU messages are
+// rendered by IntlFormatter (php-intl MessageFormatter) instead of strtr
+```
 
 ```mermaid
 flowchart LR
@@ -84,6 +105,17 @@ flowchart LR
   `plural` instead.
 - `{% trans_default_domain 'admin' %}` sets the default domain for the rest of the
   template so you can drop the domain argument.
+
+```twig
+{# file naming: translations/messages.en.yaml, admin.fr.xlf,
+   messages+intl-icu.en.yaml (ICU: plural, select, intl formatting) #}
+
+{% trans_default_domain 'admin' %}
+{{ 'dashboard.title'|trans }}            {# domain 'admin' implied now #}
+{{ 'error.required'|trans({}, 'validators') }}
+
+{# transchoice() and |transchoice are removed — use ICU plural instead #}
+```
 
 !!! note "Source reference"
     `Symfony\Bridge\Twig\Extension\TranslationExtension`,
