@@ -96,6 +96,26 @@ tableau `$this->data` sérialisé via le cloner de VarDumper, afin qu'il survive
 au stockage). `reset()` remet l'état à zéro entre les requests dans les workers
 de longue durée.
 
+```php
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+
+final class ApiCallsCollector extends DataCollector
+{
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
+    {
+        // $this->data is cloned by VarDumper — store serializable snapshots only
+        $this->data['calls'] = $this->client->getCallCount();
+    }
+
+    public function getName(): string { return 'app.api_calls'; }
+
+    public function reset(): void
+    {
+        $this->data = []; // clear state between requests in long-running workers
+    }
+}
+```
+
 !!! note "Source reference"
     `Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface` et
     `Profiler` —
@@ -107,6 +127,24 @@ de longue durée.
 `kernel.terminate` via le profiler) pour les données indisponibles pendant
 `kernel.response` (p. ex. la liste finale des dumps, les appels au cache).
 Implémentez-la quand votre métrique n'est complète qu'après la response.
+
+```php
+use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
+
+final class CacheStatsCollector extends DataCollector implements LateDataCollectorInterface
+{
+    public function collect(Request $request, Response $response, ?\Throwable $exception = null): void
+    {
+        // kernel.response — too early: cache calls may still happen
+    }
+
+    public function lateCollect(): void
+    {
+        // kernel.terminate — totals are final now
+        $this->data['hits'] = $this->pool->getHits();
+    }
+}
+```
 
 ### Custom template
 

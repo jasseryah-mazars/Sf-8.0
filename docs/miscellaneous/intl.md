@@ -60,6 +60,15 @@ The framework's `Symfony\Component\Translation\Translator`:
 Catalogues are loaded from `translations/<domain>.<locale>.<format>` files
 (`yaml`, `xlf`/XLIFF, `php`) by loaders, then cached (compiled) per locale.
 
+```php
+// trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null)
+$text = $translator->trans('order.summary', ['name' => 'Ada'], 'checkout', 'fr');
+// 1. locale: the explicit 'fr' argument wins over the request locale
+// 2. the fr MessageCatalogue (+ fallbacks) is loaded from translations/checkout.fr.yaml
+// 3. "order.summary" is looked up in the "checkout" domain
+// 4. parameters are substituted by the ICU IntlFormatter
+```
+
 ```mermaid
 flowchart LR
     T[trans id, params] --> L[resolve locale + fallbacks]
@@ -85,6 +94,14 @@ domain suffix, e.g. `messages+intl-icu.en.yaml`):
 Pass `['count' => 3]`; ICU picks the correct plural category for the locale
 (`one`, `few`, `many`, `other` vary by language). `{gender, select, …}` handles
 choice by value.
+
+```php
+// Patterns live in translations/messages+intl-icu.<locale>.yaml
+$translator->trans('apple_count', ['count' => 3]); // "3 apples" (plural rule)
+
+// invite: "{gender, select, female {She comes} male {He comes} other {They come}}"
+$translator->trans('invite', ['gender' => 'female']); // "She comes"
+```
 
 ### Domains & fallback
 
