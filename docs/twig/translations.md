@@ -141,6 +141,16 @@ notifications: >-
 `#` prints the number; `one`/`other` are CLDR plural categories (locale-specific);
 `=0` matches the exact value. `select` works the same for gender/enums.
 
+```yaml
+# translations/messages+intl-icu.en.yaml — select: like plural, but by keyword
+invitation: >-
+    {gender, select,
+        female {She is invited}
+        male   {He is invited}
+        other  {They are invited}
+    }
+```
+
 ## Configuration & code
 
 === "Twig — filter & tag"

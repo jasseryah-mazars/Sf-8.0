@@ -38,6 +38,12 @@ Two kinds of input exist:
 - **Options** — *named*, order-free, prefixed `--` (or a `-x` shortcut):
   `--force`, `-f`, `--env=prod`.
 
+```console
+$ php bin/console app:clone https://example.com/repo.git ./target   # 2 positional arguments
+$ php bin/console app:deploy --force --env=prod                     # named options, any order
+$ php bin/console app:deploy -f                                     # -f shortcut for --force
+```
+
 **Argument modes** (`Symfony\Component\Console\Input\InputArgument`):
 
 | Mode | Value | Meaning |

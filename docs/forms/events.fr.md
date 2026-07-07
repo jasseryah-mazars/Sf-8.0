@@ -135,6 +135,21 @@ Vous ne pouvez ajouter/supprimer des champs qu'**avant** leur liaison — c'est
 pourquoi ces deux events « PRE » sont les bons points d'accroche, pas
 `SUBMIT`/`POST_SUBMIT`.
 
+```php
+// Depends on the initial object -> PRE_SET_DATA
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $e): void {
+    $e->getForm()->add('vatNumber', TextType::class);   // form still mutable
+});
+
+// Depends on the submitted value -> PRE_SUBMIT (raw array)
+$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $e): void {
+    $country = $e->getData()['country'] ?? null;
+    $e->getForm()->add('city', ChoiceType::class, ['choices' => []]);
+});
+
+// SUBMIT / POST_SUBMIT: too late — a field added here is never bound
+```
+
 ### Listener vs subscriber
 
 - **Listener en closure :** `$builder->addEventListener(FormEvents::PRE_SUBMIT, fn (FormEvent $e) => ...)`.

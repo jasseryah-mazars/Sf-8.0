@@ -261,11 +261,27 @@ applique `serialize()` à l'envelope. Le transport serializer basé sur le
 **Symfony Serializer** est recommandé pour l'interopérabilité entre
 langages/applications.
 
+```yaml
+# config/packages/messenger.yaml
+framework:
+    messenger:
+        transports:
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'  # builds a TransportInterface
+                # replace the default PhpSerializer (PHP serialize()) for interop:
+                serializer: messenger.transport.symfony_serializer
+```
+
 ### Worker lifecycle
 
 `messenger:consume <transport>` construit un `Worker` qui boucle : **recevoir →
 pousser dans le bus (avec un `ReceivedStamp`) → ack en cas de succès / reject en
 cas d'échec**. Events dispatchés autour de chaque étape :
+
+```console
+# Starts a Worker: receive → dispatch (with ReceivedStamp) → ack/reject loop
+$ php bin/console messenger:consume async -vv --time-limit=3600
+```
 
 ```mermaid
 sequenceDiagram

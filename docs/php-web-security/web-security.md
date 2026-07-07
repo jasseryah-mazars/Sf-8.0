@@ -129,6 +129,12 @@ sequenceDiagram
 The site is loaded in an invisible `<iframe>` over bait UI. Defence:
 `X-Frame-Options: DENY` or a Content-Security-Policy `frame-ancestors 'none'`.
 
+```php
+// Either response header blocks framing:
+$response->headers->set('X-Frame-Options', 'DENY');
+$response->headers->set('Content-Security-Policy', "frame-ancestors 'none'");
+```
+
 ### HTTPS, HSTS & security headers
 
 Serve everything over TLS. **HSTS** (`Strict-Transport-Security`) tells browsers

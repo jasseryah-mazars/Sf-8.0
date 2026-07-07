@@ -62,6 +62,12 @@ fraîcheur du cache. En prod, le container compilé dans `var/cache/prod/` est
 chargé tel quel — Symfony le suppose à jour, vous **devez** donc
 préchauffer/vider le cache au déploiement.
 
+```ini
+; real env vars (or .env.local.php) on the prod server
+APP_ENV=prod   ; selects the prod config tree
+APP_DEBUG=0    ; no profiler, no verbose errors, no freshness checks
+```
+
 ### Cache warmup
 
 `cache:clear` supprime le cache périmé et (par défaut) exécute les **cache

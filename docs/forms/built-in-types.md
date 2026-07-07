@@ -35,6 +35,15 @@ Symfony ships a catalogue of field types under
 They group into: **text/scalar**, **choice**, **date/time**, **special-purpose
 compound** (`collection`, `repeated`), and **buttons**.
 
+```php
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;     // choice
+use Symfony\Component\Form\Extension\Core\Type\CollectionType; // 'collection' compound
+use Symfony\Component\Form\Extension\Core\Type\DateType;       // date/time
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;   // 'repeated' compound
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;     // buttons
+use Symfony\Component\Form\Extension\Core\Type\TextType;       // text/scalar
+```
+
 !!! info "Doctrine out of scope"
     `EntityType` (`Symfony\Bridge\Doctrine\Form\Type\EntityType`) is a Doctrine
     bridge type and is **out of scope** for this material. Use `ChoiceType` with

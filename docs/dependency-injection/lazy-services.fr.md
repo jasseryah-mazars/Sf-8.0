@@ -67,6 +67,15 @@ supporte les
 — le container compilé émet donc désormais de simples instances lazy au niveau
 du moteur, sans aucune classe proxy générée pour les services concrets.
 
+```yaml
+# Symfony 8 / PHP 8.4 — laziness needs NO extra package:
+#   friendsofphp/proxy-manager: not required anymore
+#   symfony/var-exporter LazyGhostTrait / LazyProxyTrait generation: not used either
+services:
+    App\Report\HeavyReportGenerator:
+        lazy: true   # the compiled container emits a native PHP 8.4 lazy object
+```
+
 ## Deep Dive — how it works internally
 
 ### Ghost vs proxy — the two native strategies
@@ -90,6 +99,20 @@ notamment autour des classes `readonly` et de la plupart des classes internes
 (niveau C), qui ne peuvent pas être rendues lazy en PHP 8.4 — voir le
 [manuel PHP](https://www.php.net/manual/en/language.oop5.lazy-objects.php)
 pour les règles exactes.
+
+```php
+$reflector = new \ReflectionClass(HeavyReportGenerator::class);
+
+// ReflectionClass::newLazyGhost(): uninitialized instance of the class itself —
+// works even if the class is `final` (no subclassing involved)
+$ghost = $reflector->newLazyGhost(fn (HeavyReportGenerator $r) => $r->__construct());
+
+// ReflectionClass::newLazyProxy(): separate delegating object — the strategy
+// behind `lazy: 'Some\Interface'` definitions
+$proxy = $reflector->newLazyProxy(fn () => new HeavyReportGenerator());
+
+// PHP 8.4 restrictions: `readonly` classes and most internal classes cannot be lazy
+```
 
 ```mermaid
 flowchart TD

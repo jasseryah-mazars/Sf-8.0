@@ -96,6 +96,18 @@ puis un bloc nommé ajuste un service en particulier.
 - **aliases** — un second id (ou une interface) pointant vers un service, afin
   qu'il puisse être récupéré/autowiré sous un autre nom.
 
+```yaml
+services:
+    App\Report\PdfReporter:
+        arguments:
+            $logger: '@monolog.logger'    # argument by name
+        calls:
+            - setLogger: ['@logger']      # setter injection after construction
+
+    # Alias: the interface id points at the concrete service.
+    App\Report\ReporterInterface: '@App\Report\PdfReporter'
+```
+
 ```mermaid
 flowchart TD
     G["App\\: resource glob"] --> D["Definition per class (id = FQCN)"]
