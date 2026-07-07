@@ -33,3 +33,10 @@ jump straight into a timed 75-question simulation drawn from all 14 areas.
     a partially-correct selection earns zero. The pass mark shown (65%) is a
     community estimate for orientation, not an official figure — treat a comfortable
     margin above it as your target.
+
+!!! tip "Weak-area memory"
+    The simulator remembers your per-topic accuracy **in this browser**
+    (`localStorage` — nothing leaves your device). Once you've answered a few
+    questions, the setup screen shows your weakest areas and offers a
+    **Drill my weaknesses** button that builds a practice session from exactly
+    those topics. Use *Reset stats* to start fresh.

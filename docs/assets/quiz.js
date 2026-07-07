@@ -49,6 +49,40 @@
     return m + ":" + (s < 10 ? "0" : "") + s;
   }
 
+  // --- persistent per-topic stats (weak-area memory) ----------------------
+  var STATS_KEY = "sfq-stats-v1";
+
+  function loadStats() {
+    try {
+      var raw = window.localStorage.getItem(STATS_KEY);
+      var s = raw ? JSON.parse(raw) : null;
+      return (s && s.areas) ? s : { areas: {} };
+    } catch (e) { return { areas: {} }; }
+  }
+
+  function saveStats(stats) {
+    try { window.localStorage.setItem(STATS_KEY, JSON.stringify(stats)); }
+    catch (e) { /* private mode / quota — stats are a bonus, never break */ }
+  }
+
+  function recordResult(area, correct) {
+    var stats = loadStats();
+    var a = stats.areas[area] || { c: 0, n: 0 };
+    a.n += 1; if (correct) a.c += 1;
+    stats.areas[area] = a;
+    saveStats(stats);
+  }
+
+  function weakestAreas(minAttempts, howMany) {
+    var stats = loadStats(), rows = [];
+    Object.keys(stats.areas).forEach(function (name) {
+      var a = stats.areas[name];
+      if (a.n >= minAttempts) rows.push({ name: name, pct: a.c / a.n, n: a.n });
+    });
+    rows.sort(function (x, y) { return x.pct - y.pct; });
+    return rows.slice(0, howMany);
+  }
+
   // --- session state ------------------------------------------------------
   function Player(root, data) {
     this.root = root;
@@ -155,7 +189,40 @@
       self.start({ areas: d.areas.slice(), diff: "", type: "", count: d.exam.questions });
     });
     btns.appendChild(start); btns.appendChild(mock);
+
+    // Weak-area memory: after ≥3 attempts in ≥1 area, offer a targeted drill.
+    var weak = weakestAreas(3, 3);
+    if (weak.length) {
+      var drill = el("button", "sfq__btn sfq__btn--ghost", "Drill my weaknesses");
+      drill.type = "button";
+      drill.addEventListener("click", function () {
+        self.mode = "practice";
+        self.start({
+          areas: weak.map(function (w) { return w.name; }),
+          diff: "", type: "", count: 20
+        });
+      });
+      btns.appendChild(drill);
+    }
     wrap.appendChild(btns);
+
+    if (weak.length) {
+      var strip = el("p", "sfq__hint");
+      strip.appendChild(el("b", null, "Your weakest areas so far: "));
+      strip.appendChild(document.createTextNode(
+        weak.map(function (w) {
+          return w.name + " (" + Math.round(w.pct * 100) + "% over " + w.n + " Q)";
+        }).join(" · ") + "  —  stats live only in this browser. "));
+      var reset = el("a", null, "Reset stats");
+      reset.href = "#"; reset.style.cursor = "pointer";
+      reset.addEventListener("click", function (e) {
+        e.preventDefault();
+        try { window.localStorage.removeItem(STATS_KEY); } catch (err) {}
+        self.renderConfig();
+      });
+      strip.appendChild(reset);
+      wrap.appendChild(strip);
+    }
 
     this.root.appendChild(wrap);
   };
@@ -326,6 +393,7 @@
       .filter(function (i) { return i >= 0; });
     state.correct = setsEqual(state.picked, correctIdx);
     state.checked = true;
+    recordResult(state.q.area, state.correct); // grade() runs exactly once per question
     return state.correct;
   };
 
