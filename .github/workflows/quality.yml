@@ -16,7 +16,7 @@ jobs:
   markdownlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Markdown lint (informational)
         continue-on-error: true
         uses: DavidAnson/markdownlint-cli2-action@v19
@@ -26,7 +26,7 @@ jobs:
   linkcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check links (informational, does not fail the run)
         uses: lycheeverse/lychee-action@v2
         with:
