@@ -92,9 +92,9 @@ cet ordre fixe :
 | Constante de phase | Rôle |
 |---|---|
 | `TYPE_BEFORE_OPTIMIZATION` | la plupart des passes utilisateur : lire les tags, ajouter des arguments |
-| `TYPE_OPTIMIZATION` | autowiring, résolution des références (cœur) |
+| `TYPE_OPTIMIZE` | autowiring, résolution des références (cœur) |
 | `TYPE_BEFORE_REMOVING` | dernière chance avant l'élagage |
-| `TYPE_REMOVING` | suppression des services privés/inutilisés |
+| `TYPE_REMOVE` | suppression des services privés/inutilisés |
 | `TYPE_AFTER_REMOVING` | s'exécute après la suppression |
 
 La phase par défaut est `TYPE_BEFORE_OPTIMIZATION`. Enregistrez-y votre pass sauf
@@ -184,7 +184,7 @@ foreach ($container->findTaggedServiceIds('app.handler') as $id => $tags) {
     `TYPE_BEFORE_OPTIMIZATION` ; il supprimait donc une définition dont la phase
     d'optimisation avait encore besoin pour résoudre une `Reference`.
     **Correction :** déplacer la suppression vers `TYPE_BEFORE_REMOVING` /
-    `TYPE_REMOVING`. **À éviter :** faites correspondre la phase à l'intention —
+    `TYPE_REMOVE`. **À éviter :** faites correspondre la phase à l'intention —
     lire/ajouter des arguments avant l'optimisation, élaguer uniquement dans les
     phases de suppression.
 
@@ -310,7 +310,7 @@ arguments — une logique qu'aucun attribut n'exprime.
     ajoutez un appel de méthode avec une `Reference`, et enregistrez avec
     `addCompilerPass()` dans `Kernel::build()`.
 
-    **2.** La suppression a sa place dans `TYPE_REMOVING` (ou vous vous reposez sur
+    **2.** La suppression a sa place dans `TYPE_REMOVE` (ou vous vous reposez sur
     le pass de suppression intégré). La faire en before-optimization supprimerait
     un service que l'autowiring (phase d'optimisation) pourrait encore devoir
     référencer, cassant la résolution.
@@ -329,8 +329,8 @@ arguments — une logique qu'aucun attribut n'exprime.
 
 ??? question "Q2. What is the default compilation phase for a pass?"
     - [x] A. `TYPE_BEFORE_OPTIMIZATION` ✅
-    - [ ] B. `TYPE_OPTIMIZATION`
-    - [ ] C. `TYPE_REMOVING`
+    - [ ] B. `TYPE_OPTIMIZE`
+    - [ ] C. `TYPE_REMOVE`
     - [ ] D. `TYPE_AFTER_REMOVING`
 
     **Why:** Les passes enregistrées sans phase s'exécutent avant l'optimisation.

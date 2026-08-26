@@ -95,7 +95,7 @@ Un **service subscriber** déclare les services dont il *pourrait* avoir besoin 
 `Symfony\Contracts\Service\ServiceSubscriberInterface::getSubscribedServices()`,
 et le container injecte un locator dans une propriété `$container` (via
 `ServiceMethodsSubscriberTrait` ou un argument de constructeur — l'ancien
-`ServiceSubscriberTrait` a été **déprécié en 6.4**, utilisez
+`ServiceSubscriberTrait` a été **déprécié en 7.1**, utilisez
 `ServiceMethodsSubscriberTrait`). En Symfony 8, vous annotez les méthodes avec
 `#[SubscribedService]` et utilisez le trait — le type de retour de la méthode est
 le type du service. C'est ainsi que l'`AbstractController` de base obtient `twig`,
@@ -103,7 +103,7 @@ le type du service. C'est ainsi que l'`AbstractController` de base obtient `twig
 
 ```php
 use Symfony\Contracts\Service\Attribute\SubscribedService;
-use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait; // NOT ServiceSubscriberTrait (deprecated 6.4)
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait; // NOT ServiceSubscriberTrait (deprecated 7.1)
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 final class Dashboard implements ServiceSubscriberInterface

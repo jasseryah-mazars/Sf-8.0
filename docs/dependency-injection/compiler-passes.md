@@ -88,9 +88,9 @@ fixed order:
 | Phase constant | Purpose |
 |---|---|
 | `TYPE_BEFORE_OPTIMIZATION` | most user passes: read tags, add args |
-| `TYPE_OPTIMIZATION` | autowiring, resolve refs (core) |
+| `TYPE_OPTIMIZE` | autowiring, resolve refs (core) |
 | `TYPE_BEFORE_REMOVING` | last chance before pruning |
-| `TYPE_REMOVING` | remove private/unused services |
+| `TYPE_REMOVE` | remove private/unused services |
 | `TYPE_AFTER_REMOVING` | runs after removal |
 
 Default phase is `TYPE_BEFORE_OPTIMIZATION`. Register there unless you specifically
@@ -175,7 +175,7 @@ foreach ($container->findTaggedServiceIds('app.handler') as $id => $tags) {
     **Symptom:** a pass that removed a service caused an autowiring failure
     elsewhere. **Diagnosis:** it was registered in `TYPE_BEFORE_OPTIMIZATION`, so it
     deleted a definition the optimization phase still needed to resolve a
-    `Reference`. **Fix:** move removal to `TYPE_BEFORE_REMOVING` / `TYPE_REMOVING`.
+    `Reference`. **Fix:** move removal to `TYPE_BEFORE_REMOVING` / `TYPE_REMOVE`.
     **Avoid:** match the phase to the intent — read/add args before optimization,
     prune only in the removing phases.
 
@@ -296,7 +296,7 @@ expresses.
     method call with a `Reference`, and register with `addCompilerPass()` in
     `Kernel::build()`.
 
-    **2.** Removal belongs in `TYPE_REMOVING` (or you rely on the built-in removal
+    **2.** Removal belongs in `TYPE_REMOVE` (or you rely on the built-in removal
     pass). Doing it in before-optimization would delete a service that autowiring
     (optimization phase) might still need to reference, breaking resolution.
 
@@ -313,8 +313,8 @@ expresses.
 
 ??? question "Q2. What is the default compilation phase for a pass?"
     - [x] A. `TYPE_BEFORE_OPTIMIZATION` ✅
-    - [ ] B. `TYPE_OPTIMIZATION`
-    - [ ] C. `TYPE_REMOVING`
+    - [ ] B. `TYPE_OPTIMIZE`
+    - [ ] C. `TYPE_REMOVE`
     - [ ] D. `TYPE_AFTER_REMOVING`
 
     **Why:** Passes registered without a phase run before optimization.

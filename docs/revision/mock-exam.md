@@ -508,8 +508,8 @@
 **Q36.** What is the default phase for a compiler pass registered without one?  <small>_(Dependency Injection)_</small>
 
 - A. TYPE_BEFORE_OPTIMIZATION
-- B. TYPE_OPTIMIZATION
-- C. TYPE_REMOVING
+- B. TYPE_OPTIMIZE
+- C. TYPE_REMOVE
 - D. TYPE_AFTER_REMOVING
 
 ??? success "Answer Q36"

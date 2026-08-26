@@ -433,9 +433,9 @@
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
 
 ??? question "62. In which phase should a pass that removes a service run, and why not TYPE_BEFORE_OPTIMIZATION?"
-    **✅ TYPE_REMOVING — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference**
+    **✅ TYPE_REMOVE — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference**
 
-    Removal belongs in TYPE_REMOVING. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZATION races with autowiring.
+    Removal belongs in TYPE_REMOVE. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZATION races with autowiring.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
 
@@ -547,7 +547,7 @@
 ??? question "78. Which trait should a Symfony 8 service subscriber use with #[SubscribedService] methods?"
     **✅ ServiceMethodsSubscriberTrait**
 
-    The older ServiceSubscriberTrait was deprecated in 6.4; Symfony 8 uses ServiceMethodsSubscriberTrait together with #[SubscribedService] methods whose return type names the service. ServiceLocatorTrait builds a locator class, and ContainerAwareTrait is the removed container-injection anti-pattern.
+    The older ServiceSubscriberTrait was deprecated in 7.1 (symfony/contracts v3.5); Symfony 8 uses ServiceMethodsSubscriberTrait together with #[SubscribedService] methods whose return type names the service. ServiceLocatorTrait builds a locator class, and ContainerAwareTrait is the removed container-injection anti-pattern.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 

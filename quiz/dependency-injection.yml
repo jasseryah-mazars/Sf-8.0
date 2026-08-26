@@ -1288,9 +1288,9 @@ categories:
         answers:
           - value: "TYPE_BEFORE_OPTIMIZATION"
             correct: true
-          - value: "TYPE_OPTIMIZATION"
+          - value: "TYPE_OPTIMIZE"
             correct: false
-          - value: "TYPE_REMOVING"
+          - value: "TYPE_REMOVE"
             correct: false
           - value: "TYPE_AFTER_REMOVING"
             correct: false
@@ -1345,23 +1345,23 @@ categories:
         type: "scenario"
         difficulty: "hard"
         subchapter: "dependency-injection/compiler-passes"
-        concepts: ["PassConfig", "TYPE_REMOVING", "phase-order"]
+        concepts: ["PassConfig", "TYPE_REMOVE", "phase-order"]
         syllabus: "Dependency Injection → Compiler Passes"
         question: "In which phase should a pass that removes a service run, and why not TYPE_BEFORE_OPTIMIZATION?"
         answers:
-          - value: "TYPE_REMOVING — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference"
+          - value: "TYPE_REMOVE — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference"
             correct: true
           - value: "TYPE_BEFORE_OPTIMIZATION is fine; phase order never matters"
             correct: false
           - value: "TYPE_AFTER_REMOVING, because removal always happens last"
             correct: false
-          - value: "TYPE_OPTIMIZATION, alongside autowiring"
+          - value: "TYPE_OPTIMIZE, alongside autowiring"
             correct: false
         explanation: >-
-          Removal belongs in TYPE_REMOVING. Doing it before optimization would delete
+          Removal belongs in TYPE_REMOVE. Doing it before optimization would delete
           a service that the autowiring/optimization phase might still reference,
           breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it
-          into OPTIMIZATION races with autowiring.
+          into OPTIMIZE races with autowiring.
         documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
 
       - id: "DI-PASS-06"
@@ -1705,14 +1705,15 @@ categories:
         answers:
           - value: "ServiceMethodsSubscriberTrait"
             correct: true
-          - value: "ServiceSubscriberTrait (deprecated in 6.4)"
+          - value: "ServiceSubscriberTrait (deprecated in 7.1)"
             correct: false
           - value: "ServiceLocatorTrait"
             correct: false
           - value: "ContainerAwareTrait"
             correct: false
         explanation: >-
-          The older ServiceSubscriberTrait was deprecated in 6.4; Symfony 8 uses
+          The older ServiceSubscriberTrait was deprecated in 7.1 (symfony/contracts
+          v3.5); Symfony 8 uses
           ServiceMethodsSubscriberTrait together with #[SubscribedService] methods
           whose return type names the service. ServiceLocatorTrait builds a locator
           class, and ContainerAwareTrait is the removed container-injection anti-pattern.

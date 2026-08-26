@@ -284,8 +284,8 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 **Q21.** What is the default phase for a compiler pass registered without one?  <small>_(easy · internals)_</small>
 
 - A. TYPE_BEFORE_OPTIMIZATION
-- B. TYPE_OPTIMIZATION
-- C. TYPE_REMOVING
+- B. TYPE_OPTIMIZE
+- C. TYPE_REMOVE
 - D. TYPE_AFTER_REMOVING
 
 ??? success "Answer Q21"
@@ -816,14 +816,14 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 **Q59.** Which trait should a Symfony 8 service subscriber use with #[SubscribedService] methods?  <small>_(medium · trap)_</small>
 
 - A. ServiceMethodsSubscriberTrait
-- B. ServiceSubscriberTrait (deprecated in 6.4)
+- B. ServiceSubscriberTrait (deprecated in 7.1)
 - C. ServiceLocatorTrait
 - D. ContainerAwareTrait
 
 ??? success "Answer Q59"
     **A**
 
-    The older ServiceSubscriberTrait was deprecated in 6.4; Symfony 8 uses ServiceMethodsSubscriberTrait together with #[SubscribedService] methods whose return type names the service. ServiceLocatorTrait builds a locator class, and ContainerAwareTrait is the removed container-injection anti-pattern.
+    The older ServiceSubscriberTrait was deprecated in 7.1 (symfony/contracts v3.5); Symfony 8 uses ServiceMethodsSubscriberTrait together with #[SubscribedService] methods whose return type names the service. ServiceLocatorTrait builds a locator class, and ContainerAwareTrait is the removed container-injection anti-pattern.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
 
@@ -1067,15 +1067,15 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
 **Q77.** In which phase should a pass that removes a service run, and why not TYPE_BEFORE_OPTIMIZATION?  <small>_(hard · scenario)_</small>
 
-- A. TYPE_REMOVING — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference
+- A. TYPE_REMOVE — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference
 - B. TYPE_BEFORE_OPTIMIZATION is fine; phase order never matters
 - C. TYPE_AFTER_REMOVING, because removal always happens last
-- D. TYPE_OPTIMIZATION, alongside autowiring
+- D. TYPE_OPTIMIZE, alongside autowiring
 
 ??? success "Answer Q77"
     **A**
 
-    Removal belongs in TYPE_REMOVING. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZATION races with autowiring.
+    Removal belongs in TYPE_REMOVE. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZATION races with autowiring.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
 
