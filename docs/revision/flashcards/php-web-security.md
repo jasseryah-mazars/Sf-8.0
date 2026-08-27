@@ -624,10 +624,10 @@
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/book.opcache.php)
 
-??? question "89. For immutable production deploys, why set `opcache.validate_timestamps=0`?"
-    **✅ It stops OPcache stat-ing files for changes each request, saving I/O since code never changes**
+??? question "89. You deploy a code change to a server running `opcache.validate_timestamps=0` but forget to reset OPcache. What do requests serve?"
+    **✅ The stale, previously-cached bytecode — OPcache never notices the file changed**
 
-    With validate_timestamps=0 OPcache trusts cached bytecode without checking file mtimes on each request, removing a filesystem stat per script — ideal when deploys are immutable (you clear OPcache on release instead). It does not resize memory, does not cache data, and does not disable OPcache (it makes it more aggressive). Misconception: thinking it turns caching off — it turns off the freshness check.
+    With validate_timestamps=0, OPcache trusts its cached bytecode unconditionally and never stats the source file to check for changes. Forgetting to reset/clear OPcache (or restart PHP-FPM) after a deploy means every request keeps serving the OLD compiled code indefinitely, silently, with no error — exactly why the setting is only safe for immutable deploys that reset OPcache as part of the release step.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/opcache.configuration.php)
 

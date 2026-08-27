@@ -50,6 +50,9 @@ jobs:
       - name: Validate quiz bank
         run: python tools/validate_quiz.py
 
+      - name: Quiz near-duplicate scan (report only, non-blocking)
+        run: python tools/check_quiz_duplicates.py
+
       - name: Regenerate interactive quiz dataset
         run: python tools/gen_quiz_json.py
 

@@ -402,12 +402,100 @@ instantiating Symfony's DI container, out of scope for a static-analysis
 pass) — a green run from these tools proves **syntactic validity**, not that
 every configuration key/option shown is a real, current Symfony 8.0 option.
 
-**Tested (combined):** `lint_yaml.py` → 373/0; `lint_twig.py` → 222/0;
-`lint_xml.py` → 2 linted + 2 skipped/0; `lint_php.py` → 382/0 (unchanged,
-re-verified); `mkdocs build --strict` → exit 0.
+**Tested (combined):** `lint_yaml.py` → 373 blocs YAML testés, 0 erreur;
+`lint_twig.py` → 222 blocs Twig testés, 0 erreur (appariement des balises
+uniquement); `lint_xml.py` → 2 documents complets testés + 2 fragments
+ignorés (non des erreurs), 0 erreur; `lint_php.py` → 382 blocs PHP testés,
+0 erreur (inchangé, re-vérifié — ce chiffre mesure le nombre de blocs
+passés au linter, pas le nombre total de blocs de code du site, et ne
+prouve que l'absence d'erreur de syntaxe PHP détectée par ce script, pas
+l'exactitude fonctionnelle du contenu); `mkdocs build --strict` → code de
+sortie 0 (le `DeprecationWarning` tiers documenté ci-dessus reste présent
+dans les logs de build malgré le code 0 — voir `specs/FinalComplianceAudit.md`).
 
 Wired all three new tools into `.github/workflows/deploy.yml` alongside the
 existing `lint_php.py` step so CI blocks on regression.
+
+---
+
+## P1-03 — Full quiz audit: near-duplicate detection
+
+**Source added:** `tools/check_quiz_duplicates.py` (new). **Method, stated
+honestly:** normalizes each of the 1 292 questions' stem text (lowercase,
+strip punctuation, tokenize, drop a small stopword list), then computes
+pairwise **Jaccard token-set similarity** between every pair of questions
+(with a cheap size-ratio pre-filter to keep the O(n²) comparison tractable).
+This is a **lexical-overlap heuristic, not semantic understanding** — it
+cannot recognize two differently-worded questions that test the same fact,
+and it can flag two questions that are legitimately different but share a
+lot of template phrasing. The script does not fail CI; every reported pair
+is explicitly labeled a *candidate* requiring human review, never asserted
+as a confirmed duplicate by the tool itself.
+
+**Run (threshold 0.75):** `checked 1292 questions, 833986 pairs,
+threshold=0.75: 17 candidate near-duplicate pair(s)`.
+
+**Human review of all 17 candidates:**
+- **16 pairs were legitimate, not duplicates.** Nearly all shared the same
+  template stem across different topics — e.g. "Which of the following
+  statements are true about the Symfony `X` component?" repeated for
+  different values of `X` (Routing, Validator, Messenger, …) — same
+  sentence shape, entirely different tested content and answer options.
+  These were read individually and confirmed as distinct questions, not
+  batch-dismissed on the pattern alone.
+- **1 pair was a genuine near-duplicate:** `MISC-DEPLOY-03`
+  (`quiz/miscellaneous.yml`) and `PHP-EXT-09` (`quiz/php-web-security.yml`)
+  both tested `opcache.validate_timestamps=0` with near-identical wording
+  and the same "why set it" framing, differing mainly in which chapter they
+  sat in.
+
+**Fix applied to `PHP-EXT-09`:** reworded from asking *why* the setting is
+used (already `MISC-DEPLOY-03`'s question) to a complementary
+consequence/trap angle — *what happens if you deploy code but forget to
+reset OPcache* — testing a different, non-overlapping fact (that OPcache
+silently keeps serving stale bytecode with no error) rather than repeating
+the rationale for the setting. `type` changed from `internals` to `trap`
+to match the new question shape (confirmed in `validate_quiz.py`'s
+type-count breakdown: `trap` 216→217, `internals` 201→200).
+
+**Propagated to every derived copy of this question** (hand-patched, not
+regenerated — a full `gen_chapter_exams.py` run for this one change
+resurfaced ~270 lines of pre-existing, unrelated historical drift between
+the committed exam file and the current quiz source; that regeneration was
+reverted with `git checkout --` and the specific block was hand-edited
+instead, per this project's established practice):
+- `quiz/php-web-security.yml` — source of truth, edited directly.
+- `docs/exams/php-web-security.md` — Q106 block hand-patched to match.
+- `docs/revision/flashcards/php-web-security.md` — card 89 hand-patched.
+- `docs/assets/quiz-data.json` — fully regenerated via `tools/gen_quiz_json.py`
+  (safe: single combined file, no historical-drift risk) and the new text
+  verified present.
+- `quiz/flashcards.csv` — this file is CRLF-encoded; edited via a
+  byte-level script (never through a text editor, which would silently
+  normalize ~100 unrelated lines' line endings) and re-verified after the
+  edit by re-parsing the whole file with Python's `csv` module (1 293 rows:
+  1 header + 1 292 questions, unchanged count) and spot-checking that the
+  target row now carries the new question and explanation text.
+
+**What this does and does not prove, stated explicitly per the mission's
+caveat:** `validate_quiz.py` passing (1292 questions, 0 error(s)) after this
+change demonstrates the quiz bank's **structural validity** — every
+question has the required fields, a syllabus tag, correct-answer count,
+etc. — it does **not** demonstrate that the other 1 291 questions are
+individually fact-checked against the official Symfony 8.0 documentation;
+that remains outside what any script in this repository can verify without
+network access to the official sources, and outside what was re-verified in
+this pass (only the one edited question was re-checked against
+`php.net/manual/en/opcache.configuration.php`, which reachable per the
+standing network-limitation notice in `specs/TraceabilityMatrix.md`).
+
+**Tested:** `check_quiz_duplicates.py` → 17 candidats, 1 doublon réel
+corrigé; `validate_quiz.py` → 1292 questions, 0 erreur (validité
+structurelle uniquement); `mkdocs build --strict` → code de sortie 0.
+
+Wired `check_quiz_duplicates.py` into `.github/workflows/deploy.yml` as a
+non-blocking informational step (documented as such in the workflow step
+name), consistent with the script's own stated scope.
 
 ---
 

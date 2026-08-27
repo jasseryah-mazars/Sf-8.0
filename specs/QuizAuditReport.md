@@ -29,7 +29,7 @@ Command: `python3 tools/validate_quiz.py`
 validated 15 quiz files, 1292 questions; 0 error(s)
   official (in-scope): 1268 · out-of-scope/additional (excluded from certification): 24
   with v2 metadata: 1292/1292
-  by type: {'single': 403, 'trap': 216, 'internals': 201, 'true-false': 49, 'scenario': 54, 'code': 102, 'config': 78, 'debug': 69, 'multiple': 120}
+  by type: {'single': 403, 'trap': 217, 'internals': 200, 'true-false': 49, 'scenario': 54, 'code': 102, 'config': 78, 'debug': 69, 'multiple': 120}
   by difficulty: {'easy': 332, 'medium': 661, 'hard': 299}
   subchapter coverage: 157/157 (100%)
 ```
@@ -49,8 +49,39 @@ question.
 | The marked answer is actually correct | No | Manual verification per question |
 | Explanation quality / no ambiguity | No | Manual read |
 | `documentation` URL is relevant (not just present) | Partial — `tools/check_doc_version_refs.py` (new this run) verifies every `symfony.com/doc/...` URL in the bank is pinned to `8.0`, but not that it's the *right* page for the question | Manual spot-check |
-| No duplicate questions (near-identical stems) | No | Not yet scripted — see §3 for a proposed method |
+| No duplicate questions (near-identical stems) | **Partial — implemented and run this session** | `tools/check_quiz_duplicates.py` (Jaccard token-overlap, lexical not semantic — see §1b) found 17 candidate pairs; all 17 were read by hand, 16 were legitimate distinct questions and 1 genuine near-duplicate was reworded (see `specs/RemediationLog.md` P1-03) |
 | Single-vs-multiple type matches the actual count of `correct: true` answers | **Yes — implemented and run this session** | `tools/validate_quiz.py` now checks `single`/`true-false` have exactly 1 `correct: true` and `multiple` has ≥2; result: **0 errors** across all 1,292 questions |
+
+## 1b. Near-duplicate detection (ran this run, P1-03)
+
+Command: `python3 tools/check_quiz_duplicates.py --threshold 0.75`
+
+```
+checked 1292 questions, 833986 pairs, threshold=0.75: 17 candidate near-duplicate pair(s)
+```
+
+**Method, stated honestly:** Jaccard similarity of each question's
+normalized token set (lowercase, punctuation stripped, stopwords removed).
+This is a **lexical-overlap heuristic, not semantic understanding** — it
+would miss two differently-worded questions testing the same fact, and it
+can flag two questions sharing template phrasing (e.g. "Which of the
+following statements are true about the Symfony `X` component?" repeated
+per component) as candidates even when they are legitimately different.
+The script never asserts a confirmed duplicate itself; it does not fail CI.
+
+**Human review result:** all 17 candidate pairs were read individually.
+16 were confirmed legitimate (shared template stem, different tested
+content). 1 was a genuine near-duplicate — `MISC-DEPLOY-03` vs `PHP-EXT-09`,
+both testing `opcache.validate_timestamps=0` with near-identical "why set
+it" wording. `PHP-EXT-09` was reworded to a complementary consequence/trap
+angle and propagated to every derived copy (exam page, flashcard,
+`quiz-data.json`, `flashcards.csv`). Full before/after in
+`specs/RemediationLog.md`'s P1-03 entry.
+
+**What this does not prove:** that no *semantic* duplicate exists among
+question pairs whose wording differs enough to fall under the lexical
+threshold — that class of duplicate is not detectable by this script and
+would require the manual per-question read described in §3.
 
 ## 2. Doc-reference version compliance (ran this run, P0-01)
 
@@ -75,9 +106,13 @@ For a future run with the budget to do this properly, per question:
 4. Check `subchapter` against `specs/OfficialSyllabusBaseline.md` — flag any
    question whose subchapter doesn't map to an official subtopic and isn't
    tagged `out_of_scope: true`.
-5. Fuzzy-match `question` text bank-wide for near-duplicates (e.g. a simple
-   token-overlap or embedding similarity pass across all 1,292 stems) before
-   reading them all verbatim, to prioritize likely duplicates first.
+5. ~~Fuzzy-match `question` text bank-wide for near-duplicates~~ — done:
+   `tools/check_quiz_duplicates.py` (§1b) implements the token-overlap pass
+   and the resulting 17 candidates were all reviewed this run. This
+   surfaces *lexical* near-duplicates only; a true embedding/semantic pass
+   across all 1,292 stems remains unimplemented (no ML/embedding library
+   available in this environment) and would still be needed to catch
+   differently-worded duplicates.
 
 ## 4. Honest summary
 

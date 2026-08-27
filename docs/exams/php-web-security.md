@@ -1456,17 +1456,17 @@ Full theory: [PHP & Web Security](../php-web-security/index.md).
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/function.ctype-digit.php)
 
-**Q106.** For immutable production deploys, why set `opcache.validate_timestamps=0`?  <small>_(hard · internals)_</small>
+**Q106.** You deploy a code change to a server running `opcache.validate_timestamps=0` but forget to reset OPcache. What do requests serve?  <small>_(hard · trap)_</small>
 
-- A. It stops OPcache stat-ing files for changes each request, saving I/O since code never changes
-- B. It doubles the shared-memory cache size
-- C. It enables caching of query results
-- D. It disables OPcache entirely
+- A. The stale, previously-cached bytecode — OPcache never notices the file changed
+- B. PHP automatically detects the mtime change and recompiles anyway
+- C. A fatal error, since validate_timestamps=0 requires a matching file hash
+- D. The new code, but only for the first request after the change
 
 ??? success "Answer Q106"
     **A**
 
-    With validate_timestamps=0 OPcache trusts cached bytecode without checking file mtimes on each request, removing a filesystem stat per script — ideal when deploys are immutable (you clear OPcache on release instead). It does not resize memory, does not cache data, and does not disable OPcache (it makes it more aggressive). Misconception: thinking it turns caching off — it turns off the freshness check.
+    With validate_timestamps=0, OPcache trusts its cached bytecode unconditionally and never stats the source file to check for changes — that stat-per-request is exactly what the setting removes for performance. Forgetting to reset/clear OPcache (or restart PHP-FPM) after a deploy means every request keeps serving the OLD compiled code indefinitely, silently, with no error. This is precisely why the setting is only safe for immutable deploys that reset OPcache as part of the release step (see the Deployment chapter's own question on why the setting exists in the first place).
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/opcache.configuration.php)
 

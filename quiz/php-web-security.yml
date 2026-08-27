@@ -1800,24 +1800,26 @@ categories:
         documentation: "https://www.php.net/manual/en/book.opcache.php"
 
       - id: "PHP-EXT-09"
-        question: "For immutable production deploys, why set `opcache.validate_timestamps=0`?"
-        type: "internals"
+        question: "You deploy a code change to a server running `opcache.validate_timestamps=0` but forget to reset OPcache. What do requests serve?"
+        type: "trap"
         difficulty: "hard"
         subchapter: "php-web-security/extensions"
-        concepts: ["opcache", "validate_timestamps", "production"]
+        concepts: ["opcache", "validate_timestamps", "stale-bytecode"]
         syllabus: "PHP → PHP extensions"
         answers:
-          - { value: "It stops OPcache stat-ing files for changes each request, saving I/O since code never changes", correct: true }
-          - { value: "It doubles the shared-memory cache size", correct: false }
-          - { value: "It enables caching of query results", correct: false }
-          - { value: "It disables OPcache entirely", correct: false }
+          - { value: "The stale, previously-cached bytecode — OPcache never notices the file changed", correct: true }
+          - { value: "PHP automatically detects the mtime change and recompiles anyway", correct: false }
+          - { value: "A fatal error, since validate_timestamps=0 requires a matching file hash", correct: false }
+          - { value: "The new code, but only for the first request after the change", correct: false }
         explanation: >-
-          With validate_timestamps=0 OPcache trusts cached bytecode without checking
-          file mtimes on each request, removing a filesystem stat per script — ideal
-          when deploys are immutable (you clear OPcache on release instead). It does
-          not resize memory, does not cache data, and does not disable OPcache (it
-          makes it more aggressive). Misconception: thinking it turns caching off —
-          it turns off the freshness check.
+          With validate_timestamps=0, OPcache trusts its cached bytecode unconditionally
+          and never stats the source file to check for changes — that stat-per-request
+          is exactly what the setting removes for performance. Forgetting to reset/clear
+          OPcache (or restart PHP-FPM) after a deploy means every request keeps serving
+          the OLD compiled code indefinitely, silently, with no error. This is precisely
+          why the setting is only safe for immutable deploys that reset OPcache as part
+          of the release step (see the Deployment chapter's own question on why the
+          setting exists in the first place).
         documentation: "https://www.php.net/manual/en/opcache.configuration.php"
 
   - name: "SPL"
