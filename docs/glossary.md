@@ -26,7 +26,7 @@ follow the link for the full chapter.
   `CsrfTokenBadge`, `RememberMeBadge`…). → [authenticators](security/authenticators.md)
 - **BC promise** — Backward-compatibility contract: breaking changes only in majors,
   after deprecation. → [chapter](architecture/bc-promise.md)
-- **Bus (message bus)** — `MessageBusInterface`; runs a message through middleware to its handler. → [messenger](miscellaneous/messenger.md)
+- **Bus (message bus)** — `MessageBusInterface`; runs a message through middleware to its handler. → [messenger](messenger/messages-handlers.md)
 
 ## C
 
@@ -50,7 +50,7 @@ follow the link for the full chapter.
 
 ## E
 
-- **Envelope** — Wraps a Messenger message with **stamps** (metadata). → [messenger](miscellaneous/messenger.md)
+- **Envelope** — Wraps a Messenger message with **stamps** (metadata). → [messenger](messenger/middleware.md)
 - **ESI (Edge Side Includes)** — Cache fragments independently at a gateway. → [chapter](http-caching/esi.md)
 - **ETag** — Validation cache header (content fingerprint); wins over `Last-Modified`. → [validation](http-caching/validation.md)
 - **EventDispatcher** — Dispatches events to listeners/subscribers by priority. → [chapter](architecture/events.md)
@@ -81,7 +81,7 @@ follow the link for the full chapter.
 ## L–M
 
 - **Last-Modified** — Timestamp validation cache header. → [validation](http-caching/validation.md)
-- **Middleware (Messenger)** — Layers wrapping handling; russian-doll via `stack->next()`. → [messenger](miscellaneous/messenger.md)
+- **Middleware (Messenger)** — Layers wrapping handling; russian-doll via `stack->next()`. → [messenger](messenger/middleware.md)
 - **MockHttpClient** — In-memory HttpClient for tests. → [chapter](http/httpclient.md)
 
 ## N–P
@@ -96,7 +96,7 @@ follow the link for the full chapter.
 
 - **Reference type** — URL generation mode: `ABSOLUTE_PATH` (default), `ABSOLUTE_URL`,
   `NETWORK_PATH`, `RELATIVE_PATH`. → [url generation](routing/url-generation.md)
-- **Retry strategy / failure transport** — Messenger redelivery then dead-letter. → [messenger](miscellaneous/messenger.md)
+- **Retry strategy / failure transport** — Messenger redelivery then dead-letter. → [messenger](messenger/retries-failures.md)
 - **Role hierarchy** — `ROLE_*` inheritance (e.g. `ROLE_ADMIN` ⊃ `ROLE_USER`). → [roles](security/roles.md)
 - **Runtime** — Bootstraps the app entry point (`SymfonyRuntime`). → [chapter](miscellaneous/runtime.md)
 
@@ -104,7 +104,7 @@ follow the link for the full chapter.
 
 - **Service locator** — Lazy, on-demand access to a fixed set of services. → [chapter](dependency-injection/service-locators.md)
 - **Serializer** — normalizers + encoders; `#[Groups]` controls fields. → [chapter](miscellaneous/serializer.md)
-- **Stamp** — Metadata on a Messenger `Envelope`. → [messenger](miscellaneous/messenger.md)
+- **Stamp** — Metadata on a Messenger `Envelope`. → [messenger](messenger/middleware.md)
 - **Stateless CSRF** — Cookie/origin-based CSRF without session (7.2+/8). → [csrf](forms/csrf.md)
 
 ## T–V

@@ -213,7 +213,7 @@ while ($process->isRunning()) {
 
 Use Process for CLI tools you must shell out to (image processing, git, dumps).
 For work that should be deferred/retried, dispatch a
-[Messenger](messenger.md) message instead of blocking the request. Never use
+[Messenger](../messenger/index.md) message instead of blocking the request. Never use
 `fromShellCommandline` with untrusted input.
 
 !!! danger "Certification traps"
@@ -295,7 +295,7 @@ For work that should be deferred/retried, dispatch a
 ## Connections
 
 - **Depends on:** [Console](../console/index.md) — commands frequently wrap `Process` to shell out.
-- **Reused in:** [Messenger](messenger.md) — defer/retry long shell work as a message; [Filesystem & Finder](filesystem-finder.md) discovers the files you process.
+- **Reused in:** [Messenger](../messenger/index.md) — defer/retry long shell work as a message; [Filesystem & Finder](filesystem-finder.md) discovers the files you process.
 - **Confused with:** running work inline — for deferrable/retriable jobs, dispatch a message instead of blocking the request.
 
 ## Official References
@@ -325,4 +325,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Console](../console/index.md) · [Messenger](messenger.md) · [Lock](lock.md)</small>
+<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](lock.md)</small>

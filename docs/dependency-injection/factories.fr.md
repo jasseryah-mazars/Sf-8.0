@@ -348,7 +348,7 @@ service, utilisez la [décoration](decoration.md).
 
 - **Dépend de :** [Service Registration](registration.md) — une factory est un
   indicateur sur la `Definition` du service.
-- **Réutilisé dans :** [Messenger](../miscellaneous/messenger.md),
+- **Réutilisé dans :** [Messenger](../messenger/index.md),
   [Miscellaneous — Cache](../miscellaneous/cache.md) — les transports et les pools
   sont souvent construits par des factories.
 - **À ne pas confondre avec :** [Decoration](decoration.md) — une factory

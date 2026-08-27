@@ -4,32 +4,22 @@
     Prêt à le construire vous-même ? Faites le lab pratique : **[Messenger Middleware](../labs/miscellaneous.md)** — un TD pas à pas avec une approche test-first et une solution de référence.
 
 Les composants avancés qui complètent une boîte à outils Symfony de niveau
-Expert : **Messenger** (le traitement asynchrone de messages — la tête d'affiche
-au poids renforcé), Serializer, Mailer & Mime, Cache, Process, Lock,
+Expert : Serializer, PropertyAccess, Mailer & Mime, Cache, Process, Lock,
 Intl/Translation, Runtime, Clock, Config/DotEnv/ExpressionLanguage, plus la
 gestion des erreurs, le débogage et les bonnes pratiques de déploiement. Chacun
 est un composant découplé, utilisable de manière autonome ou via l'autowiring du
-framework.
+framework. **Messenger** — qui faisait auparavant partie de cette étape — a
+désormais sa propre étape dédiée : voir [Messenger](../messenger/index.md),
+le sujet le plus testé du programme.
 
 !!! abstract "Stage at a glance"
     - **Prerequisites:** [Architecture](../architecture/index.md) (le kernel, les events),
       [Dependency Injection](../dependency-injection/index.md) (autowiring, tags)
     - **Level:** Advanced → Expert
-    - **Difficulty:** ★★★
-    - **Est. time:** 7–9 h
-    - **Dependencies:** s'appuie sur Architecture + DI ; Messenger touche au
-      worker [Console](../console/index.md) et aux events
-    - **Revision priority:** **Élevée** dans l'ensemble — **Messenger est
-      Critique** et le sujet le plus testé de cette étape.
-
-## Why Messenger is Critical
-
-L'examen Symfony 8 renforce le poids de **Messenger**. Vous devez connaître —
-sur le bout des doigts — le modèle message/handler, le pipeline bus +
-middleware, les envelopes et les stamps, les transports et le routing, le cycle
-de vie du worker `messenger:consume`, et la stratégie de retry/échec. Traitez
-[Messenger](messenger.md) comme le chapitre phare de toute l'étape et
-revoyez-le en dernière minute.
+    - **Difficulty:** ★★☆
+    - **Est. time:** 5–6 h
+    - **Dependencies:** s'appuie sur Architecture + DI
+    - **Revision priority:** **Élevée** dans l'ensemble.
 
 ## Chapters
 
@@ -47,8 +37,8 @@ revoyez-le en dernière minute.
   le streaming, les codes de sortie, les pièges de `fromShellCommandline`.
 - [Serializer Component](serializer.md) — normalizers + encoders, les groups,
   `#[SerializedName]`, `#[Ignore]`, le context, les références circulaires.
-- [Messenger Component](messenger.md) — **la plongée en profondeur** : les buses, les middleware,
-  les transports, le routing, envelopes/stamps, le cycle de vie du worker, les retries et l'échec.
+- [PropertyAccess Component](property-access.md) — chemins de propriété
+  dynamiques, l'ordre de recherche des getters, les fallbacks magiques.
 - [Mime & Mailer Components](mailer.md) — `Email`/`TemplatedEmail`, les transports,
   pièces jointes/intégration, l'envoi async via Messenger, le modèle de parts Mime.
 - [Filesystem & Finder Components](filesystem-finder.md) — les opérations sur fichiers et
@@ -66,9 +56,9 @@ revoyez-le en dernière minute.
 
 ## Suggested reading order
 
-Commencez par [Messenger](messenger.md) et accordez-lui le plus de passes.
-Couvrez ensuite les composants de mise en forme des données —
-[Serializer](serializer.md) et [Mailer](mailer.md) — puis l'ensemble
+Commencez par les composants de mise en forme des données —
+[Serializer](serializer.md), [PropertyAccess](property-access.md) et
+[Mailer](mailer.md) — puis l'ensemble
 infrastructure ([Cache](cache.md), [Lock](lock.md), [Process](process.md),
 [Filesystem & Finder](filesystem-finder.md)). Intégrez
 [Config](configuration.md), [Runtime](runtime.md), [Clock](clock.md) et

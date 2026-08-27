@@ -339,7 +339,7 @@ scaled app.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — `LockFactory` is autowired from the configured store DSN.
-- **Reused in:** [Messenger](messenger.md) — serialise duplicate worker runs; [Process](process.md) — guard shared external tools.
+- **Reused in:** [Messenger](../messenger/index.md) — serialise duplicate worker runs; [Process](process.md) — guard shared external tools.
 - **Confused with:** [Cache](cache.md) stampede protection — Lock enforces strict mutual exclusion; the cache only reduces duplicate recompute.
 
 ## Official References
@@ -370,4 +370,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Cache](cache.md) · [Process](process.md) · [Messenger](messenger.md)</small>
+<small>Related: [Cache](cache.md) · [Process](process.md) · [Messenger](../messenger/index.md)</small>

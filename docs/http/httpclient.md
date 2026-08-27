@@ -479,7 +479,7 @@ PSR-18-compatible if a library needs it.
 ## Connections
 
 - **Depends on:** [HTTP Response](response.md) — `ResponseInterface` mirrors the response model, one direction out.
-- **Reused in:** [Messenger Component](../miscellaneous/messenger.md) — pair outbound calls with async fan-out and retries.
+- **Reused in:** [Messenger Component](../messenger/index.md) — pair outbound calls with async fan-out and retries.
 - **Confused with:** [HTTP Request](request.md) — HttpClient is the *outgoing* client; `Request` wraps the *incoming* exchange.
 
 ## Official References
@@ -511,4 +511,4 @@ I'm ready when I can:
 ---
 
 <small>Related: [HTTP Request](request.md) · [HTTP Response](response.md) ·
-[Status Codes](status-codes.md) · [Messenger Component](../miscellaneous/messenger.md)</small>
+[Status Codes](status-codes.md) · [Messenger Component](../messenger/index.md)</small>

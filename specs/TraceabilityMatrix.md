@@ -271,13 +271,13 @@ Anomaly column).
 
 | Official Topic | Official Subtopic | Main Chapter | Additional Chapters | Example | Exercise | Solution | Situational Q | Pitfall | Sf 8.0 Ref | Official Ref | Status | Anomaly |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Messenger | Messenger component | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | Single monolithic chapter covers all 7 Messenger subtopics; mission asks for a docs/messenger/ split with one chapter per subtopic — not done this lot (time budget), flagged for the next one. |
-| Messenger | Transports | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | See Messenger component row — same monolithic-chapter caveat. Third-party transports (Doctrine, Redis, Amazon SQS) are out of scope — see Out-of-scope section. |
-| Messenger | Messages and handlers | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | See Messenger component row — same monolithic-chapter caveat. |
-| Messenger | Workers | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | See Messenger component row — same monolithic-chapter caveat. |
-| Messenger | Retries and failures | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | See Messenger component row — same monolithic-chapter caveat. |
-| Messenger | Middleware | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | See Messenger component row — same monolithic-chapter caveat. |
-| Messenger | Events | `miscellaneous/messenger.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | CORRECTION (this lot): a prior pass wrongly reported this as a gap — the Worker lifecycle section already covers WorkerStartedEvent/WorkerMessageReceivedEvent/WorkerMessageHandledEvent/WorkerMessageFailedEvent/WorkerRunningEvent/WorkerStoppedEvent/WorkerRateLimitedEvent with a real diagram, example listener, and source reference. The one genuinely missing event, SendMessageToTransportsEvent (the dispatch-side event fired by SendMessageMiddleware), was added this lot, verified against source. See also Messenger component row — same monolithic-chapter caveat. |
+| Messenger | Messenger component | `messenger/component.md` | `messenger/index.md` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | Split (this lot) from a prior monolithic miscellaneous/messenger.md into docs/messenger/ — one chapter per official subtopic, each with its own full anatomy. |
+| Messenger | Messages and handlers | `messenger/messages-handlers.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | — |
+| Messenger | Middleware | `messenger/middleware.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | — |
+| Messenger | Transports | `messenger/transports.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | Third-party transports (Doctrine, Redis, Amazon SQS) are out of scope — see Out-of-scope section; the chapter says so explicitly. |
+| Messenger | Workers | `messenger/workers.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | — |
+| Messenger | Retries and failures | `messenger/retries-failures.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | — |
+| Messenger | Events | `messenger/events.md` | — | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | PASS | Covers 6 worker events (WorkerStarted/MessageReceived/MessageHandled/MessageFailed/Running/Stopped/RateLimited) plus the dispatch-side SendMessageToTransportsEvent, verified against source. |
 
 ## Internationalization and localization
 
@@ -301,7 +301,7 @@ official question count (tagged `out_of_scope: true` where applicable):
 | HTTP Caching | Edge Side Includes (ESI) | http-caching/esi.md — excluded from the syllabus per mission brief; chapter now carries an explicit exclusion notice, its 10 quiz questions are tagged out_of_scope: true. |
 | Automated Tests | PHPUnit Bridge | testing/phpunit-bridge.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 8 quiz questions are tagged out_of_scope: true. |
 | Miscellaneous | Lock component | miscellaneous/lock.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 6 quiz questions are tagged out_of_scope: true. |
-| Messenger | Doctrine / Redis / Amazon SQS transports | Third-party Messenger transports — excluded per mission brief. Not currently taught as their own content in miscellaneous/messenger.md (spot-checked); no quiz questions found testing them specifically. |
+| Messenger | Doctrine / Redis / Amazon SQS transports | Third-party Messenger transports — excluded per mission brief; messenger/transports.md says so explicitly. No quiz questions found testing them specifically. |
 | Internationalization | Intl component ICU utilities | Countries/Languages/Locales/Currencies/Timezones static lookup classes in miscellaneous/intl.md — excluded from the exam per mission brief; chapter now carries an explicit exclusion notice. No quiz question found testing this API. |
 | Ecosystem (never taught) | Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, third-party bundles/bridges | Out of scope by design since the project's original GapAnalysis.md; mentions found are contextual/comparative, not taught content — not re-audited line-by-line this lot. |
 

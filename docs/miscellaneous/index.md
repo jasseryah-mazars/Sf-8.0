@@ -4,30 +4,22 @@
     Ready to build it yourself? Do the hands-on lab: **[Messenger Middleware](../labs/miscellaneous.md)** — a step-by-step TD with test-first guidance and a reference solution.
 
 The advanced components that round out an Expert-level Symfony toolkit:
-**Messenger** (asynchronous message handling — the up-weighted headliner),
-Serializer, Mailer & Mime, Cache, Process, Lock, Intl/Translation, Runtime,
-Clock, Config/DotEnv/ExpressionLanguage, plus error handling, debugging and
-deployment practice. Each is a decoupled component you can use standalone or
-through the framework's autowiring.
+Serializer, PropertyAccess, Mailer & Mime, Cache, Process, Lock,
+Intl/Translation, Runtime, Clock, Config/DotEnv/ExpressionLanguage, plus
+error handling, debugging and deployment practice. Each is a decoupled
+component you can use standalone or through the framework's autowiring.
+**Messenger** — previously part of this stage — is now its own dedicated
+stage: see [Messenger](../messenger/index.md), the single most tested topic
+in the syllabus.
 
 !!! abstract "Stage at a glance"
     - **Prerequisites:** [Architecture](../architecture/index.md) (kernel, events),
       [Dependency Injection](../dependency-injection/index.md) (autowiring, tags)
     - **Level:** Advanced → Expert
-    - **Difficulty:** ★★★
-    - **Est. time:** 7–9 h
-    - **Dependencies:** builds on Architecture + DI; Messenger touches the
-      [Console](../console/index.md) worker and events
-    - **Revision priority:** **High** overall — **Messenger is Critical** and the
-      single most tested topic in this stage.
-
-## Why Messenger is Critical
-
-The Symfony 8 exam up-weights **Messenger**. You must know the message/handler
-model, the bus + middleware pipeline, envelopes and stamps, transports and
-routing, the `messenger:consume` worker lifecycle, and the retry/failure
-strategy — cold. Treat [Messenger](messenger.md) as the flagship chapter of the
-whole stage and revisit it last-minute.
+    - **Difficulty:** ★★☆
+    - **Est. time:** 5–6 h
+    - **Dependencies:** builds on Architecture + DI
+    - **Revision priority:** **High** overall.
 
 ## Chapters
 
@@ -45,8 +37,8 @@ whole stage and revisit it last-minute.
   streaming, exit codes, `fromShellCommandline` pitfalls.
 - [Serializer Component](serializer.md) — normalizers + encoders, groups,
   `#[SerializedName]`, `#[Ignore]`, context, circular refs.
-- [Messenger Component](messenger.md) — **the deep dive**: buses, middleware,
-  transports, routing, envelopes/stamps, worker lifecycle, retries & failure.
+- [PropertyAccess Component](property-access.md) — dynamic property paths,
+  the getter lookup order, magic-method fallbacks.
 - [Mime & Mailer Components](mailer.md) — `Email`/`TemplatedEmail`, transports,
   attachments/embedding, async sending via Messenger, the Mime part model.
 - [Filesystem & Finder Components](filesystem-finder.md) — file operations and
@@ -64,9 +56,9 @@ whole stage and revisit it last-minute.
 
 ## Suggested reading order
 
-Start with [Messenger](messenger.md) and give it the most passes. Then cover the
-data-shaping components — [Serializer](serializer.md) and
-[Mailer](mailer.md) — followed by the infrastructure set
+Start with the data-shaping components — [Serializer](serializer.md),
+[PropertyAccess](property-access.md), and [Mailer](mailer.md) — followed by
+the infrastructure set
 ([Cache](cache.md), [Lock](lock.md), [Process](process.md),
 [Filesystem & Finder](filesystem-finder.md)). Fold in
 [Config](configuration.md), [Runtime](runtime.md), [Clock](clock.md) and

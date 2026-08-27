@@ -45,7 +45,7 @@ I'm ready when I can:
 
 Tailor the five bullets to the chapter's concept (don't leave them generic).
 
-## Critical areas ONLY (architecture, dependency-injection, security, miscellaneous/messenger)
+## Critical areas ONLY (architecture, dependency-injection, security, messenger)
 
 For the flagship chapters of these areas, ALSO add (where they add real value —
 skip if forced):

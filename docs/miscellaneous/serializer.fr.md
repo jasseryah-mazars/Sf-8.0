@@ -416,7 +416,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — les normalizers et encoders sont des services taggés injectés par autowiring dans le `serializer`.
-- **Reused in:** [Messenger](messenger.md) — un serializer de transport peut utiliser le Serializer pour encoder les envelopes entre langages ; [Mailer](mailer.md) partage le même câblage DI.
+- **Reused in:** [Messenger](../messenger/index.md) — un serializer de transport peut utiliser le Serializer pour encoder les envelopes entre langages ; [Mailer](mailer.md) partage le même câblage DI.
 - **Confused with:** le `json_encode` de PHP — le Serializer ajoute la normalisation, les groupes et la dénormalisation vers des objets typés.
 
 ## Official References
@@ -447,4 +447,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Messenger](messenger.md) · [Mailer](mailer.md) · [Intl](intl.md)</small>
+<small>Related: [Messenger](../messenger/index.md) · [Mailer](mailer.md) · [Intl](intl.md)</small>

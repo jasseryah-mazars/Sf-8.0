@@ -334,7 +334,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
 
 - **Depends on:** [Tags](tags.md) — a `tagged_locator` builds a locator from a tag.
 - **Reused in:** [Controllers — AbstractController](../controllers/abstract-controller.md),
-  [Messenger](../miscellaneous/messenger.md) — the base controller and handler
+  [Messenger](../messenger/index.md) — the base controller and handler
   wiring lean on subscribers/locators.
 - **Confused with:** [The Service Container](container.md) — a locator is a small
   PSR-11 whitelist, not the whole container.

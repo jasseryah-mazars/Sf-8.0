@@ -101,16 +101,93 @@ clean: `mkdocs build --strict` (0 real warnings), `lint_php.py` (378/0
 failures), `check_section_order.py` (170/170), `validate_quiz.py` (1295
 questions, 0 errors).
 
-**Still NOT done (unchanged from before, explicitly deferred — see matrix
-Anomaly column for each):**
-- Messenger is still one monolithic `miscellaneous/messenger.md` chapter; the
-  mission wants a `docs/messenger/` split into 7 chapters. Not attempted —
-  content-complete per subtopic, but structurally still one file.
+## Lot 3 — Messenger split into docs/messenger/ (same session, deploy branch)
+
+Per user instruction, this and all following work landed directly on
+`claude/symfony8-cert-platform-mgkdkr` (the repo's real default/deploy
+branch — **there is no `master` branch in this repo**; the deploy workflow
+(`deploy.yml`) triggers on `main` or `claude/symfony8-cert-platform-mgkdkr`,
+and only the latter exists). Lot 1+2's branch
+(`claude/sf-8-certification-quality-iimd4l`) was fast-forward-merged in
+first, then all Lot 3 work committed straight to the deploy branch so each
+push triggers a live-site rebuild.
+
+**What changed:**
+- Split `miscellaneous/messenger.md` (707 lines, one monolithic chapter) into
+  `docs/messenger/{index,component,messages-handlers,middleware,transports,
+  workers,retries-failures,events}.md` — 8 files, EN only (no FR yet), each
+  with full chapter anatomy (own exercises/traps/cheat-sheet/certification
+  questions), redistributing the original's already-verified content rather
+  than re-deriving it. Old `miscellaneous/messenger.md`/`.fr.md` deleted.
+- **Caught a real accuracy bug while writing `retries-failures.md`:**
+  initially wrote an exact "1000/2000/4000 ms" retry-delay example, then
+  verified against `FrameworkBundle/DependencyInjection/Configuration.php`
+  and found the framework's default `retry_strategy.jitter` is **0.1** (±10%
+  randomization) — not 0. Fixed the chapter and its quiz question to state
+  the delays are only exact when `jitter: 0`, with jitter itself now taught
+  as its own certification trap.
+- Migrated 28 quiz questions from `quiz/miscellaneous.yml` into a new
+  `quiz/messenger.yml`, re-tagged to the 7 new subchapters (re-classified 2
+  questions' `type` from `internals`→`trap` where that was the more honest
+  label, to get situational coverage on `component`/`middleware`).
+- Fixed ~30 cross-reference links across ~15 files (EN+FR) that pointed at
+  the old `miscellaneous/messenger.md` path — dependency-injection chapters,
+  `http/httpclient.md`, `docs/glossary.md`, `docs/labs/miscellaneous.md`,
+  `docs/miscellaneous/{clock,lock,mailer,process,serializer,index}.md`.
+  Glossary entries were pointed at the *specific* new chapter (e.g. "Stamp"
+  → `middleware.md`), not just the index.
+- Reworded `miscellaneous/index.md` (EN+FR): removed the "Messenger is the
+  flagship of this stage" framing, added the missing `PropertyAccess`
+  chapter-list entry (existed in nav but not in the index's own bullet list
+  — a gap from Lot 2), adjusted difficulty/time estimates now that Messenger
+  left this stage.
+- Regenerated exam/flashcard/sheet artifacts for `miscellaneous` + new
+  `messenger`, plus the three `index.md` files, via the `gen_*.py` tools —
+  then **reverted the other 13 areas'** regenerated exam/flashcard/sheet
+  files back to their committed versions (same historical-drift risk as
+  Lot 1/2: a full regen resurfaces pre-existing staleness unrelated to this
+  lot) and hand-corrected the two index pages' question counts to match the
+  reverted (not regenerated) per-area files. `docs/assets/quiz-data.json`
+  and `quiz/flashcards.csv` were kept fully regenerated (global,
+  machine-read artifacts — no realistic partial-patch path for those).
+- `tools/gen_traceability_matrix.py`: fixed two more real measurement bugs
+  found while re-checking Messenger rows — `sf8_ref` only recognized
+  `blob/8.0`/`tree/8.0`, not Twig's own `twigphp/Twig/blob/3.x` (Twig isn't
+  in symfony/symfony); `example` only recognized ```php/yaml/console fences,
+  not ```twig/```http. Also re-mapped 4 rows to a more suitable Main Chapter
+  than a bare `index.md` landing page (TwigBundle → `controller-rendering.md`,
+  Form component → `creation.md`, Console component → `built-in-commands.md`,
+  Misc HTTP-Caching cross-ref → `cache-types.md`) since those already carry
+  full anatomy and the index pages don't.
+- Added a missing `Source reference` note to `http-caching/client-side.md`
+  (EN+FR), citing `ResponseHeaderBag::addCacheControlDirective()` — spotted
+  while re-checking why that row scored TO VERIFY.
+
+**Result: 170/175 (97.1%) PASS, 0 missing.** Same 5 legitimately-unforced
+Architecture meta-chapter rows remain TO VERIFY (Flex/License/Best-practices/
+Release-management/Roadmap — no natural source-code citation to add without
+padding). Full validation clean: `mkdocs build --strict` (0 real warnings,
+only expected "no git logs yet" noise on new files), `lint_php.py` (382/0
+failures), `check_section_order.py` (176/176), `validate_quiz.py` (1295
+questions, 0 errors, 15 quiz files now).
+
+**Known new inconsistency from this lot (logged, not fixed):** the 13
+untouched areas' printed exam/flashcard page counts (e.g. "PHP & Web
+Security — 112 questions") now lag behind `docs/assets/quiz-data.json`'s
+live count for the same areas, because the JSON was fully regenerated but
+the printed pages were deliberately reverted to avoid absorbing unrelated
+historical drift. This is the same historical-drift issue flagged in Lot 1
+and Lot 2 — not new, just newly visible in one more place. Fixing it means
+doing the "full quiz-bank reformat" item below, area by area, with review.
+
+**Still NOT done (explicitly deferred — see matrix Anomaly column for
+each):**
 - Full quiz-bank reformat to the mission's mandated per-question fields
   (Official Topic/Subtopic, Scenario, Explanation-per-option, Pitfall,
   Symfony 8.0 Reference) across all ~1295 questions — not attempted; only
-  the ~12 new questions added across both passes use that scenario-forward
-  style. This is the single largest undone item in the brief.
+  the ~16 new/reclassified questions across all passes use that
+  scenario-forward style. This is the single largest undone item in the
+  brief, and now also the fix for the historical-drift inconsistency above.
 - The "Practice question, not an official exam question" banner — still not
   added anywhere.
 - Recursive ecosystem term audit (Symfony UX/AI, Doctrine, Monolog,
@@ -118,13 +195,13 @@ Anomaly column for each):**
   triaged file-by-file.
 - Every pre-existing row marked PASS was checked by **automated evidence
   only** — no fresh line-by-line technical re-read beyond Lot 1's DI
-  chapters and this pass's spot-checks (components.md, client-side.md).
-  A PASS is not a blanket claim of verified factual accuracy.
-- `http/rfc-9110.md` and `miscellaneous/property-access.md` still have no
-  French translation.
+  chapters and this pass's spot-checks. A PASS is not a blanket claim of
+  verified factual accuracy.
+- `http/rfc-9110.md`, `miscellaneous/property-access.md`, and all 8 new
+  `docs/messenger/*.md` chapters still have no French translation.
+- A live (non-`--offline`) `check_links.py` run has still never been done.
 
-**Next task:** pick ONE of the "Still NOT done" items above per future lot
-(the Messenger split is the most syllabus-visible remaining structural item).
+**Next task:** pick ONE of the "Still NOT done" items above per future lot.
 Before starting, re-read `specs/TraceabilityMatrix.md`'s Anomaly column for
 that row instead of rescanning the repo.
 

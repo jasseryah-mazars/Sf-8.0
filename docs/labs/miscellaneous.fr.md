@@ -11,7 +11,7 @@ tags:
     `MiddlewareInterface` personnalisé qui appose un stamp et journalise chaque envelope, puis prouver que
     tout fonctionne en câblant un vrai `MessageBus` dans un test ·
     **Difficulty:** Advanced ·
-    **Theory:** [Messenger](../miscellaneous/messenger.md) ·
+    **Theory:** [Messenger](../messenger/index.md) ·
     **Mode:** TDD
 
 ## Objective
@@ -31,7 +31,7 @@ tags:
 
 ## Prerequisites
 
-- Chapitres : [Messenger](../miscellaneous/messenger.md),
+- Chapitres : [Messenger](../messenger/index.md),
   [Events](../architecture/events.md), [Clock](../miscellaneous/clock.md),
   [Automated Tests](../testing/index.md)
 - Compétences supposées acquises : `TestCase` PHPUnit, `LoggerInterface` PSR-3, objets immuables.
@@ -413,4 +413,4 @@ des middlewares).
 
 ---
 
-<small>Theory: [Messenger](../miscellaneous/messenger.md) · Labs: [all labs](index.md)</small>
+<small>Theory: [Messenger](../messenger/index.md) · Labs: [all labs](index.md)</small>

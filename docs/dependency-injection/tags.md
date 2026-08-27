@@ -361,7 +361,7 @@ simpler. If you must *transform* definitions (not just collect), you need a
 - **Depends on:** [Service Registration](registration.md) — autoconfiguration adds
   the tag to every implementer.
 - **Reused in:** [Security](../security/voters.md),
-  [Messenger](../miscellaneous/messenger.md), [Console](../console/events.md) —
+  [Messenger](../messenger/index.md), [Console](../console/events.md) —
   voters, handlers and event subscribers are all collected by tag.
 - **Confused with:** [Service Locators](service-locators.md) — `tagged_locator`
   *builds* a locator; a locator is the general lazy-set primitive.

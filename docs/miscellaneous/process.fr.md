@@ -224,7 +224,7 @@ while ($process->isRunning()) {
 
 Utilisez Process pour les outils CLI que vous devez invoquer (traitement
 d'images, git, dumps). Pour le travail à différer/réessayer, dispatchez un
-message [Messenger](messenger.md) au lieu de bloquer la request. N'utilisez
+message [Messenger](../messenger/index.md) au lieu de bloquer la request. N'utilisez
 jamais `fromShellCommandline` avec une entrée non fiable.
 
 !!! danger "Certification traps"
@@ -306,7 +306,7 @@ jamais `fromShellCommandline` avec une entrée non fiable.
 ## Connections
 
 - **Depends on:** [Console](../console/index.md) — les commandes enveloppent fréquemment `Process` pour invoquer le shell.
-- **Reused in:** [Messenger](messenger.md) — différez/réessayez un long travail shell sous forme de message ; [Filesystem & Finder](filesystem-finder.md) découvre les fichiers que vous traitez.
+- **Reused in:** [Messenger](../messenger/index.md) — différez/réessayez un long travail shell sous forme de message ; [Filesystem & Finder](filesystem-finder.md) découvre les fichiers que vous traitez.
 - **Confused with:** exécuter le travail en ligne — pour les tâches différables/réessayables, dispatchez un message au lieu de bloquer la request.
 
 ## Official References
@@ -336,4 +336,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Console](../console/index.md) · [Messenger](messenger.md) · [Lock](lock.md)</small>
+<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](lock.md)</small>

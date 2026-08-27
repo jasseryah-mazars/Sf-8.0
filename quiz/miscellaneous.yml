@@ -1,2345 +1,1862 @@
 categories:
-  - name: "Miscellaneous — Messenger"
-    questions:
-      - id: "MISC-MSG-01"
-        question: "What does MessageBusInterface::dispatch() return?"
-        type: "internals"
-        difficulty: "easy"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["envelope", "dispatch", "message-bus"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "An Envelope"
-            correct: true
-          - value: "The handler's return value"
-            correct: false
-          - value: "void"
-            correct: false
-          - value: "A HandledStamp"
-            correct: false
-        explanation: >-
-          dispatch() always returns the (possibly stamped) Envelope. A handler's
-          return value is available via $envelope->last(HandledStamp::class)->getResult().
-          It never returns the value directly because a routed (async) message is
-          not handled in this process at all — only the Envelope exists yet.
-        documentation: "https://symfony.com/doc/current/messenger.html"
-      - id: "MISC-MSG-02"
-        question: "A message is routed to an async transport. During dispatch() in the web process, the handler…"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["send-middleware", "transport", "async"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "does not run — SendMessageMiddleware serializes and sends it, stopping the bus"
-            correct: true
-          - value: "runs immediately and is also queued"
-            correct: false
-          - value: "runs only if a worker is currently active"
-            correct: false
-          - value: "throws NoHandlerForMessageException"
-            correct: false
-        explanation: >-
-          When a message is routed to a transport, SendMessageMiddleware adds a
-          SentStamp, sends the envelope and stops the pipeline; a worker handles it
-          later. It is not handled twice, and a running worker is irrelevant to the
-          dispatching process. NoHandlerForMessageException only occurs when no
-          handler exists for a synchronously handled message.
-        documentation: "https://symfony.com/doc/current/messenger.html#transports-async-queued-messages"
-      - id: "MISC-MSG-03"
-        question: "DelayStamp(5000) delays delivery by how long?"
-        type: "trap"
-        difficulty: "easy"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["delay-stamp", "milliseconds"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "5000 milliseconds (5 seconds)"
-            correct: true
-          - value: "5000 seconds"
-            correct: false
-          - value: "5000 microseconds"
-            correct: false
-          - value: "5000 minutes"
-            correct: false
-        explanation: >-
-          DelayStamp is expressed in milliseconds, so 5000 means 5 seconds. The
-          classic trap is to read it as seconds; the retry strategy's initial
-          delay is likewise in milliseconds.
-        documentation: "https://symfony.com/doc/current/messenger.html#delaying-messages"
-      - id: "MISC-MSG-04"
-        question: "After a message exhausts its configured retries, where does it go?"
-        type: "single"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["retry", "failure-transport"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "To the configured failure transport"
-            correct: true
-          - value: "To the sync transport"
-            correct: false
-          - value: "It is silently discarded"
-            correct: false
-          - value: "Back to the front of the same queue forever"
-            correct: false
-        explanation: >-
-          Once max_retries is reached the envelope is sent to the failure_transport,
-          where messenger:failed:show/retry can inspect and requeue it. Without a
-          failure transport the message would be lost, which is why configuring one
-          is a best practice.
-        documentation: "https://symfony.com/doc/current/messenger.html#saving-retrying-failed-messages"
-      - id: "MISC-MSG-05"
-        question: "Which middleware locates and invokes the handler(s), adding a HandledStamp?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["middleware", "handle-middleware", "handled-stamp"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "HandleMessageMiddleware"
-            correct: true
-          - value: "SendMessageMiddleware"
-            correct: false
-          - value: "DispatchAfterCurrentBusMiddleware"
-            correct: false
-          - value: "ValidationMiddleware"
-            correct: false
-        explanation: >-
-          HandleMessageMiddleware resolves handlers for the message type, calls them,
-          and records each result in a HandledStamp. SendMessageMiddleware only
-          routes/sends to transports (and may stop the bus before Handle runs).
-        documentation: "https://symfony.com/doc/current/messenger.html#middleware"
-      - id: "MISC-MSG-06"
-        question: "How do you make a failing handler skip retries and go straight to the failure transport?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["retry", "unrecoverable", "failure-transport"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "Throw UnrecoverableMessageHandlingException"
-            correct: true
-          - value: "Return false from the handler"
-            correct: false
-          - value: "Add a DelayStamp(0)"
-            correct: false
-          - value: "Call $envelope->stopPropagation()"
-            correct: false
-        explanation: >-
-          UnrecoverableMessageHandlingException marks the failure as non-retryable, so
-          the worker sends the message to the failure transport immediately. A
-          handler's return value never influences retries, and there is no
-          stopPropagation() on an Envelope.
-        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
-      - id: "MISC-MSG-07"
-        question: "Which attribute marks a service as a message handler in Symfony 8?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["handler", "attribute", "autoconfigure"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "#[AsMessageHandler]"
-            correct: true
-          - value: "#[MessageHandler]"
-            correct: false
-          - value: "#[AsHandler]"
-            correct: false
-          - value: "#[Handler]"
-            correct: false
-        explanation: >-
-          Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler registers an invokable
-          service (or a specific method) as a handler for its typed message argument.
-          The other names do not exist in the component.
-        documentation: "https://symfony.com/doc/current/messenger.html#registering-handlers"
-      - id: "MISC-MSG-08"
-        question: "What is the purpose of DispatchAfterCurrentBusStamp?"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["stamp", "transaction", "dispatch-after-current-bus"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "Defer delivery of a message dispatched inside a handler until the current handling finishes successfully"
-            correct: true
-          - value: "Send the message to every bus in the application"
-            correct: false
-          - value: "Add a delay equal to the current bus latency"
-            correct: false
-          - value: "Retry the message on the next bus in a chain"
-            correct: false
-        explanation: >-
-          It prevents dispatching side-effect messages (e.g. a confirmation email)
-          before the surrounding work commits, so a failure/rollback cancels them.
-          It has nothing to do with delays, multi-bus fan-out, or retries.
-        documentation: "https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html"
-      - id: "MISC-MSG-17"
-        question: "True or False: routing a message to the sync:// transport skips the middleware pipeline."
-        type: "true-false"
-        difficulty: "easy"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["sync", "middleware", "pipeline"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "True"
-            correct: false
-          - value: "False"
-            correct: true
-        explanation: >-
-          False. sync:// still runs the full middleware stack (validation,
-          transactions, handler discovery) — it simply handles the message
-          immediately in the same process instead of enqueueing it. Treating
-          sync:// as "no bus" is a common exam trap.
-        documentation: "https://symfony.com/doc/current/messenger.html#transport-configuration"
-      - id: "MISC-MSG-18"
-        question: "A dispatched message throws NoHandlerForMessageException. What is the most likely cause?"
-        type: "debug"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["handler", "as-message-handler", "autoconfigure"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The handler class is missing #[AsMessageHandler] (or its __invoke argument type does not match the message)"
-            correct: true
-          - value: "The worker is not running"
-            correct: false
-          - value: "The failure transport is not configured"
-            correct: false
-          - value: "The message is not readonly"
-            correct: false
-        explanation: >-
-          Handlers are discovered by autoconfiguration of the #[AsMessageHandler]
-          attribute and matched by the typed argument of __invoke(). Missing the
-          attribute (or a mismatched/imported type) means no handler is registered.
-          Worker state, failure transport and message immutability are unrelated to
-          handler resolution.
-        documentation: "https://symfony.com/doc/current/messenger.html#registering-handlers"
-      - id: "MISC-MSG-19"
-        question: "Which statements about Messenger buses are correct? (choose 2)"
-        type: "multiple"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["bus", "command-query-event", "middleware"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The default bus service is messenger.bus.default"
-            correct: true
-          - value: "You can define multiple buses, each with its own ordered middleware list"
-            correct: true
-          - value: "All buses in an app must share a single global middleware list"
-            correct: false
-          - value: "The command/query/event bus split is enforced by the component"
-            correct: false
-        explanation: >-
-          Messenger ships one default bus (messenger.bus.default) but supports many,
-          each configured with its own middleware — so a command bus can wrap
-          handlers in a transaction while an event bus does not. The command/query/
-          event convention is just that: a convention, not enforced by the code.
-        documentation: "https://symfony.com/doc/current/messenger/multiple_buses.html"
-      - id: "MISC-MSG-20"
-        question: "During messenger:consume, which event is dispatched when a handler throws an exception?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["worker-events", "failure"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "WorkerMessageFailedEvent"
-            correct: true
-          - value: "WorkerMessageHandledEvent"
-            correct: false
-          - value: "WorkerStoppedEvent"
-            correct: false
-          - value: "WorkerRunningEvent"
-            correct: false
-        explanation: >-
-          The worker loop dispatches WorkerMessageReceivedEvent, then on success
-          WorkerMessageHandledEvent (ack) or on exception WorkerMessageFailedEvent
-          (reject/retry). WorkerRunningEvent fires between receives and
-          WorkerStoppedEvent on shutdown — neither signals a handler failure.
-        documentation: "https://symfony.com/doc/current/messenger.html#messenger-events"
-      - id: "MISC-MSG-21"
-        question: "With retry_strategy delay: 1000 and multiplier: 2, what are the delays before the 1st, 2nd and 3rd retry?"
-        type: "config"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["retry-strategy", "backoff", "exponential"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "1000 ms, 2000 ms, 4000 ms (delay × multiplier per attempt)"
-            correct: true
-          - value: "1000 ms, 1000 ms, 1000 ms (constant)"
-            correct: false
-          - value: "2000 ms, 4000 ms, 8000 ms"
-            correct: false
-          - value: "1 s, 2 s, 3 s (linear)"
-            correct: false
-        explanation: >-
-          MultiplierRetryStrategy multiplies the initial delay by the multiplier for
-          each successive attempt: 1000, 1000×2=2000, 2000×2=4000 (capped by
-          max_delay if set). It is exponential, not constant or linear, and starts
-          at the configured delay, not delay×multiplier.
-        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
-      - id: "MISC-MSG-22"
-        question: "An order handler dispatches an 'order confirmed' email message, but the email is sent even when the surrounding DB transaction rolls back. What fixes this?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["dispatch-after-current-bus", "transaction", "stamp"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "Dispatch the email message with DispatchAfterCurrentBusStamp so it is delivered only after the current handler finishes successfully"
-            correct: true
-          - value: "Add a DelayStamp so the email is sent 5 seconds later"
-            correct: false
-          - value: "Throw UnrecoverableMessageHandlingException in the email handler"
-            correct: false
-          - value: "Route the email to the sync:// transport"
-            correct: false
-        explanation: >-
-          DispatchAfterCurrentBusStamp defers the inner dispatch until the current
-          message finishes handling successfully, so a rollback cancels the email.
-          A delay only postpones sending, the unrecoverable exception affects the
-          email's own retries, and sync routing would send it immediately during
-          the transaction.
-        documentation: "https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html"
-      - id: "MISC-MSG-23"
-        question: "$envelope->last(HandledStamp::class) returns null. Which situation explains this best?"
-        type: "trap"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["handled-stamp", "null", "async"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The message was routed to an async transport, so it has not been handled in this process yet"
-            correct: true
-          - value: "The handler returned null, so no HandledStamp was created"
-            correct: false
-          - value: "dispatch() failed and returned null instead of an Envelope"
-            correct: false
-          - value: "HandledStamp only exists on the query bus"
-            correct: false
-        explanation: >-
-          A handler that returns null still produces a HandledStamp (its result is
-          null) — so last() returning null means no such stamp exists, i.e. the
-          message was sent async and not handled here. dispatch() always returns an
-          Envelope (never null), and HandledStamp is not query-bus-specific. This is
-          why the nullsafe ?-> guards 'not handled here', distinct from 'handled,
-          returned null'.
-        documentation: "https://symfony.com/doc/current/messenger.html#messenger-getting-handler-results"
-      - id: "MISC-MSG-24"
-        question: "Which serializer does a Messenger transport use by default to serialize the envelope?"
-        type: "single"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["transport", "serializer", "phpserializer"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "PhpSerializer (native PHP serialize())"
-            correct: true
-          - value: "The Symfony Serializer component"
-            correct: false
-          - value: "JsonEncoder"
-            correct: false
-          - value: "igbinary"
-            correct: false
-        explanation: >-
-          By default transports use Transport\\Serialization\\PhpSerializer, which
-          calls PHP's serialize(). The Symfony Serializer transport serializer is
-          opt-in and recommended for cross-language/cross-app interop, but it is not
-          the default.
-        documentation: "https://symfony.com/doc/current/messenger.html#serializing-messages"
-      - id: "MISC-MSG-25"
-        question: "In a custom middleware, code placed AFTER the $stack->next()->handle($envelope, $stack) call runs…"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["middleware", "stack", "russian-doll"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "On the way out — after the inner middleware and the handler have executed"
-            correct: true
-          - value: "Never — the call terminates the middleware"
-            correct: false
-          - value: "Before any other middleware in the stack"
-            correct: false
-          - value: "Only if the message was routed async"
-            correct: false
-        explanation: >-
-          The middleware stack is a russian-doll chain: code before
-          $stack->next()->handle() runs on the way in, and code after it runs on the
-          way out once the rest of the pipeline (including the handler) has returned.
-          This lets a middleware wrap the whole handling (e.g. open/commit a
-          transaction).
-        documentation: "https://symfony.com/doc/current/messenger.html#creating-your-own-middleware"
-      - id: "MISC-MSG-26"
-        question: "After a deploy, long-running workers keep executing the old code. Which approach fixes this for zero-downtime deploys?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["worker", "stop-workers", "deploy"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "Run messenger:stop-workers on deploy and let a supervisor restart workers, ideally combined with --time-limit/--memory-limit"
-            correct: true
-          - value: "Restart the database so workers reconnect with new code"
-            correct: false
-          - value: "Add a DelayStamp to every message"
-            correct: false
-          - value: "Increase max_retries so old workers eventually give up"
-            correct: false
-        explanation: >-
-          Workers bootstrap the kernel once and keep it in memory, so new code is
-          only picked up after a restart. messenger:stop-workers signals running
-          workers to finish the current message and exit; a process manager then
-          restarts them with the new code. --time-limit/--memory-limit make them
-          recycle regularly. The other options don't reload the worker's code.
-        documentation: "https://symfony.com/doc/current/messenger.html#deploying-to-production"
-
-  - name: "Miscellaneous — Messenger (Advanced)"
-    questions:
-      - id: "MISC-MSG-09"
-        question: "How do you retrieve a synchronous handler's return value after MessageBusInterface::dispatch()?"
-        type: "code"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["handled-stamp", "query-bus", "result"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "$envelope->last(HandledStamp::class)->getResult()"
-            correct: true
-          - value: "The value is returned directly by dispatch()"
-            correct: false
-          - value: "$envelope->getResult()"
-            correct: false
-          - value: "$bus->getLastResult()"
-            correct: false
-        explanation: >-
-          dispatch() returns an Envelope. For a single sync handler you read its
-          result via the HandledStamp: $envelope->last(HandledStamp::class)->getResult().
-          Use HandleTrait to unwrap it in a query bus. Envelope has no getResult()
-          and the bus does not cache a "last result".
-        documentation: "https://symfony.com/doc/current/messenger.html#messenger-getting-handler-results"
-      - id: "MISC-MSG-10"
-        question: "What information does a RedeliveryStamp carry on a retried message?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["redelivery-stamp", "retry"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The current retry count (and timing), so the retry strategy knows how many attempts have happened"
-            correct: true
-          - value: "The DSN of the failure transport"
-            correct: false
-          - value: "The fully-qualified class name of the handler that failed"
-            correct: false
-          - value: "A cryptographic signature of the payload"
-            correct: false
-        explanation: >-
-          RedeliveryStamp records the retry count (and redelivery timestamp). The
-          worker reads it to compare against max_retries and to compute the next
-          delay via the retry strategy. Handler identity is on HandlerFailedStamp,
-          not here.
-        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
-      - id: "MISC-MSG-11"
-        question: "Inside a custom middleware, how do you pass the envelope on to the rest of the stack?"
-        type: "code"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["middleware", "stack", "next"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "return $stack->next()->handle($envelope, $stack);"
-            correct: true
-          - value: "return $this->bus->dispatch($envelope);"
-            correct: false
-          - value: "return $stack->handle($envelope);"
-            correct: false
-          - value: "$envelope->next();"
-            correct: false
-        explanation: >-
-          A MiddlewareInterface::handle() implementation calls
-          $stack->next()->handle($envelope, $stack) to invoke the next middleware.
-          Code before that call runs on the way in; code after it runs on the way out.
-          Re-dispatching via the bus would restart the whole pipeline.
-        documentation: "https://symfony.com/doc/current/messenger.html#creating-your-own-middleware"
-      - id: "MISC-MSG-12"
-        question: "Which built-in transport handles a message immediately in the same process, without a queue?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["transport", "sync"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The sync transport (DSN sync://)"
-            correct: true
-          - value: "The in-memory transport (in-memory://)"
-            correct: false
-          - value: "The doctrine transport (doctrine://default)"
-            correct: false
-          - value: "The amqp transport (amqp://...)"
-            correct: false
-        explanation: >-
-          sync:// processes the message synchronously during dispatch. in-memory://
-          keeps messages in memory for tests, while doctrine/amqp/redis are real
-          asynchronous transports consumed by a worker.
-        documentation: "https://symfony.com/doc/current/messenger.html#transport-configuration"
-      - id: "MISC-MSG-13"
-        question: "In framework.messenger.routing, mapping App\\Message\\SmsNotification to 'async' means…"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["routing", "transport", "send-middleware"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "SendMessageMiddleware sends that message class to the 'async' transport instead of handling it in-process"
-            correct: true
-          - value: "The handler is renamed to 'async'"
-            correct: false
-          - value: "The message is handled by every transport named async"
-            correct: false
-          - value: "It only affects messages dispatched from the CLI"
-            correct: false
-        explanation: >-
-          routing maps a message class (or interface/parent) to one or more transport
-          names. A routed message is serialized and sent to that transport rather than
-          handled synchronously. A message with no routing entry is handled immediately.
-        documentation: "https://symfony.com/doc/current/messenger.html#routing-messages-to-a-transport"
-      - id: "MISC-MSG-14"
-        question: "Which options let 'messenger:consume' stop a worker gracefully for zero-downtime deploys?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["worker", "consume", "deploy"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "--limit (max messages) and --time-limit (max seconds), optionally with memory limits"
-            correct: true
-          - value: "--kill and --restart"
-            correct: false
-          - value: "--stop-now only"
-            correct: false
-          - value: "--reload after each message"
-            correct: false
-        explanation: >-
-          A long-running worker is stopped cleanly with --limit / --time-limit
-          (and --memory-limit). Combined with a process manager and
-          messenger:stop-workers, this enables graceful restarts on deploy.
-        documentation: "https://symfony.com/doc/current/messenger.html#deploying-to-production"
-      - id: "MISC-MSG-15"
-        question: "Under a transport's retry_strategy, what does the 'multiplier' option control?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["retry-strategy", "backoff"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The factor by which the delay grows between successive retries (exponential backoff)"
-            correct: true
-          - value: "The number of parallel workers spawned"
-            correct: false
-          - value: "How many transports share the message"
-            correct: false
-          - value: "The maximum number of messages fetched per poll"
-            correct: false
-        explanation: >-
-          retry_strategy defines max_retries, delay (initial, ms), multiplier
-          (delay is multiplied by this each attempt) and max_delay to cap it,
-          producing exponential backoff before the failure transport is used.
-        documentation: "https://symfony.com/doc/current/messenger.html#retries-failures"
-      - id: "MISC-MSG-16"
-        question: "Which transport is intended specifically for functional tests, asserting dispatched messages without a broker?"
-        type: "single"
-        difficulty: "medium"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["in-memory", "testing", "transport"]
-        syllabus: "Miscellaneous → Messenger"
-        answers:
-          - value: "The in-memory transport (in-memory://), inspected via getSent()"
-            correct: true
-          - value: "The sync transport (sync://)"
-            correct: false
-          - value: "The redis transport (redis://localhost)"
-            correct: false
-          - value: "The doctrine transport"
-            correct: false
-        explanation: >-
-          in-memory:// keeps envelopes in memory instead of sending them, so a test
-          can fetch the transport from the container and assert on getSent(). It is
-          reset between tests via the messenger reset behaviour.
-        documentation: "https://symfony.com/doc/current/messenger.html#testing"
-
-  - name: "Miscellaneous — Cache"
-    questions:
-      - id: "MISC-CACHE-01"
-        question: "Symfony\\Contracts\\Cache\\CacheInterface::get() runs its callback…"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/cache"
-        concepts: ["cache-contracts", "get-callback", "stampede"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "only on a cache miss, then stores and returns the value"
-            correct: true
-          - value: "on every call"
-            correct: false
-          - value: "never — you must call save() yourself"
-            correct: false
-          - value: "only when the beta factor is INF"
-            correct: false
-        explanation: >-
-          The callback computes the value on a miss; the result is persisted and
-          returned. It also provides probabilistic early-expiration stampede
-          protection. Running on every call would defeat caching, and unlike PSR-6
-          you do not call save() manually.
-        documentation: "https://symfony.com/doc/current/cache.html#cache-contracts"
-      - id: "MISC-CACHE-02"
-        question: "Which statement about PSR-6 vs PSR-16 is correct?"
-        type: "trap"
-        difficulty: "hard"
-        subchapter: "miscellaneous/cache"
-        concepts: ["psr-6", "psr-16", "tags"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "PSR-6 (pools/items) supports deferred saves and, via TagAwareAdapter, tags; PSR-16 (SimpleCache) does not"
-            correct: true
-          - value: "PSR-16 supports tags but PSR-6 does not"
-            correct: false
-          - value: "Both are identical key/value APIs"
-            correct: false
-          - value: "PSR-6 has no expiration support"
-            correct: false
-        explanation: >-
-          PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or
-          tags. PSR-6 uses CacheItem objects and supports tags through a
-          TagAwareAdapter as well as expiration.
-        documentation: "https://symfony.com/doc/current/components/cache.html"
-      - id: "MISC-CACHE-03"
-        question: "Cache stampede protection in Symfony Cache is implemented by…"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/cache"
-        concepts: ["stampede", "beta", "early-expiration"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "probabilistic early expiration controlled by the $beta factor"
-            correct: true
-          - value: "a global mutex acquired on every key"
-            correct: false
-          - value: "disabling TTLs entirely"
-            correct: false
-          - value: "duplicating the value across all adapters"
-            correct: false
-        explanation: >-
-          As an item nears expiry, one request is probabilistically chosen to
-          recompute early while others serve the cached value ($beta=INF forces it,
-          0 disables it). There is no per-key mutex.
-        documentation: "https://symfony.com/doc/current/cache.html#stampede-prevention"
-      - id: "MISC-CACHE-04"
-        question: "Which adapter keeps entries only for the current process (ideal for tests)?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/cache"
-        concepts: ["array-adapter", "tests"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "ArrayAdapter"
-            correct: true
-          - value: "FilesystemAdapter"
-            correct: false
-          - value: "RedisAdapter"
-            correct: false
-          - value: "ApcuAdapter"
-            correct: false
-        explanation: >-
-          ArrayAdapter stores items in memory for the current request/process only, so
-          nothing persists across requests — useful for deterministic tests.
-        documentation: "https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html"
-      - id: "MISC-CACHE-05"
-        question: "Your CacheInterface::get() callback returns null on the first call. What happens on the next call before expiry?"
-        type: "trap"
-        difficulty: "hard"
-        subchapter: "miscellaneous/cache"
-        concepts: ["null", "hit", "get-callback"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "null is returned as a cache hit; the callback is NOT run again"
-            correct: true
-          - value: "The callback runs again because null means a miss"
-            correct: false
-          - value: "A CacheException is thrown for storing null"
-            correct: false
-          - value: "The item is deleted automatically"
-            correct: false
-        explanation: >-
-          null is a valid cached value: the contracts API stores whatever the
-          callback returns and treats it as a hit until it expires. get() never uses
-          null to mean 'miss' — that is exactly the PSR-6 footgun (getItem()->get()
-          returning null for both absent and stored-null) that the callback API
-          avoids. Caching 'no result' as null is fine, but it counts as a hit.
-        documentation: "https://symfony.com/doc/current/cache.html#cache-contracts"
-      - id: "MISC-CACHE-06"
-        question: "A pool is declared with `tags: true` in cache.yaml. What does this enable?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/cache"
-        concepts: ["tags", "tag-aware-adapter", "invalidate"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "Tagging items with $item->tag([...]) and evicting groups via invalidateTags([...])"
-            correct: true
-          - value: "Automatic compression of cached values"
-            correct: false
-          - value: "Sharing the pool across all servers"
-            correct: false
-          - value: "Disabling stampede protection"
-            correct: false
-        explanation: >-
-          `tags: true` wraps the pool in a TagAwareAdapter implementing
-          TagAwareCacheInterface, so items can carry tags and invalidateTags()
-          evicts all items with a given tag — invalidation by concern rather than by
-          key. Calling $item->tag() on a non-tag-aware pool errors.
-        documentation: "https://symfony.com/doc/current/cache.html#using-cache-tags"
-      - id: "MISC-CACHE-07"
-        question: "True or False: passing $beta = INF to CacheInterface::get() forces the value to be recomputed immediately."
-        type: "true-false"
-        difficulty: "medium"
-        subchapter: "miscellaneous/cache"
-        concepts: ["beta", "early-expiration", "stampede"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "True"
-            correct: true
-          - value: "False"
-            correct: false
-        explanation: >-
-          True. $beta = INF forces early expiration, so the callback runs and the
-          value is refreshed on this call. $beta = 0 disables early expiration
-          entirely; the default (null) picks a sensible probabilistic value.
-        documentation: "https://symfony.com/doc/current/cache.html#stampede-prevention"
-      - id: "MISC-CACHE-08"
-        question: "Using the raw PSR-6 API, how do you distinguish a stored null value from a missing key?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/cache"
-        concepts: ["psr-6", "isHit", "cache-item"]
-        syllabus: "Miscellaneous → Cache"
-        answers:
-          - value: "Check $item->isHit() — get() returns null for both cases"
-            correct: true
-          - value: "Compare $item->get() to null"
-            correct: false
-          - value: "Call $pool->hasKey($key)"
-            correct: false
-          - value: "Catch a CacheMissException"
-            correct: false
-        explanation: >-
-          With PSR-6, CacheItemInterface::get() returns null both for an absent key
-          and for a genuinely stored null, so you must call isHit() to tell them
-          apart. The contracts callback API sidesteps this ambiguity; there is no
-          hasKey() or miss exception.
-        documentation: "https://symfony.com/doc/current/components/cache.html"
-
-  - name: "Miscellaneous — Serializer"
-    questions:
-      - id: "MISC-SER-01"
-        question: "In serialize(), which stage runs first?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["normalizer", "encoder", "pipeline"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: "The normalizer (object to array), then the encoder (array to string)"
-            correct: true
-          - value: "The encoder, then the normalizer"
-            correct: false
-          - value: "Only the encoder runs"
-            correct: false
-          - value: "They run concurrently"
-            correct: false
-        explanation: >-
-          serialize() normalizes the object to an array/scalars, then encodes that to
-          a string. deserialize() reverses it: decode then denormalize.
-        documentation: "https://symfony.com/doc/current/components/serializer.html"
-      - id: "MISC-SER-02"
-        question: "#[Groups(['read'])] on a property takes effect when…"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["groups", "context"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: "the context includes ['groups' => ['read']]"
-            correct: true
-          - value: "always, regardless of context"
-            correct: false
-          - value: "only during deserialization"
-            correct: false
-          - value: "the property is public"
-            correct: false
-        explanation: >-
-          Group filtering only applies when matching groups are passed in the context;
-          otherwise the group attribute has no effect and all fields are (de)serialized.
-        documentation: "https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes"
-      - id: "MISC-SER-03"
-        question: "Which normalizer reads and writes private properties directly via reflection?"
-        type: "single"
-        difficulty: "medium"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["property-normalizer", "reflection"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: "PropertyNormalizer"
-            correct: true
-          - value: "ObjectNormalizer"
-            correct: false
-          - value: "GetSetMethodNormalizer"
-            correct: false
-          - value: "JsonEncoder"
-            correct: false
-        explanation: >-
-          PropertyNormalizer accesses object properties directly (including private),
-          whereas ObjectNormalizer uses accessors and the constructor, and
-          GetSetMethodNormalizer uses only get/set methods. JsonEncoder is an encoder,
-          not a normalizer.
-        documentation: "https://symfony.com/doc/current/serializer.html#normalizers"
-      - id: "MISC-SER-04"
-        question: "By default, what is the Serializer's circular reference limit before it throws?"
-        type: "trap"
-        difficulty: "hard"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["circular-reference", "max-depth"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: "1 (unless a circular reference handler or #[MaxDepth] is set)"
-            correct: true
-          - value: "0 — it never throws"
-            correct: false
-          - value: "Unlimited"
-            correct: false
-          - value: "10"
-            correct: false
-        explanation: >-
-          The default circular reference limit is 1; beyond it a CircularReferenceException
-          is thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
-        documentation: "https://symfony.com/doc/current/serializer.html#handling-circular-references"
-      - id: "MISC-SER-05"
-        question: "A UserDto has #[Groups(['read'])] #[SerializedName('full_name')] on $name and #[Ignore] on $passwordHash. What is the JSON when serialized with context ['groups' => ['read']]?"
-        type: "code"
-        difficulty: "hard"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["groups", "serialized-name", "ignore"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: '{"full_name":"..."} plus any other read-group fields; passwordHash is omitted'
-            correct: true
-          - value: '{"name":"...","passwordHash":"..."}'
-            correct: false
-          - value: "All properties, because groups are ignored during serialization"
-            correct: false
-          - value: "An empty object, because #[Ignore] hides everything"
-            correct: false
-        explanation: >-
-          With the read group in context, only read-group properties are emitted;
-          $name is renamed to full_name by #[SerializedName], and #[Ignore] drops
-          passwordHash entirely regardless of group. Groups are honoured only
-          because they are passed in the context.
-        documentation: "https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes"
-      - id: "MISC-SER-06"
-        question: "What does the framework.serializer.default_context option skip_null_values: true do?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["skip-null-values", "context", "null"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: "Omits properties whose value is null from the serialized output"
-            correct: true
-          - value: "Throws when a property is null"
-            correct: false
-          - value: "Converts null to an empty string"
-            correct: false
-          - value: "Only affects deserialization of missing keys"
-            correct: false
-        explanation: >-
-          By default a null property is serialized as \"key\":null. Setting
-          AbstractObjectNormalizer::SKIP_NULL_VALUES (skip_null_values) omits those
-          keys from the payload. The classic bug is a consumer treating an absent key
-          as an error rather than 'the value was null'.
-        documentation: "https://symfony.com/doc/current/serializer.html"
-      - id: "MISC-SER-07"
-        question: "A private property with no getter is missing from the JSON produced by the default ObjectNormalizer. Why, and how do you fix it?"
-        type: "debug"
-        difficulty: "medium"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["object-normalizer", "property-normalizer", "accessors"]
-        syllabus: "Miscellaneous → Serializer"
-        answers:
-          - value: "ObjectNormalizer uses accessors; add a getter (or use PropertyNormalizer, which reads properties directly)"
-            correct: true
-          - value: "The property must be marked #[Groups] to appear"
-            correct: false
-          - value: "You must call serialize() with the 'private' => true context"
-            correct: false
-          - value: "Private properties can never be serialized in Symfony 8"
-            correct: false
-        explanation: >-
-          ObjectNormalizer reads via getters/issers/hassers and the constructor, so a
-          private property without an accessor is invisible. Provide a getter or
-          switch to PropertyNormalizer, which uses reflection to read properties
-          directly. Groups filter fields but do not expose accessorless private
-          properties.
-        documentation: "https://symfony.com/doc/current/serializer.html#normalizers"
-
-  - name: "Miscellaneous — Configuration & DotEnv"
-    questions:
-      - id: "MISC-CFG-01"
-        question: "In which environment is .env.local NOT loaded?"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/configuration"
-        concepts: ["dotenv", "test-env", "cascade"]
-        syllabus: "Miscellaneous → Configuration"
-        answers:
-          - value: "test"
-            correct: true
-          - value: "dev"
-            correct: false
-          - value: "prod"
-            correct: false
-          - value: "staging"
-            correct: false
-        explanation: >-
-          .env.local is intentionally skipped in the test environment so tests run
-          from committed defaults and stay reproducible.
-        documentation: "https://symfony.com/doc/current/configuration.html#selecting-the-active-environment"
-      - id: "MISC-CFG-02"
-        question: "What does `composer dump-env prod` produce, and what is the effect?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/configuration"
-        concepts: ["dotenv", "dump-env", "production"]
-        syllabus: "Miscellaneous → Configuration"
-        answers:
-          - value: ".env.local.php — Symfony loads it directly and skips parsing .env* files"
-            correct: true
-          - value: ".env.prod — parsed on every request"
-            correct: false
-          - value: "config/prod.php overriding all bundles"
-            correct: false
-          - value: "Nothing; it only validates env vars"
-            correct: false
-        explanation: >-
-          The whole .env* cascade is compiled to a plain PHP array in .env.local.php,
-          which Symfony loads directly, avoiding DotEnv parsing on each request.
-        documentation: "https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production"
-      - id: "MISC-CFG-03"
-        question: "ExpressionLanguage::compile() returns what?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/configuration"
-        concepts: ["expression-language", "compile", "evaluate"]
-        syllabus: "Miscellaneous → Configuration"
-        answers:
-          - value: "A string of PHP source code"
-            correct: true
-          - value: "The evaluated result value"
-            correct: false
-          - value: "An AST node object"
-            correct: false
-          - value: "A boolean success flag"
-            correct: false
-        explanation: >-
-          compile() transpiles an expression to PHP source you can cache/reuse, while
-          evaluate() interprets the expression and returns its value.
-        documentation: "https://symfony.com/doc/current/components/expression_language.html"
-      - id: "MISC-CFG-04"
-        question: "A .env file sets DATABASE_URL, but a real OS environment variable DATABASE_URL is also exported. Which wins?"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/configuration"
-        concepts: ["dotenv", "precedence", "env-vars"]
-        syllabus: "Miscellaneous → Configuration"
-        answers:
-          - value: "The real OS environment variable — DotEnv never overrides an existing real env var"
-            correct: true
-          - value: ".env, because it is loaded last"
-            correct: false
-          - value: "Whichever value is longer"
-            correct: false
-          - value: "They are concatenated"
-            correct: false
-        explanation: >-
-          Real OS environment variables always take precedence; the DotEnv cascade
-          (.env → .env.local → .env.<env> → .env.<env>.local) only fills values not
-          already set in the real environment. Later .env* files override earlier
-          ones but never a real env var.
-        documentation: "https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local"
-      - id: "MISC-CFG-05"
-        question: "What is the result of ExpressionLanguage::compile('1 + a', ['a'])?"
-        type: "code"
-        difficulty: "hard"
-        subchapter: "miscellaneous/configuration"
-        concepts: ["expression-language", "compile", "php-source"]
-        syllabus: "Miscellaneous → Configuration"
-        answers:
-          - value: 'The PHP source string "(1 + $a)"'
-            correct: true
-          - value: "The integer 1"
-            correct: false
-          - value: "A closure you can invoke"
-            correct: false
-          - value: "An exception, because $a is undefined"
-            correct: false
-        explanation: >-
-          compile() emits PHP source, turning the variable name a into $a: "(1 + $a)".
-          It does not evaluate anything (so no undefined-variable error) — use
-          evaluate('1 + a', ['a' => 5]) to get the value 6.
-        documentation: "https://symfony.com/doc/current/components/expression_language.html"
-      - id: "MISC-CFG-06"
-        question: "Which class merges every config source and validates it against a bundle's Configuration tree?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/configuration"
-        concepts: ["config", "processor", "tree-builder"]
-        syllabus: "Miscellaneous → Configuration"
-        answers:
-          - value: "Processor (Processor::processConfiguration())"
-            correct: true
-          - value: "TreeBuilder"
-            correct: false
-          - value: "FileLocator"
-            correct: false
-          - value: "ContainerBuilder"
-            correct: false
-        explanation: >-
-          Processor::processConfiguration() merges all sources and validates them
-          against the tree returned by the Configuration class, applying defaults and
-          constraints. TreeBuilder only defines the schema; FileLocator finds files.
-        documentation: "https://symfony.com/doc/current/components/config/definition.html"
-
-  - name: "Miscellaneous — Deployment"
-    questions:
-      - id: "MISC-DEPLOY-01"
-        question: "Which composer flag excludes require-dev packages when deploying to production?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/deployment"
-        concepts: ["composer", "no-dev", "production"]
-        syllabus: "Miscellaneous → Deployment"
-        answers:
-          - value: "--no-dev"
-            correct: true
-          - value: "--prod"
-            correct: false
-          - value: "--production"
-            correct: false
-          - value: "--optimize"
-            correct: false
-        explanation: >-
-          `composer install --no-dev` skips require-dev packages (profiler, PHPUnit,
-          etc.). Add --optimize-autoloader (or --classmap-authoritative) to build an
-          optimised classmap and cut per-class filesystem stat calls.
-        documentation: "https://symfony.com/doc/current/deployment.html"
-      - id: "MISC-DEPLOY-02"
-        question: "You changed a YAML config file and redeployed to prod, but the change has no effect. Why?"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/deployment"
-        concepts: ["cache", "compiled-container", "warmup"]
-        syllabus: "Miscellaneous → Deployment"
-        answers:
-          - value: "Prod loads the compiled container as-is and does not auto-detect config changes; you must clear/warm the cache on deploy"
-            correct: true
-          - value: "Prod re-reads YAML on every request, so a restart is needed"
-            correct: false
-          - value: "YAML config is ignored in prod; only PHP config works"
-            correct: false
-          - value: "APP_DEBUG must be 1 for config to reload"
-            correct: false
-        explanation: >-
-          In prod the compiled container in var/cache/prod is loaded as-is with no
-          freshness checks (those exist only in debug), so config changes require
-          cache:clear + cache:warmup on deploy. Enabling APP_DEBUG in prod is unsafe
-          and not the fix.
-        documentation: "https://symfony.com/doc/current/deployment.html"
-      - id: "MISC-DEPLOY-03"
-        question: "Why set opcache.validate_timestamps=0 in production?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/deployment"
-        concepts: ["opcache", "bytecode", "performance"]
-        syllabus: "Miscellaneous → Deployment"
-        answers:
-          - value: "To skip per-request file-modification checks and always serve cached bytecode (reset opcache on deploy instead)"
-            correct: true
-          - value: "To enable debug mode"
-            correct: false
-          - value: "To disable opcache entirely"
-            correct: false
-          - value: "To force recompilation on every request"
-            correct: false
-        explanation: >-
-          With immutable deploys, disabling timestamp validation maximises opcache
-          hits by not stat-ing files each request. Because opcache then never notices
-          new files, you must reset opcache (or the PHP process manager) on each
-          deploy so the new bytecode is loaded.
-        documentation: "https://symfony.com/doc/current/performance.html"
-      - id: "MISC-DEPLOY-04"
-        question: "Which ordered command sequence is correct for a from-scratch prod deploy?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/deployment"
-        concepts: ["deploy-order", "dump-env", "cache-warmup"]
-        syllabus: "Miscellaneous → Deployment"
-        answers:
-          - value: "composer install --no-dev --optimize-autoloader → composer dump-env prod → cache:clear → cache:warmup → reset opcache"
-            correct: true
-          - value: "cache:warmup → composer install → dump-env prod → go live"
-            correct: false
-          - value: "composer update → APP_DEBUG=1 → cache:clear"
-            correct: false
-          - value: "cache:clear → composer install --dev → dump-env dev"
-            correct: false
-        explanation: >-
-          You install prod deps first, compile the env cascade with dump-env prod,
-          then clear and warm the cache so the first live request is fast, and
-          finally reset opcache. Warming before installing, or shipping dev deps /
-          APP_DEBUG=1, are wrong.
-        documentation: "https://symfony.com/doc/current/deployment.html"
-      - id: "MISC-DEPLOY-05"
-        question: "What does `cache:clear` run, by default, in addition to removing stale cache?"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/deployment"
-        concepts: ["cache-warmer", "warmup", "cache-warmer-interface"]
-        syllabus: "Miscellaneous → Deployment"
-        answers:
-          - value: "The cache warmers (CacheWarmerInterface) that pre-build the container, routing, Twig cache and metadata"
-            correct: true
-          - value: "The database migrations"
-            correct: false
-          - value: "The Messenger workers"
-            correct: false
-          - value: "composer install"
-            correct: false
-        explanation: >-
-          cache:clear removes stale cache and then runs the CacheWarmerInterface
-          warmers to pre-build the container, routing matcher/generator, Twig
-          template cache and validator/serializer metadata. cache:warmup warms
-          without clearing. Migrations, workers and composer are separate steps.
-        documentation: "https://symfony.com/doc/current/deployment.html"
-      - id: "MISC-DEPLOY-06"
-        question: "True or False: leaving APP_DEBUG=1 in production is acceptable as long as the profiler is disabled."
-        type: "true-false"
-        difficulty: "easy"
-        subchapter: "miscellaneous/deployment"
-        concepts: ["app-debug", "security", "performance"]
-        syllabus: "Miscellaneous → Deployment"
-        answers:
-          - value: "True"
-            correct: false
-          - value: "False"
-            correct: true
-        explanation: >-
-          False. APP_DEBUG=1 enables verbose error pages that leak stack traces and
-          internals, re-enables freshness checks and other overhead, and generally
-          exposes the app. Production must run APP_DEBUG=0.
-        documentation: "https://symfony.com/doc/current/deployment.html"
-
-  - name: "Miscellaneous — Process"
-    questions:
-      - id: "MISC-PROC-01"
-        question: "Which Process constructor auto-escapes each argument?"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/process"
-        concepts: ["process", "escaping", "security"]
-        syllabus: "Miscellaneous → Process"
-        answers:
-          - value: "new Process(['git', 'log', '--oneline'])"
-            correct: true
-          - value: "Process::fromShellCommandline('git log --oneline')"
-            correct: false
-          - value: "Both escape equally"
-            correct: false
-          - value: "Neither escapes anything"
-            correct: false
-        explanation: >-
-          The array form escapes each element automatically. fromShellCommandline()
-          runs a raw shell string and does not escape, risking command injection if
-          you interpolate untrusted input.
-        documentation: "https://symfony.com/doc/current/components/process.html"
-      - id: "MISC-PROC-02"
-        question: "What does Process::run() return?"
-        type: "internals"
-        difficulty: "easy"
-        subchapter: "miscellaneous/process"
-        concepts: ["process", "run", "exit-code"]
-        syllabus: "Miscellaneous → Process"
-        answers:
-          - value: "The integer exit code"
-            correct: true
-          - value: "The stdout as a string"
-            correct: false
-          - value: "void"
-            correct: false
-          - value: "A boolean success flag"
-            correct: false
-        explanation: >-
-          run() blocks until completion and returns the exit code; use getOutput() for
-          stdout and mustRun() to throw a ProcessFailedException on failure.
-        documentation: "https://symfony.com/doc/current/components/process.html#usage"
-      - id: "MISC-PROC-03"
-        question: "What is the default Process timeout?"
-        type: "trap"
-        difficulty: "easy"
-        subchapter: "miscellaneous/process"
-        concepts: ["process", "timeout"]
-        syllabus: "Miscellaneous → Process"
-        answers:
-          - value: "60 seconds"
-            correct: true
-          - value: "Unlimited"
-            correct: false
-          - value: "30 seconds"
-            correct: false
-          - value: "300 seconds"
-            correct: false
-        explanation: >-
-          The default timeout is 60 seconds; pass null to setTimeout() to disable it.
-          Exceeding it throws a ProcessTimedOutException.
-        documentation: "https://symfony.com/doc/current/components/process.html#process-timeout"
-      - id: "MISC-PROC-04"
-        question: "You build a command from user input using Process::fromShellCommandline('convert '.$userInput). What is the risk and the fix?"
-        type: "debug"
-        difficulty: "medium"
-        subchapter: "miscellaneous/process"
-        concepts: ["command-injection", "escaping", "array-constructor"]
-        syllabus: "Miscellaneous → Process"
-        answers:
-          - value: "Command injection — use the array constructor new Process(['convert', $userInput]) so each argument is auto-escaped"
-            correct: true
-          - value: "None; fromShellCommandline escapes arguments for you"
-            correct: false
-          - value: "A timeout error; raise setTimeout()"
-            correct: false
-          - value: "It only fails on Windows; add a shebang"
-            correct: false
-        explanation: >-
-          fromShellCommandline runs the string through /bin/sh with no escaping, so
-          untrusted input can inject shell metacharacters. The array constructor
-          escapes each element as a single argument, eliminating the injection
-          vector. This is unrelated to timeouts or platform.
-        documentation: "https://symfony.com/doc/current/components/process.html"
-      - id: "MISC-PROC-05"
-        question: "Which call runs a process and throws automatically on a non-zero exit code?"
-        type: "code"
-        difficulty: "medium"
-        subchapter: "miscellaneous/process"
-        concepts: ["mustRun", "process-failed-exception", "run"]
-        syllabus: "Miscellaneous → Process"
-        answers:
-          - value: "mustRun() — it throws ProcessFailedException on failure"
-            correct: true
-          - value: "run() — it throws ProcessFailedException on failure"
-            correct: false
-          - value: "start() — it throws immediately on failure"
-            correct: false
-          - value: "wait() — it converts the exit code into an exception"
-            correct: false
-        explanation: >-
-          mustRun() behaves like run() but throws ProcessFailedException when the
-          process exits non-zero. run() simply returns the integer exit code and you
-          check isSuccessful() yourself; start()/wait() are for async execution.
-        documentation: "https://symfony.com/doc/current/components/process.html#usage"
-
-  - name: "Miscellaneous — Lock"
-    questions:
-      - id: "MISC-LOCK-01"
-        question: "LockInterface::acquire() called with no argument is…"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/lock"
-        out_of_scope: true
-        concepts: ["lock", "acquire", "non-blocking"]
-        syllabus: "Miscellaneous → Lock"
-        answers:
-          - value: "non-blocking — it returns false immediately if the lock is held"
-            correct: true
-          - value: "blocking — it waits until the lock is free"
-            correct: false
-          - value: "throwing an exception if the lock is held"
-            correct: false
-          - value: "always successful"
-            correct: false
-        explanation: >-
-          acquire() defaults to non-blocking; pass true to block until the resource
-          becomes available (store permitting). It returns a boolean false when held,
-          it does not throw, so `if (!$lock->acquire()) { return; }` is the correct guard.
-        documentation: "https://symfony.com/doc/current/lock.html#blocking-locks"
-      - id: "MISC-LOCK-02"
-        question: "Which lock store provides mutual exclusion across multiple servers?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/lock"
-        out_of_scope: true
-        concepts: ["lock", "store", "distributed"]
-        syllabus: "Miscellaneous → Lock"
-        answers:
-          - value: "RedisStore"
-            correct: true
-          - value: "FlockStore"
-            correct: false
-          - value: "SemaphoreStore"
-            correct: false
-          - value: "InMemoryStore"
-            correct: false
-        explanation: >-
-          Flock and Semaphore stores are local to one machine, and InMemoryStore is
-          per-process (tests). Shared stores like Redis (or a database store)
-          coordinate locks across servers.
-        documentation: "https://symfony.com/doc/current/components/lock.html#available-stores"
-      - id: "MISC-LOCK-03"
-        question: "Why call refresh() during a long critical section?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/lock"
-        out_of_scope: true
-        concepts: ["lock", "ttl", "refresh"]
-        syllabus: "Miscellaneous → Lock"
-        answers:
-          - value: "To extend the lock's TTL so it is not considered expired mid-job"
-            correct: true
-          - value: "To release then reacquire the lock"
-            correct: false
-          - value: "To switch to a different store"
-            correct: false
-          - value: "To convert it to a shared lock"
-            correct: false
-        explanation: >-
-          Locks have a TTL to avoid deadlocks after crashes. refresh() prolongs it so
-          a still-working owner keeps exclusivity; without it another process could
-          acquire the lock after the TTL, breaking mutual exclusion.
-        documentation: "https://symfony.com/doc/current/components/lock.html#expiring-locks"
-      - id: "MISC-LOCK-04"
-        question: "Which is the correct guard to skip work another process is already doing?"
-        type: "code"
-        difficulty: "medium"
-        subchapter: "miscellaneous/lock"
-        out_of_scope: true
-        concepts: ["acquire", "boolean", "guard"]
-        syllabus: "Miscellaneous → Lock"
-        answers:
-          - value: "if (!$lock->acquire()) { return; }"
-            correct: true
-          - value: "try { $lock->acquire(); } catch (LockConflictedException) { return; }"
-            correct: false
-          - value: "if ($lock->acquire() === null) { return; }"
-            correct: false
-          - value: "if ($lock->isLocked()) { return; }"
-            correct: false
-        explanation: >-
-          Non-blocking acquire() returns false when the resource is held, so
-          !$lock->acquire() is the idiomatic early-return guard. It does not return
-          null and does not throw on contention (only blocking acquire(true) may
-          throw LockConflictedException). Forgetting to check the boolean means
-          entering the critical section unprotected.
-        documentation: "https://symfony.com/doc/current/lock.html"
-      - id: "MISC-LOCK-05"
-        question: "What is the default TTL of a lock created via LockFactory::createLock($resource)?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/lock"
-        out_of_scope: true
-        concepts: ["lock-factory", "ttl", "auto-release"]
-        syllabus: "Miscellaneous → Lock"
-        answers:
-          - value: "300 seconds (5 minutes), with autoRelease on by default"
-            correct: true
-          - value: "60 seconds"
-            correct: false
-          - value: "Unlimited (no TTL)"
-            correct: false
-          - value: "30 seconds"
-            correct: false
-        explanation: >-
-          createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true)
-          defaults to a 300 second TTL and releases the lock when the Lock object is
-          destroyed. Long jobs should raise the TTL and call refresh() to avoid
-          premature expiry.
-        documentation: "https://symfony.com/doc/current/components/lock.html#expiring-locks"
-
-  - name: "Miscellaneous — Mailer"
-    questions:
-      - id: "MISC-MAIL-01"
-        question: "With Messenger routing configured for emails, MailerInterface::send() will…"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/mailer"
-        concepts: ["mailer", "messenger", "async"]
-        syllabus: "Miscellaneous → Mailer"
-        answers:
-          - value: "dispatch a SendEmailMessage to be delivered by a worker"
-            correct: true
-          - value: "always send synchronously over SMTP"
-            correct: false
-          - value: "throw if no worker is running"
-            correct: false
-          - value: "render but not send the email"
-            correct: false
-        explanation: >-
-          When SendEmailMessage is routed to a transport, send() enqueues it; a worker
-          delivers it later, giving async sending plus retries. It does not throw if a
-          worker is down — the message just waits in the queue.
-        documentation: "https://symfony.com/doc/current/mailer.html#sending-messages-async"
-      - id: "MISC-MAIL-02"
-        question: "Which class renders Twig templates into an email body?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/mailer"
-        concepts: ["templated-email", "twig-bridge"]
-        syllabus: "Miscellaneous → Mailer"
-        answers:
-          - value: "Symfony\\Bridge\\Twig\\Mime\\TemplatedEmail"
-            correct: true
-          - value: "Symfony\\Component\\Mime\\Email"
-            correct: false
-          - value: "Symfony\\Component\\Mailer\\Mailer"
-            correct: false
-          - value: "Symfony\\Component\\Mime\\Message"
-            correct: false
-        explanation: >-
-          TemplatedEmail (in the Twig bridge) carries htmlTemplate()/textTemplate() and
-          context(); a body renderer turns them into MIME parts before sending. Plain
-          Email has no template support.
-        documentation: "https://symfony.com/doc/current/mailer.html#twig-html-css"
-      - id: "MISC-MAIL-03"
-        question: "How is an inline (embedded) image referenced from an email's HTML body?"
-        type: "single"
-        difficulty: "medium"
-        subchapter: "miscellaneous/mailer"
-        concepts: ["embed", "cid", "mime"]
-        syllabus: "Miscellaneous → Mailer"
-        answers:
-          - value: "Via a cid: reference produced by embed()/embedFromPath()"
-            correct: true
-          - value: "Only as an absolute external URL"
-            correct: false
-          - value: "As a base64 data: URI hand-written by the developer"
-            correct: false
-          - value: "Inline images are not supported"
-            correct: false
-        explanation: >-
-          embed()/embedFromPath() add a DataPart addressed with cid:<name>, which the
-          HTML body references (e.g. <img src="cid:logo">).
-        documentation: "https://symfony.com/doc/current/mailer.html#embedding-images"
-      - id: "MISC-MAIL-04"
-        question: "In the Mailer, how does the Envelope differ from the message headers?"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/mailer"
-        concepts: ["envelope", "headers", "smtp"]
-        syllabus: "Miscellaneous → Mailer"
-        answers:
-          - value: "The Envelope holds the actual sender/recipients used for the SMTP conversation; headers (From/To) render in the visible message"
-            correct: true
-          - value: "They are the same object with two names"
-            correct: false
-          - value: "The Envelope stores the HTML body; headers store attachments"
-            correct: false
-          - value: "The Envelope is only used for async delivery"
-            correct: false
-        explanation: >-
-          Mailer's Envelope (sender + recipients) drives the transport's SMTP
-          exchange, whereas the message headers (From, To, Subject) are what the
-          recipient sees. They can legitimately differ (e.g. bounce address vs
-          visible From), which is a common exam distinction.
-        documentation: "https://symfony.com/doc/current/mailer.html#sending-messages"
-      - id: "MISC-MAIL-05"
-        question: "Which configuration makes emails send asynchronously via Messenger?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/mailer"
-        concepts: ["send-email-message", "routing", "mailer-dsn"]
-        syllabus: "Miscellaneous → Mailer"
-        answers:
-          - value: "Route Symfony\\Component\\Mailer\\Messenger\\SendEmailMessage to a transport in messenger routing (and run a worker)"
-            correct: true
-          - value: "Set MAILER_DSN to async://default"
-            correct: false
-          - value: "Add async: true under framework.mailer"
-            correct: false
-          - value: "Wrap send() in a try/catch"
-            correct: false
-        explanation: >-
-          Async delivery comes from routing SendEmailMessage to a Messenger transport
-          and consuming it with a worker. MAILER_DSN chooses the delivery transport
-          (SMTP/API), not sync-vs-async, and there is no framework.mailer.async flag.
-        documentation: "https://symfony.com/doc/current/mailer.html#sending-messages-async"
-
-  - name: "Miscellaneous — Runtime & Clock"
-    questions:
-      - id: "MISC-RUN-01"
-        question: "What does public/index.php return under the Runtime component?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/runtime"
-        concepts: ["runtime", "entry-point", "callable"]
-        syllabus: "Miscellaneous → Runtime"
-        answers:
-          - value: "A callable that produces the application object (e.g. a Kernel)"
-            correct: true
-          - value: "A Response object"
-            correct: false
-          - value: "Nothing — it echoes the output directly"
-            correct: false
-          - value: "The exit code as an int"
-            correct: false
-        explanation: >-
-          index.php returns a callable; autoload_runtime.php resolves its arguments,
-          invokes it, then a RunnerInterface handles/sends/terminates. It never calls
-          handle() itself.
-        documentation: "https://symfony.com/doc/current/components/runtime.html"
-      - id: "MISC-RUN-02"
-        question: "Which environment variable selects the runtime class?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/runtime"
-        concepts: ["runtime", "app-runtime"]
-        syllabus: "Miscellaneous → Runtime"
-        answers:
-          - value: "APP_RUNTIME"
-            correct: true
-          - value: "APP_ENV"
-            correct: false
-          - value: "SYMFONY_RUNTIME"
-            correct: false
-          - value: "RUNTIME_CLASS"
-            correct: false
-        explanation: >-
-          APP_RUNTIME (or composer.json extra.runtime.class) chooses the RuntimeInterface
-          implementation; the default is SymfonyRuntime, which extends GenericRuntime.
-        documentation: "https://symfony.com/doc/current/components/runtime.html#using-the-runtime"
-      - id: "MISC-RUN-03"
-        question: "Which class does the default SymfonyRuntime extend?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/runtime"
-        concepts: ["symfony-runtime", "generic-runtime"]
-        syllabus: "Miscellaneous → Runtime"
-        answers:
-          - value: "GenericRuntime"
-            correct: true
-          - value: "HttpKernel"
-            correct: false
-          - value: "Kernel"
-            correct: false
-          - value: "SymfonyStyle"
-            correct: false
-        explanation: >-
-          SymfonyRuntime extends the framework-agnostic GenericRuntime, adding
-          Symfony-aware resolvers/runners (inject Request, SymfonyStyle, console
-          Input/Output; run a Kernel or console Application). It is not a kernel.
-        documentation: "https://symfony.com/doc/current/components/runtime.html"
-      - id: "MISC-RUN-04"
-        question: "How does the argument `array $context` in the index.php closure get populated?"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/runtime"
-        concepts: ["resolver", "autowiring", "context"]
-        syllabus: "Miscellaneous → Runtime"
-        answers:
-          - value: "The runtime's resolver autowires it from $_SERVER (env vars like APP_ENV/APP_DEBUG)"
-            correct: true
-          - value: "You must call getenv() yourself inside the closure"
-            correct: false
-          - value: "Symfony injects it from services.yaml parameters"
-            correct: false
-          - value: "It is always an empty array in Symfony 8"
-            correct: false
-        explanation: >-
-          RuntimeInterface::getResolver() builds a resolver that inspects the
-          callable's typed arguments and supplies them — array $context comes from
-          $_SERVER (env), and it can also inject Request, InputInterface, etc. You
-          therefore never read $_SERVER manually in the entry point.
-        documentation: "https://symfony.com/doc/current/components/runtime.html#using-the-runtime"
-      - id: "MISC-RUN-SCENARIO-01"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/runtime"
-        concepts: ["public/index.php", "SymfonyRuntime", "APP_RUNTIME"]
-        syllabus: "Miscellaneous → Runtime"
-        question: "A teammate 'fixes' a bug by adding $kernel->handle($request)->send(); at the end of public/index.php, right after the file already returns its closure. What is wrong with this?"
-        answers:
-          - value: "public/index.php must only return a callable; the Runtime component itself builds the kernel, handles the request and sends the response"
-            correct: true
-          - value: "Nothing — calling handle()/send() manually is required in Symfony 8"
-            correct: false
-          - value: "It is wrong only when APP_RUNTIME is unset"
-            correct: false
-          - value: "It is wrong only under SymfonyRuntime, not GenericRuntime"
-            correct: false
-        explanation: >-
-          The whole point of symfony/runtime is that the front controller
-          only returns a callable (or an application object); the runtime
-          resolves its arguments, invokes it, and — for the Symfony flavor —
-          runs the kernel and sends the response itself. Hand-calling
-          handle()/send() after autoload_runtime.php has already done so
-          double-processes the request.
-        documentation: "https://symfony.com/doc/current/components/runtime.html"
-      - id: "MISC-CLOCK-01"
-        question: "ClockInterface::now() returns what type?"
-        type: "internals"
-        difficulty: "easy"
-        subchapter: "miscellaneous/clock"
-        concepts: ["clock", "now", "datepoint"]
-        syllabus: "Miscellaneous → Clock"
-        answers:
-          - value: "A \\DateTimeImmutable (a DatePoint)"
-            correct: true
-          - value: "A Unix timestamp int"
-            correct: false
-          - value: "A mutable \\DateTime"
-            correct: false
-          - value: "A float of seconds"
-            correct: false
-        explanation: >-
-          now() returns an immutable DatePoint (a \\DateTimeImmutable subclass). Tests
-          swap the NativeClock for a MockClock to freeze or advance time.
-        documentation: "https://symfony.com/doc/current/components/clock.html"
-      - id: "MISC-CLOCK-02"
-        question: "Which clock lets tests freeze or advance time without a real delay?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/clock"
-        concepts: ["mock-clock", "testing", "sleep"]
-        syllabus: "Miscellaneous → Clock"
-        answers:
-          - value: "MockClock — you set the time and its sleep() advances virtual time"
-            correct: true
-          - value: "NativeClock"
-            correct: false
-          - value: "MonotonicClock"
-            correct: false
-          - value: "SystemClock"
-            correct: false
-        explanation: >-
-          MockClock is constructed with a fixed time and its sleep() advances time
-          virtually (no real waiting), perfect for TTL/expiry tests. NativeClock is
-          the real prod clock; MonotonicClock is for durations.
-        documentation: "https://symfony.com/doc/current/components/clock.html#usage-in-tests"
-      - id: "MISC-CLOCK-03"
-        question: "Which clock is best for measuring elapsed durations and is immune to system clock changes?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/clock"
-        concepts: ["monotonic-clock", "durations"]
-        syllabus: "Miscellaneous → Clock"
-        answers:
-          - value: "MonotonicClock"
-            correct: true
-          - value: "NativeClock"
-            correct: false
-          - value: "MockClock"
-            correct: false
-          - value: "DatePoint"
-            correct: false
-        explanation: >-
-          MonotonicClock uses a high-resolution monotonic source unaffected by NTP or
-          manual clock adjustments, so duration diffs stay accurate. Wall-clock
-          NativeClock can jump; MockClock is for tests; DatePoint is a date type, not
-          a clock.
-        documentation: "https://symfony.com/doc/current/components/clock.html"
-      - id: "MISC-CLOCK-04"
-        question: "True or False: you should guard ClockInterface::now() with a nullsafe operator because it may return null with a frozen MockClock."
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/clock"
-        concepts: ["null", "now", "non-nullable"]
-        syllabus: "Miscellaneous → Clock"
-        answers:
-          - value: "False"
-            correct: true
-          - value: "True"
-            correct: false
-        explanation: >-
-          False. now() is typed : \\DateTimeImmutable and always returns a DatePoint,
-          even with a frozen MockClock, so ?-> is unnecessary. The real bug is
-          comparing a MockClock time against a live new \\DateTime() — read time from
-          the clock on both sides.
-        documentation: "https://symfony.com/doc/current/components/clock.html"
-
-  - name: "Miscellaneous — Debugging, Errors & Profiler"
-    questions:
-      - id: "MISC-DEBUG-01"
-        question: "Which object does VarDumper's VarCloner produce before rendering?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/debugging"
-        concepts: ["vardumper", "varcloner", "data"]
-        syllabus: "Miscellaneous → Code Debugging"
-        answers:
-          - value: "A Data object"
-            correct: true
-          - value: "A Response"
-            correct: false
-          - value: "A FlattenException"
-            correct: false
-          - value: "A StopwatchEvent"
-            correct: false
-        explanation: >-
-          The cloner captures the variable into an immutable, depth-limited Data object,
-          which a CliDumper or HtmlDumper then renders — separating capture from output.
-        documentation: "https://symfony.com/doc/current/components/var_dumper.html"
-      - id: "MISC-DEBUG-02"
-        question: "What does dd() do that dump() does not?"
-        type: "trap"
-        difficulty: "easy"
-        subchapter: "miscellaneous/debugging"
-        concepts: ["dump", "dd", "exit"]
-        syllabus: "Miscellaneous → Code Debugging"
-        answers:
-          - value: "It stops execution (exit) after dumping"
-            correct: true
-          - value: "It writes the dump to a log file"
-            correct: false
-          - value: "It serializes the value to JSON"
-            correct: false
-          - value: "It dumps only scalar values"
-            correct: false
-        explanation: >-
-          dd() means 'dump and die': it dumps then calls exit, halting the script.
-          dump() records the variable and lets execution continue (the dump is shown
-          in the toolbar/collector).
-        documentation: "https://symfony.com/doc/current/components/var_dumper.html#the-dump-function"
-      - id: "MISC-DEBUG-03"
-        question: "What unit does StopwatchEvent::getDuration() use, and when is the debug.stopwatch service available?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/debugging"
-        concepts: ["stopwatch", "milliseconds", "debug-only"]
-        syllabus: "Miscellaneous → Code Debugging"
-        answers:
-          - value: "Milliseconds; the service exists only when debug/the profiler is enabled"
-            correct: true
-          - value: "Seconds; always available in every environment"
-            correct: false
-          - value: "Microseconds; only in prod"
-            correct: false
-          - value: "Nanoseconds; only in tests"
-            correct: false
-        explanation: >-
-          getDuration() returns milliseconds, and the autowirable debug.stopwatch
-          service is only registered in debug (dev/test). Injecting Stopwatch in prod
-          therefore causes a wiring error.
-        documentation: "https://symfony.com/doc/current/components/stopwatch.html"
-      - id: "MISC-DEBUG-04"
-        question: "A service that autowires Symfony\\Component\\Stopwatch\\Stopwatch works in dev but fails to boot in prod. Why?"
-        type: "debug"
-        difficulty: "medium"
-        subchapter: "miscellaneous/debugging"
-        concepts: ["stopwatch", "debug-only", "wiring"]
-        syllabus: "Miscellaneous → Code Debugging"
-        answers:
-          - value: "The debug.stopwatch service exists only in debug mode, so the dependency is missing in prod"
-            correct: true
-          - value: "Stopwatch requires the profiler bundle in prod"
-            correct: false
-          - value: "getDuration() throws in prod"
-            correct: false
-          - value: "Autowiring is disabled in prod"
-            correct: false
-        explanation: >-
-          Stopwatch's framework service is registered only when debug is enabled, so
-          in prod there is nothing to inject and the container fails. Use it for
-          ad-hoc dev profiling only; for prod metrics use real observability.
-        documentation: "https://symfony.com/doc/current/components/stopwatch.html"
-      - id: "MISC-ERR-01"
-        question: "An uncaught exception that does NOT implement HttpExceptionInterface produces which status code?"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/error-handling"
-        concepts: ["error-handling", "http-exception", "status-code"]
-        syllabus: "Miscellaneous → Error Handling"
-        answers:
-          - value: "500"
-            correct: true
-          - value: "404"
-            correct: false
-          - value: "400"
-            correct: false
-          - value: "200"
-            correct: false
-        explanation: >-
-          Only HttpExceptionInterface carries a custom status code; any other throwable
-          defaults to HTTP 500 via the error controller.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
-      - id: "MISC-ERR-02"
-        question: "What does the ErrorHandler component do with a PHP warning or notice?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/error-handling"
-        concepts: ["error-handler", "error-exception", "set-error-handler"]
-        syllabus: "Miscellaneous → Error Handling"
-        answers:
-          - value: "Converts it into a catchable \\ErrorException via set_error_handler()"
-            correct: true
-          - value: "Silently ignores it"
-            correct: false
-          - value: "Writes it directly into the response body"
-            correct: false
-          - value: "Converts it into an HttpException"
-            correct: false
-        explanation: >-
-          ErrorHandler registers set_error_handler() to throw \\ErrorException for PHP
-          errors (warnings, notices, fatals via a shutdown function), making them
-          catchable. It does not turn them into HttpExceptions.
-        documentation: "https://symfony.com/doc/current/components/error_handler.html"
-      - id: "MISC-ERR-03"
-        question: "Which serializable object represents a throwable for rendering and logging?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/error-handling"
-        concepts: ["flatten-exception", "error-renderer"]
-        syllabus: "Miscellaneous → Error Handling"
-        answers:
-          - value: "FlattenException"
-            correct: true
-          - value: "HttpException"
-            correct: false
-          - value: "ErrorEvent"
-            correct: false
-          - value: "ExceptionListener"
-            correct: false
-        explanation: >-
-          Throwables are normalised into a FlattenException — a serializable snapshot
-          (class, message, status, trace) that error renderers (HTML/JSON/XML) turn
-          into output and that is safe to log. HttpException is a throwable, not the
-          snapshot.
-        documentation: "https://symfony.com/doc/current/components/error_handler.html"
-      - id: "MISC-ERR-04"
-        question: "In a controller, which throw produces a 404 rendered by the framework error controller?"
-        type: "scenario"
-        difficulty: "medium"
-        subchapter: "miscellaneous/error-handling"
-        concepts: ["not-found-http-exception", "status-code", "error-controller"]
-        syllabus: "Miscellaneous → Error Handling"
-        answers:
-          - value: "throw new NotFoundHttpException('...') — it implements HttpExceptionInterface with status 404"
-            correct: true
-          - value: "return new Response('', 404) is required; exceptions always give 500"
-            correct: false
-          - value: "throw new \\RuntimeException('not found')"
-            correct: false
-          - value: "throw new \\InvalidArgumentException('404')"
-            correct: false
-        explanation: >-
-          NotFoundHttpException implements HttpExceptionInterface, so the error
-          controller maps it to 404 via getStatusCode(). A plain \\RuntimeException or
-          \\InvalidArgumentException does not carry a status and becomes 500. You do
-          not need to build the Response manually.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
-      - id: "MISC-PROF-01"
-        question: "When does the Web Profiler collect data for a request?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/profiler"
-        concepts: ["profiler", "data-collector", "kernel-response"]
-        syllabus: "Miscellaneous → Web Profiler"
-        answers:
-          - value: "On kernel.response, with late collectors running at kernel.terminate"
-            correct: true
-          - value: "On kernel.request only"
-            correct: false
-          - value: "During container compilation"
-            correct: false
-          - value: "Only in the CLI"
-            correct: false
-        explanation: >-
-          Profiler::collect() runs on kernel.response, invoking each DataCollector;
-          LateDataCollectorInterface::lateCollect() runs later at terminate for data
-          not complete during the response.
-        documentation: "https://symfony.com/doc/current/profiler.html"
-      - id: "MISC-PROF-02"
-        question: "Which service tag registers a custom data collector (with a toolbar/panel)?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/profiler"
-        concepts: ["data-collector", "tag", "template"]
-        syllabus: "Miscellaneous → Web Profiler"
-        answers:
-          - value: "data_collector (with a `template` attribute for the panel)"
-            correct: true
-          - value: "kernel.collector"
-            correct: false
-          - value: "profiler.panel"
-            correct: false
-          - value: "web_profiler.collector"
-            correct: false
-        explanation: >-
-          The data_collector tag wires a DataCollectorInterface; supplying a
-          `template` attribute makes its toolbar badge and panel appear. Autoconfigure
-          applies the tag automatically for services implementing the interface.
-        documentation: "https://symfony.com/doc/current/profiler/data_collector.html"
-      - id: "MISC-PROF-03"
-        question: "A custom collector storing a PDO connection in $this->data breaks profile storage. Why?"
-        type: "debug"
-        difficulty: "medium"
-        subchapter: "miscellaneous/profiler"
-        concepts: ["data-collector", "serializable", "reset"]
-        syllabus: "Miscellaneous → Web Profiler"
-        answers:
-          - value: "$this->data is serialized to storage (via VarDumper's cloner); a live connection/resource is not serializable"
-            correct: true
-          - value: "PDO is banned from all services"
-            correct: false
-          - value: "Collectors may only store strings"
-            correct: false
-          - value: "The data_collector tag rejects objects"
-            correct: false
-        explanation: >-
-          Profiles are persisted per token, so $this->data must be serializable —
-          store scalar/array (VarDumper-clonable) data, not live resources like a PDO
-          connection or an entity with a connection. Implement reset() for worker
-          reuse.
-        documentation: "https://symfony.com/doc/current/profiler/data_collector.html"
-      - id: "MISC-PROF-04"
-        question: "Your metric is only complete after the response is sent. Which interface should the collector implement?"
-        type: "internals"
-        difficulty: "hard"
-        subchapter: "miscellaneous/profiler"
-        concepts: ["late-data-collector", "terminate", "lifecycle"]
-        syllabus: "Miscellaneous → Web Profiler"
-        answers:
-          - value: "LateDataCollectorInterface (its lateCollect() runs at kernel.terminate)"
-            correct: true
-          - value: "DataCollectorInterface only; collect() runs after terminate"
-            correct: false
-          - value: "EventSubscriberInterface on kernel.request"
-            correct: false
-          - value: "CacheWarmerInterface"
-            correct: false
-        explanation: >-
-          Normal collect() runs on kernel.response, too early for post-response data
-          (final dumps, cache calls). LateDataCollectorInterface::lateCollect() runs
-          later at terminate, when that data is complete.
-        documentation: "https://symfony.com/doc/current/profiler/data_collector.html"
-
-  - name: "Miscellaneous — Intl, Filesystem & Finder"
-    questions:
-      - id: "MISC-INTL-01"
-        question: "Which mechanism does Symfony 8 use for translation pluralization?"
-        type: "single"
-        difficulty: "medium"
-        subchapter: "miscellaneous/intl"
-        concepts: ["translation", "icu", "pluralization"]
-        syllabus: "Miscellaneous → Internationalization"
-        answers:
-          - value: "ICU MessageFormat, e.g. {count, plural, one {…} other {# …}}"
-            correct: true
-          - value: "The singular|plural pipe syntax"
-            correct: false
-          - value: "A %count% placeholder only"
-            correct: false
-          - value: "Separate keys per number"
-            correct: false
-        explanation: >-
-          ICU MessageFormat handles plural/select rules with locale-aware categories
-          (one/few/many/other); the old pipe syntax is legacy.
-        documentation: "https://symfony.com/doc/current/translation/message_format.html"
-      - id: "MISC-INTL-02"
-        question: "What does the translator return when a message id has no translation in the active locale or its fallbacks?"
-        type: "trap"
-        difficulty: "easy"
-        subchapter: "miscellaneous/intl"
-        concepts: ["translation", "missing-key", "fallback"]
-        syllabus: "Miscellaneous → Internationalization"
-        answers:
-          - value: "The message id itself (and it is logged in dev)"
-            correct: true
-          - value: "An empty string"
-            correct: false
-          - value: "A TranslationException"
-            correct: false
-          - value: "null"
-            correct: false
-        explanation: >-
-          A missing translation returns the untranslated id, not an error or empty
-          string, so the UI degrades gracefully. In dev the miss is logged so you can
-          fix the catalogue.
-        documentation: "https://symfony.com/doc/current/translation.html"
-      - id: "MISC-INTL-03"
-        question: "Which class returns the localized display name of a country code?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/intl"
-        concepts: ["intl", "countries", "icu-data"]
-        syllabus: "Miscellaneous → Internationalization"
-        answers:
-          - value: "Symfony\\Component\\Intl\\Countries (Countries::getName('FR'))"
-            correct: true
-          - value: "Symfony\\Component\\Locale\\Country"
-            correct: false
-          - value: "Symfony\\Component\\Translation\\Countries"
-            correct: false
-          - value: "Symfony\\Component\\Intl\\Locale"
-            correct: false
-        explanation: >-
-          Countries::getName() reads the bundled ICU dataset and returns the name in
-          the current/requested locale. Related classes are Languages, Locales,
-          Currencies and Timezones. The other namespaces do not exist.
-        documentation: "https://symfony.com/doc/current/components/intl.html"
-      - id: "MISC-INTL-04"
-        question: "What is the default translation domain, and what file naming applies ICU formatting?"
-        type: "config"
-        difficulty: "medium"
-        subchapter: "miscellaneous/intl"
-        concepts: ["domain", "intl-icu", "catalogue"]
-        syllabus: "Miscellaneous → Internationalization"
-        answers:
-          - value: "Default domain is messages; the +intl-icu suffix (messages+intl-icu.<locale>.yaml) enables ICU formatting"
-            correct: true
-          - value: "Default domain is default; ICU is always applied to every file"
-            correct: false
-          - value: "Default domain is translations; ICU needs a .icu extension"
-            correct: false
-          - value: "There is no default domain; you must always pass one"
-            correct: false
-        explanation: >-
-          When no domain is passed, trans() uses messages; validators and security
-          are separate domains. ICU MessageFormat is applied to catalogues named with
-          the +intl-icu suffix — forgetting it means ICU rules are not parsed.
-        documentation: "https://symfony.com/doc/current/translation/message_format.html"
-      - id: "MISC-FS-01"
-        question: "What makes Filesystem::dumpFile() safe against partial reads?"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "miscellaneous/filesystem-finder"
-        concepts: ["filesystem", "dumpfile", "atomic"]
-        syllabus: "Miscellaneous → Filesystem & Finder"
-        answers:
-          - value: "It writes to a temporary file then atomically renames it into place"
-            correct: true
-          - value: "It acquires an flock on the file"
-            correct: false
-          - value: "It compresses the content"
-            correct: false
-          - value: "It buffers writes in memory forever"
-            correct: false
-        explanation: >-
-          dumpFile() writes to a temp file and renames it, so a reader always sees
-          either the old content or the complete new content, never a half-written
-          file. appendToFile(), by contrast, is not atomic.
-        documentation: "https://symfony.com/doc/current/components/filesystem.html"
-      - id: "MISC-FS-02"
-        question: "Which Finder method defines the directories to search?"
-        type: "single"
-        difficulty: "easy"
-        subchapter: "miscellaneous/filesystem-finder"
-        concepts: ["finder", "in", "directories"]
-        syllabus: "Miscellaneous → Filesystem & Finder"
-        answers:
-          - value: "in()"
-            correct: true
-          - value: "from()"
-            correct: false
-          - value: "search()"
-            correct: false
-          - value: "path()"
-            correct: false
-        explanation: >-
-          Finder::in() sets the search directories; without it the Finder throws. It
-          yields Symfony SplFileInfo objects with helpers like getRelativePathname().
-        documentation: "https://symfony.com/doc/current/components/finder.html"
-      - id: "MISC-FS-03"
-        question: "How does Symfony\\Component\\Filesystem\\Filesystem signal a failed operation (e.g. copy())?"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/filesystem-finder"
-        concepts: ["filesystem", "io-exception", "error-handling"]
-        syllabus: "Miscellaneous → Filesystem & Finder"
-        answers:
-          - value: "It throws an IOExceptionInterface (it does not return false)"
-            correct: true
-          - value: "It returns false, like the native PHP functions"
-            correct: false
-          - value: "It returns null"
-            correct: false
-          - value: "It triggers a PHP warning only"
-            correct: false
-        explanation: >-
-          Unlike native file functions that return false, Filesystem methods throw
-          IOExceptionInterface on failure, so errors cannot be silently ignored. Also
-          note Path helpers manipulate path strings only and never touch the disk.
-        documentation: "https://symfony.com/doc/current/components/filesystem.html#error-handling"
-      - id: "MISC-FS-04"
-        question: "A Finder query returns directories as well as files. What is missing?"
-        type: "debug"
-        difficulty: "medium"
-        subchapter: "miscellaneous/filesystem-finder"
-        concepts: ["finder", "files", "directories"]
-        syllabus: "Miscellaneous → Filesystem & Finder"
-        answers:
-          - value: "A ->files() call — without files() or directories() the Finder yields both"
-            correct: true
-          - value: "A ->name() filter — name() restricts to files"
-            correct: false
-          - value: "A ->in() call — in() excludes directories"
-            correct: false
-          - value: "Nothing; Finder always returns files only"
-            correct: false
-        explanation: >-
-          Finder yields both files and directories unless you narrow it with files()
-          (or directories()). name()/in() do not restrict the entry type. Iterated
-          results are Finder SplFileInfo objects.
-        documentation: "https://symfony.com/doc/current/components/finder.html"
-  - name: "Miscellaneous — Multiple Choice Drills"
-    questions:
-      - id: "MISC-MC-01"
-        type: "multiple"
-        difficulty: "medium"
-        subchapter: "miscellaneous/cache"
-        concepts: ["cache-contracts", "tags", "stampede-protection"]
-        syllabus: "Miscellaneous → Cache"
-        question: "Which of the following statements are true about the Symfony Cache component? (select all that apply)"
-        answers:
-          - value: "CacheInterface::get($key, $callback) runs the callback only on a cache miss and stores its return value"
-            correct: true
-          - value: "Cache tags require a tag-aware pool (TagAwareAdapter or tags: true); calling $item->tag() on a plain pool does not work"
-            correct: true
-          - value: "If the callback returns null, that null is stored and later calls return it as a hit until it expires"
-            correct: true
-          - value: "PSR-16 (SimpleCache) supports cache tags and deferred saves just like PSR-6"
-            correct: false
-          - value: "CacheInterface::get() returns null to signal a cache miss"
-            correct: false
-        explanation: >-
-          The contracts get() computes-and-stores on miss, tags only work on a
-          TagAwareAdapter/pool configured with tags: true, and a stored null is a
-          valid cached value that counts as a hit. PSR-16 has no tags and no deferred
-          saves (those are PSR-6 features), and get() never returns null to mean
-          "miss" — on a miss it runs the callback and returns its result.
-        documentation: "https://symfony.com/doc/current/cache.html"
-      - id: "MISC-MC-02"
-        type: "multiple"
-        difficulty: "medium"
-        subchapter: "miscellaneous/clock"
-        concepts: ["clock-interface", "mock-clock", "date-point"]
-        syllabus: "Miscellaneous → Clock"
-        question: "Which of the following statements are true about the Symfony Clock component? (select all that apply)"
-        answers:
-          - value: "ClockInterface::now() returns an immutable DatePoint (a \\DateTimeImmutable subclass), never a mutable \\DateTime"
-            correct: true
-          - value: "MockClock::sleep() advances virtual time instantly, with no real delay — ideal for TTL/expiry tests"
-            correct: true
-          - value: "The framework autowires MockClock as the default clock in the dev environment"
-            correct: false
-          - value: "MonotonicClock is meant for reading the wall-clock time and is affected by system clock (NTP) adjustments"
-            correct: false
-        explanation: >-
-          now() is typed to return a \DateTimeImmutable and yields a DatePoint, and
-          MockClock advances time virtually so tests never wait. The default framework
-          clock is NativeClock in every environment (tests swap in MockClock
-          themselves), and MonotonicClock is for measuring durations precisely because
-          it is immune to system clock changes.
-        documentation: "https://symfony.com/doc/current/components/clock.html"
-      - id: "MISC-MC-03"
-        type: "multiple"
-        difficulty: "hard"
-        subchapter: "miscellaneous/lock"
-        out_of_scope: true
-        concepts: ["acquire", "ttl", "stores"]
-        syllabus: "Miscellaneous → Lock"
-        question: "Which of the following statements are true about the Symfony Lock component? (select all that apply)"
-        answers:
-          - value: "acquire() is non-blocking by default: it returns false immediately when the lock is already held"
-            correct: true
-          - value: "FlockStore and SemaphoreStore only guarantee mutual exclusion on a single machine"
-            correct: true
-          - value: "Locks have a TTL (300 seconds by default), and long jobs must call refresh() to extend it"
-            correct: true
-          - value: "acquire() throws a LockConflictedException whenever the lock is already held"
-            correct: false
-          - value: "A FlockStore is a safe choice to serialise a cron job across multiple servers"
-            correct: false
-        explanation: >-
-          The default acquire(false) returns a plain false when the resource is busy,
-          local stores (flock/semaphore) never protect across machines, and the TTL
-          expires mid-job unless refresh() extends it. Non-blocking acquire() does not
-          throw on contention (only blocking acquisition can end in
-          LockConflictedException), and multi-server exclusion needs a shared store
-          such as Redis or a database.
-        documentation: "https://symfony.com/doc/current/lock.html"
-      - id: "MISC-MC-04"
-        type: "multiple"
-        difficulty: "medium"
-        subchapter: "miscellaneous/mailer"
-        concepts: ["send-email-message", "embedded-images", "twig-bridge"]
-        syllabus: "Miscellaneous → Mailer"
-        question: "Which of the following statements are true about the Symfony Mailer and Mime components? (select all that apply)"
-        answers:
-          - value: "When SendEmailMessage is routed to an async Messenger transport, MailerInterface::send() queues the email instead of delivering it inline"
-            correct: true
-          - value: "Images embedded with embedFromPath() are referenced in the HTML body via a cid: reference"
-            correct: true
-          - value: "TemplatedEmail lives in the Symfony\\Component\\Mime namespace, so no Twig bridge is needed to render templates"
-            correct: false
-          - value: "The Mailer Envelope is just another name for the visible message headers"
-            correct: false
-        explanation: >-
-          With Messenger routing configured, send() dispatches a SendEmailMessage that
-          a worker delivers later, and embedded parts are addressed with cid: in the
-          HTML body. TemplatedEmail is part of the Twig bridge
-          (Symfony\Bridge\Twig\Mime), and the Envelope (sender/recipients used for the
-          SMTP conversation) is distinct from the message headers rendered in the
-          visible email.
-        documentation: "https://symfony.com/doc/current/mailer.html"
-      - id: "MISC-MC-05"
-        type: "multiple"
-        difficulty: "hard"
-        subchapter: "miscellaneous/process"
-        concepts: ["escaping", "timeout", "must-run"]
-        syllabus: "Miscellaneous → Process"
-        question: "Which of the following statements are true about the Symfony Process component? (select all that apply)"
-        answers:
-          - value: "new Process(['git', 'log', $input]) auto-escapes each array element, so $input cannot inject shell syntax"
-            correct: true
-          - value: "The default process timeout is 60 seconds; setTimeout(null) disables it"
-            correct: true
-          - value: "mustRun() throws a ProcessFailedException when the process exits with a non-zero code"
-            correct: true
-          - value: "Process::fromShellCommandline() escapes interpolated variables, making it safe with untrusted input"
-            correct: false
-          - value: "run() returns the process standard output as a string"
-            correct: false
-        explanation: >-
-          The array constructor escapes every argument, the timeout defaults to 60
-          seconds (nullable to disable), and mustRun() throws ProcessFailedException
-          on failure where run() only returns the exit code. fromShellCommandline()
-          runs a raw string through the shell with no escaping (a command-injection
-          risk), and stdout is read via getOutput(), not from run().
-        documentation: "https://symfony.com/doc/current/components/process.html"
-      - id: "MISC-MC-06"
-        type: "multiple"
-        difficulty: "hard"
-        subchapter: "miscellaneous/serializer"
-        concepts: ["normalizers", "groups", "context"]
-        syllabus: "Miscellaneous → Serializer"
-        question: "Which of the following statements are true about the Symfony Serializer? (select all that apply)"
-        answers:
-          - value: "serialize() works in two stages: normalizers turn objects into arrays, then an encoder turns the array into a string"
-            correct: true
-          - value: "#[Groups] attributes only filter properties when a 'groups' key is passed in the serialization context"
-            correct: true
-          - value: "PropertyNormalizer reads and writes through getters and setters, respecting PropertyAccess"
-            correct: false
-          - value: "By default, null-valued properties are omitted from the JSON output"
-            correct: false
-        explanation: >-
-          Serialization is normalize-then-encode, and group filtering is inert until
-          you pass ['groups' => [...]] in the context — without it all readable fields
-          are emitted. PropertyNormalizer accesses properties directly via reflection
-          (ObjectNormalizer is the one using accessors), and null properties are
-          serialized as null unless you enable the skip_null_values context option.
-        documentation: "https://symfony.com/doc/current/serializer.html"
-      - id: "MISC-PROPACC-01"
-        type: "trap"
-        difficulty: "medium"
-        subchapter: "miscellaneous/property-access"
-        concepts: ["getter order", "magic methods", "enableMagicCall"]
-        syllabus: "Miscellaneous → PropertyAccess component"
-        question: "A class exposes its data only through __call() (no real getX()/setX() methods). You read a path with the default PropertyAccessor. What happens?"
-        answers:
-          - value: "It throws — __call fallback is not enabled by default, only __get/__set are"
-            correct: true
-          - value: "It works — all magic methods are enabled by default"
-            correct: false
-          - value: "It returns null silently"
-            correct: false
-          - value: "It works only for reading, never for writing"
-            correct: false
-        explanation: >-
-          PropertyAccessorBuilder defaults to MAGIC_GET | MAGIC_SET only;
-          __call is disabled unless enableMagicCall() is explicitly called.
-          Without it, a class reachable only via __call() is not accessible
-          through the default accessor, and getValue() throws rather than
-          returning null.
-        documentation: "https://symfony.com/doc/current/components/property_access.html#magic-getters-and-setters"
-      - id: "MISC-PROPACC-02"
-        type: "scenario"
-        difficulty: "hard"
-        subchapter: "miscellaneous/property-access"
-        concepts: ["NoSuchPropertyException", "UninitializedPropertyException", "isReadable"]
-        syllabus: "Miscellaneous → PropertyAccess component"
-        question: "getValue() throws UninitializedPropertyException for one object and NoSuchPropertyException for another, both accessed via the same path 'title'. What distinguishes the two cases?"
-        answers:
-          - value: "The first object declares a typed $title property that was never assigned; the second has no title property/getter/setter at all"
-            correct: true
-          - value: "Both exceptions mean exactly the same thing; the name is arbitrary"
-            correct: false
-          - value: "UninitializedPropertyException means the path syntax itself is malformed"
-            correct: false
-          - value: "NoSuchPropertyException only happens with array paths, never objects"
-            correct: false
-        explanation: >-
-          UninitializedPropertyException (a subtype of AccessException) means
-          the property genuinely exists — typed, but never given a value —
-          while NoSuchPropertyException means no getter, public property, or
-          enabled magic method could resolve the path at all. isReadable()
-          would have returned false for both without distinguishing them;
-          only the thrown exception type tells them apart.
-        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/Exception/UninitializedPropertyException.php"
-      - id: "MISC-MC-07"
-        type: "multiple"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["envelope", "send-message-middleware", "delay-stamp"]
-        syllabus: "Miscellaneous → Messenger"
-        question: "Which of the following statements are true about Symfony Messenger? (select all that apply)"
-        answers:
-          - value: "MessageBusInterface::dispatch() always returns an Envelope, never the handler's return value directly"
-            correct: true
-          - value: "When a message is routed to an async transport, SendMessageMiddleware enqueues it and stops the bus, so no handler runs in the dispatching process"
-            correct: true
-          - value: "DelayStamp(5000) delays delivery by 5000 milliseconds (5 seconds)"
-            correct: true
-          - value: "dispatch() returns the handler's result so a query bus needs no stamps"
-            correct: false
-          - value: "Once a message exhausts its retries, it is silently discarded"
-            correct: false
-        explanation: >-
-          dispatch() returns the (possibly stamped) Envelope, routed-async messages
-          are serialized and sent without invoking the handler in-process, and
-          DelayStamp is expressed in milliseconds. A query result must be read from
-          the HandledStamp via $envelope->last(HandledStamp::class)->getResult(), and
-          messages that exhaust max_retries go to the configured failure transport,
-          not into the void.
-        documentation: "https://symfony.com/doc/current/messenger.html"
-      - id: "MISC-MSG-EVENT-01"
-        type: "scenario"
-        difficulty: "hard"
-        subchapter: "miscellaneous/messenger"
-        concepts: ["SendMessageToTransportsEvent", "SendMessageMiddleware", "envelope rewrite"]
-        syllabus: "Miscellaneous → Messenger → Events"
-        question: "You need to tag every outgoing async message with a stamp right before it is handed to its transport, without touching every call site that dispatches it. Which event do you listen to, and why not a Worker* event?"
-        answers:
-          - value: "SendMessageToTransportsEvent — it fires on the dispatch side, before the envelope reaches a transport, and setEnvelope() lets you rewrite it"
-            correct: true
-          - value: "WorkerMessageReceivedEvent — it fires earliest, before anything else happens to the message"
-            correct: false
-          - value: "WorkerRunningEvent — it fires once per worker loop iteration, covering every message"
-            correct: false
-          - value: "WorkerMessageHandledEvent — tagging after handling still reaches the transport in time"
-            correct: false
-        explanation: >-
-          SendMessageToTransportsEvent is raised by SendMessageMiddleware on
-          the dispatching side, before the message is actually sent to any
-          transport, and exposes setEnvelope() to rewrite it (e.g. add a
-          stamp). The Worker* events all fire on the consuming side, inside a
-          `messenger:consume` worker process — too late to affect what gets
-          sent, and irrelevant for synchronous (non-transport) messages.
-        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Event/SendMessageToTransportsEvent.php"
+- name: Miscellaneous — Cache
+  questions:
+  - id: MISC-CACHE-01
+    question: Symfony\Contracts\Cache\CacheInterface::get() runs its callback…
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/cache
+    concepts:
+    - cache-contracts
+    - get-callback
+    - stampede
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: only on a cache miss, then stores and returns the value
+      correct: true
+    - value: on every call
+      correct: false
+    - value: never — you must call save() yourself
+      correct: false
+    - value: only when the beta factor is INF
+      correct: false
+    explanation: The callback computes the value on a miss; the result is persisted and returned. It also
+      provides probabilistic early-expiration stampede protection. Running on every call would defeat
+      caching, and unlike PSR-6 you do not call save() manually.
+    documentation: https://symfony.com/doc/current/cache.html#cache-contracts
+  - id: MISC-CACHE-02
+    question: Which statement about PSR-6 vs PSR-16 is correct?
+    type: trap
+    difficulty: hard
+    subchapter: miscellaneous/cache
+    concepts:
+    - psr-6
+    - psr-16
+    - tags
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: PSR-6 (pools/items) supports deferred saves and, via TagAwareAdapter, tags; PSR-16 (SimpleCache)
+        does not
+      correct: true
+    - value: PSR-16 supports tags but PSR-6 does not
+      correct: false
+    - value: Both are identical key/value APIs
+      correct: false
+    - value: PSR-6 has no expiration support
+      correct: false
+    explanation: PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or tags. PSR-6
+      uses CacheItem objects and supports tags through a TagAwareAdapter as well as expiration.
+    documentation: https://symfony.com/doc/current/components/cache.html
+  - id: MISC-CACHE-03
+    question: Cache stampede protection in Symfony Cache is implemented by…
+    type: internals
+    difficulty: hard
+    subchapter: miscellaneous/cache
+    concepts:
+    - stampede
+    - beta
+    - early-expiration
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: probabilistic early expiration controlled by the $beta factor
+      correct: true
+    - value: a global mutex acquired on every key
+      correct: false
+    - value: disabling TTLs entirely
+      correct: false
+    - value: duplicating the value across all adapters
+      correct: false
+    explanation: As an item nears expiry, one request is probabilistically chosen to recompute early while
+      others serve the cached value ($beta=INF forces it, 0 disables it). There is no per-key mutex.
+    documentation: https://symfony.com/doc/current/cache.html#stampede-prevention
+  - id: MISC-CACHE-04
+    question: Which adapter keeps entries only for the current process (ideal for tests)?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/cache
+    concepts:
+    - array-adapter
+    - tests
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: ArrayAdapter
+      correct: true
+    - value: FilesystemAdapter
+      correct: false
+    - value: RedisAdapter
+      correct: false
+    - value: ApcuAdapter
+      correct: false
+    explanation: ArrayAdapter stores items in memory for the current request/process only, so nothing
+      persists across requests — useful for deterministic tests.
+    documentation: https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
+  - id: MISC-CACHE-05
+    question: Your CacheInterface::get() callback returns null on the first call. What happens on the
+      next call before expiry?
+    type: trap
+    difficulty: hard
+    subchapter: miscellaneous/cache
+    concepts:
+    - 'null'
+    - hit
+    - get-callback
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: null is returned as a cache hit; the callback is NOT run again
+      correct: true
+    - value: The callback runs again because null means a miss
+      correct: false
+    - value: A CacheException is thrown for storing null
+      correct: false
+    - value: The item is deleted automatically
+      correct: false
+    explanation: 'null is a valid cached value: the contracts API stores whatever the callback returns
+      and treats it as a hit until it expires. get() never uses null to mean ''miss'' — that is exactly
+      the PSR-6 footgun (getItem()->get() returning null for both absent and stored-null) that the callback
+      API avoids. Caching ''no result'' as null is fine, but it counts as a hit.'
+    documentation: https://symfony.com/doc/current/cache.html#cache-contracts
+  - id: MISC-CACHE-06
+    question: 'A pool is declared with `tags: true` in cache.yaml. What does this enable?'
+    type: config
+    difficulty: medium
+    subchapter: miscellaneous/cache
+    concepts:
+    - tags
+    - tag-aware-adapter
+    - invalidate
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: Tagging items with $item->tag([...]) and evicting groups via invalidateTags([...])
+      correct: true
+    - value: Automatic compression of cached values
+      correct: false
+    - value: Sharing the pool across all servers
+      correct: false
+    - value: Disabling stampede protection
+      correct: false
+    explanation: '`tags: true` wraps the pool in a TagAwareAdapter implementing TagAwareCacheInterface,
+      so items can carry tags and invalidateTags() evicts all items with a given tag — invalidation by
+      concern rather than by key. Calling $item->tag() on a non-tag-aware pool errors.'
+    documentation: https://symfony.com/doc/current/cache.html#using-cache-tags
+  - id: MISC-CACHE-07
+    question: 'True or False: passing $beta = INF to CacheInterface::get() forces the value to be recomputed
+      immediately.'
+    type: true-false
+    difficulty: medium
+    subchapter: miscellaneous/cache
+    concepts:
+    - beta
+    - early-expiration
+    - stampede
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: 'True'
+      correct: true
+    - value: 'False'
+      correct: false
+    explanation: True. $beta = INF forces early expiration, so the callback runs and the value is refreshed
+      on this call. $beta = 0 disables early expiration entirely; the default (null) picks a sensible
+      probabilistic value.
+    documentation: https://symfony.com/doc/current/cache.html#stampede-prevention
+  - id: MISC-CACHE-08
+    question: Using the raw PSR-6 API, how do you distinguish a stored null value from a missing key?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/cache
+    concepts:
+    - psr-6
+    - isHit
+    - cache-item
+    syllabus: Miscellaneous → Cache
+    answers:
+    - value: Check $item->isHit() — get() returns null for both cases
+      correct: true
+    - value: Compare $item->get() to null
+      correct: false
+    - value: Call $pool->hasKey($key)
+      correct: false
+    - value: Catch a CacheMissException
+      correct: false
+    explanation: With PSR-6, CacheItemInterface::get() returns null both for an absent key and for a genuinely
+      stored null, so you must call isHit() to tell them apart. The contracts callback API sidesteps this
+      ambiguity; there is no hasKey() or miss exception.
+    documentation: https://symfony.com/doc/current/components/cache.html
+- name: Miscellaneous — Serializer
+  questions:
+  - id: MISC-SER-01
+    question: In serialize(), which stage runs first?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/serializer
+    concepts:
+    - normalizer
+    - encoder
+    - pipeline
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: The normalizer (object to array), then the encoder (array to string)
+      correct: true
+    - value: The encoder, then the normalizer
+      correct: false
+    - value: Only the encoder runs
+      correct: false
+    - value: They run concurrently
+      correct: false
+    explanation: 'serialize() normalizes the object to an array/scalars, then encodes that to a string.
+      deserialize() reverses it: decode then denormalize.'
+    documentation: https://symfony.com/doc/current/components/serializer.html
+  - id: MISC-SER-02
+    question: '#[Groups([''read''])] on a property takes effect when…'
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/serializer
+    concepts:
+    - groups
+    - context
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: the context includes ['groups' => ['read']]
+      correct: true
+    - value: always, regardless of context
+      correct: false
+    - value: only during deserialization
+      correct: false
+    - value: the property is public
+      correct: false
+    explanation: Group filtering only applies when matching groups are passed in the context; otherwise
+      the group attribute has no effect and all fields are (de)serialized.
+    documentation: https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes
+  - id: MISC-SER-03
+    question: Which normalizer reads and writes private properties directly via reflection?
+    type: single
+    difficulty: medium
+    subchapter: miscellaneous/serializer
+    concepts:
+    - property-normalizer
+    - reflection
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: PropertyNormalizer
+      correct: true
+    - value: ObjectNormalizer
+      correct: false
+    - value: GetSetMethodNormalizer
+      correct: false
+    - value: JsonEncoder
+      correct: false
+    explanation: PropertyNormalizer accesses object properties directly (including private), whereas ObjectNormalizer
+      uses accessors and the constructor, and GetSetMethodNormalizer uses only get/set methods. JsonEncoder
+      is an encoder, not a normalizer.
+    documentation: https://symfony.com/doc/current/serializer.html#normalizers
+  - id: MISC-SER-04
+    question: By default, what is the Serializer's circular reference limit before it throws?
+    type: trap
+    difficulty: hard
+    subchapter: miscellaneous/serializer
+    concepts:
+    - circular-reference
+    - max-depth
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: '1 (unless a circular reference handler or #[MaxDepth] is set)'
+      correct: true
+    - value: 0 — it never throws
+      correct: false
+    - value: Unlimited
+      correct: false
+    - value: '10'
+      correct: false
+    explanation: The default circular reference limit is 1; beyond it a CircularReferenceException is
+      thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
+    documentation: https://symfony.com/doc/current/serializer.html#handling-circular-references
+  - id: MISC-SER-05
+    question: 'A UserDto has #[Groups([''read''])] #[SerializedName(''full_name'')] on $name and #[Ignore]
+      on $passwordHash. What is the JSON when serialized with context [''groups'' => [''read'']]?'
+    type: code
+    difficulty: hard
+    subchapter: miscellaneous/serializer
+    concepts:
+    - groups
+    - serialized-name
+    - ignore
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: '{"full_name":"..."} plus any other read-group fields; passwordHash is omitted'
+      correct: true
+    - value: '{"name":"...","passwordHash":"..."}'
+      correct: false
+    - value: All properties, because groups are ignored during serialization
+      correct: false
+    - value: 'An empty object, because #[Ignore] hides everything'
+      correct: false
+    explanation: 'With the read group in context, only read-group properties are emitted; $name is renamed
+      to full_name by #[SerializedName], and #[Ignore] drops passwordHash entirely regardless of group.
+      Groups are honoured only because they are passed in the context.'
+    documentation: https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes
+  - id: MISC-SER-06
+    question: 'What does the framework.serializer.default_context option skip_null_values: true do?'
+    type: config
+    difficulty: medium
+    subchapter: miscellaneous/serializer
+    concepts:
+    - skip-null-values
+    - context
+    - 'null'
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: Omits properties whose value is null from the serialized output
+      correct: true
+    - value: Throws when a property is null
+      correct: false
+    - value: Converts null to an empty string
+      correct: false
+    - value: Only affects deserialization of missing keys
+      correct: false
+    explanation: By default a null property is serialized as \"key\":null. Setting AbstractObjectNormalizer::SKIP_NULL_VALUES
+      (skip_null_values) omits those keys from the payload. The classic bug is a consumer treating an
+      absent key as an error rather than 'the value was null'.
+    documentation: https://symfony.com/doc/current/serializer.html
+  - id: MISC-SER-07
+    question: A private property with no getter is missing from the JSON produced by the default ObjectNormalizer.
+      Why, and how do you fix it?
+    type: debug
+    difficulty: medium
+    subchapter: miscellaneous/serializer
+    concepts:
+    - object-normalizer
+    - property-normalizer
+    - accessors
+    syllabus: Miscellaneous → Serializer
+    answers:
+    - value: ObjectNormalizer uses accessors; add a getter (or use PropertyNormalizer, which reads properties
+        directly)
+      correct: true
+    - value: 'The property must be marked #[Groups] to appear'
+      correct: false
+    - value: You must call serialize() with the 'private' => true context
+      correct: false
+    - value: Private properties can never be serialized in Symfony 8
+      correct: false
+    explanation: ObjectNormalizer reads via getters/issers/hassers and the constructor, so a private property
+      without an accessor is invisible. Provide a getter or switch to PropertyNormalizer, which uses reflection
+      to read properties directly. Groups filter fields but do not expose accessorless private properties.
+    documentation: https://symfony.com/doc/current/serializer.html#normalizers
+- name: Miscellaneous — Configuration & DotEnv
+  questions:
+  - id: MISC-CFG-01
+    question: In which environment is .env.local NOT loaded?
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/configuration
+    concepts:
+    - dotenv
+    - test-env
+    - cascade
+    syllabus: Miscellaneous → Configuration
+    answers:
+    - value: test
+      correct: true
+    - value: dev
+      correct: false
+    - value: prod
+      correct: false
+    - value: staging
+      correct: false
+    explanation: .env.local is intentionally skipped in the test environment so tests run from committed
+      defaults and stay reproducible.
+    documentation: https://symfony.com/doc/current/configuration.html#selecting-the-active-environment
+  - id: MISC-CFG-02
+    question: What does `composer dump-env prod` produce, and what is the effect?
+    type: config
+    difficulty: medium
+    subchapter: miscellaneous/configuration
+    concepts:
+    - dotenv
+    - dump-env
+    - production
+    syllabus: Miscellaneous → Configuration
+    answers:
+    - value: .env.local.php — Symfony loads it directly and skips parsing .env* files
+      correct: true
+    - value: .env.prod — parsed on every request
+      correct: false
+    - value: config/prod.php overriding all bundles
+      correct: false
+    - value: Nothing; it only validates env vars
+      correct: false
+    explanation: The whole .env* cascade is compiled to a plain PHP array in .env.local.php, which Symfony
+      loads directly, avoiding DotEnv parsing on each request.
+    documentation: https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production
+  - id: MISC-CFG-03
+    question: ExpressionLanguage::compile() returns what?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/configuration
+    concepts:
+    - expression-language
+    - compile
+    - evaluate
+    syllabus: Miscellaneous → Configuration
+    answers:
+    - value: A string of PHP source code
+      correct: true
+    - value: The evaluated result value
+      correct: false
+    - value: An AST node object
+      correct: false
+    - value: A boolean success flag
+      correct: false
+    explanation: compile() transpiles an expression to PHP source you can cache/reuse, while evaluate()
+      interprets the expression and returns its value.
+    documentation: https://symfony.com/doc/current/components/expression_language.html
+  - id: MISC-CFG-04
+    question: A .env file sets DATABASE_URL, but a real OS environment variable DATABASE_URL is also exported.
+      Which wins?
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/configuration
+    concepts:
+    - dotenv
+    - precedence
+    - env-vars
+    syllabus: Miscellaneous → Configuration
+    answers:
+    - value: The real OS environment variable — DotEnv never overrides an existing real env var
+      correct: true
+    - value: .env, because it is loaded last
+      correct: false
+    - value: Whichever value is longer
+      correct: false
+    - value: They are concatenated
+      correct: false
+    explanation: Real OS environment variables always take precedence; the DotEnv cascade (.env → .env.local
+      → .env.<env> → .env.<env>.local) only fills values not already set in the real environment. Later
+      .env* files override earlier ones but never a real env var.
+    documentation: https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
+  - id: MISC-CFG-05
+    question: What is the result of ExpressionLanguage::compile('1 + a', ['a'])?
+    type: code
+    difficulty: hard
+    subchapter: miscellaneous/configuration
+    concepts:
+    - expression-language
+    - compile
+    - php-source
+    syllabus: Miscellaneous → Configuration
+    answers:
+    - value: The PHP source string "(1 + $a)"
+      correct: true
+    - value: The integer 1
+      correct: false
+    - value: A closure you can invoke
+      correct: false
+    - value: An exception, because $a is undefined
+      correct: false
+    explanation: 'compile() emits PHP source, turning the variable name a into $a: "(1 + $a)". It does
+      not evaluate anything (so no undefined-variable error) — use evaluate(''1 + a'', [''a'' => 5]) to
+      get the value 6.'
+    documentation: https://symfony.com/doc/current/components/expression_language.html
+  - id: MISC-CFG-06
+    question: Which class merges every config source and validates it against a bundle's Configuration
+      tree?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/configuration
+    concepts:
+    - config
+    - processor
+    - tree-builder
+    syllabus: Miscellaneous → Configuration
+    answers:
+    - value: Processor (Processor::processConfiguration())
+      correct: true
+    - value: TreeBuilder
+      correct: false
+    - value: FileLocator
+      correct: false
+    - value: ContainerBuilder
+      correct: false
+    explanation: Processor::processConfiguration() merges all sources and validates them against the tree
+      returned by the Configuration class, applying defaults and constraints. TreeBuilder only defines
+      the schema; FileLocator finds files.
+    documentation: https://symfony.com/doc/current/components/config/definition.html
+- name: Miscellaneous — Deployment
+  questions:
+  - id: MISC-DEPLOY-01
+    question: Which composer flag excludes require-dev packages when deploying to production?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/deployment
+    concepts:
+    - composer
+    - no-dev
+    - production
+    syllabus: Miscellaneous → Deployment
+    answers:
+    - value: --no-dev
+      correct: true
+    - value: --prod
+      correct: false
+    - value: --production
+      correct: false
+    - value: --optimize
+      correct: false
+    explanation: '`composer install --no-dev` skips require-dev packages (profiler, PHPUnit, etc.). Add
+      --optimize-autoloader (or --classmap-authoritative) to build an optimised classmap and cut per-class
+      filesystem stat calls.'
+    documentation: https://symfony.com/doc/current/deployment.html
+  - id: MISC-DEPLOY-02
+    question: You changed a YAML config file and redeployed to prod, but the change has no effect. Why?
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/deployment
+    concepts:
+    - cache
+    - compiled-container
+    - warmup
+    syllabus: Miscellaneous → Deployment
+    answers:
+    - value: Prod loads the compiled container as-is and does not auto-detect config changes; you must
+        clear/warm the cache on deploy
+      correct: true
+    - value: Prod re-reads YAML on every request, so a restart is needed
+      correct: false
+    - value: YAML config is ignored in prod; only PHP config works
+      correct: false
+    - value: APP_DEBUG must be 1 for config to reload
+      correct: false
+    explanation: In prod the compiled container in var/cache/prod is loaded as-is with no freshness checks
+      (those exist only in debug), so config changes require cache:clear + cache:warmup on deploy. Enabling
+      APP_DEBUG in prod is unsafe and not the fix.
+    documentation: https://symfony.com/doc/current/deployment.html
+  - id: MISC-DEPLOY-03
+    question: Why set opcache.validate_timestamps=0 in production?
+    type: config
+    difficulty: medium
+    subchapter: miscellaneous/deployment
+    concepts:
+    - opcache
+    - bytecode
+    - performance
+    syllabus: Miscellaneous → Deployment
+    answers:
+    - value: To skip per-request file-modification checks and always serve cached bytecode (reset opcache
+        on deploy instead)
+      correct: true
+    - value: To enable debug mode
+      correct: false
+    - value: To disable opcache entirely
+      correct: false
+    - value: To force recompilation on every request
+      correct: false
+    explanation: With immutable deploys, disabling timestamp validation maximises opcache hits by not
+      stat-ing files each request. Because opcache then never notices new files, you must reset opcache
+      (or the PHP process manager) on each deploy so the new bytecode is loaded.
+    documentation: https://symfony.com/doc/current/performance.html
+  - id: MISC-DEPLOY-04
+    question: Which ordered command sequence is correct for a from-scratch prod deploy?
+    type: scenario
+    difficulty: medium
+    subchapter: miscellaneous/deployment
+    concepts:
+    - deploy-order
+    - dump-env
+    - cache-warmup
+    syllabus: Miscellaneous → Deployment
+    answers:
+    - value: composer install --no-dev --optimize-autoloader → composer dump-env prod → cache:clear →
+        cache:warmup → reset opcache
+      correct: true
+    - value: cache:warmup → composer install → dump-env prod → go live
+      correct: false
+    - value: composer update → APP_DEBUG=1 → cache:clear
+      correct: false
+    - value: cache:clear → composer install --dev → dump-env dev
+      correct: false
+    explanation: You install prod deps first, compile the env cascade with dump-env prod, then clear and
+      warm the cache so the first live request is fast, and finally reset opcache. Warming before installing,
+      or shipping dev deps / APP_DEBUG=1, are wrong.
+    documentation: https://symfony.com/doc/current/deployment.html
+  - id: MISC-DEPLOY-05
+    question: What does `cache:clear` run, by default, in addition to removing stale cache?
+    type: internals
+    difficulty: hard
+    subchapter: miscellaneous/deployment
+    concepts:
+    - cache-warmer
+    - warmup
+    - cache-warmer-interface
+    syllabus: Miscellaneous → Deployment
+    answers:
+    - value: The cache warmers (CacheWarmerInterface) that pre-build the container, routing, Twig cache
+        and metadata
+      correct: true
+    - value: The database migrations
+      correct: false
+    - value: The Messenger workers
+      correct: false
+    - value: composer install
+      correct: false
+    explanation: cache:clear removes stale cache and then runs the CacheWarmerInterface warmers to pre-build
+      the container, routing matcher/generator, Twig template cache and validator/serializer metadata.
+      cache:warmup warms without clearing. Migrations, workers and composer are separate steps.
+    documentation: https://symfony.com/doc/current/deployment.html
+  - id: MISC-DEPLOY-06
+    question: 'True or False: leaving APP_DEBUG=1 in production is acceptable as long as the profiler
+      is disabled.'
+    type: true-false
+    difficulty: easy
+    subchapter: miscellaneous/deployment
+    concepts:
+    - app-debug
+    - security
+    - performance
+    syllabus: Miscellaneous → Deployment
+    answers:
+    - value: 'True'
+      correct: false
+    - value: 'False'
+      correct: true
+    explanation: False. APP_DEBUG=1 enables verbose error pages that leak stack traces and internals,
+      re-enables freshness checks and other overhead, and generally exposes the app. Production must run
+      APP_DEBUG=0.
+    documentation: https://symfony.com/doc/current/deployment.html
+- name: Miscellaneous — Process
+  questions:
+  - id: MISC-PROC-01
+    question: Which Process constructor auto-escapes each argument?
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/process
+    concepts:
+    - process
+    - escaping
+    - security
+    syllabus: Miscellaneous → Process
+    answers:
+    - value: new Process(['git', 'log', '--oneline'])
+      correct: true
+    - value: Process::fromShellCommandline('git log --oneline')
+      correct: false
+    - value: Both escape equally
+      correct: false
+    - value: Neither escapes anything
+      correct: false
+    explanation: The array form escapes each element automatically. fromShellCommandline() runs a raw
+      shell string and does not escape, risking command injection if you interpolate untrusted input.
+    documentation: https://symfony.com/doc/current/components/process.html
+  - id: MISC-PROC-02
+    question: What does Process::run() return?
+    type: internals
+    difficulty: easy
+    subchapter: miscellaneous/process
+    concepts:
+    - process
+    - run
+    - exit-code
+    syllabus: Miscellaneous → Process
+    answers:
+    - value: The integer exit code
+      correct: true
+    - value: The stdout as a string
+      correct: false
+    - value: void
+      correct: false
+    - value: A boolean success flag
+      correct: false
+    explanation: run() blocks until completion and returns the exit code; use getOutput() for stdout and
+      mustRun() to throw a ProcessFailedException on failure.
+    documentation: https://symfony.com/doc/current/components/process.html#usage
+  - id: MISC-PROC-03
+    question: What is the default Process timeout?
+    type: trap
+    difficulty: easy
+    subchapter: miscellaneous/process
+    concepts:
+    - process
+    - timeout
+    syllabus: Miscellaneous → Process
+    answers:
+    - value: 60 seconds
+      correct: true
+    - value: Unlimited
+      correct: false
+    - value: 30 seconds
+      correct: false
+    - value: 300 seconds
+      correct: false
+    explanation: The default timeout is 60 seconds; pass null to setTimeout() to disable it. Exceeding
+      it throws a ProcessTimedOutException.
+    documentation: https://symfony.com/doc/current/components/process.html#process-timeout
+  - id: MISC-PROC-04
+    question: You build a command from user input using Process::fromShellCommandline('convert '.$userInput).
+      What is the risk and the fix?
+    type: debug
+    difficulty: medium
+    subchapter: miscellaneous/process
+    concepts:
+    - command-injection
+    - escaping
+    - array-constructor
+    syllabus: Miscellaneous → Process
+    answers:
+    - value: Command injection — use the array constructor new Process(['convert', $userInput]) so each
+        argument is auto-escaped
+      correct: true
+    - value: None; fromShellCommandline escapes arguments for you
+      correct: false
+    - value: A timeout error; raise setTimeout()
+      correct: false
+    - value: It only fails on Windows; add a shebang
+      correct: false
+    explanation: fromShellCommandline runs the string through /bin/sh with no escaping, so untrusted input
+      can inject shell metacharacters. The array constructor escapes each element as a single argument,
+      eliminating the injection vector. This is unrelated to timeouts or platform.
+    documentation: https://symfony.com/doc/current/components/process.html
+  - id: MISC-PROC-05
+    question: Which call runs a process and throws automatically on a non-zero exit code?
+    type: code
+    difficulty: medium
+    subchapter: miscellaneous/process
+    concepts:
+    - mustRun
+    - process-failed-exception
+    - run
+    syllabus: Miscellaneous → Process
+    answers:
+    - value: mustRun() — it throws ProcessFailedException on failure
+      correct: true
+    - value: run() — it throws ProcessFailedException on failure
+      correct: false
+    - value: start() — it throws immediately on failure
+      correct: false
+    - value: wait() — it converts the exit code into an exception
+      correct: false
+    explanation: mustRun() behaves like run() but throws ProcessFailedException when the process exits
+      non-zero. run() simply returns the integer exit code and you check isSuccessful() yourself; start()/wait()
+      are for async execution.
+    documentation: https://symfony.com/doc/current/components/process.html#usage
+- name: Miscellaneous — Lock
+  questions:
+  - id: MISC-LOCK-01
+    question: LockInterface::acquire() called with no argument is…
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/lock
+    out_of_scope: true
+    concepts:
+    - lock
+    - acquire
+    - non-blocking
+    syllabus: Miscellaneous → Lock
+    answers:
+    - value: non-blocking — it returns false immediately if the lock is held
+      correct: true
+    - value: blocking — it waits until the lock is free
+      correct: false
+    - value: throwing an exception if the lock is held
+      correct: false
+    - value: always successful
+      correct: false
+    explanation: acquire() defaults to non-blocking; pass true to block until the resource becomes available
+      (store permitting). It returns a boolean false when held, it does not throw, so `if (!$lock->acquire())
+      { return; }` is the correct guard.
+    documentation: https://symfony.com/doc/current/lock.html#blocking-locks
+  - id: MISC-LOCK-02
+    question: Which lock store provides mutual exclusion across multiple servers?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/lock
+    out_of_scope: true
+    concepts:
+    - lock
+    - store
+    - distributed
+    syllabus: Miscellaneous → Lock
+    answers:
+    - value: RedisStore
+      correct: true
+    - value: FlockStore
+      correct: false
+    - value: SemaphoreStore
+      correct: false
+    - value: InMemoryStore
+      correct: false
+    explanation: Flock and Semaphore stores are local to one machine, and InMemoryStore is per-process
+      (tests). Shared stores like Redis (or a database store) coordinate locks across servers.
+    documentation: https://symfony.com/doc/current/components/lock.html#available-stores
+  - id: MISC-LOCK-03
+    question: Why call refresh() during a long critical section?
+    type: scenario
+    difficulty: medium
+    subchapter: miscellaneous/lock
+    out_of_scope: true
+    concepts:
+    - lock
+    - ttl
+    - refresh
+    syllabus: Miscellaneous → Lock
+    answers:
+    - value: To extend the lock's TTL so it is not considered expired mid-job
+      correct: true
+    - value: To release then reacquire the lock
+      correct: false
+    - value: To switch to a different store
+      correct: false
+    - value: To convert it to a shared lock
+      correct: false
+    explanation: Locks have a TTL to avoid deadlocks after crashes. refresh() prolongs it so a still-working
+      owner keeps exclusivity; without it another process could acquire the lock after the TTL, breaking
+      mutual exclusion.
+    documentation: https://symfony.com/doc/current/components/lock.html#expiring-locks
+  - id: MISC-LOCK-04
+    question: Which is the correct guard to skip work another process is already doing?
+    type: code
+    difficulty: medium
+    subchapter: miscellaneous/lock
+    out_of_scope: true
+    concepts:
+    - acquire
+    - boolean
+    - guard
+    syllabus: Miscellaneous → Lock
+    answers:
+    - value: if (!$lock->acquire()) { return; }
+      correct: true
+    - value: try { $lock->acquire(); } catch (LockConflictedException) { return; }
+      correct: false
+    - value: if ($lock->acquire() === null) { return; }
+      correct: false
+    - value: if ($lock->isLocked()) { return; }
+      correct: false
+    explanation: Non-blocking acquire() returns false when the resource is held, so !$lock->acquire()
+      is the idiomatic early-return guard. It does not return null and does not throw on contention (only
+      blocking acquire(true) may throw LockConflictedException). Forgetting to check the boolean means
+      entering the critical section unprotected.
+    documentation: https://symfony.com/doc/current/lock.html
+  - id: MISC-LOCK-05
+    question: What is the default TTL of a lock created via LockFactory::createLock($resource)?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/lock
+    out_of_scope: true
+    concepts:
+    - lock-factory
+    - ttl
+    - auto-release
+    syllabus: Miscellaneous → Lock
+    answers:
+    - value: 300 seconds (5 minutes), with autoRelease on by default
+      correct: true
+    - value: 60 seconds
+      correct: false
+    - value: Unlimited (no TTL)
+      correct: false
+    - value: 30 seconds
+      correct: false
+    explanation: createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true) defaults
+      to a 300 second TTL and releases the lock when the Lock object is destroyed. Long jobs should raise
+      the TTL and call refresh() to avoid premature expiry.
+    documentation: https://symfony.com/doc/current/components/lock.html#expiring-locks
+- name: Miscellaneous — Mailer
+  questions:
+  - id: MISC-MAIL-01
+    question: With Messenger routing configured for emails, MailerInterface::send() will…
+    type: scenario
+    difficulty: medium
+    subchapter: miscellaneous/mailer
+    concepts:
+    - mailer
+    - messenger
+    - async
+    syllabus: Miscellaneous → Mailer
+    answers:
+    - value: dispatch a SendEmailMessage to be delivered by a worker
+      correct: true
+    - value: always send synchronously over SMTP
+      correct: false
+    - value: throw if no worker is running
+      correct: false
+    - value: render but not send the email
+      correct: false
+    explanation: When SendEmailMessage is routed to a transport, send() enqueues it; a worker delivers
+      it later, giving async sending plus retries. It does not throw if a worker is down — the message
+      just waits in the queue.
+    documentation: https://symfony.com/doc/current/mailer.html#sending-messages-async
+  - id: MISC-MAIL-02
+    question: Which class renders Twig templates into an email body?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/mailer
+    concepts:
+    - templated-email
+    - twig-bridge
+    syllabus: Miscellaneous → Mailer
+    answers:
+    - value: Symfony\Bridge\Twig\Mime\TemplatedEmail
+      correct: true
+    - value: Symfony\Component\Mime\Email
+      correct: false
+    - value: Symfony\Component\Mailer\Mailer
+      correct: false
+    - value: Symfony\Component\Mime\Message
+      correct: false
+    explanation: TemplatedEmail (in the Twig bridge) carries htmlTemplate()/textTemplate() and context();
+      a body renderer turns them into MIME parts before sending. Plain Email has no template support.
+    documentation: https://symfony.com/doc/current/mailer.html#twig-html-css
+  - id: MISC-MAIL-03
+    question: How is an inline (embedded) image referenced from an email's HTML body?
+    type: single
+    difficulty: medium
+    subchapter: miscellaneous/mailer
+    concepts:
+    - embed
+    - cid
+    - mime
+    syllabus: Miscellaneous → Mailer
+    answers:
+    - value: 'Via a cid: reference produced by embed()/embedFromPath()'
+      correct: true
+    - value: Only as an absolute external URL
+      correct: false
+    - value: 'As a base64 data: URI hand-written by the developer'
+      correct: false
+    - value: Inline images are not supported
+      correct: false
+    explanation: embed()/embedFromPath() add a DataPart addressed with cid:<name>, which the HTML body
+      references (e.g. <img src="cid:logo">).
+    documentation: https://symfony.com/doc/current/mailer.html#embedding-images
+  - id: MISC-MAIL-04
+    question: In the Mailer, how does the Envelope differ from the message headers?
+    type: internals
+    difficulty: hard
+    subchapter: miscellaneous/mailer
+    concepts:
+    - envelope
+    - headers
+    - smtp
+    syllabus: Miscellaneous → Mailer
+    answers:
+    - value: The Envelope holds the actual sender/recipients used for the SMTP conversation; headers (From/To)
+        render in the visible message
+      correct: true
+    - value: They are the same object with two names
+      correct: false
+    - value: The Envelope stores the HTML body; headers store attachments
+      correct: false
+    - value: The Envelope is only used for async delivery
+      correct: false
+    explanation: Mailer's Envelope (sender + recipients) drives the transport's SMTP exchange, whereas
+      the message headers (From, To, Subject) are what the recipient sees. They can legitimately differ
+      (e.g. bounce address vs visible From), which is a common exam distinction.
+    documentation: https://symfony.com/doc/current/mailer.html#sending-messages
+  - id: MISC-MAIL-05
+    question: Which configuration makes emails send asynchronously via Messenger?
+    type: config
+    difficulty: medium
+    subchapter: miscellaneous/mailer
+    concepts:
+    - send-email-message
+    - routing
+    - mailer-dsn
+    syllabus: Miscellaneous → Mailer
+    answers:
+    - value: Route Symfony\Component\Mailer\Messenger\SendEmailMessage to a transport in messenger routing
+        (and run a worker)
+      correct: true
+    - value: Set MAILER_DSN to async://default
+      correct: false
+    - value: 'Add async: true under framework.mailer'
+      correct: false
+    - value: Wrap send() in a try/catch
+      correct: false
+    explanation: Async delivery comes from routing SendEmailMessage to a Messenger transport and consuming
+      it with a worker. MAILER_DSN chooses the delivery transport (SMTP/API), not sync-vs-async, and there
+      is no framework.mailer.async flag.
+    documentation: https://symfony.com/doc/current/mailer.html#sending-messages-async
+- name: Miscellaneous — Runtime & Clock
+  questions:
+  - id: MISC-RUN-01
+    question: What does public/index.php return under the Runtime component?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/runtime
+    concepts:
+    - runtime
+    - entry-point
+    - callable
+    syllabus: Miscellaneous → Runtime
+    answers:
+    - value: A callable that produces the application object (e.g. a Kernel)
+      correct: true
+    - value: A Response object
+      correct: false
+    - value: Nothing — it echoes the output directly
+      correct: false
+    - value: The exit code as an int
+      correct: false
+    explanation: index.php returns a callable; autoload_runtime.php resolves its arguments, invokes it,
+      then a RunnerInterface handles/sends/terminates. It never calls handle() itself.
+    documentation: https://symfony.com/doc/current/components/runtime.html
+  - id: MISC-RUN-02
+    question: Which environment variable selects the runtime class?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/runtime
+    concepts:
+    - runtime
+    - app-runtime
+    syllabus: Miscellaneous → Runtime
+    answers:
+    - value: APP_RUNTIME
+      correct: true
+    - value: APP_ENV
+      correct: false
+    - value: SYMFONY_RUNTIME
+      correct: false
+    - value: RUNTIME_CLASS
+      correct: false
+    explanation: APP_RUNTIME (or composer.json extra.runtime.class) chooses the RuntimeInterface implementation;
+      the default is SymfonyRuntime, which extends GenericRuntime.
+    documentation: https://symfony.com/doc/current/components/runtime.html#using-the-runtime
+  - id: MISC-RUN-03
+    question: Which class does the default SymfonyRuntime extend?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/runtime
+    concepts:
+    - symfony-runtime
+    - generic-runtime
+    syllabus: Miscellaneous → Runtime
+    answers:
+    - value: GenericRuntime
+      correct: true
+    - value: HttpKernel
+      correct: false
+    - value: Kernel
+      correct: false
+    - value: SymfonyStyle
+      correct: false
+    explanation: SymfonyRuntime extends the framework-agnostic GenericRuntime, adding Symfony-aware resolvers/runners
+      (inject Request, SymfonyStyle, console Input/Output; run a Kernel or console Application). It is
+      not a kernel.
+    documentation: https://symfony.com/doc/current/components/runtime.html
+  - id: MISC-RUN-04
+    question: How does the argument `array $context` in the index.php closure get populated?
+    type: internals
+    difficulty: hard
+    subchapter: miscellaneous/runtime
+    concepts:
+    - resolver
+    - autowiring
+    - context
+    syllabus: Miscellaneous → Runtime
+    answers:
+    - value: The runtime's resolver autowires it from $_SERVER (env vars like APP_ENV/APP_DEBUG)
+      correct: true
+    - value: You must call getenv() yourself inside the closure
+      correct: false
+    - value: Symfony injects it from services.yaml parameters
+      correct: false
+    - value: It is always an empty array in Symfony 8
+      correct: false
+    explanation: RuntimeInterface::getResolver() builds a resolver that inspects the callable's typed
+      arguments and supplies them — array $context comes from $_SERVER (env), and it can also inject Request,
+      InputInterface, etc. You therefore never read $_SERVER manually in the entry point.
+    documentation: https://symfony.com/doc/current/components/runtime.html#using-the-runtime
+  - id: MISC-RUN-SCENARIO-01
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/runtime
+    concepts:
+    - public/index.php
+    - SymfonyRuntime
+    - APP_RUNTIME
+    syllabus: Miscellaneous → Runtime
+    question: A teammate 'fixes' a bug by adding $kernel->handle($request)->send(); at the end of public/index.php,
+      right after the file already returns its closure. What is wrong with this?
+    answers:
+    - value: public/index.php must only return a callable; the Runtime component itself builds the kernel,
+        handles the request and sends the response
+      correct: true
+    - value: Nothing — calling handle()/send() manually is required in Symfony 8
+      correct: false
+    - value: It is wrong only when APP_RUNTIME is unset
+      correct: false
+    - value: It is wrong only under SymfonyRuntime, not GenericRuntime
+      correct: false
+    explanation: The whole point of symfony/runtime is that the front controller only returns a callable
+      (or an application object); the runtime resolves its arguments, invokes it, and — for the Symfony
+      flavor — runs the kernel and sends the response itself. Hand-calling handle()/send() after autoload_runtime.php
+      has already done so double-processes the request.
+    documentation: https://symfony.com/doc/current/components/runtime.html
+  - id: MISC-CLOCK-01
+    question: ClockInterface::now() returns what type?
+    type: internals
+    difficulty: easy
+    subchapter: miscellaneous/clock
+    concepts:
+    - clock
+    - now
+    - datepoint
+    syllabus: Miscellaneous → Clock
+    answers:
+    - value: A \DateTimeImmutable (a DatePoint)
+      correct: true
+    - value: A Unix timestamp int
+      correct: false
+    - value: A mutable \DateTime
+      correct: false
+    - value: A float of seconds
+      correct: false
+    explanation: now() returns an immutable DatePoint (a \\DateTimeImmutable subclass). Tests swap the
+      NativeClock for a MockClock to freeze or advance time.
+    documentation: https://symfony.com/doc/current/components/clock.html
+  - id: MISC-CLOCK-02
+    question: Which clock lets tests freeze or advance time without a real delay?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/clock
+    concepts:
+    - mock-clock
+    - testing
+    - sleep
+    syllabus: Miscellaneous → Clock
+    answers:
+    - value: MockClock — you set the time and its sleep() advances virtual time
+      correct: true
+    - value: NativeClock
+      correct: false
+    - value: MonotonicClock
+      correct: false
+    - value: SystemClock
+      correct: false
+    explanation: MockClock is constructed with a fixed time and its sleep() advances time virtually (no
+      real waiting), perfect for TTL/expiry tests. NativeClock is the real prod clock; MonotonicClock
+      is for durations.
+    documentation: https://symfony.com/doc/current/components/clock.html#usage-in-tests
+  - id: MISC-CLOCK-03
+    question: Which clock is best for measuring elapsed durations and is immune to system clock changes?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/clock
+    concepts:
+    - monotonic-clock
+    - durations
+    syllabus: Miscellaneous → Clock
+    answers:
+    - value: MonotonicClock
+      correct: true
+    - value: NativeClock
+      correct: false
+    - value: MockClock
+      correct: false
+    - value: DatePoint
+      correct: false
+    explanation: MonotonicClock uses a high-resolution monotonic source unaffected by NTP or manual clock
+      adjustments, so duration diffs stay accurate. Wall-clock NativeClock can jump; MockClock is for
+      tests; DatePoint is a date type, not a clock.
+    documentation: https://symfony.com/doc/current/components/clock.html
+  - id: MISC-CLOCK-04
+    question: 'True or False: you should guard ClockInterface::now() with a nullsafe operator because
+      it may return null with a frozen MockClock.'
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/clock
+    concepts:
+    - 'null'
+    - now
+    - non-nullable
+    syllabus: Miscellaneous → Clock
+    answers:
+    - value: 'False'
+      correct: true
+    - value: 'True'
+      correct: false
+    explanation: 'False. now() is typed : \\DateTimeImmutable and always returns a DatePoint, even with
+      a frozen MockClock, so ?-> is unnecessary. The real bug is comparing a MockClock time against a
+      live new \\DateTime() — read time from the clock on both sides.'
+    documentation: https://symfony.com/doc/current/components/clock.html
+- name: Miscellaneous — Debugging, Errors & Profiler
+  questions:
+  - id: MISC-DEBUG-01
+    question: Which object does VarDumper's VarCloner produce before rendering?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/debugging
+    concepts:
+    - vardumper
+    - varcloner
+    - data
+    syllabus: Miscellaneous → Code Debugging
+    answers:
+    - value: A Data object
+      correct: true
+    - value: A Response
+      correct: false
+    - value: A FlattenException
+      correct: false
+    - value: A StopwatchEvent
+      correct: false
+    explanation: The cloner captures the variable into an immutable, depth-limited Data object, which
+      a CliDumper or HtmlDumper then renders — separating capture from output.
+    documentation: https://symfony.com/doc/current/components/var_dumper.html
+  - id: MISC-DEBUG-02
+    question: What does dd() do that dump() does not?
+    type: trap
+    difficulty: easy
+    subchapter: miscellaneous/debugging
+    concepts:
+    - dump
+    - dd
+    - exit
+    syllabus: Miscellaneous → Code Debugging
+    answers:
+    - value: It stops execution (exit) after dumping
+      correct: true
+    - value: It writes the dump to a log file
+      correct: false
+    - value: It serializes the value to JSON
+      correct: false
+    - value: It dumps only scalar values
+      correct: false
+    explanation: 'dd() means ''dump and die'': it dumps then calls exit, halting the script. dump() records
+      the variable and lets execution continue (the dump is shown in the toolbar/collector).'
+    documentation: https://symfony.com/doc/current/components/var_dumper.html#the-dump-function
+  - id: MISC-DEBUG-03
+    question: What unit does StopwatchEvent::getDuration() use, and when is the debug.stopwatch service
+      available?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/debugging
+    concepts:
+    - stopwatch
+    - milliseconds
+    - debug-only
+    syllabus: Miscellaneous → Code Debugging
+    answers:
+    - value: Milliseconds; the service exists only when debug/the profiler is enabled
+      correct: true
+    - value: Seconds; always available in every environment
+      correct: false
+    - value: Microseconds; only in prod
+      correct: false
+    - value: Nanoseconds; only in tests
+      correct: false
+    explanation: getDuration() returns milliseconds, and the autowirable debug.stopwatch service is only
+      registered in debug (dev/test). Injecting Stopwatch in prod therefore causes a wiring error.
+    documentation: https://symfony.com/doc/current/components/stopwatch.html
+  - id: MISC-DEBUG-04
+    question: A service that autowires Symfony\Component\Stopwatch\Stopwatch works in dev but fails to
+      boot in prod. Why?
+    type: debug
+    difficulty: medium
+    subchapter: miscellaneous/debugging
+    concepts:
+    - stopwatch
+    - debug-only
+    - wiring
+    syllabus: Miscellaneous → Code Debugging
+    answers:
+    - value: The debug.stopwatch service exists only in debug mode, so the dependency is missing in prod
+      correct: true
+    - value: Stopwatch requires the profiler bundle in prod
+      correct: false
+    - value: getDuration() throws in prod
+      correct: false
+    - value: Autowiring is disabled in prod
+      correct: false
+    explanation: Stopwatch's framework service is registered only when debug is enabled, so in prod there
+      is nothing to inject and the container fails. Use it for ad-hoc dev profiling only; for prod metrics
+      use real observability.
+    documentation: https://symfony.com/doc/current/components/stopwatch.html
+  - id: MISC-ERR-01
+    question: An uncaught exception that does NOT implement HttpExceptionInterface produces which status
+      code?
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/error-handling
+    concepts:
+    - error-handling
+    - http-exception
+    - status-code
+    syllabus: Miscellaneous → Error Handling
+    answers:
+    - value: '500'
+      correct: true
+    - value: '404'
+      correct: false
+    - value: '400'
+      correct: false
+    - value: '200'
+      correct: false
+    explanation: Only HttpExceptionInterface carries a custom status code; any other throwable defaults
+      to HTTP 500 via the error controller.
+    documentation: https://symfony.com/doc/current/controller/error_pages.html
+  - id: MISC-ERR-02
+    question: What does the ErrorHandler component do with a PHP warning or notice?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/error-handling
+    concepts:
+    - error-handler
+    - error-exception
+    - set-error-handler
+    syllabus: Miscellaneous → Error Handling
+    answers:
+    - value: Converts it into a catchable \ErrorException via set_error_handler()
+      correct: true
+    - value: Silently ignores it
+      correct: false
+    - value: Writes it directly into the response body
+      correct: false
+    - value: Converts it into an HttpException
+      correct: false
+    explanation: ErrorHandler registers set_error_handler() to throw \\ErrorException for PHP errors (warnings,
+      notices, fatals via a shutdown function), making them catchable. It does not turn them into HttpExceptions.
+    documentation: https://symfony.com/doc/current/components/error_handler.html
+  - id: MISC-ERR-03
+    question: Which serializable object represents a throwable for rendering and logging?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/error-handling
+    concepts:
+    - flatten-exception
+    - error-renderer
+    syllabus: Miscellaneous → Error Handling
+    answers:
+    - value: FlattenException
+      correct: true
+    - value: HttpException
+      correct: false
+    - value: ErrorEvent
+      correct: false
+    - value: ExceptionListener
+      correct: false
+    explanation: Throwables are normalised into a FlattenException — a serializable snapshot (class, message,
+      status, trace) that error renderers (HTML/JSON/XML) turn into output and that is safe to log. HttpException
+      is a throwable, not the snapshot.
+    documentation: https://symfony.com/doc/current/components/error_handler.html
+  - id: MISC-ERR-04
+    question: In a controller, which throw produces a 404 rendered by the framework error controller?
+    type: scenario
+    difficulty: medium
+    subchapter: miscellaneous/error-handling
+    concepts:
+    - not-found-http-exception
+    - status-code
+    - error-controller
+    syllabus: Miscellaneous → Error Handling
+    answers:
+    - value: throw new NotFoundHttpException('...') — it implements HttpExceptionInterface with status
+        404
+      correct: true
+    - value: return new Response('', 404) is required; exceptions always give 500
+      correct: false
+    - value: throw new \RuntimeException('not found')
+      correct: false
+    - value: throw new \InvalidArgumentException('404')
+      correct: false
+    explanation: NotFoundHttpException implements HttpExceptionInterface, so the error controller maps
+      it to 404 via getStatusCode(). A plain \\RuntimeException or \\InvalidArgumentException does not
+      carry a status and becomes 500. You do not need to build the Response manually.
+    documentation: https://symfony.com/doc/current/controller/error_pages.html
+  - id: MISC-PROF-01
+    question: When does the Web Profiler collect data for a request?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/profiler
+    concepts:
+    - profiler
+    - data-collector
+    - kernel-response
+    syllabus: Miscellaneous → Web Profiler
+    answers:
+    - value: On kernel.response, with late collectors running at kernel.terminate
+      correct: true
+    - value: On kernel.request only
+      correct: false
+    - value: During container compilation
+      correct: false
+    - value: Only in the CLI
+      correct: false
+    explanation: Profiler::collect() runs on kernel.response, invoking each DataCollector; LateDataCollectorInterface::lateCollect()
+      runs later at terminate for data not complete during the response.
+    documentation: https://symfony.com/doc/current/profiler.html
+  - id: MISC-PROF-02
+    question: Which service tag registers a custom data collector (with a toolbar/panel)?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/profiler
+    concepts:
+    - data-collector
+    - tag
+    - template
+    syllabus: Miscellaneous → Web Profiler
+    answers:
+    - value: data_collector (with a `template` attribute for the panel)
+      correct: true
+    - value: kernel.collector
+      correct: false
+    - value: profiler.panel
+      correct: false
+    - value: web_profiler.collector
+      correct: false
+    explanation: The data_collector tag wires a DataCollectorInterface; supplying a `template` attribute
+      makes its toolbar badge and panel appear. Autoconfigure applies the tag automatically for services
+      implementing the interface.
+    documentation: https://symfony.com/doc/current/profiler/data_collector.html
+  - id: MISC-PROF-03
+    question: A custom collector storing a PDO connection in $this->data breaks profile storage. Why?
+    type: debug
+    difficulty: medium
+    subchapter: miscellaneous/profiler
+    concepts:
+    - data-collector
+    - serializable
+    - reset
+    syllabus: Miscellaneous → Web Profiler
+    answers:
+    - value: $this->data is serialized to storage (via VarDumper's cloner); a live connection/resource
+        is not serializable
+      correct: true
+    - value: PDO is banned from all services
+      correct: false
+    - value: Collectors may only store strings
+      correct: false
+    - value: The data_collector tag rejects objects
+      correct: false
+    explanation: Profiles are persisted per token, so $this->data must be serializable — store scalar/array
+      (VarDumper-clonable) data, not live resources like a PDO connection or an entity with a connection.
+      Implement reset() for worker reuse.
+    documentation: https://symfony.com/doc/current/profiler/data_collector.html
+  - id: MISC-PROF-04
+    question: Your metric is only complete after the response is sent. Which interface should the collector
+      implement?
+    type: internals
+    difficulty: hard
+    subchapter: miscellaneous/profiler
+    concepts:
+    - late-data-collector
+    - terminate
+    - lifecycle
+    syllabus: Miscellaneous → Web Profiler
+    answers:
+    - value: LateDataCollectorInterface (its lateCollect() runs at kernel.terminate)
+      correct: true
+    - value: DataCollectorInterface only; collect() runs after terminate
+      correct: false
+    - value: EventSubscriberInterface on kernel.request
+      correct: false
+    - value: CacheWarmerInterface
+      correct: false
+    explanation: Normal collect() runs on kernel.response, too early for post-response data (final dumps,
+      cache calls). LateDataCollectorInterface::lateCollect() runs later at terminate, when that data
+      is complete.
+    documentation: https://symfony.com/doc/current/profiler/data_collector.html
+- name: Miscellaneous — Intl, Filesystem & Finder
+  questions:
+  - id: MISC-INTL-01
+    question: Which mechanism does Symfony 8 use for translation pluralization?
+    type: single
+    difficulty: medium
+    subchapter: miscellaneous/intl
+    concepts:
+    - translation
+    - icu
+    - pluralization
+    syllabus: Miscellaneous → Internationalization
+    answers:
+    - value: ICU MessageFormat, e.g. {count, plural, one {…} other {# …}}
+      correct: true
+    - value: The singular|plural pipe syntax
+      correct: false
+    - value: A %count% placeholder only
+      correct: false
+    - value: Separate keys per number
+      correct: false
+    explanation: ICU MessageFormat handles plural/select rules with locale-aware categories (one/few/many/other);
+      the old pipe syntax is legacy.
+    documentation: https://symfony.com/doc/current/translation/message_format.html
+  - id: MISC-INTL-02
+    question: What does the translator return when a message id has no translation in the active locale
+      or its fallbacks?
+    type: trap
+    difficulty: easy
+    subchapter: miscellaneous/intl
+    concepts:
+    - translation
+    - missing-key
+    - fallback
+    syllabus: Miscellaneous → Internationalization
+    answers:
+    - value: The message id itself (and it is logged in dev)
+      correct: true
+    - value: An empty string
+      correct: false
+    - value: A TranslationException
+      correct: false
+    - value: 'null'
+      correct: false
+    explanation: A missing translation returns the untranslated id, not an error or empty string, so the
+      UI degrades gracefully. In dev the miss is logged so you can fix the catalogue.
+    documentation: https://symfony.com/doc/current/translation.html
+  - id: MISC-INTL-03
+    question: Which class returns the localized display name of a country code?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/intl
+    concepts:
+    - intl
+    - countries
+    - icu-data
+    syllabus: Miscellaneous → Internationalization
+    answers:
+    - value: Symfony\Component\Intl\Countries (Countries::getName('FR'))
+      correct: true
+    - value: Symfony\Component\Locale\Country
+      correct: false
+    - value: Symfony\Component\Translation\Countries
+      correct: false
+    - value: Symfony\Component\Intl\Locale
+      correct: false
+    explanation: Countries::getName() reads the bundled ICU dataset and returns the name in the current/requested
+      locale. Related classes are Languages, Locales, Currencies and Timezones. The other namespaces do
+      not exist.
+    documentation: https://symfony.com/doc/current/components/intl.html
+  - id: MISC-INTL-04
+    question: What is the default translation domain, and what file naming applies ICU formatting?
+    type: config
+    difficulty: medium
+    subchapter: miscellaneous/intl
+    concepts:
+    - domain
+    - intl-icu
+    - catalogue
+    syllabus: Miscellaneous → Internationalization
+    answers:
+    - value: Default domain is messages; the +intl-icu suffix (messages+intl-icu.<locale>.yaml) enables
+        ICU formatting
+      correct: true
+    - value: Default domain is default; ICU is always applied to every file
+      correct: false
+    - value: Default domain is translations; ICU needs a .icu extension
+      correct: false
+    - value: There is no default domain; you must always pass one
+      correct: false
+    explanation: When no domain is passed, trans() uses messages; validators and security are separate
+      domains. ICU MessageFormat is applied to catalogues named with the +intl-icu suffix — forgetting
+      it means ICU rules are not parsed.
+    documentation: https://symfony.com/doc/current/translation/message_format.html
+  - id: MISC-FS-01
+    question: What makes Filesystem::dumpFile() safe against partial reads?
+    type: internals
+    difficulty: medium
+    subchapter: miscellaneous/filesystem-finder
+    concepts:
+    - filesystem
+    - dumpfile
+    - atomic
+    syllabus: Miscellaneous → Filesystem & Finder
+    answers:
+    - value: It writes to a temporary file then atomically renames it into place
+      correct: true
+    - value: It acquires an flock on the file
+      correct: false
+    - value: It compresses the content
+      correct: false
+    - value: It buffers writes in memory forever
+      correct: false
+    explanation: dumpFile() writes to a temp file and renames it, so a reader always sees either the old
+      content or the complete new content, never a half-written file. appendToFile(), by contrast, is
+      not atomic.
+    documentation: https://symfony.com/doc/current/components/filesystem.html
+  - id: MISC-FS-02
+    question: Which Finder method defines the directories to search?
+    type: single
+    difficulty: easy
+    subchapter: miscellaneous/filesystem-finder
+    concepts:
+    - finder
+    - in
+    - directories
+    syllabus: Miscellaneous → Filesystem & Finder
+    answers:
+    - value: in()
+      correct: true
+    - value: from()
+      correct: false
+    - value: search()
+      correct: false
+    - value: path()
+      correct: false
+    explanation: Finder::in() sets the search directories; without it the Finder throws. It yields Symfony
+      SplFileInfo objects with helpers like getRelativePathname().
+    documentation: https://symfony.com/doc/current/components/finder.html
+  - id: MISC-FS-03
+    question: How does Symfony\Component\Filesystem\Filesystem signal a failed operation (e.g. copy())?
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/filesystem-finder
+    concepts:
+    - filesystem
+    - io-exception
+    - error-handling
+    syllabus: Miscellaneous → Filesystem & Finder
+    answers:
+    - value: It throws an IOExceptionInterface (it does not return false)
+      correct: true
+    - value: It returns false, like the native PHP functions
+      correct: false
+    - value: It returns null
+      correct: false
+    - value: It triggers a PHP warning only
+      correct: false
+    explanation: Unlike native file functions that return false, Filesystem methods throw IOExceptionInterface
+      on failure, so errors cannot be silently ignored. Also note Path helpers manipulate path strings
+      only and never touch the disk.
+    documentation: https://symfony.com/doc/current/components/filesystem.html#error-handling
+  - id: MISC-FS-04
+    question: A Finder query returns directories as well as files. What is missing?
+    type: debug
+    difficulty: medium
+    subchapter: miscellaneous/filesystem-finder
+    concepts:
+    - finder
+    - files
+    - directories
+    syllabus: Miscellaneous → Filesystem & Finder
+    answers:
+    - value: A ->files() call — without files() or directories() the Finder yields both
+      correct: true
+    - value: A ->name() filter — name() restricts to files
+      correct: false
+    - value: A ->in() call — in() excludes directories
+      correct: false
+    - value: Nothing; Finder always returns files only
+      correct: false
+    explanation: Finder yields both files and directories unless you narrow it with files() (or directories()).
+      name()/in() do not restrict the entry type. Iterated results are Finder SplFileInfo objects.
+    documentation: https://symfony.com/doc/current/components/finder.html
+- name: Miscellaneous — Multiple Choice Drills
+  questions:
+  - id: MISC-MC-01
+    type: multiple
+    difficulty: medium
+    subchapter: miscellaneous/cache
+    concepts:
+    - cache-contracts
+    - tags
+    - stampede-protection
+    syllabus: Miscellaneous → Cache
+    question: Which of the following statements are true about the Symfony Cache component? (select all
+      that apply)
+    answers:
+    - value: CacheInterface::get($key, $callback) runs the callback only on a cache miss and stores its
+        return value
+      correct: true
+    - value: 'Cache tags require a tag-aware pool (TagAwareAdapter or tags: true); calling $item->tag()
+        on a plain pool does not work'
+      correct: true
+    - value: If the callback returns null, that null is stored and later calls return it as a hit until
+        it expires
+      correct: true
+    - value: PSR-16 (SimpleCache) supports cache tags and deferred saves just like PSR-6
+      correct: false
+    - value: CacheInterface::get() returns null to signal a cache miss
+      correct: false
+    explanation: 'The contracts get() computes-and-stores on miss, tags only work on a TagAwareAdapter/pool
+      configured with tags: true, and a stored null is a valid cached value that counts as a hit. PSR-16
+      has no tags and no deferred saves (those are PSR-6 features), and get() never returns null to mean
+      "miss" — on a miss it runs the callback and returns its result.'
+    documentation: https://symfony.com/doc/current/cache.html
+  - id: MISC-MC-02
+    type: multiple
+    difficulty: medium
+    subchapter: miscellaneous/clock
+    concepts:
+    - clock-interface
+    - mock-clock
+    - date-point
+    syllabus: Miscellaneous → Clock
+    question: Which of the following statements are true about the Symfony Clock component? (select all
+      that apply)
+    answers:
+    - value: ClockInterface::now() returns an immutable DatePoint (a \DateTimeImmutable subclass), never
+        a mutable \DateTime
+      correct: true
+    - value: MockClock::sleep() advances virtual time instantly, with no real delay — ideal for TTL/expiry
+        tests
+      correct: true
+    - value: The framework autowires MockClock as the default clock in the dev environment
+      correct: false
+    - value: MonotonicClock is meant for reading the wall-clock time and is affected by system clock (NTP)
+        adjustments
+      correct: false
+    explanation: now() is typed to return a \DateTimeImmutable and yields a DatePoint, and MockClock advances
+      time virtually so tests never wait. The default framework clock is NativeClock in every environment
+      (tests swap in MockClock themselves), and MonotonicClock is for measuring durations precisely because
+      it is immune to system clock changes.
+    documentation: https://symfony.com/doc/current/components/clock.html
+  - id: MISC-MC-03
+    type: multiple
+    difficulty: hard
+    subchapter: miscellaneous/lock
+    out_of_scope: true
+    concepts:
+    - acquire
+    - ttl
+    - stores
+    syllabus: Miscellaneous → Lock
+    question: Which of the following statements are true about the Symfony Lock component? (select all
+      that apply)
+    answers:
+    - value: 'acquire() is non-blocking by default: it returns false immediately when the lock is already
+        held'
+      correct: true
+    - value: FlockStore and SemaphoreStore only guarantee mutual exclusion on a single machine
+      correct: true
+    - value: Locks have a TTL (300 seconds by default), and long jobs must call refresh() to extend it
+      correct: true
+    - value: acquire() throws a LockConflictedException whenever the lock is already held
+      correct: false
+    - value: A FlockStore is a safe choice to serialise a cron job across multiple servers
+      correct: false
+    explanation: The default acquire(false) returns a plain false when the resource is busy, local stores
+      (flock/semaphore) never protect across machines, and the TTL expires mid-job unless refresh() extends
+      it. Non-blocking acquire() does not throw on contention (only blocking acquisition can end in LockConflictedException),
+      and multi-server exclusion needs a shared store such as Redis or a database.
+    documentation: https://symfony.com/doc/current/lock.html
+  - id: MISC-MC-04
+    type: multiple
+    difficulty: medium
+    subchapter: miscellaneous/mailer
+    concepts:
+    - send-email-message
+    - embedded-images
+    - twig-bridge
+    syllabus: Miscellaneous → Mailer
+    question: Which of the following statements are true about the Symfony Mailer and Mime components?
+      (select all that apply)
+    answers:
+    - value: When SendEmailMessage is routed to an async Messenger transport, MailerInterface::send()
+        queues the email instead of delivering it inline
+      correct: true
+    - value: 'Images embedded with embedFromPath() are referenced in the HTML body via a cid: reference'
+      correct: true
+    - value: TemplatedEmail lives in the Symfony\Component\Mime namespace, so no Twig bridge is needed
+        to render templates
+      correct: false
+    - value: The Mailer Envelope is just another name for the visible message headers
+      correct: false
+    explanation: 'With Messenger routing configured, send() dispatches a SendEmailMessage that a worker
+      delivers later, and embedded parts are addressed with cid: in the HTML body. TemplatedEmail is part
+      of the Twig bridge (Symfony\Bridge\Twig\Mime), and the Envelope (sender/recipients used for the
+      SMTP conversation) is distinct from the message headers rendered in the visible email.'
+    documentation: https://symfony.com/doc/current/mailer.html
+  - id: MISC-MC-05
+    type: multiple
+    difficulty: hard
+    subchapter: miscellaneous/process
+    concepts:
+    - escaping
+    - timeout
+    - must-run
+    syllabus: Miscellaneous → Process
+    question: Which of the following statements are true about the Symfony Process component? (select
+      all that apply)
+    answers:
+    - value: new Process(['git', 'log', $input]) auto-escapes each array element, so $input cannot inject
+        shell syntax
+      correct: true
+    - value: The default process timeout is 60 seconds; setTimeout(null) disables it
+      correct: true
+    - value: mustRun() throws a ProcessFailedException when the process exits with a non-zero code
+      correct: true
+    - value: Process::fromShellCommandline() escapes interpolated variables, making it safe with untrusted
+        input
+      correct: false
+    - value: run() returns the process standard output as a string
+      correct: false
+    explanation: The array constructor escapes every argument, the timeout defaults to 60 seconds (nullable
+      to disable), and mustRun() throws ProcessFailedException on failure where run() only returns the
+      exit code. fromShellCommandline() runs a raw string through the shell with no escaping (a command-injection
+      risk), and stdout is read via getOutput(), not from run().
+    documentation: https://symfony.com/doc/current/components/process.html
+  - id: MISC-MC-06
+    type: multiple
+    difficulty: hard
+    subchapter: miscellaneous/serializer
+    concepts:
+    - normalizers
+    - groups
+    - context
+    syllabus: Miscellaneous → Serializer
+    question: Which of the following statements are true about the Symfony Serializer? (select all that
+      apply)
+    answers:
+    - value: 'serialize() works in two stages: normalizers turn objects into arrays, then an encoder turns
+        the array into a string'
+      correct: true
+    - value: '#[Groups] attributes only filter properties when a ''groups'' key is passed in the serialization
+        context'
+      correct: true
+    - value: PropertyNormalizer reads and writes through getters and setters, respecting PropertyAccess
+      correct: false
+    - value: By default, null-valued properties are omitted from the JSON output
+      correct: false
+    explanation: Serialization is normalize-then-encode, and group filtering is inert until you pass ['groups'
+      => [...]] in the context — without it all readable fields are emitted. PropertyNormalizer accesses
+      properties directly via reflection (ObjectNormalizer is the one using accessors), and null properties
+      are serialized as null unless you enable the skip_null_values context option.
+    documentation: https://symfony.com/doc/current/serializer.html
+  - id: MISC-PROPACC-01
+    type: trap
+    difficulty: medium
+    subchapter: miscellaneous/property-access
+    concepts:
+    - getter order
+    - magic methods
+    - enableMagicCall
+    syllabus: Miscellaneous → PropertyAccess component
+    question: A class exposes its data only through __call() (no real getX()/setX() methods). You read
+      a path with the default PropertyAccessor. What happens?
+    answers:
+    - value: It throws — __call fallback is not enabled by default, only __get/__set are
+      correct: true
+    - value: It works — all magic methods are enabled by default
+      correct: false
+    - value: It returns null silently
+      correct: false
+    - value: It works only for reading, never for writing
+      correct: false
+    explanation: PropertyAccessorBuilder defaults to MAGIC_GET | MAGIC_SET only; __call is disabled unless
+      enableMagicCall() is explicitly called. Without it, a class reachable only via __call() is not accessible
+      through the default accessor, and getValue() throws rather than returning null.
+    documentation: https://symfony.com/doc/current/components/property_access.html#magic-getters-and-setters
+  - id: MISC-PROPACC-02
+    type: scenario
+    difficulty: hard
+    subchapter: miscellaneous/property-access
+    concepts:
+    - NoSuchPropertyException
+    - UninitializedPropertyException
+    - isReadable
+    syllabus: Miscellaneous → PropertyAccess component
+    question: getValue() throws UninitializedPropertyException for one object and NoSuchPropertyException
+      for another, both accessed via the same path 'title'. What distinguishes the two cases?
+    answers:
+    - value: The first object declares a typed $title property that was never assigned; the second has
+        no title property/getter/setter at all
+      correct: true
+    - value: Both exceptions mean exactly the same thing; the name is arbitrary
+      correct: false
+    - value: UninitializedPropertyException means the path syntax itself is malformed
+      correct: false
+    - value: NoSuchPropertyException only happens with array paths, never objects
+      correct: false
+    explanation: UninitializedPropertyException (a subtype of AccessException) means the property genuinely
+      exists — typed, but never given a value — while NoSuchPropertyException means no getter, public
+      property, or enabled magic method could resolve the path at all. isReadable() would have returned
+      false for both without distinguishing them; only the thrown exception type tells them apart.
+    documentation: https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/Exception/UninitializedPropertyException.php

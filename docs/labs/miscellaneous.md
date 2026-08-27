@@ -11,7 +11,7 @@ tags:
     custom `MiddlewareInterface` that stamps and logs every envelope, then prove it
     all works by wiring a real `MessageBus` in a test ·
     **Difficulty:** Advanced ·
-    **Theory:** [Messenger](../miscellaneous/messenger.md) ·
+    **Theory:** [Messenger](../messenger/index.md) ·
     **Mode:** TDD
 
 ## Objective
@@ -31,7 +31,7 @@ After this lab you can, from scratch and without the framework kernel:
 
 ## Prerequisites
 
-- Chapters: [Messenger](../miscellaneous/messenger.md),
+- Chapters: [Messenger](../messenger/index.md),
   [Events](../architecture/events.md), [Clock](../miscellaneous/clock.md),
   [Automated Tests](../testing/index.md)
 - Assumed skills: PHPUnit `TestCase`, PSR-3 `LoggerInterface`, immutable objects.
@@ -413,4 +413,4 @@ ordering).
 
 ---
 
-<small>Theory: [Messenger](../miscellaneous/messenger.md) · Labs: [all labs](index.md)</small>
+<small>Theory: [Messenger](../messenger/index.md) · Labs: [all labs](index.md)</small>

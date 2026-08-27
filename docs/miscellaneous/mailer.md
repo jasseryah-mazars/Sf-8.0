@@ -24,7 +24,7 @@
     **Syllabus:** `Miscellaneous → Mailer` ·
     **Level:** Advanced ·
     **Est. time:** 40 min ·
-    **Prerequisites:** [Twig](../twig/index.md), [Messenger](messenger.md)
+    **Prerequisites:** [Twig](../twig/index.md), [Messenger](../messenger/index.md)
 
 ---
 
@@ -154,7 +154,7 @@ $email = (new TemplatedEmail())
 If Messenger is configured to route `Symfony\Component\Mailer\Messenger\SendEmailMessage`
 to a transport, `MailerInterface::send()` **dispatches** it instead of sending
 inline; a worker delivers it later. This keeps request latency low and gives
-retries/failure handling for free. See [Messenger](messenger.md).
+retries/failure handling for free. See [Messenger](../messenger/index.md).
 
 ```yaml
 # config/packages/messenger.yaml
@@ -302,7 +302,7 @@ production unless the email must be confirmed before responding.
 
 ## Connections
 
-- **Depends on:** [Messenger](messenger.md) — async delivery routes `SendEmailMessage`; [Twig](../twig/index.md) renders `TemplatedEmail`.
+- **Depends on:** [Messenger](../messenger/index.md) — async delivery routes `SendEmailMessage`; [Twig](../twig/index.md) renders `TemplatedEmail`.
 - **Reused in:** [Console](../console/index.md) — `messenger:consume` is what actually delivers queued mail.
 - **Confused with:** the Mailer `Envelope` (sender/recipients for the SMTP conversation) vs the visible message headers.
 
@@ -334,4 +334,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Messenger](messenger.md) · [Twig](../twig/index.md) · [Serializer](serializer.md)</small>
+<small>Related: [Messenger](../messenger/index.md) · [Twig](../twig/index.md) · [Serializer](serializer.md)</small>

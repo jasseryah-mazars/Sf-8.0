@@ -1,0 +1,673 @@
+categories:
+- name: Messenger — Component
+  questions:
+  - id: MISC-MSG-01
+    question: What does MessageBusInterface::dispatch() return?
+    type: trap
+    difficulty: easy
+    subchapter: messenger/component
+    concepts:
+    - envelope
+    - dispatch
+    - message-bus
+    syllabus: Messenger
+    answers:
+    - value: An Envelope
+      correct: true
+    - value: The handler's return value
+      correct: false
+    - value: void
+      correct: false
+    - value: A HandledStamp
+      correct: false
+    explanation: dispatch() always returns the (possibly stamped) Envelope. A handler's return value is
+      available via $envelope->last(HandledStamp::class)->getResult(). It never returns the value directly
+      because a routed (async) message is not handled in this process at all — only the Envelope exists
+      yet.
+    documentation: https://symfony.com/doc/current/messenger.html
+  - id: MISC-MSG-07
+    question: Which attribute marks a service as a message handler in Symfony 8?
+    type: single
+    difficulty: easy
+    subchapter: messenger/component
+    concepts:
+    - handler
+    - attribute
+    - autoconfigure
+    syllabus: Messenger
+    answers:
+    - value: '#[AsMessageHandler]'
+      correct: true
+    - value: '#[MessageHandler]'
+      correct: false
+    - value: '#[AsHandler]'
+      correct: false
+    - value: '#[Handler]'
+      correct: false
+    explanation: Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler registers an invokable service
+      (or a specific method) as a handler for its typed message argument. The other names do not exist
+      in the component.
+    documentation: https://symfony.com/doc/current/messenger.html#registering-handlers
+  - id: MISC-MC-07
+    type: multiple
+    difficulty: hard
+    subchapter: messenger/component
+    concepts:
+    - envelope
+    - send-message-middleware
+    - delay-stamp
+    syllabus: Messenger
+    question: Which of the following statements are true about Symfony Messenger? (select all that apply)
+    answers:
+    - value: MessageBusInterface::dispatch() always returns an Envelope, never the handler's return value
+        directly
+      correct: true
+    - value: When a message is routed to an async transport, SendMessageMiddleware enqueues it and stops
+        the bus, so no handler runs in the dispatching process
+      correct: true
+    - value: DelayStamp(5000) delays delivery by 5000 milliseconds (5 seconds)
+      correct: true
+    - value: dispatch() returns the handler's result so a query bus needs no stamps
+      correct: false
+    - value: Once a message exhausts its retries, it is silently discarded
+      correct: false
+    explanation: dispatch() returns the (possibly stamped) Envelope, routed-async messages are serialized
+      and sent without invoking the handler in-process, and DelayStamp is expressed in milliseconds. A
+      query result must be read from the HandledStamp via $envelope->last(HandledStamp::class)->getResult(),
+      and messages that exhaust max_retries go to the configured failure transport, not into the void.
+    documentation: https://symfony.com/doc/current/messenger.html
+- name: Messenger — Messages & Handlers
+  questions:
+  - id: MISC-MSG-08
+    question: What is the purpose of DispatchAfterCurrentBusStamp?
+    type: internals
+    difficulty: hard
+    subchapter: messenger/messages-handlers
+    concepts:
+    - stamp
+    - transaction
+    - dispatch-after-current-bus
+    syllabus: Messenger
+    answers:
+    - value: Defer delivery of a message dispatched inside a handler until the current handling finishes
+        successfully
+      correct: true
+    - value: Send the message to every bus in the application
+      correct: false
+    - value: Add a delay equal to the current bus latency
+      correct: false
+    - value: Retry the message on the next bus in a chain
+      correct: false
+    explanation: It prevents dispatching side-effect messages (e.g. a confirmation email) before the surrounding
+      work commits, so a failure/rollback cancels them. It has nothing to do with delays, multi-bus fan-out,
+      or retries.
+    documentation: https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html
+  - id: MISC-MSG-18
+    question: A dispatched message throws NoHandlerForMessageException. What is the most likely cause?
+    type: debug
+    difficulty: medium
+    subchapter: messenger/messages-handlers
+    concepts:
+    - handler
+    - as-message-handler
+    - autoconfigure
+    syllabus: Messenger
+    answers:
+    - value: 'The handler class is missing #[AsMessageHandler] (or its __invoke argument type does not
+        match the message)'
+      correct: true
+    - value: The worker is not running
+      correct: false
+    - value: The failure transport is not configured
+      correct: false
+    - value: The message is not readonly
+      correct: false
+    explanation: 'Handlers are discovered by autoconfiguration of the #[AsMessageHandler] attribute and
+      matched by the typed argument of __invoke(). Missing the attribute (or a mismatched/imported type)
+      means no handler is registered. Worker state, failure transport and message immutability are unrelated
+      to handler resolution.'
+    documentation: https://symfony.com/doc/current/messenger.html#registering-handlers
+  - id: MISC-MSG-19
+    question: Which statements about Messenger buses are correct? (choose 2)
+    type: multiple
+    difficulty: hard
+    subchapter: messenger/messages-handlers
+    concepts:
+    - bus
+    - command-query-event
+    - middleware
+    syllabus: Messenger
+    answers:
+    - value: The default bus service is messenger.bus.default
+      correct: true
+    - value: You can define multiple buses, each with its own ordered middleware list
+      correct: true
+    - value: All buses in an app must share a single global middleware list
+      correct: false
+    - value: The command/query/event bus split is enforced by the component
+      correct: false
+    explanation: 'Messenger ships one default bus (messenger.bus.default) but supports many, each configured
+      with its own middleware — so a command bus can wrap handlers in a transaction while an event bus
+      does not. The command/query/ event convention is just that: a convention, not enforced by the code.'
+    documentation: https://symfony.com/doc/current/messenger/multiple_buses.html
+  - id: MISC-MSG-22
+    question: An order handler dispatches an 'order confirmed' email message, but the email is sent even
+      when the surrounding DB transaction rolls back. What fixes this?
+    type: scenario
+    difficulty: medium
+    subchapter: messenger/messages-handlers
+    concepts:
+    - dispatch-after-current-bus
+    - transaction
+    - stamp
+    syllabus: Messenger
+    answers:
+    - value: Dispatch the email message with DispatchAfterCurrentBusStamp so it is delivered only after
+        the current handler finishes successfully
+      correct: true
+    - value: Add a DelayStamp so the email is sent 5 seconds later
+      correct: false
+    - value: Throw UnrecoverableMessageHandlingException in the email handler
+      correct: false
+    - value: Route the email to the sync:// transport
+      correct: false
+    explanation: DispatchAfterCurrentBusStamp defers the inner dispatch until the current message finishes
+      handling successfully, so a rollback cancels the email. A delay only postpones sending, the unrecoverable
+      exception affects the email's own retries, and sync routing would send it immediately during the
+      transaction.
+    documentation: https://symfony.com/doc/current/messenger/dispatch_after_current_bus.html
+  - id: MISC-MSG-23
+    question: $envelope->last(HandledStamp::class) returns null. Which situation explains this best?
+    type: trap
+    difficulty: hard
+    subchapter: messenger/messages-handlers
+    concepts:
+    - handled-stamp
+    - 'null'
+    - async
+    syllabus: Messenger
+    answers:
+    - value: The message was routed to an async transport, so it has not been handled in this process
+        yet
+      correct: true
+    - value: The handler returned null, so no HandledStamp was created
+      correct: false
+    - value: dispatch() failed and returned null instead of an Envelope
+      correct: false
+    - value: HandledStamp only exists on the query bus
+      correct: false
+    explanation: A handler that returns null still produces a HandledStamp (its result is null) — so last()
+      returning null means no such stamp exists, i.e. the message was sent async and not handled here.
+      dispatch() always returns an Envelope (never null), and HandledStamp is not query-bus-specific.
+      This is why the nullsafe ?-> guards 'not handled here', distinct from 'handled, returned null'.
+    documentation: https://symfony.com/doc/current/messenger.html#messenger-getting-handler-results
+  - id: MISC-MSG-09
+    question: How do you retrieve a synchronous handler's return value after MessageBusInterface::dispatch()?
+    type: code
+    difficulty: medium
+    subchapter: messenger/messages-handlers
+    concepts:
+    - handled-stamp
+    - query-bus
+    - result
+    syllabus: Messenger
+    answers:
+    - value: $envelope->last(HandledStamp::class)->getResult()
+      correct: true
+    - value: The value is returned directly by dispatch()
+      correct: false
+    - value: $envelope->getResult()
+      correct: false
+    - value: $bus->getLastResult()
+      correct: false
+    explanation: 'dispatch() returns an Envelope. For a single sync handler you read its result via the
+      HandledStamp: $envelope->last(HandledStamp::class)->getResult(). Use HandleTrait to unwrap it in
+      a query bus. Envelope has no getResult() and the bus does not cache a "last result".'
+    documentation: https://symfony.com/doc/current/messenger.html#messenger-getting-handler-results
+- name: Messenger — Middleware
+  questions:
+  - id: MISC-MSG-02
+    question: A message is routed to an async transport. During dispatch() in the web process, the handler…
+    type: trap
+    difficulty: medium
+    subchapter: messenger/middleware
+    concepts:
+    - send-middleware
+    - transport
+    - async
+    syllabus: Messenger
+    answers:
+    - value: does not run — SendMessageMiddleware serializes and sends it, stopping the bus
+      correct: true
+    - value: runs immediately and is also queued
+      correct: false
+    - value: runs only if a worker is currently active
+      correct: false
+    - value: throws NoHandlerForMessageException
+      correct: false
+    explanation: When a message is routed to a transport, SendMessageMiddleware adds a SentStamp, sends
+      the envelope and stops the pipeline; a worker handles it later. It is not handled twice, and a running
+      worker is irrelevant to the dispatching process. NoHandlerForMessageException only occurs when no
+      handler exists for a synchronously handled message.
+    documentation: https://symfony.com/doc/current/messenger.html#transports-async-queued-messages
+  - id: MISC-MSG-05
+    question: Which middleware locates and invokes the handler(s), adding a HandledStamp?
+    type: internals
+    difficulty: medium
+    subchapter: messenger/middleware
+    concepts:
+    - middleware
+    - handle-middleware
+    - handled-stamp
+    syllabus: Messenger
+    answers:
+    - value: HandleMessageMiddleware
+      correct: true
+    - value: SendMessageMiddleware
+      correct: false
+    - value: DispatchAfterCurrentBusMiddleware
+      correct: false
+    - value: ValidationMiddleware
+      correct: false
+    explanation: HandleMessageMiddleware resolves handlers for the message type, calls them, and records
+      each result in a HandledStamp. SendMessageMiddleware only routes/sends to transports (and may stop
+      the bus before Handle runs).
+    documentation: https://symfony.com/doc/current/messenger.html#middleware
+  - id: MISC-MSG-17
+    question: 'True or False: routing a message to the sync:// transport skips the middleware pipeline.'
+    type: true-false
+    difficulty: easy
+    subchapter: messenger/middleware
+    concepts:
+    - sync
+    - middleware
+    - pipeline
+    syllabus: Messenger
+    answers:
+    - value: 'True'
+      correct: false
+    - value: 'False'
+      correct: true
+    explanation: False. sync:// still runs the full middleware stack (validation, transactions, handler
+      discovery) — it simply handles the message immediately in the same process instead of enqueueing
+      it. Treating sync:// as "no bus" is a common exam trap.
+    documentation: https://symfony.com/doc/current/messenger.html#transport-configuration
+  - id: MISC-MSG-25
+    question: In a custom middleware, code placed AFTER the $stack->next()->handle($envelope, $stack)
+      call runs…
+    type: internals
+    difficulty: hard
+    subchapter: messenger/middleware
+    concepts:
+    - middleware
+    - stack
+    - russian-doll
+    syllabus: Messenger
+    answers:
+    - value: On the way out — after the inner middleware and the handler have executed
+      correct: true
+    - value: Never — the call terminates the middleware
+      correct: false
+    - value: Before any other middleware in the stack
+      correct: false
+    - value: Only if the message was routed async
+      correct: false
+    explanation: 'The middleware stack is a russian-doll chain: code before $stack->next()->handle() runs
+      on the way in, and code after it runs on the way out once the rest of the pipeline (including the
+      handler) has returned. This lets a middleware wrap the whole handling (e.g. open/commit a transaction).'
+    documentation: https://symfony.com/doc/current/messenger.html#creating-your-own-middleware
+  - id: MISC-MSG-11
+    question: Inside a custom middleware, how do you pass the envelope on to the rest of the stack?
+    type: code
+    difficulty: hard
+    subchapter: messenger/middleware
+    concepts:
+    - middleware
+    - stack
+    - next
+    syllabus: Messenger
+    answers:
+    - value: return $stack->next()->handle($envelope, $stack);
+      correct: true
+    - value: return $this->bus->dispatch($envelope);
+      correct: false
+    - value: return $stack->handle($envelope);
+      correct: false
+    - value: $envelope->next();
+      correct: false
+    explanation: A MiddlewareInterface::handle() implementation calls $stack->next()->handle($envelope,
+      $stack) to invoke the next middleware. Code before that call runs on the way in; code after it runs
+      on the way out. Re-dispatching via the bus would restart the whole pipeline.
+    documentation: https://symfony.com/doc/current/messenger.html#creating-your-own-middleware
+- name: Messenger — Transports
+  questions:
+  - id: MISC-MSG-03
+    question: DelayStamp(5000) delays delivery by how long?
+    type: trap
+    difficulty: easy
+    subchapter: messenger/transports
+    concepts:
+    - delay-stamp
+    - milliseconds
+    syllabus: Messenger
+    answers:
+    - value: 5000 milliseconds (5 seconds)
+      correct: true
+    - value: 5000 seconds
+      correct: false
+    - value: 5000 microseconds
+      correct: false
+    - value: 5000 minutes
+      correct: false
+    explanation: DelayStamp is expressed in milliseconds, so 5000 means 5 seconds. The classic trap is
+      to read it as seconds; the retry strategy's initial delay is likewise in milliseconds.
+    documentation: https://symfony.com/doc/current/messenger.html#delaying-messages
+  - id: MISC-MSG-24
+    question: Which serializer does a Messenger transport use by default to serialize the envelope?
+    type: single
+    difficulty: hard
+    subchapter: messenger/transports
+    concepts:
+    - transport
+    - serializer
+    - phpserializer
+    syllabus: Messenger
+    answers:
+    - value: PhpSerializer (native PHP serialize())
+      correct: true
+    - value: The Symfony Serializer component
+      correct: false
+    - value: JsonEncoder
+      correct: false
+    - value: igbinary
+      correct: false
+    explanation: By default transports use Transport\\Serialization\\PhpSerializer, which calls PHP's
+      serialize(). The Symfony Serializer transport serializer is opt-in and recommended for cross-language/cross-app
+      interop, but it is not the default.
+    documentation: https://symfony.com/doc/current/messenger.html#serializing-messages
+  - id: MISC-MSG-12
+    question: Which built-in transport handles a message immediately in the same process, without a queue?
+    type: single
+    difficulty: easy
+    subchapter: messenger/transports
+    concepts:
+    - transport
+    - sync
+    syllabus: Messenger
+    answers:
+    - value: The sync transport (DSN sync://)
+      correct: true
+    - value: The in-memory transport (in-memory://)
+      correct: false
+    - value: The doctrine transport (doctrine://default)
+      correct: false
+    - value: The amqp transport (amqp://...)
+      correct: false
+    explanation: sync:// processes the message synchronously during dispatch. in-memory:// keeps messages
+      in memory for tests, while doctrine/amqp/redis are real asynchronous transports consumed by a worker.
+    documentation: https://symfony.com/doc/current/messenger.html#transport-configuration
+  - id: MISC-MSG-13
+    question: In framework.messenger.routing, mapping App\Message\SmsNotification to 'async' means…
+    type: config
+    difficulty: medium
+    subchapter: messenger/transports
+    concepts:
+    - routing
+    - transport
+    - send-middleware
+    syllabus: Messenger
+    answers:
+    - value: SendMessageMiddleware sends that message class to the 'async' transport instead of handling
+        it in-process
+      correct: true
+    - value: The handler is renamed to 'async'
+      correct: false
+    - value: The message is handled by every transport named async
+      correct: false
+    - value: It only affects messages dispatched from the CLI
+      correct: false
+    explanation: routing maps a message class (or interface/parent) to one or more transport names. A
+      routed message is serialized and sent to that transport rather than handled synchronously. A message
+      with no routing entry is handled immediately.
+    documentation: https://symfony.com/doc/current/messenger.html#routing-messages-to-a-transport
+  - id: MISC-MSG-16
+    question: Which transport is intended specifically for functional tests, asserting dispatched messages
+      without a broker?
+    type: single
+    difficulty: medium
+    subchapter: messenger/transports
+    concepts:
+    - in-memory
+    - testing
+    - transport
+    syllabus: Messenger
+    answers:
+    - value: The in-memory transport (in-memory://), inspected via getSent()
+      correct: true
+    - value: The sync transport (sync://)
+      correct: false
+    - value: The redis transport (redis://localhost)
+      correct: false
+    - value: The doctrine transport
+      correct: false
+    explanation: in-memory:// keeps envelopes in memory instead of sending them, so a test can fetch the
+      transport from the container and assert on getSent(). It is reset between tests via the messenger
+      reset behaviour.
+    documentation: https://symfony.com/doc/current/messenger.html#testing
+- name: Messenger — Workers
+  questions:
+  - id: MISC-MSG-26
+    question: After a deploy, long-running workers keep executing the old code. Which approach fixes this
+      for zero-downtime deploys?
+    type: scenario
+    difficulty: medium
+    subchapter: messenger/workers
+    concepts:
+    - worker
+    - stop-workers
+    - deploy
+    syllabus: Messenger
+    answers:
+    - value: Run messenger:stop-workers on deploy and let a supervisor restart workers, ideally combined
+        with --time-limit/--memory-limit
+      correct: true
+    - value: Restart the database so workers reconnect with new code
+      correct: false
+    - value: Add a DelayStamp to every message
+      correct: false
+    - value: Increase max_retries so old workers eventually give up
+      correct: false
+    explanation: Workers bootstrap the kernel once and keep it in memory, so new code is only picked up
+      after a restart. messenger:stop-workers signals running workers to finish the current message and
+      exit; a process manager then restarts them with the new code. --time-limit/--memory-limit make them
+      recycle regularly. The other options don't reload the worker's code.
+    documentation: https://symfony.com/doc/current/messenger.html#deploying-to-production
+  - id: MISC-MSG-14
+    question: Which options let 'messenger:consume' stop a worker gracefully for zero-downtime deploys?
+    type: scenario
+    difficulty: medium
+    subchapter: messenger/workers
+    concepts:
+    - worker
+    - consume
+    - deploy
+    syllabus: Messenger
+    answers:
+    - value: --limit (max messages) and --time-limit (max seconds), optionally with memory limits
+      correct: true
+    - value: --kill and --restart
+      correct: false
+    - value: --stop-now only
+      correct: false
+    - value: --reload after each message
+      correct: false
+    explanation: A long-running worker is stopped cleanly with --limit / --time-limit (and --memory-limit).
+      Combined with a process manager and messenger:stop-workers, this enables graceful restarts on deploy.
+    documentation: https://symfony.com/doc/current/messenger.html#deploying-to-production
+- name: Messenger — Retries & Failures
+  questions:
+  - id: MISC-MSG-04
+    question: After a message exhausts its configured retries, where does it go?
+    type: single
+    difficulty: medium
+    subchapter: messenger/retries-failures
+    concepts:
+    - retry
+    - failure-transport
+    syllabus: Messenger
+    answers:
+    - value: To the configured failure transport
+      correct: true
+    - value: To the sync transport
+      correct: false
+    - value: It is silently discarded
+      correct: false
+    - value: Back to the front of the same queue forever
+      correct: false
+    explanation: Once max_retries is reached the envelope is sent to the failure_transport, where messenger:failed:show/retry
+      can inspect and requeue it. Without a failure transport the message would be lost, which is why
+      configuring one is a best practice.
+    documentation: https://symfony.com/doc/current/messenger.html#saving-retrying-failed-messages
+  - id: MISC-MSG-06
+    question: How do you make a failing handler skip retries and go straight to the failure transport?
+    type: scenario
+    difficulty: medium
+    subchapter: messenger/retries-failures
+    concepts:
+    - retry
+    - unrecoverable
+    - failure-transport
+    syllabus: Messenger
+    answers:
+    - value: Throw UnrecoverableMessageHandlingException
+      correct: true
+    - value: Return false from the handler
+      correct: false
+    - value: Add a DelayStamp(0)
+      correct: false
+    - value: Call $envelope->stopPropagation()
+      correct: false
+    explanation: UnrecoverableMessageHandlingException marks the failure as non-retryable, so the worker
+      sends the message to the failure transport immediately. A handler's return value never influences
+      retries, and there is no stopPropagation() on an Envelope.
+    documentation: https://symfony.com/doc/current/messenger.html#retries-failures
+  - id: MISC-MSG-21
+    question: 'With retry_strategy delay: 1000 and multiplier: 2, what are the delays before the 1st,
+      2nd and 3rd retry?'
+    type: config
+    difficulty: hard
+    subchapter: messenger/retries-failures
+    concepts:
+    - retry-strategy
+    - backoff
+    - exponential
+    syllabus: Messenger
+    answers:
+    - value: 1000 ms, 2000 ms, 4000 ms (delay × multiplier per attempt)
+      correct: true
+    - value: 1000 ms, 1000 ms, 1000 ms (constant)
+      correct: false
+    - value: 2000 ms, 4000 ms, 8000 ms
+      correct: false
+    - value: 1 s, 2 s, 3 s (linear)
+      correct: false
+    explanation: 'MultiplierRetryStrategy multiplies the initial delay by the multiplier for each successive
+      attempt: 1000, 1000×2=2000, 2000×2=4000 (capped by max_delay if set). It is exponential, not constant
+      or linear, and starts at the configured delay, not delay×multiplier.'
+    documentation: https://symfony.com/doc/current/messenger.html#retries-failures
+  - id: MISC-MSG-10
+    question: What information does a RedeliveryStamp carry on a retried message?
+    type: internals
+    difficulty: medium
+    subchapter: messenger/retries-failures
+    concepts:
+    - redelivery-stamp
+    - retry
+    syllabus: Messenger
+    answers:
+    - value: The current retry count (and timing), so the retry strategy knows how many attempts have
+        happened
+      correct: true
+    - value: The DSN of the failure transport
+      correct: false
+    - value: The fully-qualified class name of the handler that failed
+      correct: false
+    - value: A cryptographic signature of the payload
+      correct: false
+    explanation: RedeliveryStamp records the retry count (and redelivery timestamp). The worker reads
+      it to compare against max_retries and to compute the next delay via the retry strategy. Handler
+      identity is on HandlerFailedStamp, not here.
+    documentation: https://symfony.com/doc/current/messenger.html#retries-failures
+  - id: MISC-MSG-15
+    question: Under a transport's retry_strategy, what does the 'multiplier' option control?
+    type: config
+    difficulty: medium
+    subchapter: messenger/retries-failures
+    concepts:
+    - retry-strategy
+    - backoff
+    syllabus: Messenger
+    answers:
+    - value: The factor by which the delay grows between successive retries (exponential backoff)
+      correct: true
+    - value: The number of parallel workers spawned
+      correct: false
+    - value: How many transports share the message
+      correct: false
+    - value: The maximum number of messages fetched per poll
+      correct: false
+    explanation: retry_strategy defines max_retries, delay (initial, ms), multiplier (delay is multiplied
+      by this each attempt) and max_delay to cap it, producing exponential backoff before the failure
+      transport is used.
+    documentation: https://symfony.com/doc/current/messenger.html#retries-failures
+- name: Messenger — Events
+  questions:
+  - id: MISC-MSG-20
+    question: During messenger:consume, which event is dispatched when a handler throws an exception?
+    type: internals
+    difficulty: medium
+    subchapter: messenger/events
+    concepts:
+    - worker-events
+    - failure
+    syllabus: Messenger
+    answers:
+    - value: WorkerMessageFailedEvent
+      correct: true
+    - value: WorkerMessageHandledEvent
+      correct: false
+    - value: WorkerStoppedEvent
+      correct: false
+    - value: WorkerRunningEvent
+      correct: false
+    explanation: The worker loop dispatches WorkerMessageReceivedEvent, then on success WorkerMessageHandledEvent
+      (ack) or on exception WorkerMessageFailedEvent (reject/retry). WorkerRunningEvent fires between
+      receives and WorkerStoppedEvent on shutdown — neither signals a handler failure.
+    documentation: https://symfony.com/doc/current/messenger.html#messenger-events
+  - id: MISC-MSG-EVENT-01
+    type: scenario
+    difficulty: hard
+    subchapter: messenger/events
+    concepts:
+    - SendMessageToTransportsEvent
+    - SendMessageMiddleware
+    - envelope rewrite
+    syllabus: Messenger → Events
+    question: You need to tag every outgoing async message with a stamp right before it is handed to its
+      transport, without touching every call site that dispatches it. Which event do you listen to, and
+      why not a Worker* event?
+    answers:
+    - value: SendMessageToTransportsEvent — it fires on the dispatch side, before the envelope reaches
+        a transport, and setEnvelope() lets you rewrite it
+      correct: true
+    - value: WorkerMessageReceivedEvent — it fires earliest, before anything else happens to the message
+      correct: false
+    - value: WorkerRunningEvent — it fires once per worker loop iteration, covering every message
+      correct: false
+    - value: WorkerMessageHandledEvent — tagging after handling still reaches the transport in time
+      correct: false
+    explanation: SendMessageToTransportsEvent is raised by SendMessageMiddleware on the dispatching side,
+      before the message is actually sent to any transport, and exposes setEnvelope() to rewrite it (e.g.
+      add a stamp). The Worker* events all fire on the consuming side, inside a `messenger:consume` worker
+      process — too late to affect what gets sent, and irrelevant for synchronous (non-transport) messages.
+    documentation: https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Event/SendMessageToTransportsEvent.php

@@ -483,7 +483,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
 ## Connections
 
 - **Depends on:** [HTTP Response](response.md) — `ResponseInterface` reflète le modèle de response, dans le sens sortant.
-- **Reused in:** [Messenger Component](../miscellaneous/messenger.md) — associez les appels sortants au fan-out async et aux retries.
+- **Reused in:** [Messenger Component](../messenger/index.md) — associez les appels sortants au fan-out async et aux retries.
 - **Confused with:** [HTTP Request](request.md) — HttpClient est le client *sortant* ; `Request` enveloppe l'échange *entrant*.
 
 ## Official References
@@ -515,4 +515,4 @@ Je suis prêt quand je peux :
 ---
 
 <small>Related: [HTTP Request](request.md) · [HTTP Response](response.md) ·
-[Status Codes](status-codes.md) · [Messenger Component](../miscellaneous/messenger.md)</small>
+[Status Codes](status-codes.md) · [Messenger Component](../messenger/index.md)</small>

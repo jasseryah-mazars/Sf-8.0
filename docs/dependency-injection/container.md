@@ -496,7 +496,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
   builds and boots the container.
 - **Reused in:** [Controllers](../controllers/abstract-controller.md),
   [Console](../console/custom-commands.md),
-  [Messenger](../miscellaneous/messenger.md) — every entry point pulls its
+  [Messenger](../messenger/index.md) — every entry point pulls its
   collaborators from this container.
 - **Confused with:** [Service Locators](service-locators.md) — a locator is a small
   PSR-11 subset, not the whole container.

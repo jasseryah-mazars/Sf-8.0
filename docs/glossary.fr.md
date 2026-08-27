@@ -26,7 +26,7 @@ entrée tient en une ligne ; suivez le lien pour le chapitre complet.
   `CsrfTokenBadge`, `RememberMeBadge`…). → [authenticators](security/authenticators.md)
 - **BC promise** — Contrat de rétrocompatibilité : les ruptures n'arrivent que dans les versions majeures,
   après dépréciation. → [chapter](architecture/bc-promise.md)
-- **Bus (message bus)** — `MessageBusInterface` ; fait passer un message à travers des middlewares jusqu'à son handler. → [messenger](miscellaneous/messenger.md)
+- **Bus (message bus)** — `MessageBusInterface` ; fait passer un message à travers des middlewares jusqu'à son handler. → [messenger](messenger/messages-handlers.md)
 
 ## C
 
@@ -50,7 +50,7 @@ entrée tient en une ligne ; suivez le lien pour le chapitre complet.
 
 ## E
 
-- **Envelope** — Enveloppe un message Messenger avec des **stamps** (métadonnées). → [messenger](miscellaneous/messenger.md)
+- **Envelope** — Enveloppe un message Messenger avec des **stamps** (métadonnées). → [messenger](messenger/middleware.md)
 - **ESI (Edge Side Includes)** — Mettre en cache des fragments indépendamment, au niveau d'une gateway. → [chapter](http-caching/esi.md)
 - **ETag** — Header de cache par validation (empreinte du contenu) ; l'emporte sur `Last-Modified`. → [validation](http-caching/validation.md)
 - **EventDispatcher** — Distribue les events aux listeners/subscribers par priorité. → [chapter](architecture/events.md)
@@ -81,7 +81,7 @@ entrée tient en une ligne ; suivez le lien pour le chapitre complet.
 ## L–M
 
 - **Last-Modified** — Header de cache par validation basé sur un horodatage. → [validation](http-caching/validation.md)
-- **Middleware (Messenger)** — Couches enveloppant le traitement ; en poupées russes via `stack->next()`. → [messenger](miscellaneous/messenger.md)
+- **Middleware (Messenger)** — Couches enveloppant le traitement ; en poupées russes via `stack->next()`. → [messenger](messenger/middleware.md)
 - **MockHttpClient** — HttpClient en mémoire pour les tests. → [chapter](http/httpclient.md)
 
 ## N–P
@@ -96,7 +96,7 @@ entrée tient en une ligne ; suivez le lien pour le chapitre complet.
 
 - **Reference type** — Mode de génération d'URL : `ABSOLUTE_PATH` (par défaut), `ABSOLUTE_URL`,
   `NETWORK_PATH`, `RELATIVE_PATH`. → [url generation](routing/url-generation.md)
-- **Retry strategy / failure transport** — Redistribution Messenger puis mise en dead-letter. → [messenger](miscellaneous/messenger.md)
+- **Retry strategy / failure transport** — Redistribution Messenger puis mise en dead-letter. → [messenger](messenger/retries-failures.md)
 - **Role hierarchy** — Héritage des `ROLE_*` (p. ex. `ROLE_ADMIN` ⊃ `ROLE_USER`). → [roles](security/roles.md)
 - **Runtime** — Amorce le point d'entrée de l'application (`SymfonyRuntime`). → [chapter](miscellaneous/runtime.md)
 
@@ -104,7 +104,7 @@ entrée tient en une ligne ; suivez le lien pour le chapitre complet.
 
 - **Service locator** — Accès lazy, à la demande, à un ensemble fixe de services. → [chapter](dependency-injection/service-locators.md)
 - **Serializer** — normalizers + encoders ; `#[Groups]` contrôle les champs. → [chapter](miscellaneous/serializer.md)
-- **Stamp** — Métadonnées sur une `Envelope` Messenger. → [messenger](miscellaneous/messenger.md)
+- **Stamp** — Métadonnées sur une `Envelope` Messenger. → [messenger](messenger/middleware.md)
 - **Stateless CSRF** — CSRF basé sur cookie/origin, sans session (7.2+/8). → [csrf](forms/csrf.md)
 
 ## T–V

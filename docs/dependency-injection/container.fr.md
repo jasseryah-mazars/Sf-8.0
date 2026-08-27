@@ -517,7 +517,7 @@ d'injecter le container entier.
   construit et démarre le container.
 - **Reused in:** [Controllers](../controllers/abstract-controller.md),
   [Console](../console/custom-commands.md),
-  [Messenger](../miscellaneous/messenger.md) — chaque point d'entrée tire ses
+  [Messenger](../messenger/index.md) — chaque point d'entrée tire ses
   collaborateurs de ce container.
 - **Confused with:** [Service Locators](service-locators.md) — un locator est un
   petit sous-ensemble PSR-11, pas le container entier.

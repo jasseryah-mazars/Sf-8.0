@@ -21,6 +21,7 @@ Print-friendly, one-per-area condensed recaps for the final days — every subch
 - [Console](console.md)
 - [Automated Tests](testing.md)
 - [Miscellaneous](miscellaneous.md)
+- [Messenger](messenger.md)
 
 ---
 

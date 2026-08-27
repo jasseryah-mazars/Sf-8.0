@@ -340,7 +340,7 @@ sans logique dépendante du temps n'en ont pas besoin.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — le service `clock` (`NativeClock`) est autowiré via `ClockInterface`.
-- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` substitue une `MockClock` ; les délais/retries de [Messenger](messenger.md) raisonnent sur « maintenant ».
+- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` substitue une `MockClock` ; les délais/retries de [Messenger](../messenger/index.md) raisonnent sur « maintenant ».
 - **Confused with:** `MonotonicClock` — celle-ci sert à mesurer des *durées*, pas à lire le « maintenant » de l'horloge murale.
 
 ## Official References
@@ -372,4 +372,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../testing/phpunit-bridge.md) · [Messenger](messenger.md)</small>
+<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../testing/phpunit-bridge.md) · [Messenger](../messenger/index.md)</small>

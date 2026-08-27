@@ -376,7 +376,7 @@ arguments — une logique qu'aucun attribut n'exprime.
 
 - **Depends on:** [The Service Container](container.md) — les passes réécrivent
   des `Definition`s pendant `compile()`.
-- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+- **Reused in:** [Messenger](../messenger/index.md),
   [Security](../security/voters.md) — la collecte des handlers et des voters est
   câblée par des passes.
 - **Confused with:** [Tags](tags.md) — un tag ne fait qu'étiqueter ; un pass est ce

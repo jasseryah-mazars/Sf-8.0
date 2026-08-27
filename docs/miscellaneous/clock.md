@@ -328,7 +328,7 @@ clock. Trivial scripts with no time-dependent logic don't need it.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — the `clock` service (`NativeClock`) is autowired via `ClockInterface`.
-- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` swaps in a `MockClock`; [Messenger](messenger.md) delays/retries reason about "now".
+- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` swaps in a `MockClock`; [Messenger](../messenger/index.md) delays/retries reason about "now".
 - **Confused with:** `MonotonicClock` — that one is for measuring *durations*, not reading wall-clock "now".
 
 ## Official References
@@ -359,4 +359,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../testing/phpunit-bridge.md) · [Messenger](messenger.md)</small>
+<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../testing/phpunit-bridge.md) · [Messenger](../messenger/index.md)</small>

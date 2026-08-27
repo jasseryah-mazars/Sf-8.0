@@ -17,7 +17,7 @@ AREAS = {
  "php-web-security":"PHP & Web Security","http":"HTTP","architecture":"Symfony Architecture",
  "controllers":"Controllers","routing":"Routing","twig":"Templating (Twig)","forms":"Forms",
  "validation":"Data Validation","dependency-injection":"Dependency Injection","security":"Security",
- "http-caching":"HTTP Caching","console":"Console","testing":"Automated Tests","miscellaneous":"Miscellaneous",
+ "http-caching":"HTTP Caching","console":"Console","testing":"Automated Tests","miscellaneous":"Miscellaneous","messenger":"Messenger",
 }
 
 def strip_links(text):

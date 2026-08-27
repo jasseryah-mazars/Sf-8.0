@@ -416,7 +416,7 @@ groups + max-depth to keep payloads bounded.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — normalizers and encoders are tagged services autowired into the `serializer`.
-- **Reused in:** [Messenger](messenger.md) — a transport serializer can use the Serializer to encode envelopes across languages; [Mailer](mailer.md) shares the same DI wiring.
+- **Reused in:** [Messenger](../messenger/index.md) — a transport serializer can use the Serializer to encode envelopes across languages; [Mailer](mailer.md) shares the same DI wiring.
 - **Confused with:** PHP's `json_encode` — the Serializer adds normalization, groups, and denormalization back into typed objects.
 
 ## Official References
@@ -447,4 +447,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Messenger](messenger.md) · [Mailer](mailer.md) · [Intl](intl.md)</small>
+<small>Related: [Messenger](../messenger/index.md) · [Mailer](mailer.md) · [Intl](intl.md)</small>

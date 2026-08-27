@@ -40,6 +40,7 @@ AREA_LABELS = {
     "http": "HTTP",
     "http-caching": "HTTP Caching",
     "miscellaneous": "Miscellaneous",
+    "messenger": "Messenger",
     "php-web-security": "PHP & Web Security",
     "routing": "Routing",
     "security": "Security",

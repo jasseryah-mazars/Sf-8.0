@@ -357,7 +357,7 @@ expresses.
 
 - **Depends on:** [The Service Container](container.md) — passes rewrite
   `Definition`s during `compile()`.
-- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+- **Reused in:** [Messenger](../messenger/index.md),
   [Security](../security/voters.md) — handler and voter collection is wired by
   passes.
 - **Confused with:** [Tags](tags.md) — a tag only labels; a pass is what *consumes*

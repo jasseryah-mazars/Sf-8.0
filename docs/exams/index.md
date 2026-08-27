@@ -17,7 +17,8 @@ One exam per topic area — every subchapter mixed together, ordered progressive
 - [HTTP Caching](http-caching.md) — 52 questions
 - [Console](console.md) — 66 questions
 - [Automated Tests](testing.md) — 71 questions
-- [Miscellaneous](miscellaneous.md) — 96 questions
+- [Miscellaneous](miscellaneous.md) — 79 questions
+- [Messenger](messenger.md) — 28 questions
 
 ---
 

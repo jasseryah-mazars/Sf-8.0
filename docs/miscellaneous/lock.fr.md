@@ -352,7 +352,7 @@ horizontalement.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — la `LockFactory` est autowirée à partir du DSN de store configuré.
-- **Reused in:** [Messenger](messenger.md) — sérialiser les exécutions de workers en double ; [Process](process.md) — protéger des outils externes partagés.
+- **Reused in:** [Messenger](../messenger/index.md) — sérialiser les exécutions de workers en double ; [Process](process.md) — protéger des outils externes partagés.
 - **Confused with:** la protection contre le stampede de [Cache](cache.md) — Lock impose une exclusion mutuelle stricte ; le cache ne fait que réduire les recalculs en double.
 
 ## Official References
@@ -384,4 +384,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Cache](cache.md) · [Process](process.md) · [Messenger](messenger.md)</small>
+<small>Related: [Cache](cache.md) · [Process](process.md) · [Messenger](../messenger/index.md)</small>

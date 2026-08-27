@@ -5,7 +5,7 @@ Active-recall decks generated from the practice-question bank — one per topic 
 !!! abstract "Why flashcards"
     Testing yourself (active recall) beats re-reading. Spacing the reviews beats cramming. These decks turn the 534-question bank into that workflow.
 
-**Total cards:** 1179
+**Total cards:** 1190
 
 ## Decks
 
@@ -22,7 +22,8 @@ Active-recall decks generated from the practice-question bank — one per topic 
 - [HTTP Caching](http-caching.md) — 52 cards
 - [Console](console.md) — 66 cards
 - [Automated Tests](testing.md) — 71 cards
-- [Miscellaneous](miscellaneous.md) — 96 cards
+- [Miscellaneous](miscellaneous.md) — 79 cards
+- [Messenger](messenger.md) — 28 cards
 
 ## Anki import
 

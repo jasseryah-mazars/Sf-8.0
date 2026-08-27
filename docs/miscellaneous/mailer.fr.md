@@ -26,7 +26,7 @@
     **Syllabus:** `Miscellaneous → Mailer` ·
     **Level:** Advanced ·
     **Est. time:** 40 min ·
-    **Prerequisites:** [Twig](../twig/index.md), [Messenger](messenger.md)
+    **Prerequisites:** [Twig](../twig/index.md), [Messenger](../messenger/index.md)
 
 ---
 
@@ -164,7 +164,7 @@ Si Messenger est configuré pour router
 `MailerInterface::send()` le **dispatche** au lieu de l'envoyer immédiatement ;
 un worker le livre plus tard. Cela garde la latence de la request basse et
 offre gratuitement les retries et la gestion des échecs. Voir
-[Messenger](messenger.md).
+[Messenger](../messenger/index.md).
 
 ```yaml
 # config/packages/messenger.yaml
@@ -314,7 +314,7 @@ de répondre.
 
 ## Connections
 
-- **Depends on:** [Messenger](messenger.md) — la livraison asynchrone route `SendEmailMessage` ; [Twig](../twig/index.md) rend `TemplatedEmail`.
+- **Depends on:** [Messenger](../messenger/index.md) — la livraison asynchrone route `SendEmailMessage` ; [Twig](../twig/index.md) rend `TemplatedEmail`.
 - **Reused in:** [Console](../console/index.md) — `messenger:consume` est ce qui livre réellement le courrier en file d'attente.
 - **Confused with:** l'`Envelope` du Mailer (expéditeur/destinataires pour la conversation SMTP) vs les headers visibles du message.
 
@@ -346,4 +346,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Messenger](messenger.md) · [Twig](../twig/index.md) · [Serializer](serializer.md)</small>
+<small>Related: [Messenger](../messenger/index.md) · [Twig](../twig/index.md) · [Serializer](serializer.md)</small>

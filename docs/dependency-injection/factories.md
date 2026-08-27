@@ -333,7 +333,7 @@ a service, use [decoration](decoration.md).
 
 - **Depends on:** [Service Registration](registration.md) — a factory is a flag on
   the service `Definition`.
-- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+- **Reused in:** [Messenger](../messenger/index.md),
   [Miscellaneous — Cache](../miscellaneous/cache.md) — transports and pools are
   often built by factories.
 - **Confused with:** [Decoration](decoration.md) — a factory *builds* a service; a

@@ -342,7 +342,6 @@ nav:
       - Process Component: miscellaneous/process.md
       - Serializer Component: miscellaneous/serializer.md
       - PropertyAccess Component: miscellaneous/property-access.md
-      - Messenger Component: miscellaneous/messenger.md
       - Mime & Mailer Components: miscellaneous/mailer.md
       - Filesystem & Finder Components: miscellaneous/filesystem-finder.md
       - Lock Component: miscellaneous/lock.md
@@ -350,6 +349,15 @@ nav:
       - Internationalization and localization: miscellaneous/intl.md
       - Runtime Component: miscellaneous/runtime.md
       - Clock Component: miscellaneous/clock.md
+  - Messenger:
+      - messenger/index.md
+      - Messenger Component: messenger/component.md
+      - Messages & Handlers: messenger/messages-handlers.md
+      - Middleware: messenger/middleware.md
+      - Transports: messenger/transports.md
+      - Workers: messenger/workers.md
+      - Retries & Failures: messenger/retries-failures.md
+      - Events: messenger/events.md
   - Labs:
       - labs/index.md
       - PHP & Web Security — SPL Collection: labs/php-web-security.md
@@ -388,6 +396,7 @@ nav:
       - Console: exams/console.md
       - Automated Tests: exams/testing.md
       - Miscellaneous: exams/miscellaneous.md
+      - Messenger: exams/messenger.md
   - Revision Hub:
       - revision/index.md
       - Revision Modes: revision/modes.md
@@ -414,6 +423,7 @@ nav:
           - Console: revision/sheets/console.md
           - Automated Tests: revision/sheets/testing.md
           - Miscellaneous: revision/sheets/miscellaneous.md
+          - Messenger: revision/sheets/messenger.md
       - Flashcards:
           - revision/flashcards/index.md
           - PHP & Web Security: revision/flashcards/php-web-security.md
@@ -430,6 +440,7 @@ nav:
           - Console: revision/flashcards/console.md
           - Automated Tests: revision/flashcards/testing.md
           - Miscellaneous: revision/flashcards/miscellaneous.md
+          - Messenger: revision/flashcards/messenger.md
       - Mock Exam A: revision/mock-exam.md
       - Mock Exam B: revision/mock-exam-b.md
       - Mock Exam C: revision/mock-exam-c.md

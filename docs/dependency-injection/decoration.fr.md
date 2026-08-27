@@ -365,7 +365,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
 
 - **Depends on:** [Compiler Passes](compiler-passes.md) — `DecoratorServicePass`
   effectue le recâblage à la compilation.
-- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+- **Reused in:** [Messenger](../messenger/index.md),
   [Security](../security/authenticators.md) — les middlewares et handlers sont
   couramment décorés pour ajouter du logging ou du cache.
 - **Confused with:** [Factories](factories.md) — une factory *construit* un

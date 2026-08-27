@@ -377,7 +377,7 @@ définitions (pas seulement collecter), il vous faut un
 - **Depends on:** [Service Registration](registration.md) — l'autoconfiguration
   ajoute le tag à chaque implémenteur.
 - **Reused in:** [Security](../security/voters.md),
-  [Messenger](../miscellaneous/messenger.md), [Console](../console/events.md) —
+  [Messenger](../messenger/index.md), [Console](../console/events.md) —
   voters, handlers et event subscribers sont tous collectés par tag.
 - **Confused with:** [Service Locators](service-locators.md) — `tagged_locator`
   *construit* un locator ; le locator est la primitive générale d'ensemble lazy.

@@ -348,7 +348,7 @@ run *many* handlers, use [tags](tags.md) instead.
 
 - **Depends on:** [Compiler Passes](compiler-passes.md) — `DecoratorServicePass`
   does the rewiring at compile time.
-- **Reused in:** [Messenger](../miscellaneous/messenger.md),
+- **Reused in:** [Messenger](../messenger/index.md),
   [Security](../security/authenticators.md) — middleware and handlers are commonly
   decorated to add logging or caching.
 - **Confused with:** [Factories](factories.md) — a factory *builds* a service; a

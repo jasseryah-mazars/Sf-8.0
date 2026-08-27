@@ -25,8 +25,8 @@ canonical list are ignored, and missing sections are not flagged.
 
 ## Summary
 
-- Content chapters scanned: **170**
-- Compliant: **170**
+- Content chapters scanned: **176**
+- Compliant: **176**
 - Non-compliant: **0**
 
 ## Violations
