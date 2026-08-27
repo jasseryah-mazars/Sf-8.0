@@ -1,9 +1,8 @@
 # Cowork Progress — Sf-8.0 Certification Quality
 
 _Compact, durable log. Update after every lot instead of rescanning the repo._
-_Branch: `claude/sf-8-certification-quality-iimd4l`. Lot 1 was committed locally,
-not pushed (commit `60c0814`). Lot 2 (below) is currently uncommitted working-tree
-changes pending user decision — see the "SORTIE FINALE" report given to the user._
+_Branch: `claude/sf-8-certification-quality-iimd4l`. Both Lot 1 (`60c0814`) and
+Lot 2 (`15d1f4c`) are committed AND pushed to origin. No PR opened (not asked)._
 
 ## Lot 2 — Official syllabus realignment (2026-08-26, second mission)
 
