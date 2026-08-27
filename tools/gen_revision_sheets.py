@@ -35,8 +35,16 @@ def title(text):
     return m.group(1).strip() if m else "?"
 
 for area, label in AREAS.items():
-    files = sorted(f for f in glob.glob(os.path.join(DOCS, area, "*.md"))
-                   if not f.endswith("index.md"))
+    files = sorted(
+        f for f in glob.glob(os.path.join(DOCS, area, "*.md"))
+        # Exclude the index hub (both languages: 'index.md' AND its
+        # 'index.fr.md' sidecar — the old check only matched the former,
+        # letting the French index's H1 leak in as a spurious empty
+        # section) and every '*.fr.md' sidecar (this sheet is English-only;
+        # including the French files duplicated every chapter's content).
+        if os.path.basename(f) not in ("index.md", "index.fr.md")
+        and not f.endswith(".fr.md")
+    )
     L = [f"# Revision Sheet — {label}", "",
          "Ultra-condensed, print-friendly recap of every subchapter (key takeaways +"
          " last-minute cheat). For the final days. Full detail: "

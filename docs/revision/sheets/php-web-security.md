@@ -10,6 +10,17 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 **Cheat:** `abstract` method = no body; subclass must implement (variance applies). Can have ctor/props/constants; cannot be `new`-ed. Template method: `final` skeleton → abstract hooks. `extends` one class, `implements` many interfaces.
 
+## Attributes
+- An attribute is inert metadata: it does nothing until read via Reflection.
+- `getAttributes()` returns data (name/arguments/target); `newInstance()`
+  is the only call that constructs the object and autoloads its class.
+- `Attribute::TARGET_*` restricts where an attribute may be used;
+  `IS_REPEATABLE` allows more than one occurrence on the same target.
+- Symfony's `#[Route]`, `#[AsCommand]`, etc. are plain attribute classes —
+  the framework's loaders are the "something" that reads and instantiates them.
+
+**Cheat:** Declare: `#[\Attribute(TARGET_* | IS_REPEATABLE)]` above the class. Read: `getAttributes(?string $name = null, int $flags = 0): array`. `ReflectionAttribute`: `getName()`, `getArguments()`, `getTarget()`, `isRepeated()`, `newInstance()`. `ReflectionAttribute::IS_INSTANCEOF` — match subclasses too. Class constants can carry attributes since PHP **8.3**.
+
 ## Anonymous Functions & Closures
 - Closures are `Closure` instances carrying a bound `$this` and a scope.
 - `use` = by value at definition (or `&` for reference); `fn` = auto by value.
@@ -17,6 +28,17 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - `f(...)` and `Closure::fromCallable()` build closures from any callable.
 
 **Cheat:** `fn (x) => expr` — auto-capture by value, single expr, no `&`. `function () use (&$x) {}` — by reference. `bindTo($obj, $scope)` / `bind()` (static) / `call($obj)`. `strlen(...)` == `Closure::fromCallable('strlen')`.
+
+## Enums
+- Pure enums implement `UnitEnum`; backed enums additionally implement
+  `BackedEnum` and add `->value`/`from()`/`tryFrom()`.
+- `from()` throws `\ValueError` on a miss; `tryFrom()` returns `null` — not
+  interchangeable.
+- Cases are singletons: `===` identity comparison is always safe.
+- Symfony's `BackedEnumValueResolver` turns a bad route value into a 404;
+  `EnumType` binds a backed enum to a form field via `::cases()`.
+
+**Cheat:** `enum X { case A; }` — pure. `enum X: string { case A = 'a'; }` — backed. `UnitEnum`: `->name`, `cases()`. `BackedEnum` (backed only): `->value`, `from()` (throws), `tryFrom()` (null). Route argument, backed enum, bad value → **404** via `BackedEnumValueResolver`. `EnumType::class` form option: `class` (required) → `choices` from `::cases()`.
 
 ## Exception & Error Handling
 - `Throwable` = `Error` ∪ `Exception`; catch `\Throwable` for both.

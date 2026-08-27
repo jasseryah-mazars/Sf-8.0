@@ -63,16 +63,6 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 **Cheat:** Status: `assertResponseIsSuccessful()`, `assertResponseStatusCodeSame(n)`, `assertResponseIsUnprocessable()`. Redirect: `assertResponseRedirects($to?, $code?)`. Headers/cookies: `assertResponseHasHeader`, `assertResponseHeaderSame`, `assertResponseHasCookie`. DOM: `assertSelectorExists`, `assertSelectorTextContains/Same`, `assertPageTitleContains`, `assertRouteSame`.
 
-## The PHPUnit Bridge
-- The bridge adds deprecation collection + clock/DNS mocking, wired by
-  `SymfonyExtension`.
-- Clock/DNS mocking is opt-in via `time-sensitive` / `dns-sensitive` groups.
-- `SYMFONY_DEPRECATIONS_HELPER` (env var) tunes reporting: `max[...]`, `weak`,
-  `disabled`, baseline.
-- Prefer the Clock component's `MockClock` for code that injects `ClockInterface`.
-
-**Cheat:** Install: `composer require --dev symfony/phpunit-bridge`. Register: `<bootstrap class="Symfony\Bridge\PhpUnit\SymfonyExtension"/>`. Groups: `#[Group('time-sensitive')]`, `#[Group('dns-sensitive')]`. Env: `SYMFONY_DEPRECATIONS_HELPER=max[direct]=0` / `weak` / `disabled=1`.
-
 ## The Profiler in Tests
 - Enable per request with `enableProfiler()` **before** `request()`.
 - `getProfile()` returns a `Profile` or `false`.

@@ -80,6 +80,17 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 **Cheat:** `new Response($body, $status, $headers)`; default `Cache-Control: no-cache, private`. `JsonResponse::fromJsonString()`, `RedirectResponse(url, 302)`. `BinaryFileResponse` = files on disk (range/X-Sendfile); `StreamedResponse` = generated output. Disposition via `HeaderUtils::makeDisposition()`.
 
+## HTTP Specification (RFC 9110)
+- RFC 9110 defines HTTP **semantics** (methods, status codes, headers,
+  negotiation, conditional/range requests), independent of HTTP version.
+- RFC 9112/9113/9114 define the **wire format** per HTTP version; RFC 9111
+  defines **caching** — both separate from RFC 9110.
+- Symfony's `Request`/`Response` model the RFC 9110 layer, which is why they
+  don't change shape across HTTP/1.1, /2, /3.
+- An absent header and an empty header value are distinct under RFC 9110.
+
+**Cheat:** **9110** = Semantics (methods, status, headers, negotiation, conditional/range). **9111** = Caching. **9112** = HTTP/1.1. **9113** = HTTP/2. **9114** = HTTP/3. 9110 replaced 7231/7232/7233/7235/7538 — **not** 7230 (→9112) or 7234 (→9111). Safe / idempotent / cacheable = per-method RFC 9110 properties, not framework rules.
+
 ## Status Codes
 - 1xx info, 2xx success, 3xx redirect, 4xx client error, 5xx server error.
 - 307/308 keep the method; 303 forces GET; 301/308 are permanent (cached).

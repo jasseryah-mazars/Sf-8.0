@@ -43,10 +43,9 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 ## Deprecations Best Practices
 - Use `trigger_deprecation(package, version, message, ...args)` from the contracts package.
 - Deprecations are `E_USER_DEPRECATED` notices, removed only in the next major.
-- Detect via profiler, logs, and the PHPUnit bridge.
-- Gate CI with `SYMFONY_DEPRECATIONS_HELPER` to keep the codebase upgrade-ready.
+- Detect via the profiler and the `deprecation` log channel.
 
-**Cheat:** `trigger_deprecation('pkg', 'X.Y', 'msg %s', $arg)` — package, version, msg, args. Level: `E_USER_DEPRECATED`. Removed: next major. Detect: toolbar/profiler, `deprecation` log channel, phpunit-bridge. DI: `deprecated:` key / `Definition::setDeprecated()`.
+**Cheat:** `trigger_deprecation('pkg', 'X.Y', 'msg %s', $arg)` — package, version, msg, args. Level: `E_USER_DEPRECATED`. Removed: next major. Detect: toolbar/profiler, `deprecation` log channel. DI: `deprecated:` key / `Definition::setDeprecated()`.
 
 ## Event Dispatcher & Kernel Events
 - Dispatcher sorts by priority (desc), memoises, and invokes lazily-built listeners.

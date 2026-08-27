@@ -23,17 +23,6 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 **Cheat:** Browser cache = private: `max-age`/`Expires`/`ETag`; ignores `s-maxage`. Reload → `max-age=0` (304 possible). Hard reload → `no-cache` (refetch). Fingerprinted asset → `public, max-age=31536000, immutable`. Cache busting = new URL, not "clearing" the browser cache.
 
-## Edge Side Includes (ESI)
-- ESI declares **holes** the surrogate fills as independent sub-requests, each
-  with its own TTL — mixed freshness on one page.
-- Enable `framework.esi: true` and embed with `render_esi(controller(...))`;
-  without a surrogate it renders inline.
-- Processing happens in the reverse proxy (`HttpCache`/Varnish) via the `Esi`
-  surrogate; fragment URIs are signed.
-- SSI (`render_ssi`) is the equivalent for SSI-capable servers.
-
-**Cheat:** Enable: `framework.esi: true` (+ `http_cache: true`). SSI: `framework.ssi`. Twig: `render_esi(controller('Ctrl::method'))`; fragment sets own `#[Cache]`. No surrogate → `render_esi` falls back to **inline** rendering. Classes: `HttpCache\Esi` (SurrogateInterface), `Fragment\EsiFragmentRenderer`. Without ESI, the shortest embedded TTL caps the whole page.
-
 ## Expiration (Expires, Cache-Control)
 - Freshness lets a cache answer without hitting the origin; precedence is
   `s-maxage` > `max-age` > `Expires` for shared caches.

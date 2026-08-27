@@ -87,6 +87,9 @@ jobs:
       - name: Structural checks (Official References, placeholders, internal links)
         run: python tools/check_placeholders.py
 
+      - name: Editorial structure checks (nav/docs consistency, code fences, empty sections)
+        run: python tools/check_editorial_structure.py
+
       - name: Report freshness check (informational only)
         run: python tools/check_report_freshness.py
 

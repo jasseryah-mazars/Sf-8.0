@@ -30,11 +30,11 @@ each subject and `specs/FinalComplianceAudit.md` for the end-state audit.
 
 ## P2 — Medium priority
 
-| # | Subject | Status |
-|---|---|---|
-| P2-01 | Editorial structure normalization | not started this run |
-| P2-02 | README/documentation corrections | not started this run |
-| P2-03 | Site quality (accessibility, mobile, etc.) | not started this run |
+| # | Subject | Status | Notes |
+|---|---|---|---|
+| P2-01 | Editorial structure normalization | **done this run** | New `tools/check_editorial_structure.py` (nav<->docs consistency, code-fence balance, empty-body headings — all 0 violations after fixes). Found and fixed a real generator bug in `tools/gen_revision_sheets.py` (its file glob picked up `*.fr.md` sidecars, duplicating every chapter's content in French+English inside the English-only revision sheets, plus a stray empty section from `index.fr.md` leaking in) — see RemediationLog. Section order (176/176) and Official-References/placeholder/link checks (already covered by `check_section_order.py`/`check_placeholders.py`) re-verified, not re-implemented. |
+| P2-02 | README/documentation corrections | not started this run | |
+| P2-03 | Site quality (accessibility, mobile, etc.) | not started this run | |
 
 ## P3 — Improvements
 

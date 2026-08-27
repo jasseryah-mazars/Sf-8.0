@@ -20,11 +20,11 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 ## Controller Rendering
 - `render(controller(...))` embeds a controller as a sub-request (inline).
-- `render_esi` defers to a reverse proxy; `render_hinclude` to the browser.
+- `render_hinclude` defers loading to the browser via a JS placeholder.
 - Backed by `HttpKernelExtension` → `FragmentHandler` → a `FragmentRenderer`.
 - Use it only when the fragment needs its own logic/data/cache.
 
-**Cheat:** `render(controller('C::m', {a:1}))` = inline sub-request. `render_esi(...)` = reverse-proxy cache, falls back to inline. Enable via `framework.fragments` / `framework.esi`. `include` for cheap fragments; embed for isolated logic.
+**Cheat:** `render(controller('C::m', {a:1}))` = inline sub-request. `render_hinclude(...)` = async placeholder resolved by the browser. Enable direct fragment URLs via `framework.fragments`. `include` for cheap fragments; embed for isolated logic.
 
 ## Debugging Variables
 - `dump()` prints a rich VarDumper view; `{% dump %}` sends it to the collector.

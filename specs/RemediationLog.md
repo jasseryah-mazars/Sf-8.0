@@ -589,6 +589,68 @@ in the log, still documented, still not a structural MkDocs failure).
 
 ---
 
+## P2-01 — Editorial structure normalization
+
+**New source:** `tools/check_editorial_structure.py` — three checks not
+already covered elsewhere:
+1. **Nav <-> docs consistency:** every `docs/**/*.md` file (excluding
+   `mkdocs.yml`'s own `exclude_docs: _meta/` and the per-chapter generated
+   `exams/`/`revision/` pages, which are reached via their own hub index,
+   not individually nav-listed) must be reachable from `mkdocs.yml`'s
+   `nav:` tree, and every nav entry must point at a file that exists.
+2. **Balanced code fences:** every file's ` ``` ` markers must come in
+   pairs (an unclosed fence breaks rendering for the rest of the page).
+3. **No heading with an empty subtree:** a heading is flagged only if
+   *nothing* — not even a deeper subheading and its content — appears
+   before the next heading at the same or shallower level (so a `## Deep
+   Dive` immediately followed by `### The wrapping model` and a Mermaid
+   diagram is correctly NOT flagged; only a truly empty stub is).
+
+**First run found 83 violations, 82 of which were the same class of bug,
+traced to its actual source and fixed there (not patched in the output):**
+`tools/gen_revision_sheets.py`'s file glob (`docs/<area>/*.md`) picked up
+every chapter's `*.fr.md` sidecar in addition to its `.md` file, and its
+`index.md`-only exclusion check missed `index.fr.md` (`"index.fr.md"
+.endswith("index.md")` is `False`). Two consequences, both real, both
+present in every one of the 15 generated revision sheets, not just the one
+`check_editorial_structure.py` happened to flag as empty:
+- Every chapter's content appeared **twice** in its area's revision sheet —
+  once from the French file, once from the English file, under the same
+  `## Heading` — silently doubling every "cheat sheet" with untranslated
+  French prose mixed into what is meant to be the English page.
+- `docs/miscellaneous/index.fr.md`'s H1 ("Miscellaneous Components") leaked
+  in as a spurious heading with zero content (index pages have no "Key
+  takeaways"/"Last-minute revision" sections to extract) — this is the one
+  `check_editorial_structure.py`'s empty-section check actually caught;
+  the French-duplication half of the bug required reading the diff, not
+  just the automated check, to notice.
+
+**Fix:** excluded both `*.fr.md` (all of them, not just the index) and
+`index.fr.md` explicitly from the glob in `tools/gen_revision_sheets.py`,
+then regenerated all 15 sheets. **Verified: every area's sheet now has
+exactly one `## ` section per non-index, non-French chapter file** (counted
+file-by-file, 15/15 areas match exactly — e.g. `dependency-injection`:
+14 chapters, 14 sections; `security`: 16/16; full table checked, not
+sampled). `check_editorial_structure.py` re-run: 0 violations across all
+three checks.
+
+**What this does not do:** rewrite or re-validate the *content* of the
+now-deduplicated sheets against the source chapters beyond the count-match
+above — the extracted text itself was already correct English prose before
+this fix (the bug was inclusion of extra unwanted sections, not corruption
+of the wanted ones), so a full content re-read was not required to close
+this specific defect, but is not claimed here either.
+
+Wired `tools/check_editorial_structure.py` into
+`.github/workflows/deploy.yml` as a **blocking** step.
+
+**Tested:** `check_editorial_structure.py` → 0/0/0 violations across all
+three checks; `validate_quiz.py` → 1292/0 (unaffected — this fix touches
+`docs/revision/sheets/` only, not `quiz/`); `check_placeholders.py` → OK;
+`mkdocs build --strict` → exit 0.
+
+---
+
 _This log continues to grow as P1/P2/P3 subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._
