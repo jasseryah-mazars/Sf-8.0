@@ -9,7 +9,7 @@ site_author: Community
 site_url: https://jasseryah-mazars.github.io/Sf-8.0/
 repo_url: https://github.com/jasseryah-mazars/Sf-8.0
 repo_name: Sf-8.0
-edit_uri: edit/main/docs/
+edit_uri: edit/master/docs/
 copyright: >-
   Content licensed under MIT. Symfony is a trademark of Symfony SAS.
   This is an independent community project and is not affiliated with Symfony SAS.

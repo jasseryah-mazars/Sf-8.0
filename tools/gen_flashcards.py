@@ -77,7 +77,7 @@ for stem, title in TITLES.items():
     idx.append(f"- [{title}]({stem}.md) — {counts.get(stem,0)} cards")
 idx += ["", "## Anki import", "",
         "Prefer a real SRS app? Import [`quiz/flashcards.csv`](https://github.com/"
-        "jasseryah-mazars/Sf-8.0/blob/main/quiz/flashcards.csv) into "
+        "jasseryah-mazars/Sf-8.0/blob/master/quiz/flashcards.csv) into "
         "[Anki](https://apps.ankiweb.net/) (Basic note type; fields: Front, Back, "
         "Tags; the area tag lets you study one deck at a time).", "",
         "---", "", "<small>Back to [Revision Hub](../index.md)</small>"]

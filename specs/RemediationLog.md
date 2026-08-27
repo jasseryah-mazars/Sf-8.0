@@ -934,6 +934,72 @@ numbers).
 
 ---
 
+## Master as the project's reference branch (Phase 2 of the master-consolidation mission)
+
+**Verified via `mcp__github__search_repositories` (a real API read, not**
+**assumed):** the repository's GitHub-side default branch is currently
+**`claude/symfony8-cert-platform-mgkdkr`, not `master`.** No tool available
+in this session can change a repository's default branch (searched the
+full GitHub MCP toolset for anything settings/admin-shaped — only
+content/branch/PR-level tools exist, nothing that touches repository
+Settings). **This is the one remaining administrative action**, to be done
+by someone with repo admin access: **Settings → General → Default branch
+→ change to `master`.** Not claimed as done; not worked around.
+
+This does **not** block Pages deployment: the `github-pages` environment's
+deployment-branch policy is independent of the repository's "default
+branch" setting, and `master` already deploys successfully today (see the
+merge subject above, and run history — `master` push builds have
+succeeded since before this session).
+
+**Found and fixed while auditing branch references for harmonization (real
+bugs, not cosmetic):** `mkdocs.yml`'s `edit_uri: edit/main/docs/` pointed
+at a branch that **does not exist in this repository at all** — confirmed
+via `git ls-remote --heads origin`, only `master` (plus now-merged
+`claude/...` branches) has ever existed here. This predates the master-
+consolidation mission entirely; it was simply always broken. Every
+"Edit this page" link on the live site was pointing at a 404. Fixed to
+`edit/master/docs/`. Two more of the same class of bug found and fixed:
+`docs/revision/flashcards/index.md` and its generator
+`tools/gen_flashcards.py` both hardcoded
+`github.com/jasseryah-mazars/Sf-8.0/blob/main/quiz/flashcards.csv` (same
+nonexistent branch) — fixed to `blob/master/...` in both the generated
+page and its source generator. Two other `blob/main` matches
+(`docs/architecture/deprecations.md`/`.fr.md`, linking to
+`symfony/deprecation-contracts`) were correctly left untouched — that
+`main` is the external Symfony org repo's own real branch, not this
+project's.
+
+**Mistake made and corrected in the same subject:** ran
+`tools/gen_flashcards.py` to pick up the link fix, which — per this
+project's own established, previously-documented historical-drift risk —
+regenerated all 15 flashcard decks, not just the one link. Caught via
+`git status`/`git diff --stat` immediately, before committing. Reverted
+the 12 unrelated regenerated deck files with `git checkout --`. Kept two
+regenerated files after checking them line-by-line: `docs/revision/
+flashcards/index.md` (its diff was cleanly the intended link fix plus
+stale card-count numbers already out of sync with the actual per-deck
+files — re-applied as a single-line hand-patch instead, leaving the stale
+counts exactly as before rather than mixing a partial regeneration in) and
+`quiz/flashcards.csv`, whose diff turned out to be exactly ONE row
+different from committed content (not the usual mass-drift pattern) — that
+one row was this project's own P1-03-era hand-patch of the `PHP-EXT-09`
+card, done via a manual byte-level script at the time, which had used a
+shortened paraphrase instead of the exact wording from `quiz/
+php-web-security.yml`'s `explanation` field. The regenerated row matches
+that YAML source exactly, and also now matches `docs/revision/flashcards/
+php-web-security.md`'s already-correct card 89 text — keeping it fixes a
+real, previously-unnoticed inconsistency between the CSV export and the
+site's own flashcard page, verified by direct comparison before deciding
+to keep it, not assumed safe.
+
+**Tested:** `validate_quiz.py` (1292/0, unaffected — this subject touched
+no `quiz/*.yml` question content, only the generated CSV row's wording),
+`check_placeholders.py`, `check_editorial_structure.py` all clean;
+`mkdocs build --strict` → exit 0.
+
+---
+
 _This log continues to grow as future subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._

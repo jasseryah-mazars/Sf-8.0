@@ -27,7 +27,7 @@ Active-recall decks generated from the practice-question bank — one per topic 
 
 ## Anki import
 
-Prefer a real SRS app? Import [`quiz/flashcards.csv`](https://github.com/jasseryah-mazars/Sf-8.0/blob/main/quiz/flashcards.csv) into [Anki](https://apps.ankiweb.net/) (Basic note type; fields: Front, Back, Tags; the area tag lets you study one deck at a time).
+Prefer a real SRS app? Import [`quiz/flashcards.csv`](https://github.com/jasseryah-mazars/Sf-8.0/blob/master/quiz/flashcards.csv) into [Anki](https://apps.ankiweb.net/) (Basic note type; fields: Front, Back, Tags; the area tag lets you study one deck at a time).
 
 ---
 
