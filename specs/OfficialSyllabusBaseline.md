@@ -3,6 +3,15 @@
 _Established 2026-08-27. Regenerate/re-verify whenever network access to the primary
 sources below becomes available, or when Symfony announces a syllabus revision._
 
+> **This file's title says "Official" because it *tracks* the official syllabus —**
+> **it is not itself an official document, and §2/§3 below are not proof of what**
+> **the official syllabus says.** The taxonomy in §3 was derived from
+> `specs/TraceabilityMatrix.md`, which is this repository's own working document,
+> not `certification.symfony.com` re-read live. Nowhere in this repository should
+> "175 subtopics" or the taxonomy below be cited as confirmation of the official
+> syllabus's actual contents — only as this project's current best-effort tracking
+> of it, explicitly pending live re-verification (§1).
+
 ## 1. Sources consulted this run (network reachability, checked live)
 
 | # | Source | URL | Reachable this run? | Result |

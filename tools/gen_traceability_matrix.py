@@ -109,6 +109,104 @@ def status_for(ev: dict, out_of_scope_dep: bool) -> str:
     return "TO VERIFY"
 
 
+# -------------------------------------------------------- multi-status (P0-04) --
+# Six-status schema replacing the binary PASS/TO VERIFY read above, per the
+# mission's explicit instruction that a single PASS bucket conflates
+# "structurally present" with "technically checked" with "editorially
+# reviewed" with "conforme" — four different, decreasing-confidence claims
+# that were previously indistinguishable. This is a STRICTER read of the
+# same underlying evidence, not new evidence: nothing here re-verifies
+# against symfony.com or certification.symfony.com (both unreachable from
+# this environment — see the matrix's own network-limitation notice). Do
+# not read `conforme` as "confirmed against the official syllabus page";
+# read it as "every automatable proxy this repo can check, including a
+# French translation, is present."
+#
+# Ordinal scale (weakest wins for the single overall Statut column):
+#   absent                — no Main Chapter mapped, or the file doesn't exist
+#   structure              — file exists and is non-empty, but the basic
+#                             pedagogical structure (worked example, an
+#                             Exercises section, a Solutions block) is
+#                             incomplete
+#   partiel                — full structure present, but the technical-
+#                             evidence checklist (situational quiz question,
+#                             Certification-traps block, Symfony 8.0 source
+#                             pin) is incomplete
+#   validé techniquement   — structure + technical evidence complete, but no
+#                             official doc/php.net/RFC reference is present
+#   validé éditorialement  — the above plus an official reference, but no
+#                             French translation exists for the chapter
+#                             (this repo is bilingual by design; a chapter
+#                             that only exists in English has not had its
+#                             content independently re-expressed/reviewed a
+#                             second time — a deliberate, documented proxy
+#                             for "not yet through a second editorial pass",
+#                             not an official-syllabus requirement)
+#   conforme                — all of the above, including a French translation
+
+def has_fr(main: str | None) -> bool:
+    if not main:
+        return False
+    stem, ext = os.path.splitext(main)
+    return os.path.exists(os.path.join(DOCS, f"{stem}.fr{ext}"))
+
+
+def multi_status(ev: dict, main: str | None, out_of_scope_dep: bool) -> dict:
+    structural_ok = bool(ev.get("path_exists")) and all(
+        ev.get(k) for k in ("non_empty", "example", "exercise", "solution")
+    )
+    technical_ok = structural_ok and all(
+        ev.get(k) for k in ("situational", "pitfall", "sf8_ref")
+    )
+    editorial_ok = technical_ok and bool(ev.get("official_ref"))
+    fr_ok = has_fr(main)
+    conforme_ok = editorial_ok and fr_ok
+
+    if out_of_scope_dep or not ev.get("path_exists"):
+        overall = "absent"
+    elif not structural_ok:
+        overall = "structure"
+    elif not technical_ok:
+        overall = "partiel"
+    elif not editorial_ok:
+        overall = "validé techniquement"
+    elif not conforme_ok:
+        overall = "validé éditorialement"
+    else:
+        overall = "conforme"
+
+    return {
+        "structural": structural_ok,
+        "technical": technical_ok,
+        "editorial": editorial_ok,
+        "fr": fr_ok,
+        "conforme": conforme_ok,
+        "overall": overall,
+    }
+
+
+def multi_gaps(ev: dict, main: str | None, ms: dict) -> list[str]:
+    if not main:
+        return ["aucun Main Chapter mappé"]
+    if not ev.get("path_exists"):
+        return ["fichier absent"]
+    out = []
+    if not ms["structural"]:
+        labels = {"non_empty": "fichier vide/ébauche", "example": "aucun exemple travaillé",
+                   "exercise": "aucune section Exercises", "solution": "aucun bloc Solutions"}
+        out += [v for k, v in labels.items() if not ev.get(k)]
+    elif not ms["technical"]:
+        labels = {"situational": "aucune question quiz situationnelle/trap/debug rattachée",
+                   "pitfall": "aucun bloc Certification traps",
+                   "sf8_ref": "aucune référence source Symfony 8.0 (blob/8.0 ou tree/8.0)"}
+        out += [v for k, v in labels.items() if not ev.get(k)]
+    elif not ms["editorial"]:
+        out.append("aucune référence officielle doc/php.net/RFC")
+    elif not ms["conforme"]:
+        out.append("traduction française absente")
+    return out
+
+
 def gaps(ev: dict, main: str | None) -> list[str]:
     if not main:
         return ["no Main Chapter mapped"]
@@ -357,49 +455,96 @@ def fmt_paths(paths: list[str]) -> str:
 
 
 def render() -> str:
+    import datetime
+    today = datetime.date.today().isoformat()
     lines = [
         "# Traceability Matrix",
         "",
-        "_Reconstructed against the mission brief (2026-08-26): official syllabus",
-        "realignment, PHP Attributes/Enums, HTTP RFC 9110, missing component rows,",
-        "a dedicated Messenger topic, and an explicit Out-of-scope / Additional",
-        "Learning section. Regenerate: `python tools/gen_traceability_matrix.py`._",
+        "_Regenerate: `python tools/gen_traceability_matrix.py`. Six-status schema",
+        f"(P0-04, this run). \"Dernière validation\" below is the date this file was",
+        "last **automatically regenerated** ({0}) — it is a re-check-timestamp for".format(today),
+        "the automated evidence, not a human editorial review date; nothing in this",
+        "column implies a person re-read the chapter on that date._",
         "",
-        "**Status legend:** `PASS` = automated evidence found for every one of:",
-        "existing path, non-empty content, a worked example, an Exercises section,",
-        "a Solutions block, at least one situational/scenario/trap/debug quiz",
-        "question tagged to it, a Certification-traps pitfall block, a Symfony 8.0",
-        "(`blob/8.0` or `tree/8.0`) source reference, and an official doc/php.net/RFC reference —",
-        "**and** no out-of-scope dependency. `TO VERIFY` = anything short of that;",
-        "the Anomaly column names exactly what is missing. **No row is marked PASS",
-        "without this checked evidence — a PASS here is not a claim that the",
-        "content is pedagogically excellent, only that the required building",
-        "blocks are present.**",
+        "## What the 175-subtopic count is, and is not",
         "",
-        "**Network limitation (this run):** `certification.symfony.com`,",
-        "`symfony.com`, `www.php.net`, and `www.rfc-editor.org` were unreachable",
-        "from this environment (egress blocked) — only `github.com` (source code)",
-        "was reachable. Official Topic/Subtopic wording below is taken from the",
-        "mission brief and this repo's pre-existing topic list, not independently",
-        "re-fetched from the live syllabus page this session. Treat wording",
-        "mismatches against the live page as a TO VERIFY item, not a confirmed",
-        "anomaly, until someone with access re-checks it.",
+        "**The `SYLLABUS` list below (175 subtopics, 16 topic areas) is this",
+        "repository's own working taxonomy** — originally assembled from the",
+        "mission brief text and this repo's pre-existing topic list across prior",
+        "sessions, cross-referenced against `certification.symfony.com` and",
+        "`symfony.com/doc/8.0/` **when those were reachable in past sessions**, not",
+        "independently re-fetched and re-verified against the live syllabus page",
+        "in the current run (`certification.symfony.com` and `symfony.com` are",
+        "blocked by this environment's network egress proxy — confirmed live via a",
+        "fetch attempt, not assumed). **The number 175 is a fact about this file's",
+        "own row count, not a proof that the official syllabus itself lists exactly",
+        "175 subtopics.** Treat any wording or count mismatch against the live",
+        "syllabus page as an open item, not something this matrix has confirmed",
+        "either way, until someone with network access re-diffs it — see",
+        "`specs/OfficialSyllabusBaseline.md` §1 for the exact source-reachability",
+        "table this decision is based on.",
         "",
-        "**Never state 100% coverage from this file alone** — it reports what",
-        "automated checks can confirm, not human pedagogical review, and several",
-        "rows are explicit, named gaps (see Status = TO VERIFY rows and their",
-        "Anomaly column).",
+        "## Status legend (six statuses, ordinal — weakest wins)",
+        "",
+        "| Statut | Means |",
+        "|---|---|",
+        "| `absent` | No Main Chapter mapped, or the file does not exist on disk. |",
+        "| `structure` | File exists, non-empty, but missing a worked example, an",
+        "  Exercises section, or a Solutions block. |",
+        "| `partiel` | Structure complete, but missing a situational/trap/debug quiz",
+        "  question, a Certification-traps block, or a Symfony 8.0",
+        "  (`blob/8.0`/`tree/8.0`) source reference. |",
+        "| `validé techniquement` | Structure + technical evidence complete, but no",
+        "  official doc/php.net/RFC reference is present. |",
+        "| `validé éditorialement` | The above plus an official reference, but no",
+        "  French translation exists yet (this repo is bilingual by design — see",
+        "  the schema note in `tools/gen_traceability_matrix.py` for why a missing",
+        "  FR file caps the status here rather than at `conforme`). |",
+        "| `conforme` | All of the above, **including** a French translation. |",
+        "",
+        "**None of these six statuses — including `conforme` — is a claim that",
+        "Symfony's certification board, or any human reviewer, has approved the",
+        "chapter.** They are automated-evidence proxies only, each one strictly",
+        "narrower than the one before it. A `validate_quiz.py`/`lint_php.py`",
+        "green run means the *structure* the tools can see is valid — it does not",
+        "mean the 1,292 quiz questions or the PHP snippets are individually",
+        "confirmed accurate against Symfony 8.0; see `specs/QuizAuditReport.md`",
+        "and `specs/RemediationLog.md` (P1-02/P1-03) for exactly what was and was",
+        "not checked.",
+        "",
+        "**Network limitation (standing, this environment):**",
+        "`certification.symfony.com`, `symfony.com`, `www.php.net`, and",
+        "`www.rfc-editor.org` are blocked by this environment's network egress",
+        "proxy (`EGRESS_BLOCKED`, confirmed via live fetch attempts, not",
+        "fabricated) — only `github.com` (source code) is reachable. No row below",
+        "was re-verified against a live fetch of these sources this run; where a",
+        "row's evidence depends on one of them, that is stated in its Anomaly",
+        "column instead of silently assumed correct.",
         "",
     ]
 
     # header
-    cols = ["Official Topic", "Official Subtopic", "Main Chapter",
-            "Additional Chapters", "Example", "Exercise", "Solution",
-            "Situational Q", "Pitfall", "Sf 8.0 Ref", "Official Ref",
-            "Status", "Anomaly"]
+    cols = ["ID", "Domaine", "Sous-sujet", "Chapitre", "Quiz", "Structurel",
+            "Technique", "Éditorial", "Statut", "Dernière validation", "Anomalie"]
     total = 0
-    passed = 0
-    by_topic_totals: dict[str, list[int]] = collections.defaultdict(lambda: [0, 0])
+    status_counts: dict[str, int] = collections.Counter()
+    by_topic_totals: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
+    topic_seq: dict[str, int] = collections.Counter()
+    TOPIC_ABBR = {
+        "PHP": "PHP", "HTTP": "HTTP", "Symfony Architecture": "ARCH",
+        "Controllers": "CTRL", "Routing": "ROUT", "Templating (Twig)": "TWIG",
+        "Forms": "FORM", "Data Validation": "VAL", "Dependency Injection": "DI",
+        "Security": "SEC", "HTTP Caching": "CACHE", "Console": "CONS",
+        "Automated Tests": "TEST", "Miscellaneous": "MISC", "Messenger": "MSG",
+        "Internationalization and localization": "I18N",
+    }
+
+    def quiz_cell(main: str | None) -> str:
+        if not main:
+            return "—"
+        stem = main.removesuffix(".md")
+        n = len(_quiz_by_subchapter().get(stem, []))
+        return f"{n} Q" if n else "0 Q"
 
     current_topic = None
     for topic, subtopic, main, additional, note in SYLLABUS:
@@ -412,30 +557,30 @@ def render() -> str:
             lines.append("|" + "---|" * len(cols))
             current_topic = topic
         ev = evidence(main)
-        out_dep = bool(note and "excluded" in (note or "").lower() and "GAP" not in note)
-        status = status_for(ev, out_of_scope_dep=False)
-        gap_list = gaps(ev, main)
+        ms = multi_status(ev, main, out_of_scope_dep=False)
+        gap_list = multi_gaps(ev, main, ms)
         anomaly_parts = []
         if note:
             anomaly_parts.append(note)
-        if status != "PASS":
-            anomaly_parts.append("Missing: " + ", ".join(gap_list) + ".")
+        if gap_list:
+            anomaly_parts.append("Manque : " + ", ".join(gap_list) + ".")
         anomaly = " ".join(anomaly_parts) if anomaly_parts else "—"
 
-        def mark(key: str) -> str:
-            return "✓" if ev.get(key) else "—"
+        def mark(b: bool) -> str:
+            return "✓" if b else "—"
 
         total += 1
-        by_topic_totals[topic][0] += 1
-        if status == "PASS":
-            passed += 1
-            by_topic_totals[topic][1] += 1
+        status_counts[ms["overall"]] += 1
+        by_topic_totals[topic]["n"] += 1
+        by_topic_totals[topic][ms["overall"]] += 1
+
+        topic_seq[topic] += 1
+        row_id = f"{TOPIC_ABBR.get(topic, topic[:4].upper())}-{topic_seq[topic]:02d}"
 
         main_cell = f"`{main}`" if main else "—"
-        row = [topic, subtopic, main_cell, fmt_paths(additional),
-               mark("example"), mark("exercise"), mark("solution"),
-               mark("situational"), mark("pitfall"), mark("sf8_ref"),
-               mark("official_ref"), status, anomaly]
+        row = [row_id, topic, subtopic, main_cell, quiz_cell(main),
+               mark(ms["structural"]), mark(ms["technical"]), mark(ms["editorial"]),
+               ms["overall"], today, anomaly]
         lines.append("| " + " | ".join(c.replace("|", "\\|") for c in row) + " |")
 
     lines += ["", "## Out-of-scope / Additional Learning", "",
@@ -447,22 +592,29 @@ def render() -> str:
     for area, item, note in OUT_OF_SCOPE:
         lines.append(f"| {area} | {item} | {note} |")
 
+    order = ["conforme", "validé éditorialement", "validé techniquement", "partiel", "structure", "absent"]
     lines += ["", "## Coverage summary", "",
-              "_Automated evidence only (see Status legend above) — not a claim of",
-              "pedagogical completeness or of 100% syllabus alignment._", "",
-              "| Official Topic | Subtopics | PASS (automated evidence) |",
-              "|---|---|---|"]
-    for topic, (n, p) in by_topic_totals.items():
-        lines.append(f"| {topic} | {n} | {p} |")
-    pct = f"{100.0 * passed / total:.1f}%" if total else "n/a"
-    lines.append(f"| **Total** | **{total}** | **{passed} ({pct})** |")
+              "_Automated evidence only (see the six-status legend above) — not a",
+              "claim of pedagogical completeness, official-syllabus confirmation, or",
+              "100% alignment. **175 is this file's own row count, not an", "official figure** — see the note above the tables._", "",
+              "| Official Topic | Subtopics | " + " | ".join(order) + " |",
+              "|---|---|" + "---|" * len(order)]
+    for topic in TOPIC_ABBR:
+        if topic not in by_topic_totals:
+            continue
+        c = by_topic_totals[topic]
+        lines.append(f"| {topic} | {c['n']} | " + " | ".join(str(c[s]) for s in order) + " |")
+    lines.append(
+        f"| **Total** | **{total}** | " + " | ".join(f"**{status_counts[s]}**" for s in order) + " |"
+    )
+    conforme_n = status_counts["conforme"]
     lines += ["",
-              f"**{total - passed} of {total} official subtopics are `TO VERIFY`** —",
-              "either a genuine content gap (no Main Chapter, or a named missing",
-              "building block) or a chapter this run's automated checks could not",
-              "fully confirm. See each row's Anomaly column. This count is never to",
-              "be reported as \"100% done\" — several TO VERIFY rows are real,",
-              "named gaps, not merely unchecked boxes.", ""]
+              f"**{conforme_n}/{total} subtopics reach `conforme`** — the strict bar",
+              "(structure + technical evidence + official reference + French",
+              "translation). This is expected to be a small number; it is a much",
+              "stricter bar than the previous single `PASS` status, by design (P0-04).",
+              f"`validé techniquement` or better: {status_counts['validé techniquement'] + status_counts['validé éditorialement'] + conforme_n}/{total}.",
+              "**Never state 100% or full conformity from this file alone.**", ""]
     return "\n".join(lines)
 
 

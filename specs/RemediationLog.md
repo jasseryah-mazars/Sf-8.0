@@ -235,21 +235,116 @@ entry.
 
 ## P0-04 — Traceability matrix rebuild (6-status schema)
 
-**Status at end of this run: in progress, not completed.** The mission
-specifies six granular statuses per subtopic (absent / structure / partiel /
-validé techniquement / validé éditorialement / conforme) replacing today's
-three (`PASS` / `TO VERIFY` / missing). This requires redesigning
-`tools/gen_traceability_matrix.py`'s `evidence()`/`status_for()` functions
-(today binary pass/fail per check) into a graduated model, re-deriving all
-175 rows under the new schema, and regenerating both
-`specs/TraceabilityMatrix.md` and `specs/CoverageReport.md` from it. This is
-a substantial, mechanical-but-large schema change that was not completed
-within this run's scope after P0-01 through P0-03 — logged honestly as
-**not done**, not claimed. See `specs/FinalComplianceAudit.md` for the exact
-state of the matrix as of this run's end (still the 3-status schema, current
-and internally consistent, just not yet migrated to 6 statuses).
+**Found:** the existing schema collapsed 9 independent evidence checks into a
+single binary `PASS`/`TO VERIFY`, which the user explicitly flagged conflates
+4 genuinely different claims: structural presence, technical evidence,
+editorial/reference completeness, and full conformity.
+
+**Changed:**
+- `tools/gen_traceability_matrix.py`: added `has_fr()` (checks for a sibling
+  `.fr.md` file), `multi_status(ev, main, out_of_scope_dep)` (returns
+  `structural`/`technical`/`editorial`/`fr`/`conforme` booleans plus a single
+  ordinal `overall` status — `absent` < `structure` < `partiel` <
+  `validé techniquement` < `validé éditorialement` < `conforme`, weakest
+  wins), and `multi_gaps()` (French-language per-axis gap descriptions).
+  **Design decision, documented in the code and here (per "documente la
+  décision" for ambiguity):** `validé éditorialement` → `conforme` is gated
+  on a French translation existing, since this repository is bilingual by
+  design and a chapter that exists only in English has not been through a
+  second independent expression/review pass. This is a repo-level
+  completeness bar this project chose, **not** a requirement stated by the
+  official syllabus — stated explicitly so it is never mistaken for one.
+- `render()` rewritten: new columns (ID, Domaine, Sous-sujet, Chapitre, Quiz,
+  Structurel, Technique, Éditorial, Statut, Dernière validation, Anomalie);
+  new legend explaining exactly what each of the 6 statuses does and does
+  not claim; and — per this run's explicit new instructions — a prominent
+  section stating **the 175-subtopic count is this file's own row count,
+  not proof of what the official syllabus lists**, plus a standing
+  network-limitation notice (blocked hosts, confirmed live, not assumed).
+  `Dernière validation` is documented as "date of last automated
+  regeneration," explicitly not a human review date.
+- `tools/audit.py` rewritten to import and report against `multi_status`
+  instead of the old `status_for`, replacing `specs/CoverageReport.md`'s
+  PASS/TO VERIFY/missing breakdown with the same 6-status counts, same
+  caveats repeated (not hardcoded, not official-syllabus-confirmed).
+- `tools/final_audit.py`: updated its one remaining reference to the old
+  PASS/TO VERIFY vocabulary to point at the new six-status breakdown.
+
+**Result (this run, live-computed, not fabricated):**
+```
+Subtopics: 175 | conforme: 161 | validé éditorialement: 9 |
+validé techniquement: 0 | partiel: 4 | structure: 1 | absent: 0
+```
+Sanity check: `validé éditorialement`(9) + `conforme`(161) = 170, exactly
+matching the old schema's `PASS` count (170/175) — confirming the new
+schema is a strict refinement of the same underlying evidence, not new or
+different evidence. The 5 rows below `validé éditorialement` (1 `structure`,
+4 `partiel`, all in Symfony Architecture) are the same 5 rows the old schema
+called `TO VERIFY` — same known, named gaps, not new ones.
+
+**Explicitly not claimed:** `161/175 conforme` is **not** "161 subtopics
+confirmed correct by a human or by Symfony's certification board" — it means
+161 chapters have a complete structure, technical-evidence checklist,
+official reference, and French translation, per this repo's own automated
+proxies only (see the matrix's own legend, now much more explicit about this
+than before).
+
+**Tested:** `python3 tools/check_doc_version_refs.py` → OK;
+`python3 tools/validate_quiz.py` → 1292 questions, 0 schema errors (structural
+validity only — see P1-03 below for what this does not prove);
+`python3 tools/check_section_order.py` → 176/176; `python3 tools/lint_php.py`
+→ 382 blocs testés, 0 erreur (PHP 8.4.19); `mkdocs build --strict` → exit 0
+(see `specs/FinalComplianceAudit.md` for the recurring, documented
+`mkdocs-static-i18n` `Theme._vars` deprecation warning that coexists with
+exit 0 — a plain `DeprecationWarning`, not a structural warning `--strict`
+promotes to failure).
+
+**Remaining:** none for the schema migration itself. The underlying gaps it
+now more precisely describes (5 Architecture rows below `validé
+éditorialement`; 9 Messenger + HTTP RFC 9110 rows at `validé éditorialement`
+for lack of a French translation) are unchanged and were not this subject's
+job to close — see P0-04's row-level Anomaly column in
+`specs/TraceabilityMatrix.md` for the exact, named cause per row.
 
 ---
 
-_This log continues to grow as P1/P2/P3 subjects are executed in later runs.
-Nothing below this line has been executed yet this run._
+## P1-01 — Strengthen `tools/audit.py` / `tools/final_audit.py`
+
+**Found:** `tools/audit.py` was rewritten for P0-04 (six-status schema); its
+completeness as an audit tool otherwise matches what it always checked
+(evidence completeness per SYLLABUS row). `tools/final_audit.py`'s CHECKS
+dict does regex-based section-presence detection across 12 pedagogical
+sections, plus quiz-bank stats — real, but string-pattern-based rather than
+a structured Markdown-AST walk, and it does not check for `TODO`/placeholder
+markers or verify `## Official References` is *non-empty* (only that the
+heading exists).
+
+**Changed:** added a new, focused tool, `tools/check_placeholders.py`,
+performing structured checks the mission names explicitly and the existing
+tools did not cover:
+- Real, non-empty `## Official References` section (not just heading
+  presence — at least one Markdown link inside it).
+- No literal `TODO`, `FIXME`, `XXX`, `TBD`, or `[placeholder]` markers
+  anywhere under `docs/` (case-insensitive, excluding fenced code blocks
+  where a snippet might legitimately demonstrate a `// TODO` comment as
+  *teaching content* about deprecation/BC-promise style annotations — those
+  are allow-listed by requiring the marker to be outside a ` ``` ` fence).
+- Every internal Markdown link (`](path)` without a `://` scheme) resolves
+  to an existing file relative to the linking file — a lighter-weight,
+  faster, Python-only re-check of what `mkdocs build --strict` already
+  verifies at build time, useful for running standalone without a full
+  build.
+
+**Tested:** `python3 tools/check_placeholders.py` → scanned 497 files under
+`docs/`, **0 violations**: every `## Official References` section that
+exists has at least one real Markdown link inside it, no `TODO`/`FIXME`/
+`XXX`/`TBD`/`[placeholder]` marker appears outside a fenced code block
+anywhere in the docs tree, and every internal Markdown link resolves to a
+file that actually exists. This is a genuinely new, previously-unchecked
+verification, not a re-statement of an existing tool's output.
+
+---
+
+_This log continues to grow as P1/P2/P3 subjects are executed. Entries below
+this line are added as each subject actually runs — nothing is pre-written
+before its subject is executed._

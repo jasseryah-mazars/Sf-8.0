@@ -63,8 +63,10 @@ def main():
          "## Syllabus coverage", "",
          f"- Chapters (syllabus items) found in `specs/TraceabilityMatrix.md`: **{n}**"
          " (parsed live from the matrix's own rows every run — never a hardcoded total;"
-         " see `specs/TraceabilityMatrix.md`'s own Coverage summary for the"
-         " PASS/TO VERIFY/missing breakdown against the official subtopic count)",
+         " see `specs/TraceabilityMatrix.md`'s own Coverage summary for the six-status"
+         " (absent/structure/partiel/validé techniquement/validé éditorialement/conforme)"
+         " breakdown — this count is this repo's own tracked total, not an independently"
+         " re-verified official figure)",
          f"- Question bank: **{total}** questions",
          f"  - by type: {dict(by_type)}",
          f"  - by difficulty: {dict(by_diff)}", "",
