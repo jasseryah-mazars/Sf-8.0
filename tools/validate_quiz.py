@@ -71,6 +71,17 @@ def main() -> int:
                 t = q.get("type")
                 if t is not None and t not in TYPES:
                     errors.append(f"{rel}: bad type '{t}' -> {stem}")
+                n_correct = sum(1 for a in ans if a.get("correct"))
+                if t in ("single", "true-false") and n_correct != 1:
+                    errors.append(
+                        f"{rel}: type '{t}' must have exactly 1 correct answer, "
+                        f"found {n_correct} -> {stem}"
+                    )
+                elif t == "multiple" and n_correct < 2:
+                    errors.append(
+                        f"{rel}: type 'multiple' must have >=2 correct answers, "
+                        f"found {n_correct} -> {stem}"
+                    )
                 d = q.get("difficulty")
                 if d is not None and d not in DIFF:
                     errors.append(f"{rel}: bad difficulty '{d}' -> {stem}")
