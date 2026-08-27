@@ -41,7 +41,7 @@ surprise le jour J.
 
 ## What is tested
 
-Les questions sont tirées des **14 domaines officiels**. Deux évolutions de
+Les questions sont tirées des **15 domaines officiels**. Deux évolutions de
 pondération propres à Symfony 8 à garder en tête :
 
 - **Messenger est davantage pondéré** — attendez-vous à plus de questions sur les

@@ -1,6 +1,6 @@
 # Master Cheat Sheet
 
-The highest-yield, glanceable facts across all 14 topic areas. This is a
+The highest-yield, glanceable facts across all 15 topic areas. This is a
 **skeleton for the night before** — each section links to the full area for detail.
 Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 
@@ -147,7 +147,18 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Events:** `console.command`, `console.signal`, `console.error`,
   `console.terminate`.
 
-## 13. Automated Tests → [area](../testing/index.md)
+## 13. Messenger → [area](../messenger/index.md)
+
+- **Up-weighted** on the Symfony 8 exam. `MessageBusInterface::dispatch()`
+  returns an **`Envelope`** wrapping the message + **stamps** (metadata).
+- Handlers via **`#[AsMessageHandler]`**; the middleware pipeline is
+  **russian-doll** (`$stack->next()->handle($envelope, $stack)`).
+- **Transports** (Doctrine, AMQP, Redis, `sync`, `in-memory`) are DSN-configured;
+  worker via `messenger:consume`.
+- **Retry strategy** (exponential backoff + **jitter**, default 0.1) +
+  **failure transport** for exhausted retries.
+
+## 14. Automated Tests → [area](../testing/index.md)
 
 - **Base classes:** `KernelTestCase` (services), `WebTestCase` (HTTP via `Client`).
 - **Client:** `request()`, `submitForm()`, `followRedirect()`; **Crawler:**
@@ -157,12 +168,8 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Container in tests:** `static::getContainer()`.
 - **Deprecations:** PHPUnit bridge + `SYMFONY_DEPRECATIONS_HELPER`.
 
-## 14. Miscellaneous → [area](../miscellaneous/index.md)
+## 15. Miscellaneous → [area](../miscellaneous/index.md)
 
-- **Messenger (up-weighted):** `MessageBusInterface::dispatch()`, `Envelope` +
-  **stamps**, handlers via **`#[AsMessageHandler]`**, transports (Doctrine, AMQP,
-  Redis, `sync`, `in-memory`), **middleware**, **retry strategy** + **failure
-  transport**, worker via `messenger:consume`.
 - **Serializer:** normalizers + encoders; `serialize()` / `deserialize()`; formats
   json/xml/csv/yaml.
 - **Cache:** PSR-6 `CacheItemPoolInterface`, PSR-16, Symfony Contracts

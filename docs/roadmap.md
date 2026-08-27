@@ -5,7 +5,7 @@ teaches the mental model first (how a request becomes a response, how the contai
 is built), then layers features on top so no concept is used before it is taught.
 
 !!! abstract "How to read this"
-    The 14 topic areas are grouped into **4 phases**. Work phase by phase; inside a
+    The 15 topic areas are grouped into **4 phases**. Work phase by phase; inside a
     phase, follow the stage numbers. Every stage uses the same
     [study loop](#the-study-loop-same-for-every-stage), and every phase ends with a
     **checkpoint** — a measurable gate that tells you whether to move on or loop
@@ -18,7 +18,7 @@ is built), then layers features on top so no concept is used before it is taught
 flowchart LR
     P1["🧱 Phase 1<br/>Foundations<br/>(~12h)"] --> P2["🧠 Phase 2<br/>The Mental Model<br/>(~14h)"]
     P2 --> P3["🧩 Phase 3<br/>The Feature Layer<br/>(~18h)"]
-    P3 --> P4["🛡 Phase 4<br/>Hardening & Breadth<br/>(~20h)"]
+    P3 --> P4["🛡 Phase 4<br/>Hardening & Breadth<br/>(~26h)"]
     P4 --> EX["🎓 Exam week"]
 ```
 
@@ -27,7 +27,7 @@ flowchart LR
 | 🧱 **1. Foundations** | 1–2 | The language + the protocol | You can narrate an HTTP request without Symfony |
 | 🧠 **2. The Mental Model** | 3–4 | Kernel, events, container | You can explain `HttpKernel::handle()` from memory |
 | 🧩 **3. The Feature Layer** | 5–9 | Controllers → Forms | You can build & validate a form end-to-end on paper |
-| 🛡 **4. Hardening & Breadth** | 10–14 | Security, caching, tests, components | You pass a full mock in exam conditions |
+| 🛡 **4. Hardening & Breadth** | 10–15 | Security, caching, Messenger, tests, components | You pass a full mock in exam conditions |
 
 ## The study loop (same for every stage)
 
@@ -61,9 +61,24 @@ flowchart TD
     A --> S[Security]
     C --> HC[HTTP Caching]
     DI --> CO[Console]
+    A --> EV[Events]
+    DI --> ME[Messenger]
+    CO --> ME
+    EV --> ME
     C --> TE[Testing]
-    DI --> M[Miscellaneous / Messenger et al.]
+    R --> TE
+    FO --> TE
+    DI --> M[Miscellaneous]
 ```
+
+Every arrow here is a **real, declared prerequisite** — extracted from each area's
+own `index.md` metadata (`Prerequisites:` / `Dependencies:`), not guessed. Two of
+these arrows correct a defect in the site's old top-level navigation, which had
+drifted out of sync with this graph: Dependency Injection used to appear *after*
+Controllers/Twig/Forms in the sidebar even though those chapters explicitly list
+Dependency Injection as a prerequisite, and Forms used to appear *before*
+Validation even though the Forms chapter lists Validation as a prerequisite. Both
+are now fixed in the navigation to match this graph.
 
 ---
 
@@ -135,18 +150,22 @@ Each stage builds directly on the previous one; keep the order.*
     [Forms chapter exam](exams/forms.md) with at most 2 mistakes. Forms is where
     single points hide — don't carry weaknesses into Phase 4.
 
-## 🛡 Phase 4 — Hardening & Breadth (stages 10–14, ~20–27 h)
+## 🛡 Phase 4 — Hardening & Breadth (stages 10–15, ~24–32 h)
 
 *Goal: the high-weight security block, then breadth. Security alone justifies its
-Critical tag — budget real time for it.*
+Critical tag — budget real time for it. Messenger gets its own stage (split out of
+Miscellaneous) because it is individually **Critical/up-weighted** and its real
+prerequisites (Console, Events) are met right after stage 12 — no reason to defer
+it behind the lower-priority Testing/Miscellaneous stages.*
 
 | # | Stage | Why here | Prereqs | Difficulty | Est. time | Revision priority |
 |---|---|---|---|---|---|---|
 | 10 | [Security](security/index.md) | Firewalls, authenticators, voters — builds on events + DI + HTTP | 3,4 | ★★★ | 6–8 h | **Critical** |
 | 11 | [HTTP Caching](http-caching/index.md) | Extends HTTP/response; ESI, reverse proxy | 2,5 | ★★☆ | 2–3 h | Medium (down-weighted) |
 | 12 | [Console](console/index.md) | Mostly standalone; input/output/events | 4 | ★☆☆ | 2–3 h | Medium |
-| 13 | [Automated Tests](testing/index.md) | Test what you can now build | 5,6,9 | ★★☆ | 3–4 h | Medium |
-| 14 | [Miscellaneous](miscellaneous/index.md) | Advanced components; **Messenger up-weighted** | 3,4 | ★★★ | 7–9 h | High (Messenger **Critical**) |
+| 13 | [Messenger](messenger/index.md) | Async messaging; needs DI + Console + Events | 4,12,3 | ★★★ | 4–5 h | **Critical** (up-weighted) |
+| 14 | [Automated Tests](testing/index.md) | Test what you can now build | 5,6,9 | ★★☆ | 3–4 h | Medium |
+| 15 | [Miscellaneous](miscellaneous/index.md) | Remaining advanced components (Cache, Serializer, Mailer, Lock…) | 3,4 | ★★☆ | 5–7 h | Medium |
 
 **Phase 4 extras (Expert):** the
 [Firewall tour](tours/firewall-request-cycle.md) plus the five expert security
@@ -156,7 +175,7 @@ chapters ([role hierarchy](security/role-hierarchy.md),
 [throttling](security/login-throttling.md),
 [programmatic login](security/programmatic-login.md)) after stage 10.
 
-- [ ] 10 · [ ] 11 · [ ] 12 · [ ] 13 · [ ] 14 — loops done
+- [ ] 10 · [ ] 11 · [ ] 12 · [ ] 13 · [ ] 14 · [ ] 15 — loops done
 - [ ] Firewall tour + expert security chapters read
 
 !!! success "Checkpoint 4 — gate to exam week"
@@ -185,12 +204,12 @@ chapters ([role hierarchy](security/role-hierarchy.md),
     all-or-nothing, and pacing is ≈72 seconds per question — both are exactly what
     the Simulator's Exam mode trains.
 
-**Total:** ~55–75 hours of focused study for Expert level.
+**Total:** ~57–78 hours of focused study for Expert level.
 
 ## Practice & self-assessment
 
 Study is only half the loop — test yourself as you go. The platform ships a full
-practice toolchain over a **1,284-question bank** covering all 154 sub-topics:
+practice toolchain over a **1,292-question bank** covering all 157 sub-topics:
 
 | Tool | Use it for | When |
 |---|---|---|
@@ -213,7 +232,7 @@ practice toolchain over a **1,284-question bank** covering all 154 sub-topics:
 
 === "Advanced track"
 
-    Stages 1–13, with emphasis on **correct usage**: configuration, common flows,
+    Stages 1–15, with emphasis on **correct usage**: configuration, common flows,
     and avoiding mistakes. Read the Theory, Code, and Traps sections closely; skim
     the Deep Dives and the phase "extras".
 
@@ -239,6 +258,7 @@ practice toolchain over a **1,284-question bank** covering all 154 sub-topics:
 - [Security](security/index.md)
 - [HTTP Caching](http-caching/index.md)
 - [Console](console/index.md)
+- [Messenger](messenger/index.md)
 - [Automated Tests](testing/index.md)
 - [Miscellaneous](miscellaneous/index.md)
 

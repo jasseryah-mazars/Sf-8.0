@@ -10,7 +10,7 @@ diffèrent, et comment l'étudier et le passer efficacement.
     - Un seul examen, deux résultats possibles : **Advanced** ou **Expert**, décidés
       par votre score.
     - Socle **PHP 8.4+** (une exigence de Symfony 8).
-    - Couvre les **14 domaines officiels** ; Messenger est davantage pondéré,
+    - Couvre les **15 domaines officiels** ; Messenger est davantage pondéré,
       HTTP Caching moins pondéré par rapport à Symfony 7.
 
 ## In this section

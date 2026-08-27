@@ -38,7 +38,7 @@ on the day.
 
 ## What is tested
 
-Questions are drawn across the **14 official topic areas**. Two Symfony 8 emphasis
+Questions are drawn across the **15 official topic areas**. Two Symfony 8 emphasis
 shifts to keep in mind:
 
 - **Messenger is up-weighted** — expect more questions on buses, transports,

@@ -202,6 +202,22 @@ nav:
       - Roadmap & Schedule: architecture/roadmap-schedule.md
       - Interoperability & PSRs: architecture/psr.md
       - Naming Conventions: architecture/naming-conventions.md
+  - Dependency Injection:
+      - dependency-injection/index.md
+      - Service Container: dependency-injection/container.md
+      - Built-in Services: dependency-injection/built-in-services.md
+      - Configuration Parameters: dependency-injection/parameters.md
+      - Service Registration: dependency-injection/registration.md
+      - Service Decoration: dependency-injection/decoration.md
+      - Tags: dependency-injection/tags.md
+      - Semantic Configuration: dependency-injection/semantic-config.md
+      - Factories: dependency-injection/factories.md
+      - Compiler Passes: dependency-injection/compiler-passes.md
+      - Autowiring: dependency-injection/autowiring.md
+      - Service Locators: dependency-injection/service-locators.md
+      - Lazy Services & Native Lazy Objects: dependency-injection/lazy-services.md
+      - Resettable Services (Services Resetter): dependency-injection/service-reset.md
+      - Inside the Compiled Container: dependency-injection/container-dump.md
   - Controllers:
       - controllers/index.md
       - Naming Conventions: controllers/naming-conventions.md
@@ -245,6 +261,16 @@ nav:
       - String Interpolation: twig/interpolation.md
       - Assets Management: twig/assets.md
       - Debugging Variables: twig/debugging.md
+  - Data Validation:
+      - validation/index.md
+      - PHP Object Validation: validation/object-validation.md
+      - Built-in Constraints: validation/built-in-constraints.md
+      - Validation Scopes: validation/scopes.md
+      - Validation Groups: validation/groups.md
+      - Group Sequence: validation/group-sequence.md
+      - Custom Callback Validators: validation/callbacks.md
+      - Custom Constraints: validation/custom-constraints.md
+      - Violations Builder: validation/violations-builder.md
   - Forms:
       - forms/index.md
       - Form Creation: forms/creation.md
@@ -258,32 +284,6 @@ nav:
       - Data Transformers: forms/data-transformers.md
       - Form Events: forms/events.md
       - Form Type Extensions: forms/type-extensions.md
-  - Data Validation:
-      - validation/index.md
-      - PHP Object Validation: validation/object-validation.md
-      - Built-in Constraints: validation/built-in-constraints.md
-      - Validation Scopes: validation/scopes.md
-      - Validation Groups: validation/groups.md
-      - Group Sequence: validation/group-sequence.md
-      - Custom Callback Validators: validation/callbacks.md
-      - Custom Constraints: validation/custom-constraints.md
-      - Violations Builder: validation/violations-builder.md
-  - Dependency Injection:
-      - dependency-injection/index.md
-      - Service Container: dependency-injection/container.md
-      - Built-in Services: dependency-injection/built-in-services.md
-      - Configuration Parameters: dependency-injection/parameters.md
-      - Service Registration: dependency-injection/registration.md
-      - Service Decoration: dependency-injection/decoration.md
-      - Tags: dependency-injection/tags.md
-      - Semantic Configuration: dependency-injection/semantic-config.md
-      - Factories: dependency-injection/factories.md
-      - Compiler Passes: dependency-injection/compiler-passes.md
-      - Autowiring: dependency-injection/autowiring.md
-      - Service Locators: dependency-injection/service-locators.md
-      - Lazy Services & Native Lazy Objects: dependency-injection/lazy-services.md
-      - Resettable Services (Services Resetter): dependency-injection/service-reset.md
-      - Inside the Compiled Container: dependency-injection/container-dump.md
   - Security:
       - security/index.md
       - Authentication: security/authentication.md
@@ -320,6 +320,15 @@ nav:
       - Built-in Helpers: console/helpers.md
       - Console Events: console/events.md
       - Verbosity Levels: console/verbosity.md
+  - Messenger:
+      - messenger/index.md
+      - Messenger Component: messenger/component.md
+      - Messages & Handlers: messenger/messages-handlers.md
+      - Middleware: messenger/middleware.md
+      - Transports: messenger/transports.md
+      - Workers: messenger/workers.md
+      - Retries & Failures: messenger/retries-failures.md
+      - Events: messenger/events.md
   - Automated Tests:
       - testing/index.md
       - Unit Tests with PHPUnit: testing/unit-tests.md
@@ -349,15 +358,6 @@ nav:
       - Internationalization and localization: miscellaneous/intl.md
       - Runtime Component: miscellaneous/runtime.md
       - Clock Component: miscellaneous/clock.md
-  - Messenger:
-      - messenger/index.md
-      - Messenger Component: messenger/component.md
-      - Messages & Handlers: messenger/messages-handlers.md
-      - Middleware: messenger/middleware.md
-      - Transports: messenger/transports.md
-      - Workers: messenger/workers.md
-      - Retries & Failures: messenger/retries-failures.md
-      - Events: messenger/events.md
   - Labs:
       - labs/index.md
       - PHP & Web Security — SPL Collection: labs/php-web-security.md

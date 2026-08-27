@@ -1,6 +1,6 @@
 # Master Cheat Sheet
 
-Les faits à plus fort rendement, consultables d'un coup d'œil, sur les 14 domaines.
+Les faits à plus fort rendement, consultables d'un coup d'œil, sur les 15 domaines.
 C'est un **squelette pour la veille au soir** — chaque section renvoie au domaine
 complet pour le détail. Tout ici est Symfony 8 / PHP 8.4 / Twig 3.x.
 
@@ -149,7 +149,18 @@ complet pour le détail. Tout ici est Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Events :** `console.command`, `console.signal`, `console.error`,
   `console.terminate`.
 
-## 13. Automated Tests → [area](../testing/index.md)
+## 13. Messenger → [area](../messenger/index.md)
+
+- **Pondération accrue** à l'examen Symfony 8. `MessageBusInterface::dispatch()`
+  retourne une **`Envelope`** enveloppant le message + des **stamps** (métadonnées).
+- Handlers via **`#[AsMessageHandler]`** ; le pipeline de middleware est en
+  **poupée russe** (`$stack->next()->handle($envelope, $stack)`).
+- **Transports** (Doctrine, AMQP, Redis, `sync`, `in-memory`) configurés via DSN ;
+  worker via `messenger:consume`.
+- **Stratégie de retry** (backoff exponentiel + **jitter**, 0.1 par défaut) +
+  **failure transport** pour les tentatives épuisées.
+
+## 14. Automated Tests → [area](../testing/index.md)
 
 - **Classes de base :** `KernelTestCase` (services), `WebTestCase` (HTTP via `Client`).
 - **Client :** `request()`, `submitForm()`, `followRedirect()` ; **Crawler :**
@@ -159,12 +170,8 @@ complet pour le détail. Tout ici est Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Le container dans les tests :** `static::getContainer()`.
 - **Dépréciations :** PHPUnit bridge + `SYMFONY_DEPRECATIONS_HELPER`.
 
-## 14. Miscellaneous → [area](../miscellaneous/index.md)
+## 15. Miscellaneous → [area](../miscellaneous/index.md)
 
-- **Messenger (pondération accrue) :** `MessageBusInterface::dispatch()`, `Envelope` +
-  **stamps**, handlers via **`#[AsMessageHandler]`**, transports (Doctrine, AMQP,
-  Redis, `sync`, `in-memory`), **middleware**, **retry strategy** + **failure
-  transport**, worker via `messenger:consume`.
 - **Serializer :** normalizers + encoders ; `serialize()` / `deserialize()` ; formats
   json/xml/csv/yaml.
 - **Cache :** PSR-6 `CacheItemPoolInterface`, PSR-16, Symfony Contracts

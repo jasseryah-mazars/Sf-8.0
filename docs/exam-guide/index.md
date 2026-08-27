@@ -9,7 +9,7 @@ study and sit it efficiently.
     - **Single choice, multiple choice, and true/false** questions.
     - One exam, two outcomes: **Advanced** or **Expert**, decided by your score.
     - **PHP 8.4+** baseline (a Symfony 8 requirement).
-    - Covers the **14 official topic areas**; Messenger is up-weighted, HTTP Caching
+    - Covers the **15 official topic areas**; Messenger is up-weighted, HTTP Caching
       down-weighted versus Symfony 7.
 
 ## In this section

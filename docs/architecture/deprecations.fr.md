@@ -136,7 +136,10 @@ final class Mailer
 
 !!! note "Source reference"
     `trigger_deprecation()` —
-    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php).
+    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php)
+    (un package compagnon sans version propre, donc pas de tag `8.0`) ;
+    `Definition::setDeprecated()` utilisé ci-dessous —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php).
 
 ### Compilation vs runtime
 

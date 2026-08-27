@@ -6,7 +6,7 @@ comment le container est construit), puis empile les fonctionnalités par-dessus
 sorte qu'aucun concept n'est utilisé avant d'avoir été enseigné.
 
 !!! abstract "How to read this"
-    Les 14 domaines sont regroupés en **4 phases**. Travaillez phase par phase ; à
+    Les 15 domaines sont regroupés en **4 phases**. Travaillez phase par phase ; à
     l'intérieur d'une phase, suivez les numéros d'étape. Chaque étape utilise la même
     [boucle d'étude](#the-study-loop-same-for-every-stage), et chaque phase se termine
     par un **checkpoint** — un jalon mesurable qui vous dit s'il faut avancer ou
@@ -19,7 +19,7 @@ sorte qu'aucun concept n'est utilisé avant d'avoir été enseigné.
 flowchart LR
     P1["🧱 Phase 1<br/>Foundations<br/>(~12h)"] --> P2["🧠 Phase 2<br/>The Mental Model<br/>(~14h)"]
     P2 --> P3["🧩 Phase 3<br/>The Feature Layer<br/>(~18h)"]
-    P3 --> P4["🛡 Phase 4<br/>Hardening & Breadth<br/>(~20h)"]
+    P3 --> P4["🛡 Phase 4<br/>Hardening & Breadth<br/>(~26h)"]
     P4 --> EX["🎓 Exam week"]
 ```
 
@@ -28,7 +28,7 @@ flowchart LR
 | 🧱 **1. Foundations** | 1–2 | Le langage + le protocole | Vous savez raconter une requête HTTP sans Symfony |
 | 🧠 **2. The Mental Model** | 3–4 | Kernel, events, container | Vous savez expliquer `HttpKernel::handle()` de mémoire |
 | 🧩 **3. The Feature Layer** | 5–9 | Controllers → Forms | Vous savez construire et valider un form de bout en bout sur papier |
-| 🛡 **4. Hardening & Breadth** | 10–14 | Sécurité, cache, tests, composants | Vous réussissez un mock complet en conditions d'examen |
+| 🛡 **4. Hardening & Breadth** | 10–15 | Sécurité, cache, Messenger, tests, composants | Vous réussissez un mock complet en conditions d'examen |
 
 ## The study loop (same for every stage)
 
@@ -62,9 +62,25 @@ flowchart TD
     A --> S[Security]
     C --> HC[HTTP Caching]
     DI --> CO[Console]
+    A --> EV[Events]
+    DI --> ME[Messenger]
+    CO --> ME
+    EV --> ME
     C --> TE[Testing]
-    DI --> M[Miscellaneous / Messenger et al.]
+    R --> TE
+    FO --> TE
+    DI --> M[Miscellaneous]
 ```
+
+Chaque flèche ici est un **prérequis réel et déclaré** — extrait des métadonnées
+`index.md` propres à chaque domaine (`Prerequisites:` / `Dependencies:`), pas
+deviné. Deux de ces flèches corrigent un défaut de l'ancienne navigation
+principale du site, qui avait dérivé et n'était plus synchronisée avec ce
+graphe : Dependency Injection apparaissait auparavant *après* Controllers/Twig/
+Forms dans le menu alors que ces chapitres citent explicitement Dependency
+Injection comme prérequis, et Forms apparaissait *avant* Validation alors que le
+chapitre Forms cite Validation comme prérequis. Les deux sont désormais corrigés
+dans la navigation pour correspondre à ce graphe.
 
 ---
 
@@ -139,18 +155,23 @@ events (PRE_SET_DATA → … → POST_SUBMIT) est un thème d'examen garanti.
     l'endroit où se cachent les points isolés — n'emportez pas de faiblesses en
     phase 4.
 
-## 🛡 Phase 4 — Hardening & Breadth (stages 10–14, ~20–27 h)
+## 🛡 Phase 4 — Hardening & Breadth (stages 10–15, ~24–32 h)
 
 *Objectif : le bloc sécurité, à fort coefficient, puis l'étendue. La sécurité à elle
-seule justifie son étiquette Critical — prévoyez-lui un vrai budget de temps.*
+seule justifie son étiquette Critical — prévoyez-lui un vrai budget de temps.
+Messenger obtient sa propre étape (détachée de Miscellaneous) car il est
+individuellement **Critical/davantage pondéré** et ses vrais prérequis (Console,
+Events) sont acquis juste après l'étape 12 — rien ne justifie de le repousser
+derrière les étapes Testing/Miscellaneous, moins prioritaires.*
 
 | # | Étape | Pourquoi ici | Prérequis | Difficulté | Temps estimé | Priorité de révision |
 |---|---|---|---|---|---|---|
 | 10 | [Security](security/index.md) | Firewalls, authenticators, voters — s'appuie sur les events + la DI + HTTP | 3,4 | ★★★ | 6–8 h | **Critical** |
 | 11 | [HTTP Caching](http-caching/index.md) | Prolonge HTTP/response ; ESI, reverse proxy | 2,5 | ★★☆ | 2–3 h | Moyenne (pondération réduite) |
 | 12 | [Console](console/index.md) | Largement autonome ; input/output/events | 4 | ★☆☆ | 2–3 h | Moyenne |
-| 13 | [Automated Tests](testing/index.md) | Testez ce que vous savez désormais construire | 5,6,9 | ★★☆ | 3–4 h | Moyenne |
-| 14 | [Miscellaneous](miscellaneous/index.md) | Composants avancés ; **Messenger davantage pondéré** | 3,4 | ★★★ | 7–9 h | Haute (Messenger **Critical**) |
+| 13 | [Messenger](messenger/index.md) | Messagerie asynchrone ; nécessite DI + Console + Events | 4,12,3 | ★★★ | 4–5 h | **Critical** (davantage pondéré) |
+| 14 | [Automated Tests](testing/index.md) | Testez ce que vous savez désormais construire | 5,6,9 | ★★☆ | 3–4 h | Moyenne |
+| 15 | [Miscellaneous](miscellaneous/index.md) | Composants avancés restants (Cache, Serializer, Mailer, Lock…) | 3,4 | ★★☆ | 5–7 h | Moyenne |
 
 **Compléments de la phase 4 (Expert) :** le
 [Firewall tour](tours/firewall-request-cycle.md) plus les cinq chapitres de sécurité
@@ -160,7 +181,7 @@ de niveau expert ([role hierarchy](security/role-hierarchy.md),
 [throttling](security/login-throttling.md),
 [programmatic login](security/programmatic-login.md)) après l'étape 10.
 
-- [ ] 10 · [ ] 11 · [ ] 12 · [ ] 13 · [ ] 14 — boucles terminées
+- [ ] 10 · [ ] 11 · [ ] 12 · [ ] 13 · [ ] 14 · [ ] 15 — boucles terminées
 - [ ] Firewall tour + chapitres de sécurité expert lus
 
 !!! success "Checkpoint 4 — gate to exam week"
@@ -190,13 +211,13 @@ de niveau expert ([role hierarchy](security/role-hierarchy.md),
     noté en tout-ou-rien, et le rythme est d'environ 72 secondes par question — deux
     choses que le mode Exam du Simulator entraîne précisément.
 
-**Total :** environ 55–75 heures d'étude concentrée pour le niveau Expert.
+**Total :** environ 57–78 heures d'étude concentrée pour le niveau Expert.
 
 ## Practice & self-assessment
 
 Étudier n'est que la moitié de la boucle — testez-vous au fur et à mesure. La
 plateforme fournit une chaîne d'entraînement complète sur une **banque de
-1 284 questions** couvrant les 154 sous-sujets :
+1 292 questions** couvrant les 157 sous-sujets :
 
 | Outil | À utiliser pour | Quand |
 |---|---|---|
@@ -219,7 +240,7 @@ plateforme fournit une chaîne d'entraînement complète sur une **banque de
 
 === "Advanced track"
 
-    Étapes 1–13, avec l'accent sur l'**usage correct** : configuration, flux
+    Étapes 1–15, avec l'accent sur l'**usage correct** : configuration, flux
     courants et erreurs à éviter. Lisez attentivement les sections Theory, Code et
     Traps ; survolez les Deep Dives et les « compléments » de phase.
 
@@ -246,6 +267,7 @@ plateforme fournit une chaîne d'entraînement complète sur une **banque de
 - [Security](security/index.md)
 - [HTTP Caching](http-caching/index.md)
 - [Console](console/index.md)
+- [Messenger](messenger/index.md)
 - [Automated Tests](testing/index.md)
 - [Miscellaneous](miscellaneous/index.md)
 
