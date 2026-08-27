@@ -336,7 +336,7 @@ collections d'*objets*.
 
     **Why:** La cascade est un opt-in par propriété via `Valid` ; sinon les objets
     imbriqués sont ignorés.
-    **Ref:** [Valid](https://symfony.com/doc/current/reference/constraints/Valid.html).
+    **Ref:** [Valid](https://symfony.com/doc/8.0/reference/constraints/Valid.html).
 
 ??? question "Q2. A rule needs to compare two properties of the same object. Best scope?"
     - [ ] A. Property scope on each field
@@ -346,7 +346,7 @@ collections d'*objets*.
 
     **Why:** Les règles inter-champs ont besoin de l'objet entier ; une constraint
     à cible classe est donc le bon choix.
-    **Ref:** [Expression](https://symfony.com/doc/current/reference/constraints/Expression.html).
+    **Ref:** [Expression](https://symfony.com/doc/8.0/reference/constraints/Expression.html).
 
 ??? question "Q3. What property path does a violation from `isActive()` use?"
     - [ ] A. `isActive`
@@ -356,7 +356,7 @@ collections d'*objets*.
 
     **Why:** Les constraints de getter rapportent sur le nom « propriétisé » ;
     `isActive`/`getActive` correspondent à `active`.
-    **Ref:** [Validation — getters](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation — getters](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -381,7 +381,7 @@ collections d'*objets*.
 - **Confused with:** [Built-in Constraints](built-in-constraints.md) — `Valid` cascade dans les objets ; `All` applique des constraints aux éléments scalaires.
 
 ## Official References
-- [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveContextualValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveContextualValidator.php)
 
 ## Video references
@@ -394,7 +394,7 @@ collections d'*objets*.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/Valid.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/Valid.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

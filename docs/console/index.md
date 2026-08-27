@@ -76,6 +76,6 @@ Work through them in order:
 
 ## Official References
 
-- [Symfony documentation — Console](https://symfony.com/doc/current/console.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Console](https://symfony.com/doc/8.0/console.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

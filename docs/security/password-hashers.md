@@ -263,7 +263,7 @@ verification usually lives in a `token_handler`, not the password hasher.
     - [ ] D. `pbkdf2`
 
     **Why:** `auto` selects the best available algorithm and adapts over time.
-    **Ref:** [Passwords](https://symfony.com/doc/current/security/passwords.html).
+    **Ref:** [Passwords](https://symfony.com/doc/8.0/security/passwords.html).
 
 ??? question "Q2. Transparent rehash on login requires…"
     - [ ] A. Only `migrate_from`
@@ -273,7 +273,7 @@ verification usually lives in a `token_handler`, not the password hasher.
 
     **Why:** `migrate_from` detects the old hash; the upgrader persists the new
     one via the `PasswordUpgradeBadge` flow.
-    **Ref:** [Password migration](https://symfony.com/doc/current/security/passwords.html#password-migration).
+    **Ref:** [Password migration](https://symfony.com/doc/8.0/security/passwords.html#password-migration).
 
 ??? question "Q3. Where is a login password actually verified?"
     - [ ] A. In `getPassword()`
@@ -283,7 +283,7 @@ verification usually lives in a `token_handler`, not the password hasher.
 
     **Why:** The `PasswordCredentials` badge is checked by the listener using the
     hasher's `verify()`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -313,7 +313,7 @@ verification usually lives in a `token_handler`, not the password hasher.
   keyed by user class, not by provider or firewall name.
 
 ## Official References
-- [Symfony docs — Passwords](https://symfony.com/doc/current/security/passwords.html)
+- [Symfony docs — Passwords](https://symfony.com/doc/8.0/security/passwords.html)
 - [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
 - [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
 
@@ -326,7 +326,7 @@ verification usually lives in a `token_handler`, not the password hasher.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/passwords.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/passwords.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

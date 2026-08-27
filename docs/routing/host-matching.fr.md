@@ -239,7 +239,7 @@ locale (`fr.example.com`) sauf si le SEO l'exige — les chemins préfixés par 
     - [ ] D. `\w+`
 
     **Why:** les hosts sont séparés par des points, un token matche donc toute étiquette sans point.
-    **Ref:** [Sub-domain routing](https://symfony.com/doc/current/routing.html#sub-domain-routing).
+    **Ref:** [Sub-domain routing](https://symfony.com/doc/8.0/routing.html#sub-domain-routing).
 
 ??? question "Q2. During matching, when is the host checked?"
     - [x] A. Before the path regex ✅
@@ -248,7 +248,7 @@ locale (`fr.example.com`) sauf si le SEO l'exige — les chemins préfixés par 
     - [ ] D. Never; host is informational
 
     **Why:** `matchCollection()` teste d'abord la regex de host, puis le chemin.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#sub-domain-routing).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#sub-domain-routing).
 
 ??? question "Q3. Generating a URL for a route on a different host produces?"
     - [x] A. An absolute (or network) URL ✅
@@ -257,7 +257,7 @@ locale (`fr.example.com`) sauf si le SEO l'exige — les chemins préfixés par 
     - [ ] D. The current host's URL
 
     **Why:** une URL chemin-seul ne peut pas changer de host, le generator la promeut donc.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#generating-urls).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q4. How do you apply one host to a whole imported controller dir?"
     - [x] A. Set `host:` on the YAML `resource` import ✅
@@ -266,7 +266,7 @@ locale (`fr.example.com`) sauf si le SEO l'exige — les chemins préfixés par 
     - [ ] D. Use `_host` in defaults
 
     **Why:** les options d'import comme `host`, `prefix`, `name_prefix` se propagent aux routes
-    importées. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    importées. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -290,7 +290,7 @@ locale (`fr.example.com`) sauf si le SEO l'exige — les chemins préfixés par 
 - **Confused with:** [Locale](locale.md) — locale basée sur le host (`fr.example.com`) vs locale en préfixe de chemin.
 
 ## Official References
-- [Official Symfony docs — Sub-domain routing](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+- [Official Symfony docs — Sub-domain routing](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -302,7 +302,7 @@ locale (`fr.example.com`) sauf si le SEO l'exige — les chemins préfixés par 
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences & keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#sub-domain-routing) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#sub-domain-routing) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

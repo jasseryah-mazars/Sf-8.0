@@ -324,7 +324,7 @@ for the raw `Request` when you need low-level access (headers, IP, raw body).
 
     **Why:** `attributes` (a `ParameterBag`) holds framework/route data like
     `_route`, `_controller` and path parameters.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. Which class backs `$request->query`?"
     - [x] A. `InputBag` ✅
@@ -370,7 +370,7 @@ for the raw `Request` when you need low-level access (headers, IP, raw body).
 - **Confused with:** [HTTP Response](response.md) — inbound `InputBag`/`ParameterBag` vs the outbound `ResponseHeaderBag`.
 
 ## Official References
-- [Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data)
+- [Symfony docs — HttpFoundation Request](https://symfony.com/doc/8.0/components/http_foundation.html#accessing-request-data)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 - [Symfony source — InputBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
 
@@ -383,7 +383,7 @@ for the raw `Request` when you need low-level access (headers, IP, raw body).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -177,7 +177,7 @@ Vary: Accept-Language, Accept-Encoding
     `Vary: *` means "every request is unique" — shared caches effectively cannot
     reuse anything. `Vary: Cookie` explodes the key space (one entry per cookie
     value), which for session cookies means *no* shared cache hits. Prefer
-    [ESI](esi.md) to isolate the user-specific fragment instead.
+    [ESI](../appendices/out-of-syllabus/esi.md) to isolate the user-specific fragment instead.
 
 ### Who obeys what
 
@@ -252,14 +252,14 @@ Content-Type: text/html; charset=UTF-8
 | Mark shareable pages `public` explicitly | Assuming responses are cacheable by default |
 | Keep user data `private` (or uncached) | Serving `public` on session-bound pages |
 | `Vary` on the headers you actually branch on | `Vary: *` or `Vary: Cookie` on a shared cache |
-| Isolate per-user bits with [ESI](esi.md) | Making the whole page private for one widget |
+| Isolate per-user bits with [ESI](../appendices/out-of-syllabus/esi.md) | Making the whole page private for one widget |
 
 ## When (not) to use it / alternatives
 
 Use `public` caching for anonymous, read-mostly pages (listings, articles,
 assets). Keep authenticated dashboards `private` or uncached. When a page is
 *mostly* public but has a small per-user corner, don't downgrade the whole page
-— cache the shell publicly and pull the private part via [ESI](esi.md).
+— cache the shell publicly and pull the private part via [ESI](../appendices/out-of-syllabus/esi.md).
 
 !!! danger "Certification traps"
     - A response with **no** `Cache-Control` becomes `no-cache, private` — safe
@@ -293,7 +293,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
 
     **2.** `private` means no CDN caching at all, so every anonymous visitor also
     misses the cache — you lose the win for the 99% case. Instead keep the page
-    `public` and render the username via an [ESI](esi.md) fragment with its own
+    `public` and render the username via an [ESI](../appendices/out-of-syllabus/esi.md) fragment with its own
     `private`/short TTL, so the shell is shared and only the tiny fragment is
     per-user.
 
@@ -307,7 +307,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
 
     **Why:** `ResponseHeaderBag::computeCacheControlValue()` defaults to
     `no-cache, private` when nothing is configured — safe, but not shared-cacheable.
-    **Ref:** [HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q2. Which cache honours `s-maxage`?"
     - [ ] A. The browser only
@@ -317,7 +317,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
 
     **Why:** `s-maxage` targets shared caches; browsers ignore it and use
     `max-age`/`Expires`.
-    **Ref:** [Expiration](https://symfony.com/doc/current/http_cache/expiration.html).
+    **Ref:** [Expiration](https://symfony.com/doc/8.0/http_cache/expiration.html).
 
 ??? question "Q3. What does `Vary: Accept-Language` instruct a cache to do?"
     - [ ] A. Reject requests with no `Accept-Language`
@@ -337,7 +337,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
 
     **Why:** The two are mutually exclusive; `setPrivate()` removes `public`, so
     the last call wins.
-    **Ref:** [Response API](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [Response API](https://symfony.com/doc/8.0/http_cache.html).
 
 ## Key takeaways
 
@@ -369,7 +369,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
   a different axis from *freshness* (how long it may be reused).
 
 ## Official References
-- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony docs — HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
 - [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 - [MDN — Vary](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary)
 - [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
@@ -383,7 +383,7 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -398,4 +398,4 @@ I'm ready when I can:
 ---
 
 <small>Related: [Expiration](expiration.md) · [Validation](validation.md) ·
-[Server-Side Caching](server-side.md) · [Edge Side Includes](esi.md)</small>
+[Server-Side Caching](server-side.md) · [Edge Side Includes](../appendices/out-of-syllabus/esi.md)</small>

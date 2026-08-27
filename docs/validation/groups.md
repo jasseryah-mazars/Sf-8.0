@@ -248,7 +248,7 @@ context** is often clearer than many groups. In forms, set the group via the
     - [ ] D. Only `Default`
 
     **Why:** Only the requested groups run; `Default` is not implied.
-    **Ref:** [Validation groups](https://symfony.com/doc/current/validation/groups.html).
+    **Ref:** [Validation groups](https://symfony.com/doc/8.0/validation/groups.html).
 
 ??? question "Q2. For a class with a `GroupSequence`, validating the `Default` group:"
     - [x] A. Triggers the group sequence ✅
@@ -258,7 +258,7 @@ context** is often clearer than many groups. In forms, set the group via the
 
     **Why:** On a sequenced class, `Default` maps to the sequence; use the
     `{ClassName}` group for the flat run.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q3. For class `App\Entity\User` with no sequence, the `{ClassName}` group is:"
     - [ ] A. `App\Entity\User`
@@ -268,7 +268,7 @@ context** is often clearer than many groups. In forms, set the group via the
 
     **Why:** The `{ClassName}` group uses the short class name and equals `Default`
     unless a sequence is defined.
-    **Ref:** [Validation groups](https://symfony.com/doc/current/validation/groups.html).
+    **Ref:** [Validation groups](https://symfony.com/doc/8.0/validation/groups.html).
 
 ## Key takeaways
 
@@ -292,7 +292,7 @@ context** is often clearer than many groups. In forms, set the group via the
 - **Confused with:** [Form Handling](../forms/handling.md) — in forms you set groups via the `validation_groups` option, not the `validate()` argument.
 
 ## Official References
-- [Official Symfony docs — Validation groups](https://symfony.com/doc/current/validation/groups.html)
+- [Official Symfony docs — Validation groups](https://symfony.com/doc/8.0/validation/groups.html)
 - [Symfony source — Constraint::DEFAULT_GROUP](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 
 ## Video references
@@ -304,7 +304,7 @@ context** is often clearer than many groups. In forms, set the group via the
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/groups.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/groups.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

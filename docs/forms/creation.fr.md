@@ -370,7 +370,7 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
     **Why:** `buildForm(FormBuilderInterface, array)` ajoute les champs ;
     `configureOptions(OptionsResolver)` déclare les options. `getName` a été
     supprimée ; `buildView` existe mais n'est pas la paire principale.
-    **Ref:** [Creating forms](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Creating forms](https://symfony.com/doc/8.0/forms.html).
 
 ??? question "Q2. What does a compound form return from `getData()` when `data_class` is unset?"
     - [ ] A. `null` always
@@ -380,7 +380,7 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
 
     **Why:** Sans `data_class`, le data mapper mappe les enfants vers/depuis un
     array. Définissez `data_class` pour lier à un objet.
-    **Ref:** [Form types](https://symfony.com/doc/current/form/data_class.html).
+    **Ref:** [Form types](https://symfony.com/doc/8.0/form/data_class.html).
 
 ## Key takeaways
 
@@ -407,8 +407,8 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
 - **Confused with:** [Form types](types.md) — une *classe de type* décrit les champs ; le *resolved type* est ce que la factory construit réellement.
 
 ## Official References
-- [Official Symfony docs — Forms](https://symfony.com/doc/current/forms.html)
-- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/current/form/data_class.html)
+- [Official Symfony docs — Forms](https://symfony.com/doc/8.0/forms.html)
+- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/8.0/form/data_class.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
 
 ## Video references
@@ -420,7 +420,7 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/forms.html) — certaines pages de la doc Symfony embarquent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/forms.html) — certaines pages de la doc Symfony embarquent un screencast.
 
 ## Confidence check
 

@@ -283,7 +283,7 @@ something that is itself instantiated.
 
     **Why:** Symfony 8 targets PHP 8.4 and uses the engine's native lazy
     objects; concrete classes become lazy ghosts initialized in place.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html).
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html).
 
 ??? question "Q2. `lazy: 'App\PaymentInterface'` on a service definition means…"
     - [x] A. The container builds a lazy proxy implementing that interface, delegating to the real instance ✅
@@ -293,7 +293,7 @@ something that is itself instantiated.
 
     **Why:** Setting `lazy` to an interface name requests an interface-typed
     lazy proxy instead of a ghost of the concrete class.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html).
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html).
 
 ??? question "Q3. Which statement about identity is correct?"
     - [x] A. Ghost: `===` the initialized object; interface proxy: `!==` the wrapped real instance ✅
@@ -351,7 +351,7 @@ something that is itself instantiated.
 
 ## Official References
 
-- [Official Symfony docs — Lazy Services](https://symfony.com/doc/current/service_container/lazy_services.html)
+- [Official Symfony docs — Lazy Services](https://symfony.com/doc/8.0/service_container/lazy_services.html)
 - [PHP manual — Lazy objects](https://www.php.net/manual/en/language.oop5.lazy-objects.php)
 - [Symfony source — PhpDumper](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php)
 
@@ -364,7 +364,7 @@ something that is itself instantiated.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/lazy_services.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/lazy_services.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

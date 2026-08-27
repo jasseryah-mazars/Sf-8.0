@@ -224,7 +224,7 @@ aucune mise en place à faire.
     - [ ] C. `--production`
 
     **Why:** `composer install --no-dev` ignore les paquets de `require-dev`.
-    **Ref:** [Deploying Symfony](https://symfony.com/doc/current/deployment.html).
+    **Ref:** [Deploying Symfony](https://symfony.com/doc/8.0/deployment.html).
 
 ??? question "Q2. What does `composer dump-env prod` create?"
     - [x] A. `.env.local.php` ✅
@@ -232,7 +232,7 @@ aucune mise en place à faire.
     - [ ] C. `config/prod.php`
 
     **Why:** Il compile la cascade en `.env.local.php` pour un chargement rapide.
-    **Ref:** [Configuring env vars in production](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).
+    **Ref:** [Configuring env vars in production](https://symfony.com/doc/8.0/configuration.html#configuring-environment-variables-in-production).
 
 ??? question "Q3. Why set `opcache.validate_timestamps=0` in prod?"
     - [x] A. To skip file-modification checks and serve cached bytecode ✅
@@ -241,7 +241,7 @@ aucune mise en place à faire.
 
     **Why:** Avec des déploiements immuables, sauter les vérifications de timestamps
     maximise les hits d'opcache (réinitialisez plutôt opcache au déploiement).
-    **Ref:** [Performance](https://symfony.com/doc/current/performance.html).
+    **Ref:** [Performance](https://symfony.com/doc/8.0/performance.html).
 
 ## Key takeaways
 
@@ -264,8 +264,8 @@ aucune mise en place à faire.
 - **Confused with:** la reconstruction automatique du dev — la prod ne détecte jamais automatiquement les changements de configuration.
 
 ## Official References
-- [Official docs — Deploying Symfony](https://symfony.com/doc/current/deployment.html)
-- [Official docs — Performance](https://symfony.com/doc/current/performance.html)
+- [Official docs — Deploying Symfony](https://symfony.com/doc/8.0/deployment.html)
+- [Official docs — Performance](https://symfony.com/doc/8.0/performance.html)
 - [Symfony source — CacheWarmerInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/CacheWarmer/CacheWarmerInterface.php)
 
 ## Video references
@@ -277,7 +277,7 @@ aucune mise en place à faire.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon et keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/deployment.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/deployment.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

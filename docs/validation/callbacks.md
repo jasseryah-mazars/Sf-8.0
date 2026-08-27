@@ -300,7 +300,7 @@ without gating it behind a group/sequence.
 
     **Why:** An instance callback receives the context and the optional payload and
     returns nothing; violations are added via the context.
-    **Ref:** [Callback](https://symfony.com/doc/current/reference/constraints/Callback.html).
+    **Ref:** [Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html).
 
 ??? question "Q2. How does a callback register an error?"
     - [ ] A. `return 'error message';`
@@ -310,7 +310,7 @@ without gating it behind a group/sequence.
 
     **Why:** Violations are built and added through the execution context; return
     values are ignored.
-    **Ref:** [Callback](https://symfony.com/doc/current/reference/constraints/Callback.html).
+    **Ref:** [Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html).
 
 ??? question "Q3. A static callback method receives, as its first argument:"
     - [x] A. The object being validated ✅
@@ -320,7 +320,7 @@ without gating it behind a group/sequence.
 
     **Why:** The static form gets `(object, context, payload)` since there is no
     `$this`.
-    **Ref:** [Callback](https://symfony.com/doc/current/reference/constraints/Callback.html).
+    **Ref:** [Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html).
 
 ## Key takeaways
 
@@ -344,7 +344,7 @@ without gating it behind a group/sequence.
 - **Confused with:** [Custom Constraints](custom-constraints.md) — a callback is class-specific and one-off; a constraint is reusable.
 
 ## Official References
-- [Official Symfony docs — Callback](https://symfony.com/doc/current/reference/constraints/Callback.html)
+- [Official Symfony docs — Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html)
 - [Symfony source — CallbackValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/CallbackValidator.php)
 
 ## Video references
@@ -356,7 +356,7 @@ without gating it behind a group/sequence.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/Callback.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/Callback.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

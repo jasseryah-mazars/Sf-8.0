@@ -358,7 +358,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
     **Why:** `authenticate()` only builds the Passport; badge resolution and
     credential checks happen on `CheckPassportEvent`.
-    **Ref:** [Passport docs](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Passport docs](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ??? question "Q2. What does a stateless firewall NOT do?"
     - [x] A. Persist the token in the session ✅
@@ -368,7 +368,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
     **Why:** Stateless firewalls skip the `ContextListener`, so nothing is stored
     or restored between requests.
-    **Ref:** [Stateless firewalls](https://symfony.com/doc/current/security.html).
+    **Ref:** [Stateless firewalls](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. `supports()` returns `null`. What happens?"
     - [ ] A. The request is rejected
@@ -410,8 +410,8 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
   authorization is *what you may do*.
 
 ## Official References
-- [Symfony docs — Security](https://symfony.com/doc/current/security.html)
-- [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
+- [Symfony docs — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony docs — Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 - [Symfony source — AuthenticatorManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)
 
 ## Video references
@@ -423,7 +423,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/custom_authenticator.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/custom_authenticator.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

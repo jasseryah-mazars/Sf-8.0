@@ -307,7 +307,7 @@ préférez injecter `Symfony\Component\Clock\ClockInterface` et substituer un
 
     **Why:** l'environnement `test` compile un `TestContainer` qui garde
     accessibles les services privés/non partagés.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q2. A private service you never inject anywhere will…"
     - [x] A. Still be removed — the test container only keeps *used* services ✅
@@ -317,7 +317,7 @@ préférez injecter `Symfony\Component\Clock\ClockInterface` et substituer un
 
     **Why:** les services privés inutilisés sont optimisés et supprimés, même en
     test.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q3. `getContainer()->set($id, $mock)` survives across requests only if…"
     - [x] A. You called `$client->disableReboot()` ✅
@@ -327,7 +327,7 @@ préférez injecter `Symfony\Component\Clock\ClockInterface` et substituer un
 
     **Why:** le redémarrage par défaut reconstruit le container et jette les
     remplacements.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. The correct way to boot without debug is…"
     - [x] A. `self::bootKernel(['debug' => false])` ✅
@@ -337,7 +337,7 @@ préférez injecter `Symfony\Component\Clock\ClockInterface` et substituer un
 
     **Why:** `bootKernel()` accepte un tableau d'options avec
     `environment`/`debug`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ## Key takeaways
 
@@ -365,8 +365,8 @@ préférez injecter `Symfony\Component\Clock\ClockInterface` et substituer un
 - **Confused with:** [The Client](client.md) — `disableReboot()` vit sur le client mais c'est lui qui fait persister un remplacement `set()`.
 
 ## Official References
-- [Official Symfony docs — Accessing the container](https://symfony.com/doc/current/testing.html#accessing-the-container)
-- [Official Symfony docs — Mocking services](https://symfony.com/doc/current/testing.html#mocking-services)
+- [Official Symfony docs — Accessing the container](https://symfony.com/doc/8.0/testing.html#accessing-the-container)
+- [Official Symfony docs — Mocking services](https://symfony.com/doc/8.0/testing.html#mocking-services)
 - [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)
 
 ## Video references
@@ -379,7 +379,7 @@ préférez injecter `Symfony\Component\Clock\ClockInterface` et substituer un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#accessing-the-container) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#accessing-the-container) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

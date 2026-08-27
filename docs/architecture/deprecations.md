@@ -100,7 +100,7 @@ flowchart LR
 | **Static** | IDE/`@deprecated` docblocks flag call sites |
 
 Gating CI on the deprecation count (the PHPUnit bridge's `SYMFONY_DEPRECATIONS_HELPER`)
-is covered in [Automated Tests → PHPUnit bridge](../testing/phpunit-bridge.md) —
+is covered in [Automated Tests → PHPUnit bridge](../appendices/out-of-syllabus/phpunit-bridge.md) —
 **excluded from Symfony 8 certification**.
 
 ### Marking your own deprecations
@@ -241,7 +241,7 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
     - [ ] C. Immediately
 
     **Why:** Deprecations survive until a major, per the BC promise. **Ref:**
-    [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ## Key takeaways
 
@@ -264,7 +264,7 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
 - **Confused with:** [Roadmap & Schedule](roadmap-schedule.md) — the schedule says *when* a major lands; deprecations say *what* gets removed then.
 
 ## Official References
-- [Official docs — deprecations](https://symfony.com/doc/current/setup/upgrade_minor.html)
+- [Official docs — deprecations](https://symfony.com/doc/8.0/setup/upgrade_minor.html)
 - [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
 
 ## Video references
@@ -276,7 +276,7 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

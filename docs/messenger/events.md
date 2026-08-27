@@ -318,7 +318,7 @@ listener.
 
 ## Official References
 
-- [Official docs — Messenger events](https://symfony.com/doc/current/messenger.html#messenger-events)
+- [Official docs — Messenger events](https://symfony.com/doc/8.0/messenger.html#messenger-events)
 - [Symfony source — Messenger events](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger/Event)
 - [Symfony source — SendMessageToTransportsEvent](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Event/SendMessageToTransportsEvent.php)
 
@@ -331,7 +331,7 @@ listener.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#messenger-events) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#messenger-events) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -51,5 +51,5 @@ vous comparer.
 
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
-- [Testing](https://symfony.com/doc/current/testing.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
+- [Testing](https://symfony.com/doc/8.0/testing.html)

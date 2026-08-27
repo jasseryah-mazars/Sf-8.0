@@ -253,7 +253,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - [ ] D. Use `$container->get('request')`
 
     **Why:** The request is per-cycle and may change; `RequestStack` gives safe
-    access. **Ref:** [RequestStack](https://symfony.com/doc/current/service_container/request.html).
+    access. **Ref:** [RequestStack](https://symfony.com/doc/8.0/service_container/request.html).
 
 ??? question "Q2. Which command shows private services too?"
     - [ ] A. `debug:autowiring`
@@ -262,7 +262,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - [ ] D. `debug:router`
 
     **Why:** By default `debug:container` lists public services and aliases only.
-    **Ref:** [Debugging services](https://symfony.com/doc/current/service_container/debug.html).
+    **Ref:** [Debugging services](https://symfony.com/doc/8.0/service_container/debug.html).
 
 ??? question "Q3. `parameter_bag` is…"
     - [x] A. A service exposing container parameters via `ParameterBagInterface` ✅
@@ -271,7 +271,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - [ ] D. A compiler pass
 
     **Why:** It lets services read parameters at runtime through an injected
-    interface. **Ref:** [Parameters](https://symfony.com/doc/current/configuration.html#configuration-parameters).
+    interface. **Ref:** [Parameters](https://symfony.com/doc/8.0/configuration.html#configuration-parameters).
 
 ## Key takeaways
 
@@ -299,8 +299,8 @@ public and not aliased, you reach it by injecting the owning service, not by id.
   an interface, not by raw id.
 
 ## Official References
-- [Official Symfony docs — Debugging services](https://symfony.com/doc/current/service_container/debug.html)
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
+- [Official Symfony docs — Debugging services](https://symfony.com/doc/8.0/service_container/debug.html)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
 - [Symfony source — FrameworkExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/FrameworkExtension.php)
 
 ## Video references
@@ -312,7 +312,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/request.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/request.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

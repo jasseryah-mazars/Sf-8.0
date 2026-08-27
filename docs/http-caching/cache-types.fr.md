@@ -191,7 +191,7 @@ Vary: Accept-Language, Accept-Encoding
     `Vary: *` signifie « chaque request est unique » — les caches partagés ne
     peuvent en pratique rien réutiliser. `Vary: Cookie` fait exploser l'espace
     des clés (une entrée par valeur de cookie), ce qui, pour les cookies de
-    session, signifie *aucun* hit de cache partagé. Préférez [ESI](esi.md) pour
+    session, signifie *aucun* hit de cache partagé. Préférez [ESI](../appendices/out-of-syllabus/esi.md) pour
     isoler le fragment propre à l'utilisateur.
 
 ### Who obeys what
@@ -268,7 +268,7 @@ Content-Type: text/html; charset=UTF-8
 | Marquer explicitement `public` les pages partageables | Supposer que les responses sont cacheables par défaut |
 | Garder les données utilisateur `private` (ou non cachées) | Servir `public` sur des pages liées à une session |
 | `Vary` sur les headers dont dépend réellement la response | `Vary: *` ou `Vary: Cookie` sur un cache partagé |
-| Isoler les parties par utilisateur avec [ESI](esi.md) | Rendre toute la page privée pour un seul widget |
+| Isoler les parties par utilisateur avec [ESI](../appendices/out-of-syllabus/esi.md) | Rendre toute la page privée pour un seul widget |
 
 ## When (not) to use it / alternatives
 
@@ -277,7 +277,7 @@ Utilisez le cache `public` pour les pages anonymes, surtout en lecture
 `private` ou non cachés. Quand une page est *majoritairement* publique mais
 comporte un petit recoin par utilisateur, ne dégradez pas toute la page —
 mettez la coquille en cache publiquement et récupérez la partie privée via
-[ESI](esi.md).
+[ESI](../appendices/out-of-syllabus/esi.md).
 
 !!! danger "Certification traps"
     - Une response **sans** `Cache-Control` devient `no-cache, private` — sûr,
@@ -319,7 +319,7 @@ mettez la coquille en cache publiquement et récupérez la partie privée via
     **2.** `private` signifie aucun cache CDN du tout : chaque visiteur anonyme
     rate donc aussi le cache — vous perdez le gain pour les 99 % de cas.
     Gardez plutôt la page `public` et affichez le nom d'utilisateur via un
-    fragment [ESI](esi.md) avec son propre TTL `private`/court, de sorte que la
+    fragment [ESI](../appendices/out-of-syllabus/esi.md) avec son propre TTL `private`/court, de sorte que la
     coquille soit partagée et que seul le minuscule fragment soit par
     utilisateur.
 
@@ -334,7 +334,7 @@ mettez la coquille en cache publiquement et récupérez la partie privée via
     **Why:** `ResponseHeaderBag::computeCacheControlValue()` produit par défaut
     `no-cache, private` quand rien n'est configuré — sûr, mais non cacheable
     par les caches partagés.
-    **Ref:** [HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q2. Which cache honours `s-maxage`?"
     - [ ] A. The browser only
@@ -344,7 +344,7 @@ mettez la coquille en cache publiquement et récupérez la partie privée via
 
     **Why:** `s-maxage` cible les caches partagés ; les navigateurs l'ignorent
     et utilisent `max-age`/`Expires`.
-    **Ref:** [Expiration](https://symfony.com/doc/current/http_cache/expiration.html).
+    **Ref:** [Expiration](https://symfony.com/doc/8.0/http_cache/expiration.html).
 
 ??? question "Q3. What does `Vary: Accept-Language` instruct a cache to do?"
     - [ ] A. Reject requests with no `Accept-Language`
@@ -365,7 +365,7 @@ mettez la coquille en cache publiquement et récupérez la partie privée via
 
     **Why:** Les deux sont mutuellement exclusifs ; `setPrivate()` retire
     `public`, donc le dernier appel gagne.
-    **Ref:** [Response API](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [Response API](https://symfony.com/doc/8.0/http_cache.html).
 
 ## Key takeaways
 
@@ -402,7 +402,7 @@ mettez la coquille en cache publiquement et récupérez la partie privée via
   être réutilisé).
 
 ## Official References
-- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony docs — HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
 - [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 - [MDN — Vary](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary)
 - [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
@@ -417,7 +417,7 @@ mettez la coquille en cache publiquement et récupérez la partie privée via
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scriptés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — les conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -437,4 +437,4 @@ Je suis prêt quand je peux :
 ---
 
 <small>Related: [Expiration](expiration.md) · [Validation](validation.md) ·
-[Server-Side Caching](server-side.md) · [Edge Side Includes](esi.md)</small>
+[Server-Side Caching](server-side.md) · [Edge Side Includes](../appendices/out-of-syllabus/esi.md)</small>

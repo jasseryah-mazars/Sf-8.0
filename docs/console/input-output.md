@@ -297,7 +297,7 @@ messages.
     - [ ] D. `InputInterface::getError()`
 
     **Why:** the split-stream method lives on `ConsoleOutputInterface`. **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ??? question "Q2. `SymfonyStyle` requires which two constructor arguments?"
     - [x] A. `InputInterface` and `OutputInterface` ✅
@@ -306,7 +306,7 @@ messages.
     - [ ] D. Only `OutputInterface`
 
     **Why:** it wraps both input (for prompts) and output. **Ref:**
-    [Console style](https://symfony.com/doc/current/console/style.html).
+    [Console style](https://symfony.com/doc/8.0/console/style.html).
 
 ??? question "Q3. What does `$output->section()` return?"
     - [x] A. A `ConsoleSectionOutput` you can `overwrite()`/`clear()` ✅
@@ -315,7 +315,7 @@ messages.
     - [ ] D. A boolean
 
     **Why:** sections are independently re-writable regions. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q4. Difference between `write()` and `writeln()`?"
     - [x] A. `writeln()` appends a newline; `write()` does not ✅
@@ -324,7 +324,7 @@ messages.
     - [ ] D. They are identical
 
     **Why:** `writeln()` = `write()` + line break. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -351,8 +351,8 @@ messages.
   `OutputInterface` is for byte-exact, unstyled output.
 
 ## Official References
-- [Official Symfony docs — Console style](https://symfony.com/doc/current/console/style.html)
-- [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/current/console/verbosity.html)
+- [Official Symfony docs — Console style](https://symfony.com/doc/8.0/console/style.html)
+- [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/8.0/console/verbosity.html)
 - [Symfony source — SymfonyStyle](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Style/SymfonyStyle.php)
 
 ## Video references
@@ -364,7 +364,7 @@ messages.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/verbosity.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/verbosity.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

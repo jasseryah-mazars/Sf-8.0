@@ -387,7 +387,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
 
     **Why:** `NotBlank` treats `''`/`[]`/blank as invalid; `NotNull` only fails on
     a strict `null`, so `''` and `0` pass it.
-    **Ref:** [NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html).
+    **Ref:** [NotBlank](https://symfony.com/doc/8.0/reference/constraints/NotBlank.html).
 
 ??? question "Q2. To validate every element of an indexed array against constraints, use:"
     - [ ] A. `Collection`
@@ -397,7 +397,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
 
     **Why:** `All` applies the given constraints to each element; `Collection`
     validates *keys* of an associative array.
-    **Ref:** [All](https://symfony.com/doc/current/reference/constraints/All.html).
+    **Ref:** [All](https://symfony.com/doc/8.0/reference/constraints/All.html).
 
 ??? question "Q3. A nested object property has its own constraints but they never run. Why?"
     - [ ] A. The validator does not support nesting
@@ -407,7 +407,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
 
     **Why:** Cascading is opt-in via `Valid`; without it the nested object is not
     traversed.
-    **Ref:** [Valid](https://symfony.com/doc/current/reference/constraints/Valid.html).
+    **Ref:** [Valid](https://symfony.com/doc/8.0/reference/constraints/Valid.html).
 
 ??? question "Q4. `#[Assert\Email]` on an empty string returns:"
     - [x] A. No violation (empty values pass) ✅
@@ -417,7 +417,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
 
     **Why:** Like most constraints, `Email` skips empty/null values; pair it with
     `NotBlank` to reject empties.
-    **Ref:** [Email](https://symfony.com/doc/current/reference/constraints/Email.html).
+    **Ref:** [Email](https://symfony.com/doc/8.0/reference/constraints/Email.html).
 
 ## Key takeaways
 
@@ -444,7 +444,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
 - **Confused with:** [Custom Constraints](custom-constraints.md) — reach here first; write your own only when no built-in fits.
 
 ## Official References
-- [Official Symfony docs — Constraints reference](https://symfony.com/doc/current/reference/constraints.html)
+- [Official Symfony docs — Constraints reference](https://symfony.com/doc/8.0/reference/constraints.html)
 - [Symfony source — Constraints/](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Validator/Constraints)
 
 ## Video references
@@ -456,7 +456,7 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/NotBlank.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/NotBlank.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

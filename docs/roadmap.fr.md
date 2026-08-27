@@ -279,4 +279,4 @@ plateforme fournit une chaîne d'entraînement complète sur une **banque de
 
 - [Official Symfony Certification](https://certification.symfony.com/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

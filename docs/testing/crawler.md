@@ -341,7 +341,7 @@ express the query (axes, text predicates).
     - [ ] D. None — CSS is built into DomCrawler
 
     **Why:** `filter()` converts CSS to XPath via CssSelectorConverter; the
-    css-selector component is required. **Ref:** [DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html).
+    css-selector component is required. **Ref:** [DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html).
 
 ??? question "Q2. Calling `text()` on a Crawler that matched nothing…"
     - [x] A. Throws unless you pass a default value ✅
@@ -350,7 +350,7 @@ express the query (axes, text predicates).
     - [ ] D. Returns the whole document text
 
     **Why:** node-reading methods operate on the first node and throw on an empty
-    set unless given a default. **Ref:** [DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html#node-values).
+    set unless given a default. **Ref:** [DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html#node-values).
 
 ??? question "Q3. `$crawler->selectButton('Save')->form(['title' => 'x'])` returns…"
     - [x] A. A `Form` pre-filled with page values, with `title` overridden ✅
@@ -359,7 +359,7 @@ express the query (axes, text predicates).
     - [ ] D. A new Crawler
 
     **Why:** `form()` builds a `DomCrawler\Form` seeded from the DOM; the argument
-    overrides fields. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#forms).
+    overrides fields. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#forms).
 
 ??? question "Q4. To follow an anchor you first obtain…"
     - [x] A. A `Link` via `$crawler->selectLink('Text')->link()` ✅
@@ -368,7 +368,7 @@ express the query (axes, text predicates).
     - [ ] D. A `Response`
 
     **Why:** `link()` builds a `DomCrawler\Link` for `$client->click()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#clicking-links).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#clicking-links).
 
 ## Key takeaways
 
@@ -392,8 +392,8 @@ express the query (axes, text predicates).
 - **Confused with:** [Introspection](introspection.md) — the Crawler *finds* nodes; the `assertSelector*` helpers *check* them.
 
 ## Official References
-- [Official Symfony docs — DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html)
-- [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/current/testing.html#the-crawler)
+- [Official Symfony docs — DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html)
+- [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/8.0/testing.html#the-crawler)
 - [Symfony source — Crawler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DomCrawler/Crawler.php)
 
 ## Video references
@@ -405,7 +405,7 @@ express the query (axes, text predicates).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/dom_crawler.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/dom_crawler.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

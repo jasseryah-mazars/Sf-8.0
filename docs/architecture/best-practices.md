@@ -85,7 +85,7 @@ flowchart LR
 
 !!! note "Source reference"
     Best Practices guide —
-    [symfony.com/doc/current/best_practices.html](https://symfony.com/doc/current/best_practices.html).
+    [symfony.com/doc/8.0/best_practices.html](https://symfony.com/doc/8.0/best_practices.html).
 
 ### Compilation vs runtime angle
 
@@ -192,7 +192,7 @@ clear reason, and document it.
     - [ ] C. In Twig templates
 
     **Why:** Thin controllers delegate to services for reuse and testability.
-    **Ref:** [Best practices](https://symfony.com/doc/current/best_practices.html).
+    **Ref:** [Best practices](https://symfony.com/doc/8.0/best_practices.html).
 
 ??? question "Q2. What visibility should app services have by default?"
     - [x] A. Private ✅
@@ -200,7 +200,7 @@ clear reason, and document it.
     - [ ] C. Protected
 
     **Why:** Private services enable DI optimisation and discourage service location.
-    **Ref:** [Service container](https://symfony.com/doc/current/service_container.html).
+    **Ref:** [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q3. Where do sensitive credentials belong?"
     - [x] A. The Secrets vault ✅
@@ -208,7 +208,7 @@ clear reason, and document it.
     - [ ] C. Hard-coded parameters
 
     **Why:** Secrets should use the vault, not committed config. **Ref:**
-    [Secrets](https://symfony.com/doc/current/configuration/secrets.html).
+    [Secrets](https://symfony.com/doc/8.0/configuration/secrets.html).
 
 ## Key takeaways
 
@@ -232,9 +232,9 @@ clear reason, and document it.
 - **Confused with:** [Naming Conventions](naming-conventions.md) — conventions are mechanical rules; best practices are the *why* behind idiomatic apps.
 
 ## Official References
-- [Official Symfony Best Practices](https://symfony.com/doc/current/best_practices.html)
-- [Service container](https://symfony.com/doc/current/service_container.html)
-- [Secrets management](https://symfony.com/doc/current/configuration/secrets.html)
+- [Official Symfony Best Practices](https://symfony.com/doc/8.0/best_practices.html)
+- [Service container](https://symfony.com/doc/8.0/service_container.html)
+- [Secrets management](https://symfony.com/doc/8.0/configuration/secrets.html)
 
 ## Video references
 
@@ -245,7 +245,7 @@ clear reason, and document it.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/best_practices.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/best_practices.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

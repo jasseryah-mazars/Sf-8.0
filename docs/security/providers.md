@@ -275,7 +275,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
     **Why:** `loadUserByUsername()` was removed; the loader is
     `loadUserByIdentifier()`.
-    **Ref:** [User providers](https://symfony.com/doc/current/security/user_providers.html).
+    **Ref:** [User providers](https://symfony.com/doc/8.0/security/user_providers.html).
 
 ??? question "Q2. When is `refreshUser()` called?"
     - [ ] A. Only during login
@@ -295,7 +295,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
     **Why:** Providers only load/refresh users; `CheckCredentialsListener`
     verifies `PasswordCredentials`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -324,7 +324,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
   *loads* users; it never verifies credentials.
 
 ## Official References
-- [Symfony docs — User providers](https://symfony.com/doc/current/security/user_providers.html)
+- [Symfony docs — User providers](https://symfony.com/doc/8.0/security/user_providers.html)
 - [Symfony source — InMemoryUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/InMemoryUserProvider.php)
 - [Symfony source — ChainUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/ChainUserProvider.php)
 
@@ -337,7 +337,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/user_providers.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/user_providers.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

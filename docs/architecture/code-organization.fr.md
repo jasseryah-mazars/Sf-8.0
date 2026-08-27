@@ -281,7 +281,7 @@ fonctionnalité réutilisable et partageable — pas pour le code applicatif.
     - [ ] C. `web/`
 
     **Why:** `public/` contient `index.php` et les assets ; rien d'autre n'est accessible via le web.
-    **Ref:** [Directory structure](https://symfony.com/doc/current/configuration.html).
+    **Ref:** [Directory structure](https://symfony.com/doc/8.0/configuration.html).
 
 ??? question "Q2. Where are bundles enabled?"
     - [x] A. `config/bundles.php` ✅
@@ -289,7 +289,7 @@ fonctionnalité réutilisable et partageable — pas pour le code applicatif.
     - [ ] C. `src/Kernel.php` manually
 
     **Why:** La carte des bundles se trouve dans `config/bundles.php`. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ??? question "Q3. What supplies `registerBundles()` in a skeleton Kernel?"
     - [x] A. `MicroKernelTrait` ✅
@@ -297,7 +297,7 @@ fonctionnalité réutilisable et partageable — pas pour le code applicatif.
     - [ ] C. `FrameworkBundle` extension
 
     **Why:** Le trait implémente ce code répétitif à votre place. **Ref:**
-    [MicroKernelTrait](https://symfony.com/doc/current/configuration/micro_kernel_trait.html).
+    [MicroKernelTrait](https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html).
 
 ## Key takeaways
 
@@ -321,8 +321,8 @@ fonctionnalité réutilisable et partageable — pas pour le code applicatif.
 - **Confused with:** [Framework Overloading](overloading.md) — la configuration applicative dans `config/` et la surcharge de la configuration livrée par un bundle sont deux préoccupations différentes.
 
 ## Official References
-- [Official docs — Configuration & structure](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Best practices](https://symfony.com/doc/current/best_practices.html)
+- [Official docs — Configuration & structure](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Best practices](https://symfony.com/doc/8.0/best_practices.html)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)
 
 ## Video references
@@ -334,7 +334,7 @@ fonctionnalité réutilisable et partageable — pas pour le code applicatif.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html) — certaines pages de la documentation Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html) — certaines pages de la documentation Symfony intègrent un screencast.
 
 ## Confidence check
 

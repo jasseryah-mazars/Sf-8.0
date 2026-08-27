@@ -312,7 +312,7 @@ chaque request sans le protéger derrière un groupe ou une séquence.
 
     **Why:** Un callback d'instance reçoit le context et le payload facultatif et
     ne retourne rien ; les violations sont ajoutées via le context.
-    **Ref:** [Callback](https://symfony.com/doc/current/reference/constraints/Callback.html).
+    **Ref:** [Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html).
 
 ??? question "Q2. How does a callback register an error?"
     - [ ] A. `return 'error message';`
@@ -322,7 +322,7 @@ chaque request sans le protéger derrière un groupe ou une séquence.
 
     **Why:** Les violations sont construites et ajoutées via l'execution context ;
     les valeurs de retour sont ignorées.
-    **Ref:** [Callback](https://symfony.com/doc/current/reference/constraints/Callback.html).
+    **Ref:** [Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html).
 
 ??? question "Q3. A static callback method receives, as its first argument:"
     - [x] A. The object being validated ✅
@@ -332,7 +332,7 @@ chaque request sans le protéger derrière un groupe ou une séquence.
 
     **Why:** La forme statique reçoit `(object, context, payload)` puisqu'il n'y a
     pas de `$this`.
-    **Ref:** [Callback](https://symfony.com/doc/current/reference/constraints/Callback.html).
+    **Ref:** [Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html).
 
 ## Key takeaways
 
@@ -358,7 +358,7 @@ chaque request sans le protéger derrière un groupe ou une séquence.
 - **Confused with:** [Custom Constraints](custom-constraints.md) — un callback est spécifique à une classe et ponctuel ; une constraint est réutilisable.
 
 ## Official References
-- [Official Symfony docs — Callback](https://symfony.com/doc/current/reference/constraints/Callback.html)
+- [Official Symfony docs — Callback](https://symfony.com/doc/8.0/reference/constraints/Callback.html)
 - [Symfony source — CallbackValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/CallbackValidator.php)
 
 ## Video references
@@ -371,7 +371,7 @@ chaque request sans le protéger derrière un groupe ou une séquence.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/Callback.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/Callback.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

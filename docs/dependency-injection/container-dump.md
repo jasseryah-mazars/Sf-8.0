@@ -78,7 +78,7 @@ and a content hash, so treat these as shapes, not exact strings):
 | `{KernelClass}Container.xml` | Debug-mode snapshot of the **pre-dump** `ContainerBuilder`, used by `debug:container` |
 
 Two dot-prefixed parameters shape the dump (see the
-[performance docs](https://symfony.com/doc/current/performance.html)):
+[performance docs](https://symfony.com/doc/8.0/performance.html)):
 `.container.dumper.inline_factories` (inline every factory into a single
 container file instead of per-service files) and
 `.container.dumper.inline_class_loader` (let the dumped code inline class
@@ -292,7 +292,7 @@ services).
 
     **Why:** The command inspects pre-dump definitions; the removing passes
     inline or prune private services from the generated code afterwards.
-    **Ref:** [Container compilation](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Container compilation](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ??? question "Q2. Correct order of the PassConfig phases?"
     - [x] A. before-optimization → optimization → before-removing → removing → after-removing ✅
@@ -302,7 +302,7 @@ services).
 
     **Why:** `PassConfig` hard-codes the five phases; priority only orders
     passes *within* a phase.
-    **Ref:** [Container compilation](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Container compilation](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ??? question "Q3. You edit services.yaml on a prod server. When does the container reflect it?"
     - [ ] A. Immediately — YAML is re-read per request
@@ -312,7 +312,7 @@ services).
 
     **Why:** Prod executes the dumped PHP container and does not track config
     resources; only a rebuild re-runs compilation.
-    **Ref:** [Container compilation](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Container compilation](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ??? question "Q4. What is `{Kernel}Container.preload.php` for?"
     - [x] A. It lists hot container/service classes for OPcache preloading via `opcache.preload` ✅
@@ -323,7 +323,7 @@ services).
     **Why:** The dumper generates a preload script; referencing it from
     `opcache.preload` compiles those classes into shared memory at server
     start.
-    **Ref:** [Performance](https://symfony.com/doc/current/performance.html).
+    **Ref:** [Performance](https://symfony.com/doc/8.0/performance.html).
 
 ## Key takeaways
 
@@ -364,8 +364,8 @@ services).
 
 ## Official References
 
-- [Official Symfony docs — Compiling the Container](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
-- [Official Symfony docs — Performance (preloading, inline factories)](https://symfony.com/doc/current/performance.html)
+- [Official Symfony docs — Compiling the Container](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
+- [Official Symfony docs — Performance (preloading, inline factories)](https://symfony.com/doc/8.0/performance.html)
 - [Symfony source — PhpDumper](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)
 
@@ -378,7 +378,7 @@ services).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/dependency_injection/compilation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

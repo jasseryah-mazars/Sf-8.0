@@ -335,7 +335,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
 
     **Why:** Affirmative est la stratégie par défaut — un seul voter qui accorde
     suffit.
-    **Ref:** [Access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q2. `Voter::supports()` returns `false`. The vote is…"
     - [ ] A. `ACCESS_DENIED`
@@ -355,7 +355,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
 
     **Why:** Sans grant explicite et avec le `false` par défaut, l'abstention
     générale signifie un refus.
-    **Ref:** [Access decision](https://symfony.com/doc/current/security/voters.html).
+    **Ref:** [Access decision](https://symfony.com/doc/8.0/security/voters.html).
 
 ??? question "Q4. Which values do the vote constants hold?"
     - [x] A. GRANTED 1, ABSTAIN 0, DENIED -1 ✅
@@ -394,7 +394,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
   subject ; les voters sont la couche par objet.
 
 ## Official References
-- [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
+- [Symfony docs — Voters](https://symfony.com/doc/8.0/security/voters.html)
 - [Symfony source — Voter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/Voter.php)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
 
@@ -408,7 +408,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -271,7 +271,7 @@ jamais `fromShellCommandline` avec une entrée non fiable.
     - [ ] C. both equally
 
     **Why:** La forme tableau échappe chaque élément ; la forme shell ne le fait pas.
-    **Ref:** [Process](https://symfony.com/doc/current/components/process.html).
+    **Ref:** [Process](https://symfony.com/doc/8.0/components/process.html).
 
 ??? question "Q2. What does `run()` return?"
     - [x] A. The process exit code ✅
@@ -279,14 +279,14 @@ jamais `fromShellCommandline` avec une entrée non fiable.
     - [ ] C. `void`
 
     **Why:** `run()` retourne l'exit code entier ; utilisez `getOutput()` pour stdout.
-    **Ref:** [Process](https://symfony.com/doc/current/components/process.html#usage).
+    **Ref:** [Process](https://symfony.com/doc/8.0/components/process.html#usage).
 
 ??? question "Q3. The default process timeout is…"
     - [x] A. 60 seconds ✅
     - [ ] B. unlimited
     - [ ] C. 30 seconds
 
-    **Why:** Le défaut est de 60 s ; passez `null` pour le désactiver. **Ref:** [Process timeout](https://symfony.com/doc/current/components/process.html#process-timeout).
+    **Why:** Le défaut est de 60 s ; passez `null` pour le désactiver. **Ref:** [Process timeout](https://symfony.com/doc/8.0/components/process.html#process-timeout).
 
 ## Key takeaways
 
@@ -310,7 +310,7 @@ jamais `fromShellCommandline` avec une entrée non fiable.
 - **Confused with:** exécuter le travail en ligne — pour les tâches différables/réessayables, dispatchez un message au lieu de bloquer la request.
 
 ## Official References
-- [Official docs — Process](https://symfony.com/doc/current/components/process.html)
+- [Official docs — Process](https://symfony.com/doc/8.0/components/process.html)
 - [Symfony source — Process](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Process/Process.php)
 
 ## Video references
@@ -322,7 +322,7 @@ jamais `fromShellCommandline` avec une entrée non fiable.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/process.html) — certaines pages de la doc Symfony embarquent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/process.html) — certaines pages de la doc Symfony embarquent un screencast.
 
 ## Confidence check
 
@@ -336,4 +336,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](lock.md)</small>
+<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](../appendices/out-of-syllabus/lock.md)</small>

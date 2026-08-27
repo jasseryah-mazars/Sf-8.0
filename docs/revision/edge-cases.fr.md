@@ -276,7 +276,7 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     Il lève une **`AlreadySubmittedException`** — un form ne peut être soumis
     qu'une seule fois. Il en va de même pour la mutation d'un form soumis, p. ex.
     faire `add()` d'un enfant après la soumission.
-    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/current/form/direct_submit.html)
+    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/form/direct_submit.html)
 
 ??? question "What happens if you render fields manually and forget `form_rest()` (so no `_token` is printed)?"
     La soumission suivante échoue à la validation CSRF — une erreur **"invalid
@@ -362,7 +362,7 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     constructeur ne peuvent pas être instanciés. Cassez le cycle en rendant un côté
     `lazy` (un proxy diffère l'instanciation), en injectant un service locator, ou
     en passant une arête en injection par setter.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html)
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html)
 
 ??? question "What happens if you tag a service with a custom tag and nothing else?"
     **Rien** — un tag est une métadonnée inerte tant qu'un consommateur (un
@@ -563,14 +563,14 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     défaut ; passez `true` pour bloquer. Les locks portent aussi un TTL (300 s par
     défaut), donc les longs jobs doivent `refresh()`, et
     `FlockStore`/`SemaphoreStore` ne protègent qu'une seule machine.
-    **Ref:** [Lock](../miscellaneous/lock.md)
+    **Ref:** [Lock](../appendices/out-of-syllabus/lock.md)
 
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
-- [Routing](https://symfony.com/doc/current/routing.html) · [Controllers](https://symfony.com/doc/current/controller.html) · [Forms](https://symfony.com/doc/current/forms.html) · [Validation](https://symfony.com/doc/current/validation.html)
-- [Service container](https://symfony.com/doc/current/service_container.html) · [Security](https://symfony.com/doc/current/security.html) · [HTTP cache](https://symfony.com/doc/current/http_cache.html)
-- [Console](https://symfony.com/doc/current/console.html) · [Testing](https://symfony.com/doc/current/testing.html) · [Twig](https://twig.symfony.com/doc/3.x/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
+- [Routing](https://symfony.com/doc/8.0/routing.html) · [Controllers](https://symfony.com/doc/8.0/controller.html) · [Forms](https://symfony.com/doc/8.0/forms.html) · [Validation](https://symfony.com/doc/8.0/validation.html)
+- [Service container](https://symfony.com/doc/8.0/service_container.html) · [Security](https://symfony.com/doc/8.0/security.html) · [HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
+- [Console](https://symfony.com/doc/8.0/console.html) · [Testing](https://symfony.com/doc/8.0/testing.html) · [Twig](https://twig.symfony.com/doc/3.x/)
 - [PHP manual](https://www.php.net/manual/en/) · [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
 
 ---

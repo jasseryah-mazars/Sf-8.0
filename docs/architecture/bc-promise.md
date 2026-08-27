@@ -218,7 +218,7 @@ inheritance of framework classes.
     - [ ] C. In patch releases
 
     **Why:** BC breaks are reserved for majors and require a deprecation path.
-    **Ref:** [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    **Ref:** [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q2. What does `@internal` mean for BC?"
     - [x] A. The element is excluded from the BC promise ✅
@@ -226,7 +226,7 @@ inheritance of framework classes.
     - [ ] C. It is deprecated
 
     **Why:** `@internal` marks implementation details not covered by BC. **Ref:**
-    [Coding standards / @internal](https://symfony.com/doc/current/contributing/code/bc.html).
+    [Coding standards / @internal](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How should you customise a `final` Symfony class?"
     - [x] A. Decorate/compose it ✅
@@ -234,7 +234,7 @@ inheritance of framework classes.
     - [ ] C. Edit it in vendor
 
     **Why:** `final` forbids inheritance; use decoration. **Ref:**
-    [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -258,9 +258,9 @@ inheritance of framework classes.
 - **Confused with:** [Framework Overloading](overloading.md) — overriding a bundle's resources is app-level customisation, not a statement about API stability.
 
 ## Official References
-- [Backward Compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
-- [Conventions — @internal / @final](https://symfony.com/doc/current/contributing/code/conventions.html)
-- [Experimental features](https://symfony.com/doc/current/contributing/code/experimental.html)
+- [Backward Compatibility promise](https://symfony.com/doc/8.0/contributing/code/bc.html)
+- [Conventions — @internal / @final](https://symfony.com/doc/8.0/contributing/code/conventions.html)
+- [Experimental features](https://symfony.com/doc/8.0/contributing/code/experimental.html)
 
 ## Video references
 
@@ -271,7 +271,7 @@ inheritance of framework classes.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

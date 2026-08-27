@@ -340,7 +340,7 @@ périmée se revalide avec un 304 peu coûteux.
     `Cookie` et `Authorization` : une request porteuse d'un cookie de session
     est traitée comme privée et n'est ni servie depuis le cache partagé, ni
     stockée dedans. Ne vous y fiez cependant jamais — gardez les responses
-    authentifiées `private` ou non cachées, et utilisez [ESI](esi.md).
+    authentifiées `private` ou non cachées, et utilisez [ESI](../appendices/out-of-syllabus/esi.md).
 
 ## Certification questions
 
@@ -372,7 +372,7 @@ périmée se revalide avec un 304 peu coûteux.
 
     **Why:** Les caches partagés résolvent la fraîcheur avec `s-maxage` >
     `max-age` > `Expires`.
-    **Ref:** [Expiration](https://symfony.com/doc/current/http_cache/expiration.html).
+    **Ref:** [Expiration](https://symfony.com/doc/8.0/http_cache/expiration.html).
 
 ??? question "Q4. How do you emit `must-revalidate` from a `Response`?"
     - [ ] A. `$response->setMustRevalidate()`
@@ -382,7 +382,7 @@ périmée se revalide avec un 304 peu coûteux.
 
     **Why:** Il n'existe pas de setter dédié ; `mustRevalidate()` est un
     getter. Utilisez `setCache()` (ou `#[Cache(mustRevalidate: true)]`).
-    **Ref:** [HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q5. What accepts a string like `'1 hour'` on `#[Cache]`?"
     - [x] A. `maxage`, `smaxage`, `staleWhileRevalidate`, `staleIfError` ✅
@@ -392,7 +392,7 @@ périmée se revalide avec un 304 peu coûteux.
 
     **Why:** Ces options de durée numérique acceptent un int ou une chaîne de
     date relative analysée via `DateTimeImmutable`.
-    **Ref:** [#[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute).
+    **Ref:** [#[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute).
 
 ## Key takeaways
 
@@ -429,8 +429,8 @@ périmée se revalide avec un 304 peu coûteux.
   durée de vie ; la validation *demande à l'origine* si la copie a changé.
 
 ## Official References
-- [Symfony docs — Expiration](https://symfony.com/doc/current/http_cache/expiration.html)
-- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+- [Symfony docs — Expiration](https://symfony.com/doc/8.0/http_cache/expiration.html)
+- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 - [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 - [Symfony source — CacheAttributeListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php)
@@ -445,7 +445,7 @@ périmée se revalide avec un 304 peu coûteux.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scriptés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — les conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/expiration.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache/expiration.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

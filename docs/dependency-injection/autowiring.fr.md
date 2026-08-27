@@ -321,7 +321,7 @@ pour un accès à la demande, utilisez les [service locators](service-locators.m
     - [ ] D. Environment variables
 
     **Why:** L'autowiring fait correspondre un type-hint à un service ; les
-    scalaires/env nécessitent un binding explicite. **Ref:** [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html).
+    scalaires/env nécessitent un binding explicite. **Ref:** [Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q2. Two services implement one interface and no default is set. Autowiring…"
     - [ ] A. Picks the first one
@@ -331,7 +331,7 @@ pour un accès à la demande, utilisez les [service locators](service-locators.m
 
     **Why:** L'ambiguïté est une erreur de build pure et dure ; vous devez lever
     l'ambiguïté vous-même.
-    **Ref:** [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html).
+    **Ref:** [Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q3. What does `#[Target('requestLogger')]` do?"
     - [x] A. Selects the named autowiring alias `...$requestLogger` explicitly ✅
@@ -340,7 +340,7 @@ pour un accès à la demande, utilisez les [service locators](service-locators.m
     - [ ] D. Makes the service public
 
     **Why:** `#[Target]` se lie à un alias nommé sans dépendre du nom du
-    paramètre. **Ref:** [Autowiring aliases](https://symfony.com/doc/current/service_container/autowiring.html#fixing-non-autowireable-arguments).
+    paramètre. **Ref:** [Autowiring aliases](https://symfony.com/doc/8.0/service_container/autowiring.html#fixing-non-autowireable-arguments).
 
 ??? question "Q4. When does autowiring resolution occur?"
     - [x] A. At container compilation ✅
@@ -349,7 +349,7 @@ pour un accès à la demande, utilisez les [service locators](service-locators.m
     - [ ] D. At kernel termination
 
     **Why:** L'`AutowirePass` s'exécute pendant la compilation ; le container dumpé
-    a des arguments déjà résolus. **Ref:** [Compiling the container](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    a des arguments déjà résolus. **Ref:** [Compiling the container](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ## Key takeaways
 
@@ -378,7 +378,7 @@ pour un accès à la demande, utilisez les [service locators](service-locators.m
   autowirés ; ils nécessitent `bind` ou `#[Autowire]`.
 
 ## Official References
-- [Official Symfony docs — Autowiring](https://symfony.com/doc/current/service_container/autowiring.html)
+- [Official Symfony docs — Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html)
 - [Symfony source — AutowirePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/AutowirePass.php)
 
 ## Video references
@@ -391,7 +391,7 @@ pour un accès à la demande, utilisez les [service locators](service-locators.m
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/autowiring.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/autowiring.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

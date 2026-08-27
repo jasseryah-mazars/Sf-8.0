@@ -246,7 +246,7 @@ complètes des exceptions en cas d'erreur.
     - [ ] D. `-q`
 
     **Why:** `-vv` correspond à very verbose (128) ; `-vvv` à debug (256). **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ??? question "Q2. What is the integer value of `VERBOSITY_NORMAL`?"
     - [ ] A. 0
@@ -255,7 +255,7 @@ complètes des exceptions en cas d'erreur.
     - [ ] D. 64
 
     **Why:** QUIET=16, NORMAL=32, VERBOSE=64, VERY_VERBOSE=128, DEBUG=256. **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ??? question "Q3. Where does the current verbosity level live?"
     - [x] A. On the `OutputInterface` (set by the Application) ✅
@@ -264,7 +264,7 @@ complètes des exceptions en cas d'erreur.
     - [ ] D. In an environment variable only
 
     **Why:** l'Application appelle `$output->setVerbosity()` à partir des flags. **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ??? question "Q4. A message written with `VERBOSITY_VERBOSE` appears at…"
     - [x] A. `-v`, `-vv`, and `-vvv` ✅
@@ -273,7 +273,7 @@ complètes des exceptions en cas d'erreur.
     - [ ] D. `-q` and above
 
     **Why:** tout niveau ≥ au niveau du message l'imprime. **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ## Key takeaways
 
@@ -300,7 +300,7 @@ complètes des exceptions en cas d'erreur.
   à imprimer, pas les formats machine (utilisez `--format`/STDOUT pour les données).
 
 ## Official References
-- [Official Symfony docs — Console verbosity](https://symfony.com/doc/current/console/verbosity.html)
+- [Official Symfony docs — Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html)
 - [Symfony source — OutputInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Output/OutputInterface.php)
 
 ## Video references
@@ -312,7 +312,7 @@ complètes des exceptions en cas d'erreur.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/verbosity.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/verbosity.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -331,7 +331,7 @@ besoin du container sans HTTP, `KernelTestCase` est plus léger que
     - [ ] D. `BrowserTestCase`
 
     **Why:** `WebTestCase` étend `KernelTestCase` et fournit `createClient()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#application-tests).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#application-tests).
 
 ??? question "Q2. Why can `self::getContainer()->get()` return a private service?"
     - [x] A. It returns the special test container (`test.service_container`) ✅
@@ -341,7 +341,7 @@ besoin du container sans HTTP, `KernelTestCase` est plus léger que
 
     **Why:** l'environnement `test` compile un `TestContainer` exposant les
     services privés/non partagés.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q3. How many times can you call `createClient()` in one test?"
     - [x] A. Once — a second call throws ✅
@@ -351,7 +351,7 @@ besoin du container sans HTTP, `KernelTestCase` est plus léger que
 
     **Why:** un seul kernel/client peut être démarré par test ; un nouvel appel
     lève une exception.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. Which config flag makes the `test.client` service available?"
     - [x] A. `framework.test: true` ✅
@@ -361,7 +361,7 @@ besoin du container sans HTTP, `KernelTestCase` est plus léger que
 
     **Why:** `framework.test: true` (par défaut dans `config/packages/test/`)
     enregistre le client et le container de test.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ## Key takeaways
 
@@ -387,7 +387,7 @@ besoin du container sans HTTP, `KernelTestCase` est plus léger que
 - **Confused with:** [Unit Tests](unit-tests.md) — les tests unitaires ne démarrent aucun kernel ; les tests fonctionnels démarrent le vrai.
 
 ## Official References
-- [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
+- [Official Symfony docs — Testing](https://symfony.com/doc/8.0/testing.html)
 - [Symfony source — WebTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)
 
@@ -401,7 +401,7 @@ besoin du container sans HTTP, `KernelTestCase` est plus léger que
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#application-tests) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#application-tests) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

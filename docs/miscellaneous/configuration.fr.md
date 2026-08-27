@@ -283,7 +283,7 @@ et les variables d'environnement. Utilisez ExpressionLanguage pour des règles d
     - [x] C. test ✅
 
     **Why:** Les tests doivent être déterministes, donc `.env.local` est ignoré en `test`.
-    **Ref:** [Configuring environments](https://symfony.com/doc/current/configuration.html#selecting-the-active-environment).
+    **Ref:** [Configuring environments](https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment).
 
 ??? question "Q2. `ExpressionLanguage::compile()` returns…"
     - [ ] A. the evaluated value
@@ -291,7 +291,7 @@ et les variables d'environnement. Utilisez ExpressionLanguage pour des règles d
     - [ ] C. an AST node
 
     **Why:** `compile()` transpile l'expression en PHP ; `evaluate()` l'interprète.
-    **Ref:** [ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html).
+    **Ref:** [ExpressionLanguage](https://symfony.com/doc/8.0/components/expression_language.html).
 
 ??? question "Q3. Which class validates raw config against a tree?"
     - [x] A. `Processor` ✅
@@ -299,7 +299,7 @@ et les variables d'environnement. Utilisez ExpressionLanguage pour des règles d
     - [ ] C. `FileLocator`
 
     **Why:** `Processor::processConfiguration()` fusionne et valide contre l'arbre de la
-    `Configuration`. **Ref:** [Config component](https://symfony.com/doc/current/components/config/definition.html).
+    `Configuration`. **Ref:** [Config component](https://symfony.com/doc/8.0/components/config/definition.html).
 
 ## Key takeaways
 
@@ -323,9 +323,9 @@ et les variables d'environnement. Utilisez ExpressionLanguage pour des règles d
 - **Confused with:** les variables d'environnement applicatives — le composant Config définit des schémas de **bundle**, pas des réglages par application.
 
 ## Official References
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Config component](https://symfony.com/doc/current/components/config.html)
-- [Official docs — ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Config component](https://symfony.com/doc/8.0/components/config.html)
+- [Official docs — ExpressionLanguage](https://symfony.com/doc/8.0/components/expression_language.html)
 - [Symfony source — Dotenv](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Dotenv/Dotenv.php)
 
 ## Video references
@@ -337,7 +337,7 @@ et les variables d'environnement. Utilisez ExpressionLanguage pour des règles d
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html#selecting-the-active-environment) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

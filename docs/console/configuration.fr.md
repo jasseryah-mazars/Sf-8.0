@@ -324,7 +324,7 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
 
     **Why:** `configure()` s'exécute dans le constructeur ; puis `run()` appelle
     `initialize`, `interact` et `execute`. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. When is `interact()` called?"
     - [x] A. Only when the input is interactive ✅
@@ -333,7 +333,7 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
     - [ ] D. After `execute()`
 
     **Why:** elle est sautée pour un input non interactif (`-n`). **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q3. Why put the command name in `#[AsCommand]` rather than `configure()`?"
     - [x] A. It lets the loader know the name without instantiating (lazy loading) ✅
@@ -343,7 +343,7 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
 
     **Why:** l'attribut expose le nom à la compilation pour le
     `ContainerCommandLoader`. **Ref:**
-    [Commands as services](https://symfony.com/doc/current/console/commands_as_services.html).
+    [Commands as services](https://symfony.com/doc/8.0/console/commands_as_services.html).
 
 ??? question "Q4. A command marked `hidden: true`…"
     - [x] A. Does not appear in `list` but can still be executed ✅
@@ -352,7 +352,7 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
     - [ ] D. Only runs in the `dev` environment
 
     **Why:** `hidden` n'affecte que le listing. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -383,8 +383,8 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
   l'input.
 
 ## Official References
-- [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Commands as services (lazy)](https://symfony.com/doc/current/console/commands_as_services.html)
+- [Official Symfony docs — Console](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Commands as services (lazy)](https://symfony.com/doc/8.0/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)
 
 ## Video references
@@ -396,7 +396,7 @@ lazy. `initialize()` est optionnelle ; sautez-la s'il n'y a rien à partager ent
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -247,7 +247,7 @@ défaut ne correspond pas au markup de votre framework.
 
     **Why:** La hiérarchie des block prefixes est parcourue depuis le nom unique
     par champ jusqu'au bloc racine `form_*` ; le premier bloc existant est utilisé.
-    **Ref:** [Form themes](https://symfony.com/doc/current/form/form_themes.html).
+    **Ref:** [Form themes](https://symfony.com/doc/8.0/form/form_themes.html).
 
 ??? question "Q2. What does `bootstrap_5_layout.html.twig` provide?"
     - [ ] A. Bootstrap CSS and JS assets
@@ -257,7 +257,7 @@ défaut ne correspond pas au markup de votre framework.
 
     **Why:** Les layouts intégrés sont des templates de thème (markup uniquement).
     C'est à vous de charger le framework CSS.
-    **Ref:** [Bootstrap form theme](https://symfony.com/doc/current/form/bootstrap5.html).
+    **Ref:** [Bootstrap form theme](https://symfony.com/doc/8.0/form/bootstrap5.html).
 
 ??? question "Q3. When two global themes define the same block…"
     - [x] A. The last theme in the list wins ✅
@@ -267,7 +267,7 @@ défaut ne correspond pas au markup de votre framework.
 
     **Why:** Les `twig.form_themes` sont appliqués dans l'ordre ; les entrées
     suivantes surchargent les précédentes.
-    **Ref:** [Form themes docs](https://symfony.com/doc/current/form/form_themes.html).
+    **Ref:** [Form themes docs](https://symfony.com/doc/8.0/form/form_themes.html).
 
 ## Key takeaways
 
@@ -292,8 +292,8 @@ défaut ne correspond pas au markup de votre framework.
 - **Confused with:** [Twig templating](../twig/index.md) — les thèmes sont des blocs Twig ordinaires appliqués via `form_theme`/`twig.form_themes`, pas un moteur séparé.
 
 ## Official References
-- [Official Symfony docs — Form themes](https://symfony.com/doc/current/form/form_themes.html)
-- [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/current/form/bootstrap5.html)
+- [Official Symfony docs — Form themes](https://symfony.com/doc/8.0/form/form_themes.html)
+- [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/8.0/form/bootstrap5.html)
 - [Symfony source — form_div_layout.html.twig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig)
 
 ## Video references
@@ -305,7 +305,7 @@ défaut ne correspond pas au markup de votre framework.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/form_themes.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/form_themes.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

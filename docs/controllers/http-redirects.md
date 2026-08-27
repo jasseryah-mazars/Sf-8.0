@@ -211,7 +211,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
     - [ ] C. 303
     - [ ] D. 307
 
-    **Why:** `RedirectResponse` defaults to 302 Found. **Ref:** [redirecting](https://symfony.com/doc/current/controller.html#redirecting).
+    **Why:** `RedirectResponse` defaults to 302 Found. **Ref:** [redirecting](https://symfony.com/doc/8.0/controller.html#redirecting).
 
 ??? question "Q2. Which status codes preserve the HTTP method and body?"
     - [ ] A. 301 and 302
@@ -228,7 +228,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
     - [ ] D. They are aliases.
 
     **Why:** the former is URL-based, the latter builds the URL from the router.
-    **Ref:** [redirecting](https://symfony.com/doc/current/controller.html#redirecting).
+    **Ref:** [redirecting](https://symfony.com/doc/8.0/controller.html#redirecting).
 
 ## Key takeaways
 
@@ -251,7 +251,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
 - **Confused with:** [Internal Redirects](internal-redirects.md) — a forward is same-request with no 3xx; a redirect is a new client request.
 
 ## Official References
-- [Official Symfony docs — Redirecting](https://symfony.com/doc/current/controller.html#redirecting)
+- [Official Symfony docs — Redirecting](https://symfony.com/doc/8.0/controller.html#redirecting)
 - [Symfony source — RedirectResponse](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/RedirectResponse.php)
 
 ## Video references
@@ -263,7 +263,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#redirecting) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#redirecting) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

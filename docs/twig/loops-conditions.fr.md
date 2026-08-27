@@ -326,7 +326,7 @@ lignes dans Twig.
 - **Confused with:** [Twig Syntax](syntax.md) — `is empty` (vrai pour `0`/`''`/`[]`/`null`) est plus large que `is null`.
 
 ## Official References
-- [Official — Loops in templates](https://symfony.com/doc/current/templates.html)
+- [Official — Loops in templates](https://symfony.com/doc/8.0/templates.html)
 - [Twig — for / if tags](https://twig.symfony.com/doc/3.x/tags/for.html)
 - [Twig source — ForNode](https://github.com/twigphp/Twig/blob/3.x/src/Node/ForNode.php)
 
@@ -340,7 +340,7 @@ lignes dans Twig.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

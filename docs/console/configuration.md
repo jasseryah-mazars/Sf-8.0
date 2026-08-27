@@ -313,7 +313,7 @@ nothing to share between `interact()` and `execute()`.
 
     **Why:** `configure()` runs in the constructor; then `run()` calls
     `initialize`, `interact`, and `execute`. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. When is `interact()` called?"
     - [x] A. Only when the input is interactive ✅
@@ -322,7 +322,7 @@ nothing to share between `interact()` and `execute()`.
     - [ ] D. After `execute()`
 
     **Why:** it is skipped for non-interactive input (`-n`). **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q3. Why put the command name in `#[AsCommand]` rather than `configure()`?"
     - [x] A. It lets the loader know the name without instantiating (lazy loading) ✅
@@ -332,7 +332,7 @@ nothing to share between `interact()` and `execute()`.
 
     **Why:** the attribute exposes the name at compile time for the
     `ContainerCommandLoader`. **Ref:**
-    [Commands as services](https://symfony.com/doc/current/console/commands_as_services.html).
+    [Commands as services](https://symfony.com/doc/8.0/console/commands_as_services.html).
 
 ??? question "Q4. A command marked `hidden: true`…"
     - [x] A. Does not appear in `list` but can still be executed ✅
@@ -341,7 +341,7 @@ nothing to share between `interact()` and `execute()`.
     - [ ] D. Only runs in the `dev` environment
 
     **Why:** `hidden` affects listing only. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -370,8 +370,8 @@ nothing to share between `interact()` and `execute()`.
   declares those, but metadata (name/help) is not the input definition.
 
 ## Official References
-- [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Commands as services (lazy)](https://symfony.com/doc/current/console/commands_as_services.html)
+- [Official Symfony docs — Console](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Commands as services (lazy)](https://symfony.com/doc/8.0/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)
 
 ## Video references
@@ -383,7 +383,7 @@ nothing to share between `interact()` and `execute()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

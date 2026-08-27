@@ -329,7 +329,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
     - [ ] D. `RELATIVE_PATH`
 
     **Why:** il retourne par défaut un path relatif à la racine comme `/blog/42`.
-    **Ref:** [Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls).
+    **Ref:** [Generating URLs](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q2. `generateUrl('blog_show', ['id' => 42, 'utm' => 'x'])` yields?"
     - [x] A. `/blog/42?utm=x` ✅
@@ -338,7 +338,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
     - [ ] D. `/blog/42`
 
     **Why:** les paramètres qui ne sont pas des placeholders sont ajoutés en query string.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#generating-urls).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q3. Which class holds `ABSOLUTE_URL`, `NETWORK_PATH`, etc.?"
     - [ ] A. `UrlGenerator`
@@ -347,7 +347,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
     - [ ] D. `Router`
 
     **Why:** les constantes de reference type sont définies sur l'interface.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q4. Why might a console command generate `http://localhost/...`?"
     - [x] A. No `RequestContext` host; `default_uri` not configured ✅
@@ -356,7 +356,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
     - [ ] D. Twig is disabled
 
     **Why:** sans request, le generator s'appuie sur `router.default_uri`.
-    **Ref:** [Routing in commands](https://symfony.com/doc/current/routing.html#generating-urls-in-commands).
+    **Ref:** [Routing in commands](https://symfony.com/doc/8.0/routing.html#generating-urls-in-commands).
 
 ??? question "Q5. Which Twig function produces an absolute URL?"
     - [ ] A. `path()`
@@ -365,7 +365,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
     - [ ] D. `absolute_url()` only
 
     **Why:** `url()` correspond à `ABSOLUTE_URL` ; `path()` correspond à `ABSOLUTE_PATH`.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#generating-urls-in-templates).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#generating-urls-in-templates).
 
 ## Key takeaways
 
@@ -391,7 +391,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
 - **Confused with:** [Defaults](defaults.md) — une valeur égale à son défaut est omise de l'URL générée.
 
 ## Official References
-- [Official Symfony docs — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
+- [Official Symfony docs — Generating URLs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 - [Symfony source — UrlGenerator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Generator/UrlGenerator.php)
 - [Symfony source — RequestContext](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RequestContext.php)
 
@@ -404,7 +404,7 @@ protocol-relative ; `RELATIVE_PATH` est rarement nécessaire et plus difficile �
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#generating-urls) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#generating-urls) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

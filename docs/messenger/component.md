@@ -229,7 +229,7 @@ service directly is simpler and has no dispatch overhead.
 
     **Why:** `dispatch()` always returns the (possibly stamped) `Envelope`;
     a handler's result lives in a `HandledStamp` inside it.
-    **Ref:** [Messenger](https://symfony.com/doc/current/messenger.html).
+    **Ref:** [Messenger](https://symfony.com/doc/8.0/messenger.html).
 
 ??? question "Q2. What must a Messenger message class implement?"
     - [x] A. Nothing — any plain, serializable PHP object works ✅
@@ -238,7 +238,7 @@ service directly is simpler and has no dispatch overhead.
     - [ ] D. `Stringable`
 
     **Why:** Messenger deliberately has no message marker interface; a plain
-    DTO is enough. **Ref:** [Messenger — Creating a Message Handler](https://symfony.com/doc/current/messenger.html#creating-a-message-handler).
+    DTO is enough. **Ref:** [Messenger — Creating a Message Handler](https://symfony.com/doc/8.0/messenger.html#creating-a-message-handler).
 
 ??? question "Q3. Which attribute marks a service as a message handler in Symfony 8?"
     - [x] A. `#[AsMessageHandler]` ✅
@@ -247,7 +247,7 @@ service directly is simpler and has no dispatch overhead.
     - [ ] D. `#[Handles]`
 
     **Why:** `#[AsMessageHandler]` is what autoconfiguration looks for to
-    tag and wire a handler. **Ref:** [Messenger](https://symfony.com/doc/current/messenger.html#creating-a-message-handler).
+    tag and wire a handler. **Ref:** [Messenger](https://symfony.com/doc/8.0/messenger.html#creating-a-message-handler).
 
 ## Key takeaways
 
@@ -278,7 +278,7 @@ service directly is simpler and has no dispatch overhead.
 
 ## Official References
 
-- [Official docs — Messenger](https://symfony.com/doc/current/messenger.html)
+- [Official docs — Messenger](https://symfony.com/doc/8.0/messenger.html)
 - [Symfony source — Messenger component](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger)
 
 ## Video references
@@ -290,7 +290,7 @@ service directly is simpler and has no dispatch overhead.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

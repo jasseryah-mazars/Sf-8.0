@@ -64,6 +64,6 @@ picture. Finish with the policy cluster —
 
 ## Official References
 
-- [Symfony documentation — Symfony Architecture (HttpKernel)](https://symfony.com/doc/current/components/http_kernel.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Symfony Architecture (HttpKernel)](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

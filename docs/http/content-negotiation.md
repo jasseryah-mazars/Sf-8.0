@@ -319,7 +319,7 @@ multiple clients transparently.
 
     **Why:** With a whitelist it intersects the client's ordered languages with
     your list and returns the best match.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. `getAcceptableContentTypes()` returns…"
     - [x] A. MIME types ordered by preference ✅
@@ -375,7 +375,7 @@ multiple clients transparently.
 
 ## Official References
 - [MDN — Content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation)
-- [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
+- [Symfony docs — HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — AcceptHeader](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/AcceptHeader.php)
 
 ## Video references
@@ -387,7 +387,7 @@ multiple clients transparently.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

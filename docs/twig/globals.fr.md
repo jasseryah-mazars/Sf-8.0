@@ -267,7 +267,7 @@ controller. Pour des valeurs nécessaires à un seul partial, passez-les via
     - [ ] D. It throws
 
     **Why:** `AppVariable::getUser()` retourne l'utilisateur du token ou `null`. **Ref:**
-    [The app global](https://symfony.com/doc/current/templates.html#the-app-global-variable).
+    [The app global](https://symfony.com/doc/8.0/templates.html#the-app-global-variable).
 
 ??? question "Q2. Which class backs the `app` global?"
     - [ ] A. `Twig\Environment`
@@ -285,7 +285,7 @@ controller. Pour des valeurs nécessaires à un seul partial, passez-les via
     - [ ] D. It is impossible
 
     **Why:** Les globales se déclarent sous `twig.globals` ou via `GlobalsInterface`.
-    **Ref:** [Global variables](https://symfony.com/doc/current/templates.html#global-variables).
+    **Ref:** [Global variables](https://symfony.com/doc/8.0/templates.html#global-variables).
 
 ## Key takeaways
 
@@ -309,8 +309,8 @@ controller. Pour des valeurs nécessaires à un seul partial, passez-les via
 - **Confused with:** [Authentication](../security/authentication.md) — `app.user` n'est que le versant vue ; le token qu'il lit est alimenté par la couche de sécurité.
 
 ## Official References
-- [Official — The app global variable](https://symfony.com/doc/current/templates.html#the-app-global-variable)
-- [Official — Global variables](https://symfony.com/doc/current/templates.html#global-variables)
+- [Official — The app global variable](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
+- [Official — Global variables](https://symfony.com/doc/8.0/templates.html#global-variables)
 - [Symfony source — AppVariable](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php)
 
 ## Video references
@@ -323,7 +323,7 @@ controller. Pour des valeurs nécessaires à un seul partial, passez-les via
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#the-app-global-variable) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#the-app-global-variable) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

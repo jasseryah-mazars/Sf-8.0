@@ -274,7 +274,7 @@ code.
     - [ ] C. `web/`
 
     **Why:** `public/` holds `index.php` and assets; nothing else is web-accessible.
-    **Ref:** [Directory structure](https://symfony.com/doc/current/configuration.html).
+    **Ref:** [Directory structure](https://symfony.com/doc/8.0/configuration.html).
 
 ??? question "Q2. Where are bundles enabled?"
     - [x] A. `config/bundles.php` ✅
@@ -282,7 +282,7 @@ code.
     - [ ] C. `src/Kernel.php` manually
 
     **Why:** The bundles map lives in `config/bundles.php`. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ??? question "Q3. What supplies `registerBundles()` in a skeleton Kernel?"
     - [x] A. `MicroKernelTrait` ✅
@@ -290,7 +290,7 @@ code.
     - [ ] C. `FrameworkBundle` extension
 
     **Why:** The trait implements the boilerplate. **Ref:**
-    [MicroKernelTrait](https://symfony.com/doc/current/configuration/micro_kernel_trait.html).
+    [MicroKernelTrait](https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html).
 
 ## Key takeaways
 
@@ -314,8 +314,8 @@ code.
 - **Confused with:** [Framework Overloading](overloading.md) — app config in `config/` vs overriding a bundle's shipped config are different concerns.
 
 ## Official References
-- [Official docs — Configuration & structure](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Best practices](https://symfony.com/doc/current/best_practices.html)
+- [Official docs — Configuration & structure](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Best practices](https://symfony.com/doc/8.0/best_practices.html)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)
 
 ## Video references
@@ -327,7 +327,7 @@ code.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

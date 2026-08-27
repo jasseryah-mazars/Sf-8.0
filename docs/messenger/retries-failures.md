@@ -219,7 +219,7 @@ those only delays the inevitable and wastes worker time.
     - [ ] D. It is silently discarded
 
     **Why:** `failure_transport` stores permanently-failed messages for
-    inspection/retry. **Ref:** [Failure transport](https://symfony.com/doc/current/messenger.html#saving-retrying-failed-messages).
+    inspection/retry. **Ref:** [Failure transport](https://symfony.com/doc/8.0/messenger.html#saving-retrying-failed-messages).
 
 ??? question "Q2. How do you make a failing handler skip retries and go straight to the failure transport?"
     - [x] A. Throw `UnrecoverableMessageHandlingException` ✅
@@ -228,7 +228,7 @@ those only delays the inevitable and wastes worker time.
     - [ ] D. Set `max_retries: 0` globally
 
     **Why:** that exception explicitly marks the failure as non-retryable.
-    **Ref:** [Retries & failures](https://symfony.com/doc/current/messenger.html#retries-failures).
+    **Ref:** [Retries & failures](https://symfony.com/doc/8.0/messenger.html#retries-failures).
 
 ??? question "Q3. With `retry_strategy: { delay: 1000, multiplier: 2, jitter: 0 }`, what are the base delays before retries 1, 2, and 3?"
     - [x] A. 1000 ms, 2000 ms, 4000 ms ✅
@@ -293,7 +293,7 @@ those only delays the inevitable and wastes worker time.
 
 ## Official References
 
-- [Official docs — Retries & failures](https://symfony.com/doc/current/messenger.html#retries-failures)
+- [Official docs — Retries & failures](https://symfony.com/doc/8.0/messenger.html#retries-failures)
 - [Symfony source — MultiplierRetryStrategy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Retry/MultiplierRetryStrategy.php)
 - [Symfony source — UnrecoverableMessageHandlingException](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Exception/UnrecoverableMessageHandlingException.php)
 
@@ -306,7 +306,7 @@ those only delays the inevitable and wastes worker time.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#retries-failures) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#retries-failures) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

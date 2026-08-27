@@ -251,7 +251,7 @@ la sortie d'un controller dans un template.
     - [ ] C. Includes a template.
     - [ ] D. Dispatches a message asynchronously.
 
-    **Why:** il dispatche une sub-request à travers le kernel. **Ref:** [forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller).
+    **Why:** il dispatche une sub-request à travers le kernel. **Ref:** [forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller).
 
 ??? question "Q2. During a forwarded sub-request, `isMainRequest()` returns…"
     - [ ] A. true
@@ -259,7 +259,7 @@ la sortie d'un controller dans un template.
     - [ ] C. null
     - [ ] D. throws
 
-    **Why:** la sub-request est dispatchée avec `SUB_REQUEST`. **Ref:** [http kernel](https://symfony.com/doc/current/components/http_kernel.html).
+    **Why:** la sub-request est dispatchée avec `SUB_REQUEST`. **Ref:** [http kernel](https://symfony.com/doc/8.0/components/http_kernel.html).
 
 ??? question "Q3. The user's address bar after a `forward()` shows…"
     - [x] A. the original URL (unchanged) ✅
@@ -269,7 +269,7 @@ la sortie d'un controller dans un template.
 
     **Why:** le forwarding est interne au serveur ; aucune nouvelle requête cliente
     n'a lieu.
-    **Ref:** [forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller).
+    **Ref:** [forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller).
 
 ## Key takeaways
 
@@ -292,7 +292,7 @@ la sortie d'un controller dans un template.
 - **Confused with:** [Built-in Controllers](built-in-controllers.md) — le `RedirectController` redirige le client ; `forward()` non.
 
 ## Official References
-- [Official Symfony docs — Forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+- [Official Symfony docs — Forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 - [Symfony source — HttpKernelInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernelInterface.php)
 
 ## Video references
@@ -305,7 +305,7 @@ la sortie d'un controller dans un template.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

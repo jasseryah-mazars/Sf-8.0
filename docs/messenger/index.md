@@ -72,6 +72,6 @@ Work through them in order:
 
 ## Official References
 
-- [Symfony documentation — Messenger](https://symfony.com/doc/current/messenger.html)
+- [Symfony documentation — Messenger](https://symfony.com/doc/8.0/messenger.html)
 - [Symfony source — Messenger component](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

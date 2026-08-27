@@ -271,7 +271,7 @@ builders typés. Les surcharges propres à un environnement vivent dans
     - [ ] D. Renamed to `authenticator: true`
 
     **Why:** La clé existait (et était dépréciée) en 7.x ; la 8.0 l'a supprimée.
-    **Ref:** [Security config](https://symfony.com/doc/current/security.html).
+    **Ref:** [Security config](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q2. The `password_hashers` map is keyed by…"
     - [ ] A. Firewall name
@@ -281,7 +281,7 @@ builders typés. Les surcharges propres à un environnement vivent dans
 
     **Why:** Vous associez une classe utilisateur (généralement
     `PasswordAuthenticatedUserInterface`) à un algorithme comme `auto`.
-    **Ref:** [Password hashing](https://symfony.com/doc/current/security/passwords.html).
+    **Ref:** [Password hashing](https://symfony.com/doc/8.0/security/passwords.html).
 
 ??? question "Q3. Two providers are defined; a firewall omits `provider:`. Result?"
     - [ ] A. It uses the first provider
@@ -291,7 +291,7 @@ builders typés. Les surcharges propres à un environnement vivent dans
 
     **Why:** Avec plusieurs providers, il n'y a pas de défaut implicite ; chaque
     firewall doit en nommer un.
-    **Ref:** [User providers](https://symfony.com/doc/current/security/user_providers.html).
+    **Ref:** [User providers](https://symfony.com/doc/8.0/security/user_providers.html).
 
 ## Key takeaways
 
@@ -321,8 +321,8 @@ builders typés. Les surcharges propres à un environnement vivent dans
   configurent *l'authentification* ; `access_control` configure *l'autorisation*.
 
 ## Official References
-- [Symfony docs — Security configuration](https://symfony.com/doc/current/security.html)
-- [Symfony docs — SecurityBundle config reference](https://symfony.com/doc/current/reference/configuration/security.html)
+- [Symfony docs — Security configuration](https://symfony.com/doc/8.0/security.html)
+- [Symfony docs — SecurityBundle config reference](https://symfony.com/doc/8.0/reference/configuration/security.html)
 - [Symfony source — SecurityExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/DependencyInjection/SecurityExtension.php)
 
 ## Video references
@@ -334,7 +334,7 @@ builders typés. Les surcharges propres à un environnement vivent dans
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

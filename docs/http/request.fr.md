@@ -338,7 +338,7 @@ brute aux besoins bas niveau (headers, IP, body brut).
 
     **Why:** `attributes` (un `ParameterBag`) contient les données du framework et
     de la route comme `_route`, `_controller` et les paramètres du chemin.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. Which class backs `$request->query`?"
     - [x] A. `InputBag` ✅
@@ -386,7 +386,7 @@ brute aux besoins bas niveau (headers, IP, body brut).
 - **Confused with:** [HTTP Response](response.md) — les `InputBag`/`ParameterBag` entrants vs le `ResponseHeaderBag` sortant.
 
 ## Official References
-- [Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data)
+- [Symfony docs — HttpFoundation Request](https://symfony.com/doc/8.0/components/http_foundation.html#accessing-request-data)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 - [Symfony source — InputBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
 
@@ -399,7 +399,7 @@ brute aux besoins bas niveau (headers, IP, body brut).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

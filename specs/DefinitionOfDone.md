@@ -24,7 +24,7 @@ applicable item below is true. This is the gate referenced by every task.
 - [ ] **Certification questions** (inline, collapsible) with explanations + refs.
 - [ ] **Key takeaways** + **Last-minute revision** cheat sheet.
 - [ ] **`## Official References`** section (mandatory): official Symfony docs
-      (`doc/current`) for Symfony concepts, **php.net** for PHP concepts, plus
+      (`doc/8.0`) for Symfony concepts, **php.net** for PHP concepts, plus
       **source**/RFC links where internals are discussed. A chapter is invalid
       without it.
 - [ ] **Related** cross-links (2–4), all resolving.

@@ -266,7 +266,7 @@ pour la mécanique de routing, [Locale Guessing](../routing/locale.md).
 
     **Why:** La forme avec whitelist garantit une locale supportée ; les autres peuvent
     en renvoyer une que vous ne supportez pas.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. What sets the request locale when a route has `{_locale}`?"
     - [x] A. `LocaleListener` on `kernel.request` calls `setLocale()` ✅
@@ -286,7 +286,7 @@ pour la mécanique de routing, [Locale Guessing](../routing/locale.md).
 
     **Why:** Elle restreint les locales valides (`_locale` du routing, compilation des
     traductions) ; `default_locale` définit la valeur de repli.
-    **Ref:** [Translations config](https://symfony.com/doc/current/translation.html).
+    **Ref:** [Translations config](https://symfony.com/doc/8.0/translation.html).
 
 ## Key takeaways
 
@@ -311,8 +311,8 @@ pour la mécanique de routing, [Locale Guessing](../routing/locale.md).
 - **Confused with:** [Internationalization (Intl)](../miscellaneous/intl.md) — *détecter* la locale (HTTP) vs *traduire* le contenu.
 
 ## Official References
-- [Symfony docs — Translations & locale](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
-- [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
+- [Symfony docs — Translations & locale](https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations)
+- [Symfony docs — HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
 ## Video references
@@ -324,7 +324,7 @@ pour la mécanique de routing, [Locale Guessing](../routing/locale.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

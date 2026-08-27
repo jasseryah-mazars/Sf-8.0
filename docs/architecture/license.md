@@ -192,7 +192,7 @@ trademark when marketing.
 - **Confused with:** [BC Promise](bc-promise.md) — a *legal* guarantee about the code licence, not a *technical* guarantee about API stability.
 
 ## Official References
-- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/current/contributing/code/bc.html)
+- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/8.0/contributing/code/bc.html)
 - [Symfony source — LICENSE (MIT)](https://github.com/symfony/symfony/blob/8.0/LICENSE)
 - [MIT License text](https://opensource.org/license/mit)
 - [Symfony trademark policy](https://symfony.com/trademark)
@@ -206,7 +206,7 @@ trademark when marketing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

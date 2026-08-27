@@ -296,7 +296,7 @@ dépendance, injectez-la directement — un locator ajoute une indirection inuti
     - [ ] D. There is no difference
 
     **Why:** L'ensemble d'un locator est explicite et analysable ; injecter le
-    container entier cache les dépendances. **Ref:** [Service subscribers & locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    container entier cache les dépendances. **Ref:** [Service subscribers & locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. When are locator services instantiated?"
     - [ ] A. All at construction
@@ -306,7 +306,7 @@ dépendance, injectez-la directement — un locator ajoute une indirection inuti
 
     **Why:** Un locator diffère la construction jusqu'à ce qu'un service soit
     réellement demandé.
-    **Ref:** [Service locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators).
+    **Ref:** [Service locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators).
 
 ??? question "Q3. What does `getSubscribedServices()` return?"
     - [x] A. A map/list of services the subscriber may lazily use ✅
@@ -316,7 +316,7 @@ dépendance, injectez-la directement — un locator ajoute une indirection inuti
 
     **Why:** Elle déclare la liste blanche ; le container injecte un locator
     correspondant.
-    **Ref:** [Service subscribers](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    **Ref:** [Service subscribers](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q4. `ServiceLocator` implements which interface?"
     - [x] A. `Psr\Container\ContainerInterface` (PSR-11) ✅
@@ -325,7 +325,7 @@ dépendance, injectez-la directement — un locator ajoute une indirection inuti
     - [ ] D. `CompilerPassInterface`
 
     **Why:** C'est un container PSR-11 exposant `get()`/`has()`.
-    **Ref:** [Service locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators).
+    **Ref:** [Service locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators).
 
 ## Key takeaways
 
@@ -356,7 +356,7 @@ dépendance, injectez-la directement — un locator ajoute une indirection inuti
   est une petite liste blanche PSR-11, pas le container entier.
 
 ## Official References
-- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — ServiceLocator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ServiceLocator.php)
 
 ## Video references
@@ -369,7 +369,7 @@ dépendance, injectez-la directement — un locator ajoute une indirection inuti
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

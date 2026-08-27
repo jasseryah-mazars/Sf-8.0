@@ -357,7 +357,7 @@ automatically.
 
     **Why:** `validate()` always returns a violation list; you inspect it with
     `count()`. It never throws or returns a bool.
-    **Ref:** [Validation](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q2. Which method checks a value *without* modifying the object?"
     - [ ] A. `validate()`
@@ -367,7 +367,7 @@ automatically.
 
     **Why:** `validatePropertyValue($objectOrClass, $property, $value)` validates a
     hypothetical value; the object's state is untouched.
-    **Ref:** [ValidatorInterface](https://symfony.com/doc/current/validation.html).
+    **Ref:** [ValidatorInterface](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q3. How is `#[Assert\...]` attribute metadata turned into constraints?"
     - [ ] A. Parsed on every `validate()` call by reflection
@@ -377,7 +377,7 @@ automatically.
 
     **Why:** The `LazyLoadingMetadataFactory` uses `AttributeLoader` to build
     `ClassMetadata`, cached in a PSR-6 pool so reflection runs once per class.
-    **Ref:** [Validator internals](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validator internals](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -403,7 +403,7 @@ automatically.
 - **Confused with:** [Scopes](scopes.md) — *where* constraints attach vs *how* you run the validator here.
 
 ## Official References
-- [Official Symfony docs — Validation](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveValidator.php)
 
 ## Video references
@@ -415,7 +415,7 @@ automatically.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -231,7 +231,7 @@ do NOT re-run these unless the underlying files change:
 - `tools/check_links.py --offline` → 670 unique external URLs catalogued (not yet network-checked this session — no network check run; see "Next task").
 
 **Design decisions confirmed intentional (do NOT "fix"):**
-- Doc links use `symfony.com/doc/current/...` on purpose (tracks latest stable; documented in
+- Doc links use `symfony.com/doc/8.0/...` on purpose (tracks latest stable; documented in
   specs/Architecture.md, FutureMaintenance.md, MigrationPlan.md, Requirements.md FR-12). Source
   links correctly pin `github.com/symfony/symfony/blob/8.0/...` — verified the `8.0` branch is
   real and has releases through 8.0.16 (current actual stable is 8.1.5, per GitHub as of

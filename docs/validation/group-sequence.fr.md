@@ -317,7 +317,7 @@ affiche toutes les erreurs d'un coup. N'utilisez un **provider** que lorsque les
 
     **Why:** Chaque groupe s'exécute entièrement ; la séquence s'interrompt après le
     premier groupe qui produit une violation quelconque.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q2. Inside a class's `GroupSequence`, how do you reference its own basic constraints?"
     - [ ] A. `Default`
@@ -327,7 +327,7 @@ affiche toutes les erreurs d'un coup. N'utilisez un **provider** que lorsque les
 
     **Why:** Référencer `Default` provoquerait une boucle ; le groupe `{ClassName}`
     désigne les propres constraints Default de la classe.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q3. `#[Assert\GroupSequenceProvider]` requires the class to…"
     - [x] A. Implement `GroupSequenceProviderInterface::getGroupSequence()` ✅
@@ -337,7 +337,7 @@ affiche toutes les erreurs d'un coup. N'utilisez un **provider** que lorsque les
 
     **Why:** L'attribut du provider délègue à `getGroupSequence()` de l'interface,
     évaluée à chaque validation.
-    **Ref:** [Group sequence provider](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence provider](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ## Key takeaways
 
@@ -364,7 +364,7 @@ affiche toutes les erreurs d'un coup. N'utilisez un **provider** que lorsque les
 - **Confused with:** [Object Validation](object-validation.md) — valider `{ClassName}` exécute l'ensemble à plat et contourne la séquence.
 
 ## Official References
-- [Official Symfony docs — Group sequence & provider](https://symfony.com/doc/current/validation/sequence_provider.html)
+- [Official Symfony docs — Group sequence & provider](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 - [Symfony source — GroupSequence](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/GroupSequence.php)
 
 ## Video references
@@ -377,7 +377,7 @@ affiche toutes les erreurs d'un coup. N'utilisez un **provider** que lorsque les
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/sequence_provider.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/sequence_provider.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

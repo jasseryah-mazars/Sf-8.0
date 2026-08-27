@@ -314,7 +314,7 @@ utilisez YAML quand c'est de la configuration propre à l'application.
     - [ ] D. A random hash
 
     **Why:** L'auto-enregistrement PSR-4 utilise le FQCN comme id.
-    **Ref:** [Service container](https://symfony.com/doc/current/service_container.html).
+    **Ref:** [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. What does `autoconfigure: true` do?"
     - [ ] A. Fills constructor arguments by type
@@ -324,7 +324,7 @@ utilisez YAML quand c'est de la configuration propre à l'application.
 
     **Why:** Autoconfigure ajoute automatiquement les tags (p. ex. event
     subscriber) ; c'est autowire qui remplit les arguments.
-    **Ref:** [Autoconfigure](https://symfony.com/doc/current/service_container.html#the-autoconfigure-option).
+    **Ref:** [Autoconfigure](https://symfony.com/doc/8.0/service_container.html#the-autoconfigure-option).
 
 ??? question "Q3. How do you make an interface type-hint resolve to a class?"
     - [x] A. Define an alias `Interface: '@Class'` ✅
@@ -334,7 +334,7 @@ utilisez YAML quand c'est de la configuration propre à l'application.
 
     **Why:** Un alias de l'id de l'interface vers le service concret permet à
     l'autowiring de résoudre le type-hint.
-    **Ref:** [Aliasing](https://symfony.com/doc/current/service_container/alias_private.html).
+    **Ref:** [Aliasing](https://symfony.com/doc/8.0/service_container/alias_private.html).
 
 ## Key takeaways
 
@@ -363,8 +363,8 @@ utilisez YAML quand c'est de la configuration propre à l'application.
   `services.yaml` au niveau applicatif vs la config typée d'un bundle réutilisable.
 
 ## Official References
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
-- [Official Symfony docs — Aliasing & private services](https://symfony.com/doc/current/service_container/alias_private.html)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
+- [Official Symfony docs — Aliasing & private services](https://symfony.com/doc/8.0/service_container/alias_private.html)
 - [Symfony source — Autoconfigure attribute](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Attribute/Autoconfigure.php)
 
 ## Video references
@@ -377,7 +377,7 @@ utilisez YAML quand c'est de la configuration propre à l'application.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

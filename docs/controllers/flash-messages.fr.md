@@ -230,7 +230,7 @@ un flash message ne sont pas cachables par un cache partagé.
     - [ ] D. It is written to the log.
 
     **Why:** `get`/`all` consomment ; utilisez `peek` pour lire sans supprimer.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q2. `$this->addFlash('notice', 'Hi')` is shorthand for…"
     - [x] A. `getSession()->getFlashBag()->add('notice', 'Hi')` ✅
@@ -238,7 +238,7 @@ un flash message ne sont pas cachables par un cache partagé.
     - [ ] C. writing a cookie
     - [ ] D. dispatching an event
 
-    **Why:** la méthode délègue au flash bag de la session. **Ref:** [AbstractController](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Why:** la méthode délègue au flash bag de la session. **Ref:** [AbstractController](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q3. Why pair a flash with a redirect?"
     - [x] A. The message displays on the next (GET) request, matching the PRG pattern. ✅
@@ -247,7 +247,7 @@ un flash message ne sont pas cachables par un cache partagé.
     - [ ] D. It prevents CSRF.
 
     **Why:** les flash messages sont conçus pour survivre à exactement un redirect et être affichés ensuite.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ## Key takeaways
 
@@ -271,7 +271,7 @@ un flash message ne sont pas cachables par un cache partagé.
 - **Confused with:** [AbstractController](abstract-controller.md) — `addFlash()` est du sucre syntaxique autour de `getSession()->getFlashBag()->add()`.
 
 ## Official References
-- [Official Symfony docs — Flash Messages](https://symfony.com/doc/current/controller.html#flash-messages)
+- [Official Symfony docs — Flash Messages](https://symfony.com/doc/8.0/controller.html#flash-messages)
 - [Symfony source — FlashBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php)
 
 ## Video references
@@ -283,7 +283,7 @@ un flash message ne sont pas cachables par un cache partagé.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#flash-messages) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#flash-messages) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

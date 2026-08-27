@@ -22,7 +22,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Private services are not fetchable by id from the public container; they may only be injected. Fetching one throws ServiceNotFoundException.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q2.** True or False: a service being public and a service being shared mean the same thing.  <small>_(easy · true-false)_</small>
 
@@ -34,7 +34,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     They are independent flags. Public means fetchable by id via get(); shared means the same instance is reused across get() calls. The default service is private and shared. A common trap confuses the two — a service can be public and non-shared, or private and shared, in any combination.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q3.** How should you access the current request inside a service?  <small>_(easy · single)_</small>
 
@@ -48,7 +48,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The Request is per-cycle and can change across sub-requests, so it is not injectable directly. Inject RequestStack and read the current request.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/request.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/request.html)
 
 **Q4.** Which command lists what a given type-hint autowires to?  <small>_(easy · single)_</small>
 
@@ -62,7 +62,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     debug:autowiring shows the types you can type-hint and which service each resolves to; debug:container inspects a definition by id.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/debug.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/debug.html)
 
 **Q5.** By default, debug:container hides which services?  <small>_(easy · single)_</small>
 
@@ -76,7 +76,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     debug:container lists public services and aliases; add --show-private to include private ones.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/debug.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/debug.html)
 
 **Q6.** What does the expression %env(int:MAX)% produce?  <small>_(easy · single)_</small>
 
@@ -90,7 +90,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The int: processor casts the raw env string to an integer. Processors chain right-to-left.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/env_var_processors.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/env_var_processors.html)
 
 **Q7.** How do you write a literal percent sign inside a parameter value?  <small>_(easy · single)_</small>
 
@@ -104,7 +104,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A doubled percent escapes to a single literal % so it is not treated as a parameter reference.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html#configuration-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html#configuration-parameters)
 
 **Q8.** True or False: environment variables referenced with %env(...)% are frozen into the compiled container cache at compile time.  <small>_(easy · true-false)_</small>
 
@@ -116,7 +116,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The compiler replaces %env(...)% with a placeholder and the EnvVarProcessor resolves it at runtime, which is exactly why one compiled container works across environments and changing an env var needs no cache rebuild. Only plain parameters (%x%) are frozen at compile time.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables)
 
 **Q9.** Using the App\: resource glob, what is a service's id?  <small>_(easy · single)_</small>
 
@@ -130,7 +130,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     PSR-4 auto-registration creates one definition per class using the FQCN as the service id.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q10.** What does autoconfigure: true do (as opposed to autowire)?  <small>_(easy · single)_</small>
 
@@ -144,7 +144,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Autoconfigure adds tags automatically (e.g. event subscriber); autowire is the separate flag that fills arguments by type.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html#the-autoconfigure-option)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html#the-autoconfigure-option)
 
 **Q11.** How do you make an interface type-hint resolve to a concrete class?  <small>_(easy · single)_</small>
 
@@ -158,7 +158,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     An alias from the interface id to the concrete service lets autowiring resolve the interface type-hint.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/alias_private.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/alias_private.html)
 
 **Q12.** In a decorator definition, what does @.inner reference?  <small>_(easy · single)_</small>
 
@@ -172,7 +172,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     DecoratorServicePass renames the decorated service and exposes it as .inner so the decorator can delegate to it.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 **Q13.** Which attribute injects the decorated (inner) service into a decorator?  <small>_(easy · trap)_</small>
 
@@ -186,7 +186,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     #[AsDecorator] declares the decoration; #[AutowireDecorated] resolves the parameter to the .inner service.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 **Q14.** What does a tagged_locator argument inject?  <small>_(easy · single)_</small>
 
@@ -200,7 +200,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     tagged_locator injects a ServiceLocator that instantiates services on demand, keyed by the configured index; tagged_iterator yields instances.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q15.** A higher priority on a tag places the service where in the tagged iterator?  <small>_(easy · single)_</small>
 
@@ -214,7 +214,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Tagged services are ordered by descending priority, so higher priority comes first.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html#tagged-services-with-priority)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html#tagged-services-with-priority)
 
 **Q16.** True or False: adding a tag to a service changes its behaviour automatically, even with no collector consuming that tag.  <small>_(easy · true-false)_</small>
 
@@ -226,7 +226,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A tag is inert build-time metadata; on its own it does nothing. Something — a tagged_iterator/tagged_locator argument or a compiler pass calling findTaggedServiceIds() — must consume the tag for it to have any effect.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
 **Q17.** Which class validates and defaults a bundle's configuration schema?  <small>_(easy · single)_</small>
 
@@ -240,7 +240,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Configuration defines allowed keys, types, defaults and validation; Extension::load() only consumes the processed result.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
 **Q18.** Which command prints a bundle's configuration reference tree?  <small>_(easy · single)_</small>
 
@@ -254,7 +254,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     config:dump-reference dumps the schema defined by Configuration; debug:config shows the currently resolved values.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
 **Q19.** A bundle named AcmeBlogBundle exposes its configuration under which root key by convention?  <small>_(easy · single)_</small>
 
@@ -268,7 +268,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The root key is derived from the extension/bundle name: the class name minus the Bundle suffix, converted to snake_case, giving acme_blog. The misconception is using the class name verbatim or keeping the Bundle suffix.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
 **Q20.** For a factory-built service, where are its arguments passed?  <small>_(easy · single)_</small>
 
@@ -282,7 +282,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     With a factory, the container calls the factory and passes the definition's arguments to it, not to a constructor.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/factories.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
 **Q21.** What is the default phase for a compiler pass registered without one?  <small>_(easy · internals)_</small>
 
@@ -296,7 +296,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     PassConfig runs passes in phase order; unspecified passes run in the before-optimization phase.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q22.** What can autowiring resolve automatically?  <small>_(easy · single)_</small>
 
@@ -310,7 +310,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Autowiring maps a type-hint to a service; scalars and env vars must be bound explicitly with bind or #[Autowire].
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q23.** How does a ServiceLocator differ from injecting the whole container?  <small>_(easy · single)_</small>
 
@@ -324,7 +324,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A locator's set is explicit and analysable; injecting the whole container hides dependencies and is an anti-pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q24.** When does a ServiceLocator instantiate the services it holds?  <small>_(easy · single)_</small>
 
@@ -338,7 +338,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A locator defers construction until a service is actually requested, which is its main advantage over injecting all candidates.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators)
 
 **Q25.** Why are Symfony services private by default?  <small>_(medium · internals)_</small>
 
@@ -352,7 +352,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Private services can be inlined into their single consumer and pruned when unreferenced, shrinking the compiled container, and it discourages the service-locator anti-pattern of pulling from the container.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q26.** What is written to var/cache/prod/ after compilation?  <small>_(medium · internals)_</small>
 
@@ -366,7 +366,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     PhpDumper writes a compiled PHP class with a method per service; the runtime uses it directly, never the ContainerBuilder.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 
 **Q27.** Which objects exist only at build time, not at runtime? (choose one)  <small>_(medium · internals)_</small>
 
@@ -380,7 +380,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Definition/Reference/Alias/Parameter are build-time recipes held by the ContainerBuilder; the runtime container holds instances.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 
 **Q28.** A developer calls $this->container->get(MailerInterface::class) inside a service and gets a ServiceNotFoundException, even though the mailer works elsewhere. Why?  <small>_(medium · debug)_</small>
 
@@ -394,7 +394,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The mailer service is private (the default), so it can only be injected, not fetched by id from the public container — get() therefore throws. The fix is constructor injection/autowiring, not making it public. It is registered and the container is compiled; the misconception is treating get() as a general-purpose lookup instead of using DI.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q29.** A service injects RequestStack and calls $this->requestStack->getCurrentRequest()->getLocale(); it fatals when run from a console command. Why?  <small>_(medium · trap)_</small>
 
@@ -408,7 +408,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Outside the HTTP cycle (console commands, Messenger workers) there is no current request, so getCurrentRequest() returns null and the method call fatals. Guard with getCurrentRequest()?->getLocale() or an early null check. RequestStack is autowirable everywhere; the trap is assuming a request always exists.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/request.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/request.html)
 
 **Q30.** Which are correct ways to obtain framework services in your code? (choose 2)  <small>_(medium · multiple)_</small>
 
@@ -422,7 +422,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Autowiring by interface is the idiomatic path, and debug:autowiring is the discovery tool for finding the right type-hint. A raw Request cannot be injected (use RequestStack), and pulling services with $container->get() in business code is the service-locator anti-pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/debug.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/debug.html)
 
 **Q31.** When is %env(DATABASE_URL)% resolved?  <small>_(medium · internals)_</small>
 
@@ -436,7 +436,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Env placeholders resolve at runtime so a single compiled container works across environments; parameters (%x%) are frozen at compile time.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables)
 
 **Q32.** Which attribute injects the container parameter app.name into a constructor argument?  <small>_(medium · config)_</small>
 
@@ -450,7 +450,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     param: names a container parameter; a bare string without %% is a literal, and env: reads an environment variable.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q33.** What does ParameterBagInterface::get('app.missing') do for an undefined parameter?  <small>_(medium · debug)_</small>
 
@@ -464,7 +464,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Reading a missing parameter throws ParameterNotFoundException; it never returns null. Guard optional lookups with has() before get(). The common bug is assuming an absent parameter silently becomes null.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html#configuration-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html#configuration-parameters)
 
 **Q34.** Given _defaults with autowire: true, autoconfigure: true, public: false and an App\: resource glob, what is true of a class under src/?  <small>_(medium · config)_</small>
 
@@ -478,7 +478,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     _defaults sets the baseline: public: false makes it private, autowire fills constructor arguments by type, and autoconfigure applies tags based on implemented interfaces. The id is the FQCN. The glob registers every class in the directory, not just annotated ones.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q35.** The App\: glob registers a class, and a later named block redefines the same id. Which definition wins?  <small>_(medium · internals)_</small>
 
@@ -492,7 +492,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Registration order matters: the glob first registers everything, then a later, more specific entry for the same id overrides it. This is the idiomatic way to tweak one autowired service. It is not an error and the glob does not win.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q36.** Which argument cannot be supplied by autowiring and must come from bind, #[Autowire], or a parameter?  <small>_(medium · trap)_</small>
 
@@ -506,7 +506,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Autowiring resolves objects by type-hint; it can never guess scalars (strings, ints, arrays). Those must be bound explicitly via bind, #[Autowire], or a parameter. Objects, aliases, and single implementations all autowire fine.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q37.** decoration_on_invalid: ignore does what when the decorated service is missing?  <small>_(medium · single)_</small>
 
@@ -520,7 +520,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     ignore drops the decorator; null would inject null; exception (the default) throws when the target is absent.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 **Q38.** A decorator injects the service by its own (decorated) id instead of .inner and hits infinite recursion. What is the fix?  <small>_(medium · debug)_</small>
 
@@ -534,7 +534,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Because the decorator takes over the decorated service's public id, referencing that id inside the decorator injects the decorator itself, causing infinite recursion. You must reference the renamed original via .inner or #[AutowireDecorated]. Visibility and priority are unrelated to the loop.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 **Q39.** How can every implementation of an interface receive a tag automatically?  <small>_(medium · single)_</small>
 
@@ -548,7 +548,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Autoconfiguration maps an interface to a tag so all implementers are tagged without manual annotation.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
 **Q40.** What does #[AutowireIterator('app.handler')] on an iterable $handlers argument inject?  <small>_(medium · code)_</small>
 
@@ -562,7 +562,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     #[AutowireIterator] is the attribute form of tagged_iterator: it injects an iterable of the instantiated tagged services, ordered by descending priority. #[AutowireLocator] would give the lazy keyed locator; the attribute does not filter down to one service.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
 **Q41.** When does prepend() run relative to the extensions' load() calls?  <small>_(medium · internals)_</small>
 
@@ -576,7 +576,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Prepend runs first so a bundle can inject default configuration into other bundles before they load.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/prepend_extension.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 
 **Q42.** Which command shows the currently resolved configuration values (not the schema) for a bundle?  <small>_(medium · trap)_</small>
 
@@ -590,7 +590,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     debug:config prints the merged, resolved values in effect; config:dump-reference prints the schema (allowed keys, types, defaults) defined by Configuration. Confusing the two is a common trap — one shows what is set, the other what is allowed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
 **Q43.** How do you configure a factory produced value via attributes?  <small>_(medium · trap)_</small>
 
@@ -604,7 +604,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     There is no dedicated #[Factory] attribute; factories are configured with #[Autowire(factory:)] or in YAML/PHP config.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q44.** How is an instance-method factory referenced in YAML?  <small>_(medium · config)_</small>
 
@@ -618,7 +618,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     An array of [reference, method] denotes a method call on a service; a static factory uses the 'Class::method' string form.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/factories.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
 **Q45.** factory: '@svc::method' throws an error. What is the correct instance-method form?  <small>_(medium · debug)_</small>
 
@@ -632,7 +632,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The '@svc::method' string is invalid syntax for an instance-method factory; use the array form ['@svc', 'method']. The 'Class::method' string form is reserved for static factories. The other forms are not recognised.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/factories.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
 **Q46.** How is an invokable factory service referenced in YAML?  <small>_(medium · single)_</small>
 
@@ -646,7 +646,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A bare service reference '@service' as the factory means the container calls the service's __invoke() and stores the return value. Explicitly naming __invoke via the '::' string form is invalid; the array form is used for named instance methods, not required for invokables.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/factories.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
 **Q47.** Which attribute registers a compiler pass? (choose one)  <small>_(medium · trap)_</small>
 
@@ -660,7 +660,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Compiler passes are registered programmatically via ContainerBuilder::addCompilerPass(), typically in Kernel::build() or a bundle's build(). There is no core attribute for this.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q48.** What does ContainerBuilder::findTaggedServiceIds('t') return?  <small>_(medium · internals)_</small>
 
@@ -674,7 +674,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     It returns definitions' ids each mapped to the attributes of every occurrence of the tag, used to wire collectors at compile time.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
 **Q49.** Inside a compiler pass process() method, what should you manipulate?  <small>_(medium · internals)_</small>
 
@@ -688,7 +688,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Compilation deals only with definitions; nothing is instantiated yet, so calling get() inside a pass is wrong.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q50.** Inside process(), a pass calls $container->get(SomeService::class) and it fails. Why?  <small>_(medium · debug)_</small>
 
@@ -702,7 +702,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A compiler pass runs before any service exists, so you manipulate build-time Definition objects (findDefinition, addMethodCall, new Reference), never live instances. Calling get() during compilation is the classic mistake; visibility and spelling are not the cause here.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q51.** Which are valid places to register a compiler pass? (choose 2)  <small>_(medium · multiple)_</small>
 
@@ -716,7 +716,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Passes are registered programmatically with addCompilerPass() in the application Kernel::build() or a bundle's build(). There is no #[CompilerPass] attribute and no services.yaml tag that registers a pass — those are common invented answers.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q52.** In addCompilerPass(new MyPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, priority: 5), what do the 2nd and 3rd arguments control?  <small>_(medium · code)_</small>
 
@@ -730,7 +730,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     addCompilerPass(pass, phase, priority) takes the phase constant that determines when in PassConfig the pass runs, and a priority that orders passes within that phase (higher first). It has nothing to do with service ids, tags, or environments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q53.** Two services implement one interface with no default alias. Autowiring by that interface...  <small>_(medium · single)_</small>
 
@@ -744,7 +744,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Ambiguity is a hard build error; you disambiguate with a named alias, #[Target], #[Autowire(service:)] or bind.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q54.** What does the #[Target('requestLogger')] attribute do?  <small>_(medium · single)_</small>
 
@@ -758,7 +758,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     #[Target] binds to a named autowiring alias by name, so renaming the constructor parameter does not break wiring.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html#fixing-non-autowireable-arguments)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html#fixing-non-autowireable-arguments)
 
 **Q55.** A parameter has #[Autowire('app.foo')] and receives the literal string "app.foo" instead of the service. Why?  <small>_(medium · trap)_</small>
 
@@ -772,7 +772,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     In #[Autowire], a bare string is interpreted as a literal value (or a %param% / %env()% expression), not a service reference. Use the named argument service: to pin a service id. Visibility is irrelevant and no @ prefix is used in attributes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q56.** A constructor type-hints an interface that has no implementation and no alias. What does the container build do?  <small>_(medium · debug)_</small>
 
@@ -786,7 +786,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Autowiring an unregistered type is a hard build failure. Silent null only happens if you explicitly opt in with a nullable argument and default (?Type $x = null). Autowiring never guesses an arbitrary class or defers to runtime — the misconception is expecting null.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q57.** What interface does Symfony's ServiceLocator implement?  <small>_(medium · single)_</small>
 
@@ -800,7 +800,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     ServiceLocator is a PSR-11 container exposing get() and has() over a fixed, compile-time set of services.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators)
 
 **Q58.** What does ServiceSubscriberInterface::getSubscribedServices() declare?  <small>_(medium · single)_</small>
 
@@ -814,7 +814,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     It declares a whitelist; the container injects a matching ServiceLocator so services are built only when requested.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q59.** Which trait should a Symfony 8 service subscriber use with #[SubscribedService] methods?  <small>_(medium · trap)_</small>
 
@@ -828,7 +828,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The older ServiceSubscriberTrait was deprecated in 7.1 (symfony/contracts v3.5); Symfony 8 uses ServiceMethodsSubscriberTrait together with #[SubscribedService] methods whose return type names the service. ServiceLocatorTrait builds a locator class, and ContainerAwareTrait is the removed container-injection anti-pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q60.** With #[AutowireLocator(['stripe' => StripeGateway::class, 'paypal' => PayPalGateway::class])] ContainerInterface $gateways, what happens on $gateways->get('stripe')?  <small>_(medium · code)_</small>
 
@@ -842,7 +842,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     #[AutowireLocator] builds a PSR-11 locator that instantiates a service only when get() requests it, so fetching 'stripe' builds StripeGateway and leaves PayPalGateway cold. Locators do not require member services to be public, and they build instances, not return strings.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q61.** A locator built for keys 'stripe' and 'paypal' is called with a user-supplied key 'unknown'. What happens?  <small>_(medium · debug)_</small>
 
@@ -856,7 +856,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A locator's set is fixed at compile time, so get() on a key outside the whitelist throws; unlike the main container there is no NULL_ON_INVALID mode. Guard untrusted keys with has() first. It never returns null or falls back to another service.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q62.** A service is defined with shared: false. What happens on repeated $container->get() calls for it?  <small>_(hard · internals)_</small>
 
@@ -870,7 +870,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     shared defaults to true, so the first get() builds and caches the instance and later calls return the same object. shared: false disables caching, so the container rebuilds the service on every request. This is orthogonal to public/private — the misconception is thinking non-shared implies private.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/shared.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/shared.html)
 
 **Q63.** Which sequence correctly describes container compilation?  <small>_(hard · internals)_</small>
 
@@ -884,7 +884,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     compile() executes the passes in PassConfig phase order, then freezes the parameter bag (making it a FrozenParameterBag), then PhpDumper writes the optimised class to var/cache. It all happens at build time; nothing about compilation is deferred to runtime, which is the key misconception.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 
 **Q64.** For the router, which statement about id, class and autowiring alias is correct?  <small>_(hard · internals)_</small>
 
@@ -898,7 +898,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     These are three distinct keys. FrameworkExtension registers the service under the id 'router' with a concrete class, then adds an autowiring alias from the interface FQCN (RouterInterface) to that id so type-hints resolve. debug:autowiring lists those aliases; debug:container inspects the id.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/debug.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/debug.html)
 
 **Q65.** What does %env(int:default:app.timeout:TIMEOUT)% do?  <small>_(hard · internals)_</small>
 
@@ -912,7 +912,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Env processors chain right-to-left. The innermost segment reads the env var TIMEOUT; default:app.timeout supplies the app.timeout parameter as a fallback when TIMEOUT is unset; int: then casts the resolved value. The misconception is reading it left-to-right, which inverts the meaning.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/env_var_processors.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/env_var_processors.html)
 
 **Q66.** A constructor arg is #[Autowire('%env(MAX)%')] int $max, but you hit a type error because a string was passed. What is wrong?  <small>_(hard · trap)_</small>
 
@@ -926,7 +926,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Raw env values are always strings until a processor casts them, so %env(MAX)% is a string while the argument expects int. Use %env(int:MAX)%. #[Autowire] fully supports env placeholders and no prior parameter declaration is needed; the trap is assuming env values are already typed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/env_var_processors.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/env_var_processors.html)
 
 **Q67.** After ContainerBuilder::compile(), what happens to the parameter bag?  <small>_(hard · internals)_</small>
 
@@ -940,7 +940,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     During build the ContainerBuilder uses a mutable ParameterBag; compile() freezes it into a FrozenParameterBag, after which parameters are read-only. This is why parameters are compile-time constants — the misconception is expecting to mutate parameters at runtime.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html#configuration-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html#configuration-parameters)
 
 **Q68.** You add the alias App\Report\ReporterInterface: '@App\Report\Missing' but the target service does not exist. What happens?  <small>_(hard · debug)_</small>
 
@@ -954,7 +954,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     An alias must point at an existing service id; a dangling alias fails the container build. Optional dependencies use nullable constructor args or NULL_ON_INVALID_REFERENCE, not a broken alias. The misconception is expecting a missing target to become null.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/alias_private.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/alias_private.html)
 
 **Q69.** With two decorators on one id, a higher decoration_priority means the decorator is...  <small>_(hard · trap)_</small>
 
@@ -968,7 +968,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Higher priority decorators are applied first and end up innermost; consumers receive the lowest-priority, outermost decorator.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority)
 
 **Q70.** Two decorators target the same service. You need caching wrapped directly around the original and logging on the outside so consumers hit logging first. How do you set decoration_priority?  <small>_(hard · scenario)_</small>
 
@@ -982,7 +982,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Higher decoration_priority is applied first and ends up innermost (closest to the original), so caching needs the higher number to sit directly around the original, and logging the lower number to become the outermost wrapper consumers hit first. Assuming lower priority runs first inverts the chain.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority)
 
 **Q71.** decoration_on_invalid: null is set, but .inner is typed as non-nullable MailerInterface and the decorated target is absent. What happens?  <small>_(hard · config)_</small>
 
@@ -996,7 +996,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     With null, the compiler injects null as .inner; if the argument type is not nullable this becomes a TypeError at instantiation. The fix is a nullable type (?MailerInterface) and nullsafe delegation. ignore (not null) is what removes the decorator; exception is the default that throws at build.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 **Q72.** What is the key difference between tagged_iterator and tagged_locator?  <small>_(hard · single)_</small>
 
@@ -1010,7 +1010,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     tagged_iterator injects an iterable of instances (use it when you always iterate all of them), while tagged_locator injects a ServiceLocator that builds each service lazily on get() and is keyed for pick-one-of-many. The trap is swapping their laziness.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
 **Q73.** How is the key of each tagged_locator entry determined?  <small>_(hard · config)_</small>
 
@@ -1024,7 +1024,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     The locator key comes from the index_by tag attribute, a static method named by default_index_method (commonly getName/getDefaultIndexName), or an #[AsTaggedItem(index:)] attribute — not the service id by default. If two services resolve to the same key, the later one silently overwrites the earlier.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
 **Q74.** In a Symfony 8 AbstractBundle, where do the config schema and the service wiring live?  <small>_(hard · internals)_</small>
 
@@ -1038,7 +1038,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     AbstractBundle streamlines bundles by folding the schema (configure) and the extension logic (loadExtension) onto the bundle class itself, so a separate Configuration/Extension pair is no longer required. Kernel::build() registers compiler passes, not bundle semantic config.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
 **Q75.** Your bundle must set a default framework option before FrameworkBundle loads. What do you call, and when does it run?  <small>_(hard · code)_</small>
 
@@ -1052,7 +1052,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     PrependExtensionInterface::prepend() (or prependExtension() on AbstractBundle) runs before every extension's load(), and prependExtensionConfig() injects config into another bundle's namespace. Doing it in load() would be too late, and setParameter() sets a parameter, not another bundle's config.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/prepend_extension.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 
 **Q76.** Ledger has a private constructor and a static open(string $path). How do you register it as a service?  <small>_(hard · config)_</small>
 
@@ -1066,7 +1066,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A static factory in the 'Class::method' string form bypasses the private constructor, and arguments are passed to open(), not a constructor. The instance-method array form would require an existing service instance, which the private constructor prevents.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/factories.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
 **Q77.** In which phase should a pass that removes a service run, and why not TYPE_BEFORE_OPTIMIZATION?  <small>_(hard · scenario)_</small>
 
@@ -1080,7 +1080,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Removal belongs in TYPE_REMOVE. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZATION races with autowiring.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q78.** Two passes are registered in the same phase with priorities 10 and 100. Which runs first?  <small>_(hard · trap)_</small>
 
@@ -1094,7 +1094,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Within a phase, addCompilerPass orders by priority with higher running first. The trap is assuming lower numbers run first (as some other Symfony orderings work); for compiler passes higher priority is earlier.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
 **Q79.** What is the literal id of a named autowiring alias, e.g. for a Monolog channel logger?  <small>_(hard · internals)_</small>
 
@@ -1108,7 +1108,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     A named autowiring alias id is the full type followed by the variable name, 'Type $paramName'. Autowiring matches it when your constructor parameter is named identically — which is fragile, so #[Target('requestLogger')] states the intent explicitly and survives parameter renames.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q80.** Which techniques resolve autowiring ambiguity when several services implement one interface? (choose 3)  <small>_(hard · multiple)_</small>
 
@@ -1122,7 +1122,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Ambiguity is resolved by explicitly choosing an implementation: a named alias, #[Target], #[Autowire(service:)], or bind. Making services public only affects fetchability by id and does nothing to disambiguate autowiring.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q81.** You have five heavy payment gateways but use exactly one per request, chosen by name. What is the best tool?  <small>_(hard · scenario)_</small>
 
@@ -1136,7 +1136,7 @@ Full theory: [Dependency Injection](../dependency-injection/index.md).
 
     Pick-one-of-many with heavy dependencies is the textbook case for a lazy locator: only the selected gateway is instantiated. A tagged_iterator or constructor-injecting all five would eagerly build every gateway, and injecting the whole container is the anti-pattern the locator replaces.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 ---
 

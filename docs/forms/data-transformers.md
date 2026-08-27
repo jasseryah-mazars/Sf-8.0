@@ -341,7 +341,7 @@ rules belong to the Validator.
 
     **Why:** `transform` goes toward the view (display); `reverseTransform` goes
     toward the model (submit).
-    **Ref:** [Data transformers](https://symfony.com/doc/current/form/data_transformers.html).
+    **Ref:** [Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html).
 
 ??? question "Q2. `addModelTransformer` converts between…"
     - [x] A. Model and normalized data ✅
@@ -351,7 +351,7 @@ rules belong to the Validator.
 
     **Why:** Model transformers bridge model↔norm; view transformers bridge
     norm↔view.
-    **Ref:** [Data transformers](https://symfony.com/doc/current/form/data_transformers.html).
+    **Ref:** [Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html).
 
 ??? question "Q3. What should a transformer throw on invalid input?"
     - [x] A. `TransformationFailedException` ✅
@@ -385,8 +385,8 @@ rules belong to the Validator.
 - **Confused with:** [Validation](../validation/index.md) — a failed transform is a *format* error (`invalid_message`), not a business-rule violation.
 
 ## Official References
-- [Official Symfony docs — Data transformers](https://symfony.com/doc/current/form/data_transformers.html)
-- [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/current/form/data_transformers.html#example-1-transforming-string-to-datetime)
+- [Official Symfony docs — Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html)
+- [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/8.0/form/data_transformers.html#example-1-transforming-string-to-datetime)
 - [Symfony source — Form.php](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)
 
 ## Video references
@@ -398,7 +398,7 @@ rules belong to the Validator.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/data_transformers.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/data_transformers.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

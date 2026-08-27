@@ -255,7 +255,7 @@ components (modals, cards with slots).
 - **Confused with:** [Template Inheritance](inheritance.md) — `include` drops a fragment; only `embed`/`extends` can override blocks.
 
 ## Official References
-- [Official — Including templates](https://symfony.com/doc/current/templates.html#including-templates)
+- [Official — Including templates](https://symfony.com/doc/8.0/templates.html#including-templates)
 - [Twig — include / embed](https://twig.symfony.com/doc/3.x/tags/include.html)
 - [Twig source — FilesystemLoader](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
 
@@ -268,7 +268,7 @@ components (modals, cards with slots).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#including-templates) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#including-templates) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -145,7 +145,7 @@ switch **and** on every exit. Typical uses:
   user provider as the identifier. To let admins switch by something else
   (e.g. e-mail while identifiers are UUIDs), a listener can look the user up
   itself and replace the target user on the event — see the
-  [official guide](https://symfony.com/doc/current/security/impersonating_user.html)
+  [official guide](https://symfony.com/doc/8.0/security/impersonating_user.html)
   for the supported pattern in your exact version.
 - **Extra restrictions:** throw an exception from the listener to veto a switch
   (e.g. forbid impersonating other admins).
@@ -304,7 +304,7 @@ full session swap.
 
     **Why:** The same configured parameter with the special `_exit` value
     restores the original token.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q2. Which attribute detects that the current user is impersonating someone?"
     - [ ] A. `ROLE_PREVIOUS_ADMIN`
@@ -314,7 +314,7 @@ full session swap.
 
     **Why:** `IS_IMPERSONATOR` is granted only when the active token is a
     `SwitchUserToken`; `ROLE_PREVIOUS_ADMIN` is the legacy spelling.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q3. Where does Symfony keep the admin's authentication during a switch?"
     - [ ] A. In a dedicated session key `_security_previous`
@@ -334,7 +334,7 @@ full session swap.
 
     **Why:** `switch_user: true` defaults to requiring
     `ROLE_ALLOWED_TO_SWITCH`; override it with the `role` option.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ## Key takeaways
 
@@ -370,7 +370,7 @@ full session swap.
   reversible by design.
 
 ## Official References
-- [Symfony docs — Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html)
+- [Symfony docs — Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html)
 - [Symfony source — SwitchUserListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/SwitchUserListener.php)
 - [Symfony source — SwitchUserEvent](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Event/SwitchUserEvent.php)
 
@@ -383,7 +383,7 @@ full session swap.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/impersonating_user.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/impersonating_user.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

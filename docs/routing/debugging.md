@@ -206,7 +206,7 @@ instead of scraping HTML.
     - [ ] D. `router:debug`
 
     **Why:** `router:match` runs the (traceable) matcher against a given path.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#debugging-routes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#debugging-routes).
 
 ??? question "Q2. After changing routes in the prod environment you must…"
     - [x] A. Clear/warm the cache (`cache:clear`) ✅
@@ -215,7 +215,7 @@ instead of scraping HTML.
     - [ ] D. Delete `vendor/`
 
     **Why:** the compiled router is built at cache warmup and not auto-refreshed in
-    prod. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    prod. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. What does `router:match` use to explain rejections?"
     - [x] A. `TraceableUrlMatcher` ✅
@@ -256,7 +256,7 @@ instead of scraping HTML.
 - **Confused with:** [URL generation](url-generation.md) — the matcher's `_route` vs the generator's separate compiled file.
 
 ## Official References
-- [Official Symfony docs — Debugging routes](https://symfony.com/doc/current/routing.html#debugging-routes)
+- [Official Symfony docs — Debugging routes](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 - [Symfony source — RouterMatchCommand](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Command/RouterMatchCommand.php)
 
 ## Video references
@@ -268,7 +268,7 @@ instead of scraping HTML.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#debugging-routes) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#debugging-routes) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

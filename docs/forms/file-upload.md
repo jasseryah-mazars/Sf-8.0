@@ -289,7 +289,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
     **Why:** `mapped => false` excludes the field from the data mapper; you fetch
     it directly from the child form.
-    **Ref:** [File uploads](https://symfony.com/doc/current/controller/upload_file.html).
+    **Ref:** [File uploads](https://symfony.com/doc/8.0/controller/upload_file.html).
 
 ??? question "Q2. Which value is safe to trust for validation?"
     - [ ] A. `getClientOriginalName()`
@@ -309,7 +309,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
     **Why:** The form's `multipart` view var is set when a child requires it (e.g.
     `FileType`), and `form_start` renders the enctype accordingly.
-    **Ref:** [File type](https://symfony.com/doc/current/reference/forms/types/file.html).
+    **Ref:** [File type](https://symfony.com/doc/8.0/reference/forms/types/file.html).
 
 ## Key takeaways
 
@@ -334,8 +334,8 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 - **Confused with:** [Validation](../validation/index.md) — the `File`/`Image` constraints enforce size/MIME, even on an unmapped field.
 
 ## Official References
-- [Official Symfony docs — Uploading files](https://symfony.com/doc/current/controller/upload_file.html)
-- [Official Symfony docs — File field type](https://symfony.com/doc/current/reference/forms/types/file.html)
+- [Official Symfony docs — Uploading files](https://symfony.com/doc/8.0/controller/upload_file.html)
+- [Official Symfony docs — File field type](https://symfony.com/doc/8.0/reference/forms/types/file.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
 
 ## Video references
@@ -347,7 +347,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/upload_file.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/upload_file.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

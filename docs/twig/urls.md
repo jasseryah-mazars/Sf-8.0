@@ -219,7 +219,7 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
     - [ ] D. `path()` only works in controllers
 
     **Why:** `path()` = `ABSOLUTE_PATH`, `url()` = `ABSOLUTE_URL`. **Ref:**
-    [Linking to pages](https://symfony.com/doc/current/templates.html#linking-to-pages).
+    [Linking to pages](https://symfony.com/doc/8.0/templates.html#linking-to-pages).
 
 ??? question "Q2. `path('search', { q: 'x', extra: 1 })` where `search` is `/search`. Result?"
     - [x] A. `/search?q=x&extra=1` ✅
@@ -228,7 +228,7 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
     - [ ] D. Error
 
     **Why:** Parameters not in the route pattern become the query string. **Ref:**
-    [URL generation](https://symfony.com/doc/current/routing.html#generating-urls).
+    [URL generation](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q3. Which extension provides `path()`/`url()`?"
     - [x] A. `Symfony\Bridge\Twig\Extension\RoutingExtension` ✅
@@ -261,8 +261,8 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
 - **Confused with:** [Assets](assets.md) — `path()`/`url()` are for routes; `asset()` is for static files under `public/`.
 
 ## Official References
-- [Official — Linking to pages](https://symfony.com/doc/current/templates.html#linking-to-pages)
-- [Official — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
+- [Official — Linking to pages](https://symfony.com/doc/8.0/templates.html#linking-to-pages)
+- [Official — Generating URLs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 - [Symfony source — RoutingExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php)
 
 ## Video references
@@ -274,7 +274,7 @@ host). Choose `path()` for normal in-page navigation to keep pages host-agnostic
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#linking-to-pages) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#linking-to-pages) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

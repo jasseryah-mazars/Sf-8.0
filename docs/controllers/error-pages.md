@@ -289,7 +289,7 @@ lines later, not a clean 404.
     - [ ] D. `abort(404);`
 
     **Why:** throwing `NotFoundHttpException` lets the kernel render the error page.
-    **Ref:** [errors](https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages).
+    **Ref:** [errors](https://symfony.com/doc/8.0/controller.html#managing-errors-and-404-pages).
 
 ??? question "Q2. A controller throws a plain `\RuntimeException`. Status code?"
     - [ ] A. 400
@@ -298,7 +298,7 @@ lines later, not a clean 404.
     - [ ] D. 200
 
     **Why:** only `HttpExceptionInterface` sets a status; others are 500.
-    **Ref:** [error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q3. Where do you put a custom prod 404 page?"
     - [x] A. `templates/bundles/TwigBundle/Exception/error404.html.twig` ✅
@@ -307,7 +307,7 @@ lines later, not a clean 404.
     - [ ] D. `config/errors.yaml`
 
     **Why:** the Twig error renderer looks up per-status templates there.
-    **Ref:** [customize error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [customize error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q4. Which event lets you convert an exception into a Response?"
     - [x] A. `kernel.exception` (`ExceptionEvent`) ✅
@@ -315,7 +315,7 @@ lines later, not a clean 404.
     - [ ] C. `kernel.terminate`
     - [ ] D. `kernel.controller`
 
-    **Why:** `ExceptionEvent` listeners can `setResponse()`. **Ref:** [kernel events](https://symfony.com/doc/current/reference/events.html#kernel-exception).
+    **Why:** `ExceptionEvent` listeners can `setResponse()`. **Ref:** [kernel events](https://symfony.com/doc/8.0/reference/events.html#kernel-exception).
 
 ## Key takeaways
 
@@ -339,7 +339,7 @@ lines later, not a clean 404.
 - **Confused with:** [AbstractController](abstract-controller.md) — `createNotFoundException()` returns an exception; it does not abort by itself.
 
 ## Official References
-- [Official Symfony docs — Errors & 404 pages](https://symfony.com/doc/current/controller/error_pages.html)
+- [Official Symfony docs — Errors & 404 pages](https://symfony.com/doc/8.0/controller/error_pages.html)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 
 ## Video references
@@ -351,7 +351,7 @@ lines later, not a clean 404.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#managing-errors-and-404-pages) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

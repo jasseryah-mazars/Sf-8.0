@@ -264,7 +264,7 @@ composants configurables (modales, cartes avec slots).
 - **Confused with:** [Template Inheritance](inheritance.md) — `include` dépose un fragment ; seuls `embed`/`extends` peuvent surcharger des blocks.
 
 ## Official References
-- [Official — Including templates](https://symfony.com/doc/current/templates.html#including-templates)
+- [Official — Including templates](https://symfony.com/doc/8.0/templates.html#including-templates)
 - [Twig — include / embed](https://twig.symfony.com/doc/3.x/tags/include.html)
 - [Twig source — FilesystemLoader](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
 
@@ -278,7 +278,7 @@ composants configurables (modales, cartes avec slots).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#including-templates) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#including-templates) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

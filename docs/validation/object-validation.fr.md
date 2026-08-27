@@ -374,7 +374,7 @@ automatiquement les DTO désérialisés.
     **Why:** `validate()` retourne toujours une liste de violations ; vous
     l'inspectez avec `count()`. Il ne lève jamais d'exception et ne retourne
     jamais de booléen.
-    **Ref:** [Validation](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q2. Which method checks a value *without* modifying the object?"
     - [ ] A. `validate()`
@@ -384,7 +384,7 @@ automatiquement les DTO désérialisés.
 
     **Why:** `validatePropertyValue($objectOrClass, $property, $value)` valide une
     valeur hypothétique ; l'état de l'objet reste intact.
-    **Ref:** [ValidatorInterface](https://symfony.com/doc/current/validation.html).
+    **Ref:** [ValidatorInterface](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q3. How is `#[Assert\...]` attribute metadata turned into constraints?"
     - [ ] A. Parsed on every `validate()` call by reflection
@@ -395,7 +395,7 @@ automatiquement les DTO désérialisés.
     **Why:** La `LazyLoadingMetadataFactory` utilise l'`AttributeLoader` pour
     construire la `ClassMetadata`, mise en cache dans un pool PSR-6 pour que la
     réflexion ne s'exécute qu'une fois par classe.
-    **Ref:** [Validator internals](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validator internals](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -423,7 +423,7 @@ automatiquement les DTO désérialisés.
 - **Confused with:** [Scopes](scopes.md) — *où* les constraints s'attachent vs *comment* vous exécutez le validator ici.
 
 ## Official References
-- [Official Symfony docs — Validation](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveValidator.php)
 
 ## Video references
@@ -436,7 +436,7 @@ automatiquement les DTO désérialisés.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

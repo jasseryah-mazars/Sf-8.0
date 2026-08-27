@@ -363,7 +363,7 @@ N'utilisez pas les exceptions comme flux de contrôle normal.
     - [ ] C. `kernel.terminate`
 
     **Why:** Les listeners de l'`ExceptionEvent` définissent la response. **Ref:**
-    [kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception).
+    [kernel.exception](https://symfony.com/doc/8.0/reference/events.html#kernel-exception).
 
 ??? question "Q2. What status code does a bare `\LogicException` produce?"
     - [ ] A. 404
@@ -371,7 +371,7 @@ N'utilisez pas les exceptions comme flux de contrôle normal.
     - [ ] C. 400
 
     **Why:** Seules les exceptions `HttpExceptionInterface` portent un statut ; les autres → 500.
-    **Ref:** [Error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q3. Where do you override the 404 template?"
     - [x] A. `templates/bundles/TwigBundle/Exception/error404.html.twig` ✅
@@ -379,7 +379,7 @@ N'utilisez pas les exceptions comme flux de contrôle normal.
     - [ ] C. In `vendor/`
 
     **Why:** TwigBundle résout les surcharges sous `templates/bundles/<Bundle>/`.
-    **Ref:** [Customizing error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Customizing error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ## Key takeaways
 
@@ -403,8 +403,8 @@ N'utilisez pas les exceptions comme flux de contrôle normal.
 - **Confused with:** [HTTP Response](../http/response.md) — lever une `HttpException` définit un *statut*, mais un listener doit encore la transformer en vraie `Response`.
 
 ## Official References
-- [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
-- [Official docs — kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+- [Official docs — Error pages](https://symfony.com/doc/8.0/controller/error_pages.html)
+- [Official docs — kernel.exception](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 
 ## Video references
@@ -417,7 +417,7 @@ N'utilisez pas les exceptions comme flux de contrôle normal.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/events.html#kernel-exception) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/events.html#kernel-exception) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

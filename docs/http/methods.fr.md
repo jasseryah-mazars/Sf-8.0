@@ -272,7 +272,7 @@ besoin.
     **Why:** Vous devez activer `framework.http_method_override` (ou appeler
     `Request::enableHttpMethodParameterOverride()`) ; cela ne s'applique qu'au
     POST.
-    **Ref:** [Method override](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Method override](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. Which method is safe AND idempotent?"
     - [ ] A. POST
@@ -310,7 +310,7 @@ besoin.
 
 ## Official References
 - [MDN — HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-- [Symfony docs — Routing (method matching)](https://symfony.com/doc/current/routing.html)
+- [Symfony docs — Routing (method matching)](https://symfony.com/doc/8.0/routing.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 
 ## Video references
@@ -323,7 +323,7 @@ besoin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -450,7 +450,7 @@ itself.
     - [ ] C. controller → request → response → terminate
 
     **Why:** `kernel.view` is skipped because a `Response` was returned; the rest
-    follow the canonical order. **Ref:** [HttpKernel component](https://symfony.com/doc/current/components/http_kernel.html#the-workflow-of-a-request).
+    follow the canonical order. **Ref:** [HttpKernel component](https://symfony.com/doc/8.0/components/http_kernel.html#the-workflow-of-a-request).
 
 ??? question "Q2. When is `kernel.terminate` dispatched?"
     - [x] A. After the response is sent to the client, for the main request only ✅
@@ -458,7 +458,7 @@ itself.
     - [ ] C. Once per sub-request
 
     **Why:** `terminate()` runs post-send and is not called for sub-requests.
-    **Ref:** [kernel.terminate](https://symfony.com/doc/current/reference/events.html#kernel-terminate).
+    **Ref:** [kernel.terminate](https://symfony.com/doc/8.0/reference/events.html#kernel-terminate).
 
 ??? question "Q3. A listener calls `setResponse()` on `kernel.request`. What happens?"
     - [ ] A. The controller still runs
@@ -466,7 +466,7 @@ itself.
     - [ ] C. A `kernel.view` event is required
 
     **Why:** A response on `kernel.request` short-circuits controller resolution.
-    **Ref:** [kernel.request](https://symfony.com/doc/current/reference/events.html#kernel-request).
+    **Ref:** [kernel.request](https://symfony.com/doc/8.0/reference/events.html#kernel-request).
 
 ## Key takeaways
 
@@ -493,8 +493,8 @@ itself.
 - **Confused with:** [Events](events.md) — `HttpKernel` *orchestrates* the flow; the `EventDispatcher` only *delivers* each event to listeners.
 
 ## Official References
-- [Official docs — HttpKernel workflow](https://symfony.com/doc/current/components/http_kernel.html)
-- [Official docs — Built-in events](https://symfony.com/doc/current/reference/events.html)
+- [Official docs — HttpKernel workflow](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [Official docs — Built-in events](https://symfony.com/doc/8.0/reference/events.html)
 - [Symfony source — HttpKernel](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernel.php)
 - [Symfony source — KernelEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/KernelEvents.php)
 
@@ -507,7 +507,7 @@ itself.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_kernel.html#the-workflow-of-a-request) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_kernel.html#the-workflow-of-a-request) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -262,7 +262,7 @@ chemin.
 
     **Why:** La `FirewallMap` renvoie le premier context correspondant ; le
     matching s'arrête là.
-    **Ref:** [Firewalls](https://symfony.com/doc/current/security.html#the-firewall).
+    **Ref:** [Firewalls](https://symfony.com/doc/8.0/security.html#the-firewall).
 
 ??? question "Q2. What does `security: false` do?"
     - [x] A. Disables the security layer for that zone (still counts as the match) ✅
@@ -272,7 +272,7 @@ chemin.
 
     **Why:** Il désactive tous les listeners de sécurité pour les requests
     correspondantes ; utilisé pour le profiler/les assets.
-    **Ref:** [Security config](https://symfony.com/doc/current/security.html).
+    **Ref:** [Security config](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. Two firewalls should share a logged-in session. What do you set?"
     - [ ] A. The same `provider`
@@ -282,7 +282,7 @@ chemin.
 
     **Why:** Le partage exige une clé `context` explicitement identique ; sinon
     chaque firewall possède son propre token.
-    **Ref:** [Firewall context](https://symfony.com/doc/current/security.html).
+    **Ref:** [Firewall context](https://symfony.com/doc/8.0/security.html).
 
 ## Key takeaways
 
@@ -316,8 +316,8 @@ chemin.
   sélectionnent *l'authentification* ; `access_control` gère *l'autorisation*.
 
 ## Official References
-- [Symfony docs — The firewall](https://symfony.com/doc/current/security.html#the-firewall)
-- [Symfony docs — Security config reference](https://symfony.com/doc/current/reference/configuration/security.html)
+- [Symfony docs — The firewall](https://symfony.com/doc/8.0/security.html#the-firewall)
+- [Symfony docs — Security config reference](https://symfony.com/doc/8.0/reference/configuration/security.html)
 - [Symfony source — Firewall](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)
 
 ## Video references
@@ -330,7 +330,7 @@ chemin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#the-firewall) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#the-firewall) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

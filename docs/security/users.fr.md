@@ -358,7 +358,7 @@ passe invalide immédiatement les sessions existantes.
   c'est *qui vous êtes*, pas *comment* vous l'avez prouvé.
 
 ## Official References
-- [Symfony docs — The User](https://symfony.com/doc/current/security.html#the-user)
+- [Symfony docs — The User](https://symfony.com/doc/8.0/security.html#the-user)
 - [Symfony source — UserInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/UserInterface.php)
 - [Symfony UPGRADE-8.0 (Security)](https://github.com/symfony/symfony/blob/8.0/UPGRADE-8.0.md)
 
@@ -371,7 +371,7 @@ passe invalide immédiatement les sessions existantes.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#the-user) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#the-user) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -243,7 +243,7 @@ file — it needs directories via `in()`.
     - [ ] C. It compresses the content
 
     **Why:** The temp-write + rename means readers see either old or complete new content.
-    **Ref:** [Filesystem](https://symfony.com/doc/current/components/filesystem.html).
+    **Ref:** [Filesystem](https://symfony.com/doc/8.0/components/filesystem.html).
 
 ??? question "Q2. `Finder` requires which call to define where to search?"
     - [x] A. `in($dirs)` ✅
@@ -251,14 +251,14 @@ file — it needs directories via `in()`.
     - [ ] C. `search($dirs)`
 
     **Why:** `in()` sets the search directories; without it Finder throws.
-    **Ref:** [Finder](https://symfony.com/doc/current/components/finder.html).
+    **Ref:** [Finder](https://symfony.com/doc/8.0/components/finder.html).
 
 ??? question "Q3. On failure, `Filesystem::copy()`…"
     - [x] A. throws an `IOExceptionInterface` ✅
     - [ ] B. returns `false`
     - [ ] C. returns `null`
 
-    **Why:** Filesystem methods signal errors via exceptions. **Ref:** [Filesystem](https://symfony.com/doc/current/components/filesystem.html#error-handling).
+    **Why:** Filesystem methods signal errors via exceptions. **Ref:** [Filesystem](https://symfony.com/doc/8.0/components/filesystem.html#error-handling).
 
 ## Key takeaways
 
@@ -281,8 +281,8 @@ file — it needs directories via `in()`.
 - **Confused with:** raw `glob()`/`scandir()` — Finder adds fluent filters and yields `SplFileInfo`.
 
 ## Official References
-- [Official docs — Filesystem](https://symfony.com/doc/current/components/filesystem.html)
-- [Official docs — Finder](https://symfony.com/doc/current/components/finder.html)
+- [Official docs — Filesystem](https://symfony.com/doc/8.0/components/filesystem.html)
+- [Official docs — Finder](https://symfony.com/doc/8.0/components/finder.html)
 - [Symfony source — Finder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Finder/Finder.php)
 
 ## Video references
@@ -294,7 +294,7 @@ file — it needs directories via `in()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/filesystem.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/filesystem.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -308,4 +308,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Process](process.md) · [Lock](lock.md) · [Deployment](deployment.md)</small>
+<small>Related: [Process](process.md) · [Lock](../appendices/out-of-syllabus/lock.md) · [Deployment](deployment.md)</small>

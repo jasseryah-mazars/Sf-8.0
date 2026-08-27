@@ -70,6 +70,6 @@ explique toutes les questions de performance et de priorité posées à l'examen
 
 ## Official References
 
-- [Symfony documentation — Routing](https://symfony.com/doc/current/routing.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Routing](https://symfony.com/doc/8.0/routing.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

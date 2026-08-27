@@ -307,7 +307,7 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
 
     **Why:** `handleRequest` populates and submits the form; only then are
     `isSubmitted`/`isValid` meaningful.
-    **Ref:** [Processing forms](https://symfony.com/doc/current/forms.html#processing-forms).
+    **Ref:** [Processing forms](https://symfony.com/doc/8.0/forms.html#processing-forms).
 
 ??? question "Q2. When does form validation run in the submit lifecycle?"
     - [ ] A. During `handleRequest` header parsing
@@ -317,7 +317,7 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
 
     **Why:** The validation form extension registers a `POST_SUBMIT` listener
     that runs the Validator against the mapped model data.
-    **Ref:** [Form events](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q3. For a `PATCH` submission, `clearMissing` is…"
     - [x] A. `false`, enabling partial updates ✅
@@ -353,8 +353,8 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
 - **Confused with:** [Data transformers](data-transformers.md) — the model/norm/view shapes bound here are converted by transformers.
 
 ## Official References
-- [Official Symfony docs — Processing forms](https://symfony.com/doc/current/forms.html)
-- [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
+- [Official Symfony docs — Processing forms](https://symfony.com/doc/8.0/forms.html)
+- [Official Symfony docs — Form events](https://symfony.com/doc/8.0/form/events.html)
 - [Symfony source — HttpFoundationRequestHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php)
 
 ## Video references
@@ -366,7 +366,7 @@ driving through `handleRequest` with a crafted `Request` for fidelity.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/forms.html#processing-forms) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/forms.html#processing-forms) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

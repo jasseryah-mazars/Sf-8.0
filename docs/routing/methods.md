@@ -259,7 +259,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. 301 redirect
 
     **Why:** path matches but method doesn't, yielding 405 with an `Allow` header.
-    **Ref:** [HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods).
+    **Ref:** [HTTP methods](https://symfony.com/doc/8.0/routing.html#matching-http-methods).
 
 ??? question "Q2. `methods: ['GET']` also matches which verb?"
     - [x] A. HEAD ✅
@@ -268,7 +268,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. PUT
 
     **Why:** HttpKernel treats HEAD as a bodyless GET, so GET routes match HEAD.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-http-methods).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-http-methods).
 
 ??? question "Q3. An `http` request to an `https`-only route results in?"
     - [x] A. A redirect to the `https` URL ✅
@@ -277,7 +277,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. 404 Not Found
 
     **Why:** the redirectable matcher redirects scheme mismatches.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-the-http-scheme).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-the-http-scheme).
 
 ??? question "Q4. For a form's `_method` field to change routing, you must…"
     - [x] A. Call `Request::enableHttpMethodParameterOverride()` ✅
@@ -286,7 +286,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. Set `framework.http_method_override: false`
 
     **Why:** method override is opt-in via `enableHttpMethodParameterOverride()`.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ## Key takeaways
 
@@ -309,7 +309,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
 - **Confused with:** [Controllers → The Request](../controllers/request.md) — the matcher tests `Request::getMethod()` (with any override).
 
 ## Official References
-- [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods)
+- [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -321,7 +321,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#matching-http-methods) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#matching-http-methods) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

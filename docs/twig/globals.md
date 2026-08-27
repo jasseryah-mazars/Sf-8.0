@@ -260,7 +260,7 @@ global namespace.
     - [ ] D. It throws
 
     **Why:** `AppVariable::getUser()` returns the token's user or `null`. **Ref:**
-    [The app global](https://symfony.com/doc/current/templates.html#the-app-global-variable).
+    [The app global](https://symfony.com/doc/8.0/templates.html#the-app-global-variable).
 
 ??? question "Q2. Which class backs the `app` global?"
     - [ ] A. `Twig\Environment`
@@ -278,7 +278,7 @@ global namespace.
     - [ ] D. It is impossible
 
     **Why:** Globals are declared under `twig.globals` or via `GlobalsInterface`.
-    **Ref:** [Global variables](https://symfony.com/doc/current/templates.html#global-variables).
+    **Ref:** [Global variables](https://symfony.com/doc/8.0/templates.html#global-variables).
 
 ## Key takeaways
 
@@ -302,8 +302,8 @@ global namespace.
 - **Confused with:** [Authentication](../security/authentication.md) — `app.user` is only the view side; the token it reads is populated by the security layer.
 
 ## Official References
-- [Official — The app global variable](https://symfony.com/doc/current/templates.html#the-app-global-variable)
-- [Official — Global variables](https://symfony.com/doc/current/templates.html#global-variables)
+- [Official — The app global variable](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
+- [Official — Global variables](https://symfony.com/doc/8.0/templates.html#global-variables)
 - [Symfony source — AppVariable](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/AppVariable.php)
 
 ## Video references
@@ -315,7 +315,7 @@ global namespace.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#the-app-global-variable) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#the-app-global-variable) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

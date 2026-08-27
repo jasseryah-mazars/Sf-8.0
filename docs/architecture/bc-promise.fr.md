@@ -231,7 +231,7 @@ framework.
 
     **Why:** Les ruptures de BC sont réservées aux majeures et exigent un parcours de
     dépréciation.
-    **Ref:** [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    **Ref:** [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q2. What does `@internal` mean for BC?"
     - [x] A. The element is excluded from the BC promise ✅
@@ -239,7 +239,7 @@ framework.
     - [ ] C. It is deprecated
 
     **Why:** `@internal` marque des détails d'implémentation non couverts par la BC. **Ref:**
-    [Coding standards / @internal](https://symfony.com/doc/current/contributing/code/bc.html).
+    [Coding standards / @internal](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How should you customise a `final` Symfony class?"
     - [x] A. Decorate/compose it ✅
@@ -247,7 +247,7 @@ framework.
     - [ ] C. Edit it in vendor
 
     **Why:** `final` interdit l'héritage ; utilisez la décoration. **Ref:**
-    [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -272,9 +272,9 @@ framework.
 - **Confused with:** [Framework Overloading](overloading.md) — surcharger les ressources d'un bundle est une personnalisation applicative, pas une affirmation sur la stabilité de l'API.
 
 ## Official References
-- [Backward Compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
-- [Conventions — @internal / @final](https://symfony.com/doc/current/contributing/code/conventions.html)
-- [Experimental features](https://symfony.com/doc/current/contributing/code/experimental.html)
+- [Backward Compatibility promise](https://symfony.com/doc/8.0/contributing/code/bc.html)
+- [Conventions — @internal / @final](https://symfony.com/doc/8.0/contributing/code/conventions.html)
+- [Experimental features](https://symfony.com/doc/8.0/contributing/code/experimental.html)
 
 ## Video references
 
@@ -285,7 +285,7 @@ framework.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — certaines pages de la documentation Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — certaines pages de la documentation Symfony intègrent un screencast.
 
 ## Confidence check
 

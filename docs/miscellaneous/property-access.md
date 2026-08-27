@@ -259,7 +259,7 @@ overhead.
     - [ ] D. Only `get`, nothing else
 
     **Why:** `ReflectionExtractor::$defaultAccessorPrefixes` fixes this exact
-    order. **Ref:** [PropertyAccess](https://symfony.com/doc/current/components/property_access.html).
+    order. **Ref:** [PropertyAccess](https://symfony.com/doc/8.0/components/property_access.html).
 
 ??? question "Q2. Which magic method is disabled by default in PropertyAccessorBuilder?"
     - [ ] A. `__get`
@@ -269,7 +269,7 @@ overhead.
 
     **Why:** the default flags are `MAGIC_GET | MAGIC_SET`; `__call` requires
     `enableMagicCall()` explicitly.
-    **Ref:** [PropertyAccess — magic methods](https://symfony.com/doc/current/components/property_access.html#magic-getters-and-setters).
+    **Ref:** [PropertyAccess — magic methods](https://symfony.com/doc/8.0/components/property_access.html#magic-getters-and-setters).
 
 ??? question "Q3. `getValue()` on a property that does not exist on the target…"
     - [x] A. Throws `NoSuchPropertyException` ✅
@@ -288,7 +288,7 @@ overhead.
     - [ ] D. Emits a warning and returns `true`
 
     **Why:** `isReadable()`/`isWritable()` are the safe probes, always
-    returning a plain boolean. **Ref:** [PropertyAccess](https://symfony.com/doc/current/components/property_access.html).
+    returning a plain boolean. **Ref:** [PropertyAccess](https://symfony.com/doc/8.0/components/property_access.html).
 
 ## Key takeaways
 
@@ -322,7 +322,7 @@ overhead.
   reads/writes a single path once you already have the target object/array.
 
 ## Official References
-- [Official Symfony docs — PropertyAccess](https://symfony.com/doc/current/components/property_access.html)
+- [Official Symfony docs — PropertyAccess](https://symfony.com/doc/8.0/components/property_access.html)
 - [Symfony source — PropertyAccessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/PropertyAccessor.php)
 - [Symfony source — PropertyAccessorBuilder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/PropertyAccessorBuilder.php)
 
@@ -335,7 +335,7 @@ overhead.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/property_access.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/property_access.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

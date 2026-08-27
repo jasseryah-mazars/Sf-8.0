@@ -240,7 +240,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     **Why:** `form_row` compose label + widget + erreurs + aide via le bloc de
     thème `field_row`/`*_row`.
-    **Ref:** [Form rendering functions](https://symfony.com/doc/current/form/form_customization.html).
+    **Ref:** [Form rendering functions](https://symfony.com/doc/8.0/form/form_customization.html).
 
 ??? question "Q2. How is the CSRF token normally emitted in the HTML?"
     - [x] A. By `form_rest`, which `form_end` calls by default ✅
@@ -250,7 +250,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     **Why:** Le champ CSRF est un enfant caché rendu par `form_rest` ; `form_end`
     déclenche `form_rest` sauf si `render_rest: false`.
-    **Ref:** [CSRF protection](https://symfony.com/doc/current/security/csrf.html).
+    **Ref:** [CSRF protection](https://symfony.com/doc/8.0/security/csrf.html).
 
 ??? question "Q3. Which shows form-level (non-field) errors?"
     - [x] A. `form_errors(form)` ✅
@@ -260,7 +260,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     **Why:** Passer la vue racine à `form_errors` rend les erreurs attachées au
     form lui-même (p. ex. issues d'une constraint au niveau de la classe).
-    **Ref:** [Form errors](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form errors](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -289,8 +289,8 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 - **Confused with:** [CSRF protection](csrf.md) — c'est `form_rest`/`form_end` qui émet réellement le token dans le HTML.
 
 ## Official References
-- [Official Symfony docs — Form customization](https://symfony.com/doc/current/form/form_customization.html)
-- [Official Symfony docs — Rendering forms](https://symfony.com/doc/current/forms.html)
+- [Official Symfony docs — Form customization](https://symfony.com/doc/8.0/form/form_customization.html)
+- [Official Symfony docs — Rendering forms](https://symfony.com/doc/8.0/forms.html)
 - [Symfony source — Twig FormExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php)
 
 ## Video references
@@ -302,7 +302,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/form_customization.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/form_customization.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

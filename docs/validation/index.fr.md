@@ -80,6 +80,6 @@ Travaillez-les dans l'ordre :
 
 ## Official References
 
-- [Symfony documentation — Validation](https://symfony.com/doc/current/validation.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Validation](https://symfony.com/doc/8.0/validation.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

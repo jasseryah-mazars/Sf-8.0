@@ -436,7 +436,7 @@ handshake SSO maison). Pour les APIs stateless, `access_token` + un
 
     **Why:** `authenticate()` construit un Passport ; le token est produit plus
     tard par `createToken()`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ??? question "Q2. Which passport suits a valid-API-token flow with no password?"
     - [ ] A. `Passport` with empty `PasswordCredentials`
@@ -446,7 +446,7 @@ handshake SSO maison). Pour les APIs stateless, `access_token` + un
 
     **Why:** Aucun credential à vérifier ⇒ un passport auto-validant portant
     uniquement le user badge.
-    **Ref:** [Passport](https://symfony.com/doc/current/security/custom_authenticator.html#the-passport).
+    **Ref:** [Passport](https://symfony.com/doc/8.0/security/custom_authenticator.html#the-passport).
 
 ??? question "Q3. In which namespace is `PasswordCredentials`?"
     - [ ] A. `…\Passport\Badge`
@@ -490,8 +490,8 @@ handshake SSO maison). Pour les APIs stateless, `access_token` + un
   `UserBadge`.
 
 ## Official References
-- [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
-- [Symfony docs — Access token authentication](https://symfony.com/doc/current/security/access_token.html)
+- [Symfony docs — Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html)
+- [Symfony docs — Access token authentication](https://symfony.com/doc/8.0/security/access_token.html)
 - [Symfony source — Passport](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Security/Http/Authenticator/Passport)
 
 ## Video references
@@ -504,7 +504,7 @@ handshake SSO maison). Pour les APIs stateless, `access_token` + un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/custom_authenticator.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/custom_authenticator.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

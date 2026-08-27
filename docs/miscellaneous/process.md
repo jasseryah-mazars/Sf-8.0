@@ -260,7 +260,7 @@ For work that should be deferred/retried, dispatch a
     - [ ] C. both equally
 
     **Why:** The array form escapes each element; the shell form does not.
-    **Ref:** [Process](https://symfony.com/doc/current/components/process.html).
+    **Ref:** [Process](https://symfony.com/doc/8.0/components/process.html).
 
 ??? question "Q2. What does `run()` return?"
     - [x] A. The process exit code ✅
@@ -268,14 +268,14 @@ For work that should be deferred/retried, dispatch a
     - [ ] C. `void`
 
     **Why:** `run()` returns the integer exit code; use `getOutput()` for stdout.
-    **Ref:** [Process](https://symfony.com/doc/current/components/process.html#usage).
+    **Ref:** [Process](https://symfony.com/doc/8.0/components/process.html#usage).
 
 ??? question "Q3. The default process timeout is…"
     - [x] A. 60 seconds ✅
     - [ ] B. unlimited
     - [ ] C. 30 seconds
 
-    **Why:** The default is 60 s; pass `null` to disable. **Ref:** [Process timeout](https://symfony.com/doc/current/components/process.html#process-timeout).
+    **Why:** The default is 60 s; pass `null` to disable. **Ref:** [Process timeout](https://symfony.com/doc/8.0/components/process.html#process-timeout).
 
 ## Key takeaways
 
@@ -299,7 +299,7 @@ For work that should be deferred/retried, dispatch a
 - **Confused with:** running work inline — for deferrable/retriable jobs, dispatch a message instead of blocking the request.
 
 ## Official References
-- [Official docs — Process](https://symfony.com/doc/current/components/process.html)
+- [Official docs — Process](https://symfony.com/doc/8.0/components/process.html)
 - [Symfony source — Process](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Process/Process.php)
 
 ## Video references
@@ -311,7 +311,7 @@ For work that should be deferred/retried, dispatch a
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/process.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/process.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -325,4 +325,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](lock.md)</small>
+<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](../appendices/out-of-syllabus/lock.md)</small>

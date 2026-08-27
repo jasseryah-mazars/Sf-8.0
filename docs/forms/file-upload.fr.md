@@ -298,7 +298,7 @@ basés sur Symfony UX sortent du cadre de ce chapitre.
 
     **Why:** `mapped => false` exclut le champ du data mapper ; vous le
     récupérez directement depuis le form enfant.
-    **Ref:** [File uploads](https://symfony.com/doc/current/controller/upload_file.html).
+    **Ref:** [File uploads](https://symfony.com/doc/8.0/controller/upload_file.html).
 
 ??? question "Q2. Which value is safe to trust for validation?"
     - [ ] A. `getClientOriginalName()`
@@ -318,7 +318,7 @@ basés sur Symfony UX sortent du cadre de ce chapitre.
 
     **Why:** La variable de vue `multipart` du form est définie quand un enfant
     l'exige (par ex. `FileType`), et `form_start` rend l'enctype en conséquence.
-    **Ref:** [File type](https://symfony.com/doc/current/reference/forms/types/file.html).
+    **Ref:** [File type](https://symfony.com/doc/8.0/reference/forms/types/file.html).
 
 ## Key takeaways
 
@@ -343,8 +343,8 @@ basés sur Symfony UX sortent du cadre de ce chapitre.
 - **Confused with:** [Validation](../validation/index.md) — les constraints `File`/`Image` imposent taille/MIME, même sur un champ unmapped.
 
 ## Official References
-- [Official Symfony docs — Uploading files](https://symfony.com/doc/current/controller/upload_file.html)
-- [Official Symfony docs — File field type](https://symfony.com/doc/current/reference/forms/types/file.html)
+- [Official Symfony docs — Uploading files](https://symfony.com/doc/8.0/controller/upload_file.html)
+- [Official Symfony docs — File field type](https://symfony.com/doc/8.0/reference/forms/types/file.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
 
 ## Video references
@@ -356,7 +356,7 @@ basés sur Symfony UX sortent du cadre de ce chapitre.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/upload_file.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/upload_file.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

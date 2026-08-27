@@ -267,7 +267,7 @@ l'overloading est réservé aux ressources tierces.
     - [ ] C. Inside `vendor/`
 
     **Why:** Twig résout les surcharges depuis `templates/bundles/<BundleName>/`. **Ref:**
-    [Overriding bundle templates](https://symfony.com/doc/current/bundles/override.html).
+    [Overriding bundle templates](https://symfony.com/doc/8.0/bundles/override.html).
 
 ??? question "Q2. Which is the current way to change a bundle's inherited resources?"
     - [x] A. Per-resource overriding (templates/services/config) ✅
@@ -275,7 +275,7 @@ l'overloading est réservé aux ressources tierces.
     - [ ] C. Editing the bundle in `vendor/`
 
     **Why:** L'héritage de bundle a été supprimé dans Symfony 5. **Ref:**
-    [Overriding bundles](https://symfony.com/doc/current/bundles/override.html).
+    [Overriding bundles](https://symfony.com/doc/8.0/bundles/override.html).
 
 ??? question "Q3. How do you augment a bundle service without replacing it?"
     - [x] A. Decorate it (`#[AsDecorator]` / `decorates:`) ✅
@@ -283,7 +283,7 @@ l'overloading est réservé aux ressources tierces.
     - [ ] C. Use `getParent()`
 
     **Why:** La décoration enveloppe l'original et l'injecte sous forme de `.inner`. **Ref:**
-    [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -307,8 +307,8 @@ l'overloading est réservé aux ressources tierces.
 - **Confused with:** [Bridges](bridges.md) — l'overloading personnalise un bundle existant ; un bridge relie un component à une bibliothèque tierce.
 
 ## Official References
-- [Official docs — Overriding bundles](https://symfony.com/doc/current/bundles/override.html)
-- [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
+- [Official docs — Overriding bundles](https://symfony.com/doc/8.0/bundles/override.html)
+- [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 - [Symfony source — bundles](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bundle)
 
 ## Video references
@@ -321,7 +321,7 @@ l'overloading est réservé aux ressources tierces.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/override.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/override.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

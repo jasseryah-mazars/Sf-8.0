@@ -237,7 +237,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
     - [ ] C. `$request->query`
     - [ ] D. `$_SESSION`
 
-    **Why:** le `ParameterBag` `cookies` encapsule `$_COOKIE`. **Ref:** [http_foundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Why:** le `ParameterBag` `cookies` encapsule `$_COOKIE`. **Ref:** [http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. A cookie with `SameSite=None` also requires…"
     - [ ] A. `HttpOnly=false`
@@ -246,7 +246,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
     - [ ] D. a max-age of 0
 
     **Why:** les navigateurs rejettent les cookies `SameSite=None` qui ne sont pas `Secure`.
-    **Ref:** [cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies).
+    **Ref:** [cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies).
 
 ??? question "Q3. Why might `clearCookie('token')` fail to remove the cookie?"
     - [x] A. The path/domain don't match the original cookie. ✅
@@ -255,7 +255,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
     - [ ] D. It requires the value to match too.
 
     **Why:** la suppression envoie un cookie expiré délimité par path/domain ; une
-    non-correspondance vise un autre cookie. **Ref:** [http_foundation](https://symfony.com/doc/current/components/http_foundation.html).
+    non-correspondance vise un autre cookie. **Ref:** [http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ## Key takeaways
 
@@ -280,7 +280,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
 - **Confused with:** [HTTP → Cookies](../http/cookies.md) — ici la lecture/écriture côté controller ; le chapitre HTTP couvre le protocole.
 
 ## Official References
-- [Official Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+- [Official Symfony docs — Setting cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
 
 ## Video references
@@ -292,7 +292,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -412,7 +412,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** `Constraint::validatedBy()` retourne `static::class.'Validator'` par
     convention ; ne le surchargez que pour le changer.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q2. To make a constraint apply at class scope you must…"
     - [ ] A. Set `#[\Attribute(\Attribute::TARGET_CLASS)]` only
@@ -422,7 +422,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** La cible de l'attribut PHP et le `getTargets()` du validator sont
     distincts ; le validator se base sur ce dernier pour décider du placement.
-    **Ref:** [Class constraint validator](https://symfony.com/doc/current/validation/custom_constraint.html#class-constraint-validator).
+    **Ref:** [Class constraint validator](https://symfony.com/doc/8.0/validation/custom_constraint.html#class-constraint-validator).
 
 ??? question "Q3. In a `ConstraintValidator::validate()`, the first thing you should do is…"
     - [x] A. Check `$constraint instanceof YourConstraint` and throw otherwise ✅
@@ -432,7 +432,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** Protéger le type de la constraint avec `UnexpectedTypeException` est
     la première étape documentée.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q4. What does `#[HasNamedArguments]` do?"
     - [x] A. Passes attribute arguments as named constructor arguments ✅
@@ -442,7 +442,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** Il active la construction typée par arguments nommés au lieu du style
     hérité à tableau d'options.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ## Key takeaways
 
@@ -471,7 +471,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 - **Confused with:** [Callbacks](callbacks.md) — un callback est l'alternative ponctuelle ; ne promouvez en constraint que lorsque la règle est réutilisable.
 
 ## Official References
-- [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/current/validation/custom_constraint.html)
+- [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 - [Symfony source — Constraint](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 
 ## Video references
@@ -484,7 +484,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/custom_constraint.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/custom_constraint.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

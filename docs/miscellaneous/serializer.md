@@ -379,7 +379,7 @@ groups + max-depth to keep payloads bounded.
     - [ ] C. They run in parallel
 
     **Why:** Objects are normalized to arrays, then encoded to a string.
-    **Ref:** [Serializer](https://symfony.com/doc/current/components/serializer.html).
+    **Ref:** [Serializer](https://symfony.com/doc/8.0/components/serializer.html).
 
 ??? question "Q2. Which normalizer reads private properties directly?"
     - [ ] A. `ObjectNormalizer`
@@ -387,7 +387,7 @@ groups + max-depth to keep payloads bounded.
     - [ ] C. `GetSetMethodNormalizer`
 
     **Why:** `PropertyNormalizer` uses reflection on properties, bypassing accessors.
-    **Ref:** [Normalizers](https://symfony.com/doc/current/serializer.html#normalizers).
+    **Ref:** [Normalizers](https://symfony.com/doc/8.0/serializer.html#normalizers).
 
 ??? question "Q3. `#[Groups(['read'])]` takes effect when…"
     - [x] A. `['groups' => ['read']]` is passed in the context ✅
@@ -395,7 +395,7 @@ groups + max-depth to keep payloads bounded.
     - [ ] C. only during deserialization
 
     **Why:** Group filtering only applies when the matching groups are in context.
-    **Ref:** [Serialization groups](https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes).
+    **Ref:** [Serialization groups](https://symfony.com/doc/8.0/serializer.html#using-serialization-groups-attributes).
 
 ## Key takeaways
 
@@ -420,8 +420,8 @@ groups + max-depth to keep payloads bounded.
 - **Confused with:** PHP's `json_encode` — the Serializer adds normalization, groups, and denormalization back into typed objects.
 
 ## Official References
-- [Official docs — Serializer](https://symfony.com/doc/current/serializer.html)
-- [Official docs — Serializer component](https://symfony.com/doc/current/components/serializer.html)
+- [Official docs — Serializer](https://symfony.com/doc/8.0/serializer.html)
+- [Official docs — Serializer component](https://symfony.com/doc/8.0/components/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)
 
 ## Video references
@@ -433,7 +433,7 @@ groups + max-depth to keep payloads bounded.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/serializer.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/serializer.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

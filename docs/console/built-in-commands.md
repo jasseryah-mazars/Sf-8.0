@@ -261,7 +261,7 @@ request — it is a CLI/deploy step.
     - [ ] D. `debug:container`
 
     **Why:** `list` is the Application's default command. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. Which of these is NOT part of Symfony core / FrameworkBundle?"
     - [ ] A. `cache:clear`
@@ -270,7 +270,7 @@ request — it is a CLI/deploy step.
     - [ ] D. `about`
 
     **Why:** `make:*` commands come from the optional MakerBundle. **Ref:**
-    [MakerBundle](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html).
+    [MakerBundle](https://symfony.com/doc/8.0/bundles/SymfonyMakerBundle/index.html).
 
 ??? question "Q3. How does `bin/console` obtain the `Application` in Symfony 8?"
     - [ ] A. It calls `Application::create()` statically
@@ -279,7 +279,7 @@ request — it is a CLI/deploy step.
     - [ ] D. The web front controller instantiates it
 
     **Why:** the Runtime component runs the closure returned by `bin/console`.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html).
 
 ??? question "Q4. What does `php bin/console ca:cl` do when unambiguous?"
     - [x] A. Runs `cache:clear` via name abbreviation ✅
@@ -288,7 +288,7 @@ request — it is a CLI/deploy step.
     - [ ] D. Clears only the `cl` namespace
 
     **Why:** `find()` resolves unambiguous abbreviations. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -315,8 +315,8 @@ request — it is a CLI/deploy step.
   vs. declaring your own metadata.
 
 ## Official References
-- [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
+- [Official Symfony docs — Console](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Runtime](https://symfony.com/doc/8.0/components/runtime.html)
 - [Symfony source — Application](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Application.php)
 
 ## Video references
@@ -328,7 +328,7 @@ request — it is a CLI/deploy step.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

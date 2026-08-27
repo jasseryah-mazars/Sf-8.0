@@ -66,7 +66,7 @@ Work through them in order:
   `Cache-Control` **request** directives.
 - [ ] [Server-Side Caching](server-side.md) — the Symfony reverse proxy
   (`HttpCache` kernel), `Store`, enabling it, Varnish comparison.
-- [ ] [Edge Side Includes (ESI)](esi.md) — `<esi:include>`, `render_esi`, when
+- [ ] [Edge Side Includes (ESI)](../appendices/out-of-syllabus/esi.md) — `<esi:include>`, `render_esi`, when
   fragment caching beats full-page caching, the SSI alternative. **Excluded
   from Symfony 8 certification.**
 
@@ -78,7 +78,7 @@ Work through them in order:
    [Validation](validation.md) — and how they **combine**.
 3. See both **sides** of the wire: [Client-Side](client-side.md) and
    [Server-Side](server-side.md).
-4. Finish with [ESI](esi.md) for mixed-freshness pages.
+4. Finish with [ESI](../appendices/out-of-syllabus/esi.md) for mixed-freshness pages.
 
 ---
 
@@ -89,6 +89,6 @@ Work through them in order:
 
 ## Official References
 
-- [Symfony documentation — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — HTTP Cache](https://symfony.com/doc/8.0/http_cache.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

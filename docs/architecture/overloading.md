@@ -256,7 +256,7 @@ third-party resources.
     - [ ] C. Inside `vendor/`
 
     **Why:** Twig resolves overrides from `templates/bundles/<BundleName>/`. **Ref:**
-    [Overriding bundle templates](https://symfony.com/doc/current/bundles/override.html).
+    [Overriding bundle templates](https://symfony.com/doc/8.0/bundles/override.html).
 
 ??? question "Q2. Which is the current way to change a bundle's inherited resources?"
     - [x] A. Per-resource overriding (templates/services/config) ✅
@@ -264,7 +264,7 @@ third-party resources.
     - [ ] C. Editing the bundle in `vendor/`
 
     **Why:** Bundle inheritance was removed in Symfony 5. **Ref:**
-    [Overriding bundles](https://symfony.com/doc/current/bundles/override.html).
+    [Overriding bundles](https://symfony.com/doc/8.0/bundles/override.html).
 
 ??? question "Q3. How do you augment a bundle service without replacing it?"
     - [x] A. Decorate it (`#[AsDecorator]` / `decorates:`) ✅
@@ -272,7 +272,7 @@ third-party resources.
     - [ ] C. Use `getParent()`
 
     **Why:** Decoration wraps the original and injects it as `.inner`. **Ref:**
-    [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -296,8 +296,8 @@ third-party resources.
 - **Confused with:** [Bridges](bridges.md) — overloading customises an existing bundle; a bridge glues a component to a third-party library.
 
 ## Official References
-- [Official docs — Overriding bundles](https://symfony.com/doc/current/bundles/override.html)
-- [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
+- [Official docs — Overriding bundles](https://symfony.com/doc/8.0/bundles/override.html)
+- [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 - [Symfony source — bundles](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bundle)
 
 ## Video references
@@ -309,7 +309,7 @@ third-party resources.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/override.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/override.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

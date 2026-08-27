@@ -79,5 +79,5 @@ devient de la lecture plutôt que de la découverte.
 ## Official References
 
 - [Symfony documentation — PHP Manual](https://www.php.net/manual/en/)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

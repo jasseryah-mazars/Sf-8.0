@@ -293,7 +293,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. Any container in prod
 
     **Why:** the `test` env compiles a `TestContainer` that keeps private/non-shared
-    services reachable. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    services reachable. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q2. A private service you never inject anywhere will…"
     - [x] A. Still be removed — the test container only keeps *used* services ✅
@@ -302,7 +302,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. Throw at compile time
 
     **Why:** unused private services are optimised out even in test.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q3. `getContainer()->set($id, $mock)` survives across requests only if…"
     - [x] A. You called `$client->disableReboot()` ✅
@@ -311,7 +311,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. You enable the profiler
 
     **Why:** the default reboot rebuilds the container and discards replacements.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. The correct way to boot without debug is…"
     - [x] A. `self::bootKernel(['debug' => false])` ✅
@@ -320,7 +320,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. Setting `APP_DEBUG` at runtime only
 
     **Why:** `bootKernel()` accepts an options array with `environment`/`debug`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ## Key takeaways
 
@@ -344,8 +344,8 @@ and swapping a `MockClock` over global clock mocking.
 - **Confused with:** [The Client](client.md) — `disableReboot()` lives on the client but is what makes a `set()` replacement persist.
 
 ## Official References
-- [Official Symfony docs — Accessing the container](https://symfony.com/doc/current/testing.html#accessing-the-container)
-- [Official Symfony docs — Mocking services](https://symfony.com/doc/current/testing.html#mocking-services)
+- [Official Symfony docs — Accessing the container](https://symfony.com/doc/8.0/testing.html#accessing-the-container)
+- [Official Symfony docs — Mocking services](https://symfony.com/doc/8.0/testing.html#mocking-services)
 - [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)
 
 ## Video references
@@ -357,7 +357,7 @@ and swapping a `MockClock` over global clock mocking.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#accessing-the-container) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#accessing-the-container) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

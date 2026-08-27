@@ -307,7 +307,7 @@ code accessible depuis la CLI.
     - [ ] D. Autowire `Session` and store it as a property.
 
     **Why:** la session est liée au scope de la request ; `RequestStack` est le point
-    d'entrée stable. **Ref:** [sessions](https://symfony.com/doc/current/session.html).
+    d'entrée stable. **Ref:** [sessions](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q2. When does a lazy Symfony session actually start?"
     - [ ] A. On every request automatically.
@@ -316,7 +316,7 @@ code accessible depuis la CLI.
     - [ ] D. When `RequestStack` is injected.
 
     **Why:** les sessions lazy évitent un `Set-Cookie` pour les requests qui ne les utilisent jamais.
-    **Ref:** [sessions](https://symfony.com/doc/current/session.html).
+    **Ref:** [sessions](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q3. Which call prevents session fixation after login?"
     - [x] A. `migrate()` (regenerate the id) ✅
@@ -325,7 +325,7 @@ code accessible depuis la CLI.
     - [ ] D. `save()`
 
     **Why:** régénérer l'id invalide tout id pré-login qu'un attaquant aurait planté.
-    **Ref:** [session security](https://symfony.com/doc/current/session.html).
+    **Ref:** [session security](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q4. What is a side effect of touching the session on a public page?"
     - [x] A. A `Set-Cookie` header makes it uncacheable by shared proxies. ✅
@@ -334,7 +334,7 @@ code accessible depuis la CLI.
     - [ ] D. It disables Twig caching.
 
     **Why:** les caches partagés ne doivent pas stocker des responses `Set-Cookie` propres à un utilisateur.
-    **Ref:** [http cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [http cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ## Key takeaways
 
@@ -358,7 +358,7 @@ code accessible depuis la CLI.
 - **À ne pas confondre avec :** [Cookies](cookies.md) — la session garde l'état côté serveur ; seul son id voyage dans un cookie.
 
 ## Official References
-- [Official Symfony docs — Sessions](https://symfony.com/doc/current/session.html)
+- [Official Symfony docs — Sessions](https://symfony.com/doc/8.0/session.html)
 - [Symfony source — Session](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php)
 
 ## Video references
@@ -370,7 +370,7 @@ code accessible depuis la CLI.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/session.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/session.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

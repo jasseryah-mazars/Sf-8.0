@@ -335,7 +335,7 @@ on.
     - [ ] D. A list of routes
 
     **Why:** `createClient(array $options, array $server)` — server params model
-    `$_SERVER`. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#configuring-the-test-client).
+    `$_SERVER`. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client).
 
 ??? question "Q2. To send an `Accept: application/json` header you set…"
     - [x] A. `HTTP_ACCEPT => 'application/json'` ✅
@@ -344,7 +344,7 @@ on.
     - [ ] D. `CONTENT_TYPE => 'application/json'`
 
     **Why:** request headers use the `HTTP_` prefix in server params.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#configuring-the-test-client).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client).
 
 ??? question "Q3. `$client->loginUser($user)` does what?"
     - [x] A. Authenticates the session with `$user`, skipping the login form ✅
@@ -353,7 +353,7 @@ on.
     - [ ] D. Returns a JWT
 
     **Why:** it injects a security token for the given `UserInterface`.
-    **Ref:** [Testing — login](https://symfony.com/doc/current/testing.html#logging-in-users-authentication).
+    **Ref:** [Testing — login](https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication).
 
 ??? question "Q4. `$client->insulate()` means each request…"
     - [x] A. Runs in a separate PHP subprocess (no in-process profiler) ✅
@@ -362,7 +362,7 @@ on.
     - [ ] D. Is cached
 
     **Why:** insulation isolates global state at the cost of losing in-process
-    access. **Ref:** [BrowserKit](https://symfony.com/doc/current/components/browser_kit.html).
+    access. **Ref:** [BrowserKit](https://symfony.com/doc/8.0/components/browser_kit.html).
 
 ## Key takeaways
 
@@ -387,8 +387,8 @@ on.
 - **Confused with:** [The Client](client.md) — behaviour (redirects, cookies) lives there; boot options and server params live here.
 
 ## Official References
-- [Official Symfony docs — Configuring the test client](https://symfony.com/doc/current/testing.html#configuring-the-test-client)
-- [Official Symfony docs — Logging in users](https://symfony.com/doc/current/testing.html#logging-in-users-authentication)
+- [Official Symfony docs — Configuring the test client](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client)
+- [Official Symfony docs — Logging in users](https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
 
 ## Video references
@@ -400,7 +400,7 @@ on.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#configuring-the-test-client) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

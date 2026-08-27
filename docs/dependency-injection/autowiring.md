@@ -304,7 +304,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
     - [ ] D. Environment variables
 
     **Why:** Autowiring maps a type-hint to a service; scalars/env need explicit
-    binding. **Ref:** [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html).
+    binding. **Ref:** [Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q2. Two services implement one interface and no default is set. Autowiring…"
     - [ ] A. Picks the first one
@@ -313,7 +313,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
     - [ ] D. Picks the last one
 
     **Why:** Ambiguity is a hard build error; you must disambiguate.
-    **Ref:** [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html).
+    **Ref:** [Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q3. What does `#[Target('requestLogger')]` do?"
     - [x] A. Selects the named autowiring alias `...$requestLogger` explicitly ✅
@@ -322,7 +322,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
     - [ ] D. Makes the service public
 
     **Why:** `#[Target]` binds to a named alias without relying on the parameter
-    name. **Ref:** [Autowiring aliases](https://symfony.com/doc/current/service_container/autowiring.html#fixing-non-autowireable-arguments).
+    name. **Ref:** [Autowiring aliases](https://symfony.com/doc/8.0/service_container/autowiring.html#fixing-non-autowireable-arguments).
 
 ??? question "Q4. When does autowiring resolution occur?"
     - [x] A. At container compilation ✅
@@ -331,7 +331,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
     - [ ] D. At kernel termination
 
     **Why:** `AutowirePass` runs during compilation; the dumped container has
-    resolved arguments. **Ref:** [Compiling the container](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    resolved arguments. **Ref:** [Compiling the container](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ## Key takeaways
 
@@ -359,7 +359,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
   they need `bind` or `#[Autowire]`.
 
 ## Official References
-- [Official Symfony docs — Autowiring](https://symfony.com/doc/current/service_container/autowiring.html)
+- [Official Symfony docs — Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html)
 - [Symfony source — AutowirePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/AutowirePass.php)
 
 ## Video references
@@ -371,7 +371,7 @@ use [parameters](parameters.md) + `#[Autowire]`; for many implementations use
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/autowiring.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/autowiring.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -257,7 +257,7 @@ $file->setAutoLastModified();
     - [ ] D. `void`; Symfony renders the matching template.
 
     **Why:** the kernel requires a `Response`; a non-Response fires `kernel.view`.
-    **Ref:** [controller](https://symfony.com/doc/current/controller.html).
+    **Ref:** [controller](https://symfony.com/doc/8.0/controller.html).
 
 ??? question "Q2. When does a `StreamedResponse` produce its body?"
     - [ ] A. When constructed.
@@ -266,7 +266,7 @@ $file->setAutoLastModified();
     - [ ] D. When the profiler collects data.
 
     **Why:** the callback runs at send time, streaming output chunk by chunk.
-    **Ref:** [streaming response](https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response).
+    **Ref:** [streaming response](https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response).
 
 ??? question "Q3. Which class best serves a resumable file download?"
     - [ ] A. `Response`
@@ -275,7 +275,7 @@ $file->setAutoLastModified();
     - [ ] D. `JsonResponse`
 
     **Why:** it supports HTTP range requests and X-Sendfile offloading.
-    **Ref:** [serving files](https://symfony.com/doc/current/components/http_foundation.html#serving-files).
+    **Ref:** [serving files](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files).
 
 ## Key takeaways
 
@@ -299,7 +299,7 @@ $file->setAutoLastModified();
 - **Confused with:** [Error Pages](error-pages.md) — errors are produced by *throwing*, not by building an error `Response`.
 
 ## Official References
-- [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html)
+- [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
 ## Video references
@@ -311,7 +311,7 @@ $file->setAutoLastModified();
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

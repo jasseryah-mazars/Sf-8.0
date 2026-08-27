@@ -280,7 +280,7 @@ de répondre.
     - [ ] C. throws if no worker is running
 
     **Why:** Router `SendEmailMessage` en asynchrone fait que `send()` le met en file d'attente.
-    **Ref:** [Sending messages async](https://symfony.com/doc/current/mailer.html#sending-messages-async).
+    **Ref:** [Sending messages async](https://symfony.com/doc/8.0/mailer.html#sending-messages-async).
 
 ??? question "Q2. Which class renders Twig templates into an email?"
     - [x] A. `Symfony\Bridge\Twig\Mime\TemplatedEmail` ✅
@@ -288,14 +288,14 @@ de répondre.
     - [ ] C. `Symfony\Component\Mailer\Mailer`
 
     **Why:** `TemplatedEmail` (bridge Twig) transporte le template + le context.
-    **Ref:** [HTML content](https://symfony.com/doc/current/mailer.html#twig-html-css).
+    **Ref:** [HTML content](https://symfony.com/doc/8.0/mailer.html#twig-html-css).
 
 ??? question "Q3. How are inline images referenced in the HTML body?"
     - [x] A. via a `cid:` reference from `embedFromPath()`/`embed()` ✅
     - [ ] B. as external URLs only
     - [ ] C. they cannot be inlined
 
-    **Why:** Les parts embarquées sont adressées avec `cid:<name>`. **Ref:** [Embedding images](https://symfony.com/doc/current/mailer.html#embedding-images).
+    **Why:** Les parts embarquées sont adressées avec `cid:<name>`. **Ref:** [Embedding images](https://symfony.com/doc/8.0/mailer.html#embedding-images).
 
 ## Key takeaways
 
@@ -319,8 +319,8 @@ de répondre.
 - **Confused with:** l'`Envelope` du Mailer (expéditeur/destinataires pour la conversation SMTP) vs les headers visibles du message.
 
 ## Official References
-- [Official docs — Mailer](https://symfony.com/doc/current/mailer.html)
-- [Official docs — Mime](https://symfony.com/doc/current/components/mime.html)
+- [Official docs — Mailer](https://symfony.com/doc/8.0/mailer.html)
+- [Official docs — Mime](https://symfony.com/doc/8.0/components/mime.html)
 - [Symfony source — Mailer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Mailer/Mailer.php)
 
 ## Video references
@@ -332,7 +332,7 @@ de répondre.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/mailer.html#sending-messages-async) — certaines pages de la doc Symfony embarquent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/mailer.html#sending-messages-async) — certaines pages de la doc Symfony embarquent un screencast.
 
 ## Confidence check
 

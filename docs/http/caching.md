@@ -213,7 +213,7 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
 
     **Why:** While fresh (`max-age`), the cache serves without any request;
     validation always sends a conditional request.
-    **Ref:** [Symfony HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [Symfony HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q2. `s-maxage` applies to…"
     - [ ] A. the browser cache only
@@ -223,7 +223,7 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
 
     **Why:** `s-maxage` is honoured only by shared caches and overrides `max-age`
     there.
-    **Ref:** [Cache expiration](https://symfony.com/doc/current/http_cache/expiration.html).
+    **Ref:** [Cache expiration](https://symfony.com/doc/8.0/http_cache/expiration.html).
 
 ??? question "Q3. What does `Response::isNotModified()` return/produce on a match?"
     - [x] A. true, and turns the response into a bodyless 304 ✅
@@ -257,7 +257,7 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
 - **Confused with:** [Status Codes](status-codes.md) — validation ends in **304**, freshness in a served **200**; don't mix the two models.
 
 ## Official References
-- [Symfony docs — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony docs — HTTP Cache](https://symfony.com/doc/8.0/http_cache.html)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
@@ -270,7 +270,7 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

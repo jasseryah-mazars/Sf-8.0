@@ -32,7 +32,7 @@ Verification legend: **Build** = enforced by `mkdocs build --strict` / CI ·
 | FR-9 | Every chapter with a flow/lifecycle/hierarchy includes at least one Mermaid diagram. | Review |
 | FR-10 | Every code snippet compiles (valid `<?php`, `declare(strict_types=1)`, real imports/types) and is Symfony 8 / PHP 8.4. | Review |
 | FR-11 | Every chapter includes: best-practices/anti-patterns table, when-(not)-to-use, certification traps, common mistakes, exercises + hidden solutions, inline certification questions, key takeaways, last-minute revision, and references. | Review |
-| FR-12 | Official-doc references use `symfony.com/doc/current`; source references pin `github.com/symfony/symfony/blob/8.0`. | Build, Review |
+| FR-12 | Official-doc references use `symfony.com/doc/8.0`; source references pin `github.com/symfony/symfony/blob/8.0`. | Build, Review |
 
 ### Navigation & information architecture
 
@@ -88,7 +88,7 @@ Each maps to a Quality Requirement; the normative statement lives there.
 | NFR-3 | One template, one voice, uniform terminology and conventions. | [Q3](QualityRequirements.md) |
 | NFR-4 | 100% syllabus completeness with full per-chapter anatomy. | [Q4](QualityRequirements.md) |
 | NFR-5 | Mobile-first readability: micro-chapters (150–450 lines), narrow tables, small diagrams. | [Q5](QualityRequirements.md) |
-| NFR-6 | Maintainability: small decoupled files, `doc/current` + `8.0` source pins, clear contribution path. | [Q6](QualityRequirements.md), [FutureMaintenance.md](FutureMaintenance.md) |
+| NFR-6 | Maintainability: small decoupled files, `doc/8.0` + `8.0` source pins, clear contribution path. | [Q6](QualityRequirements.md), [FutureMaintenance.md](FutureMaintenance.md) |
 | NFR-7 | Buildability: strict green build, no broken links or orphans. | [Q7](QualityRequirements.md) |
 | NFR-8 | Learnability: content ordered by the optimized Roadmap. | [Q8](QualityRequirements.md) |
 | NFR-9 | Clear, concise, progressive, precise English; no filler or duplication. | [Q9](QualityRequirements.md) |

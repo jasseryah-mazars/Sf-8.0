@@ -232,7 +232,7 @@ switch off CSRF explicitly.
 
     **Why:** `form_row` composes label + widget + errors + help via the
     `field_row`/`*_row` theme block.
-    **Ref:** [Form rendering functions](https://symfony.com/doc/current/form/form_customization.html).
+    **Ref:** [Form rendering functions](https://symfony.com/doc/8.0/form/form_customization.html).
 
 ??? question "Q2. How is the CSRF token normally emitted in the HTML?"
     - [x] A. By `form_rest`, which `form_end` calls by default ✅
@@ -242,7 +242,7 @@ switch off CSRF explicitly.
 
     **Why:** The CSRF field is a hidden child rendered by `form_rest`; `form_end`
     triggers `form_rest` unless `render_rest: false`.
-    **Ref:** [CSRF protection](https://symfony.com/doc/current/security/csrf.html).
+    **Ref:** [CSRF protection](https://symfony.com/doc/8.0/security/csrf.html).
 
 ??? question "Q3. Which shows form-level (non-field) errors?"
     - [x] A. `form_errors(form)` ✅
@@ -252,7 +252,7 @@ switch off CSRF explicitly.
 
     **Why:** Passing the root view to `form_errors` renders errors attached to
     the form itself (e.g. from a class-level constraint).
-    **Ref:** [Form errors](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form errors](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -277,8 +277,8 @@ switch off CSRF explicitly.
 - **Confused with:** [CSRF protection](csrf.md) — `form_rest`/`form_end` is what actually emits the token into the HTML.
 
 ## Official References
-- [Official Symfony docs — Form customization](https://symfony.com/doc/current/form/form_customization.html)
-- [Official Symfony docs — Rendering forms](https://symfony.com/doc/current/forms.html)
+- [Official Symfony docs — Form customization](https://symfony.com/doc/8.0/form/form_customization.html)
+- [Official Symfony docs — Rendering forms](https://symfony.com/doc/8.0/forms.html)
 - [Symfony source — Twig FormExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php)
 
 ## Video references
@@ -290,7 +290,7 @@ switch off CSRF explicitly.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/form_customization.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/form_customization.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

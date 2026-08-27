@@ -296,7 +296,7 @@ d'une manière qui casse l'autowiring.
     - [ ] C. Random UUIDs
 
     **Why:** Le FQCN est l'id ; l'autowiring fait correspondre le type. **Ref:**
-    [Service container](https://symfony.com/doc/current/service_container.html).
+    [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. What case are environment variables?"
     - [x] A. UPPER_SNAKE_CASE, usually `APP_`-prefixed ✅
@@ -304,7 +304,7 @@ d'une manière qui casse l'autowiring.
     - [ ] C. kebab-case
 
     **Why:** Les variables d'environnement utilisent l'upper snake case. **Ref:**
-    [Configuration — env vars](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables).
+    [Configuration — env vars](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables).
 
 ??? question "Q3. Which is a correctly named route?"
     - [x] A. `invoice_show` ✅
@@ -312,7 +312,7 @@ d'une manière qui casse l'autowiring.
     - [ ] C. `invoice show`
 
     **Why:** Les routes utilisent le snake_case, typiquement `entity_action`. **Ref:**
-    [Routing](https://symfony.com/doc/current/routing.html).
+    [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -336,9 +336,9 @@ d'une manière qui casse l'autowiring.
 - **Confused with:** [Best Practices](best-practices.md) — le nommage est l'ensemble de règles mécaniques ; les best practices expliquent les choix de conception.
 
 ## Official References
-- [Official docs — Coding standards](https://symfony.com/doc/current/contributing/code/standards.html)
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official docs — Coding standards](https://symfony.com/doc/8.0/contributing/code/standards.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Routing](https://symfony.com/doc/8.0/routing.html)
 
 ## Video references
 
@@ -350,7 +350,7 @@ d'une manière qui casse l'autowiring.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

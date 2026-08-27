@@ -347,7 +347,7 @@ prod so a missing optional variable renders as empty rather than erroring.
 
 ## Official References
 - [Official — Twig for template designers](https://twig.symfony.com/doc/3.x/templates.html)
-- [Official — Creating templates (Symfony)](https://symfony.com/doc/current/templates.html)
+- [Official — Creating templates (Symfony)](https://symfony.com/doc/8.0/templates.html)
 - [Twig source — Environment/Compiler](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php)
 
 ## Video references
@@ -359,7 +359,7 @@ prod so a missing optional variable renders as empty rather than erroring.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

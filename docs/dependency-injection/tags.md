@@ -320,7 +320,7 @@ simpler. If you must *transform* definitions (not just collect), you need a
     - [ ] D. The raw tag string
 
     **Why:** The locator instantiates services on demand, keyed by the index.
-    **Ref:** [Service subscribers & locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    **Ref:** [Service subscribers & locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. Higher `priority` on a tag means the service is…"
     - [x] A. Earlier in the tagged iterator ✅
@@ -329,7 +329,7 @@ simpler. If you must *transform* definitions (not just collect), you need a
     - [ ] D. Ignored
 
     **Why:** Tagged collections are sorted by descending priority.
-    **Ref:** [Tags with priority](https://symfony.com/doc/current/service_container/tags.html#tagged-services-with-priority).
+    **Ref:** [Tags with priority](https://symfony.com/doc/8.0/service_container/tags.html#tagged-services-with-priority).
 
 ??? question "Q3. How can every implementation of an interface get a tag automatically?"
     - [x] A. `#[AutoconfigureTag]` on the interface or `_instanceof` in YAML ✅
@@ -338,7 +338,7 @@ simpler. If you must *transform* definitions (not just collect), you need a
     - [ ] D. Using `#[AsTaggedItem]`
 
     **Why:** Autoconfiguration maps an interface to a tag for all implementers.
-    **Ref:** [Autoconfiguring tags](https://symfony.com/doc/current/service_container/tags.html).
+    **Ref:** [Autoconfiguring tags](https://symfony.com/doc/8.0/service_container/tags.html).
 
 ## Key takeaways
 
@@ -367,8 +367,8 @@ simpler. If you must *transform* definitions (not just collect), you need a
   *builds* a locator; a locator is the general lazy-set primitive.
 
 ## Official References
-- [Official Symfony docs — Service Tags](https://symfony.com/doc/current/service_container/tags.html)
-- [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Service Tags](https://symfony.com/doc/8.0/service_container/tags.html)
+- [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — PriorityTaggedServiceTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PriorityTaggedServiceTrait.php)
 
 ## Video references
@@ -380,7 +380,7 @@ simpler. If you must *transform* definitions (not just collect), you need a
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

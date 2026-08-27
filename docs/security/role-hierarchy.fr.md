@@ -298,7 +298,7 @@ forcer un lien parent/enfant artificiel.
 
     **Why:** La hiérarchie n'est résolue que pendant les contrôles d'accès
     par le `RoleHierarchyVoter` ; `getRoles()` est votre propre donnée brute.
-    **Ref:** [Hierarchical roles](https://symfony.com/doc/current/security.html#hierarchical-roles).
+    **Ref:** [Hierarchical roles](https://symfony.com/doc/8.0/security.html#hierarchical-roles).
 
 ??? question "Q2. Which service expands a set of roles the way access checks do?"
     - [ ] A. `TokenStorageInterface`
@@ -318,7 +318,7 @@ forcer un lien parent/enfant artificiel.
 
     **Why:** `getReachableRoleNames()` suit la carte récursivement, et
     `isGranted()` comme `access_control` l'utilisent via le voter.
-    **Ref:** [Hierarchical roles](https://symfony.com/doc/current/security.html#hierarchical-roles).
+    **Ref:** [Hierarchical roles](https://symfony.com/doc/8.0/security.html#hierarchical-roles).
 
 ??? question "Q4. Which voter enforces roles when a hierarchy is configured?"
     - [ ] A. `AuthenticatedVoter`
@@ -366,7 +366,7 @@ forcer un lien parent/enfant artificiel.
   le token brut).
 
 ## Official References
-- [Symfony docs — Hierarchical roles](https://symfony.com/doc/current/security.html#hierarchical-roles)
+- [Symfony docs — Hierarchical roles](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
 - [Symfony source — RoleHierarchy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Role/RoleHierarchy.php)
 - [Symfony source — RoleHierarchyVoter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/RoleHierarchyVoter.php)
 
@@ -380,7 +380,7 @@ forcer un lien parent/enfant artificiel.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#hierarchical-roles) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#hierarchical-roles) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

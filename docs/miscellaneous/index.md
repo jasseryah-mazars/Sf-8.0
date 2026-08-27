@@ -43,7 +43,7 @@ in the syllabus.
   attachments/embedding, async sending via Messenger, the Mime part model.
 - [Filesystem & Finder Components](filesystem-finder.md) — file operations and
   the fluent file iterator.
-- [Lock Component](lock.md) — `LockFactory`, blocking vs non-blocking, stores,
+- [Lock Component](../appendices/out-of-syllabus/lock.md) — `LockFactory`, blocking vs non-blocking, stores,
   expiring/auto-refreshing and shared locks.
 - [Web Profiler & Data Collectors](profiler.md) — the toolbar, custom
   `DataCollectorInterface`, when it runs, prod disabling.
@@ -59,7 +59,7 @@ in the syllabus.
 Start with the data-shaping components — [Serializer](serializer.md),
 [PropertyAccess](property-access.md), and [Mailer](mailer.md) — followed by
 the infrastructure set
-([Cache](cache.md), [Lock](lock.md), [Process](process.md),
+([Cache](cache.md), [Lock](../appendices/out-of-syllabus/lock.md), [Process](process.md),
 [Filesystem & Finder](filesystem-finder.md)). Fold in
 [Config](configuration.md), [Runtime](runtime.md), [Clock](clock.md) and
 [Intl](intl.md), and finish with the operational trio
@@ -68,6 +68,6 @@ the infrastructure set
 
 ## Official References
 
-- [Symfony documentation — Symfony Components](https://symfony.com/doc/current/components/index.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Symfony Components](https://symfony.com/doc/8.0/components/index.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

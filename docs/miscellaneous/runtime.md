@@ -238,7 +238,7 @@ the app object is created/run. The component is transparent for standard apps.
     - [ ] C. Nothing — it echoes output
 
     **Why:** The runtime invokes the returned callable, resolving its arguments.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html).
 
 ??? question "Q2. Which env var selects the runtime class?"
     - [x] A. `APP_RUNTIME` ✅
@@ -246,7 +246,7 @@ the app object is created/run. The component is transparent for standard apps.
     - [ ] C. `SYMFONY_RUNTIME`
 
     **Why:** `APP_RUNTIME` (or composer `extra.runtime.class`) chooses the runtime.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html#using-the-runtime).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html#using-the-runtime).
 
 ??? question "Q3. `SymfonyRuntime` extends which class?"
     - [x] A. `GenericRuntime` ✅
@@ -277,7 +277,7 @@ the app object is created/run. The component is transparent for standard apps.
 - **Confused with:** the `Kernel` itself — the runtime *runs* the kernel; it isn't the kernel.
 
 ## Official References
-- [Official docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
+- [Official docs — Runtime](https://symfony.com/doc/8.0/components/runtime.html)
 - [Symfony source — RuntimeInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php)
 - [Symfony source — SymfonyRuntime](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/SymfonyRuntime.php)
 
@@ -290,7 +290,7 @@ the app object is created/run. The component is transparent for standard apps.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/runtime.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/runtime.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -258,7 +258,7 @@ For form-driven uploads, use the `FileType` field — see
     - [ ] D. the form field name
 
     **Why:** client-provided values are spoofable; the guesser inspects content.
-    **Ref:** [file uploads](https://symfony.com/doc/current/controller/upload_file.html).
+    **Ref:** [file uploads](https://symfony.com/doc/8.0/controller/upload_file.html).
 
 ??? question "Q2. What does `UploadedFile::move()` do on failure?"
     - [ ] A. Returns false.
@@ -275,7 +275,7 @@ For form-driven uploads, use the `FileType` field — see
     - [ ] D. is ignored in prod
 
     **Why:** the resolver validates and aborts with an HTTP error on failure.
-    **Ref:** [value resolvers](https://symfony.com/doc/current/controller/value_resolver.html).
+    **Ref:** [value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ## Key takeaways
 
@@ -299,8 +299,8 @@ For form-driven uploads, use the `FileType` field — see
 - **Confused with:** [Forms → File Upload](../forms/file-upload.md) — the `FileType` field wraps this with CSRF, binding, and error rendering.
 
 ## Official References
-- [Official Symfony docs — Uploading Files](https://symfony.com/doc/current/controller/upload_file.html)
-- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
+- [Official Symfony docs — Uploading Files](https://symfony.com/doc/8.0/controller/upload_file.html)
+- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
 
 ## Video references
@@ -312,7 +312,7 @@ For form-driven uploads, use the `FileType` field — see
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/upload_file.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/upload_file.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

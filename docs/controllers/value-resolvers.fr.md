@@ -371,7 +371,7 @@ rien retourné.
     - [ ] D. `ControllerResolverInterface`
 
     **Why:** l'interface scindée `supports()`/`resolve()` a été supprimée ;
-    `resolve()` retourne désormais un `iterable`. **Ref:** [value resolvers](https://symfony.com/doc/current/controller/value_resolver.html).
+    `resolve()` retourne désormais un `iterable`. **Ref:** [value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ??? question "Q2. How does a resolver indicate it does not handle an argument?"
     - [x] A. Yield nothing (return an empty iterable). ✅
@@ -380,7 +380,7 @@ rien retourné.
     - [ ] D. Return `null`.
 
     **Why:** ne rien yielder passe l'argument au resolver suivant.
-    **Ref:** [value resolvers](https://symfony.com/doc/current/controller/value_resolver.html).
+    **Ref:** [value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ??? question "Q3. Which resolver has the highest default priority?"
     - [x] A. `RequestValueResolver` / `SessionValueResolver` (120) ✅
@@ -399,7 +399,7 @@ rien retourné.
 
     **Why:** le flux serializer/validator lance une
     `UnprocessableEntityHttpException` (422) pour les erreurs de validation.
-    **Ref:** [mapping request payload](https://symfony.com/doc/current/controller/value_resolver.html#mapping-the-whole-request-payload).
+    **Ref:** [mapping request payload](https://symfony.com/doc/8.0/controller/value_resolver.html#mapping-the-whole-request-payload).
 
 ??? question "Q5. `#[MapQueryParameter]` vs `#[MapQueryString]` — the difference?"
     - [x] A. `MapQueryParameter` binds one typed param; `MapQueryString` maps the whole query into a DTO. ✅
@@ -408,7 +408,7 @@ rien retourné.
     - [ ] D. Both require Doctrine.
 
     **Why:** l'un lie un seul scalaire, l'autre désérialise + valide un DTO.
-    **Ref:** [value resolver](https://symfony.com/doc/current/controller/value_resolver.html).
+    **Ref:** [value resolver](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ## Key takeaways
 
@@ -437,7 +437,7 @@ rien retourné.
 - **À ne pas confondre avec :** [The Request](request.md) — `RequestValueResolver` remplit l'argument `Request` ; les attributs Map* construisent des DTO.
 
 ## Official References
-- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
+- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html)
 - [Symfony source — ArgumentResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 - [Symfony source — value resolver services (web.php)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Resources/config/web.php)
 
@@ -450,7 +450,7 @@ rien retourné.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/value_resolver.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/value_resolver.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

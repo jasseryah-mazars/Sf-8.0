@@ -321,7 +321,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     **Why:** Cascading is opt-in per property via `Valid`; otherwise nested objects
     are ignored.
-    **Ref:** [Valid](https://symfony.com/doc/current/reference/constraints/Valid.html).
+    **Ref:** [Valid](https://symfony.com/doc/8.0/reference/constraints/Valid.html).
 
 ??? question "Q2. A rule needs to compare two properties of the same object. Best scope?"
     - [ ] A. Property scope on each field
@@ -331,7 +331,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     **Why:** Cross-field rules need the whole object, so a class-target constraint
     is correct.
-    **Ref:** [Expression](https://symfony.com/doc/current/reference/constraints/Expression.html).
+    **Ref:** [Expression](https://symfony.com/doc/8.0/reference/constraints/Expression.html).
 
 ??? question "Q3. What property path does a violation from `isActive()` use?"
     - [ ] A. `isActive`
@@ -341,7 +341,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     **Why:** Getter constraints report on the property-ised name; `isActive`/`getActive`
     map to `active`.
-    **Ref:** [Validation — getters](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation — getters](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -365,7 +365,7 @@ graph on every request has a cost. For collections of scalars use `All`
 - **Confused with:** [Built-in Constraints](built-in-constraints.md) — `Valid` cascades into objects; `All` applies constraints to scalar elements.
 
 ## Official References
-- [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveContextualValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveContextualValidator.php)
 
 ## Video references
@@ -377,7 +377,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/Valid.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/Valid.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

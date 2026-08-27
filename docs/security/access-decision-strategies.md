@@ -270,7 +270,7 @@ choice is irrelevant by construction.
 
     **Why:** Affirmative is the default: a single `ACCESS_GRANTED` wins,
     regardless of denies.
-    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q2. Under `unanimous`, votes are GRANTED + ABSTAIN + ABSTAIN. Outcome?"
     - [x] A. Granted — abstain is not a deny ✅
@@ -290,7 +290,7 @@ choice is irrelevant by construction.
 
     **Why:** All strategies fall back to `allow_if_all_abstain` when no voter
     casts a real vote, and it defaults to `false`.
-    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q4. Where do you plug a custom decision algorithm?"
     - [ ] A. `security.firewalls.main.strategy`
@@ -301,7 +301,7 @@ choice is irrelevant by construction.
     **Why:** `strategy_service` swaps the strategy object; `service` would
     replace the entire manager. Both live under
     `security.access_decision_manager`, never under a firewall.
-    **Ref:** [Custom access decision strategy](https://symfony.com/doc/current/security/voters.html#custom-access-decision-strategy).
+    **Ref:** [Custom access decision strategy](https://symfony.com/doc/8.0/security/voters.html#custom-access-decision-strategy).
 
 ## Key takeaways
 
@@ -335,7 +335,7 @@ choice is irrelevant by construction.
   entry point; the strategy is the *tally rule* at the very end.
 
 ## Official References
-- [Symfony docs — Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy)
+- [Symfony docs — Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
 - [Symfony source — AccessDecisionStrategyInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Strategy/AccessDecisionStrategyInterface.php)
 
@@ -348,7 +348,7 @@ choice is irrelevant by construction.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

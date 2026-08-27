@@ -270,4 +270,4 @@ practice toolchain over a **1,292-question bank** covering all 157 sub-topics:
 
 - [Official Symfony Certification](https://certification.symfony.com/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

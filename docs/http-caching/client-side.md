@@ -280,7 +280,7 @@ resource — you change its **URL** instead (cache busting).
 
     **Why:** `s-maxage` targets shared caches; the browser is a private cache and
     uses `max-age`/`Expires`.
-    **Ref:** [HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q2. A normal browser **reload** typically sends…"
     - [ ] A. `Cache-Control: no-store`
@@ -339,7 +339,7 @@ resource — you change its **URL** instead (cache busting).
   per-user and out of your control; the reverse proxy is shared and yours.
 
 ## Official References
-- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony docs — HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
 - [MDN — Cache-Control (request directives)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 
@@ -352,7 +352,7 @@ resource — you change its **URL** instead (cache busting).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

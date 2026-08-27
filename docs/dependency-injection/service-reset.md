@@ -295,7 +295,7 @@ instance per injection is acceptable.
 
     **Why:** It iterates only instantiated tagged services and invokes their
     reset method(s); the container and instances survive.
-    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset).
+    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset).
 
 ??? question "Q2. How does a service become resettable with zero configuration?"
     - [x] A. Implement `Symfony\Contracts\Service\ResetInterface` — autoconfiguration adds the `kernel.reset` tag ✅
@@ -305,7 +305,7 @@ instance per injection is acceptable.
 
     **Why:** The framework autoconfigures `ResetInterface` implementors with
     the `kernel.reset` tag (method `reset`).
-    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset).
+    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset).
 
 ??? question "Q3. In `messenger:consume`, what is the role of `--limit=100` relative to service resetting?"
     - [x] A. It stops the worker after 100 messages so a supervisor restarts a fresh process — a backstop for leaks reset cannot fix ✅
@@ -316,7 +316,7 @@ instance per injection is acceptable.
     **Why:** Reset handles per-message state; process recycling
     (`--limit`/`--time-limit`/`--memory-limit`) handles memory growth and
     unresettable state.
-    **Ref:** [Messenger](https://symfony.com/doc/current/messenger.html).
+    **Ref:** [Messenger](https://symfony.com/doc/8.0/messenger.html).
 
 ??? question "Q4. A service tagged `kernel.reset` was never instantiated during the request. What happens at reset time?"
     - [x] A. Nothing — the resetter only touches initialized services ✅
@@ -326,7 +326,7 @@ instance per injection is acceptable.
 
     **Why:** Forcing instantiation just to reset would defeat laziness; the
     resetter's iterator yields only services that exist.
-    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset).
+    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset).
 
 ## Key takeaways
 
@@ -365,8 +365,8 @@ instance per injection is acceptable.
 
 ## Official References
 
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
-- [Official Symfony docs — Built-in Symfony Service Tags (`kernel.reset`)](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
+- [Official Symfony docs — Built-in Symfony Service Tags (`kernel.reset`)](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
 - [Symfony source — ServicesResetter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DependencyInjection/ServicesResetter.php)
 
 ## Video references
@@ -378,7 +378,7 @@ instance per injection is acceptable.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

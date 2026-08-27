@@ -713,28 +713,28 @@
 
     Twig HTML-escapes variables by default (context-aware), so injected markup renders as inert text. It does not strip tags (it encodes them), does not send CSP (a separate, complementary defence), and does not encrypt output. The |raw filter opts out and reintroduces the risk. Misconception: thinking escaping removes content — it encodes it so the browser treats it as data.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
 ??? question "102. Which technique best prevents SQL injection?"
     **✅ Prepared statements with bound parameters**
 
     Binding sends the data separately from the SQL text, so input can never alter the query structure. addslashes is fragile and charset-dependent, a WAF is defence-in-depth not a fix, and HTML-escaping addresses XSS, not SQL. Symfony apps use PDO/DBAL with bound parameters. Misconception: believing escaping input is equivalent to parameterisation — only binding structurally separates code from data.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "103. Session fixation is primarily mitigated by…"
     **✅ Regenerating the session id on login**
 
     Migrating to a new session id at authentication invalidates any attacker-planted id — Symfony does this automatically on login. Longer ids help against guessing (not fixation), logout-only deletion leaves the login window open, and encoding an id changes nothing about the attack. Misconception: conflating fixation (attacker sets the id pre-login) with hijacking (attacker steals the cookie) — they need different defences.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "104. Which response header defends against clickjacking?"
     **✅ X-Frame-Options: DENY (or CSP frame-ancestors)**
 
     X-Frame-Options: DENY (or CSP frame-ancestors 'none') forbids the page from being framed, defeating invisible-iframe clickjacking. X-Content-Type-Options stops MIME sniffing, Referrer-Policy limits referer leakage, and Accept-Language is a request header. Misconception: assuming any security header helps against any attack — each header targets a specific threat.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "105. What is the correct way to store user passwords?"
     **✅ password_hash() with bcrypt or argon2id**
@@ -748,42 +748,42 @@
 
     XSS defence must be context-aware: a value safe as HTML text can still break out inside JavaScript or a URL, so you need the js or url escaping strategy there. HTML escaping is not universally sufficient, Twig does not silently disable escaping in script tags, and URLs routinely carry user data (which must be url-encoded). Misconception: treating one escaping strategy as a cure-all across all output contexts.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
 ??? question "107. In Twig, `{{ comment }}` renders the value `<script>alert(1)</script>`. What is output and why is it safe?"
     **✅ &lt;script&gt;alert(1)&lt;/script&gt; — escaped to inert text, so the script never runs**
 
     Twig auto-escapes to HTML entities, so the browser shows the literal text and executes nothing. It does not run the script (that would require |raw), does not strip the tag (it encodes it), and does not error on the content. Only |raw on this value would reintroduce the XSS. Misconception: assuming the tag is removed rather than entity-encoded.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
 ??? question "108. In framework.yaml, which session cookie settings harden against hijacking and CSRF?"
     **✅ cookie_secure: auto, cookie_httponly: true, cookie_samesite: lax**
 
     Secure (auto = on when HTTPS) keeps the cookie off plain HTTP, HttpOnly blocks JS access (anti-theft via XSS), and SameSite=lax curbs CSRF by not sending the cookie on cross-site navigations. The second option disables every protection; lifetime and domain settings alone do not harden against these attacks. Misconception: thinking SameSite=None (without Secure) is a safe default — it widens exposure.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 ??? question "109. How do the `HttpOnly` and `Secure` cookie flags differ?"
     **✅ HttpOnly blocks JavaScript access to the cookie; Secure restricts it to HTTPS connections**
 
     HttpOnly hides the cookie from document.cookie (mitigating theft via XSS); Secure ensures the cookie is only sent over TLS (mitigating network sniffing). They solve different problems, are not synonyms, and the third option swaps their meanings. Neither affects lifetime (that is Max-Age/ Expires). Misconception: assuming one flag covers both JS access and transport security.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 ??? question "110. True or False: a CSRF token is an authentication mechanism."
     **✅ False**
 
     A CSRF token proves a state-changing request originated from your own form/session, not that a particular user is authenticated — those are separate concerns. Authentication establishes identity; the CSRF token defends already-authenticated sessions from forged cross-site requests. Misconception: treating CSRF tokens as login/identity checks rather than request-origin proof for state-changing actions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/csrf.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/csrf.html)
 
 ??? question "111. Which pairings of threat and Symfony/PHP defence are correct? (choose two)"
     **✅ XSS is mitigated by Twig context-aware auto-escaping ; SQL injection is mitigated by prepared statements with bound parameters**
 
     XSS→output escaping and SQLi→parameter binding are the canonical pairings. CSRF is mitigated by tokens plus SameSite cookies (not output escaping, which addresses XSS), and clickjacking is mitigated by X-Frame-Options/CSP (password hashing protects stored credentials, an unrelated concern). Misconception: assuming one defence generalises across threats — each attack has its own countermeasure.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "112. A developer verifies passwords with `if ($hash == $storedHash)`. What is wrong and what is the fix?"
     **✅ == is non-constant-time (timing attack) and re-hashes wrongly; use password_verify()/hash_equals()**

@@ -282,7 +282,7 @@ password hasher.
 
     **Why:** `auto` sélectionne le meilleur algorithme disponible et s'adapte
     dans le temps.
-    **Ref:** [Passwords](https://symfony.com/doc/current/security/passwords.html).
+    **Ref:** [Passwords](https://symfony.com/doc/8.0/security/passwords.html).
 
 ??? question "Q2. Transparent rehash on login requires…"
     - [ ] A. Only `migrate_from`
@@ -292,7 +292,7 @@ password hasher.
 
     **Why:** `migrate_from` détecte l'ancien hachage ; l'upgrader persiste le
     nouveau via le flux du `PasswordUpgradeBadge`.
-    **Ref:** [Password migration](https://symfony.com/doc/current/security/passwords.html#password-migration).
+    **Ref:** [Password migration](https://symfony.com/doc/8.0/security/passwords.html#password-migration).
 
 ??? question "Q3. Where is a login password actually verified?"
     - [ ] A. In `getPassword()`
@@ -302,7 +302,7 @@ password hasher.
 
     **Why:** Le badge `PasswordCredentials` est contrôlé par le listener via le
     `verify()` du hasher.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -334,7 +334,7 @@ password hasher.
   indexé par classe d'utilisateur, pas par nom de provider ni de firewall.
 
 ## Official References
-- [Symfony docs — Passwords](https://symfony.com/doc/current/security/passwords.html)
+- [Symfony docs — Passwords](https://symfony.com/doc/8.0/security/passwords.html)
 - [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
 - [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
 
@@ -348,7 +348,7 @@ password hasher.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/passwords.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/passwords.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

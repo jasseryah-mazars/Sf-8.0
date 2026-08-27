@@ -281,7 +281,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - [ ] C. A templating engine
 
     **Why:** Flex automates package configuration at Composer time. **Ref:**
-    [Symfony Flex](https://symfony.com/doc/current/setup.html#symfony-flex).
+    [Symfony Flex](https://symfony.com/doc/8.0/setup.html#symfony-flex).
 
 ??? question "Q2. What does `symfony.lock` track?"
     - [x] A. Which recipes are installed and their versions ✅
@@ -289,7 +289,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - [ ] C. HTTP sessions
 
     **Why:** It records recipe application, separate from `composer.lock`. **Ref:**
-    [Using Symfony Flex](https://symfony.com/doc/current/setup.html).
+    [Using Symfony Flex](https://symfony.com/doc/8.0/setup.html).
 
 ??? question "Q3. How are bundles auto-registered by a recipe?"
     - [x] A. Entries are written to `config/bundles.php` ✅
@@ -297,7 +297,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - [ ] C. In `services.yaml`
 
     **Why:** The `bundles` configurator edits `config/bundles.php`. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ## Key takeaways
 
@@ -321,7 +321,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
 - **Confused with:** [Components](components.md) — Flex is Composer-time automation, not a runtime component.
 
 ## Official References
-- [Official docs — Setup & Flex](https://symfony.com/doc/current/setup.html)
+- [Official docs — Setup & Flex](https://symfony.com/doc/8.0/setup.html)
 - [Symfony Flex source](https://github.com/symfony/flex)
 - [Symfony recipes](https://github.com/symfony/recipes)
 
@@ -334,7 +334,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/setup.html#symfony-flex) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/setup.html#symfony-flex) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

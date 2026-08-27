@@ -345,7 +345,7 @@ controllers retournent `$this->render()` qui produit une `Response`.
 
     **Why:** `BinaryFileResponse` streame un fichier, prend en charge les
     requests `Range` et `X-Sendfile`.
-    **Ref:** [Streaming responses](https://symfony.com/doc/current/components/http_foundation.html#serving-files).
+    **Ref:** [Streaming responses](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files).
 
 ??? question "Q2. What does `Response::prepare()` do?"
     - [x] A. Makes the response compliant with the request (charset, body for HEAD/304, protocol) ✅
@@ -393,7 +393,7 @@ controllers retournent `$this->render()` qui produit une `Response`.
 - **Confused with:** [Caching Overview](caching.md) — les setters de cache (`setPublic`, `setEtag`) vivent sur `Response`.
 
 ## Official References
-- [Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html#response)
+- [Symfony docs — HttpFoundation Response](https://symfony.com/doc/8.0/components/http_foundation.html#response)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 - [Symfony source — ResponseHeaderBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
 
@@ -407,7 +407,7 @@ controllers retournent `$this->render()` qui produit une `Response`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html#serving-files) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

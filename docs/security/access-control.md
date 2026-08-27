@@ -261,7 +261,7 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
     - [ ] D. The last matching rule
 
     **Why:** `AccessMap` returns the first match; evaluation stops there.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control).
 
 ??? question "Q2. A rule has `roles: [ROLE_A, ROLE_B]`. Access is granted when the user has…"
     - [x] A. Either `ROLE_A` or `ROLE_B` ✅
@@ -270,7 +270,7 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
     - [ ] D. Exactly one
 
     **Why:** Multiple roles in a rule are OR-combined.
-    **Ref:** [access_control roles](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control).
+    **Ref:** [access_control roles](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control).
 
 ??? question "Q3. No `access_control` rule matches the request. What happens?"
     - [ ] A. 403 Forbidden
@@ -280,7 +280,7 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
 
     **Why:** `access_control` denies only on a matching rule; no match means no
     URL-level restriction.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html).
 
 ## Key takeaways
 
@@ -309,8 +309,8 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
   it cannot see a subject, unlike a voter.
 
 ## Official References
-- [Symfony docs — access_control](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
-- [Symfony docs — Security expressions](https://symfony.com/doc/current/security/expressions.html)
+- [Symfony docs — access_control](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control)
+- [Symfony docs — Security expressions](https://symfony.com/doc/8.0/security/expressions.html)
 - [Symfony source — AccessListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/AccessListener.php)
 
 ## Video references
@@ -322,7 +322,7 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

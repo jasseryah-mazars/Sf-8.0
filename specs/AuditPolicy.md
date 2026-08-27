@@ -7,7 +7,7 @@ continuous-improvement system, not a one-time generation.
 
 Every syllabus micro-chapter **must** end with a `## Official References` section:
 
-- **Symfony concepts** → official Symfony docs (`https://symfony.com/doc/current/…`),
+- **Symfony concepts** → official Symfony docs (`https://symfony.com/doc/8.0/…`),
   plus component/config/best-practice pages and Symfony **source** links when
   internals are discussed.
 - **PHP concepts** → the PHP manual (`https://www.php.net/manual/en/…`) and the

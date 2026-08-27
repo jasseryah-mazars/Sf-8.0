@@ -87,4 +87,4 @@ confondent, côte à côte. Parcourez-la le matin de l'examen.
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

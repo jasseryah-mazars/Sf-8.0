@@ -429,7 +429,7 @@ PSR-18-compatible if a library needs it.
 
     **Why:** `request()` returns a lazy response; the transfer completes on first
     access, which is what enables concurrency.
-    **Ref:** [HttpClient](https://symfony.com/doc/current/http_client.html).
+    **Ref:** [HttpClient](https://symfony.com/doc/8.0/http_client.html).
 
 ??? question "Q2. What does `getContent()` do on a 500 response by default?"
     - [ ] A. Returns the body
@@ -439,7 +439,7 @@ PSR-18-compatible if a library needs it.
 
     **Why:** By default errors throw; pass `false` to read the body without
     throwing.
-    **Ref:** [HttpClient exceptions](https://symfony.com/doc/current/http_client.html#handling-exceptions).
+    **Ref:** [HttpClient exceptions](https://symfony.com/doc/8.0/http_client.html#handling-exceptions).
 
 ??? question "Q3. Which type should you type-hint for autowiring an HTTP client?"
     - [x] A. `Symfony\Contracts\HttpClient\HttpClientInterface` ✅
@@ -448,7 +448,7 @@ PSR-18-compatible if a library needs it.
     - [ ] D. `Psr18Client`
 
     **Why:** Depend on the contract; the transport is chosen by the framework.
-    **Ref:** [HttpClient DI](https://symfony.com/doc/current/http_client.html).
+    **Ref:** [HttpClient DI](https://symfony.com/doc/8.0/http_client.html).
 
 ??? question "Q4. Which class lets you test API code with no network?"
     - [ ] A. `RetryableHttpClient`
@@ -458,7 +458,7 @@ PSR-18-compatible if a library needs it.
 
     **Why:** `MockHttpClient` returns `MockResponse` objects without real
     requests.
-    **Ref:** [Testing HttpClient](https://symfony.com/doc/current/http_client.html#testing).
+    **Ref:** [Testing HttpClient](https://symfony.com/doc/8.0/http_client.html#testing).
 
 ## Key takeaways
 
@@ -483,7 +483,7 @@ PSR-18-compatible if a library needs it.
 - **Confused with:** [HTTP Request](request.md) — HttpClient is the *outgoing* client; `Request` wraps the *incoming* exchange.
 
 ## Official References
-- [Symfony docs — HttpClient](https://symfony.com/doc/current/http_client.html)
+- [Symfony docs — HttpClient](https://symfony.com/doc/8.0/http_client.html)
 - [Symfony source — HttpClient](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpClient/HttpClient.php)
 - [Symfony source — HttpClientInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/HttpClient/HttpClientInterface.php)
 
@@ -496,7 +496,7 @@ PSR-18-compatible if a library needs it.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_client.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_client.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -248,7 +248,7 @@ differ per kind.
     **Why:** buses are configured independently (own middleware), and
     Messenger does not hard-code command/query/event semantics — you name
     and configure buses however you like.
-    **Ref:** [Messenger — Multiple buses](https://symfony.com/doc/current/messenger.html#messenger-multiple-buses).
+    **Ref:** [Messenger — Multiple buses](https://symfony.com/doc/8.0/messenger.html#messenger-multiple-buses).
 
 ??? question "Q2. How do you retrieve a synchronous handler's return value after `dispatch()`?"
     - [x] A. `$envelope->last(HandledStamp::class)?->getResult()` ✅
@@ -258,7 +258,7 @@ differ per kind.
 
     **Why:** the result is wrapped in a `HandledStamp` inside the returned
     `Envelope`, not returned directly.
-    **Ref:** [Messenger — Handling messages synchronously](https://symfony.com/doc/current/messenger.html#getting-results-from-the-handled-message).
+    **Ref:** [Messenger — Handling messages synchronously](https://symfony.com/doc/8.0/messenger.html#getting-results-from-the-handled-message).
 
 ??? question "Q3. A dispatched message throws `NoHandlerForMessageException`. What is the most likely cause?"
     - [x] A. The handler service is missing `#[AsMessageHandler]` (or its `use` import) ✅
@@ -268,7 +268,7 @@ differ per kind.
 
     **Why:** without the attribute (or explicit tagging), autoconfiguration
     never registers the service as a handler for that message type.
-    **Ref:** [Messenger — Creating a handler](https://symfony.com/doc/current/messenger.html#creating-a-message-handler).
+    **Ref:** [Messenger — Creating a handler](https://symfony.com/doc/8.0/messenger.html#creating-a-message-handler).
 
 ## Key takeaways
 
@@ -300,8 +300,8 @@ differ per kind.
 
 ## Official References
 
-- [Official docs — Messenger: multiple buses](https://symfony.com/doc/current/messenger.html#messenger-multiple-buses)
-- [Official docs — Getting results from a handled message](https://symfony.com/doc/current/messenger.html#getting-results-from-the-handled-message)
+- [Official docs — Messenger: multiple buses](https://symfony.com/doc/8.0/messenger.html#messenger-multiple-buses)
+- [Official docs — Getting results from a handled message](https://symfony.com/doc/8.0/messenger.html#getting-results-from-the-handled-message)
 - [Symfony source — DispatchAfterCurrentBusStamp](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Stamp/DispatchAfterCurrentBusStamp.php)
 
 ## Video references
@@ -313,7 +313,7 @@ differ per kind.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#messenger-multiple-buses) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#messenger-multiple-buses) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

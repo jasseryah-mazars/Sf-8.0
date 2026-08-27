@@ -314,7 +314,7 @@ transforms an existing value (`value|price`).
 
     **Why:** Current Twig 3.x provides `Twig\Attribute\AsTwigFilter` (and
     `AsTwigFunction`). **Ref:**
-    [Custom extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension).
+    [Custom extensions](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension).
 
 ??? question "Q2. A custom filter returns `<b>x</b>`. Why does the page show escaped text?"
     - [ ] A. Twig never escapes filter output
@@ -357,7 +357,7 @@ transforms an existing value (`value|price`).
 - **Confused with:** [Auto-Escaping](auto-escaping.md) — a filter's HTML output is escaped unless it declares `is_safe`.
 
 ## Official References
-- [Official — Twig extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
+- [Official — Twig extensions](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension)
 - [Twig — filters & functions reference](https://twig.symfony.com/doc/3.x/#reference)
 - [Twig source — CoreExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/CoreExtension.php)
 
@@ -370,7 +370,7 @@ transforms an existing value (`value|price`).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#creating-a-twig-extension) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

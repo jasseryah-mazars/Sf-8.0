@@ -280,7 +280,7 @@ access_control:
     - [ ] D. The last matching rule
 
     **Why:** L'`AccessMap` renvoie le premier match ; l'évaluation s'arrête là.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control).
 
 ??? question "Q2. A rule has `roles: [ROLE_A, ROLE_B]`. Access is granted when the user has…"
     - [x] A. Either `ROLE_A` or `ROLE_B` ✅
@@ -289,7 +289,7 @@ access_control:
     - [ ] D. Exactly one
 
     **Why:** Plusieurs roles dans une règle sont combinés en OR.
-    **Ref:** [access_control roles](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control).
+    **Ref:** [access_control roles](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control).
 
 ??? question "Q3. No `access_control` rule matches the request. What happens?"
     - [ ] A. 403 Forbidden
@@ -299,7 +299,7 @@ access_control:
 
     **Why:** `access_control` ne refuse que sur une règle correspondante ; pas
     de match signifie aucune restriction au niveau de l'URL.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html).
 
 ## Key takeaways
 
@@ -331,8 +331,8 @@ access_control:
   d'URL ; il ne peut pas voir de subject, contrairement à un voter.
 
 ## Official References
-- [Symfony docs — access_control](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
-- [Symfony docs — Security expressions](https://symfony.com/doc/current/security/expressions.html)
+- [Symfony docs — access_control](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control)
+- [Symfony docs — Security expressions](https://symfony.com/doc/8.0/security/expressions.html)
 - [Symfony source — AccessListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/AccessListener.php)
 
 ## Video references
@@ -345,7 +345,7 @@ access_control:
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

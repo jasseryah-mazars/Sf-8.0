@@ -315,7 +315,7 @@ configurez simplement les options au moment du `->add()`.
 
     **Why:** `getParent()` retourne une chaîne de classe (par défaut
     `FormType::class`) ; le registre la résout en chaîne de parents.
-    **Ref:** [Creating a custom type](https://symfony.com/doc/current/form/create_custom_field_type.html).
+    **Ref:** [Creating a custom type](https://symfony.com/doc/8.0/form/create_custom_field_type.html).
 
 ??? question "Q2. Which object bundles a type with its parents and extensions?"
     - [ ] A. `FormBuilder`
@@ -335,7 +335,7 @@ configurez simplement les options au moment du `->add()`.
 
     **Why:** Le type résolu parcourt la chaîne du haut vers le bas, si bien qu'un
     enfant peut surcharger les valeurs par défaut posées par son parent.
-    **Ref:** [Form types docs](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form types docs](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -363,8 +363,8 @@ configurez simplement les options au moment du `->add()`.
 - **Confused with:** [Built-in types](built-in-types.md) — ce sont les types de champs concrets ; ce chapitre couvre la hiérarchie et le mécanisme `ResolvedFormType` qui les sous-tend.
 
 ## Official References
-- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
-- [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
+- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/8.0/form/create_custom_field_type.html)
+- [Official Symfony docs — Form type options](https://symfony.com/doc/8.0/reference/forms/types.html)
 - [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)
 
 ## Video references
@@ -376,7 +376,7 @@ configurez simplement les options au moment du `->add()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_custom_field_type.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_custom_field_type.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

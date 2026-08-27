@@ -80,6 +80,6 @@ performance, l'échappement et le débogage.
 
 ## Official References
 
-- [Symfony documentation — Creating and Using Templates (Twig)](https://symfony.com/doc/current/templates.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Creating and Using Templates (Twig)](https://symfony.com/doc/8.0/templates.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

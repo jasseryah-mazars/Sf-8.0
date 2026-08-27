@@ -353,7 +353,7 @@ prédicats sur le texte).
 
     **Why:** `filter()` convertit le CSS en XPath via CssSelectorConverter ; le
     composant css-selector est requis.
-    **Ref:** [DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html).
+    **Ref:** [DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html).
 
 ??? question "Q2. Calling `text()` on a Crawler that matched nothing…"
     - [x] A. Throws unless you pass a default value ✅
@@ -363,7 +363,7 @@ prédicats sur le texte).
 
     **Why:** les méthodes de lecture de nœud opèrent sur le premier nœud et
     lèvent une exception sur un ensemble vide, sauf valeur par défaut.
-    **Ref:** [DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html#node-values).
+    **Ref:** [DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html#node-values).
 
 ??? question "Q3. `$crawler->selectButton('Save')->form(['title' => 'x'])` returns…"
     - [x] A. A `Form` pre-filled with page values, with `title` overridden ✅
@@ -373,7 +373,7 @@ prédicats sur le texte).
 
     **Why:** `form()` construit un `DomCrawler\Form` initialisé depuis le DOM ;
     l'argument surcharge des champs.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#forms).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#forms).
 
 ??? question "Q4. To follow an anchor you first obtain…"
     - [x] A. A `Link` via `$crawler->selectLink('Text')->link()` ✅
@@ -382,7 +382,7 @@ prédicats sur le texte).
     - [ ] D. A `Response`
 
     **Why:** `link()` construit un `DomCrawler\Link` pour `$client->click()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#clicking-links).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#clicking-links).
 
 ## Key takeaways
 
@@ -409,8 +409,8 @@ prédicats sur le texte).
 - **Confused with:** [Introspection](introspection.md) — le Crawler *trouve* les nœuds ; les helpers `assertSelector*` les *vérifient*.
 
 ## Official References
-- [Official Symfony docs — DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html)
-- [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/current/testing.html#the-crawler)
+- [Official Symfony docs — DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html)
+- [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/8.0/testing.html#the-crawler)
 - [Symfony source — Crawler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DomCrawler/Crawler.php)
 
 ## Video references
@@ -423,7 +423,7 @@ prédicats sur le texte).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/dom_crawler.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/dom_crawler.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

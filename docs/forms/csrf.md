@@ -279,7 +279,7 @@ mutates state under cookie auth **must** keep CSRF.
 
     **Why:** `CsrfValidationListener` runs on PRE_SUBMIT, pops `_token` from raw
     data and validates it.
-    **Ref:** [CSRF protection](https://symfony.com/doc/current/security/csrf.html).
+    **Ref:** [CSRF protection](https://symfony.com/doc/8.0/security/csrf.html).
 
 ??? question "Q2. What does `csrf_token_id` control?"
     - [ ] A. The hidden field's HTML name
@@ -289,7 +289,7 @@ mutates state under cookie auth **must** keep CSRF.
 
     **Why:** `csrf_token_id` is the intention string; `csrf_field_name` sets the
     HTML field name.
-    **Ref:** [Form CSRF options](https://symfony.com/doc/current/reference/forms/types/form.html).
+    **Ref:** [Form CSRF options](https://symfony.com/doc/8.0/reference/forms/types/form.html).
 
 ??? question "Q3. Stateless CSRF (7.2+) primarily removes the need for…"
     - [x] A. A server-side session to store tokens ✅
@@ -299,7 +299,7 @@ mutates state under cookie auth **must** keep CSRF.
 
     **Why:** `SameOriginCsrfTokenManager` validates via double-submit cookie +
     origin checks, so no token is stored in the session.
-    **Ref:** [Stateless CSRF](https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-login-forms).
+    **Ref:** [Stateless CSRF](https://symfony.com/doc/8.0/security/csrf.html#csrf-protection-in-login-forms).
 
 ## Key takeaways
 
@@ -324,8 +324,8 @@ mutates state under cookie auth **must** keep CSRF.
 - **Confused with:** [Form events](events.md) — the token is checked by a listener on `PRE_SUBMIT`, not a separate validation phase.
 
 ## Official References
-- [Official Symfony docs — CSRF protection](https://symfony.com/doc/current/security/csrf.html)
-- [Official Symfony docs — Form type CSRF options](https://symfony.com/doc/current/reference/forms/types/form.html)
+- [Official Symfony docs — CSRF protection](https://symfony.com/doc/8.0/security/csrf.html)
+- [Official Symfony docs — Form type CSRF options](https://symfony.com/doc/8.0/reference/forms/types/form.html)
 - [Symfony source — FormTypeCsrfExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Csrf/Type/FormTypeCsrfExtension.php)
 
 ## Video references
@@ -337,7 +337,7 @@ mutates state under cookie auth **must** keep CSRF.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/csrf.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/csrf.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

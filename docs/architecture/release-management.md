@@ -186,7 +186,7 @@ alternative cadence to opt into.
     - [ ] C. 8.2
 
     **Why:** The last minor of a major (`X.4`) is the LTS. **Ref:**
-    [Long Term Support](https://symfony.com/doc/current/contributing/community/releases.html).
+    [Long Term Support](https://symfony.com/doc/8.0/contributing/community/releases.html).
 
 ??? question "Q3. What may a minor release NOT do?"
     - [x] A. Break backward compatibility ✅
@@ -194,7 +194,7 @@ alternative cadence to opt into.
     - [ ] C. Add deprecations
 
     **Why:** Minors add features/deprecations but never break BC. **Ref:**
-    [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ## Key takeaways
 
@@ -218,8 +218,8 @@ alternative cadence to opt into.
 
 ## Official References
 - [Symfony releases](https://symfony.com/releases)
-- [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
-- [Backward compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
+- [Release process](https://symfony.com/doc/8.0/contributing/community/releases.html)
+- [Backward compatibility promise](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -230,7 +230,7 @@ alternative cadence to opt into.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/community/releases.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/community/releases.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

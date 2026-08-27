@@ -368,7 +368,7 @@ du container mais pas de HTTP, utilisez
     - [ ] D. `#[UseProvider]`
 
     **Why:** `PHPUnit\Framework\Attributes\DataProvider` remplace l'annotation
-    `@dataProvider`, supprimée. **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    `@dataProvider`, supprimée. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q2. A data-provider method must be…"
     - [x] A. `public static`, returning an iterable ✅
@@ -422,10 +422,10 @@ du container mais pas de HTTP, utilisez
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — les classes testables reçoivent leurs collaborateurs en arguments de constructeur, que vous pouvez doubler.
 - **Reused in:** [Functional Tests](functional-tests.md) — les mêmes doublures remplacent les services de frontière une fois le kernel démarré.
-- **Confused with:** [PHPUnit Bridge](phpunit-bridge.md) — le bridge ajoute l'outillage dépréciations/horloge par-dessus PHPUnit pur, pas la classe de base `TestCase`.
+- **Confused with:** [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — le bridge ajoute l'outillage dépréciations/horloge par-dessus PHPUnit pur, pas la classe de base `TestCase`.
 
 ## Official References
-- [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
+- [Official Symfony docs — Testing](https://symfony.com/doc/8.0/testing.html)
 - [PHPUnit — Writing tests](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)
 
@@ -439,7 +439,7 @@ du container mais pas de HTTP, utilisez
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -453,4 +453,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Functional Tests](functional-tests.md) · [Framework Objects](framework-objects.md) · [PHPUnit Bridge](phpunit-bridge.md)</small>
+<small>Related: [Functional Tests](functional-tests.md) · [Framework Objects](framework-objects.md) · [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md)</small>

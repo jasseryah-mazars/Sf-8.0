@@ -296,7 +296,7 @@ Ici, `_sidebar.html.twig` ne contient que des définitions
 - **Confused with:** [Includes](includes.md) — l'héritage remplit des *trous* dans un layout ; les includes déposent un *fragment* en place.
 
 ## Official References
-- [Official — Template inheritance](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts)
+- [Official — Template inheritance](https://symfony.com/doc/8.0/templates.html#template-inheritance-and-layouts)
 - [Twig — extends / use / block](https://twig.symfony.com/doc/3.x/tags/extends.html)
 - [Twig source — Template.php](https://github.com/twigphp/Twig/blob/3.x/src/Template.php)
 
@@ -310,7 +310,7 @@ Ici, `_sidebar.html.twig` ne contient que des définitions
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#template-inheritance-and-layouts) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

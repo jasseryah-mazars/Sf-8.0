@@ -239,8 +239,8 @@ possède l'argument** — c'est précisément pourquoi l'examen le demande.
 
 - [ControllerResolver.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ControllerResolver.php)
 - [ArgumentResolver.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
-- [Extending Action Argument Resolving](https://symfony.com/doc/current/controller/value_resolver.html)
-- [Mapping Request Data to Typed Objects](https://symfony.com/doc/current/controller.html#mapping-request-data-to-typed-objects)
+- [Extending Action Argument Resolving](https://symfony.com/doc/8.0/controller/value_resolver.html)
+- [Mapping Request Data to Typed Objects](https://symfony.com/doc/8.0/controller.html#mapping-request-data-to-typed-objects)
 
 ---
 <small>Related: [Value Resolvers](../controllers/value-resolvers.md) ·

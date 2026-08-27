@@ -319,7 +319,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     **Why:** `getExtendedTypes()` (statique, iterable) a remplacé l'ancienne
     méthode au singulier `getExtendedType()`.
-    **Ref:** [Form type extensions](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ??? question "Q2. How is a type extension registered with autoconfiguration on?"
     - [x] A. Automatically, via the `form.type_extension` tag on `FormTypeExtensionInterface` services ✅
@@ -329,7 +329,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     **Why:** Symfony tague automatiquement les implémentations ; aucun attribut
     n'existe pour cela.
-    **Ref:** [Form type extensions docs](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ??? question "Q3. What does returning `FormType::class` from `getExtendedTypes()` do?"
     - [x] A. Applies the extension to every form type ✅
@@ -339,7 +339,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     **Why:** Tous les types descendent de `FormType`, donc l'extension s'attache
     à tous.
-    **Ref:** [Form type extensions docs](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ## Key takeaways
 
@@ -369,7 +369,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 - **Confused with:** [Data transformers](data-transformers.md) — les extensions augmentent options/comportement, pas la conversion des valeurs.
 
 ## Official References
-- [Official Symfony docs — Create a form type extension](https://symfony.com/doc/current/form/create_form_type_extension.html)
+- [Official Symfony docs — Create a form type extension](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
 - [Symfony source — AbstractTypeExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/AbstractTypeExtension.php)
 
 ## Video references
@@ -382,7 +382,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_form_type_extension.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_form_type_extension.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

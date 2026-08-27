@@ -197,7 +197,7 @@ alternative à laquelle souscrire.
     - [ ] C. 8.2
 
     **Why:** La dernière mineure d'une majeure (`X.4`) est la LTS. **Ref:**
-    [Long Term Support](https://symfony.com/doc/current/contributing/community/releases.html).
+    [Long Term Support](https://symfony.com/doc/8.0/contributing/community/releases.html).
 
 ??? question "Q3. What may a minor release NOT do?"
     - [x] A. Break backward compatibility ✅
@@ -205,7 +205,7 @@ alternative à laquelle souscrire.
     - [ ] C. Add deprecations
 
     **Why:** Les mineures ajoutent des fonctionnalités et des dépréciations mais ne cassent jamais la BC. **Ref:**
-    [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ## Key takeaways
 
@@ -229,8 +229,8 @@ alternative à laquelle souscrire.
 
 ## Official References
 - [Symfony releases](https://symfony.com/releases)
-- [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
-- [Backward compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
+- [Release process](https://symfony.com/doc/8.0/contributing/community/releases.html)
+- [Backward compatibility promise](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -242,7 +242,7 @@ alternative à laquelle souscrire.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/community/releases.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/community/releases.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

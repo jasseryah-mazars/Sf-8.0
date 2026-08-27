@@ -214,7 +214,7 @@ plutôt que de scraper le HTML.
     - [ ] D. `router:debug`
 
     **Why:** `router:match` exécute le matcher (traçable) contre un path donné.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#debugging-routes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#debugging-routes).
 
 ??? question "Q2. After changing routes in the prod environment you must…"
     - [x] A. Clear/warm the cache (`cache:clear`) ✅
@@ -223,7 +223,7 @@ plutôt que de scraper le HTML.
     - [ ] D. Delete `vendor/`
 
     **Why:** le router compilé est construit au warmup du cache et n'est pas rafraîchi
-    automatiquement en prod. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    automatiquement en prod. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. What does `router:match` use to explain rejections?"
     - [x] A. `TraceableUrlMatcher` ✅
@@ -264,7 +264,7 @@ plutôt que de scraper le HTML.
 - **Confused with:** [URL generation](url-generation.md) — la `_route` du matcher vs le fichier compilé séparé du generator.
 
 ## Official References
-- [Official Symfony docs — Debugging routes](https://symfony.com/doc/current/routing.html#debugging-routes)
+- [Official Symfony docs — Debugging routes](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 - [Symfony source — RouterMatchCommand](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Command/RouterMatchCommand.php)
 
 ## Video references
@@ -276,7 +276,7 @@ plutôt que de scraper le HTML.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#debugging-routes) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#debugging-routes) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -238,21 +238,21 @@ pas Stopwatch.
     - [ ] C. `FlattenException`
 
     **Why:** Le cloner construit un objet `Data` immuable que les dumpers rendent.
-    **Ref:** [VarDumper](https://symfony.com/doc/current/components/var_dumper.html).
+    **Ref:** [VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html).
 
 ??? question "Q2. What does `dd()` do that `dump()` does not?"
     - [x] A. Stops execution (`exit`) after dumping ✅
     - [ ] B. Dumps to a file
     - [ ] C. Serializes to JSON
 
-    **Why:** `dd()` = dump and die. **Ref:** [The dump() function](https://symfony.com/doc/current/components/var_dumper.html#the-dump-function).
+    **Why:** `dd()` = dump and die. **Ref:** [The dump() function](https://symfony.com/doc/8.0/components/var_dumper.html#the-dump-function).
 
 ??? question "Q3. Stopwatch `getDuration()` is expressed in…"
     - [x] A. milliseconds ✅
     - [ ] B. seconds
     - [ ] C. microseconds
 
-    **Why:** Les durées sont en millisecondes. **Ref:** [Stopwatch](https://symfony.com/doc/current/components/stopwatch.html).
+    **Why:** Les durées sont en millisecondes. **Ref:** [Stopwatch](https://symfony.com/doc/8.0/components/stopwatch.html).
 
 ## Key takeaways
 
@@ -274,8 +274,8 @@ pas Stopwatch.
 - **Confused with:** [Clock](clock.md) — Stopwatch mesure le temps écoulé (wall time) ; utilisez `MonotonicClock` pour des durées robustes.
 
 ## Official References
-- [Official docs — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
-- [Official docs — Stopwatch](https://symfony.com/doc/current/components/stopwatch.html)
+- [Official docs — VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html)
+- [Official docs — Stopwatch](https://symfony.com/doc/8.0/components/stopwatch.html)
 - [Symfony source — VarCloner](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/VarDumper/Cloner/VarCloner.php)
 
 ## Video references
@@ -287,7 +287,7 @@ pas Stopwatch.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/var_dumper.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/var_dumper.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

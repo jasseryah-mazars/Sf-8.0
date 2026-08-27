@@ -285,7 +285,7 @@ clearer, and never in a way that breaks autowiring.
     - [ ] C. Random UUIDs
 
     **Why:** The FQCN is the id; autowiring matches by type. **Ref:**
-    [Service container](https://symfony.com/doc/current/service_container.html).
+    [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. What case are environment variables?"
     - [x] A. UPPER_SNAKE_CASE, usually `APP_`-prefixed ✅
@@ -293,7 +293,7 @@ clearer, and never in a way that breaks autowiring.
     - [ ] C. kebab-case
 
     **Why:** Env vars use upper snake case. **Ref:**
-    [Configuration — env vars](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables).
+    [Configuration — env vars](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables).
 
 ??? question "Q3. Which is a correctly named route?"
     - [x] A. `invoice_show` ✅
@@ -301,7 +301,7 @@ clearer, and never in a way that breaks autowiring.
     - [ ] C. `invoice show`
 
     **Why:** Routes use snake_case, typically `entity_action`. **Ref:**
-    [Routing](https://symfony.com/doc/current/routing.html).
+    [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -325,9 +325,9 @@ clearer, and never in a way that breaks autowiring.
 - **Confused with:** [Best Practices](best-practices.md) — naming is the mechanical rule set; best practices explain the design choices.
 
 ## Official References
-- [Official docs — Coding standards](https://symfony.com/doc/current/contributing/code/standards.html)
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official docs — Coding standards](https://symfony.com/doc/8.0/contributing/code/standards.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Routing](https://symfony.com/doc/8.0/routing.html)
 
 ## Video references
 
@@ -338,7 +338,7 @@ clearer, and never in a way that breaks autowiring.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

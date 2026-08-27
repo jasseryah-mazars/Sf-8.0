@@ -350,7 +350,7 @@ use [`KernelTestCase`](framework-objects.md).
     - [ ] D. `#[UseProvider]`
 
     **Why:** `PHPUnit\Framework\Attributes\DataProvider` replaces the removed
-    `@dataProvider` annotation. **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    `@dataProvider` annotation. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q2. A data-provider method must be…"
     - [x] A. `public static`, returning an iterable ✅
@@ -400,10 +400,10 @@ use [`KernelTestCase`](framework-objects.md).
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — testable classes take collaborators as constructor arguments you can double.
 - **Reused in:** [Functional Tests](functional-tests.md) — the same doubles replace boundary services once the kernel is booted.
-- **Confused with:** [PHPUnit Bridge](phpunit-bridge.md) — the bridge adds deprecation/clock tooling on top of plain PHPUnit, not the base `TestCase`.
+- **Confused with:** [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — the bridge adds deprecation/clock tooling on top of plain PHPUnit, not the base `TestCase`.
 
 ## Official References
-- [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
+- [Official Symfony docs — Testing](https://symfony.com/doc/8.0/testing.html)
 - [PHPUnit — Writing tests](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)
 
@@ -416,7 +416,7 @@ use [`KernelTestCase`](framework-objects.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -430,4 +430,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Functional Tests](functional-tests.md) · [Framework Objects](framework-objects.md) · [PHPUnit Bridge](phpunit-bridge.md)</small>
+<small>Related: [Functional Tests](functional-tests.md) · [Framework Objects](framework-objects.md) · [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md)</small>

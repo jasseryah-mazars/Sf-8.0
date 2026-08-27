@@ -365,7 +365,7 @@ CSRF for you).
     **Why:** `buildForm(FormBuilderInterface, array)` adds fields;
     `configureOptions(OptionsResolver)` declares options. `getName` was removed;
     `buildView` exists but is not the primary pair.
-    **Ref:** [Creating forms](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Creating forms](https://symfony.com/doc/8.0/forms.html).
 
 ??? question "Q2. What does a compound form return from `getData()` when `data_class` is unset?"
     - [ ] A. `null` always
@@ -375,7 +375,7 @@ CSRF for you).
 
     **Why:** With no `data_class`, the data mapper maps children into/out of an
     array. Set `data_class` to bind to an object.
-    **Ref:** [Form types](https://symfony.com/doc/current/form/data_class.html).
+    **Ref:** [Form types](https://symfony.com/doc/8.0/form/data_class.html).
 
 ## Key takeaways
 
@@ -402,8 +402,8 @@ CSRF for you).
 - **Confused with:** [Form types](types.md) — a *type class* describes fields; the *resolved type* is what the factory actually builds.
 
 ## Official References
-- [Official Symfony docs — Forms](https://symfony.com/doc/current/forms.html)
-- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/current/form/data_class.html)
+- [Official Symfony docs — Forms](https://symfony.com/doc/8.0/forms.html)
+- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/8.0/form/data_class.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
 
 ## Video references
@@ -415,7 +415,7 @@ CSRF for you).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/forms.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/forms.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

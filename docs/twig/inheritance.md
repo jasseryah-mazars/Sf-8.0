@@ -287,7 +287,7 @@ definitions — no `extends`, no surrounding HTML.
 - **Confused with:** [Includes](includes.md) — inheritance fills *holes* in a layout; includes drop a *fragment* in place.
 
 ## Official References
-- [Official — Template inheritance](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts)
+- [Official — Template inheritance](https://symfony.com/doc/8.0/templates.html#template-inheritance-and-layouts)
 - [Twig — extends / use / block](https://twig.symfony.com/doc/3.x/tags/extends.html)
 - [Twig source — Template.php](https://github.com/twigphp/Twig/blob/3.x/src/Template.php)
 
@@ -300,7 +300,7 @@ definitions — no `extends`, no surrounding HTML.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#template-inheritance-and-layouts) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

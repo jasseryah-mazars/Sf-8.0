@@ -281,7 +281,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. `_name`
 
     **Why:** le matcher injecte `_route` avec le nom de la route matchée.
-    **Ref:** [Special parameters](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Special parameters](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q2. What does `_format` do when matched?"
     - [x] A. Sets the request format (affects `Content-Type`) ✅
@@ -290,7 +290,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. Sets the HTTP method
 
     **Why:** le `RouterListener`/`Request::setRequestFormat()` l'utilise pour la
-    négociation de contenu. **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    négociation de contenu. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q3. `stateless: true` primarily does what?"
     - [x] A. Asserts the route must not use the session (warns in debug) ✅
@@ -299,7 +299,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. Makes the route match any method
 
     **Why:** il signale toute utilisation accidentelle de la session pendant le développement.
-    **Ref:** [Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes).
+    **Ref:** [Stateless routes](https://symfony.com/doc/8.0/routing.html#stateless-routes).
 
 ??? question "Q4. Where does `_fragment` take effect?"
     - [ ] A. During matching
@@ -308,7 +308,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. In the session
 
     **Why:** le generator l'ajoute comme fragment de l'URL ; le matcher l'ignore.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ## Key takeaways
 
@@ -333,8 +333,8 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
 - **Confused with:** [URL generation](url-generation.md) — `_fragment` n'agit qu'à la génération, jamais au matching.
 
 ## Official References
-- [Official Symfony docs — Special parameters](https://symfony.com/doc/current/routing.html#special-parameters)
-- [Official Symfony docs — Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes)
+- [Official Symfony docs — Special parameters](https://symfony.com/doc/8.0/routing.html#special-parameters)
+- [Official Symfony docs — Stateless routes](https://symfony.com/doc/8.0/routing.html#stateless-routes)
 - [Symfony source — RouterListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
 
 ## Video references
@@ -346,7 +346,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#special-parameters) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#special-parameters) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

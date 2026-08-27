@@ -251,7 +251,7 @@ une page de login).
     - [ ] D. The controller runs anyway
 
     **Why:** une condition fausse signifie que la route ne matche pas ; le matching continue.
-    **Ref:** [Matching conditions](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Matching conditions](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ??? question "Q2. Which are valid inside a routing condition?"
     - [x] A. `context`, `request`, `env()`, `service()` ✅
@@ -260,7 +260,7 @@ une page de login).
     - [ ] D. `params`, `route()`
 
     **Why:** l'expression provider du routing expose exactement ceux-ci.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ??? question "Q3. Do conditions affect `generateUrl()`?"
     - [ ] A. Yes, generation fails if the condition is false
@@ -269,7 +269,7 @@ une page de login).
     - [ ] D. Only in debug mode
 
     **Why:** il n'y a aucune request à évaluer ; la génération ignore les conditions.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ??? question "Q4. To call `service('x')` in a condition, service `x` must…"
     - [x] A. Be tagged `routing.condition_service` (`#[AsRoutingConditionService]`) ✅
@@ -278,7 +278,7 @@ une page de login).
     - [ ] D. Extend `AbstractController`
 
     **Why:** seuls les services taggés sont exposés à l'expression de routing.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ## Key takeaways
 
@@ -302,7 +302,7 @@ une page de login).
 - **Confused with:** [Security](../security/index.md) — une condition échouée est un 404, pas de l'autorisation (qui est un 403 via des voters).
 
 ## Official References
-- [Official Symfony docs — Matching expressions](https://symfony.com/doc/current/routing.html#matching-expressions)
+- [Official Symfony docs — Matching expressions](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -314,7 +314,7 @@ une page de login).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#matching-expressions) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#matching-expressions) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

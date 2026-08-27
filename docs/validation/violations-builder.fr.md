@@ -297,7 +297,7 @@ lorsque vous affichez les erreurs vous-même.
     - [ ] D. On `setParameter()`
 
     **Why:** Le builder est fluide ; `addViolation()` valide l'ajout dans la liste.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q2. Which returns the message with placeholders still unresolved?"
     - [ ] A. `getMessage()`
@@ -307,7 +307,7 @@ lorsque vous affichez les erreurs vous-même.
 
     **Why:** `getMessage()` est interpolé ; `getMessageTemplate()` conserve les
     placeholders `{{ x }}`.
-    **Ref:** [ConstraintViolationInterface](https://symfony.com/doc/current/validation.html).
+    **Ref:** [ConstraintViolationInterface](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q3. `validate()` returns a value that is…"
     - [ ] A. A plain PHP array of strings
@@ -317,7 +317,7 @@ lorsque vous affichez les erreurs vous-même.
 
     **Why:** C'est toujours un objet liste de violations ; itérez-le ou appelez
     `count()`.
-    **Ref:** [Validation](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q4. To attach an error to a different property you call…"
     - [ ] A. `setPropertyPath()`
@@ -327,7 +327,7 @@ lorsque vous affichez les erreurs vous-même.
 
     **Why:** `atPath()` déplace la violation vers le chemin donné relativement au
     nœud courant.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ## Key takeaways
 
@@ -351,7 +351,7 @@ lorsque vous affichez les erreurs vous-même.
 - **Confused with:** [Callbacks](callbacks.md) — même API `ExecutionContext`, point d'entrée différent.
 
 ## Official References
-- [Official Symfony docs — Custom constraint (violations)](https://symfony.com/doc/current/validation/custom_constraint.html)
+- [Official Symfony docs — Custom constraint (violations)](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 - [Symfony source — ConstraintViolationBuilderInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Violation/ConstraintViolationBuilderInterface.php)
 
 ## Video references
@@ -364,7 +364,7 @@ lorsque vous affichez les erreurs vous-même.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/custom_constraint.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/custom_constraint.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

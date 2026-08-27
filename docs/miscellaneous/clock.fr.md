@@ -26,7 +26,7 @@
     **Syllabus:** `Miscellaneous → Clock` ·
     **Level:** Advanced ·
     **Est. time:** 25 min ·
-    **Prerequisites:** [Testing](../testing/phpunit-bridge.md)
+    **Prerequisites:** [Testing](../appendices/out-of-syllabus/phpunit-bridge.md)
 
 ---
 
@@ -130,7 +130,7 @@ sauvegarde/restaure l'horloge globale autour de chaque test et fournit
 `self::mockTime()`. Avec une `MockClock`, vous pouvez figer « maintenant », puis
 `$clock->sleep(3600)` pour sauter une heure sans délai réel — parfait pour les
 tests d'expiration de token, de TTL et de planification. Voir
-[PHPUnit Bridge](../testing/phpunit-bridge.md).
+[PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md).
 
 ```php
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
@@ -305,7 +305,7 @@ sans logique dépendante du temps n'en ont pas besoin.
     - [ ] B. a Unix timestamp `int`
     - [ ] C. a mutable `\DateTime`
 
-    **Why:** Elle retourne une date/heure immuable. **Ref:** [Clock](https://symfony.com/doc/current/components/clock.html).
+    **Why:** Elle retourne une date/heure immuable. **Ref:** [Clock](https://symfony.com/doc/8.0/components/clock.html).
 
 ??? question "Q2. Which clock advances time without real delay for tests?"
     - [x] A. `MockClock` ✅
@@ -313,14 +313,14 @@ sans logique dépendante du temps n'en ont pas besoin.
     - [ ] C. `MonotonicClock`
 
     **Why:** `MockClock` vous permet de régler/avancer le temps (son `sleep()` est virtuel).
-    **Ref:** [Testing with Clock](https://symfony.com/doc/current/components/clock.html#usage-in-tests).
+    **Ref:** [Testing with Clock](https://symfony.com/doc/8.0/components/clock.html#usage-in-tests).
 
 ??? question "Q3. Which clock is best for measuring elapsed durations?"
     - [x] A. `MonotonicClock` ✅
     - [ ] B. `NativeClock`
     - [ ] C. `MockClock`
 
-    **Why:** Elle est monotone et insensible aux ajustements de l'horloge système. **Ref:** [Clock](https://symfony.com/doc/current/components/clock.html).
+    **Why:** Elle est monotone et insensible aux ajustements de l'horloge système. **Ref:** [Clock](https://symfony.com/doc/8.0/components/clock.html).
 
 ## Key takeaways
 
@@ -340,11 +340,11 @@ sans logique dépendante du temps n'en ont pas besoin.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — le service `clock` (`NativeClock`) est autowiré via `ClockInterface`.
-- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` substitue une `MockClock` ; les délais/retries de [Messenger](../messenger/index.md) raisonnent sur « maintenant ».
+- **Reused in:** [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — `ClockSensitiveTrait` substitue une `MockClock` ; les délais/retries de [Messenger](../messenger/index.md) raisonnent sur « maintenant ».
 - **Confused with:** `MonotonicClock` — celle-ci sert à mesurer des *durées*, pas à lire le « maintenant » de l'horloge murale.
 
 ## Official References
-- [Official docs — Clock](https://symfony.com/doc/current/components/clock.html)
+- [Official docs — Clock](https://symfony.com/doc/8.0/components/clock.html)
 - [Symfony source — ClockInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/ClockInterface.php)
 - [Symfony source — MockClock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/MockClock.php)
 
@@ -358,7 +358,7 @@ sans logique dépendante du temps n'en ont pas besoin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/clock.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/clock.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -372,4 +372,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../testing/phpunit-bridge.md) · [Messenger](../messenger/index.md)</small>
+<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) · [Messenger](../messenger/index.md)</small>

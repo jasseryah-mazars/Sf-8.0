@@ -358,7 +358,7 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 
     **Why:** `transform` va vers la view (affichage) ; `reverseTransform` va vers
     le model (soumission).
-    **Ref:** [Data transformers](https://symfony.com/doc/current/form/data_transformers.html).
+    **Ref:** [Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html).
 
 ??? question "Q2. `addModelTransformer` converts between…"
     - [x] A. Model and normalized data ✅
@@ -368,7 +368,7 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 
     **Why:** Les model transformers font le pont model↔norm ; les view
     transformers font le pont norm↔view.
-    **Ref:** [Data transformers](https://symfony.com/doc/current/form/data_transformers.html).
+    **Ref:** [Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html).
 
 ??? question "Q3. What should a transformer throw on invalid input?"
     - [x] A. `TransformationFailedException` ✅
@@ -403,8 +403,8 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 - **Confused with:** [Validation](../validation/index.md) — un transform en échec est une erreur de *format* (`invalid_message`), pas une violation de règle métier.
 
 ## Official References
-- [Official Symfony docs — Data transformers](https://symfony.com/doc/current/form/data_transformers.html)
-- [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/current/form/data_transformers.html#example-1-transforming-string-to-datetime)
+- [Official Symfony docs — Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html)
+- [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/8.0/form/data_transformers.html#example-1-transforming-string-to-datetime)
 - [Symfony source — Form.php](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)
 
 ## Video references
@@ -417,7 +417,7 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/data_transformers.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/data_transformers.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

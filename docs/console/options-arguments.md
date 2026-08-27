@@ -306,7 +306,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. `InputOption::VALUE_REQUIRED`
 
     **Why:** `VALUE_NONE` accepts no value; presence means `true`. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q2. What is the integer value of `InputOption::VALUE_IS_ARRAY`?"
     - [ ] A. 4
@@ -315,7 +315,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. 2
 
     **Why:** the option-mode bitmask is 1,2,4,8,16. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q3. Which is true about an `IS_ARRAY` argument?"
     - [x] A. There can be only one and it must be declared last ✅
@@ -324,7 +324,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. It cannot be combined with `REQUIRED`
 
     **Why:** the array argument greedily consumes the remaining tokens. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q4. Which mode produces a `--no-foo` counterpart to `--foo`?"
     - [ ] A. `VALUE_OPTIONAL`
@@ -333,7 +333,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. `VALUE_IS_ARRAY`
 
     **Why:** negatable options add the `--no-` twin. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ## Key takeaways
 
@@ -361,7 +361,7 @@ are self-documenting and order-free. Interactive prompting (see
   options; the `InputDefinition` is what *binds and validates* them.
 
 ## Official References
-- [Official Symfony docs — Console input](https://symfony.com/doc/current/console/input.html)
+- [Official Symfony docs — Console input](https://symfony.com/doc/8.0/console/input.html)
 - [Symfony source — InputOption](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputOption.php)
 - [Symfony source — InputArgument](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputArgument.php)
 
@@ -374,7 +374,7 @@ are self-documenting and order-free. Interactive prompting (see
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/input.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/input.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

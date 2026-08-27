@@ -300,7 +300,7 @@ anything that changes per environment or must stay secret. Prefer injecting the
     - [ ] D. Never; it is a literal string
 
     **Why:** Env placeholders resolve at runtime so one compiled container works
-    across environments. **Ref:** [Env vars](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables).
+    across environments. **Ref:** [Env vars](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables).
 
 ??? question "Q2. What does `%env(int:MAX)%` return?"
     - [ ] A. The string value of `MAX`
@@ -309,7 +309,7 @@ anything that changes per environment or must stay secret. Prefer injecting the
     - [ ] D. A parameter named `int`
 
     **Why:** The `int:` processor casts the raw env string to an integer.
-    **Ref:** [Env var processors](https://symfony.com/doc/current/configuration/env_var_processors.html).
+    **Ref:** [Env var processors](https://symfony.com/doc/8.0/configuration/env_var_processors.html).
 
 ??? question "Q3. Which injects the `app.name` parameter into a constructor arg?"
     - [x] A. `#[Autowire(param: 'app.name')]` ✅
@@ -318,7 +318,7 @@ anything that changes per environment or must stay secret. Prefer injecting the
     - [ ] D. Type-hinting `string`
 
     **Why:** `param:` names a container parameter; a bare string without `%%` is a
-    literal. **Ref:** [Autowire attribute](https://symfony.com/doc/current/service_container/autowiring.html).
+    literal. **Ref:** [Autowire attribute](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q4. How do you write a literal percent sign in a parameter value?"
     - [ ] A. `\%`
@@ -327,7 +327,7 @@ anything that changes per environment or must stay secret. Prefer injecting the
     - [ ] D. You cannot
 
     **Why:** A doubled percent escapes to a single literal `%`.
-    **Ref:** [Parameters](https://symfony.com/doc/current/configuration.html#configuration-parameters).
+    **Ref:** [Parameters](https://symfony.com/doc/8.0/configuration.html#configuration-parameters).
 
 ## Key takeaways
 
@@ -355,8 +355,8 @@ anything that changes per environment or must stay secret. Prefer injecting the
   validated then *turned into* parameters.
 
 ## Official References
-- [Official Symfony docs — Configuration & Parameters](https://symfony.com/doc/current/configuration.html)
-- [Official Symfony docs — Env Var Processors](https://symfony.com/doc/current/configuration/env_var_processors.html)
+- [Official Symfony docs — Configuration & Parameters](https://symfony.com/doc/8.0/configuration.html)
+- [Official Symfony docs — Env Var Processors](https://symfony.com/doc/8.0/configuration/env_var_processors.html)
 - [Symfony source — EnvVarProcessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php)
 
 ## Video references
@@ -368,7 +368,7 @@ anything that changes per environment or must stay secret. Prefer injecting the
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

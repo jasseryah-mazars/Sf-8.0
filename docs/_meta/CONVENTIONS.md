@@ -5,8 +5,9 @@ Shared rules so every chapter reads as one voice. Read this before writing.
 ## Versions & scope (non-negotiable)
 
 - **Symfony 8.0**, **PHP 8.4+**, **Twig 3.x**. Never show deprecated APIs.
-- Doc links use `https://symfony.com/doc/current/...` (tracks the latest stable,
-  which is 8.x). Source links pin the branch: `.../blob/8.0/...`.
+- Doc links use `https://symfony.com/doc/8.0/...` — pinned to the certified
+  Symfony 8.0 branch, **not** `doc/current` (which tracks whatever is newest).
+  Source links pin the branch too: `.../blob/8.0/...`.
 - **Excluded** — never author content for: Symfony UX, Symfony AI, Doctrine,
   Monolog, AssetMapper, Webpack Encore, third-party bundles/bridges, or any
   component not in the official syllabus. Mention them only to say "out of scope"
@@ -52,7 +53,7 @@ Shared rules so every chapter reads as one voice. Read this before writing.
 - Every major concept links to official docs. Add a Symfony **source** link in a
   `!!! note "Source reference"` when explaining internals.
 - **Mandatory `## Official References` section** at the end of every chapter:
-  official Symfony docs (`doc/current`) for Symfony concepts, `php.net` for PHP
+  official Symfony docs (`doc/8.0`) for Symfony concepts, `php.net` for PHP
   concepts, plus source/RFC links when relevant. A chapter without it is invalid.
 - End each chapter with a `Related:` line of 2–4 cross-links.
 

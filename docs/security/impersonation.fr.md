@@ -155,7 +155,7 @@ switch **et** à chaque sortie. Usages typiques :
   aux admins de switcher par autre chose (par exemple l'e-mail alors que les
   identifiants sont des UUID), un listener peut rechercher l'utilisateur
   lui-même et remplacer l'utilisateur cible sur l'event — consultez le
-  [guide officiel](https://symfony.com/doc/current/security/impersonating_user.html)
+  [guide officiel](https://symfony.com/doc/8.0/security/impersonating_user.html)
   pour le pattern supporté dans votre version exacte.
 - **Restrictions supplémentaires :** lever une exception depuis le listener
   pour interdire un switch (par exemple interdire d'impersonner d'autres
@@ -322,7 +322,7 @@ session.
 
     **Why:** Le même paramètre configuré, avec la valeur spéciale `_exit`,
     restaure le token d'origine.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q2. Which attribute detects that the current user is impersonating someone?"
     - [ ] A. `ROLE_PREVIOUS_ADMIN`
@@ -332,7 +332,7 @@ session.
 
     **Why:** `IS_IMPERSONATOR` n'est accordé que lorsque le token actif est un
     `SwitchUserToken` ; `ROLE_PREVIOUS_ADMIN` est l'écriture legacy.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q3. Where does Symfony keep the admin's authentication during a switch?"
     - [ ] A. In a dedicated session key `_security_previous`
@@ -352,7 +352,7 @@ session.
 
     **Why:** `switch_user: true` exige par défaut `ROLE_ALLOWED_TO_SWITCH` ;
     remplacez-le avec l'option `role`.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ## Key takeaways
 
@@ -389,7 +389,7 @@ session.
   réversible par conception.
 
 ## Official References
-- [Symfony docs — Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html)
+- [Symfony docs — Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html)
 - [Symfony source — SwitchUserListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/SwitchUserListener.php)
 - [Symfony source — SwitchUserEvent](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Event/SwitchUserEvent.php)
 
@@ -403,7 +403,7 @@ session.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/impersonating_user.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/impersonating_user.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

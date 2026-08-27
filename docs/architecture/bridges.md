@@ -190,7 +190,7 @@ building your **own** integration package or debugging why a class from a bridge
     - [ ] C. A Twig template
 
     **Why:** Bridges provide classes; a bundle wires them. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ## Key takeaways
 
@@ -213,8 +213,8 @@ building your **own** integration package or debugging why a class from a bridge
 
 ## Official References
 - [Symfony source — Bridge](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge)
-- [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
-- [Official docs — Bundles](https://symfony.com/doc/current/bundles.html)
+- [Official docs — The Components](https://symfony.com/doc/8.0/components/index.html)
+- [Official docs — Bundles](https://symfony.com/doc/8.0/bundles.html)
 
 ## Video references
 
@@ -225,7 +225,7 @@ building your **own** integration package or debugging why a class from a bridge
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

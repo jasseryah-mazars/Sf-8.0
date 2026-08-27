@@ -19,7 +19,7 @@ categories:
           Flex is a Composer plugin. It runs at Composer install/update time,
           resolving package aliases and applying recipes; it has no role during
           HTTP request handling.
-        documentation: "https://symfony.com/doc/current/setup.html"
+        documentation: "https://symfony.com/doc/8.0/setup.html"
       - id: "ARCH-FLEX-02"
         type: "single"
         difficulty: "easy"
@@ -37,7 +37,7 @@ categories:
         explanation: >-
           symfony.lock records applied recipes so Flex can detect updates and
           reverse them; it is distinct from composer.lock (package versions).
-        documentation: "https://symfony.com/doc/current/setup.html"
+        documentation: "https://symfony.com/doc/8.0/setup.html"
       - id: "ARCH-FLEX-03"
         type: "single"
         difficulty: "medium"
@@ -55,7 +55,7 @@ categories:
         explanation: >-
           The bundles configurator adds the bundle class to config/bundles.php,
           which the kernel reads at boot via MicroKernelTrait::registerBundles().
-        documentation: "https://symfony.com/doc/current/bundles.html"
+        documentation: "https://symfony.com/doc/8.0/bundles.html"
       - id: "ARCH-FLEX-04"
         type: "single"
         difficulty: "medium"
@@ -97,7 +97,7 @@ categories:
           config and Flex can detect/rollback recipe changes. Both must be committed.
           The common trap is thinking one supersedes the other or that they should be
           ignored.
-        documentation: "https://symfony.com/doc/current/setup.html"
+        documentation: "https://symfony.com/doc/8.0/setup.html"
       - id: "ARCH-FLEX-06"
         type: "internals"
         difficulty: "medium"
@@ -141,7 +141,7 @@ categories:
           composer.json. The recipe is the separate automation (bundles, copy-from-recipe,
           env, container configurators described in manifest.json) that wires the
           package into your app. Aliases are convenience; recipes are the work.
-        documentation: "https://symfony.com/doc/current/setup.html"
+        documentation: "https://symfony.com/doc/8.0/setup.html"
 
   - name: "Architecture — License & Trademark"
     questions:
@@ -257,7 +257,7 @@ categories:
         explanation: >-
           Components are decoupled libraries, each independently versioned and
           usable without the full framework.
-        documentation: "https://symfony.com/doc/current/components/index.html"
+        documentation: "https://symfony.com/doc/8.0/components/index.html"
       - id: "ARCH-COMPONENTS-02"
         type: "single"
         difficulty: "medium"
@@ -293,7 +293,7 @@ categories:
         explanation: >-
           Components are decoupled; Routing can be installed and used on its own
           via UrlMatcher/UrlGenerator without the framework.
-        documentation: "https://symfony.com/doc/current/components/routing.html"
+        documentation: "https://symfony.com/doc/8.0/components/routing.html"
       - id: "ARCH-COMPONENTS-04"
         type: "trap"
         difficulty: "medium"
@@ -315,7 +315,7 @@ categories:
           specific third-party library; bundles (e.g. symfony/framework-bundle) wire
           things into the framework with services and config. Confusing bridge with
           bundle, or contract with component, is the classic exam trap.
-        documentation: "https://symfony.com/doc/current/components/index.html"
+        documentation: "https://symfony.com/doc/8.0/components/index.html"
       - id: "ARCH-COMPONENTS-05"
         type: "code"
         difficulty: "medium"
@@ -338,7 +338,7 @@ categories:
           values. No framework or kernel is involved — the component works standalone
           with a RouteCollection and a RequestContext. It returns parameters, never a
           Response (that is the framework's job).
-        documentation: "https://symfony.com/doc/current/components/routing.html"
+        documentation: "https://symfony.com/doc/8.0/components/routing.html"
       - id: "ARCH-COMPONENTS-06"
         type: "trap"
         difficulty: "medium"
@@ -358,7 +358,7 @@ categories:
           the dependency graph stays minimal and each package versions independently.
           The old symfony/symfony monolithic metapackage is discouraged. Type-hinting
           contracts/interfaces further decouples you from concrete implementations.
-        documentation: "https://symfony.com/doc/current/components/index.html"
+        documentation: "https://symfony.com/doc/8.0/components/index.html"
 
   - name: "Architecture — Bridges"
     questions:
@@ -415,7 +415,7 @@ categories:
         explanation: >-
           Bridges provide classes; a bundle wires them into the container and
           exposes configuration.
-        documentation: "https://symfony.com/doc/current/bundles.html"
+        documentation: "https://symfony.com/doc/8.0/bundles.html"
       - id: "ARCH-BRIDGES-04"
         type: "trap"
         difficulty: "medium"
@@ -478,7 +478,7 @@ categories:
         explanation: >-
           public/ contains index.php and static assets and is the only
           web-accessible directory.
-        documentation: "https://symfony.com/doc/current/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/configuration.html"
       - id: "ARCH-CODEORG-02"
         type: "single"
         difficulty: "easy"
@@ -496,7 +496,7 @@ categories:
         explanation: >-
           config/bundles.php maps each bundle class to the environments where it
           is enabled; the kernel reads it via MicroKernelTrait.
-        documentation: "https://symfony.com/doc/current/bundles.html"
+        documentation: "https://symfony.com/doc/8.0/bundles.html"
       - id: "ARCH-CODEORG-03"
         type: "single"
         difficulty: "medium"
@@ -514,7 +514,7 @@ categories:
         explanation: >-
           App\\Kernel uses MicroKernelTrait, which implements the boilerplate to
           load bundles from config/bundles.php and configuration from config/.
-        documentation: "https://symfony.com/doc/current/configuration/micro_kernel_trait.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html"
       - id: "ARCH-CODEORG-04"
         type: "config"
         difficulty: "medium"
@@ -534,7 +534,7 @@ categories:
           The kernel enables the bundle only in the listed environments whose value is
           true. `['all' => true]` means every environment; `['dev' => true, 'test' => true]`
           means dev and test only (typical for debugging/profiling bundles).
-        documentation: "https://symfony.com/doc/current/bundles.html"
+        documentation: "https://symfony.com/doc/8.0/bundles.html"
       - id: "ARCH-CODEORG-05"
         type: "internals"
         difficulty: "medium"
@@ -555,7 +555,7 @@ categories:
           no YAML parsing happens per request — that is why the front controller stays
           tiny and the hot path is fast. In dev, ConfigCache checks freshness and
           rebuilds when source config changes.
-        documentation: "https://symfony.com/doc/current/configuration/micro_kernel_trait.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html"
       - id: "ARCH-CODEORG-06"
         type: "trap"
         difficulty: "medium"
@@ -576,7 +576,7 @@ categories:
           resource type on its own (templates via templates/bundles/<Name>/, services
           via decoration/redefinition, config via config/packages/). Mentioning
           getParent() as a current mechanism is a planted trap.
-        documentation: "https://symfony.com/doc/current/bundles/override.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/override.html"
       - id: "ARCH-CODEORG-07"
         type: "config"
         difficulty: "medium"
@@ -597,7 +597,7 @@ categories:
           autoconfigure: true). exclude keeps non-service classes (like Kernel.php,
           entities, DTOs) out. Unused private services are then pruned by the compiler.
           It does not make them public.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
   - name: "Architecture — Request Handling (HttpKernel)"
     questions:
@@ -618,7 +618,7 @@ categories:
         explanation: >-
           kernel.view is skipped because a Response was returned; the remaining
           events follow the canonical order, then finish_request and terminate.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-02"
         type: "single"
         difficulty: "medium"
@@ -636,7 +636,7 @@ categories:
         explanation: >-
           If the controller returns a non-Response value, kernel.view listeners
           must convert it into a Response.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-view"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-view"
       - id: "ARCH-REQ-03"
         type: "internals"
         difficulty: "medium"
@@ -654,7 +654,7 @@ categories:
         explanation: >-
           terminate() runs after send() and is not called for sub-requests; it is
           ideal for slow post-response work.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-terminate"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-terminate"
       - id: "ARCH-REQ-04"
         type: "scenario"
         difficulty: "medium"
@@ -672,7 +672,7 @@ categories:
         explanation: >-
           Setting a response on kernel.request short-circuits controller
           resolution; the response still passes through kernel.response.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-request"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-request"
       - id: "ARCH-REQ-05"
         type: "internals"
         difficulty: "medium"
@@ -690,7 +690,7 @@ categories:
         explanation: >-
           MAIN_REQUEST is 1 and SUB_REQUEST is 2; the old MASTER_REQUEST constant
           was removed.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-06"
         type: "internals"
         difficulty: "hard"
@@ -714,7 +714,7 @@ categories:
           constant but fires out of band, only on error. controller_arguments runs
           AFTER argument resolution, and view sits between the controller call and
           response.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-07"
         type: "internals"
         difficulty: "medium"
@@ -736,7 +736,7 @@ categories:
           ValueResolverInterface resolvers (request attributes, the Request object,
           #[MapRequestPayload], services, variadics, defaults) to build the ordered
           argument list passed to the controller.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-08"
         type: "trap"
         difficulty: "hard"
@@ -757,7 +757,7 @@ categories:
           array; listeners receive a ControllerArgumentsEvent and may mutate the
           already-built array with setArguments(). Assuming it runs before resolution
           (to feed the resolver) is a common misconception.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-controller-arguments"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-controller-arguments"
       - id: "ARCH-REQ-09"
         type: "debug"
         difficulty: "medium"
@@ -779,7 +779,7 @@ categories:
           ControllerDoesNotReturnResponseException (a LogicException) with the familiar
           \"The controller must return a Response object but it returned null\" message.
           The fix is to return a real Response or register a view listener.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-10"
         type: "internals"
         difficulty: "medium"
@@ -800,7 +800,7 @@ categories:
           kernel.terminate fires only for the main request after send. handleRaw()
           pushes the sub-request onto the RequestStack before kernel.request and pops
           it after kernel.finish_request, restoring the parent request/locale.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-11"
         type: "internals"
         difficulty: "hard"
@@ -821,7 +821,7 @@ categories:
           an escaped exception is routed through handleThrowable()/kernel.exception into
           a Response. With $catch=false (common in sub-requests and tests) the exception
           simply propagates to the caller.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-REQ-12"
         type: "code"
         difficulty: "medium"
@@ -842,7 +842,7 @@ categories:
           is below the default 0, so this header listener runs relatively late. The
           #[AsEventListener] attribute is wired by RegisterListenersPass at compile time,
           replacing manual tagging.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-response"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-response"
 
   - name: "Architecture — Exception Handling"
     questions:
@@ -863,7 +863,7 @@ categories:
         explanation: >-
           When an exception escapes handleRaw(), HttpKernel dispatches
           kernel.exception; listeners may set the response.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-exception"
       - id: "ARCH-EXC-02"
         type: "single"
         difficulty: "medium"
@@ -881,7 +881,7 @@ categories:
         explanation: >-
           Only exceptions implementing HttpExceptionInterface carry a status; any
           other exception defaults to 500.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "ARCH-EXC-03"
         type: "internals"
         difficulty: "medium"
@@ -899,7 +899,7 @@ categories:
         explanation: >-
           ErrorListener runs at a low priority (-128) so your own exception
           listeners get the first chance to handle the throwable.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-exception"
       - id: "ARCH-EXC-04"
         type: "config"
         difficulty: "medium"
@@ -917,7 +917,7 @@ categories:
         explanation: >-
           TwigBundle resolves error templates from
           templates/bundles/TwigBundle/Exception/, falling back to error.html.twig.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "ARCH-EXC-05"
         type: "internals"
         difficulty: "hard"
@@ -960,7 +960,7 @@ categories:
           Security exception that does NOT implement HttpExceptionInterface; the
           firewall's exception listener catches it and turns it into a 403 (or a
           redirect to the login page for unauthenticated users).
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "ARCH-EXC-07"
         type: "debug"
         difficulty: "hard"
@@ -981,7 +981,7 @@ categories:
           enough — you must actually set it on the event. If a branch forgets
           setResponse(), the response stays null, ErrorListener's default page (or a
           500) is used instead, and your custom page never shows.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-exception"
       - id: "ARCH-EXC-08"
         type: "internals"
         difficulty: "medium"
@@ -1021,7 +1021,7 @@ categories:
           BadRequestHttpException to 400. All implement HttpExceptionInterface, so their
           status code and headers flow through to the produced response; a generic
           HttpException takes any status code from its constructor.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
 
   - name: "Architecture — Event Dispatcher & Kernel Events"
     questions:
@@ -1042,7 +1042,7 @@ categories:
         explanation: >-
           Listeners are sorted by priority in descending order, so higher
           priorities run first; the default priority is 0.
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-EVENTS-02"
         type: "internals"
         difficulty: "medium"
@@ -1060,7 +1060,7 @@ categories:
         explanation: >-
           Symfony follows PSR-14: the event object comes first, the name is
           optional (defaults to the event's class name).
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-EVENTS-03"
         type: "single"
         difficulty: "medium"
@@ -1078,7 +1078,7 @@ categories:
         explanation: >-
           EventSubscriberInterface defines the static getSubscribedEvents()
           method returning event names mapped to handlers.
-        documentation: "https://symfony.com/doc/current/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/event_dispatcher.html"
       - id: "ARCH-EVENTS-04"
         type: "single"
         difficulty: "medium"
@@ -1096,7 +1096,7 @@ categories:
         explanation: >-
           It sets a flag the dispatcher checks before each listener; only the
           current event's remaining listeners are skipped.
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-EVENTS-05"
         type: "internals"
         difficulty: "hard"
@@ -1138,7 +1138,7 @@ categories:
           attributes and wires them into the dispatcher at compile time. Listeners are
           registered lazily — the service is only constructed when its event actually
           fires — which keeps boot cheap. You rarely call addListener() at runtime.
-        documentation: "https://symfony.com/doc/current/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/event_dispatcher.html"
       - id: "ARCH-EVENTS-07"
         type: "code"
         difficulty: "medium"
@@ -1160,7 +1160,7 @@ categories:
           name string, a [method, priority] pair, or a list of such pairs to register
           several handlers for the same event. Mapping method → event name (reversed) is
           wrong and a frequent mistake.
-        documentation: "https://symfony.com/doc/current/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/event_dispatcher.html"
       - id: "ARCH-EVENTS-08"
         type: "trap"
         difficulty: "hard"
@@ -1181,7 +1181,7 @@ categories:
           data flows back is by mutating the event, which you then read from the
           returned object. Expecting dispatch() to hand back a listener's return value
           is the classic bug.
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-EVENTS-09"
         type: "internals"
         difficulty: "medium"
@@ -1201,7 +1201,7 @@ categories:
           ties (equal priority) keep their registration order. So two default-priority
           listeners run first-registered-first. To force an order, set explicit
           priorities rather than relying on registration order.
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-EVENTS-10"
         type: "single"
         difficulty: "easy"
@@ -1222,7 +1222,7 @@ categories:
           EventSubscriberInterface and declares all its events (and priorities) in the
           static getSubscribedEvents() method — handy when one class handles several
           related events. Both are wired by RegisterListenersPass.
-        documentation: "https://symfony.com/doc/current/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/event_dispatcher.html"
 
   - name: "Architecture — Official Best Practices"
     questions:
@@ -1243,7 +1243,7 @@ categories:
         explanation: >-
           Controllers should be thin and delegate to services, which keeps logic
           reusable and testable.
-        documentation: "https://symfony.com/doc/current/best_practices.html"
+        documentation: "https://symfony.com/doc/8.0/best_practices.html"
       - id: "ARCH-BP-02"
         type: "single"
         difficulty: "medium"
@@ -1261,7 +1261,7 @@ categories:
         explanation: >-
           Private services let the DI compiler inline and remove them, and
           discourage the service-locator anti-pattern.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
       - id: "ARCH-BP-03"
         type: "single"
         difficulty: "medium"
@@ -1279,7 +1279,7 @@ categories:
         explanation: >-
           Secrets should be stored in the encrypted Secrets vault, while
           infrastructure config uses env vars and behaviour uses parameters.
-        documentation: "https://symfony.com/doc/current/configuration/secrets.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/secrets.html"
       - id: "ARCH-BP-04"
         type: "config"
         difficulty: "medium"
@@ -1300,7 +1300,7 @@ categories:
           kernel.event_subscriber); public: false keeps them private so the compiler can
           inline/prune them and you inject rather than fetch. This is the idiomatic
           Symfony 8 default.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
       - id: "ARCH-BP-05"
         type: "scenario"
         difficulty: "medium"
@@ -1320,7 +1320,7 @@ categories:
           vars; application behaviour (feature toggle) goes in parameters, or an env var
           if it changes per environment; sensitive credentials (API private key) go in
           the encrypted Secrets vault — never committed as plain config.
-        documentation: "https://symfony.com/doc/current/configuration/secrets.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/secrets.html"
       - id: "ARCH-BP-06"
         type: "trap"
         difficulty: "medium"
@@ -1341,7 +1341,7 @@ categories:
           instead of dependency injection. The best practice is private, autowired
           services injected via the constructor. Public visibility is only needed in a
           few edge cases (e.g. legacy get() calls).
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
   - name: "Architecture — Release Management"
     questions:
@@ -1380,7 +1380,7 @@ categories:
         explanation: >-
           The last minor of each major (X.4) is the LTS; it ships alongside the
           next major (9.0).
-        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
       - id: "ARCH-REL-03"
         type: "single"
         difficulty: "medium"
@@ -1398,7 +1398,7 @@ categories:
         explanation: >-
           Minors add features and deprecations but never break BC; breaks are
           reserved for major releases.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-REL-04"
         type: "single"
         difficulty: "medium"
@@ -1436,7 +1436,7 @@ categories:
           branch that needs it and then merged upward into every newer branch. This
           keeps behaviour consistent across all maintained versions and avoids a fix
           being present in an old branch but missing in a newer one.
-        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
       - id: "ARCH-REL-06"
         type: "trap"
         difficulty: "medium"
@@ -1456,7 +1456,7 @@ categories:
           breaks. Minor releases add features and may introduce deprecations, but never
           break BC. Only majors break BC (by removing previously deprecated code).
           Confusing patch (bugs only) with minor (features) is a common trap.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-REL-07"
         type: "single"
         difficulty: "medium"
@@ -1476,7 +1476,7 @@ categories:
           only for code that was deprecated during the previous major line. This is what
           lets you upgrade safely within a major and plan the jump across a major once
           you have cleared deprecations.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
 
   - name: "Architecture — Backward Compatibility Promise"
     questions:
@@ -1497,7 +1497,7 @@ categories:
         explanation: >-
           BC breaks are reserved for majors and require the affected API to have
           been deprecated in the previous major line.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-BC-02"
         type: "single"
         difficulty: "medium"
@@ -1515,7 +1515,7 @@ categories:
         explanation: >-
           @internal marks implementation details not covered by BC, even if they
           are PHP-public.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-BC-03"
         type: "single"
         difficulty: "medium"
@@ -1533,7 +1533,7 @@ categories:
         explanation: >-
           final classes must not be subclassed; wrap them via decoration so
           Symfony can change internals without breaking you.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
       - id: "ARCH-BC-04"
         type: "trap"
         difficulty: "medium"
@@ -1553,7 +1553,7 @@ categories:
           stabilised; they may change in any release. Building critical paths on
           experimental code is risky. Along with @internal and final, @experimental is
           one of the markers that carve exceptions out of the promise.
-        documentation: "https://symfony.com/doc/current/contributing/code/experimental.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/experimental.html"
       - id: "ARCH-BC-05"
         type: "internals"
         difficulty: "hard"
@@ -1575,7 +1575,7 @@ categories:
           longer satisfies the contract. Symfony reserves the right to add methods to
           its interfaces, so you should only implement interfaces meant for
           implementation.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-BC-06"
         type: "multiple"
         difficulty: "medium"
@@ -1597,7 +1597,7 @@ categories:
           being a method or constructor. @internal is excluded even though PHP-public,
           and @experimental is excluded until stabilised. The classic misconception is
           equating PHP `public` with \"covered\"; @internal overrides that.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-BC-07"
         type: "true-false"
         difficulty: "easy"
@@ -1614,7 +1614,7 @@ categories:
           False. @internal explicitly removes an element from the BC promise even when
           it is PHP-public. Such methods/classes can change or disappear in any release,
           so you must not depend on them. PHP visibility and BC coverage are independent.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
 
   - name: "Architecture — Deprecations"
     questions:
@@ -1653,7 +1653,7 @@ categories:
         explanation: >-
           Deprecations survive the whole major line and are only removed in the
           next major, per the BC promise.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-DEP-04"
         type: "internals"
         difficulty: "medium"
@@ -1712,7 +1712,7 @@ categories:
           which maps to Definition::setDeprecated() and triggers a deprecation when the
           service is referenced. Container-level deprecations like this surface during
           cache:clear/compile time, whereas method-call deprecations fire at runtime.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection.html"
       - id: "ARCH-DEP-07"
         type: "trap"
         difficulty: "medium"
@@ -1773,7 +1773,7 @@ categories:
         explanation: >-
           Twig resolves overrides from templates/bundles/<BundleName>/, which
           takes precedence over the bundle's own templates.
-        documentation: "https://symfony.com/doc/current/bundles/override.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/override.html"
       - id: "ARCH-OVL-02"
         type: "single"
         difficulty: "medium"
@@ -1791,7 +1791,7 @@ categories:
         explanation: >-
           Bundle inheritance via getParent() was deprecated in 4.4 and removed in
           5.0; modern Symfony overrides each resource type individually.
-        documentation: "https://symfony.com/doc/current/bundles/override.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/override.html"
       - id: "ARCH-OVL-03"
         type: "single"
         difficulty: "medium"
@@ -1809,7 +1809,7 @@ categories:
         explanation: >-
           Decoration wraps the original service (injected as .inner), letting you
           add behaviour and delegate.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
       - id: "ARCH-OVL-04"
         type: "config"
         difficulty: "hard"
@@ -1830,7 +1830,7 @@ categories:
           reference in YAML) gives you that original instance so you can add behaviour
           and delegate. Re-creating it with `new` or fetching it publicly defeats the
           decoration pattern.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
       - id: "ARCH-OVL-05"
         type: "trap"
         difficulty: "medium"
@@ -1850,7 +1850,7 @@ categories:
           bundle's translations. Providing a catalogue with the same domain and locale
           overrides the bundle's strings — the same convention-based precedence used for
           template overrides.
-        documentation: "https://symfony.com/doc/current/translation.html"
+        documentation: "https://symfony.com/doc/8.0/translation.html"
       - id: "ARCH-OVL-06"
         type: "internals"
         difficulty: "medium"
@@ -1870,7 +1870,7 @@ categories:
           must not be presented as current. Modern bundles also drop the legacy
           Resources/ layout in favour of top-level config/, templates/ and
           translations/. Overriding is done per resource type instead.
-        documentation: "https://symfony.com/doc/current/bundles/override.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/override.html"
 
   - name: "Architecture — Roadmap & Schedule"
     questions:
@@ -1907,7 +1907,7 @@ categories:
             correct: false
         explanation: >-
           The LTS (X.4) always ships together with the next major (X+1).0.
-        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
       - id: "ARCH-ROAD-03"
         type: "single"
         difficulty: "easy"
@@ -1963,7 +1963,7 @@ categories:
           A frequent misconception is that the LTS precedes the next major. In fact X.4
           (the LTS) and (X+1).0 release together (8.4 and 9.0 both Nov 2027). Another
           trap: 8.0 is a standard release, not the LTS — 8.4 is.
-        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
       - id: "ARCH-ROAD-06"
         type: "scenario"
         difficulty: "medium"
@@ -2004,7 +2004,7 @@ categories:
         explanation: >-
           Symfony's EventDispatcherInterface extends the PSR-14
           Psr\\EventDispatcher\\EventDispatcherInterface.
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-PSR-02"
         type: "single"
         difficulty: "medium"
@@ -2022,7 +2022,7 @@ categories:
         explanation: >-
           HttpFoundation predates and differs from PSR-7; the psr-http-message
           bridge converts between HttpFoundation and PSR-7/15/17.
-        documentation: "https://symfony.com/doc/current/components/psr7.html"
+        documentation: "https://symfony.com/doc/8.0/components/psr7.html"
       - id: "ARCH-PSR-03"
         type: "single"
         difficulty: "easy"
@@ -2040,7 +2040,7 @@ categories:
         explanation: >-
           Symfony's ContainerInterface extends
           Psr\\Container\\ContainerInterface (PSR-11).
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
       - id: "ARCH-PSR-04"
         type: "internals"
         difficulty: "medium"
@@ -2105,7 +2105,7 @@ categories:
           lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter.
           Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16)
           is a common trap.
-        documentation: "https://symfony.com/doc/current/components/cache.html"
+        documentation: "https://symfony.com/doc/8.0/components/cache.html"
       - id: "ARCH-PSR-07"
         type: "single"
         difficulty: "medium"
@@ -2125,7 +2125,7 @@ categories:
           Type-hinting ClockInterface lets you inject a MockClock in tests and control
           time deterministically, instead of hard-coding new \\DateTime()/now() calls
           that are impossible to freeze.
-        documentation: "https://symfony.com/doc/current/components/clock.html"
+        documentation: "https://symfony.com/doc/8.0/components/clock.html"
       - id: "ARCH-PSR-08"
         type: "internals"
         difficulty: "medium"
@@ -2166,7 +2166,7 @@ categories:
             correct: false
         explanation: >-
           The service id is the FQCN; autowiring matches type-hints to these ids.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
       - id: "ARCH-NAMING-02"
         type: "single"
         difficulty: "easy"
@@ -2184,7 +2184,7 @@ categories:
         explanation: >-
           Env vars use upper snake case (APP_ENV, APP_DEBUG) and are read in config
           via processors such as %env(int:APP_PAGE_SIZE)%.
-        documentation: "https://symfony.com/doc/current/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/configuration.html"
       - id: "ARCH-NAMING-03"
         type: "single"
         difficulty: "medium"
@@ -2201,7 +2201,7 @@ categories:
             correct: false
         explanation: >-
           Route names use snake_case, conventionally entity_action.
-        documentation: "https://symfony.com/doc/current/routing.html"
+        documentation: "https://symfony.com/doc/8.0/routing.html"
       - id: "ARCH-NAMING-04"
         type: "single"
         difficulty: "medium"
@@ -2219,7 +2219,7 @@ categories:
         explanation: >-
           Abstract classes take the Abstract prefix; interfaces use the Interface
           suffix and traits use the Trait suffix.
-        documentation: "https://symfony.com/doc/current/contributing/code/standards.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/standards.html"
       - id: "ARCH-NAMING-05"
         type: "debug"
         difficulty: "medium"
@@ -2239,7 +2239,7 @@ categories:
           abstract classes take the Abstract prefix in PascalCase (AbstractController);
           routes are snake_case (blog_show); parameters are snake/dot-separated
           lowercase (app.page_size); env vars are UPPER_SNAKE with APP_ prefix (APP_ENV).
-        documentation: "https://symfony.com/doc/current/contributing/code/standards.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/standards.html"
       - id: "ARCH-NAMING-06"
         type: "internals"
         difficulty: "hard"
@@ -2260,7 +2260,7 @@ categories:
           kernel.event_subscriber tag, and ServiceSubscriberInterface, and voter/command
           interfaces behave similarly. So the Interface suffix marks a real, functional
           contract that drives wiring, not just style.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
       - id: "ARCH-NAMING-07"
         type: "trap"
         difficulty: "medium"
@@ -2280,7 +2280,7 @@ categories:
           enum cases are PascalCase. Bundle configuration keys are snake_case under the
           extension's alias (e.g. framework.http_method_override). Mixing these up —
           camelCase config keys, for instance — is a planted mistake.
-        documentation: "https://symfony.com/doc/current/contributing/code/standards.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/standards.html"
   - name: "Architecture — Multiple Choice Drills"
     questions:
       - id: "ARCH-MC-01"
@@ -2308,7 +2308,7 @@ categories:
           symfony.lock (committed), not in composer.lock which only tracks package
           versions, and recipe configurators write bundle registrations into
           config/bundles.php for the kernel to read at boot.
-        documentation: "https://symfony.com/doc/current/setup.html"
+        documentation: "https://symfony.com/doc/8.0/setup.html"
       - id: "ARCH-MC-02"
         type: "multiple"
         difficulty: "hard"
@@ -2334,7 +2334,7 @@ categories:
           versions, never in minors even after deprecation, and standard versions get
           8 months of bug fixes / 14 months of security fixes — the 3-year bug-fix
           window belongs to LTS releases only.
-        documentation: "https://symfony.com/doc/current/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
       - id: "ARCH-MC-03"
         type: "multiple"
         difficulty: "medium"
@@ -2358,7 +2358,7 @@ categories:
           exceptions out of the promise regardless of method visibility, and the
           recommended extension mechanisms are events, decoration and dependency
           injection rather than inheriting framework classes.
-        documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-MC-04"
         type: "multiple"
         difficulty: "hard"
@@ -2385,7 +2385,7 @@ categories:
           kernel.controller before kernel.response, and the controller callable is
           resolved by ControllerResolverInterface — ArgumentResolverInterface only
           resolves the controller's arguments.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "ARCH-MC-05"
         type: "multiple"
         difficulty: "medium"
@@ -2410,7 +2410,7 @@ categories:
           by type-hinting LoggerInterface so any compliant logger works. HttpFoundation
           predates and does not implement PSR-7 — the psr-http-message bridge converts
           between the two object models — and autoloading follows PSR-4, not PSR-0.
-        documentation: "https://symfony.com/doc/current/components/psr7.html"
+        documentation: "https://symfony.com/doc/8.0/components/psr7.html"
       - id: "ARCH-MC-06"
         type: "multiple"
         difficulty: "medium"
@@ -2434,7 +2434,7 @@ categories:
           declare all their events in getSubscribedEvents() and are wired
           automatically (autoconfiguration tags them), and dispatch() follows the
           PSR-14 signature: the event object first, then an optional event name.
-        documentation: "https://symfony.com/doc/current/components/event_dispatcher.html"
+        documentation: "https://symfony.com/doc/8.0/components/event_dispatcher.html"
       - id: "ARCH-MC-07"
         type: "multiple"
         difficulty: "hard"
@@ -2460,4 +2460,4 @@ categories:
           redefined, decorated or altered through a compiler pass. Bundle inheritance
           via getParent() has been removed, and copying whole bundles into src/ is
           not an override mechanism at all.
-        documentation: "https://symfony.com/doc/current/bundles/override.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/override.html"

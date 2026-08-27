@@ -277,7 +277,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
     **Why:** Only the `isGranted()`/`#[IsGranted]`/`denyAccessUnlessGranted()`
     path carries a subject; `access_control` is URL-based.
-    **Ref:** [Voters](https://symfony.com/doc/current/security/voters.html).
+    **Ref:** [Voters](https://symfony.com/doc/8.0/security/voters.html).
 
 ??? question "Q2. `#[IsGranted]` fails for an anonymous user. What happens?"
     - [ ] A. Immediate 403 always
@@ -287,7 +287,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
     **Why:** An unauthenticated `AccessDeniedException` is converted to an entry
     point response; an authenticated one yields 403.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html#access-control).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html#access-control).
 
 ??? question "Q3. Which interface does `isGranted()` ultimately delegate to?"
     - [ ] A. `AuthenticatorInterface`
@@ -326,8 +326,8 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
   `isGranted()` path can pass a subject; `access_control` is URL-only.
 
 ## Official References
-- [Symfony docs — Authorization](https://symfony.com/doc/current/security.html#access-control-authorization)
-- [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
+- [Symfony docs — Authorization](https://symfony.com/doc/8.0/security.html#access-control-authorization)
+- [Symfony docs — Voters](https://symfony.com/doc/8.0/security/voters.html)
 - [Symfony source — AuthorizationChecker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AuthorizationChecker.php)
 
 ## Video references
@@ -339,7 +339,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -281,7 +281,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 
     **Why:** Twig échappe la sortie en HTML par défaut ; `|raw` permet de s'en
     exclure.
-    **Ref:** [Twig escaping](https://symfony.com/doc/current/templates.html#output-escaping).
+    **Ref:** [Twig escaping](https://symfony.com/doc/8.0/templates.html#output-escaping).
 
 ??? question "Q2. Which best prevents SQL injection?"
     - [x] A. Prepared statements with bound parameters ✅
@@ -344,8 +344,8 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 - **Confused with:** [authentication](../security/authentication.md) — les tokens CSRF protègent les requests modifiant l'état, ils n'identifient pas l'utilisateur.
 
 ## Official References
-- [Symfony — Security](https://symfony.com/doc/current/security.html)
-- [Symfony — CSRF](https://symfony.com/doc/current/security/csrf.html)
+- [Symfony — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony — CSRF](https://symfony.com/doc/8.0/security/csrf.html)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - [PHP — password_hash](https://www.php.net/manual/en/function.password-hash.php)
 - [Symfony source — PasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher)
@@ -360,7 +360,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

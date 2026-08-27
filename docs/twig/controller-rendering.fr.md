@@ -101,7 +101,7 @@ flowchart LR
   **`fragments`** (`framework.fragments`).
 - `render_esi(...)` existe aussi comme troisième stratégie, qui délègue le
   fragment à un reverse proxy. **Excluded from Symfony 8 certification** — voir
-  [HTTP Caching → ESI](../http-caching/esi.md).
+  [HTTP Caching → ESI](../appendices/out-of-syllabus/esi.md).
 
 ```yaml
 # config/packages/framework.yaml
@@ -224,7 +224,7 @@ logique isolée.
     - [ ] D. A CLI command
 
     **Why:** Le renderer inline émet une `SUB_REQUEST`. **Ref:**
-    [Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers).
+    [Embedding controllers](https://symfony.com/doc/8.0/templates.html#embedding-controllers).
 
 ??? question "Q2. Which handler chooses the fragment renderer?"
     - [x] A. `FragmentHandler` ✅
@@ -253,11 +253,11 @@ logique isolée.
 ## Connections
 
 - **Depends on:** [Includes](includes.md) — l'embed est l'alternative plus lourde quand un simple `include` ne peut pas récupérer ses propres données.
-- **Related but excluded:** [HTTP Caching → ESI](../http-caching/esi.md) — `render_esi` utilise le même `FragmentHandler`, mais l'ESI elle-même est **exclue de la certification Symfony 8**.
+- **Related but excluded:** [HTTP Caching → ESI](../appendices/out-of-syllabus/esi.md) — `render_esi` utilise le même `FragmentHandler`, mais l'ESI elle-même est **exclue de la certification Symfony 8**.
 - **Confused with:** [Controllers](../controllers/index.md) — le rendu inline est une vraie **sous-request**, pas un simple appel de méthode.
 
 ## Official References
-- [Official — Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers)
+- [Official — Embedding controllers](https://symfony.com/doc/8.0/templates.html#embedding-controllers)
 - [Symfony source — FragmentHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php)
 
 ## Video references
@@ -270,7 +270,7 @@ logique isolée.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#embedding-controllers) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#embedding-controllers) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

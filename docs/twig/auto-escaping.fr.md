@@ -271,7 +271,7 @@ affichez avec `|raw` — ne faites jamais confiance à du markup utilisateur bru
 
     **Why:** Le TwigBundle définit `autoescape: name`, en utilisant
     `FileExtensionEscapingStrategy::guess()`. **Ref:**
-    [Twig autoescape](https://symfony.com/doc/current/templates.html#output-escaping).
+    [Twig autoescape](https://symfony.com/doc/8.0/templates.html#output-escaping).
 
 ??? question "Q2. A value goes inside `<script>const x = \"…\";</script>`. Which filter?"
     - [ ] A. `|e('html')`
@@ -314,7 +314,7 @@ affichez avec `|raw` — ne faites jamais confiance à du markup utilisateur bru
 - **Confused with:** [Twig Syntax](syntax.md) — l'échappement se produit à l'**affichage** (`{{ }}`), pas au `{% set %}` ; afficher et échapper ne font qu'un.
 
 ## Official References
-- [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
+- [Official — Output escaping](https://symfony.com/doc/8.0/templates.html#output-escaping)
 - [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
 - [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
 
@@ -328,7 +328,7 @@ affichez avec `|raw` — ne faites jamais confiance à du markup utilisateur bru
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -328,7 +328,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
     - [ ] D. `ContainerBuilder`
 
     **Why:** L'arbre définit les clés autorisées, les types, les défauts et la
-    validation ; `load()` ne fait que consommer le résultat traité. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    validation ; `load()` ne fait que consommer le résultat traité. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ??? question "Q2. When does `prepend()` run relative to `load()`?"
     - [x] A. Before all `load()` calls ✅
@@ -338,7 +338,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
 
     **Why:** Le prepend permet à un bundle d'influencer la config des autres avant
     qu'ils ne se chargent.
-    **Ref:** [Prepending config](https://symfony.com/doc/current/bundles/prepend_extension.html).
+    **Ref:** [Prepending config](https://symfony.com/doc/8.0/bundles/prepend_extension.html).
 
 ??? question "Q3. Which command prints a bundle's config reference tree?"
     - [x] A. `config:dump-reference <bundle>` ✅
@@ -347,7 +347,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
     - [ ] D. `debug:router`
 
     **Why:** Elle dumpe le schéma défini par `Configuration` ; `debug:config`
-    montre les valeurs actuelles. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    montre les valeurs actuelles. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ## Key takeaways
 
@@ -377,8 +377,8 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
   des parameters/services.
 
 ## Official References
-- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/current/bundles/configuration.html)
-- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/current/bundles/prepend_extension.html)
+- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/8.0/bundles/configuration.html)
+- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 - [Symfony source — Extension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php)
 
 ## Video references
@@ -391,7 +391,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/configuration.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/configuration.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

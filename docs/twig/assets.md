@@ -210,7 +210,7 @@ here**; `asset()` merely resolves the final public path/version.
     - [ ] D. An absolute filesystem path
 
     **Why:** `asset()` resolves a path relative to `public/` via `Packages`.
-    **Ref:** [Linking to assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets).
+    **Ref:** [Linking to assets](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets).
 
 ??? question "Q2. What is asset versioning for?"
     - [x] A. Cache busting when files change ✅
@@ -219,7 +219,7 @@ here**; `asset()` merely resolves the final public path/version.
     - [ ] D. Route matching
 
     **Why:** Versions force clients to refetch changed assets. **Ref:**
-    [Asset versioning](https://symfony.com/doc/current/frontend.html).
+    [Asset versioning](https://symfony.com/doc/8.0/frontend.html).
 
 ??? question "Q3. Which service does `asset()` delegate to?"
     - [x] A. `Symfony\Component\Asset\Packages` ✅
@@ -251,8 +251,8 @@ here**; `asset()` merely resolves the final public path/version.
 - **Confused with:** [URL Generation](urls.md) — `asset()` is for static files under `public/`; `path()`/`url()` are for routes.
 
 ## Official References
-- [Official — Linking to CSS/JS assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
-- [Official — Asset component](https://symfony.com/doc/current/components/asset.html)
+- [Official — Linking to CSS/JS assets](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets)
+- [Official — Asset component](https://symfony.com/doc/8.0/components/asset.html)
 - [Symfony source — Packages](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Asset/Packages.php)
 
 ## Video references
@@ -264,7 +264,7 @@ here**; `asset()` merely resolves the final public path/version.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

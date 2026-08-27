@@ -433,7 +433,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
 
     **Why:** `request()` renvoie une response lazy ; le transfert se termine au premier
     accès, ce qui est précisément ce qui permet la concurrence.
-    **Ref:** [HttpClient](https://symfony.com/doc/current/http_client.html).
+    **Ref:** [HttpClient](https://symfony.com/doc/8.0/http_client.html).
 
 ??? question "Q2. What does `getContent()` do on a 500 response by default?"
     - [ ] A. Returns the body
@@ -443,7 +443,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
 
     **Why:** Par défaut les erreurs lèvent une exception ; passez `false` pour lire le
     corps sans lever.
-    **Ref:** [HttpClient exceptions](https://symfony.com/doc/current/http_client.html#handling-exceptions).
+    **Ref:** [HttpClient exceptions](https://symfony.com/doc/8.0/http_client.html#handling-exceptions).
 
 ??? question "Q3. Which type should you type-hint for autowiring an HTTP client?"
     - [x] A. `Symfony\Contracts\HttpClient\HttpClientInterface` ✅
@@ -452,7 +452,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
     - [ ] D. `Psr18Client`
 
     **Why:** Dépendez du contrat ; le transport est choisi par le framework.
-    **Ref:** [HttpClient DI](https://symfony.com/doc/current/http_client.html).
+    **Ref:** [HttpClient DI](https://symfony.com/doc/8.0/http_client.html).
 
 ??? question "Q4. Which class lets you test API code with no network?"
     - [ ] A. `RetryableHttpClient`
@@ -462,7 +462,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
 
     **Why:** `MockHttpClient` renvoie des objets `MockResponse` sans requests
     réelles.
-    **Ref:** [Testing HttpClient](https://symfony.com/doc/current/http_client.html#testing).
+    **Ref:** [Testing HttpClient](https://symfony.com/doc/8.0/http_client.html#testing).
 
 ## Key takeaways
 
@@ -487,7 +487,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
 - **Confused with:** [HTTP Request](request.md) — HttpClient est le client *sortant* ; `Request` enveloppe l'échange *entrant*.
 
 ## Official References
-- [Symfony docs — HttpClient](https://symfony.com/doc/current/http_client.html)
+- [Symfony docs — HttpClient](https://symfony.com/doc/8.0/http_client.html)
 - [Symfony source — HttpClient](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpClient/HttpClient.php)
 - [Symfony source — HttpClientInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/HttpClient/HttpClientInterface.php)
 
@@ -500,7 +500,7 @@ HttpClient est compatible PSR-18 si une bibliothèque en a besoin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_client.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_client.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

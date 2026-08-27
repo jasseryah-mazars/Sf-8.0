@@ -294,7 +294,7 @@ a service, use [decoration](decoration.md).
     - [ ] D. They are ignored
 
     **Why:** With a factory the container calls the factory and passes `arguments`
-    to it. **Ref:** [Factories](https://symfony.com/doc/current/service_container/factories.html).
+    to it. **Ref:** [Factories](https://symfony.com/doc/8.0/service_container/factories.html).
 
 ??? question "Q2. Which attribute configures a factory-produced value?"
     - [ ] A. `#[Factory]`
@@ -303,7 +303,7 @@ a service, use [decoration](decoration.md).
     - [ ] D. `#[AsAlias]`
 
     **Why:** There is no `#[Factory]` attribute; `#[Autowire(factory:)]` is used.
-    **Ref:** [Autowire attribute](https://symfony.com/doc/current/service_container/autowiring.html).
+    **Ref:** [Autowire attribute](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q3. How do you reference an **instance-method** factory in YAML?"
     - [x] A. `factory: ['@service_id', 'method']` ✅
@@ -312,7 +312,7 @@ a service, use [decoration](decoration.md).
     - [ ] D. `factory: @service_id`
 
     **Why:** An array of `[reference, method]` denotes a method on a service.
-    **Ref:** [Factories](https://symfony.com/doc/current/service_container/factories.html).
+    **Ref:** [Factories](https://symfony.com/doc/8.0/service_container/factories.html).
 
 ## Key takeaways
 
@@ -340,7 +340,7 @@ a service, use [decoration](decoration.md).
   decorator *wraps* an existing one.
 
 ## Official References
-- [Official Symfony docs — Using a Factory](https://symfony.com/doc/current/service_container/factories.html)
+- [Official Symfony docs — Using a Factory](https://symfony.com/doc/8.0/service_container/factories.html)
 - [Symfony source — Definition](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php)
 
 ## Video references
@@ -352,7 +352,7 @@ a service, use [decoration](decoration.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/factories.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/factories.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

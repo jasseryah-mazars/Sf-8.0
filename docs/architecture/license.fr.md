@@ -204,7 +204,7 @@ notice, et faites attention à la marque dans votre marketing.
 - **Confused with:** [BC Promise](bc-promise.md) — une garantie *juridique* sur la licence du code, pas une garantie *technique* sur la stabilité de l'API.
 
 ## Official References
-- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/current/contributing/code/bc.html)
+- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/8.0/contributing/code/bc.html)
 - [Symfony source — LICENSE (MIT)](https://github.com/symfony/symfony/blob/8.0/LICENSE)
 - [MIT License text](https://opensource.org/license/mit)
 - [Symfony trademark policy](https://symfony.com/trademark)
@@ -219,7 +219,7 @@ notice, et faites attention à la marque dans votre marketing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

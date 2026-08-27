@@ -256,7 +256,7 @@ apps — JS clients (fetch) can send any verb directly and don't need it.
 
     **Why:** You must enable `framework.http_method_override` (or call
     `Request::enableHttpMethodParameterOverride()`); it applies to POST only.
-    **Ref:** [Method override](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Method override](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. Which method is safe AND idempotent?"
     - [ ] A. POST
@@ -292,7 +292,7 @@ apps — JS clients (fetch) can send any verb directly and don't need it.
 
 ## Official References
 - [MDN — HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-- [Symfony docs — Routing (method matching)](https://symfony.com/doc/current/routing.html)
+- [Symfony docs — Routing (method matching)](https://symfony.com/doc/8.0/routing.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 
 ## Video references
@@ -304,7 +304,7 @@ apps — JS clients (fetch) can send any verb directly and don't need it.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

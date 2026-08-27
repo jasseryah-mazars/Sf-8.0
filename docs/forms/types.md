@@ -306,7 +306,7 @@ For a one-off, just configure options at `->add()`.
 
     **Why:** `getParent()` returns a class string (default `FormType::class`); the
     registry resolves it into the parent chain.
-    **Ref:** [Creating a custom type](https://symfony.com/doc/current/form/create_custom_field_type.html).
+    **Ref:** [Creating a custom type](https://symfony.com/doc/8.0/form/create_custom_field_type.html).
 
 ??? question "Q2. Which object bundles a type with its parents and extensions?"
     - [ ] A. `FormBuilder`
@@ -326,7 +326,7 @@ For a one-off, just configure options at `->add()`.
 
     **Why:** The resolved type walks the chain top-down, so a child can override
     defaults set by its parent.
-    **Ref:** [Form types docs](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form types docs](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -352,8 +352,8 @@ For a one-off, just configure options at `->add()`.
 - **Confused with:** [Built-in types](built-in-types.md) — those are concrete field types; this chapter is the hierarchy/`ResolvedFormType` mechanism behind them.
 
 ## Official References
-- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
-- [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
+- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/8.0/form/create_custom_field_type.html)
+- [Official Symfony docs — Form type options](https://symfony.com/doc/8.0/reference/forms/types.html)
 - [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)
 
 ## Video references
@@ -365,7 +365,7 @@ For a one-off, just configure options at `->add()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_custom_field_type.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_custom_field_type.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

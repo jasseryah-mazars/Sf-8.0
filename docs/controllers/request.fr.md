@@ -288,7 +288,7 @@ non scalaire — il ne retourne qu'un scalaire ou `null`, jamais un tableau.)
     - [ ] D. `DefaultValueResolver`
 
     **Why:** `RequestValueResolver` fournit la `Request` courante ; le resolver
-    d'attributes gère les paramètres de route. **Ref:** [controller](https://symfony.com/doc/current/controller.html#the-request-object-as-a-controller-argument).
+    d'attributes gère les paramètres de route. **Ref:** [controller](https://symfony.com/doc/8.0/controller.html#the-request-object-as-a-controller-argument).
 
 ??? question "Q2. Where do route parameters land?"
     - [ ] A. `$request->query`
@@ -297,7 +297,7 @@ non scalaire — il ne retourne qu'un scalaire ou `null`, jamais un tableau.)
     - [ ] D. `$request->server`
 
     **Why:** le router écrit les paramètres matchés dans le bag `attributes`.
-    **Ref:** [request](https://symfony.com/doc/current/components/http_foundation.html#request).
+    **Ref:** [request](https://symfony.com/doc/8.0/components/http_foundation.html#request).
 
 ??? question "Q3. How should a service obtain the current request?"
     - [ ] A. Autowire `Request` in the constructor.
@@ -307,7 +307,7 @@ non scalaire — il ne retourne qu'un scalaire ou `null`, jamais un tableau.)
 
     **Why:** la `Request` a la portée d'une requête ; `RequestStack` est le service
     stable.
-    **Ref:** [request stack](https://symfony.com/doc/current/service_container/request.html).
+    **Ref:** [request stack](https://symfony.com/doc/8.0/service_container/request.html).
 
 ## Key takeaways
 
@@ -330,8 +330,8 @@ non scalaire — il ne retourne qu'un scalaire ou `null`, jamais un tableau.)
 - **Confused with:** [The Session](session.md) — injectez `RequestStack` (pas `Request`/`Session`) dans les services.
 
 ## Official References
-- [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html)
-- [Official Symfony docs — Request as controller argument](https://symfony.com/doc/current/controller.html)
+- [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/8.0/components/http_foundation.html)
+- [Official Symfony docs — Request as controller argument](https://symfony.com/doc/8.0/controller.html)
 - [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)
 
 ## Video references
@@ -344,7 +344,7 @@ non scalaire — il ne retourne qu'un scalaire ou `null`, jamais un tableau.)
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#the-request-object-as-a-controller-argument) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#the-request-object-as-a-controller-argument) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

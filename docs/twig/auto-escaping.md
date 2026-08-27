@@ -262,7 +262,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 
     **Why:** TwigBundle sets `autoescape: name`, using
     `FileExtensionEscapingStrategy::guess()`. **Ref:**
-    [Twig autoescape](https://symfony.com/doc/current/templates.html#output-escaping).
+    [Twig autoescape](https://symfony.com/doc/8.0/templates.html#output-escaping).
 
 ??? question "Q2. A value goes inside `<script>const x = \"…\";</script>`. Which filter?"
     - [ ] A. `|e('html')`
@@ -304,7 +304,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 - **Confused with:** [Twig Syntax](syntax.md) — escaping happens at **print** (`{{ }}`), not at `{% set %}`; printing and escaping are one step.
 
 ## Official References
-- [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
+- [Official — Output escaping](https://symfony.com/doc/8.0/templates.html#output-escaping)
 - [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
 - [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
 
@@ -317,7 +317,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#output-escaping) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#output-escaping) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

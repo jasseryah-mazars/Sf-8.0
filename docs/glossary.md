@@ -51,7 +51,7 @@ follow the link for the full chapter.
 ## E
 
 - **Envelope** — Wraps a Messenger message with **stamps** (metadata). → [messenger](messenger/middleware.md)
-- **ESI (Edge Side Includes)** — Cache fragments independently at a gateway. → [chapter](http-caching/esi.md)
+- **ESI (Edge Side Includes)** — Cache fragments independently at a gateway. → [chapter](appendices/out-of-syllabus/esi.md)
 - **ETag** — Validation cache header (content fingerprint); wins over `Last-Modified`. → [validation](http-caching/validation.md)
 - **EventDispatcher** — Dispatches events to listeners/subscribers by priority. → [chapter](architecture/events.md)
 - **`empty_data`** — Form value used when nothing is submitted. → [creation](forms/creation.md)
@@ -126,5 +126,5 @@ follow the link for the full chapter.
 
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

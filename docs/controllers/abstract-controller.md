@@ -336,7 +336,7 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
     - [ ] D. Via static properties set by the kernel.
 
     **Why:** it implements `ServiceSubscriberInterface`; the compiler builds a
-    per-controller locator. **Ref:** [service subscribers](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    per-controller locator. **Ref:** [service subscribers](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. What does `$this->container` hold inside an AbstractController?"
     - [ ] A. The full application container.
@@ -345,7 +345,7 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
     - [ ] D. Only parameters, not services.
 
     **Why:** the locator contains exactly the services returned by
-    `getSubscribedServices()`. **Ref:** [service subscribers](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    `getSubscribedServices()`. **Ref:** [service subscribers](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q3. What happens if you call `render()` without Twig installed?"
     - [ ] A. A container "service not found" fatal error.
@@ -363,7 +363,7 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
     - [ ] D. It auto-registers every app service.
 
     **Why:** subscription keeps services lazy and the coupling explicit.
-    **Ref:** [best practices](https://symfony.com/doc/current/best_practices.html).
+    **Ref:** [best practices](https://symfony.com/doc/8.0/best_practices.html).
 
 ## Key takeaways
 
@@ -390,8 +390,8 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
 - **Confused with:** [Naming Conventions](naming-conventions.md) — extending it is optional; any callable is a valid controller.
 
 ## Official References
-- [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html#the-base-controller-class-services)
-- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Controllers](https://symfony.com/doc/8.0/controller.html#the-base-controller-class-services)
+- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — AbstractController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php)
 
 ## Video references
@@ -403,7 +403,7 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

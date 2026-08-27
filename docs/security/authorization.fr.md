@@ -289,7 +289,7 @@ quand la décision est calculée en cours d'action.
 
     **Why:** Seul le chemin `isGranted()`/`#[IsGranted]`/`denyAccessUnlessGranted()`
     porte un subject ; `access_control` est basé sur l'URL.
-    **Ref:** [Voters](https://symfony.com/doc/current/security/voters.html).
+    **Ref:** [Voters](https://symfony.com/doc/8.0/security/voters.html).
 
 ??? question "Q2. `#[IsGranted]` fails for an anonymous user. What happens?"
     - [ ] A. Immediate 403 always
@@ -299,7 +299,7 @@ quand la décision est calculée en cours d'action.
 
     **Why:** Une `AccessDeniedException` non authentifiée est convertie en
     réponse d'entry point ; une exception authentifiée produit un 403.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html#access-control).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html#access-control).
 
 ??? question "Q3. Which interface does `isGranted()` ultimately delegate to?"
     - [ ] A. `AuthenticatorInterface`
@@ -340,8 +340,8 @@ quand la décision est calculée en cours d'action.
   uniquement basé sur l'URL.
 
 ## Official References
-- [Symfony docs — Authorization](https://symfony.com/doc/current/security.html#access-control-authorization)
-- [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
+- [Symfony docs — Authorization](https://symfony.com/doc/8.0/security.html#access-control-authorization)
+- [Symfony docs — Voters](https://symfony.com/doc/8.0/security/voters.html)
 - [Symfony source — AuthorizationChecker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AuthorizationChecker.php)
 
 ## Video references
@@ -353,7 +353,7 @@ quand la décision est calculée en cours d'action.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

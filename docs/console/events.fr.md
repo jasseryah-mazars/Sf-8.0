@@ -296,7 +296,7 @@ préoccupations à l'échelle de l'application.
 
     **Why:** `ERROR` ne se déclenche que sur un throwable ; `TERMINATE` se déclenche
     toujours en dernier.
-    **Ref:** [Console events](https://symfony.com/doc/current/components/console/events.html).
+    **Ref:** [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q2. Which event lets you change the exit code no matter what happened?"
     - [ ] A. `ConsoleEvents::COMMAND`
@@ -305,7 +305,7 @@ préoccupations à l'échelle de l'application.
     - [ ] D. It cannot be changed after execution
 
     **Why:** `ConsoleTerminateEvent::setExitCode()` est la dernière chance. **Ref:**
-    [Console events](https://symfony.com/doc/current/components/console/events.html).
+    [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q3. What exit code results from `ConsoleCommandEvent::disableCommand()`?"
     - [ ] A. 0
@@ -314,7 +314,7 @@ préoccupations à l'échelle de l'application.
     - [ ] D. 255
 
     **Why:** `RETURN_CODE_DISABLED` vaut 113. **Ref:**
-    [Console events](https://symfony.com/doc/current/components/console/events.html).
+    [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q4. Which interface lets a command react to `SIGTERM`?"
     - [x] A. `SignalableCommandInterface` ✅
@@ -323,7 +323,7 @@ préoccupations à l'échelle de l'application.
     - [ ] D. `EventSubscriberInterface`
 
     **Why:** implémentez `getSubscribedSignals()` et `handleSignal()`. **Ref:**
-    [Console signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals).
+    [Console signals](https://symfony.com/doc/8.0/components/console/events.html#handling-command-signals).
 
 ## Key takeaways
 
@@ -351,8 +351,8 @@ préoccupations à l'échelle de l'application.
   sont des méthodes redéfinissables, pas des events dispatchés.
 
 ## Official References
-- [Official Symfony docs — Console events](https://symfony.com/doc/current/components/console/events.html)
-- [Official Symfony docs — Handling signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals)
+- [Official Symfony docs — Console events](https://symfony.com/doc/8.0/components/console/events.html)
+- [Official Symfony docs — Handling signals](https://symfony.com/doc/8.0/components/console/events.html#handling-command-signals)
 - [Symfony source — ConsoleEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/ConsoleEvents.php)
 
 ## Video references
@@ -364,7 +364,7 @@ préoccupations à l'échelle de l'application.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/console/events.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/console/events.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

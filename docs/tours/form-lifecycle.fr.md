@@ -276,10 +276,10 @@ extensions (par exemple injecter une `var` supplémentaire pour le template).
 ## Official References
 
 - [Form.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)
-- [Form Events](https://symfony.com/doc/current/form/events.html)
-- [Data Transformers](https://symfony.com/doc/current/form/data_transformers.html)
-- [Forms — processing](https://symfony.com/doc/current/forms.html#processing-forms)
-- [When and How to Use Data Mappers](https://symfony.com/doc/current/form/data_mappers.html)
+- [Form Events](https://symfony.com/doc/8.0/form/events.html)
+- [Data Transformers](https://symfony.com/doc/8.0/form/data_transformers.html)
+- [Forms — processing](https://symfony.com/doc/8.0/forms.html#processing-forms)
+- [When and How to Use Data Mappers](https://symfony.com/doc/8.0/form/data_mappers.html)
 
 ---
 <small>Related: [Form Events](../forms/events.md) ·

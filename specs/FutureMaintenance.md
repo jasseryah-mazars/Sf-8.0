@@ -15,13 +15,18 @@ operational counterpart to [QualityRequirements Q6](QualityRequirements.md)
 | External doc/source URLs | Link rot | Continuous |
 | Exam syllabus revision | Topic weights, added/removed items | Symfony-driven |
 
-Because doc links use `doc/current`, prose about *current* behavior tends to stay
-valid across minors; **version-pinned facts, deprecations, and defaults** are what
-need active maintenance.
+Doc links are pinned to `doc/8.0` (not `doc/current`), per the certification's
+requirement to verify against Symfony 8.0 exclusively — so prose does **not**
+auto-track newer minors the way a `doc/current` link would have. When Symfony
+8.1/8.2 ship, the version-pinned facts, deprecations, and defaults described here
+are what need active review before the baseline moves.
 
 ## 2. Versioning policy
 
-- **Doc links:** always `symfony.com/doc/current/...` (tracks latest stable).
+- **Doc links:** always `symfony.com/doc/8.0/...` (pinned to the certified
+  Symfony 8.0 branch — deliberately does **not** track newer minors; see the
+  baseline-change process below before ever repointing this to `doc/current`
+  or a later version).
 - **Source links:** pin the branch the content targets — `blob/8.0` today; bump to
   `blob/9.0` only when the platform's baseline moves.
 - **Baseline statement:** the "Symfony 8.0 / PHP 8.4+ / Twig 3.x" baseline lives in
@@ -56,7 +61,7 @@ need active maintenance.
 
 - [ ] `mkdocs build --strict` catches broken **internal** links automatically.
 - [ ] Periodically validate **external** links (docs, source) with a link checker;
-      `doc/current` should be stable, but source line anchors on `blob/8.0` can move
+      `doc/8.0` is pinned and should stay stable, but source line anchors on `blob/8.0` can move
       — prefer file-level source links over line-pinned ones for durability.
 - [ ] Fix or re-point dead references; note any doc pages Symfony has restructured.
 

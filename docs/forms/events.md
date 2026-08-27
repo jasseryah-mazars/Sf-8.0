@@ -354,7 +354,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** Submission dispatches PRE_SUBMIT (raw), SUBMIT (norm), POST_SUBMIT
     (model), in that order.
-    **Ref:** [Form events](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q2. On PRE_SUBMIT, `$event->getData()` returns…"
     - [x] A. The raw submitted view data (array/string) ✅
@@ -364,7 +364,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** PRE_SUBMIT fires before transformation, so data is the raw request
     values.
-    **Ref:** [Form events docs](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events docs](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q3. To add a field based on the submitted value, listen on…"
     - [x] A. PRE_SUBMIT ✅
@@ -374,7 +374,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** Fields must be added before binding; PRE_SUBMIT gives you the raw
     value while the form is still mutable.
-    **Ref:** [Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html).
+    **Ref:** [Dynamic form modification](https://symfony.com/doc/8.0/form/dynamic_form_modification.html).
 
 ??? question "Q4. Which event does the validator extension hook to run validation?"
     - [x] A. POST_SUBMIT ✅
@@ -384,7 +384,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** Validation runs after data is bound to the model, via a POST_SUBMIT
     listener. There is no dedicated validate event.
-    **Ref:** [Form events docs](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events docs](https://symfony.com/doc/8.0/form/events.html).
 
 ## Key takeaways
 
@@ -410,8 +410,8 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 - **Confused with:** [EventDispatcher](../architecture/events.md) — form events use the same dispatcher but a distinct `FormEvents` set, not kernel events.
 
 ## Official References
-- [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
-- [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html)
+- [Official Symfony docs — Form events](https://symfony.com/doc/8.0/form/events.html)
+- [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/8.0/form/dynamic_form_modification.html)
 - [Symfony source — FormEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php)
 
 ## Video references
@@ -423,7 +423,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/events.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/events.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

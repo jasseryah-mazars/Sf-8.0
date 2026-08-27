@@ -22,7 +22,7 @@ Full theory: [Security](../security/index.md).
 
     The key existed and was deprecated in 7.x; Symfony 8 removed it entirely because the legacy authentication system is gone.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q2.** True or False: a firewall with stateless: true restores the authenticated token from the session on the next request.  <small>_(easy · true-false)_</small>
 
@@ -34,7 +34,7 @@ Full theory: [Security](../security/index.md).
 
     False. stateless: true means the ContextListener is not registered, so no token is written to or restored from the session. Each request starts with empty token storage and must re-authenticate (e.g. re-read the bearer token). Session-backed restore is a property of stateful firewalls only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q3.** Which check can pass a subject to voters?  <small>_(easy · single)_</small>
 
@@ -48,7 +48,7 @@ Full theory: [Security](../security/index.md).
 
     Only the isGranted()/#[IsGranted]/denyAccessUnlessGranted() path carries a subject. access_control is URL-based and cannot pass a subject.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q4.** isGranted() ultimately delegates the decision to which interface?  <small>_(easy · single)_</small>
 
@@ -76,7 +76,7 @@ Full theory: [Security](../security/index.md).
 
     You map a user class (commonly PasswordAuthenticatedUserInterface) to an algorithm such as 'auto'.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html)
 
 **Q6.** Which of these are valid top-level keys under security: in Symfony 8? (choose 4)  <small>_(easy · multiple)_</small>
 
@@ -91,7 +91,7 @@ Full theory: [Security](../security/index.md).
 
     providers, firewalls, access_control, password_hashers and role_hierarchy are the core keys of security.yaml. enable_authenticator_manager was removed in Symfony 8 — the authenticator system is the only one — so it is not a valid key anymore.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/configuration/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/configuration/security.html)
 
 **Q7.** Which method loads a user by identifier in Symfony 8?  <small>_(easy · single)_</small>
 
@@ -105,7 +105,7 @@ Full theory: [Security](../security/index.md).
 
     loadUserByUsername() was removed; the UserProviderInterface loader is loadUserByIdentifier().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/user_providers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/user_providers.html)
 
 **Q8.** True or False: a firewall with stateless: true still calls refreshUser() on every request.  <small>_(easy · true-false)_</small>
 
@@ -117,7 +117,7 @@ Full theory: [Security](../security/index.md).
 
     False. refreshUser() is invoked by the ContextListener, which only exists on stateful firewalls. A stateless firewall stores no token in the session, so there is nothing to refresh — the user is re-loaded from scratch by the authenticator on each request instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/user_providers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/user_providers.html)
 
 **Q9.** How many firewalls are active for a given request?  <small>_(easy · single)_</small>
 
@@ -131,7 +131,7 @@ Full theory: [Security](../security/index.md).
 
     The FirewallMap returns the first matching FirewallContext; matching stops there.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-firewall)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-firewall)
 
 **Q10.** Which methods does UserInterface declare in Symfony 8?  <small>_(easy · trap)_</small>
 
@@ -171,7 +171,7 @@ Full theory: [Security](../security/index.md).
 
     'auto' selects the best available algorithm (currently bcrypt) and can adapt over time; it also enables automatic rehash on cost changes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html)
 
 **Q13.** Which statement about the plaintext hasher is correct?  <small>_(easy · trap)_</small>
 
@@ -185,7 +185,7 @@ Full theory: [Security](../security/index.md).
 
     plaintext stores passwords unhashed; it exists to speed up test fixtures and is a production anti-pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html)
 
 **Q14.** In Symfony 8, how do you allow everyone (including not-logged-in) on a path?  <small>_(easy · trap)_</small>
 
@@ -199,7 +199,7 @@ Full theory: [Security](../security/index.md).
 
     Anonymous tokens were removed; PUBLIC_ACCESS is the attribute that opts a path out of authentication.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q15.** True or False: IS_AUTHENTICATED_ANONYMOUSLY is still a valid access attribute in Symfony 8.  <small>_(easy · true-false)_</small>
 
@@ -211,7 +211,7 @@ Full theory: [Security](../security/index.md).
 
     False. Symfony 8 has no anonymous tokens, so IS_AUTHENTICATED_ANONYMOUSLY no longer exists. To open a path to everyone (including not-logged-in visitors) use PUBLIC_ACCESS instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q16.** How many access_control rules apply to a request?  <small>_(easy · single)_</small>
 
@@ -225,7 +225,7 @@ Full theory: [Security](../security/index.md).
 
     AccessMap returns the first match and evaluation stops. Order rules from specific to general.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control)
 
 **Q17.** What does an authenticator's authenticate() method return?  <small>_(easy · single)_</small>
 
@@ -239,7 +239,7 @@ Full theory: [Security](../security/index.md).
 
     authenticate() builds a Passport of badges; the token is produced later by createToken() after CheckPassportEvent resolves the badges.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/custom_authenticator.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 
 **Q18.** Which built-in authenticator uses a token_handler returning a UserBadge?  <small>_(easy · single)_</small>
 
@@ -253,7 +253,7 @@ Full theory: [Security](../security/index.md).
 
     The access_token authenticator delegates to an AccessTokenHandlerInterface whose getUserBadgeFrom() validates the bearer token and returns a UserBadge.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/access_token.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/access_token.html)
 
 **Q19.** What is the default AccessDecisionManager strategy?  <small>_(easy · single)_</small>
 
@@ -267,7 +267,7 @@ Full theory: [Security](../security/index.md).
 
     Affirmative is the default: access is granted if at least one voter returns ACCESS_GRANTED.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
 
 **Q20.** What are the integer values of the voter constants?  <small>_(easy · internals)_</small>
 
@@ -295,7 +295,7 @@ Full theory: [Security](../security/index.md).
 
     authenticate() only builds the Passport. Badge resolution and credential verification happen on CheckPassportEvent (UserProviderListener, CheckCredentialsListener, CsrfProtectionListener…).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/custom_authenticator.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 
 **Q22.** A stateless firewall (stateless: true) does NOT do which of these?  <small>_(medium · internals)_</small>
 
@@ -309,7 +309,7 @@ Full theory: [Security](../security/index.md).
 
     Stateless firewalls skip the ContextListener, so nothing is stored or restored between requests; each request re-authenticates.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q23.** An authenticator's supports() returns null. What does that mean?  <small>_(medium · trap)_</small>
 
@@ -337,7 +337,7 @@ Full theory: [Security](../security/index.md).
 
     Security::getUser() returns ?UserInterface — it is null whenever no token holds a user (a truly anonymous request, or a lazy firewall whose token was never read). Dereferencing null is a fatal error. Guard with $user?->…, a ?? fallback, or an earlier #[IsGranted('IS_AUTHENTICATED_FULLY')] / denyAccessUnlessGranted() so $user is guaranteed non-null past that point. getUserIdentifier() is very much part of the 8.0 interface, and getUser() never throws for guests — it simply returns null.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q25.** A #[IsGranted] check fails for an unauthenticated user. What happens?  <small>_(medium · internals)_</small>
 
@@ -351,7 +351,7 @@ Full theory: [Security](../security/index.md).
 
     An AccessDeniedException for an unauthenticated user is converted to the entry point response; an authenticated-but-unauthorized user gets a 403.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#access-control)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#access-control)
 
 **Q26.** In #[IsGranted('EDIT', subject: 'post')], what does subject: 'post' do?  <small>_(medium · code)_</small>
 
@@ -365,7 +365,7 @@ Full theory: [Security](../security/index.md).
 
     The subject option references a controller argument by name; Symfony resolves $post and passes it to AccessDecisionManager::decide() as the subject, so a voter's voteOnAttribute() receives the actual Post instance and can apply per-object rules (ownership, state). It is not a voter name, a route requirement, or a role suffix.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#access-controllers)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#access-controllers)
 
 **Q27.** Which statement about access_control vs isGranted() is correct?  <small>_(medium · trap)_</small>
 
@@ -379,7 +379,7 @@ Full theory: [Security](../security/index.md).
 
     access_control runs through the same AccessDecisionManager and voters as isGranted(), but it only supplies the rule's roles/allow_if — there is no subject, because it matches on the URL, not on a domain object. Per-object decisions ("can edit THIS post?") must use #[IsGranted]/denyAccessUnlessGranted() with a subject. Both do reach voters, so the "neither" option is wrong.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q28.** Which of these funnel through AuthorizationCheckerInterface::isGranted()? (choose 3)  <small>_(medium · multiple)_</small>
 
@@ -393,7 +393,7 @@ Full theory: [Security](../security/index.md).
 
     #[IsGranted], denyAccessUnlessGranted() and Twig's is_granted() are all thin wrappers over AuthorizationCheckerInterface::isGranted(), which delegates to the AccessDecisionManager and voters. loadUserByIdentifier() belongs to the authentication/provider layer (loading users), not authorization, so it does not go through isGranted().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#access-control-authorization)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#access-control-authorization)
 
 **Q29.** Two providers are defined and a firewall omits the provider key. Result?  <small>_(medium · trap)_</small>
 
@@ -407,7 +407,7 @@ Full theory: [Security](../security/index.md).
 
     With multiple providers there is no implicit default; each firewall must name its provider explicitly.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/user_providers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/user_providers.html)
 
 **Q30.** Why must the dev firewall (security: false) be listed first?  <small>_(medium · internals)_</small>
 
@@ -421,7 +421,7 @@ Full theory: [Security](../security/index.md).
 
     Firewall matching is top-to-bottom, first match wins. Listing the dev firewall first stops the profiler/assets being intercepted by login.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-firewall)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-firewall)
 
 **Q31.** Requests under /api are being handled by the session-based main firewall instead of the stateless api firewall. What is wrong?  <small>_(medium · debug)_</small>
 
@@ -435,7 +435,7 @@ Full theory: [Security](../security/index.md).
 
     Firewalls match top-to-bottom, first match wins. A catch-all main firewall (no pattern) placed before api matches every request, so /api never reaches the stateless firewall. Move the specific ^/api firewall above main. enable_authenticator_manager no longer exists in Symfony 8, stateless does not affect matching, and multiple providers do not skip a firewall.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-firewall)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-firewall)
 
 **Q32.** How do you configure eraseCredentials behaviour in security.yaml in Symfony 8?  <small>_(medium · trap)_</small>
 
@@ -477,7 +477,7 @@ Full theory: [Security](../security/index.md).
 
     Providers only load and refresh users. CheckCredentialsListener verifies the PasswordCredentials badge.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/custom_authenticator.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 
 **Q35.** A custom provider does `return $repo->find($id);` in loadUserByIdentifier() and sometimes throws a TypeError. What is the fix?  <small>_(medium · debug)_</small>
 
@@ -491,7 +491,7 @@ Full theory: [Security](../security/index.md).
 
     loadUserByIdentifier(): UserInterface has a non-nullable return type. Returning null (as find() may) is a contract violation and causes a TypeError. When no user matches you must throw UserNotFoundException, which Symfony normalises to a generic BadCredentialsException so an attacker cannot distinguish "unknown user" from "wrong password". You never return null or false, and the method returns a single UserInterface, not an array.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/user_providers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/user_providers.html)
 
 **Q36.** A provider is configured as `all_users: { chain: { providers: [in_memory, api_users] } }`. What does it do?  <small>_(medium · config)_</small>
 
@@ -505,7 +505,7 @@ Full theory: [Security](../security/index.md).
 
     A chain provider delegates to its sub-providers in the declared order and returns the first successful match; if none support/find the user it throws. It does not merge users, require presence in all providers, or choose randomly. Correct supportsClass()/UnsupportedUserException handling in each sub-provider is what lets the chain fall through cleanly.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/user_providers.html#chaining-user-providers)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/user_providers.html#chaining-user-providers)
 
 **Q37.** What does security: false on a firewall do?  <small>_(medium · internals)_</small>
 
@@ -519,7 +519,7 @@ Full theory: [Security](../security/index.md).
 
     It turns off all security listeners for matching requests (used for the profiler and dev assets) and, being first-match, prevents later firewalls from matching.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q38.** Two firewalls should share a logged-in session. What do you configure?  <small>_(medium · single)_</small>
 
@@ -533,7 +533,7 @@ Full theory: [Security](../security/index.md).
 
     Token sharing between firewalls requires an explicit matching context key; otherwise each firewall keeps its own token.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q39.** What does lazy: true achieve on a firewall?  <small>_(medium · internals)_</small>
 
@@ -547,7 +547,7 @@ Full theory: [Security](../security/index.md).
 
     A lazy firewall only authenticates when the token is accessed (e.g. is_granted/getUser), so fully public pages skip auth and session loading.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q40.** A firewall configured with `pattern: /api` unexpectedly also intercepts /my-api-docs. Why?  <small>_(medium · debug)_</small>
 
@@ -561,7 +561,7 @@ Full theory: [Security](../security/index.md).
 
     Firewall pattern is an unanchored regular expression, so /api matches any path containing that sequence — including /my-api-docs. Anchoring with ^ (^/api) fixes it to the start of the path. Patterns are regexes (anchorable), the doc route is unrelated to physical location, and methods: narrows HTTP verbs, not path matching.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-firewall)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-firewall)
 
 **Q41.** Given firewalls declared as main (no pattern) then api (pattern: ^/api), what happens to /api requests?  <small>_(medium · trap)_</small>
 
@@ -575,7 +575,7 @@ Full theory: [Security](../security/index.md).
 
     Firewall selection is first-match, top-to-bottom — not most-specific-wins. A patternless main firewall matches everything, so it swallows /api before the api firewall is considered. The fix is ordering: specific firewalls (^/api) before the catch-all. Symfony does not run multiple firewalls per request, nor does it error on overlap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-firewall)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-firewall)
 
 **Q42.** How do you keep a user's password out of the session in Symfony 8?  <small>_(medium · code)_</small>
 
@@ -617,7 +617,7 @@ Full theory: [Security](../security/index.md).
 
     PasswordAuthenticatedUserInterface::getPassword() is typed ?string precisely because passwordless accounts (OAuth/LDAP/token-only) legitimately have a null hash. Declaring a non-nullable string return type makes PHP throw a TypeError the moment null is returned during verification or serialization. The CheckCredentialsListener treats a null hash as non-verifiable. The method name and return type are fixed by the interface, and eraseCredentials() no longer exists.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-user)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-user)
 
 **Q45.** Where is a login password actually verified?  <small>_(medium · internals)_</small>
 
@@ -631,7 +631,7 @@ Full theory: [Security](../security/index.md).
 
     The authenticator adds a PasswordCredentials badge; the listener verifies it against the hash using the configured hasher.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/custom_authenticator.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 
 **Q46.** A hasher entry is `algorithm: sodium, migrate_from: ['bcrypt']`. What does it mean?  <small>_(medium · config)_</small>
 
@@ -645,7 +645,7 @@ Full theory: [Security](../security/index.md).
 
     The primary algorithm (sodium/Argon2id) is used to hash new passwords, while migrate_from lists legacy algorithms whose hashes are still verifiable. On a valid login against an old bcrypt hash, needsRehash() returns true and the PasswordUpgradeBadge flow rehashes with sodium and persists it — transparent, no reset. It does not reject bcrypt, swap hashing/verifying roles, or double-hash.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html#password-migration)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html#password-migration)
 
 **Q47.** Which special attribute is broader?  <small>_(medium · trap)_</small>
 
@@ -659,7 +659,7 @@ Full theory: [Security](../security/index.md).
 
     Fully-authenticated users satisfy IS_AUTHENTICATED_REMEMBERED, but remember-me users do NOT satisfy IS_AUTHENTICATED_FULLY.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#security-authorization-access-decision)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#security-authorization-access-decision)
 
 **Q48.** An attribute 'EDITOR' (no ROLE_ prefix) is checked. How does RoleVoter treat it?  <small>_(medium · single)_</small>
 
@@ -673,7 +673,7 @@ Full theory: [Security](../security/index.md).
 
     RoleVoter supports only ROLE_* attributes; unprefixed strings abstain there (a custom voter could still handle them).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#roles)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#roles)
 
 **Q49.** Given role_hierarchy ROLE_ADMIN: [ROLE_USER], a user with ROLE_ADMIN…  <small>_(medium · internals)_</small>
 
@@ -687,7 +687,7 @@ Full theory: [Security](../security/index.md).
 
     RoleHierarchyVoter expands reachable roles, so ROLE_ADMIN transitively includes ROLE_USER. Hierarchy flows downward.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#hierarchical-roles)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
 
 **Q50.** With role_hierarchy ROLE_ADMIN: [ROLE_USER] and ROLE_SUPER_ADMIN: [ROLE_ADMIN], which roles does a ROLE_SUPER_ADMIN user satisfy?  <small>_(medium · config)_</small>
 
@@ -715,7 +715,7 @@ Full theory: [Security](../security/index.md).
 
     IS_AUTHENTICATED_FULLY is granted only to users who authenticated fresh in the current session — not via a remember-me cookie. A stolen remember-me cookie satisfies IS_AUTHENTICATED_REMEMBERED and IS_AUTHENTICATED, so those would wrongly permit a sensitive identity change; PUBLIC_ACCESS allows everyone. Use _FULLY to force a fresh login for payments/identity changes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#security-authorization-access-decision)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#security-authorization-access-decision)
 
 **Q52.** A rule has roles: [ROLE_A, ROLE_B]. Access is granted when the user has…  <small>_(medium · single)_</small>
 
@@ -729,7 +729,7 @@ Full theory: [Security](../security/index.md).
 
     Multiple roles within a single access_control rule are OR-combined.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control)
 
 **Q53.** No access_control rule matches the request. What happens?  <small>_(medium · trap)_</small>
 
@@ -743,7 +743,7 @@ Full theory: [Security](../security/index.md).
 
     access_control only restricts on a matching rule; with no match there is no URL-level restriction.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q54.** What does requires_channel: https do, and when?  <small>_(medium · internals)_</small>
 
@@ -757,7 +757,7 @@ Full theory: [Security](../security/index.md).
 
     The ChannelListener enforces requires_channel before authentication, so even the login page is redirected to HTTPS.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q55.** After adding { path: ^/, roles: PUBLIC_ACCESS } at the top of access_control, the ^/admin rule below stops protecting admin. Why?  <small>_(medium · debug)_</small>
 
@@ -771,7 +771,7 @@ Full theory: [Security](../security/index.md).
 
     access_control is first-match, top-to-bottom. ^/ matches all paths, so placing it first means /admin hits the PUBLIC_ACCESS rule and the ^/admin rule underneath is never evaluated — admin becomes public. Order specific rules before the ^/ catch-all. PUBLIC_ACCESS is a normal attribute (it does not disable other rules), and the roles syntax/requires_channel are unrelated.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control)
 
 **Q56.** Which passport type suits a valid-API-token flow with no password to verify?  <small>_(medium · scenario)_</small>
 
@@ -785,7 +785,7 @@ Full theory: [Security](../security/index.md).
 
     When the credential itself proves identity, use SelfValidatingPassport, which carries only a UserBadge — there is nothing further to check.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/custom_authenticator.html#the-passport)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/custom_authenticator.html#the-passport)
 
 **Q57.** In which namespace does PasswordCredentials live?  <small>_(medium · trap)_</small>
 
@@ -856,7 +856,7 @@ Full theory: [Security](../security/index.md).
 
     allow_if_all_abstain defaults to false, so if every voter abstains and no one grants, access is denied.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q62.** In a Voter, voteOnAttribute() starts with `if (!$user instanceof AppUser) { return false; }`. Why return false rather than abstain?  <small>_(medium · code)_</small>
 
@@ -870,7 +870,7 @@ Full theory: [Security](../security/index.md).
 
     By the time voteOnAttribute() runs, supports() has already said "this attribute/subject is mine", so the voter must return a real yes/no. An unauthenticated request carries a NullToken whose getUser() is null (or a user of the wrong class), so there is nobody to authorize — deny (return false). Abstaining would contradict supports(); getUser() genuinely can be null; and voters signal decisions via return values, not by throwing.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q63.** With access_decision_manager.strategy set to priority, how is the decision made?  <small>_(medium · config)_</small>
 
@@ -884,7 +884,7 @@ Full theory: [Security](../security/index.md).
 
     The priority strategy takes the vote of the first (highest-priority) non-abstaining voter as final, letting a high-priority voter short-circuit (e.g. a global "banned user" voter denying before feature voters run). "All must agree" describes unanimous, "majority" describes consensus, and "one grant is enough" describes affirmative.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
 
 **Q64.** During a successful login, in which order does the AuthenticatorManager dispatch these events?  <small>_(hard · internals)_</small>
 
@@ -997,7 +997,7 @@ Full theory: [Security](../security/index.md).
 
     migrate_from lets needsRehash() detect the old hash; the PasswordUpgradeBadge triggers PasswordMigratingListener, which persists the new hash via upgradePassword().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html#password-migration)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html#password-migration)
 
 **Q72.** A user with a very long passphrase can change the trailing characters and still log in. Which hasher is in use and why?  <small>_(hard · trap)_</small>
 
@@ -1011,7 +1011,7 @@ Full theory: [Security](../security/index.md).
 
     bcrypt has a hard 72-byte input limit; any bytes past 72 are silently ignored, so two passphrases sharing the first 72 bytes verify identically. Very long passphrases therefore lose entropy under bcrypt. sodium (Argon2id) has no such truncation, which is one reason to prefer it for long secrets. The other options invent behaviour that does not exist.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html)
 
 **Q73.** You set migrate_from and needsRehash() returns true, yet stored hashes are never upgraded. What is missing?  <small>_(hard · debug)_</small>
 
@@ -1025,7 +1025,7 @@ Full theory: [Security](../security/index.md).
 
     migrate_from + needsRehash() computes a fresh hash, but persisting it is the provider's job: only a provider implementing PasswordUpgraderInterface's upgradePassword() actually stores it (triggered by the PasswordUpgradeBadge / PasswordMigratingListener). Without it, the rehash is computed and discarded every login. migrate_from is not plaintext-only, you must not hash manually, and needsRehash() is fully supported.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html#password-migration)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html#password-migration)
 
 **Q74.** Can an access_control rule pass the matched entity to a voter as the subject?  <small>_(hard · trap)_</small>
 
@@ -1039,7 +1039,7 @@ Full theory: [Security](../security/index.md).
 
     access_control routes through the same AccessDecisionManager and voters as isGranted(), but it is purely URL-driven: the AccessListener calls decide() with the rule's roles/expression and no subject. There is no subject: key and path parameters are not passed as subjects. Per-object decisions require #[IsGranted]/denyAccessUnlessGranted() with an explicit subject.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q75.** A rule sets both roles: ROLE_USER and an allow_if expression. When is access granted?  <small>_(hard · config)_</small>
 
@@ -1053,7 +1053,7 @@ Full theory: [Security](../security/index.md).
 
     Within one rule, multiple roles are OR-combined, but when roles and allow_if are both present they must BOTH pass — it is an AND. (allow_if runs the expression through the ExpressionVoter.) Neither key is ignored, and combining them does not turn the rule into an OR.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/expressions.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/expressions.html)
 
 **Q76.** An authenticator adds a badge that no CheckPassportEvent listener resolves. What happens?  <small>_(hard · internals)_</small>
 
@@ -1081,7 +1081,7 @@ Full theory: [Security](../security/index.md).
 
     unanimous requires that no voter denies. A single ACCESS_DENIED blocks access regardless of grants (unlike affirmative).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q78.** Under the unanimous strategy, a voter returns false from voteOnAttribute() for an attribute it does not actually care about. Effect?  <small>_(hard · trap)_</small>
 

@@ -78,6 +78,6 @@ Travaillez-les dans l'ordre :
 
 ## Official References
 
-- [Symfony documentation — HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — HttpFoundation component](https://symfony.com/doc/8.0/components/http_foundation.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

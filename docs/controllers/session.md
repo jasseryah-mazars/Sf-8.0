@@ -302,7 +302,7 @@ code.
     - [ ] D. Autowire `Session` and store it as a property.
 
     **Why:** the session is request-scoped; `RequestStack` is the stable entry
-    point. **Ref:** [sessions](https://symfony.com/doc/current/session.html).
+    point. **Ref:** [sessions](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q2. When does a lazy Symfony session actually start?"
     - [ ] A. On every request automatically.
@@ -311,7 +311,7 @@ code.
     - [ ] D. When `RequestStack` is injected.
 
     **Why:** lazy sessions avoid a `Set-Cookie` for requests that never use them.
-    **Ref:** [sessions](https://symfony.com/doc/current/session.html).
+    **Ref:** [sessions](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q3. Which call prevents session fixation after login?"
     - [x] A. `migrate()` (regenerate the id) ✅
@@ -320,7 +320,7 @@ code.
     - [ ] D. `save()`
 
     **Why:** regenerating the id invalidates any pre-login id an attacker planted.
-    **Ref:** [session security](https://symfony.com/doc/current/session.html).
+    **Ref:** [session security](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q4. What is a side effect of touching the session on a public page?"
     - [x] A. A `Set-Cookie` header makes it uncacheable by shared proxies. ✅
@@ -329,7 +329,7 @@ code.
     - [ ] D. It disables Twig caching.
 
     **Why:** shared caches must not store per-user `Set-Cookie` responses.
-    **Ref:** [http cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [http cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ## Key takeaways
 
@@ -353,7 +353,7 @@ code.
 - **Confused with:** [Cookies](cookies.md) — the session keeps state server-side; only its id rides in a cookie.
 
 ## Official References
-- [Official Symfony docs — Sessions](https://symfony.com/doc/current/session.html)
+- [Official Symfony docs — Sessions](https://symfony.com/doc/8.0/session.html)
 - [Symfony source — Session](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php)
 
 ## Video references
@@ -365,7 +365,7 @@ code.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/session.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/session.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

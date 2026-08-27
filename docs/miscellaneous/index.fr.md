@@ -43,7 +43,7 @@ le sujet le plus testé du programme.
   pièces jointes/intégration, l'envoi async via Messenger, le modèle de parts Mime.
 - [Filesystem & Finder Components](filesystem-finder.md) — les opérations sur fichiers et
   l'itérateur de fichiers fluide.
-- [Lock Component](lock.md) — `LockFactory`, blocking vs non-blocking, les stores,
+- [Lock Component](../appendices/out-of-syllabus/lock.md) — `LockFactory`, blocking vs non-blocking, les stores,
   les locks expirants/auto-rafraîchissants et partagés.
 - [Web Profiler & Data Collectors](profiler.md) — la toolbar, un
   `DataCollectorInterface` personnalisé, quand il s'exécute, sa désactivation en prod.
@@ -59,7 +59,7 @@ le sujet le plus testé du programme.
 Commencez par les composants de mise en forme des données —
 [Serializer](serializer.md), [PropertyAccess](property-access.md) et
 [Mailer](mailer.md) — puis l'ensemble
-infrastructure ([Cache](cache.md), [Lock](lock.md), [Process](process.md),
+infrastructure ([Cache](cache.md), [Lock](../appendices/out-of-syllabus/lock.md), [Process](process.md),
 [Filesystem & Finder](filesystem-finder.md)). Intégrez
 [Config](configuration.md), [Runtime](runtime.md), [Clock](clock.md) et
 [Intl](intl.md), et terminez par le trio opérationnel
@@ -68,6 +68,6 @@ infrastructure ([Cache](cache.md), [Lock](lock.md), [Process](process.md),
 
 ## Official References
 
-- [Symfony documentation — Symfony Components](https://symfony.com/doc/current/components/index.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Symfony Components](https://symfony.com/doc/8.0/components/index.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -258,7 +258,7 @@ total du rendu.
     - [ ] C. 400
 
     **Why:** Seule `HttpExceptionInterface` porte un status ; sinon 500.
-    **Ref:** [Errors & exceptions](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Errors & exceptions](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q2. What does the ErrorHandler do with a PHP warning?"
     - [x] A. Converts it into an `\ErrorException` ✅
@@ -266,7 +266,7 @@ total du rendu.
     - [ ] C. Writes it to the response body
 
     **Why:** `set_error_handler()` lève une `\ErrorException` afin que les erreurs PHP soient interceptables.
-    **Ref:** [ErrorHandler](https://symfony.com/doc/current/components/error_handler.html).
+    **Ref:** [ErrorHandler](https://symfony.com/doc/8.0/components/error_handler.html).
 
 ??? question "Q3. Which serializable object represents a throwable for rendering?"
     - [x] A. `FlattenException` ✅
@@ -274,7 +274,7 @@ total du rendu.
     - [ ] C. `ErrorEvent`
 
     **Why:** `FlattenException` capture un snapshot du throwable pour les renderers/loggers.
-    **Ref:** [ErrorHandler](https://symfony.com/doc/current/components/error_handler.html).
+    **Ref:** [ErrorHandler](https://symfony.com/doc/8.0/components/error_handler.html).
 
 ## Key takeaways
 
@@ -298,8 +298,8 @@ total du rendu.
 - **Confused with:** l'event `kernel.exception` — le composant convertit/rend les erreurs ; le flux d'event transforme une exception en `Response`.
 
 ## Official References
-- [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
-- [Official docs — ErrorHandler component](https://symfony.com/doc/current/components/error_handler.html)
+- [Official docs — Error pages](https://symfony.com/doc/8.0/controller/error_pages.html)
+- [Official docs — ErrorHandler component](https://symfony.com/doc/8.0/components/error_handler.html)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 ## Video references
@@ -311,7 +311,7 @@ total du rendu.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/error_pages.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/error_pages.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

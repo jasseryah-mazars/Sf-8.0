@@ -110,9 +110,9 @@ candidate should be able to recognize that on sight; each carries its own
 
 | Topic | Where it's mentioned |
 |---|---|
-| Edge Side Includes (ESI) | [Excluded chapter](http-caching/esi.md) — reachable from HTTP Caching for completeness |
-| PHPUnit Bridge | [Excluded chapter](testing/phpunit-bridge.md) — reachable from Automated Tests for completeness |
-| Lock Component | [Excluded chapter](miscellaneous/lock.md) — reachable from Miscellaneous for completeness |
+| Edge Side Includes (ESI) | [Excluded chapter](appendices/out-of-syllabus/esi.md) — reachable from HTTP Caching for completeness |
+| PHPUnit Bridge | [Excluded chapter](appendices/out-of-syllabus/phpunit-bridge.md) — reachable from Automated Tests for completeness |
+| Lock Component | [Excluded chapter](appendices/out-of-syllabus/lock.md) — reachable from Miscellaneous for completeness |
 | Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, PHP Polyfills, String/Uid/TypeInfo components, Amazon SQS, third-party Messenger transports | Boundary mentions only (distractors, scope notes) — see [Requirements.md](https://github.com/jasseryah-mazars/Sf-8.0/blob/master/specs/Requirements.md) FR-5 |
 
 ## Who it's for
@@ -196,4 +196,4 @@ community project, not affiliated with or endorsed by Symfony SAS.</small>
 
 - [Official Symfony Certification](https://certification.symfony.com/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

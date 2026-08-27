@@ -54,8 +54,8 @@ points at the extension hook available right there.
 ## Official References
 
 - [symfony/symfony on GitHub (8.0 branch)](https://github.com/symfony/symfony/tree/8.0)
-- [Symfony Docs — The HttpKernel Component](https://symfony.com/doc/current/components/http_kernel.html)
-- [Symfony Docs — Events and Event Listeners](https://symfony.com/doc/current/event_dispatcher.html)
+- [Symfony Docs — The HttpKernel Component](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [Symfony Docs — Events and Event Listeners](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ---
 <small>Related: [Request Handling](../architecture/request-handling.md) ·

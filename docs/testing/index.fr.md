@@ -55,7 +55,7 @@ d'étude.
   headers, environnement/debug, requests isolées.
 - [Request/Response Introspection](introspection.md) — `getRequest()`/`getResponse()`
   et les helpers `assertResponse*` / `assertSelector*`.
-- [PHPUnit Bridge](phpunit-bridge.md) — collecte des dépréciations, mocking de l'horloge/du DNS,
+- [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — collecte des dépréciations, mocking de l'horloge/du DNS,
   `SYMFONY_DEPRECATIONS_HELPER`, l'extension PHPUnit de Symfony. **Exclu de la
   certification Symfony 8.**
 - [Handling Deprecated Code](deprecations.md) — `#[IgnoreDeprecations]`, modes du
@@ -70,10 +70,10 @@ Apprenez le trio [Client](client.md), [Crawler](crawler.md) et
 pilote et vérifie réellement. Terminez par le groupe intégration framework et
 diagnostics : [Framework Objects](framework-objects.md),
 [Client Configuration](client-configuration.md), [Profiler](profiler.md),
-[PHPUnit Bridge](phpunit-bridge.md) et [Deprecations](deprecations.md).
+[PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) et [Deprecations](deprecations.md).
 
 ## Official References
 
-- [Symfony documentation — Testing](https://symfony.com/doc/current/testing.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Testing](https://symfony.com/doc/8.0/testing.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

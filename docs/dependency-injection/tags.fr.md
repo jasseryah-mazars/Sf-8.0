@@ -335,7 +335,7 @@ définitions (pas seulement collecter), il vous faut un
 
     **Why:** Le locator instancie les services à la demande, indexés par la clé
     d'index.
-    **Ref:** [Service subscribers & locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    **Ref:** [Service subscribers & locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. Higher `priority` on a tag means the service is…"
     - [x] A. Earlier in the tagged iterator ✅
@@ -344,7 +344,7 @@ définitions (pas seulement collecter), il vous faut un
     - [ ] D. Ignored
 
     **Why:** Les collections taguées sont triées par priorité décroissante.
-    **Ref:** [Tags with priority](https://symfony.com/doc/current/service_container/tags.html#tagged-services-with-priority).
+    **Ref:** [Tags with priority](https://symfony.com/doc/8.0/service_container/tags.html#tagged-services-with-priority).
 
 ??? question "Q3. How can every implementation of an interface get a tag automatically?"
     - [x] A. `#[AutoconfigureTag]` on the interface or `_instanceof` in YAML ✅
@@ -354,7 +354,7 @@ définitions (pas seulement collecter), il vous faut un
 
     **Why:** L'autoconfiguration associe une interface à un tag pour tous les
     implémenteurs.
-    **Ref:** [Autoconfiguring tags](https://symfony.com/doc/current/service_container/tags.html).
+    **Ref:** [Autoconfiguring tags](https://symfony.com/doc/8.0/service_container/tags.html).
 
 ## Key takeaways
 
@@ -383,8 +383,8 @@ définitions (pas seulement collecter), il vous faut un
   *construit* un locator ; le locator est la primitive générale d'ensemble lazy.
 
 ## Official References
-- [Official Symfony docs — Service Tags](https://symfony.com/doc/current/service_container/tags.html)
-- [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Service Tags](https://symfony.com/doc/8.0/service_container/tags.html)
+- [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — PriorityTaggedServiceTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PriorityTaggedServiceTrait.php)
 
 ## Video references
@@ -397,7 +397,7 @@ définitions (pas seulement collecter), il vous faut un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

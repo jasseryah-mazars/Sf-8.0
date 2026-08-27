@@ -309,7 +309,7 @@ expresses.
     - [ ] D. Put it in `services.yaml`
 
     **Why:** There is no compiler-pass attribute; registration is programmatic.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ??? question "Q2. What is the default compilation phase for a pass?"
     - [x] A. `TYPE_BEFORE_OPTIMIZATION` ✅
@@ -318,7 +318,7 @@ expresses.
     - [ ] D. `TYPE_AFTER_REMOVING`
 
     **Why:** Passes registered without a phase run before optimization.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ??? question "Q3. `findTaggedServiceIds('t')` returns…"
     - [x] A. A map of service id → array of tag attribute sets ✅
@@ -327,7 +327,7 @@ expresses.
     - [ ] D. Only the first tagged id
 
     **Why:** It returns definitions' ids with each tag occurrence's attributes.
-    **Ref:** [Tags & passes](https://symfony.com/doc/current/service_container/tags.html).
+    **Ref:** [Tags & passes](https://symfony.com/doc/8.0/service_container/tags.html).
 
 ??? question "Q4. Inside `process()` you should manipulate…"
     - [x] A. `Definition` objects (build-time metadata) ✅
@@ -336,7 +336,7 @@ expresses.
     - [ ] D. The event dispatcher at runtime
 
     **Why:** Compilation deals only with definitions; nothing is instantiated yet.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ## Key takeaways
 
@@ -364,8 +364,8 @@ expresses.
   the label (when a `tagged_iterator` won't do).
 
 ## Official References
-- [Official Symfony docs — Compiler Passes](https://symfony.com/doc/current/service_container/compiler_passes.html)
-- [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/current/service_container/tags.html)
+- [Official Symfony docs — Compiler Passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
+- [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/8.0/service_container/tags.html)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)
 
 ## Video references
@@ -377,7 +377,7 @@ expresses.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/compiler_passes.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/compiler_passes.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

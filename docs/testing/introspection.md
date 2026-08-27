@@ -332,7 +332,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
 
     **Why:** it checks the response is in the successful (2xx) range; use
     `assertResponseStatusCodeSame` for exact codes.
-    **Ref:** [Testing assertions](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing assertions](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ??? question "Q2. Which asserts an exact element text (not substring)?"
     - [ ] A. `assertSelectorTextContains('h1', 'Hi')`
@@ -341,7 +341,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
     - [ ] D. `assertPageTitleContains('Hi')`
 
     **Why:** `...Same` requires an exact match; `...Contains` is a substring.
-    **Ref:** [Testing assertions](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing assertions](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ??? question "Q3. To assert the matched route name you use…"
     - [x] A. `assertRouteSame('app_home')` ✅
@@ -350,7 +350,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
     - [ ] D. `assertResponseRedirects()`
 
     **Why:** `assertRouteSame` checks the `_route` request attribute.
-    **Ref:** [Testing assertions](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing assertions](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ??? question "Q4. Where do the response assertions ultimately delegate?"
     - [x] A. PHPUnit `Constraint` objects under `...Test\Constraint` ✅
@@ -359,7 +359,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
     - [ ] D. Doctrine
 
     **Why:** each helper wraps a PHPUnit Constraint for good diff output.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ## Key takeaways
 
@@ -386,7 +386,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
 - **Confused with:** [The Crawler](crawler.md) — the Crawler *queries* the DOM; `assertSelector*` *asserts* on it.
 
 ## Official References
-- [Official Symfony docs — The assertions](https://symfony.com/doc/current/testing.html#the-assertions)
+- [Official Symfony docs — The assertions](https://symfony.com/doc/8.0/testing.html#the-assertions)
 - [Symfony source — HttpFoundation test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpFoundation/Test/Constraint)
 - [Symfony source — DomCrawler test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/DomCrawler/Test/Constraint)
 
@@ -399,7 +399,7 @@ queries beyond assertions, use the [Crawler](crawler.md) directly.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#the-assertions) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#the-assertions) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

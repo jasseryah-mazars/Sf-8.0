@@ -324,7 +324,7 @@ existante (`value|price`).
 
     **Why:** Twig jusqu'à la 3.22 fournit `Twig\Attribute\AsTwigFilter` (et
     `AsTwigFunction`). **Ref:**
-    [Custom extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension).
+    [Custom extensions](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension).
 
 ??? question "Q2. A custom filter returns `<b>x</b>`. Why does the page show escaped text?"
     - [ ] A. Twig never escapes filter output
@@ -368,7 +368,7 @@ existante (`value|price`).
 - **Confused with:** [Auto-Escaping](auto-escaping.md) — la sortie HTML d'un filtre est échappée sauf s'il déclare `is_safe`.
 
 ## Official References
-- [Official — Twig extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
+- [Official — Twig extensions](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension)
 - [Twig — filters & functions reference](https://twig.symfony.com/doc/3.x/#reference)
 - [Twig source — CoreExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/CoreExtension.php)
 
@@ -382,7 +382,7 @@ existante (`value|price`).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#creating-a-twig-extension) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

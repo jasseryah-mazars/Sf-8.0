@@ -303,7 +303,7 @@ has nothing to throttle.
 
     **Why:** The dual counters stop both password brute-force on one account
     and username spraying from one IP.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ??? question "Q2. Which event does the throttling listener use to block an attempt?"
     - [ ] A. `LoginFailureEvent`
@@ -324,7 +324,7 @@ has nothing to throttle.
 
     **Why:** The feature is built on the RateLimiter component; without it the
     firewall option cannot be configured.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ??? question "Q4. What must a custom `limiter` service implement?"
     - [ ] A. `LimiterInterface` from the RateLimiter component
@@ -334,7 +334,7 @@ has nothing to throttle.
 
     **Why:** The firewall needs a limiter that understands *requests*;
     `AbstractRequestRateLimiter` is the convenient base class.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ## Key takeaways
 
@@ -370,8 +370,8 @@ has nothing to throttle.
   each guess; throttling limits *how many* guesses run at all.
 
 ## Official References
-- [Symfony docs — Limiting login attempts](https://symfony.com/doc/current/security.html#limiting-login-attempts)
-- [Symfony docs — Rate Limiter component](https://symfony.com/doc/current/rate_limiter.html)
+- [Symfony docs — Limiting login attempts](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
+- [Symfony docs — Rate Limiter component](https://symfony.com/doc/8.0/rate_limiter.html)
 - [Symfony source — LoginThrottlingListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/EventListener/LoginThrottlingListener.php)
 
 ## Video references
@@ -383,7 +383,7 @@ has nothing to throttle.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#limiting-login-attempts) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#limiting-login-attempts) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

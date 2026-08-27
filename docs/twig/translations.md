@@ -242,7 +242,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `(parameters, locale, domain)`
 
     **Why:** `message|trans(parameters = {}, domain = 'messages', locale = null)`.
-    **Ref:** [trans filter](https://symfony.com/doc/current/translation.html#translations-in-templates).
+    **Ref:** [trans filter](https://symfony.com/doc/8.0/translation.html#translations-in-templates).
 
 ??? question "Q2. How do you pluralize in Symfony 8 templates?"
     - [ ] A. `transchoice`
@@ -251,7 +251,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `{% pluralize %}`
 
     **Why:** `transchoice` was removed; ICU MessageFormat handles plurals. **Ref:**
-    [Pluralization](https://symfony.com/doc/current/translation/message_format.html).
+    [Pluralization](https://symfony.com/doc/8.0/translation/message_format.html).
 
 ??? question "Q3. A key has no translation for the current locale (and no fallback). What renders?"
     - [x] A. The key string itself ✅
@@ -260,7 +260,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `null`
 
     **Why:** The translator returns the untranslated id. **Ref:**
-    [Translation](https://symfony.com/doc/current/translation.html).
+    [Translation](https://symfony.com/doc/8.0/translation.html).
 
 ## Key takeaways
 
@@ -284,8 +284,8 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 - **Confused with:** [String Interpolation](interpolation.md) — `%name%` placeholders are substituted by the translator, not by `#{}` interpolation.
 
 ## Official References
-- [Official — Translations in templates](https://symfony.com/doc/current/translation.html#translations-in-templates)
-- [Official — Message format (ICU)](https://symfony.com/doc/current/translation/message_format.html)
+- [Official — Translations in templates](https://symfony.com/doc/8.0/translation.html#translations-in-templates)
+- [Official — Message format (ICU)](https://symfony.com/doc/8.0/translation/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
 
 ## Video references
@@ -297,7 +297,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/translation.html#translations-in-templates) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/translation.html#translations-in-templates) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

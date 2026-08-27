@@ -23,7 +23,7 @@ categories:
     explanation: The callback computes the value on a miss; the result is persisted and returned. It also
       provides probabilistic early-expiration stampede protection. Running on every call would defeat
       caching, and unlike PSR-6 you do not call save() manually.
-    documentation: https://symfony.com/doc/current/cache.html#cache-contracts
+    documentation: https://symfony.com/doc/8.0/cache.html#cache-contracts
   - id: MISC-CACHE-02
     question: Which statement about PSR-6 vs PSR-16 is correct?
     type: trap
@@ -46,7 +46,7 @@ categories:
       correct: false
     explanation: PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or tags. PSR-6
       uses CacheItem objects and supports tags through a TagAwareAdapter as well as expiration.
-    documentation: https://symfony.com/doc/current/components/cache.html
+    documentation: https://symfony.com/doc/8.0/components/cache.html
   - id: MISC-CACHE-03
     question: Cache stampede protection in Symfony Cache is implemented by…
     type: internals
@@ -68,7 +68,7 @@ categories:
       correct: false
     explanation: As an item nears expiry, one request is probabilistically chosen to recompute early while
       others serve the cached value ($beta=INF forces it, 0 disables it). There is no per-key mutex.
-    documentation: https://symfony.com/doc/current/cache.html#stampede-prevention
+    documentation: https://symfony.com/doc/8.0/cache.html#stampede-prevention
   - id: MISC-CACHE-04
     question: Which adapter keeps entries only for the current process (ideal for tests)?
     type: single
@@ -89,7 +89,7 @@ categories:
       correct: false
     explanation: ArrayAdapter stores items in memory for the current request/process only, so nothing
       persists across requests — useful for deterministic tests.
-    documentation: https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
+    documentation: https://symfony.com/doc/8.0/components/cache/adapters/memcached_adapter.html
   - id: MISC-CACHE-05
     question: Your CacheInterface::get() callback returns null on the first call. What happens on the
       next call before expiry?
@@ -114,7 +114,7 @@ categories:
       and treats it as a hit until it expires. get() never uses null to mean ''miss'' — that is exactly
       the PSR-6 footgun (getItem()->get() returning null for both absent and stored-null) that the callback
       API avoids. Caching ''no result'' as null is fine, but it counts as a hit.'
-    documentation: https://symfony.com/doc/current/cache.html#cache-contracts
+    documentation: https://symfony.com/doc/8.0/cache.html#cache-contracts
   - id: MISC-CACHE-06
     question: 'A pool is declared with `tags: true` in cache.yaml. What does this enable?'
     type: config
@@ -137,7 +137,7 @@ categories:
     explanation: '`tags: true` wraps the pool in a TagAwareAdapter implementing TagAwareCacheInterface,
       so items can carry tags and invalidateTags() evicts all items with a given tag — invalidation by
       concern rather than by key. Calling $item->tag() on a non-tag-aware pool errors.'
-    documentation: https://symfony.com/doc/current/cache.html#using-cache-tags
+    documentation: https://symfony.com/doc/8.0/cache.html#using-cache-tags
   - id: MISC-CACHE-07
     question: 'True or False: passing $beta = INF to CacheInterface::get() forces the value to be recomputed
       immediately.'
@@ -157,7 +157,7 @@ categories:
     explanation: True. $beta = INF forces early expiration, so the callback runs and the value is refreshed
       on this call. $beta = 0 disables early expiration entirely; the default (null) picks a sensible
       probabilistic value.
-    documentation: https://symfony.com/doc/current/cache.html#stampede-prevention
+    documentation: https://symfony.com/doc/8.0/cache.html#stampede-prevention
   - id: MISC-CACHE-08
     question: Using the raw PSR-6 API, how do you distinguish a stored null value from a missing key?
     type: internals
@@ -180,7 +180,7 @@ categories:
     explanation: With PSR-6, CacheItemInterface::get() returns null both for an absent key and for a genuinely
       stored null, so you must call isHit() to tell them apart. The contracts callback API sidesteps this
       ambiguity; there is no hasKey() or miss exception.
-    documentation: https://symfony.com/doc/current/components/cache.html
+    documentation: https://symfony.com/doc/8.0/components/cache.html
 - name: Miscellaneous — Serializer
   questions:
   - id: MISC-SER-01
@@ -204,7 +204,7 @@ categories:
       correct: false
     explanation: 'serialize() normalizes the object to an array/scalars, then encodes that to a string.
       deserialize() reverses it: decode then denormalize.'
-    documentation: https://symfony.com/doc/current/components/serializer.html
+    documentation: https://symfony.com/doc/8.0/components/serializer.html
   - id: MISC-SER-02
     question: '#[Groups([''read''])] on a property takes effect when…'
     type: trap
@@ -225,7 +225,7 @@ categories:
       correct: false
     explanation: Group filtering only applies when matching groups are passed in the context; otherwise
       the group attribute has no effect and all fields are (de)serialized.
-    documentation: https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes
+    documentation: https://symfony.com/doc/8.0/serializer.html#using-serialization-groups-attributes
   - id: MISC-SER-03
     question: Which normalizer reads and writes private properties directly via reflection?
     type: single
@@ -247,7 +247,7 @@ categories:
     explanation: PropertyNormalizer accesses object properties directly (including private), whereas ObjectNormalizer
       uses accessors and the constructor, and GetSetMethodNormalizer uses only get/set methods. JsonEncoder
       is an encoder, not a normalizer.
-    documentation: https://symfony.com/doc/current/serializer.html#normalizers
+    documentation: https://symfony.com/doc/8.0/serializer.html#normalizers
   - id: MISC-SER-04
     question: By default, what is the Serializer's circular reference limit before it throws?
     type: trap
@@ -268,7 +268,7 @@ categories:
       correct: false
     explanation: The default circular reference limit is 1; beyond it a CircularReferenceException is
       thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
-    documentation: https://symfony.com/doc/current/serializer.html#handling-circular-references
+    documentation: https://symfony.com/doc/8.0/serializer.html#handling-circular-references
   - id: MISC-SER-05
     question: 'A UserDto has #[Groups([''read''])] #[SerializedName(''full_name'')] on $name and #[Ignore]
       on $passwordHash. What is the JSON when serialized with context [''groups'' => [''read'']]?'
@@ -292,7 +292,7 @@ categories:
     explanation: 'With the read group in context, only read-group properties are emitted; $name is renamed
       to full_name by #[SerializedName], and #[Ignore] drops passwordHash entirely regardless of group.
       Groups are honoured only because they are passed in the context.'
-    documentation: https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes
+    documentation: https://symfony.com/doc/8.0/serializer.html#using-serialization-groups-attributes
   - id: MISC-SER-06
     question: 'What does the framework.serializer.default_context option skip_null_values: true do?'
     type: config
@@ -315,7 +315,7 @@ categories:
     explanation: By default a null property is serialized as \"key\":null. Setting AbstractObjectNormalizer::SKIP_NULL_VALUES
       (skip_null_values) omits those keys from the payload. The classic bug is a consumer treating an
       absent key as an error rather than 'the value was null'.
-    documentation: https://symfony.com/doc/current/serializer.html
+    documentation: https://symfony.com/doc/8.0/serializer.html
   - id: MISC-SER-07
     question: A private property with no getter is missing from the JSON produced by the default ObjectNormalizer.
       Why, and how do you fix it?
@@ -340,7 +340,7 @@ categories:
     explanation: ObjectNormalizer reads via getters/issers/hassers and the constructor, so a private property
       without an accessor is invisible. Provide a getter or switch to PropertyNormalizer, which uses reflection
       to read properties directly. Groups filter fields but do not expose accessorless private properties.
-    documentation: https://symfony.com/doc/current/serializer.html#normalizers
+    documentation: https://symfony.com/doc/8.0/serializer.html#normalizers
 - name: Miscellaneous — Configuration & DotEnv
   questions:
   - id: MISC-CFG-01
@@ -364,7 +364,7 @@ categories:
       correct: false
     explanation: .env.local is intentionally skipped in the test environment so tests run from committed
       defaults and stay reproducible.
-    documentation: https://symfony.com/doc/current/configuration.html#selecting-the-active-environment
+    documentation: https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment
   - id: MISC-CFG-02
     question: What does `composer dump-env prod` produce, and what is the effect?
     type: config
@@ -386,7 +386,7 @@ categories:
       correct: false
     explanation: The whole .env* cascade is compiled to a plain PHP array in .env.local.php, which Symfony
       loads directly, avoiding DotEnv parsing on each request.
-    documentation: https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production
+    documentation: https://symfony.com/doc/8.0/configuration.html#configuring-environment-variables-in-production
   - id: MISC-CFG-03
     question: ExpressionLanguage::compile() returns what?
     type: internals
@@ -408,7 +408,7 @@ categories:
       correct: false
     explanation: compile() transpiles an expression to PHP source you can cache/reuse, while evaluate()
       interprets the expression and returns its value.
-    documentation: https://symfony.com/doc/current/components/expression_language.html
+    documentation: https://symfony.com/doc/8.0/components/expression_language.html
   - id: MISC-CFG-04
     question: A .env file sets DATABASE_URL, but a real OS environment variable DATABASE_URL is also exported.
       Which wins?
@@ -432,7 +432,7 @@ categories:
     explanation: Real OS environment variables always take precedence; the DotEnv cascade (.env → .env.local
       → .env.<env> → .env.<env>.local) only fills values not already set in the real environment. Later
       .env* files override earlier ones but never a real env var.
-    documentation: https://symfony.com/doc/current/configuration.html#overriding-environment-values-via-env-local
+    documentation: https://symfony.com/doc/8.0/configuration.html#overriding-environment-values-via-env-local
   - id: MISC-CFG-05
     question: What is the result of ExpressionLanguage::compile('1 + a', ['a'])?
     type: code
@@ -455,7 +455,7 @@ categories:
     explanation: 'compile() emits PHP source, turning the variable name a into $a: "(1 + $a)". It does
       not evaluate anything (so no undefined-variable error) — use evaluate(''1 + a'', [''a'' => 5]) to
       get the value 6.'
-    documentation: https://symfony.com/doc/current/components/expression_language.html
+    documentation: https://symfony.com/doc/8.0/components/expression_language.html
   - id: MISC-CFG-06
     question: Which class merges every config source and validates it against a bundle's Configuration
       tree?
@@ -479,7 +479,7 @@ categories:
     explanation: Processor::processConfiguration() merges all sources and validates them against the tree
       returned by the Configuration class, applying defaults and constraints. TreeBuilder only defines
       the schema; FileLocator finds files.
-    documentation: https://symfony.com/doc/current/components/config/definition.html
+    documentation: https://symfony.com/doc/8.0/components/config/definition.html
 - name: Miscellaneous — Deployment
   questions:
   - id: MISC-DEPLOY-01
@@ -504,7 +504,7 @@ categories:
     explanation: '`composer install --no-dev` skips require-dev packages (profiler, PHPUnit, etc.). Add
       --optimize-autoloader (or --classmap-authoritative) to build an optimised classmap and cut per-class
       filesystem stat calls.'
-    documentation: https://symfony.com/doc/current/deployment.html
+    documentation: https://symfony.com/doc/8.0/deployment.html
   - id: MISC-DEPLOY-02
     question: You changed a YAML config file and redeployed to prod, but the change has no effect. Why?
     type: trap
@@ -528,7 +528,7 @@ categories:
     explanation: In prod the compiled container in var/cache/prod is loaded as-is with no freshness checks
       (those exist only in debug), so config changes require cache:clear + cache:warmup on deploy. Enabling
       APP_DEBUG in prod is unsafe and not the fix.
-    documentation: https://symfony.com/doc/current/deployment.html
+    documentation: https://symfony.com/doc/8.0/deployment.html
   - id: MISC-DEPLOY-03
     question: Why set opcache.validate_timestamps=0 in production?
     type: config
@@ -552,7 +552,7 @@ categories:
     explanation: With immutable deploys, disabling timestamp validation maximises opcache hits by not
       stat-ing files each request. Because opcache then never notices new files, you must reset opcache
       (or the PHP process manager) on each deploy so the new bytecode is loaded.
-    documentation: https://symfony.com/doc/current/performance.html
+    documentation: https://symfony.com/doc/8.0/performance.html
   - id: MISC-DEPLOY-04
     question: Which ordered command sequence is correct for a from-scratch prod deploy?
     type: scenario
@@ -576,7 +576,7 @@ categories:
     explanation: You install prod deps first, compile the env cascade with dump-env prod, then clear and
       warm the cache so the first live request is fast, and finally reset opcache. Warming before installing,
       or shipping dev deps / APP_DEBUG=1, are wrong.
-    documentation: https://symfony.com/doc/current/deployment.html
+    documentation: https://symfony.com/doc/8.0/deployment.html
   - id: MISC-DEPLOY-05
     question: What does `cache:clear` run, by default, in addition to removing stale cache?
     type: internals
@@ -600,7 +600,7 @@ categories:
     explanation: cache:clear removes stale cache and then runs the CacheWarmerInterface warmers to pre-build
       the container, routing matcher/generator, Twig template cache and validator/serializer metadata.
       cache:warmup warms without clearing. Migrations, workers and composer are separate steps.
-    documentation: https://symfony.com/doc/current/deployment.html
+    documentation: https://symfony.com/doc/8.0/deployment.html
   - id: MISC-DEPLOY-06
     question: 'True or False: leaving APP_DEBUG=1 in production is acceptable as long as the profiler
       is disabled.'
@@ -620,7 +620,7 @@ categories:
     explanation: False. APP_DEBUG=1 enables verbose error pages that leak stack traces and internals,
       re-enables freshness checks and other overhead, and generally exposes the app. Production must run
       APP_DEBUG=0.
-    documentation: https://symfony.com/doc/current/deployment.html
+    documentation: https://symfony.com/doc/8.0/deployment.html
 - name: Miscellaneous — Process
   questions:
   - id: MISC-PROC-01
@@ -644,7 +644,7 @@ categories:
       correct: false
     explanation: The array form escapes each element automatically. fromShellCommandline() runs a raw
       shell string and does not escape, risking command injection if you interpolate untrusted input.
-    documentation: https://symfony.com/doc/current/components/process.html
+    documentation: https://symfony.com/doc/8.0/components/process.html
   - id: MISC-PROC-02
     question: What does Process::run() return?
     type: internals
@@ -666,7 +666,7 @@ categories:
       correct: false
     explanation: run() blocks until completion and returns the exit code; use getOutput() for stdout and
       mustRun() to throw a ProcessFailedException on failure.
-    documentation: https://symfony.com/doc/current/components/process.html#usage
+    documentation: https://symfony.com/doc/8.0/components/process.html#usage
   - id: MISC-PROC-03
     question: What is the default Process timeout?
     type: trap
@@ -687,7 +687,7 @@ categories:
       correct: false
     explanation: The default timeout is 60 seconds; pass null to setTimeout() to disable it. Exceeding
       it throws a ProcessTimedOutException.
-    documentation: https://symfony.com/doc/current/components/process.html#process-timeout
+    documentation: https://symfony.com/doc/8.0/components/process.html#process-timeout
   - id: MISC-PROC-04
     question: You build a command from user input using Process::fromShellCommandline('convert '.$userInput).
       What is the risk and the fix?
@@ -712,7 +712,7 @@ categories:
     explanation: fromShellCommandline runs the string through /bin/sh with no escaping, so untrusted input
       can inject shell metacharacters. The array constructor escapes each element as a single argument,
       eliminating the injection vector. This is unrelated to timeouts or platform.
-    documentation: https://symfony.com/doc/current/components/process.html
+    documentation: https://symfony.com/doc/8.0/components/process.html
   - id: MISC-PROC-05
     question: Which call runs a process and throws automatically on a non-zero exit code?
     type: code
@@ -735,7 +735,7 @@ categories:
     explanation: mustRun() behaves like run() but throws ProcessFailedException when the process exits
       non-zero. run() simply returns the integer exit code and you check isSuccessful() yourself; start()/wait()
       are for async execution.
-    documentation: https://symfony.com/doc/current/components/process.html#usage
+    documentation: https://symfony.com/doc/8.0/components/process.html#usage
 - name: Miscellaneous — Lock
   questions:
   - id: MISC-LOCK-01
@@ -761,7 +761,7 @@ categories:
     explanation: acquire() defaults to non-blocking; pass true to block until the resource becomes available
       (store permitting). It returns a boolean false when held, it does not throw, so `if (!$lock->acquire())
       { return; }` is the correct guard.
-    documentation: https://symfony.com/doc/current/lock.html#blocking-locks
+    documentation: https://symfony.com/doc/8.0/lock.html#blocking-locks
   - id: MISC-LOCK-02
     question: Which lock store provides mutual exclusion across multiple servers?
     type: single
@@ -784,7 +784,7 @@ categories:
       correct: false
     explanation: Flock and Semaphore stores are local to one machine, and InMemoryStore is per-process
       (tests). Shared stores like Redis (or a database store) coordinate locks across servers.
-    documentation: https://symfony.com/doc/current/components/lock.html#available-stores
+    documentation: https://symfony.com/doc/8.0/components/lock.html#available-stores
   - id: MISC-LOCK-03
     question: Why call refresh() during a long critical section?
     type: scenario
@@ -808,7 +808,7 @@ categories:
     explanation: Locks have a TTL to avoid deadlocks after crashes. refresh() prolongs it so a still-working
       owner keeps exclusivity; without it another process could acquire the lock after the TTL, breaking
       mutual exclusion.
-    documentation: https://symfony.com/doc/current/components/lock.html#expiring-locks
+    documentation: https://symfony.com/doc/8.0/components/lock.html#expiring-locks
   - id: MISC-LOCK-04
     question: Which is the correct guard to skip work another process is already doing?
     type: code
@@ -833,7 +833,7 @@ categories:
       is the idiomatic early-return guard. It does not return null and does not throw on contention (only
       blocking acquire(true) may throw LockConflictedException). Forgetting to check the boolean means
       entering the critical section unprotected.
-    documentation: https://symfony.com/doc/current/lock.html
+    documentation: https://symfony.com/doc/8.0/lock.html
   - id: MISC-LOCK-05
     question: What is the default TTL of a lock created via LockFactory::createLock($resource)?
     type: internals
@@ -857,7 +857,7 @@ categories:
     explanation: createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true) defaults
       to a 300 second TTL and releases the lock when the Lock object is destroyed. Long jobs should raise
       the TTL and call refresh() to avoid premature expiry.
-    documentation: https://symfony.com/doc/current/components/lock.html#expiring-locks
+    documentation: https://symfony.com/doc/8.0/components/lock.html#expiring-locks
 - name: Miscellaneous — Mailer
   questions:
   - id: MISC-MAIL-01
@@ -882,7 +882,7 @@ categories:
     explanation: When SendEmailMessage is routed to a transport, send() enqueues it; a worker delivers
       it later, giving async sending plus retries. It does not throw if a worker is down — the message
       just waits in the queue.
-    documentation: https://symfony.com/doc/current/mailer.html#sending-messages-async
+    documentation: https://symfony.com/doc/8.0/mailer.html#sending-messages-async
   - id: MISC-MAIL-02
     question: Which class renders Twig templates into an email body?
     type: single
@@ -903,7 +903,7 @@ categories:
       correct: false
     explanation: TemplatedEmail (in the Twig bridge) carries htmlTemplate()/textTemplate() and context();
       a body renderer turns them into MIME parts before sending. Plain Email has no template support.
-    documentation: https://symfony.com/doc/current/mailer.html#twig-html-css
+    documentation: https://symfony.com/doc/8.0/mailer.html#twig-html-css
   - id: MISC-MAIL-03
     question: How is an inline (embedded) image referenced from an email's HTML body?
     type: single
@@ -925,7 +925,7 @@ categories:
       correct: false
     explanation: embed()/embedFromPath() add a DataPart addressed with cid:<name>, which the HTML body
       references (e.g. <img src="cid:logo">).
-    documentation: https://symfony.com/doc/current/mailer.html#embedding-images
+    documentation: https://symfony.com/doc/8.0/mailer.html#embedding-images
   - id: MISC-MAIL-04
     question: In the Mailer, how does the Envelope differ from the message headers?
     type: internals
@@ -949,7 +949,7 @@ categories:
     explanation: Mailer's Envelope (sender + recipients) drives the transport's SMTP exchange, whereas
       the message headers (From, To, Subject) are what the recipient sees. They can legitimately differ
       (e.g. bounce address vs visible From), which is a common exam distinction.
-    documentation: https://symfony.com/doc/current/mailer.html#sending-messages
+    documentation: https://symfony.com/doc/8.0/mailer.html#sending-messages
   - id: MISC-MAIL-05
     question: Which configuration makes emails send asynchronously via Messenger?
     type: config
@@ -973,7 +973,7 @@ categories:
     explanation: Async delivery comes from routing SendEmailMessage to a Messenger transport and consuming
       it with a worker. MAILER_DSN chooses the delivery transport (SMTP/API), not sync-vs-async, and there
       is no framework.mailer.async flag.
-    documentation: https://symfony.com/doc/current/mailer.html#sending-messages-async
+    documentation: https://symfony.com/doc/8.0/mailer.html#sending-messages-async
 - name: Miscellaneous — Runtime & Clock
   questions:
   - id: MISC-RUN-01
@@ -997,7 +997,7 @@ categories:
       correct: false
     explanation: index.php returns a callable; autoload_runtime.php resolves its arguments, invokes it,
       then a RunnerInterface handles/sends/terminates. It never calls handle() itself.
-    documentation: https://symfony.com/doc/current/components/runtime.html
+    documentation: https://symfony.com/doc/8.0/components/runtime.html
   - id: MISC-RUN-02
     question: Which environment variable selects the runtime class?
     type: single
@@ -1018,7 +1018,7 @@ categories:
       correct: false
     explanation: APP_RUNTIME (or composer.json extra.runtime.class) chooses the RuntimeInterface implementation;
       the default is SymfonyRuntime, which extends GenericRuntime.
-    documentation: https://symfony.com/doc/current/components/runtime.html#using-the-runtime
+    documentation: https://symfony.com/doc/8.0/components/runtime.html#using-the-runtime
   - id: MISC-RUN-03
     question: Which class does the default SymfonyRuntime extend?
     type: single
@@ -1040,7 +1040,7 @@ categories:
     explanation: SymfonyRuntime extends the framework-agnostic GenericRuntime, adding Symfony-aware resolvers/runners
       (inject Request, SymfonyStyle, console Input/Output; run a Kernel or console Application). It is
       not a kernel.
-    documentation: https://symfony.com/doc/current/components/runtime.html
+    documentation: https://symfony.com/doc/8.0/components/runtime.html
   - id: MISC-RUN-04
     question: How does the argument `array $context` in the index.php closure get populated?
     type: internals
@@ -1063,7 +1063,7 @@ categories:
     explanation: RuntimeInterface::getResolver() builds a resolver that inspects the callable's typed
       arguments and supplies them — array $context comes from $_SERVER (env), and it can also inject Request,
       InputInterface, etc. You therefore never read $_SERVER manually in the entry point.
-    documentation: https://symfony.com/doc/current/components/runtime.html#using-the-runtime
+    documentation: https://symfony.com/doc/8.0/components/runtime.html#using-the-runtime
   - id: MISC-RUN-SCENARIO-01
     type: trap
     difficulty: medium
@@ -1089,7 +1089,7 @@ categories:
       (or an application object); the runtime resolves its arguments, invokes it, and — for the Symfony
       flavor — runs the kernel and sends the response itself. Hand-calling handle()/send() after autoload_runtime.php
       has already done so double-processes the request.
-    documentation: https://symfony.com/doc/current/components/runtime.html
+    documentation: https://symfony.com/doc/8.0/components/runtime.html
   - id: MISC-CLOCK-01
     question: ClockInterface::now() returns what type?
     type: internals
@@ -1111,7 +1111,7 @@ categories:
       correct: false
     explanation: now() returns an immutable DatePoint (a \\DateTimeImmutable subclass). Tests swap the
       NativeClock for a MockClock to freeze or advance time.
-    documentation: https://symfony.com/doc/current/components/clock.html
+    documentation: https://symfony.com/doc/8.0/components/clock.html
   - id: MISC-CLOCK-02
     question: Which clock lets tests freeze or advance time without a real delay?
     type: single
@@ -1134,7 +1134,7 @@ categories:
     explanation: MockClock is constructed with a fixed time and its sleep() advances time virtually (no
       real waiting), perfect for TTL/expiry tests. NativeClock is the real prod clock; MonotonicClock
       is for durations.
-    documentation: https://symfony.com/doc/current/components/clock.html#usage-in-tests
+    documentation: https://symfony.com/doc/8.0/components/clock.html#usage-in-tests
   - id: MISC-CLOCK-03
     question: Which clock is best for measuring elapsed durations and is immune to system clock changes?
     type: single
@@ -1156,7 +1156,7 @@ categories:
     explanation: MonotonicClock uses a high-resolution monotonic source unaffected by NTP or manual clock
       adjustments, so duration diffs stay accurate. Wall-clock NativeClock can jump; MockClock is for
       tests; DatePoint is a date type, not a clock.
-    documentation: https://symfony.com/doc/current/components/clock.html
+    documentation: https://symfony.com/doc/8.0/components/clock.html
   - id: MISC-CLOCK-04
     question: 'True or False: you should guard ClockInterface::now() with a nullsafe operator because
       it may return null with a frozen MockClock.'
@@ -1176,7 +1176,7 @@ categories:
     explanation: 'False. now() is typed : \\DateTimeImmutable and always returns a DatePoint, even with
       a frozen MockClock, so ?-> is unnecessary. The real bug is comparing a MockClock time against a
       live new \\DateTime() — read time from the clock on both sides.'
-    documentation: https://symfony.com/doc/current/components/clock.html
+    documentation: https://symfony.com/doc/8.0/components/clock.html
 - name: Miscellaneous — Debugging, Errors & Profiler
   questions:
   - id: MISC-DEBUG-01
@@ -1200,7 +1200,7 @@ categories:
       correct: false
     explanation: The cloner captures the variable into an immutable, depth-limited Data object, which
       a CliDumper or HtmlDumper then renders — separating capture from output.
-    documentation: https://symfony.com/doc/current/components/var_dumper.html
+    documentation: https://symfony.com/doc/8.0/components/var_dumper.html
   - id: MISC-DEBUG-02
     question: What does dd() do that dump() does not?
     type: trap
@@ -1222,7 +1222,7 @@ categories:
       correct: false
     explanation: 'dd() means ''dump and die'': it dumps then calls exit, halting the script. dump() records
       the variable and lets execution continue (the dump is shown in the toolbar/collector).'
-    documentation: https://symfony.com/doc/current/components/var_dumper.html#the-dump-function
+    documentation: https://symfony.com/doc/8.0/components/var_dumper.html#the-dump-function
   - id: MISC-DEBUG-03
     question: What unit does StopwatchEvent::getDuration() use, and when is the debug.stopwatch service
       available?
@@ -1245,7 +1245,7 @@ categories:
       correct: false
     explanation: getDuration() returns milliseconds, and the autowirable debug.stopwatch service is only
       registered in debug (dev/test). Injecting Stopwatch in prod therefore causes a wiring error.
-    documentation: https://symfony.com/doc/current/components/stopwatch.html
+    documentation: https://symfony.com/doc/8.0/components/stopwatch.html
   - id: MISC-DEBUG-04
     question: A service that autowires Symfony\Component\Stopwatch\Stopwatch works in dev but fails to
       boot in prod. Why?
@@ -1269,7 +1269,7 @@ categories:
     explanation: Stopwatch's framework service is registered only when debug is enabled, so in prod there
       is nothing to inject and the container fails. Use it for ad-hoc dev profiling only; for prod metrics
       use real observability.
-    documentation: https://symfony.com/doc/current/components/stopwatch.html
+    documentation: https://symfony.com/doc/8.0/components/stopwatch.html
   - id: MISC-ERR-01
     question: An uncaught exception that does NOT implement HttpExceptionInterface produces which status
       code?
@@ -1292,7 +1292,7 @@ categories:
       correct: false
     explanation: Only HttpExceptionInterface carries a custom status code; any other throwable defaults
       to HTTP 500 via the error controller.
-    documentation: https://symfony.com/doc/current/controller/error_pages.html
+    documentation: https://symfony.com/doc/8.0/controller/error_pages.html
   - id: MISC-ERR-02
     question: What does the ErrorHandler component do with a PHP warning or notice?
     type: internals
@@ -1314,7 +1314,7 @@ categories:
       correct: false
     explanation: ErrorHandler registers set_error_handler() to throw \\ErrorException for PHP errors (warnings,
       notices, fatals via a shutdown function), making them catchable. It does not turn them into HttpExceptions.
-    documentation: https://symfony.com/doc/current/components/error_handler.html
+    documentation: https://symfony.com/doc/8.0/components/error_handler.html
   - id: MISC-ERR-03
     question: Which serializable object represents a throwable for rendering and logging?
     type: single
@@ -1336,7 +1336,7 @@ categories:
     explanation: Throwables are normalised into a FlattenException — a serializable snapshot (class, message,
       status, trace) that error renderers (HTML/JSON/XML) turn into output and that is safe to log. HttpException
       is a throwable, not the snapshot.
-    documentation: https://symfony.com/doc/current/components/error_handler.html
+    documentation: https://symfony.com/doc/8.0/components/error_handler.html
   - id: MISC-ERR-04
     question: In a controller, which throw produces a 404 rendered by the framework error controller?
     type: scenario
@@ -1360,7 +1360,7 @@ categories:
     explanation: NotFoundHttpException implements HttpExceptionInterface, so the error controller maps
       it to 404 via getStatusCode(). A plain \\RuntimeException or \\InvalidArgumentException does not
       carry a status and becomes 500. You do not need to build the Response manually.
-    documentation: https://symfony.com/doc/current/controller/error_pages.html
+    documentation: https://symfony.com/doc/8.0/controller/error_pages.html
   - id: MISC-PROF-01
     question: When does the Web Profiler collect data for a request?
     type: internals
@@ -1382,7 +1382,7 @@ categories:
       correct: false
     explanation: Profiler::collect() runs on kernel.response, invoking each DataCollector; LateDataCollectorInterface::lateCollect()
       runs later at terminate for data not complete during the response.
-    documentation: https://symfony.com/doc/current/profiler.html
+    documentation: https://symfony.com/doc/8.0/profiler.html
   - id: MISC-PROF-02
     question: Which service tag registers a custom data collector (with a toolbar/panel)?
     type: single
@@ -1405,7 +1405,7 @@ categories:
     explanation: The data_collector tag wires a DataCollectorInterface; supplying a `template` attribute
       makes its toolbar badge and panel appear. Autoconfigure applies the tag automatically for services
       implementing the interface.
-    documentation: https://symfony.com/doc/current/profiler/data_collector.html
+    documentation: https://symfony.com/doc/8.0/profiler/data_collector.html
   - id: MISC-PROF-03
     question: A custom collector storing a PDO connection in $this->data breaks profile storage. Why?
     type: debug
@@ -1429,7 +1429,7 @@ categories:
     explanation: Profiles are persisted per token, so $this->data must be serializable — store scalar/array
       (VarDumper-clonable) data, not live resources like a PDO connection or an entity with a connection.
       Implement reset() for worker reuse.
-    documentation: https://symfony.com/doc/current/profiler/data_collector.html
+    documentation: https://symfony.com/doc/8.0/profiler/data_collector.html
   - id: MISC-PROF-04
     question: Your metric is only complete after the response is sent. Which interface should the collector
       implement?
@@ -1453,7 +1453,7 @@ categories:
     explanation: Normal collect() runs on kernel.response, too early for post-response data (final dumps,
       cache calls). LateDataCollectorInterface::lateCollect() runs later at terminate, when that data
       is complete.
-    documentation: https://symfony.com/doc/current/profiler/data_collector.html
+    documentation: https://symfony.com/doc/8.0/profiler/data_collector.html
 - name: Miscellaneous — Intl, Filesystem & Finder
   questions:
   - id: MISC-INTL-01
@@ -1477,7 +1477,7 @@ categories:
       correct: false
     explanation: ICU MessageFormat handles plural/select rules with locale-aware categories (one/few/many/other);
       the old pipe syntax is legacy.
-    documentation: https://symfony.com/doc/current/translation/message_format.html
+    documentation: https://symfony.com/doc/8.0/translation/message_format.html
   - id: MISC-INTL-02
     question: What does the translator return when a message id has no translation in the active locale
       or its fallbacks?
@@ -1500,7 +1500,7 @@ categories:
       correct: false
     explanation: A missing translation returns the untranslated id, not an error or empty string, so the
       UI degrades gracefully. In dev the miss is logged so you can fix the catalogue.
-    documentation: https://symfony.com/doc/current/translation.html
+    documentation: https://symfony.com/doc/8.0/translation.html
   - id: MISC-INTL-03
     question: Which class returns the localized display name of a country code?
     type: single
@@ -1523,7 +1523,7 @@ categories:
     explanation: Countries::getName() reads the bundled ICU dataset and returns the name in the current/requested
       locale. Related classes are Languages, Locales, Currencies and Timezones. The other namespaces do
       not exist.
-    documentation: https://symfony.com/doc/current/components/intl.html
+    documentation: https://symfony.com/doc/8.0/components/intl.html
   - id: MISC-INTL-04
     question: What is the default translation domain, and what file naming applies ICU formatting?
     type: config
@@ -1547,7 +1547,7 @@ categories:
     explanation: When no domain is passed, trans() uses messages; validators and security are separate
       domains. ICU MessageFormat is applied to catalogues named with the +intl-icu suffix — forgetting
       it means ICU rules are not parsed.
-    documentation: https://symfony.com/doc/current/translation/message_format.html
+    documentation: https://symfony.com/doc/8.0/translation/message_format.html
   - id: MISC-FS-01
     question: What makes Filesystem::dumpFile() safe against partial reads?
     type: internals
@@ -1570,7 +1570,7 @@ categories:
     explanation: dumpFile() writes to a temp file and renames it, so a reader always sees either the old
       content or the complete new content, never a half-written file. appendToFile(), by contrast, is
       not atomic.
-    documentation: https://symfony.com/doc/current/components/filesystem.html
+    documentation: https://symfony.com/doc/8.0/components/filesystem.html
   - id: MISC-FS-02
     question: Which Finder method defines the directories to search?
     type: single
@@ -1592,7 +1592,7 @@ categories:
       correct: false
     explanation: Finder::in() sets the search directories; without it the Finder throws. It yields Symfony
       SplFileInfo objects with helpers like getRelativePathname().
-    documentation: https://symfony.com/doc/current/components/finder.html
+    documentation: https://symfony.com/doc/8.0/components/finder.html
   - id: MISC-FS-03
     question: How does Symfony\Component\Filesystem\Filesystem signal a failed operation (e.g. copy())?
     type: trap
@@ -1615,7 +1615,7 @@ categories:
     explanation: Unlike native file functions that return false, Filesystem methods throw IOExceptionInterface
       on failure, so errors cannot be silently ignored. Also note Path helpers manipulate path strings
       only and never touch the disk.
-    documentation: https://symfony.com/doc/current/components/filesystem.html#error-handling
+    documentation: https://symfony.com/doc/8.0/components/filesystem.html#error-handling
   - id: MISC-FS-04
     question: A Finder query returns directories as well as files. What is missing?
     type: debug
@@ -1637,7 +1637,7 @@ categories:
       correct: false
     explanation: Finder yields both files and directories unless you narrow it with files() (or directories()).
       name()/in() do not restrict the entry type. Iterated results are Finder SplFileInfo objects.
-    documentation: https://symfony.com/doc/current/components/finder.html
+    documentation: https://symfony.com/doc/8.0/components/finder.html
 - name: Miscellaneous — Multiple Choice Drills
   questions:
   - id: MISC-MC-01
@@ -1669,7 +1669,7 @@ categories:
       configured with tags: true, and a stored null is a valid cached value that counts as a hit. PSR-16
       has no tags and no deferred saves (those are PSR-6 features), and get() never returns null to mean
       "miss" — on a miss it runs the callback and returns its result.'
-    documentation: https://symfony.com/doc/current/cache.html
+    documentation: https://symfony.com/doc/8.0/cache.html
   - id: MISC-MC-02
     type: multiple
     difficulty: medium
@@ -1697,7 +1697,7 @@ categories:
       time virtually so tests never wait. The default framework clock is NativeClock in every environment
       (tests swap in MockClock themselves), and MonotonicClock is for measuring durations precisely because
       it is immune to system clock changes.
-    documentation: https://symfony.com/doc/current/components/clock.html
+    documentation: https://symfony.com/doc/8.0/components/clock.html
   - id: MISC-MC-03
     type: multiple
     difficulty: hard
@@ -1726,7 +1726,7 @@ categories:
       (flock/semaphore) never protect across machines, and the TTL expires mid-job unless refresh() extends
       it. Non-blocking acquire() does not throw on contention (only blocking acquisition can end in LockConflictedException),
       and multi-server exclusion needs a shared store such as Redis or a database.
-    documentation: https://symfony.com/doc/current/lock.html
+    documentation: https://symfony.com/doc/8.0/lock.html
   - id: MISC-MC-04
     type: multiple
     difficulty: medium
@@ -1753,7 +1753,7 @@ categories:
       delivers later, and embedded parts are addressed with cid: in the HTML body. TemplatedEmail is part
       of the Twig bridge (Symfony\Bridge\Twig\Mime), and the Envelope (sender/recipients used for the
       SMTP conversation) is distinct from the message headers rendered in the visible email.'
-    documentation: https://symfony.com/doc/current/mailer.html
+    documentation: https://symfony.com/doc/8.0/mailer.html
   - id: MISC-MC-05
     type: multiple
     difficulty: hard
@@ -1782,7 +1782,7 @@ categories:
       to disable), and mustRun() throws ProcessFailedException on failure where run() only returns the
       exit code. fromShellCommandline() runs a raw string through the shell with no escaping (a command-injection
       risk), and stdout is read via getOutput(), not from run().
-    documentation: https://symfony.com/doc/current/components/process.html
+    documentation: https://symfony.com/doc/8.0/components/process.html
   - id: MISC-MC-06
     type: multiple
     difficulty: hard
@@ -1809,7 +1809,7 @@ categories:
       => [...]] in the context — without it all readable fields are emitted. PropertyNormalizer accesses
       properties directly via reflection (ObjectNormalizer is the one using accessors), and null properties
       are serialized as null unless you enable the skip_null_values context option.
-    documentation: https://symfony.com/doc/current/serializer.html
+    documentation: https://symfony.com/doc/8.0/serializer.html
   - id: MISC-PROPACC-01
     type: trap
     difficulty: medium
@@ -1833,7 +1833,7 @@ categories:
     explanation: PropertyAccessorBuilder defaults to MAGIC_GET | MAGIC_SET only; __call is disabled unless
       enableMagicCall() is explicitly called. Without it, a class reachable only via __call() is not accessible
       through the default accessor, and getValue() throws rather than returning null.
-    documentation: https://symfony.com/doc/current/components/property_access.html#magic-getters-and-setters
+    documentation: https://symfony.com/doc/8.0/components/property_access.html#magic-getters-and-setters
   - id: MISC-PROPACC-02
     type: scenario
     difficulty: hard

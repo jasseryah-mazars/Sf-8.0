@@ -300,7 +300,7 @@ l'exécution.
     - [ ] D. `Symfony\Component\HttpKernel\Attribute\Route`
 
     **Why:** la classe a déménagé dans le namespace `Attribute` ; l'alias `Annotation`
-    est supprimé dans Symfony 8. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    est supprimé dans Symfony 8. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q2. Two routes match the same path. Which wins?"
     - [x] A. The one declared first in the `RouteCollection` ✅
@@ -309,7 +309,7 @@ l'exécution.
     - [ ] D. The last one declared
 
     **Why:** le matcher itère dans l'ordre d'insertion et retourne le premier match.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. What does a class-level `#[Route('/blog', name: 'app_blog_')]` contribute?"
     - [x] A. A path prefix and a name prefix for every method route ✅
@@ -318,7 +318,7 @@ l'exécution.
     - [ ] D. Nothing without `methods`
 
     **Why:** les données de route au niveau de la classe sont fusionnées comme préfixes dans la route de chaque action.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#creating-routes-as-attributes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#creating-routes-as-attributes).
 
 ??? question "Q4. Which `type` imports `#[Route]` attributes in a YAML resource?"
     - [ ] A. `type: annotation`
@@ -327,7 +327,7 @@ l'exécution.
     - [ ] D. `type: directory`
 
     **Why:** le chargement des attributs utilise `type: attribute` dans Symfony 8.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -351,7 +351,7 @@ l'exécution.
 - **Confused with:** [Requirements](requirements.md) — l'*ordre* de déclaration et la *spécificité* des regex décident de choses différentes.
 
 ## Official References
-- [Official Symfony docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official Symfony docs — Routing](https://symfony.com/doc/8.0/routing.html)
 - [Symfony source — Router](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Router.php)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
@@ -364,7 +364,7 @@ l'exécution.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

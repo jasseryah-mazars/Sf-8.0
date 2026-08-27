@@ -284,7 +284,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
     - [ ] D. There is no difference
 
     **Why:** A locator's set is explicit and analysable; injecting the whole
-    container hides dependencies. **Ref:** [Service subscribers & locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    container hides dependencies. **Ref:** [Service subscribers & locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. When are locator services instantiated?"
     - [ ] A. All at construction
@@ -293,7 +293,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
     - [ ] D. On kernel boot
 
     **Why:** A locator defers construction until a service is actually requested.
-    **Ref:** [Service locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators).
+    **Ref:** [Service locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators).
 
 ??? question "Q3. What does `getSubscribedServices()` return?"
     - [x] A. A map/list of services the subscriber may lazily use ✅
@@ -302,7 +302,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
     - [ ] D. The whole container
 
     **Why:** It declares the whitelist; the container injects a matching locator.
-    **Ref:** [Service subscribers](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    **Ref:** [Service subscribers](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q4. `ServiceLocator` implements which interface?"
     - [x] A. `Psr\Container\ContainerInterface` (PSR-11) ✅
@@ -311,7 +311,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
     - [ ] D. `CompilerPassInterface`
 
     **Why:** It is a PSR-11 container exposing `get()`/`has()`.
-    **Ref:** [Service locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators).
+    **Ref:** [Service locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators).
 
 ## Key takeaways
 
@@ -340,7 +340,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
   PSR-11 whitelist, not the whole container.
 
 ## Official References
-- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — ServiceLocator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ServiceLocator.php)
 
 ## Video references
@@ -352,7 +352,7 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

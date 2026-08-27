@@ -33,7 +33,7 @@ is a wildcard that can cut in anywhere, then rejoins at `response`.
     request and only **after** the client got the response — every other event
     also fires for sub-requests (e.g. `forward()`, fragments).
 
-**Ref:** [https://symfony.com/doc/current/reference/events.html](https://symfony.com/doc/current/reference/events.html)
+**Ref:** [https://symfony.com/doc/8.0/reference/events.html](https://symfony.com/doc/8.0/reference/events.html)
 
 ## 2. Listener priority rules
 
@@ -54,7 +54,7 @@ registration order.*
     listener at `-1000` sees changes made by one at `0`. Questions love
     inverting this ("higher priority runs later" — false).
 
-**Ref:** [https://symfony.com/doc/current/event_dispatcher.html](https://symfony.com/doc/current/event_dispatcher.html)
+**Ref:** [https://symfony.com/doc/8.0/event_dispatcher.html](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ## 3. Form event order
 
@@ -89,7 +89,7 @@ SUBMIT, done at POST_SUBMIT.*
     not `POST_SET_DATA`. And `POST_SUBMIT` is for *reading* the final object
     (or tweaking the view), not for changing model data.
 
-**Ref:** [https://symfony.com/doc/current/form/events.html](https://symfony.com/doc/current/form/events.html)
+**Ref:** [https://symfony.com/doc/8.0/form/events.html](https://symfony.com/doc/8.0/form/events.html)
 
 ## 4. Console event order
 
@@ -107,7 +107,7 @@ always.*
     `console.terminate` fires **even when `console.error` fired** — "terminate
     is skipped on error" is false. It's the console twin of `kernel.terminate`.
 
-**Ref:** [https://symfony.com/doc/current/components/console/events.html](https://symfony.com/doc/current/components/console/events.html)
+**Ref:** [https://symfony.com/doc/8.0/components/console/events.html](https://symfony.com/doc/8.0/components/console/events.html)
 
 ## 5. Security request cycle order
 
@@ -145,7 +145,7 @@ security is a "first match" world.*
     rule below it. Put specific paths (e.g. `^/admin/login`) **above** general
     ones (`^/admin`).
 
-**Ref:** [https://symfony.com/doc/current/security.html](https://symfony.com/doc/current/security.html)
+**Ref:** [https://symfony.com/doc/8.0/security.html](https://symfony.com/doc/8.0/security.html)
 
 ## 6. Compiler pass phases
 
@@ -170,7 +170,7 @@ After-Removing — "M-BO-O-BR-R-AR".*
     pruned. Also: compiler passes are registered in `build()` — **no attribute**
     exists for registering one.
 
-**Ref:** [https://symfony.com/doc/current/components/dependency_injection/compilation.html](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
+**Ref:** [https://symfony.com/doc/8.0/components/dependency_injection/compilation.html](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 
 ## 7. Argument/value resolver order
 
@@ -194,7 +194,7 @@ defaults come last.*
     built-ins** (e.g. hijacking arguments the request-attribute resolver would
     have filled). Scope your `supports` logic tightly and keep priority modest.
 
-**Ref:** [https://symfony.com/doc/current/controller/value_resolver.html](https://symfony.com/doc/current/controller/value_resolver.html)
+**Ref:** [https://symfony.com/doc/8.0/controller/value_resolver.html](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 ## 8. Routing match order
 
@@ -214,7 +214,7 @@ wildcards downstream.*
     "Symfony picks the *most specific* route" — **false**. It picks the *first*
     match in order; specificity only wins if you order (or `priority`) it that way.
 
-**Ref:** [https://symfony.com/doc/current/routing.html](https://symfony.com/doc/current/routing.html)
+**Ref:** [https://symfony.com/doc/8.0/routing.html](https://symfony.com/doc/8.0/routing.html)
 
 ## 9. HttpKernel::handle() call sequence
 
@@ -250,7 +250,7 @@ sequenceDiagram
 **Memory anchor:** *A request-event early-exit skips the controller entirely —
 that's how HttpCache-style shortcuts and security redirects work.*
 
-**Ref:** [https://symfony.com/doc/current/components/http_kernel.html](https://symfony.com/doc/current/components/http_kernel.html)
+**Ref:** [https://symfony.com/doc/8.0/components/http_kernel.html](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ## 10. Cache/response ordering nuggets
 
@@ -274,20 +274,20 @@ after the flush.*
     `kernel.response` delays the client; `kernel.terminate` (or Messenger)
     runs after the response is sent.
 
-**Ref:** [https://symfony.com/doc/current/http_cache.html](https://symfony.com/doc/current/http_cache.html)
+**Ref:** [https://symfony.com/doc/8.0/http_cache.html](https://symfony.com/doc/8.0/http_cache.html)
 
 ## Official References
 
-- [Built-in Symfony events](https://symfony.com/doc/current/reference/events.html)
-- [The EventDispatcher (priorities)](https://symfony.com/doc/current/event_dispatcher.html)
-- [Form events](https://symfony.com/doc/current/form/events.html)
-- [Console events](https://symfony.com/doc/current/components/console/events.html)
-- [Security](https://symfony.com/doc/current/security.html)
-- [Container compilation & compiler passes](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
-- [Controller value resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
-- [Routing](https://symfony.com/doc/current/routing.html)
-- [The HttpKernel component](https://symfony.com/doc/current/components/http_kernel.html)
-- [HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [Built-in Symfony events](https://symfony.com/doc/8.0/reference/events.html)
+- [The EventDispatcher (priorities)](https://symfony.com/doc/8.0/event_dispatcher.html)
+- [Form events](https://symfony.com/doc/8.0/form/events.html)
+- [Console events](https://symfony.com/doc/8.0/components/console/events.html)
+- [Security](https://symfony.com/doc/8.0/security.html)
+- [Container compilation & compiler passes](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
+- [Controller value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html)
+- [Routing](https://symfony.com/doc/8.0/routing.html)
+- [The HttpKernel component](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
 
 ---
 

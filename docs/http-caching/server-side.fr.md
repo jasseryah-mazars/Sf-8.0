@@ -55,7 +55,7 @@ $response = $cachingKernel->handle($request); // on a fresh hit, the app never r
 Il obéit aux headers standards que vous connaissez déjà — `Cache-Control` (en
 particulier `s-maxage`, puisque c'est un cache *partagé*), `Expires`, `ETag`,
 `Last-Modified`, `Vary` — sans langage de configuration maison. Il comprend
-aussi [ESI](esi.md).
+aussi [ESI](../appendices/out-of-syllabus/esi.md).
 
 ```http
 HTTP/1.1 200 OK
@@ -84,7 +84,7 @@ Vary: Accept-Encoding
     `HttpCache` la traite comme **privée** — il ne sert pas depuis le cache
     partagé et n'y stocke pas non plus. Les requests anonymes (sans cookie),
     elles, *sont* mises en cache ; déplacez les parties par utilisateur dans de
-    l'[ESI](esi.md).
+    l'[ESI](../appendices/out-of-syllabus/esi.md).
 
 ## Deep Dive — how it works internally
 
@@ -118,7 +118,7 @@ public function __construct(
   fichiers indexé par URL + `Vary`, utilisant des fichiers de digest et des
   fichiers de lock.
 - `$surrogate` — une instance `Esi` ou `Ssi` pour le traitement des
-  [fragments](esi.md).
+  [fragments](../appendices/out-of-syllabus/esi.md).
 - `$options` — les réglages de comportement (ci-dessous).
 
 ```php
@@ -294,7 +294,7 @@ petite ou moyenne, et quand vous voulez du cache sans infrastructure
 supplémentaire. Tournez-vous vers **Varnish** ou un **CDN** à cache HTTP en cas
 de fort trafic ou de besoin de distribution en périphérie — ils parlent les
 mêmes headers HTTP, donc votre code Symfony reste inchangé. Pour une fraîcheur
-par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
+par fragment sur une page majoritairement cachable, ajoutez [ESI](../appendices/out-of-syllabus/esi.md)
 (pris en charge à la fois par le proxy PHP et par Varnish).
 
 !!! danger "Certification traps"
@@ -336,7 +336,7 @@ par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
     traitées comme privées et contournent le cache partagé. Les requests
     anonymes (sans cookie de session), elles, *sont* mises en cache. Pour mettre
     aussi en cache la coquille des pages connectées, déplacez les parties par
-    utilisateur dans des fragments [ESI](esi.md) afin que la page externe reste
+    utilisateur dans des fragments [ESI](../appendices/out-of-syllabus/esi.md) afin que la page externe reste
     anonyme/cachable.
 
 ## Certification questions
@@ -349,7 +349,7 @@ par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
 
     **Why:** Il implémente `HttpKernelInterface`/`TerminableInterface` et
     enveloppe le vrai kernel, agissant comme un gateway cache en PHP.
-    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy).
+    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy).
 
 ??? question "Q2. Which request header, by default, makes `HttpCache` treat a request as private?"
     - [x] A. `Cookie` (and `Authorization`) ✅
@@ -369,7 +369,7 @@ par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
 
     **Why:** `HttpCache` écrit une trace (header par défaut `X-Symfony-Cache`)
     telle que `GET /: fresh`/`miss`/`store`.
-    **Ref:** [Debugging HttpCache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [Debugging HttpCache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q4. The easiest way to enable the reverse proxy in Symfony 8 is…"
     - [x] A. `framework.http_cache: true` in config ✅
@@ -380,7 +380,7 @@ par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
     **Why:** Le drapeau de configuration du framework enveloppe le kernel
     automatiquement ; l'enveloppement manuel dans `public/index.php` est
     l'alternative.
-    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy).
+    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy).
 
 ## Key takeaways
 
@@ -408,21 +408,21 @@ par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
       système de fichiers.
     - Header de trace `X-Symfony-Cache` ; `private_headers` = Cookie,
       Authorization.
-    - Cache partagé → respecte `s-maxage` ; prend en charge [ESI](esi.md).
+    - Cache partagé → respecte `s-maxage` ; prend en charge [ESI](../appendices/out-of-syllabus/esi.md).
 
 ## Connections
 
 - **Depends on:** [Request Handling](../architecture/request-handling.md) —
   `HttpCache` est un `HttpKernelInterface` qui enveloppe le kernel avant son
   exécution.
-- **Reused in:** [Edge Side Includes](esi.md) — le reverse proxy est le surrogate
+- **Reused in:** [Edge Side Includes](../appendices/out-of-syllabus/esi.md) — le reverse proxy est le surrogate
   qui récupère et assemble les fragments ESI.
 - **Confused with:** [Client-Side Caching](client-side.md) — ceci est un cache
   *partagé* qui vous appartient ; le cache du navigateur est privé et par
   utilisateur.
 
 ## Official References
-- [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+- [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
 - [Symfony source — HttpCache](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php)
 - [Symfony source — Store](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Store.php)
 
@@ -436,7 +436,7 @@ par fragment sur une page majoritairement cachable, ajoutez [ESI](esi.md)
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -451,4 +451,4 @@ Je suis prêt quand je peux :
 ---
 
 <small>Related: [Cache Types](cache-types.md) · [Expiration](expiration.md) ·
-[Edge Side Includes](esi.md) · [Architecture](../architecture/index.md)</small>
+[Edge Side Includes](../appendices/out-of-syllabus/esi.md) · [Architecture](../architecture/index.md)</small>

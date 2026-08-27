@@ -2063,7 +2063,7 @@ categories:
           send CSP (a separate, complementary defence), and does not encrypt output.
           The |raw filter opts out and reintroduces the risk. Misconception: thinking
           escaping removes content — it encodes it so the browser treats it as data.
-        documentation: "https://symfony.com/doc/current/templates.html"
+        documentation: "https://symfony.com/doc/8.0/templates.html"
 
       - id: "PHP-SEC-02"
         question: "Which technique best prevents SQL injection?"
@@ -2084,7 +2084,7 @@ categories:
           Symfony apps use PDO/DBAL with bound parameters. Misconception: believing
           escaping input is equivalent to parameterisation — only binding structurally
           separates code from data.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
 
       - id: "PHP-SEC-03"
         question: "Session fixation is primarily mitigated by…"
@@ -2105,7 +2105,7 @@ categories:
           window open, and encoding an id changes nothing about the attack.
           Misconception: conflating fixation (attacker sets the id pre-login) with
           hijacking (attacker steals the cookie) — they need different defences.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
 
       - id: "PHP-SEC-04"
         question: "Which response header defends against clickjacking?"
@@ -2125,7 +2125,7 @@ categories:
           stops MIME sniffing, Referrer-Policy limits referer leakage, and
           Accept-Language is a request header. Misconception: assuming any security
           header helps against any attack — each header targets a specific threat.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
 
       - id: "PHP-SEC-05"
         question: "What is the correct way to store user passwords?"
@@ -2167,7 +2167,7 @@ categories:
           disable escaping in script tags, and URLs routinely carry user data (which
           must be url-encoded). Misconception: treating one escaping strategy as a
           cure-all across all output contexts.
-        documentation: "https://symfony.com/doc/current/templates.html"
+        documentation: "https://symfony.com/doc/8.0/templates.html"
 
       - id: "PHP-SEC-07"
         question: "In Twig, `{{ comment }}` renders the value `<script>alert(1)</script>`. What is output and why is it safe?"
@@ -2187,7 +2187,7 @@ categories:
           does not strip the tag (it encodes it), and does not error on the content.
           Only |raw on this value would reintroduce the XSS. Misconception: assuming
           the tag is removed rather than entity-encoded.
-        documentation: "https://symfony.com/doc/current/templates.html"
+        documentation: "https://symfony.com/doc/8.0/templates.html"
 
       - id: "PHP-SEC-08"
         question: "In framework.yaml, which session cookie settings harden against hijacking and CSRF?"
@@ -2208,7 +2208,7 @@ categories:
           every protection; lifetime and domain settings alone do not harden against
           these attacks. Misconception: thinking SameSite=None (without Secure) is a
           safe default — it widens exposure.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
 
       - id: "PHP-SEC-09"
         question: "How do the `HttpOnly` and `Secure` cookie flags differ?"
@@ -2229,7 +2229,7 @@ categories:
           option swaps their meanings. Neither affects lifetime (that is Max-Age/
           Expires). Misconception: assuming one flag covers both JS access and
           transport security.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
 
       - id: "PHP-SEC-10"
         question: "True or False: a CSRF token is an authentication mechanism."
@@ -2248,7 +2248,7 @@ categories:
           defends already-authenticated sessions from forged cross-site requests.
           Misconception: treating CSRF tokens as login/identity checks rather than
           request-origin proof for state-changing actions.
-        documentation: "https://symfony.com/doc/current/security/csrf.html"
+        documentation: "https://symfony.com/doc/8.0/security/csrf.html"
 
       - id: "PHP-SEC-11"
         question: "Which pairings of threat and Symfony/PHP defence are correct? (choose two)"
@@ -2269,7 +2269,7 @@ categories:
           hashing protects stored credentials, an unrelated concern). Misconception:
           assuming one defence generalises across threats — each attack has its own
           countermeasure.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
 
       - id: "PHP-SEC-12"
         question: "A developer verifies passwords with `if ($hash == $storedHash)`. What is wrong and what is the fix?"
@@ -2464,7 +2464,7 @@ categories:
           context — HTML entities do not neutralise script or URL contexts — and a
           CSRF token only proves the request originated from your own form/session,
           not who the user is.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "PHP-ATTR-01"
         type: "trap"
         difficulty: "medium"
@@ -2551,4 +2551,4 @@ categories:
           catches the resulting ValueError/TypeError itself, converting it
           into a NotFoundHttpException — an invalid enum value in a route is a
           404, never an unhandled exception reaching the client as a 500.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"

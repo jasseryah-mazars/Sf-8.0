@@ -382,7 +382,7 @@ event.
     - [ ] C. It cannot be stopped
 
     **Why:** Les listeners sont triés par priorité **décroissante**. **Ref:**
-    [EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html#connecting-listeners).
+    [EventDispatcher](https://symfony.com/doc/8.0/components/event_dispatcher.html#connecting-listeners).
 
 ??? question "Q2. What is the signature of `dispatch()` in Symfony 8?"
     - [x] A. `dispatch(object $event, ?string $eventName = null)` ✅
@@ -390,7 +390,7 @@ event.
     - [ ] C. `dispatch(Event $event, string $eventName)` (name required)
 
     **Why:** Symfony suit PSR-14 : l'objet event en premier, le nom optionnel. **Ref:**
-    [Generic events](https://symfony.com/doc/current/components/event_dispatcher.html).
+    [Generic events](https://symfony.com/doc/8.0/components/event_dispatcher.html).
 
 ??? question "Q3. Which method must a subscriber implement?"
     - [x] A. `public static function getSubscribedEvents(): array` ✅
@@ -398,7 +398,7 @@ event.
     - [ ] C. `#[AsEventSubscriber]`
 
     **Why:** `EventSubscriberInterface` définit cette méthode statique. **Ref:**
-    [Event subscribers](https://symfony.com/doc/current/event_dispatcher.html#creating-an-event-subscriber).
+    [Event subscribers](https://symfony.com/doc/8.0/event_dispatcher.html#creating-an-event-subscriber).
 
 ## Key takeaways
 
@@ -422,8 +422,8 @@ event.
 - **Confused with:** [Interoperability & PSRs](psr.md) — le dispatcher de Symfony *implémente* PSR-14 mais y ajoute les priorités et `stopPropagation()`.
 
 ## Official References
-- [Official docs — EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html)
-- [Official docs — Events reference](https://symfony.com/doc/current/reference/events.html)
+- [Official docs — EventDispatcher](https://symfony.com/doc/8.0/components/event_dispatcher.html)
+- [Official docs — Events reference](https://symfony.com/doc/8.0/reference/events.html)
 - [Symfony source — EventDispatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/EventDispatcher/EventDispatcher.php)
 
 ## Video references
@@ -436,7 +436,7 @@ event.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/event_dispatcher.html#connecting-listeners) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/event_dispatcher.html#connecting-listeners) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

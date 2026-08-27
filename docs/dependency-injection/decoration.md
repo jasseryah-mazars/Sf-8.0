@@ -299,7 +299,7 @@ run *many* handlers, use [tags](tags.md) instead.
     - [ ] D. A private alias to `service_container`
 
     **Why:** The compiler renames the decorated service and exposes it as `.inner`.
-    **Ref:** [Decorating services](https://symfony.com/doc/current/service_container/service_decoration.html).
+    **Ref:** [Decorating services](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ??? question "Q2. Which attribute injects the decorated (inner) service?"
     - [ ] A. `#[Autowire('.inner')]` only
@@ -308,7 +308,7 @@ run *many* handlers, use [tags](tags.md) instead.
     - [ ] D. `#[AsDecorator]`
 
     **Why:** `#[AutowireDecorated]` resolves to the `.inner` reference for the
-    parameter. **Ref:** [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    parameter. **Ref:** [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ??? question "Q3. With two decorators, higher `decoration_priority` means…"
     - [x] A. Applied first, sits closer to the original (innermost) ✅
@@ -317,7 +317,7 @@ run *many* handlers, use [tags](tags.md) instead.
     - [ ] D. It becomes public
 
     **Why:** Higher priority decorators are applied first and end up innermost;
-    consumers see the lowest-priority (outermost) one. **Ref:** [Decoration priority](https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority).
+    consumers see the lowest-priority (outermost) one. **Ref:** [Decoration priority](https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority).
 
 ??? question "Q4. `decoration_on_invalid: ignore` does what if the target is missing?"
     - [x] A. Removes the decorator, leaving nothing ✅
@@ -326,7 +326,7 @@ run *many* handlers, use [tags](tags.md) instead.
     - [ ] D. Creates an empty service
 
     **Why:** `ignore` drops the decorator; `null` would inject `null`; `exception`
-    (default) throws. **Ref:** [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    (default) throws. **Ref:** [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -355,7 +355,7 @@ run *many* handlers, use [tags](tags.md) instead.
   decorator *wraps* an existing one under its id.
 
 ## Official References
-- [Official Symfony docs — Service Decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
+- [Official Symfony docs — Service Decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 - [Symfony source — DecoratorServicePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/DecoratorServicePass.php)
 
 ## Video references
@@ -367,7 +367,7 @@ run *many* handlers, use [tags](tags.md) instead.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_decoration.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_decoration.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

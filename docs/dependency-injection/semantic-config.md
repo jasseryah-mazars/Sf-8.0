@@ -316,7 +316,7 @@ to set sane defaults for another bundle, not to override user intent.
     - [ ] D. `ContainerBuilder`
 
     **Why:** The tree defines allowed keys, types, defaults and validation;
-    `load()` only consumes the processed result. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    `load()` only consumes the processed result. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ??? question "Q2. When does `prepend()` run relative to `load()`?"
     - [x] A. Before all `load()` calls ✅
@@ -325,7 +325,7 @@ to set sane defaults for another bundle, not to override user intent.
     - [ ] D. Only in dev
 
     **Why:** Prepend lets a bundle influence others' config before they load.
-    **Ref:** [Prepending config](https://symfony.com/doc/current/bundles/prepend_extension.html).
+    **Ref:** [Prepending config](https://symfony.com/doc/8.0/bundles/prepend_extension.html).
 
 ??? question "Q3. Which command prints a bundle's config reference tree?"
     - [x] A. `config:dump-reference <bundle>` ✅
@@ -334,7 +334,7 @@ to set sane defaults for another bundle, not to override user intent.
     - [ ] D. `debug:router`
 
     **Why:** It dumps the schema defined by `Configuration`; `debug:config` shows
-    current values. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    current values. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ## Key takeaways
 
@@ -362,8 +362,8 @@ to set sane defaults for another bundle, not to override user intent.
   semantic config is a *validated schema* that produces parameters/services.
 
 ## Official References
-- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/current/bundles/configuration.html)
-- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/current/bundles/prepend_extension.html)
+- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/8.0/bundles/configuration.html)
+- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 - [Symfony source — Extension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php)
 
 ## Video references
@@ -375,7 +375,7 @@ to set sane defaults for another bundle, not to override user intent.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/configuration.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/configuration.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -419,7 +419,7 @@ a full authenticator.
 
     **Why:** `authenticate()` builds a Passport; the token is produced later by
     `createToken()`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ??? question "Q2. Which passport suits a valid-API-token flow with no password?"
     - [ ] A. `Passport` with empty `PasswordCredentials`
@@ -429,7 +429,7 @@ a full authenticator.
 
     **Why:** No credential to verify ⇒ self-validating passport carrying only the
     user badge.
-    **Ref:** [Passport](https://symfony.com/doc/current/security/custom_authenticator.html#the-passport).
+    **Ref:** [Passport](https://symfony.com/doc/8.0/security/custom_authenticator.html#the-passport).
 
 ??? question "Q3. In which namespace is `PasswordCredentials`?"
     - [ ] A. `…\Passport\Badge`
@@ -471,8 +471,8 @@ a full authenticator.
   passport; the provider only *loads* the user behind the `UserBadge`.
 
 ## Official References
-- [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
-- [Symfony docs — Access token authentication](https://symfony.com/doc/current/security/access_token.html)
+- [Symfony docs — Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html)
+- [Symfony docs — Access token authentication](https://symfony.com/doc/8.0/security/access_token.html)
 - [Symfony source — Passport](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Security/Http/Authenticator/Passport)
 
 ## Video references
@@ -484,7 +484,7 @@ a full authenticator.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/custom_authenticator.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/custom_authenticator.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

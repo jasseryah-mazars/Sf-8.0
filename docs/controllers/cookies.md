@@ -232,7 +232,7 @@ server-side state.
     - [ ] C. `$request->query`
     - [ ] D. `$_SESSION`
 
-    **Why:** the `cookies` `ParameterBag` wraps `$_COOKIE`. **Ref:** [http_foundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Why:** the `cookies` `ParameterBag` wraps `$_COOKIE`. **Ref:** [http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. A cookie with `SameSite=None` also requires…"
     - [ ] A. `HttpOnly=false`
@@ -241,7 +241,7 @@ server-side state.
     - [ ] D. a max-age of 0
 
     **Why:** browsers reject `SameSite=None` cookies that are not `Secure`.
-    **Ref:** [cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies).
+    **Ref:** [cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies).
 
 ??? question "Q3. Why might `clearCookie('token')` fail to remove the cookie?"
     - [x] A. The path/domain don't match the original cookie. ✅
@@ -250,7 +250,7 @@ server-side state.
     - [ ] D. It requires the value to match too.
 
     **Why:** deletion sends an expired cookie scoped by path/domain; a mismatch
-    targets a different cookie. **Ref:** [http_foundation](https://symfony.com/doc/current/components/http_foundation.html).
+    targets a different cookie. **Ref:** [http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ## Key takeaways
 
@@ -275,7 +275,7 @@ server-side state.
 - **Confused with:** [HTTP → Cookies](../http/cookies.md) — this is the controller-side read/write; the HTTP chapter covers the protocol.
 
 ## Official References
-- [Official Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+- [Official Symfony docs — Setting cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
 
 ## Video references
@@ -287,7 +287,7 @@ server-side state.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

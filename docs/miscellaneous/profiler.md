@@ -259,7 +259,7 @@ data. For prod observability use proper metrics/tracing.
     - [ ] C. Only in the CLI
 
     **Why:** `Profiler::collect()` runs on the response event; late collection at
-    terminate. **Ref:** [Profiler](https://symfony.com/doc/current/profiler.html).
+    terminate. **Ref:** [Profiler](https://symfony.com/doc/8.0/profiler.html).
 
 ??? question "Q2. Which tag registers a custom data collector?"
     - [x] A. `data_collector` ✅
@@ -267,7 +267,7 @@ data. For prod observability use proper metrics/tracing.
     - [ ] C. `profiler.panel`
 
     **Why:** The `data_collector` tag (with a `template`) wires the collector +
-    panel. **Ref:** [Creating a data collector](https://symfony.com/doc/current/profiler/data_collector.html).
+    panel. **Ref:** [Creating a data collector](https://symfony.com/doc/8.0/profiler/data_collector.html).
 
 ??? question "Q3. Should the profiler run in production?"
     - [ ] A. Yes, for monitoring
@@ -275,7 +275,7 @@ data. For prod observability use proper metrics/tracing.
     - [ ] C. Only for admins
 
     **Why:** It adds overhead and exposes internals; keep it off in prod.
-    **Ref:** [Profiler](https://symfony.com/doc/current/profiler.html).
+    **Ref:** [Profiler](https://symfony.com/doc/8.0/profiler.html).
 
 ## Key takeaways
 
@@ -299,8 +299,8 @@ data. For prod observability use proper metrics/tracing.
 - **Confused with:** production observability — the profiler is a dev-only tool, not a metrics backend.
 
 ## Official References
-- [Official docs — Profiler](https://symfony.com/doc/current/profiler.html)
-- [Official docs — Custom data collector](https://symfony.com/doc/current/profiler/data_collector.html)
+- [Official docs — Profiler](https://symfony.com/doc/8.0/profiler.html)
+- [Official docs — Custom data collector](https://symfony.com/doc/8.0/profiler/data_collector.html)
 - [Symfony source — DataCollectorInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DataCollector/DataCollectorInterface.php)
 
 ## Video references
@@ -312,7 +312,7 @@ data. For prod observability use proper metrics/tracing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/profiler.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/profiler.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

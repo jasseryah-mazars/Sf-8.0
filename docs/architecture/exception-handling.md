@@ -349,7 +349,7 @@ control flow.
     - [ ] C. `kernel.terminate`
 
     **Why:** `ExceptionEvent` listeners set the response. **Ref:**
-    [kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception).
+    [kernel.exception](https://symfony.com/doc/8.0/reference/events.html#kernel-exception).
 
 ??? question "Q2. What status code does a bare `\LogicException` produce?"
     - [ ] A. 404
@@ -357,7 +357,7 @@ control flow.
     - [ ] C. 400
 
     **Why:** Only `HttpExceptionInterface` exceptions carry a status; others → 500.
-    **Ref:** [Error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q3. Where do you override the 404 template?"
     - [x] A. `templates/bundles/TwigBundle/Exception/error404.html.twig` ✅
@@ -365,7 +365,7 @@ control flow.
     - [ ] C. In `vendor/`
 
     **Why:** TwigBundle resolves overrides under `templates/bundles/<Bundle>/`.
-    **Ref:** [Customizing error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Customizing error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ## Key takeaways
 
@@ -389,8 +389,8 @@ control flow.
 - **Confused with:** [HTTP Response](../http/response.md) — throwing an `HttpException` sets a *status*, but a listener still must turn it into a real `Response`.
 
 ## Official References
-- [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
-- [Official docs — kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+- [Official docs — Error pages](https://symfony.com/doc/8.0/controller/error_pages.html)
+- [Official docs — kernel.exception](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 
 ## Video references
@@ -402,7 +402,7 @@ control flow.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/events.html#kernel-exception) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/events.html#kernel-exception) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

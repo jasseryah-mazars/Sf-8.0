@@ -212,7 +212,7 @@ image build so the running container does zero setup.
     - [ ] C. `--production`
 
     **Why:** `composer install --no-dev` skips `require-dev` packages.
-    **Ref:** [Deploying Symfony](https://symfony.com/doc/current/deployment.html).
+    **Ref:** [Deploying Symfony](https://symfony.com/doc/8.0/deployment.html).
 
 ??? question "Q2. What does `composer dump-env prod` create?"
     - [x] A. `.env.local.php` ✅
@@ -220,7 +220,7 @@ image build so the running container does zero setup.
     - [ ] C. `config/prod.php`
 
     **Why:** It compiles the cascade into `.env.local.php` for fast loading.
-    **Ref:** [Configuring env vars in production](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).
+    **Ref:** [Configuring env vars in production](https://symfony.com/doc/8.0/configuration.html#configuring-environment-variables-in-production).
 
 ??? question "Q3. Why set `opcache.validate_timestamps=0` in prod?"
     - [x] A. To skip file-modification checks and serve cached bytecode ✅
@@ -228,7 +228,7 @@ image build so the running container does zero setup.
     - [ ] C. To disable opcache
 
     **Why:** With immutable deploys, skipping timestamp checks maximises opcache
-    hits (reset opcache on deploy instead). **Ref:** [Performance](https://symfony.com/doc/current/performance.html).
+    hits (reset opcache on deploy instead). **Ref:** [Performance](https://symfony.com/doc/8.0/performance.html).
 
 ## Key takeaways
 
@@ -251,8 +251,8 @@ image build so the running container does zero setup.
 - **Confused with:** dev's auto-rebuild — prod never auto-detects config changes.
 
 ## Official References
-- [Official docs — Deploying Symfony](https://symfony.com/doc/current/deployment.html)
-- [Official docs — Performance](https://symfony.com/doc/current/performance.html)
+- [Official docs — Deploying Symfony](https://symfony.com/doc/8.0/deployment.html)
+- [Official docs — Performance](https://symfony.com/doc/8.0/performance.html)
 - [Symfony source — CacheWarmerInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/CacheWarmer/CacheWarmerInterface.php)
 
 ## Video references
@@ -264,7 +264,7 @@ image build so the running container does zero setup.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/deployment.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/deployment.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

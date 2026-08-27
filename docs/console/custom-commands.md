@@ -378,7 +378,7 @@ call from HTTP.
     - [ ] D. 255
 
     **Why:** `SUCCESS=0`, `FAILURE=1`, `INVALID=2`. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. In Symfony 8, an invokable command class must…"
     - [ ] A. Extend `Command`
@@ -387,7 +387,7 @@ call from HTTP.
     - [ ] D. Be registered manually in `services.yaml`
 
     **Why:** invokable commands need only the attribute and an `__invoke()` method.
-    **Ref:** [Console](https://symfony.com/doc/current/console.html).
+    **Ref:** [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q3. How is a command normally registered in the service container?"
     - [x] A. Autoconfiguration tags `#[AsCommand]`/`Command` with `console.command` ✅
@@ -396,7 +396,7 @@ call from HTTP.
     - [ ] D. It is discovered by filename convention only
 
     **Why:** autoconfiguration applies the tag; a compiler pass builds the loader.
-    **Ref:** [Commands as Services](https://symfony.com/doc/current/console/commands_as_services.html).
+    **Ref:** [Commands as Services](https://symfony.com/doc/8.0/console/commands_as_services.html).
 
 ??? question "Q4. What must `execute()` (or `__invoke()`) return?"
     - [x] A. An `int` exit code ✅
@@ -405,7 +405,7 @@ call from HTTP.
     - [ ] D. A `bool`
 
     **Why:** the return value becomes the process exit code. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -433,8 +433,8 @@ call from HTTP.
   framework; here you write your own.
 
 ## Official References
-- [Official Symfony docs — Console commands](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Commands as services](https://symfony.com/doc/current/console/commands_as_services.html)
+- [Official Symfony docs — Console commands](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Commands as services](https://symfony.com/doc/8.0/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)
 
 ## Video references
@@ -446,7 +446,7 @@ call from HTTP.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

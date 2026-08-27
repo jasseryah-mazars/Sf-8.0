@@ -142,7 +142,7 @@ generation, high maintenance).
 ## 8. Cross-cutting concerns
 
 - **Link integrity** — relative links only; verified by `--strict`.
-- **Versioning** — doc links track `doc/current`; source links pin `blob/8.0`; the
+- **Versioning** — doc links track `doc/8.0`; source links pin `blob/8.0`; the
   `mike` provider is configured for future multi-version publishing (see
   [FutureMaintenance.md](FutureMaintenance.md)).
 - **Scope enforcement** — excluded topics are absent by construction (no folders,

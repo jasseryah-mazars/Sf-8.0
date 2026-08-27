@@ -269,7 +269,7 @@ instead — a middleware that branches on message class is a smell.
     - [ ] D. `RoutableMessageMiddleware`
 
     **Why:** `HandleMessageMiddleware` resolves handlers and calls them,
-    adding a `HandledStamp`. **Ref:** [Messenger middleware](https://symfony.com/doc/current/messenger.html#middleware).
+    adding a `HandledStamp`. **Ref:** [Messenger middleware](https://symfony.com/doc/8.0/messenger.html#middleware).
 
 ??? question "Q2. True or False: routing a message to the `sync://` transport skips the middleware pipeline."
     - [ ] A. True
@@ -277,7 +277,7 @@ instead — a middleware that branches on message class is a smell.
 
     **Why:** every transport, including `sync://`, still runs the full
     middleware stack; `sync://` just never diverts the message away from
-    `HandleMessageMiddleware`. **Ref:** [Messenger — Transports](https://symfony.com/doc/current/messenger.html#transports-async-queued-messages).
+    `HandleMessageMiddleware`. **Ref:** [Messenger — Transports](https://symfony.com/doc/8.0/messenger.html#transports-async-queued-messages).
 
 ??? question "Q3. In a custom middleware, code placed AFTER `$stack->next()->handle($envelope, $stack)` runs…"
     - [x] A. On the way back out, after the rest of the pipeline (russian-doll) ✅
@@ -287,7 +287,7 @@ instead — a middleware that branches on message class is a smell.
 
     **Why:** the middleware chain is a russian-doll: calling `next()` dives
     deeper, and code after it executes as the call stack unwinds.
-    **Ref:** [Messenger — Middleware](https://symfony.com/doc/current/messenger.html#middleware).
+    **Ref:** [Messenger — Middleware](https://symfony.com/doc/8.0/messenger.html#middleware).
 
 ??? question "Q4. `$envelope->with(new DelayStamp(5000))` does what to the original `$envelope` variable's value?"
     - [x] A. Nothing — `Envelope` is immutable, `with()` returns a new instance ✅
@@ -331,7 +331,7 @@ instead — a middleware that branches on message class is a smell.
 
 ## Official References
 
-- [Official docs — Messenger middleware](https://symfony.com/doc/current/messenger.html#middleware)
+- [Official docs — Messenger middleware](https://symfony.com/doc/8.0/messenger.html#middleware)
 - [Symfony source — SendMessageMiddleware](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Middleware/SendMessageMiddleware.php)
 - [Symfony source — Envelope](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Envelope.php)
 - [Symfony source — Stamps](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger/Stamp)
@@ -345,7 +345,7 @@ instead — a middleware that branches on message class is a smell.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#middleware) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#middleware) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

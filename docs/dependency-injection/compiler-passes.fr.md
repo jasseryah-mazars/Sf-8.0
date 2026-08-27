@@ -325,7 +325,7 @@ arguments — une logique qu'aucun attribut n'exprime.
 
     **Why:** Il n'existe pas d'attribut de compiler pass ; l'enregistrement est
     programmatique.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ??? question "Q2. What is the default compilation phase for a pass?"
     - [x] A. `TYPE_BEFORE_OPTIMIZATION` ✅
@@ -334,7 +334,7 @@ arguments — une logique qu'aucun attribut n'exprime.
     - [ ] D. `TYPE_AFTER_REMOVING`
 
     **Why:** Les passes enregistrées sans phase s'exécutent avant l'optimisation.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ??? question "Q3. `findTaggedServiceIds('t')` returns…"
     - [x] A. A map of service id → array of tag attribute sets ✅
@@ -344,7 +344,7 @@ arguments — une logique qu'aucun attribut n'exprime.
 
     **Why:** Elle renvoie les ids des définitions avec les attributs de chaque
     occurrence du tag.
-    **Ref:** [Tags & passes](https://symfony.com/doc/current/service_container/tags.html).
+    **Ref:** [Tags & passes](https://symfony.com/doc/8.0/service_container/tags.html).
 
 ??? question "Q4. Inside `process()` you should manipulate…"
     - [x] A. `Definition` objects (build-time metadata) ✅
@@ -354,7 +354,7 @@ arguments — une logique qu'aucun attribut n'exprime.
 
     **Why:** La compilation ne manipule que des définitions ; rien n'est encore
     instancié.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ## Key takeaways
 
@@ -383,8 +383,8 @@ arguments — une logique qu'aucun attribut n'exprime.
   qui *consomme* l'étiquette (quand un `tagged_iterator` ne suffit pas).
 
 ## Official References
-- [Official Symfony docs — Compiler Passes](https://symfony.com/doc/current/service_container/compiler_passes.html)
-- [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/current/service_container/tags.html)
+- [Official Symfony docs — Compiler Passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
+- [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/8.0/service_container/tags.html)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)
 
 ## Video references
@@ -397,7 +397,7 @@ arguments — une logique qu'aucun attribut n'exprime.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/compiler_passes.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/compiler_passes.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

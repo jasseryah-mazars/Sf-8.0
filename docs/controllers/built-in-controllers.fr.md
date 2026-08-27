@@ -261,7 +261,7 @@ flowchart LR
     - [ ] C. `ViewController`
     - [ ] D. `TwigController`
 
-    **Why:** `TemplateController` rend le template indiqué dans le default `template`. **Ref:** [render a template directly](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route).
+    **Why:** `TemplateController` rend le template indiqué dans le default `template`. **Ref:** [render a template directly](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route).
 
 ??? question "Q2. `RedirectController` with `permanent: true` returns…"
     - [ ] A. 302
@@ -269,7 +269,7 @@ flowchart LR
     - [ ] C. 307
     - [ ] D. 410
 
-    **Why:** `permanent` sélectionne le code de statut permanent. **Ref:** [redirect from route](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route).
+    **Why:** `permanent` sélectionne le code de statut permanent. **Ref:** [redirect from route](https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route).
 
 ??? question "Q3. An empty `path` in `urlRedirectAction` produces…"
     - [ ] A. 404 Not Found
@@ -303,8 +303,8 @@ flowchart LR
 - **Confused with:** [Internal Redirects](internal-redirects.md) — `RedirectController` envoie un vrai 3xx, pas un forward interne.
 
 ## Official References
-- [Official Symfony docs — Render a template from a route](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
-- [Official Symfony docs — Redirect directly from a route](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
+- [Official Symfony docs — Render a template from a route](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route)
+- [Official Symfony docs — Redirect directly from a route](https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
 
 ## Video references
@@ -316,7 +316,7 @@ flowchart LR
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

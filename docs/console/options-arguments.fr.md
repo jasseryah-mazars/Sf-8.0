@@ -309,7 +309,7 @@ contrainte d'ordre. Le questionnement interactif (voir
     - [ ] D. `InputOption::VALUE_REQUIRED`
 
     **Why:** `VALUE_NONE` n'accepte aucune valeur ; sa présence signifie `true`. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q2. What is the integer value of `InputOption::VALUE_IS_ARRAY`?"
     - [ ] A. 4
@@ -318,7 +318,7 @@ contrainte d'ordre. Le questionnement interactif (voir
     - [ ] D. 2
 
     **Why:** le bitmask des modes d'option est 1,2,4,8,16. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q3. Which is true about an `IS_ARRAY` argument?"
     - [x] A. There can be only one and it must be declared last ✅
@@ -327,7 +327,7 @@ contrainte d'ordre. Le questionnement interactif (voir
     - [ ] D. It cannot be combined with `REQUIRED`
 
     **Why:** l'argument tableau consomme gloutonnement les tokens restants. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q4. Which mode produces a `--no-foo` counterpart to `--foo`?"
     - [ ] A. `VALUE_OPTIONAL`
@@ -336,7 +336,7 @@ contrainte d'ordre. Le questionnement interactif (voir
     - [ ] D. `VALUE_IS_ARRAY`
 
     **Why:** les options négatables ajoutent le jumeau `--no-`. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ## Key takeaways
 
@@ -364,7 +364,7 @@ contrainte d'ordre. Le questionnement interactif (voir
   options ; c'est l'`InputDefinition` qui les *lie et valide*.
 
 ## Official References
-- [Official Symfony docs — Console input](https://symfony.com/doc/current/console/input.html)
+- [Official Symfony docs — Console input](https://symfony.com/doc/8.0/console/input.html)
 - [Symfony source — InputOption](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputOption.php)
 - [Symfony source — InputArgument](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputArgument.php)
 
@@ -377,7 +377,7 @@ contrainte d'ordre. Le questionnement interactif (voir
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/input.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/input.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -256,7 +256,7 @@ over defaulting.
     - [ ] D. `{page<\d+=1>}`
 
     **Why:** inline syntax is `{name<requirement>?default}`.
-    **Ref:** [Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Optional parameters](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ??? question "Q2. `generateUrl('blog', ['page' => 1])` where `page` defaults to 1 produces?"
     - [x] A. `/blog` ✅
@@ -265,7 +265,7 @@ over defaulting.
     - [ ] D. An exception
 
     **Why:** the generator omits a trailing segment whose value equals the default.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. Which parameter can be made optional in `/{a}/{b}`?"
     - [ ] A. `a` only
@@ -274,7 +274,7 @@ over defaulting.
     - [ ] D. Neither
 
     **Why:** only trailing placeholders can be omitted from the URL.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ??? question "Q4. What default does `{slug?}` declare?"
     - [ ] A. Empty string `''`
@@ -283,7 +283,7 @@ over defaulting.
     - [ ] D. `0`
 
     **Why:** a bare `?` with no value sets the default to `null`.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ## Key takeaways
 
@@ -307,7 +307,7 @@ over defaulting.
 - **Confused with:** [Special attributes](special-attributes.md) — non-path defaults like `_format`/`_locale` never appear in the path.
 
 ## Official References
-- [Official Symfony docs — Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters)
+- [Official Symfony docs — Optional parameters](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
 ## Video references
@@ -319,7 +319,7 @@ over defaulting.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#optional-parameters) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#optional-parameters) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

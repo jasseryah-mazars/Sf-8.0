@@ -281,7 +281,7 @@ returns a scalar or `null`, never an array.)
     - [ ] D. `DefaultValueResolver`
 
     **Why:** `RequestValueResolver` supplies the current `Request`; the attribute
-    resolver handles route parameters. **Ref:** [controller](https://symfony.com/doc/current/controller.html#the-request-object-as-a-controller-argument).
+    resolver handles route parameters. **Ref:** [controller](https://symfony.com/doc/8.0/controller.html#the-request-object-as-a-controller-argument).
 
 ??? question "Q2. Where do route parameters land?"
     - [ ] A. `$request->query`
@@ -290,7 +290,7 @@ returns a scalar or `null`, never an array.)
     - [ ] D. `$request->server`
 
     **Why:** the router writes matched parameters into the `attributes` bag.
-    **Ref:** [request](https://symfony.com/doc/current/components/http_foundation.html#request).
+    **Ref:** [request](https://symfony.com/doc/8.0/components/http_foundation.html#request).
 
 ??? question "Q3. How should a service obtain the current request?"
     - [ ] A. Autowire `Request` in the constructor.
@@ -299,7 +299,7 @@ returns a scalar or `null`, never an array.)
     - [ ] D. Call `Request::createFromGlobals()`.
 
     **Why:** the `Request` is request-scoped; `RequestStack` is the stable service.
-    **Ref:** [request stack](https://symfony.com/doc/current/service_container/request.html).
+    **Ref:** [request stack](https://symfony.com/doc/8.0/service_container/request.html).
 
 ## Key takeaways
 
@@ -322,8 +322,8 @@ returns a scalar or `null`, never an array.)
 - **Confused with:** [The Session](session.md) — inject `RequestStack` (not `Request`/`Session`) into services.
 
 ## Official References
-- [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html)
-- [Official Symfony docs — Request as controller argument](https://symfony.com/doc/current/controller.html)
+- [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/8.0/components/http_foundation.html)
+- [Official Symfony docs — Request as controller argument](https://symfony.com/doc/8.0/controller.html)
 - [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)
 
 ## Video references
@@ -335,7 +335,7 @@ returns a scalar or `null`, never an array.)
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#the-request-object-as-a-controller-argument) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#the-request-object-as-a-controller-argument) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

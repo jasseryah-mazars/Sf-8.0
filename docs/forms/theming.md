@@ -238,7 +238,7 @@ than a block override. Reach for a full custom theme only when the default
 
     **Why:** The block-prefix hierarchy is walked from the unique per-field name
     down to the root `form_*` block; the first existing block is used.
-    **Ref:** [Form themes](https://symfony.com/doc/current/form/form_themes.html).
+    **Ref:** [Form themes](https://symfony.com/doc/8.0/form/form_themes.html).
 
 ??? question "Q2. What does `bootstrap_5_layout.html.twig` provide?"
     - [ ] A. Bootstrap CSS and JS assets
@@ -248,7 +248,7 @@ than a block override. Reach for a full custom theme only when the default
 
     **Why:** Built-in layouts are theme templates (markup only). You still load
     the CSS framework yourself.
-    **Ref:** [Bootstrap form theme](https://symfony.com/doc/current/form/bootstrap5.html).
+    **Ref:** [Bootstrap form theme](https://symfony.com/doc/8.0/form/bootstrap5.html).
 
 ??? question "Q3. When two global themes define the same block…"
     - [x] A. The last theme in the list wins ✅
@@ -258,7 +258,7 @@ than a block override. Reach for a full custom theme only when the default
 
     **Why:** `twig.form_themes` are applied in order; later entries override
     earlier ones.
-    **Ref:** [Form themes docs](https://symfony.com/doc/current/form/form_themes.html).
+    **Ref:** [Form themes docs](https://symfony.com/doc/8.0/form/form_themes.html).
 
 ## Key takeaways
 
@@ -283,8 +283,8 @@ than a block override. Reach for a full custom theme only when the default
 - **Confused with:** [Twig templating](../twig/index.md) — themes are ordinary Twig blocks applied via `form_theme`/`twig.form_themes`, not a separate engine.
 
 ## Official References
-- [Official Symfony docs — Form themes](https://symfony.com/doc/current/form/form_themes.html)
-- [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/current/form/bootstrap5.html)
+- [Official Symfony docs — Form themes](https://symfony.com/doc/8.0/form/form_themes.html)
+- [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/8.0/form/bootstrap5.html)
 - [Symfony source — form_div_layout.html.twig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig)
 
 ## Video references
@@ -296,7 +296,7 @@ than a block override. Reach for a full custom theme only when the default
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/form_themes.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/form_themes.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

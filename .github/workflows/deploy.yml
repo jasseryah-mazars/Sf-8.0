@@ -44,6 +44,9 @@ jobs:
       - name: Completeness & references audit
         run: python tools/audit.py
 
+      - name: Doc/source version-pin check (blocking — Symfony 8.0 exclusively)
+        run: python tools/check_doc_version_refs.py
+
       - name: Validate quiz bank
         run: python tools/validate_quiz.py
 

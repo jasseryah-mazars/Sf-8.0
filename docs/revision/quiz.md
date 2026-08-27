@@ -75,7 +75,7 @@ categories:
           or a bundle's build() method. There is no core attribute for this.
         # folded scalar keeps the single-line URL within 80 columns
         documentation: >-
-          https://symfony.com/doc/current/service_container/compiler_passes.html
+          https://symfony.com/doc/8.0/service_container/compiler_passes.html
 ```
 
 !!! info "Authoring rules (see `quiz/README.md`)"
@@ -113,4 +113,4 @@ flowchart LR
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

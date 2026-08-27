@@ -222,7 +222,7 @@ categories:
           TwigBundle configures autoescape to 'name', using
           FileExtensionEscapingStrategy::guess() so .html.twig escapes as html,
           .js.twig as js, .txt.twig not at all.
-        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+        documentation: "https://symfony.com/doc/8.0/templates.html#output-escaping"
 
       - id: "TWIG-ESCAPE-02"
         question: "A value is placed inside <script>const x = \"...\";</script>. Which escape filter is correct?"
@@ -309,7 +309,7 @@ categories:
           escaping), which is correct because plain-text output has no HTML context.
           The trap is assuming escaping is always html — it is chosen per extension,
           and .txt.twig escapes nothing.
-        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+        documentation: "https://symfony.com/doc/8.0/templates.html#output-escaping"
 
       - id: "TWIG-ESCAPE-06"
         question: "A template renders user-submitted comment HTML with {{ comment|raw }}. What is the risk?"
@@ -332,7 +332,7 @@ categories:
           user comment executes — a classic stored XSS hole. Only use |raw on HTML
           you generated or ran through the HtmlSanitizer component; never on raw
           user input.
-        documentation: "https://symfony.com/doc/current/html_sanitizer.html"
+        documentation: "https://symfony.com/doc/8.0/html_sanitizer.html"
 
       - id: "TWIG-ESCAPE-07"
         question: "At which point is auto-escaping applied to a value?"
@@ -402,7 +402,7 @@ categories:
           to entities, so the literal markup is displayed as text rather than
           rendered as bold. To output real markup you would need |raw (only for
           trusted content).
-        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+        documentation: "https://symfony.com/doc/8.0/templates.html#output-escaping"
 
       - id: "TWIG-ESCAPE-10"
         question: "True or false: in Symfony, Twig output escaping is enabled by default."
@@ -420,7 +420,7 @@ categories:
           Auto-escaping is on by default (autoescape: name) as a baseline XSS
           defence; every {{ }} is escaped for its context unless the value is marked
           safe or passed through |raw. You opt out per value, not opt in.
-        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+        documentation: "https://symfony.com/doc/8.0/templates.html#output-escaping"
 
       # =====================================================================
       # inheritance.md
@@ -625,7 +625,7 @@ categories:
         explanation: >-
           AppVariable::getUser() reads the token from the token storage and
           returns its user, or null when there is no authenticated user.
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       - id: "TWIG-GLOBALS-02"
         question: "Which class backs the Twig `app` global in Symfony?"
@@ -668,7 +668,7 @@ categories:
           app exposes user, request, session, flashes, environment, debug, token,
           locale, current_route and current_route_parameters. There is no
           app.controller.
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       - id: "TWIG-GLOBALS-04"
         question: "What does app.environment return?"
@@ -689,7 +689,7 @@ categories:
         explanation: >-
           app.environment is the kernel environment (dev/prod/test); app.debug is
           the boolean debug flag. They are unrelated to OS env vars.
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       - id: "TWIG-GLOBALS-05"
         question: "How do you register a static global string in Twig?"
@@ -710,7 +710,7 @@ categories:
         explanation: >-
           Declare globals under twig.globals in twig.yaml, or return them from an
           extension implementing Twig\Extension\GlobalsInterface::getGlobals().
-        documentation: "https://symfony.com/doc/current/templates.html#global-variables"
+        documentation: "https://symfony.com/doc/8.0/templates.html#global-variables"
 
       - id: "TWIG-GLOBALS-06"
         question: "In Symfony 8, which expression prints the current user's identifier?"
@@ -733,7 +733,7 @@ categories:
           app.user.userIdentifier. The legacy getUsername()/username idiom is gone in
           modern Symfony. Remember to guard app.user first — it is null for anonymous
           requests.
-        documentation: "https://symfony.com/doc/current/security.html#the-user"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-user"
 
       - id: "TWIG-GLOBALS-07"
         question: "Which app.* accesses have a side effect? (choose 2)"
@@ -756,7 +756,7 @@ categories:
           and reading app.flashes consumes the messages so they are cleared after
           display — both have side effects. app.environment and app.debug are plain
           reads with no side effect.
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       - id: "TWIG-GLOBALS-08"
         question: "You need a global whose value is computed from an injected service. Which approach fits best?"
@@ -780,7 +780,7 @@ categories:
           instantiated. A static YAML twig.globals entry (even '@service') is fine
           for simple references, but computed/lazy values belong in a
           GlobalsInterface extension. There is no #[AsGlobal] attribute.
-        documentation: "https://symfony.com/doc/current/templates.html#global-variables"
+        documentation: "https://symfony.com/doc/8.0/templates.html#global-variables"
 
       - id: "TWIG-GLOBALS-09"
         question: "A controller passes a variable named `app` to the template. What happens?"
@@ -803,7 +803,7 @@ categories:
           name shadows the global. Passing your own `app` variable breaks
           app.user/app.request access inside that template — avoid reusing reserved
           global names.
-        documentation: "https://symfony.com/doc/current/templates.html#global-variables"
+        documentation: "https://symfony.com/doc/8.0/templates.html#global-variables"
 
       - id: "TWIG-GLOBALS-10"
         question: "Which snippet safely greets an authenticated user and falls back to 'Guest'?"
@@ -827,7 +827,7 @@ categories:
           app.user.userIdentifier directly throws under strict_variables (and is the
           classic anonymous-page crash); Guest is a bareword not a string in the
           third option; app.userIdentifier is not a member.
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       # =====================================================================
       # filters-functions.md
@@ -852,7 +852,7 @@ categories:
           Twig 3.x provides Twig\Attribute\AsTwigFilter and AsTwigFunction as an
           attribute-based alternative to returning TwigFilter/TwigFunction from an
           AbstractExtension.
-        documentation: "https://symfony.com/doc/current/templates.html#creating-a-twig-extension"
+        documentation: "https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension"
 
       - id: "TWIG-FILTERS-02"
         question: "A custom filter returns '<b>x</b>' but the page shows escaped text. Why?"
@@ -964,7 +964,7 @@ categories:
           Symfony autoconfiguration wires the class. There is no #[TwigFunction] or
           #[AsFunction] attribute, and functions are not auto-detected by method name
           without an attribute or getFunctions() registration.
-        documentation: "https://symfony.com/doc/current/templates.html#creating-a-twig-extension"
+        documentation: "https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension"
 
       - id: "TWIG-FILTERS-07"
         question: "Why put a filter's heavy-dependency logic in a runtime class rather than the extension itself?"
@@ -1389,7 +1389,7 @@ categories:
         explanation: >-
           Both use UrlGeneratorInterface via RoutingExtension; path() uses
           ABSOLUTE_PATH (relative) and url() uses ABSOLUTE_URL (scheme + host).
-        documentation: "https://symfony.com/doc/current/templates.html#linking-to-pages"
+        documentation: "https://symfony.com/doc/8.0/templates.html#linking-to-pages"
 
       - id: "TWIG-URLS-02"
         question: "Given route 'search' => /search, what does path('search', {q: 'x', page: 2}) produce?"
@@ -1410,7 +1410,7 @@ categories:
         explanation: >-
           Parameters not consumed by the route pattern are appended as the query
           string.
-        documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+        documentation: "https://symfony.com/doc/8.0/routing.html#generating-urls"
 
       - id: "TWIG-URLS-03"
         question: "Which Twig extension provides path() and url()?"
@@ -1454,7 +1454,7 @@ categories:
           consumed elsewhere) it must be absolute, so use url(). A relative path()
           link has no host and breaks once opened in a mail client. asset() is for
           static files, not routes.
-        documentation: "https://symfony.com/doc/current/templates.html#linking-to-pages"
+        documentation: "https://symfony.com/doc/8.0/templates.html#linking-to-pages"
 
       - id: "TWIG-URLS-05"
         question: "path('article_show') is called but the route requires a {slug}. What happens at render time?"
@@ -1476,7 +1476,7 @@ categories:
           The generator throws MissingMandatoryParametersException when a required
           route parameter is not supplied. (An unknown route name instead throws
           RouteNotFoundException.) Both surface at render time, not silently.
-        documentation: "https://symfony.com/doc/current/routing.html#generating-urls"
+        documentation: "https://symfony.com/doc/8.0/routing.html#generating-urls"
 
       - id: "TWIG-URLS-06"
         question: "Which UrlGenerator reference types back path() and url() respectively?"
@@ -1522,7 +1522,7 @@ categories:
           and its params; merging a new page value onto them and passing to path()
           rebuilds the current URL with one changed parameter. app.route/app.params
           are not real members, and + does not merge hashes (~ /merge do).
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       # =====================================================================
       # controller-rendering.md
@@ -1546,7 +1546,7 @@ categories:
         explanation: >-
           The InlineFragmentRenderer issues a real HttpKernel sub-request, so the
           kernel events run again for the fragment.
-        documentation: "https://symfony.com/doc/current/templates.html#embedding-controllers"
+        documentation: "https://symfony.com/doc/8.0/templates.html#embedding-controllers"
 
       - id: "TWIG-RENDER-03"
         question: "Which service selects the fragment renderer for render()/render_esi()?"
@@ -1590,7 +1590,7 @@ categories:
           fragment only needs data you already have, a plain include is far cheaper.
           Reserve render(controller()) for fragments that need their own
           services/data/cache.
-        documentation: "https://symfony.com/doc/current/templates.html#embedding-controllers"
+        documentation: "https://symfony.com/doc/8.0/templates.html#embedding-controllers"
 
       - id: "TWIG-RENDER-05"
         question: "What does render_hinclude() do differently from inline rendering?"
@@ -1613,7 +1613,7 @@ categories:
           with JavaScript, so the main page renders immediately and the fragment
           loads asynchronously afterwards. Inline instead blocks on a synchronous
           sub-request.
-        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache/esi.html"
 
       - id: "TWIG-RENDER-06"
         question: "What is true about kernel events when an inline fragment is rendered?"
@@ -1636,7 +1636,7 @@ categories:
           listener chain (request, controller, response) runs independently for the
           fragment. The sub-request has its own Request object; parent attributes are
           not automatically shared.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html#handling-requests"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html#handling-requests"
 
       - id: "TWIG-RENDER-08"
         question: "By default, can a browser hit an embedded controller's fragment URL directly?"
@@ -1659,7 +1659,7 @@ categories:
           fragment access requires enabling framework.fragments, and Symfony signs
           the fragment URL (URI signer) so attackers cannot forge arbitrary
           controller calls. Assuming embeds are publicly routable is a security trap.
-        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache/esi.html"
 
       # =====================================================================
       # translations.md
@@ -1683,7 +1683,7 @@ categories:
         explanation: >-
           The signature is message|trans(parameters = {}, domain = 'messages',
           locale = null).
-        documentation: "https://symfony.com/doc/current/translation.html#translations-in-templates"
+        documentation: "https://symfony.com/doc/8.0/translation.html#translations-in-templates"
 
       - id: "TWIG-TRANS-02"
         question: "How do you pluralize a message in Symfony 8 templates?"
@@ -1704,7 +1704,7 @@ categories:
         explanation: >-
           transchoice was removed; pluralization uses ICU MessageFormat, which is
           applied to catalogues whose domain ends with +intl-icu.
-        documentation: "https://symfony.com/doc/current/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
 
       - id: "TWIG-TRANS-03"
         question: "A translation key has no entry for the current locale and no fallback. What is rendered?"
@@ -1725,7 +1725,7 @@ categories:
         explanation: >-
           The translator returns the untranslated message id when no translation
           is found.
-        documentation: "https://symfony.com/doc/current/translation.html"
+        documentation: "https://symfony.com/doc/8.0/translation.html"
 
       - id: "TWIG-TRANS-04"
         question: "What replaced the removed transchoice() for count-based messages?"
@@ -1748,7 +1748,7 @@ categories:
           is now expressed with ICU MessageFormat ({count, plural, one{...}
           other{...}}) in a +intl-icu domain. trans has no separate count argument —
           you pass count as an ICU parameter.
-        documentation: "https://symfony.com/doc/current/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
 
       - id: "TWIG-TRANS-05"
         question: "Which catalogue file name enables ICU MessageFormat parsing for English?"
@@ -1771,7 +1771,7 @@ categories:
           the IntlFormatter, unlocking plural/select and locale-aware formatting.
           Putting ICU syntax in a plain messages.en.yaml file makes the braces render
           literally.
-        documentation: "https://symfony.com/doc/current/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
 
       - id: "TWIG-TRANS-06"
         question: "After {% trans_default_domain 'admin' %}, what does {{ 'dashboard.title'|trans }} use?"
@@ -1793,7 +1793,7 @@ categories:
           {% trans_default_domain 'admin' %} changes the default domain for the
           remainder of the template, so a trans call without an explicit domain uses
           'admin'. Domains are never inferred from the key's dotted prefix.
-        documentation: "https://symfony.com/doc/current/translation.html#translations-in-templates"
+        documentation: "https://symfony.com/doc/8.0/translation.html#translations-in-templates"
 
       - id: "TWIG-TRANS-07"
         question: "For the ICU message '{count, plural, =0 {none} one {# item} other {# items}}', what does count=1 render?"
@@ -1816,7 +1816,7 @@ categories:
           is replaced by the number, giving '1 item'. # prints the value (not a
           literal hash), 'one' is a category label not output, and =0 only matches the
           exact value 0.
-        documentation: "https://symfony.com/doc/current/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
 
       - id: "TWIG-TRANS-08"
         question: "Which service does the Twig trans filter ultimately call?"
@@ -2017,7 +2017,7 @@ categories:
           asset() resolves a path relative to public/ through the
           Symfony\Component\Asset\Packages service, applying base path and
           versioning.
-        documentation: "https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets"
+        documentation: "https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets"
 
       - id: "TWIG-ASSETS-02"
         question: "What is the purpose of asset versioning?"
@@ -2038,7 +2038,7 @@ categories:
         explanation: >-
           Versioning changes the URL when a file changes (static version or a JSON
           manifest of content hashes) so clients do not serve a stale cached copy.
-        documentation: "https://symfony.com/doc/current/frontend.html"
+        documentation: "https://symfony.com/doc/8.0/frontend.html"
 
       - id: "TWIG-ASSETS-03"
         question: "Which build tools are OUT of scope when only using asset()?"
@@ -2060,7 +2060,7 @@ categories:
           asset() only resolves the final public path/version. Bundling and
           hashing are done by AssetMapper or Webpack Encore, which are not covered
           here.
-        documentation: "https://symfony.com/doc/current/components/asset.html"
+        documentation: "https://symfony.com/doc/8.0/components/asset.html"
 
       - id: "TWIG-ASSETS-04"
         question: "Which service does the Twig asset() function delegate to?"
@@ -2104,7 +2104,7 @@ categories:
           framework.assets.packages lets you declare a named package (e.g. cdn with
           base_urls). asset('img/x.png', 'cdn') uses that package while the default
           package still serves CSS locally. There is no framework.assets.cdn flag.
-        documentation: "https://symfony.com/doc/current/components/asset.html"
+        documentation: "https://symfony.com/doc/8.0/components/asset.html"
 
       - id: "TWIG-ASSETS-06"
         question: "With a JSON manifest configured, what does asset('app.css') resolve to?"
@@ -2127,7 +2127,7 @@ categories:
           from manifest.json, so asset('app.css') returns the resolved hashed path.
           Expecting the literal path with a ?v query (that is StaticVersionStrategy)
           is the trap.
-        documentation: "https://symfony.com/doc/current/components/asset.html"
+        documentation: "https://symfony.com/doc/8.0/components/asset.html"
 
       - id: "TWIG-ASSETS-07"
         question: "True or false: you should use asset() to generate a link to a route-controlled page."
@@ -2145,7 +2145,7 @@ categories:
           asset() only resolves a public file path (with base path + version); it
           does not know about routes. Route-controlled URLs come from path()/url()
           via the RoutingExtension. Swapping the two is a common confusion.
-        documentation: "https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets"
+        documentation: "https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets"
 
       # =====================================================================
       # debugging.md
@@ -2169,7 +2169,7 @@ categories:
         explanation: >-
           Called with no arguments, dump() outputs the entire render context (all
           passed variables plus globals).
-        documentation: "https://symfony.com/doc/current/templates.html#the-dump-twig-utilities"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities"
 
       - id: "TWIG-DEBUG-02"
         question: "Why does dump() error in the prod environment?"
@@ -2190,7 +2190,7 @@ categories:
         explanation: >-
           The dump function/tag come from the debug-only DumpExtension (backed by
           VarDumper); in prod the function is undefined, so leftover dumps throw.
-        documentation: "https://symfony.com/doc/current/components/var_dumper.html"
+        documentation: "https://symfony.com/doc/8.0/components/var_dumper.html"
 
       - id: "TWIG-DEBUG-03"
         question: "What is the difference between {{ dump(x) }} and {% dump x %}?"
@@ -2211,7 +2211,7 @@ categories:
         explanation: >-
           The dump() function outputs where called; the {% dump %} tag routes the
           data to the profiler/toolbar without adding markup to the page.
-        documentation: "https://symfony.com/doc/current/templates.html#the-dump-twig-utilities"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities"
 
       - id: "TWIG-DEBUG-04"
         question: "What gives Symfony's dump() its rich, collapsible HTML output rather than plain var_dump?"
@@ -2258,7 +2258,7 @@ categories:
           design it routes the data to the dump destination (profiler/toolbar) so it
           does not pollute the page. Look in the web debug toolbar, not the page
           source.
-        documentation: "https://symfony.com/doc/current/templates.html#the-dump-twig-utilities"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities"
 
       - id: "TWIG-DEBUG-06"
         question: "A deploy fails with 'Unknown \"dump\" function' on a page. What is the cause and fix?"
@@ -2281,7 +2281,7 @@ categories:
           committed template throws 'Unknown "dump" function' in prod. The fix is to
           remove debug dumps before deploy (use logging/profiler in non-prod envs) —
           not to enable the extension in production.
-        documentation: "https://symfony.com/doc/current/components/var_dumper.html"
+        documentation: "https://symfony.com/doc/8.0/components/var_dumper.html"
 
   - name: "Twig — Multiple Choice Drills"
     questions:
@@ -2310,7 +2310,7 @@ categories:
           precedence than arithmetic operators, so 1 + 2|abs applies abs to 2 first.
           The standalone {% spaceless %} tag no longer exists — the modern form is
           {% apply spaceless %}.
-        documentation: "https://symfony.com/doc/current/templates.html#twig-templating-language"
+        documentation: "https://symfony.com/doc/8.0/templates.html#twig-templating-language"
 
       - id: "TWIG-MC-02"
         type: "multiple"
@@ -2337,7 +2337,7 @@ categories:
           print time via the escaper, and |raw / {% autoescape false %} switch the
           protection off entirely, making them XSS holes for untrusted data. The
           html_attr strategy is a stricter encoder than html, not an alias.
-        documentation: "https://symfony.com/doc/current/templates.html#output-escaping"
+        documentation: "https://symfony.com/doc/8.0/templates.html#output-escaping"
 
       - id: "TWIG-MC-03"
         type: "multiple"
@@ -2364,7 +2364,7 @@ categories:
           version. {% use %} is horizontal reuse — it imports blocks only and does
           not set a parent, and {% extends %} accepts a single parent, never several
           to combine.
-        documentation: "https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts"
+        documentation: "https://symfony.com/doc/8.0/templates.html#template-inheritance-and-layouts"
 
       - id: "TWIG-MC-04"
         type: "multiple"
@@ -2391,7 +2391,7 @@ categories:
           exceptions thrown inside the included template still propagate. Overriding
           blocks is the job of {% embed %}, not include, and a template list renders
           only the first template that exists.
-        documentation: "https://symfony.com/doc/current/templates.html#including-templates"
+        documentation: "https://symfony.com/doc/8.0/templates.html#including-templates"
 
       - id: "TWIG-MC-05"
         type: "multiple"
@@ -2418,7 +2418,7 @@ categories:
           distractors are wrong because app.environment is the kernel environment
           (dev/prod), not OS variables, and defining a local variable named app
           shadows the global.
-        documentation: "https://symfony.com/doc/current/templates.html#the-app-global-variable"
+        documentation: "https://symfony.com/doc/8.0/templates.html#the-app-global-variable"
 
       - id: "TWIG-MC-06"
         type: "multiple"
@@ -2445,7 +2445,7 @@ categories:
           route name fails at render time with RouteNotFoundException. Email bodies,
           canonical links and feeds leave the page context, so they need url() —
           relative links from path() break in mail clients.
-        documentation: "https://symfony.com/doc/current/templates.html#linking-to-pages"
+        documentation: "https://symfony.com/doc/8.0/templates.html#linking-to-pages"
 
       - id: "TWIG-MC-07"
         type: "multiple"
@@ -2472,4 +2472,4 @@ categories:
           syntax is only interpreted for domains suffixed with +intl-icu. The
           transchoice filter was removed; ICU MessageFormat is the modern way to
           pluralize.
-        documentation: "https://symfony.com/doc/current/translation.html"
+        documentation: "https://symfony.com/doc/8.0/translation.html"

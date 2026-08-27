@@ -297,7 +297,7 @@ is no runtime performance difference.
     - [ ] D. `Symfony\Component\HttpKernel\Attribute\Route`
 
     **Why:** the class moved to the `Attribute` namespace; the `Annotation` alias
-    is removed in Symfony 8. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    is removed in Symfony 8. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q2. Two routes match the same path. Which wins?"
     - [x] A. The one declared first in the `RouteCollection` ✅
@@ -306,7 +306,7 @@ is no runtime performance difference.
     - [ ] D. The last one declared
 
     **Why:** the matcher iterates in insertion order and returns the first match.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. What does a class-level `#[Route('/blog', name: 'app_blog_')]` contribute?"
     - [x] A. A path prefix and a name prefix for every method route ✅
@@ -315,7 +315,7 @@ is no runtime performance difference.
     - [ ] D. Nothing without `methods`
 
     **Why:** class-level route data is merged as prefixes into each action's route.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#creating-routes-as-attributes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#creating-routes-as-attributes).
 
 ??? question "Q4. Which `type` imports `#[Route]` attributes in a YAML resource?"
     - [ ] A. `type: annotation`
@@ -324,7 +324,7 @@ is no runtime performance difference.
     - [ ] D. `type: directory`
 
     **Why:** attribute loading uses `type: attribute` in Symfony 8.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -348,7 +348,7 @@ is no runtime performance difference.
 - **Confused with:** [Requirements](requirements.md) — declaration *order* and regex *specificity* decide different things.
 
 ## Official References
-- [Official Symfony docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official Symfony docs — Routing](https://symfony.com/doc/8.0/routing.html)
 - [Symfony source — Router](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Router.php)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
@@ -361,7 +361,7 @@ is no runtime performance difference.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -313,7 +313,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
     - [ ] D. A private alias to `service_container`
 
     **Why:** Le compilateur renomme le service décoré et l'expose sous `.inner`.
-    **Ref:** [Decorating services](https://symfony.com/doc/current/service_container/service_decoration.html).
+    **Ref:** [Decorating services](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ??? question "Q2. Which attribute injects the decorated (inner) service?"
     - [ ] A. `#[Autowire('.inner')]` only
@@ -322,7 +322,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
     - [ ] D. `#[AsDecorator]`
 
     **Why:** `#[AutowireDecorated]` se résout en la référence `.inner` pour le
-    paramètre. **Ref:** [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    paramètre. **Ref:** [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ??? question "Q3. With two decorators, higher `decoration_priority` means…"
     - [x] A. Applied first, sits closer to the original (innermost) ✅
@@ -332,7 +332,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
 
     **Why:** Les decorators de priorité plus élevée sont appliqués en premier et
     finissent les plus internes ; les consommateurs voient celui de plus basse
-    priorité (le plus externe). **Ref:** [Decoration priority](https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority).
+    priorité (le plus externe). **Ref:** [Decoration priority](https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority).
 
 ??? question "Q4. `decoration_on_invalid: ignore` does what if the target is missing?"
     - [x] A. Removes the decorator, leaving nothing ✅
@@ -342,7 +342,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
 
     **Why:** `ignore` abandonne le decorator ; `null` injecterait `null` ;
     `exception` (défaut) lève une exception.
-    **Ref:** [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    **Ref:** [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -372,7 +372,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
   service ; un decorator *enveloppe* un service existant sous son id.
 
 ## Official References
-- [Official Symfony docs — Service Decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
+- [Official Symfony docs — Service Decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 - [Symfony source — DecoratorServicePass](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/DecoratorServicePass.php)
 
 ## Video references
@@ -385,7 +385,7 @@ entre* des implémentations plutôt qu'envelopper, utilisez un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_decoration.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_decoration.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

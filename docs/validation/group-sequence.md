@@ -306,7 +306,7 @@ stages depend on runtime state.
 
     **Why:** Each group runs fully; the sequence halts after the first group that
     yields any violation.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q2. Inside a class's `GroupSequence`, how do you reference its own basic constraints?"
     - [ ] A. `Default`
@@ -316,7 +316,7 @@ stages depend on runtime state.
 
     **Why:** Referencing `Default` would loop; the `{ClassName}` group means the
     class's own Default constraints.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q3. `#[Assert\GroupSequenceProvider]` requires the class to…"
     - [x] A. Implement `GroupSequenceProviderInterface::getGroupSequence()` ✅
@@ -326,7 +326,7 @@ stages depend on runtime state.
 
     **Why:** The provider attribute delegates to `getGroupSequence()` from the
     interface, evaluated per validation.
-    **Ref:** [Group sequence provider](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence provider](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ## Key takeaways
 
@@ -352,7 +352,7 @@ stages depend on runtime state.
 - **Confused with:** [Object Validation](object-validation.md) — validating `{ClassName}` runs the flat set and bypasses the sequence.
 
 ## Official References
-- [Official Symfony docs — Group sequence & provider](https://symfony.com/doc/current/validation/sequence_provider.html)
+- [Official Symfony docs — Group sequence & provider](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 - [Symfony source — GroupSequence](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/GroupSequence.php)
 
 ## Video references
@@ -364,7 +364,7 @@ stages depend on runtime state.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/sequence_provider.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/sequence_provider.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

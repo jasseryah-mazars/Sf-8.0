@@ -322,8 +322,8 @@ doit implémenter `TerminableInterface` pour que cela soit appelé.
 ## Official References
 
 - [HttpKernel.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernel.php)
-- [The HttpKernel Component — the workflow of a request](https://symfony.com/doc/current/components/http_kernel.html)
-- [Built-in Symfony Events (KernelEvents)](https://symfony.com/doc/current/reference/events.html)
+- [The HttpKernel Component — the workflow of a request](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [Built-in Symfony Events (KernelEvents)](https://symfony.com/doc/8.0/reference/events.html)
 
 ---
 <small>Related: [Request Handling](../architecture/request-handling.md) ·

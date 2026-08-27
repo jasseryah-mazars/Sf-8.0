@@ -277,7 +277,7 @@ in templates you can just append `#anchor` in the href.
     - [ ] D. `_name`
 
     **Why:** the matcher injects `_route` with the matched route's name.
-    **Ref:** [Special parameters](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Special parameters](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q2. What does `_format` do when matched?"
     - [x] A. Sets the request format (affects `Content-Type`) ✅
@@ -286,7 +286,7 @@ in templates you can just append `#anchor` in the href.
     - [ ] D. Sets the HTTP method
 
     **Why:** `RouterListener`/`Request::setRequestFormat()` uses it for content
-    negotiation. **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    negotiation. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q3. `stateless: true` primarily does what?"
     - [x] A. Asserts the route must not use the session (warns in debug) ✅
@@ -295,7 +295,7 @@ in templates you can just append `#anchor` in the href.
     - [ ] D. Makes the route match any method
 
     **Why:** it flags accidental session usage during development.
-    **Ref:** [Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes).
+    **Ref:** [Stateless routes](https://symfony.com/doc/8.0/routing.html#stateless-routes).
 
 ??? question "Q4. Where does `_fragment` take effect?"
     - [ ] A. During matching
@@ -304,7 +304,7 @@ in templates you can just append `#anchor` in the href.
     - [ ] D. In the session
 
     **Why:** the generator appends it as the URL fragment; it is ignored by the
-    matcher. **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    matcher. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ## Key takeaways
 
@@ -329,8 +329,8 @@ in templates you can just append `#anchor` in the href.
 - **Confused with:** [URL generation](url-generation.md) — `_fragment` acts only at generation, never in matching.
 
 ## Official References
-- [Official Symfony docs — Special parameters](https://symfony.com/doc/current/routing.html#special-parameters)
-- [Official Symfony docs — Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes)
+- [Official Symfony docs — Special parameters](https://symfony.com/doc/8.0/routing.html#special-parameters)
+- [Official Symfony docs — Stateless routes](https://symfony.com/doc/8.0/routing.html#stateless-routes)
 - [Symfony source — RouterListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
 
 ## Video references
@@ -342,7 +342,7 @@ in templates you can just append `#anchor` in the href.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#special-parameters) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#special-parameters) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -281,7 +281,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
 
     **Why:** `loadUserByUsername()` a été supprimée ; le chargeur est
     `loadUserByIdentifier()`.
-    **Ref:** [User providers](https://symfony.com/doc/current/security/user_providers.html).
+    **Ref:** [User providers](https://symfony.com/doc/8.0/security/user_providers.html).
 
 ??? question "Q2. When is `refreshUser()` called?"
     - [ ] A. Only during login
@@ -301,7 +301,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
 
     **Why:** Les providers ne font que charger/rafraîchir les users ; le
     `CheckCredentialsListener` vérifie les `PasswordCredentials`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -331,7 +331,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
   ne fait que *charger* les users ; il ne vérifie jamais les credentials.
 
 ## Official References
-- [Symfony docs — User providers](https://symfony.com/doc/current/security/user_providers.html)
+- [Symfony docs — User providers](https://symfony.com/doc/8.0/security/user_providers.html)
 - [Symfony source — InMemoryUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/InMemoryUserProvider.php)
 - [Symfony source — ChainUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/ChainUserProvider.php)
 
@@ -344,7 +344,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/user_providers.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/user_providers.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

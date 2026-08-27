@@ -218,7 +218,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - [ ] D. It is written to the log.
 
     **Why:** `get`/`all` consume; use `peek` to read without removing.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q2. `$this->addFlash('notice', 'Hi')` is shorthand for…"
     - [x] A. `getSession()->getFlashBag()->add('notice', 'Hi')` ✅
@@ -226,7 +226,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - [ ] C. writing a cookie
     - [ ] D. dispatching an event
 
-    **Why:** it delegates to the session flash bag. **Ref:** [AbstractController](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Why:** it delegates to the session flash bag. **Ref:** [AbstractController](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q3. Why pair a flash with a redirect?"
     - [x] A. The message displays on the next (GET) request, matching the PRG pattern. ✅
@@ -235,7 +235,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - [ ] D. It prevents CSRF.
 
     **Why:** flashes are designed to survive exactly one redirect and be shown next.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ## Key takeaways
 
@@ -259,7 +259,7 @@ flows but means flash-bearing pages are not shared-cacheable.
 - **Confused with:** [AbstractController](abstract-controller.md) — `addFlash()` is sugar over `getSession()->getFlashBag()->add()`.
 
 ## Official References
-- [Official Symfony docs — Flash Messages](https://symfony.com/doc/current/controller.html#flash-messages)
+- [Official Symfony docs — Flash Messages](https://symfony.com/doc/8.0/controller.html#flash-messages)
 - [Symfony source — FlashBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php)
 
 ## Video references
@@ -271,7 +271,7 @@ flows but means flash-bearing pages are not shared-cacheable.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#flash-messages) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#flash-messages) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

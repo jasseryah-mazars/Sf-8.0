@@ -90,7 +90,8 @@ def evidence(main: str | None) -> dict:
     # Twig's own version-pinned source (twigphp/Twig/{blob,tree}/3.x) — Twig
     # is not part of symfony/symfony, so its own repo is the correct citation.
     ev["sf8_ref"] = bool(re.search(r"blob/8\.0|tree/8\.0|twigphp/Twig/(?:blob|tree)/3\.x", txt))
-    ev["official_ref"] = bool(re.search(r"symfony\.com/doc|php\.net|rfc-editor\.org|twig\.symfony\.com", txt))
+    ev["official_ref"] = bool(re.search(
+        r"symfony\.com/doc/8\.0|php\.net|rfc-editor\.org|twig\.symfony\.com", txt))
     stem = main.removesuffix(".md")
     tagged = _quiz_by_subchapter().get(stem, [])
     ev["situational"] = any(q.get("type") in SITUATIONAL_TYPES for q in tagged)

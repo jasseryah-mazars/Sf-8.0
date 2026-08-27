@@ -354,7 +354,7 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
     - [ ] C. never — you must call save()
 
     **Why:** The callback computes the value on miss; the result is stored and
-    returned. **Ref:** [Cache contracts](https://symfony.com/doc/current/cache.html#cache-contracts).
+    returned. **Ref:** [Cache contracts](https://symfony.com/doc/8.0/cache.html#cache-contracts).
 
 ??? question "Q2. Which API supports cache tags?"
     - [ ] A. PSR-16 SimpleCache
@@ -362,7 +362,7 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
     - [ ] C. Neither
 
     **Why:** Tags need a `TagAwareAdapter`; PSR-16 has no tag support.
-    **Ref:** [Cache tags](https://symfony.com/doc/current/cache.html#using-cache-tags).
+    **Ref:** [Cache tags](https://symfony.com/doc/8.0/cache.html#using-cache-tags).
 
 ??? question "Q3. Stampede protection is implemented by…"
     - [x] A. probabilistic early expiration controlled by `$beta` ✅
@@ -370,7 +370,7 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
     - [ ] C. disabling TTLs
 
     **Why:** Early recomputation is chosen probabilistically as expiry nears.
-    **Ref:** [Stampede prevention](https://symfony.com/doc/current/cache.html#stampede-prevention).
+    **Ref:** [Stampede prevention](https://symfony.com/doc/8.0/cache.html#stampede-prevention).
 
 ## Key takeaways
 
@@ -391,11 +391,11 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — pools are configured as services and autowired by pool name.
 - **Reused in:** [Deployment](deployment.md) — cache warmers pre-build pools/metadata; [HTTP Caching](../http-caching/index.md) caches whole responses instead of values.
-- **Confused with:** [Lock](lock.md) — both touch concurrency, but Lock enforces mutual exclusion while stampede protection only *reduces* duplicate recompute.
+- **Confused with:** [Lock](../appendices/out-of-syllabus/lock.md) — both touch concurrency, but Lock enforces mutual exclusion while stampede protection only *reduces* duplicate recompute.
 
 ## Official References
-- [Official docs — Cache](https://symfony.com/doc/current/cache.html)
-- [Official docs — Cache contracts](https://symfony.com/doc/current/components/cache.html)
+- [Official docs — Cache](https://symfony.com/doc/8.0/cache.html)
+- [Official docs — Cache contracts](https://symfony.com/doc/8.0/components/cache.html)
 - [Symfony source — CacheInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/Cache/CacheInterface.php)
 
 ## Video references
@@ -407,7 +407,7 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/cache.html#cache-contracts) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/cache.html#cache-contracts) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -421,4 +421,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [HTTP Caching](../http-caching/index.md) · [Lock](lock.md) · [Deployment](deployment.md)</small>
+<small>Related: [HTTP Caching](../http-caching/index.md) · [Lock](../appendices/out-of-syllabus/lock.md) · [Deployment](deployment.md)</small>

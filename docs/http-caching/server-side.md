@@ -51,7 +51,7 @@ $response = $cachingKernel->handle($request); // on a fresh hit, the app never r
 
 It obeys the standard headers you already know — `Cache-Control` (especially
 `s-maxage`, since it is a *shared* cache), `Expires`, `ETag`, `Last-Modified`,
-`Vary` — no bespoke config language. It also understands [ESI](esi.md).
+`Vary` — no bespoke config language. It also understands [ESI](../appendices/out-of-syllabus/esi.md).
 
 ```http
 HTTP/1.1 200 OK
@@ -78,7 +78,7 @@ Vary: Accept-Encoding
     No. Their request carries a session `Cookie`, which is in the proxy's
     `private_headers` (default `Authorization, Cookie`), so `HttpCache` treats it as
     **private** — it neither serves from nor stores in the shared cache. Anonymous
-    requests (no cookie) *do* get cached; move per-user bits into [ESI](esi.md).
+    requests (no cookie) *do* get cached; move per-user bits into [ESI](../appendices/out-of-syllabus/esi.md).
 
 ## Deep Dive — how it works internally
 
@@ -110,7 +110,7 @@ public function __construct(
 - `$store` — where entries live; the default is
   `Symfony\Component\HttpKernel\HttpCache\Store`, a filesystem store keyed by URL
   + `Vary`, using digest files and lock files.
-- `$surrogate` — an `Esi` or `Ssi` instance for [fragment](esi.md) processing.
+- `$surrogate` — an `Esi` or `Ssi` instance for [fragment](../appendices/out-of-syllabus/esi.md) processing.
 - `$options` — behavioural knobs (below).
 
 ```php
@@ -281,7 +281,7 @@ Use the PHP reverse proxy for local development, small/medium sites, and when yo
 want caching without extra infrastructure. Reach for **Varnish** or a caching
 **CDN** at high traffic or when you need edge distribution — they speak the same
 HTTP headers, so your Symfony code is unchanged. For per-fragment freshness on a
-mostly-cacheable page, add [ESI](esi.md) (supported by both the PHP proxy and
+mostly-cacheable page, add [ESI](../appendices/out-of-syllabus/esi.md) (supported by both the PHP proxy and
 Varnish).
 
 !!! danger "Certification traps"
@@ -317,7 +317,7 @@ Varnish).
     **2.** Logged-in requests send a session `Cookie`, which is in the proxy's
     `private_headers`, so they are treated as private and bypass the shared cache.
     Anonymous requests (no session cookie) *are* cached. To also cache the
-    logged-in shell, move the per-user parts into [ESI](esi.md) fragments so the
+    logged-in shell, move the per-user parts into [ESI](../appendices/out-of-syllabus/esi.md) fragments so the
     outer page stays anonymous/cacheable.
 
 ## Certification questions
@@ -330,7 +330,7 @@ Varnish).
 
     **Why:** It implements `HttpKernelInterface`/`TerminableInterface` and wraps
     the real kernel, acting as an in-PHP gateway cache.
-    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy).
+    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy).
 
 ??? question "Q2. Which request header, by default, makes `HttpCache` treat a request as private?"
     - [x] A. `Cookie` (and `Authorization`) ✅
@@ -350,7 +350,7 @@ Varnish).
 
     **Why:** `HttpCache` writes a trace (default header `X-Symfony-Cache`) like
     `GET /: fresh`/`miss`/`store`.
-    **Ref:** [Debugging HttpCache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [Debugging HttpCache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q4. The easiest way to enable the reverse proxy in Symfony 8 is…"
     - [x] A. `framework.http_cache: true` in config ✅
@@ -360,7 +360,7 @@ Varnish).
 
     **Why:** The framework config flag wraps the kernel automatically; manual
     wrapping in `public/index.php` is the alternative.
-    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy).
+    **Ref:** [Symfony reverse proxy](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy).
 
 ## Key takeaways
 
@@ -382,19 +382,19 @@ Varnish).
       `Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache`.
     - Ctor: `(kernel, store, ?surrogate, options)`; default `Store` = filesystem.
     - Trace header `X-Symfony-Cache`; `private_headers` = Cookie, Authorization.
-    - Shared cache → honours `s-maxage`; supports [ESI](esi.md).
+    - Shared cache → honours `s-maxage`; supports [ESI](../appendices/out-of-syllabus/esi.md).
 
 ## Connections
 
 - **Depends on:** [Request Handling](../architecture/request-handling.md) —
   `HttpCache` is an `HttpKernelInterface` that wraps the kernel before it runs.
-- **Reused in:** [Edge Side Includes](esi.md) — the reverse proxy is the surrogate
+- **Reused in:** [Edge Side Includes](../appendices/out-of-syllabus/esi.md) — the reverse proxy is the surrogate
   that fetches and stitches ESI fragments.
 - **Confused with:** [Client-Side Caching](client-side.md) — this is a *shared*
   cache you own; the browser cache is private and per-user.
 
 ## Official References
-- [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+- [Symfony docs — Symfony reverse proxy](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
 - [Symfony source — HttpCache](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/HttpCache.php)
 - [Symfony source — Store](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Store.php)
 
@@ -407,7 +407,7 @@ Varnish).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -422,4 +422,4 @@ I'm ready when I can:
 ---
 
 <small>Related: [Cache Types](cache-types.md) · [Expiration](expiration.md) ·
-[Edge Side Includes](esi.md) · [Architecture](../architecture/index.md)</small>
+[Edge Side Includes](../appendices/out-of-syllabus/esi.md) · [Architecture](../architecture/index.md)</small>

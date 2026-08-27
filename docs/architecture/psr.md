@@ -239,7 +239,7 @@ crossing library boundaries.
     - [ ] C. PSR-3
 
     **Why:** `EventDispatcherInterface` extends the PSR-14 interface. **Ref:**
-    [EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html).
+    [EventDispatcher](https://symfony.com/doc/8.0/components/event_dispatcher.html).
 
 ??? question "Q2. Is HttpFoundation's Request a PSR-7 message?"
     - [ ] A. Yes
@@ -247,7 +247,7 @@ crossing library boundaries.
     - [ ] C. Only in prod
 
     **Why:** HttpFoundation predates/differs from PSR-7; use the bridge. **Ref:**
-    [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html).
+    [PSR-7 bridge](https://symfony.com/doc/8.0/components/psr7.html).
 
 ??? question "Q3. Which interface standardises the service container?"
     - [x] A. PSR-11 `Psr\Container\ContainerInterface` ✅
@@ -255,7 +255,7 @@ crossing library boundaries.
     - [ ] C. PSR-16
 
     **Why:** Symfony's container implements PSR-11. **Ref:**
-    [Container](https://symfony.com/doc/current/service_container.html).
+    [Container](https://symfony.com/doc/8.0/service_container.html).
 
 ## Key takeaways
 
@@ -278,8 +278,8 @@ crossing library boundaries.
 
 ## Official References
 - [PHP-FIG PSRs](https://www.php-fig.org/psr/)
-- [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html)
-- [Clock component](https://symfony.com/doc/current/components/clock.html)
+- [PSR-7 bridge](https://symfony.com/doc/8.0/components/psr7.html)
+- [Clock component](https://symfony.com/doc/8.0/components/clock.html)
 
 ## Video references
 
@@ -290,7 +290,7 @@ crossing library boundaries.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/event_dispatcher.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/event_dispatcher.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

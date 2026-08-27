@@ -270,7 +270,7 @@ services:
     - [ ] D. `home_controller.invoke`
 
     **Why:** pour un controller invokable, on référence la **classe seule** ; le
-    resolver détecte `__invoke()`. **Ref:** [controllers](https://symfony.com/doc/current/controller.html#the-basics).
+    resolver détecte `__invoke()`. **Ref:** [controllers](https://symfony.com/doc/8.0/controller.html#the-basics).
 
 ??? question "Q2. Is the `Action` method suffix required in Symfony 8?"
     - [ ] A. Yes, the router needs it.
@@ -280,7 +280,7 @@ services:
 
     **Why:** le routing par attributes lie la méthode explicitement, donc aucun
     suffixe n'est nécessaire.
-    **Ref:** [controller conventions](https://symfony.com/doc/current/controller.html).
+    **Ref:** [controller conventions](https://symfony.com/doc/8.0/controller.html).
 
 ??? question "Q3. What visibility must an action method have?"
     - [x] A. `public` ✅
@@ -289,7 +289,7 @@ services:
     - [ ] D. Any visibility works.
 
     **Why:** le kernel invoque le callable de l'extérieur, donc la méthode doit
-    être `public`. **Ref:** [controller](https://symfony.com/doc/current/controller.html).
+    être `public`. **Ref:** [controller](https://symfony.com/doc/8.0/controller.html).
 
 ## Key takeaways
 
@@ -312,7 +312,7 @@ services:
 - **Confused with:** [Value Resolvers](value-resolvers.md) — le resolver nomme le *callable* ; les value resolvers remplissent ses *arguments*.
 
 ## Official References
-- [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html)
+- [Official Symfony docs — Controllers](https://symfony.com/doc/8.0/controller.html)
 - [Symfony source — ControllerResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/ControllerResolver.php)
 
 ## Video references
@@ -325,7 +325,7 @@ services:
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#the-basics) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#the-basics) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

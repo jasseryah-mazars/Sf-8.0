@@ -185,4 +185,4 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

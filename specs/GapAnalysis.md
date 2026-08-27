@@ -36,7 +36,7 @@ not a prose migration. Only the *topic structure* is reused.
 | Area | Change | Action |
 |---|---|---|
 | PHP baseline | 7.x/8.2 → **PHP 8.4+** | Rewrite "PHP API" around 8.3/8.4 features (typed class constants, `#[\Override]`, `json_validate()`, `new` in initializers, property hooks & asymmetric visibility context, DNF types, `readonly` classes). |
-| Symfony version | 7.0 → 8.0 | All doc links → `doc/current`; source links → `blob/8.0`. Remove any 7.x-only guidance. |
+| Symfony version | 7.0 → 8.0 | All doc links → `doc/8.0`; source links → `blob/8.0`. Remove any 7.x-only guidance. |
 | HTTP Caching | Reduced exam weight | Keep full coverage; note reduced weighting in revision priority. |
 | Messenger | **Increased** exam weight | Expand Messenger to multiple sub-sections; raise revision priority. |
 | Twig | 3.8 → current 3.x | Syntax chapter targets current Twig 3; flag any deprecations. |

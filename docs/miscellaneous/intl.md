@@ -245,7 +245,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
     - [ ] C. `%count%` only
 
     **Why:** ICU MessageFormat is the current mechanism; the pipe syntax is legacy.
-    **Ref:** [Pluralization](https://symfony.com/doc/current/translation/message_format.html).
+    **Ref:** [Pluralization](https://symfony.com/doc/8.0/translation/message_format.html).
 
 ??? question "Q2. What is returned when a translation key is missing?"
     - [x] A. The message id itself ✅
@@ -253,14 +253,14 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
     - [ ] C. A `TranslationException`
 
     **Why:** The translator returns the untranslated id (logged in dev).
-    **Ref:** [Translations](https://symfony.com/doc/current/translation.html).
+    **Ref:** [Translations](https://symfony.com/doc/8.0/translation.html).
 
 ??? question "Q3. Which class gives a localized country name?"
     - [x] A. `Symfony\Component\Intl\Countries` ✅
     - [ ] B. `Symfony\Component\Locale\Country`
     - [ ] C. `Symfony\Component\Translation\Countries`
 
-    **Why:** `Countries::getName()` reads bundled ICU data. **Ref:** [Intl](https://symfony.com/doc/current/components/intl.html).
+    **Why:** `Countries::getName()` reads bundled ICU data. **Ref:** [Intl](https://symfony.com/doc/8.0/components/intl.html).
 
 ## Key takeaways
 
@@ -284,9 +284,9 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 - **Confused with:** the legacy `apples|apple` pipe syntax — Symfony 8 uses ICU MessageFormat.
 
 ## Official References
-- [Official docs — Translations](https://symfony.com/doc/current/translation.html)
-- [Official docs — Message format](https://symfony.com/doc/current/translation/message_format.html)
-- [Official docs — Intl](https://symfony.com/doc/current/components/intl.html)
+- [Official docs — Translations](https://symfony.com/doc/8.0/translation.html)
+- [Official docs — Message format](https://symfony.com/doc/8.0/translation/message_format.html)
+- [Official docs — Intl](https://symfony.com/doc/8.0/components/intl.html)
 - [Symfony source — Translator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php)
 
 ## Video references
@@ -298,7 +298,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/translation/message_format.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/translation/message_format.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

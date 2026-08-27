@@ -22,7 +22,7 @@ Full theory: [Routing](../routing/index.md).
 
     The routing attribute lives in the Attribute namespace since 6.4; the old Annotation\Route alias is removed in Symfony 8.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q2.** Which YAML import type loads #[Route] attributes from a directory in Symfony 8?  <small>_(easy · config)_</small>
 
@@ -36,7 +36,7 @@ Full theory: [Routing](../routing/index.md).
 
     Attribute route loading uses `type: attribute`; the `annotation` type is gone in Symfony 8.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q3.** What is the default regex applied to a placeholder that has no requirement?  <small>_(easy · single)_</small>
 
@@ -50,7 +50,7 @@ Full theory: [Routing](../routing/index.md).
 
     Placeholders match any characters except the / separator by default; use .+ to span multiple segments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q4.** In YAML, which block restricts a {slug} placeholder to lowercase letters, digits and hyphens?  <small>_(easy · config)_</small>
 
@@ -64,7 +64,7 @@ Full theory: [Routing](../routing/index.md).
 
     The YAML key is `requirements`, a map of placeholder name to regex. `defaults` sets values, and there are no `constraints`/`validation` keys in a route definition — validation is a separate component.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#parameters-validation)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 
 **Q5.** What default value does the placeholder {slug?} declare?  <small>_(easy · single)_</small>
 
@@ -78,7 +78,7 @@ Full theory: [Routing](../routing/index.md).
 
     A bare ? with no value after it sets the default to null.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q6.** For /blog/{page<\d+>?1}, what does generateUrl('blog_list', ['page' => 3]) produce?  <small>_(easy · code)_</small>
 
@@ -92,7 +92,7 @@ Full theory: [Routing](../routing/index.md).
 
     The segment is only omitted when the value equals the default (1). Since 3 differs, the generator emits the full /blog/3.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q7.** What is the default reference type of UrlGeneratorInterface::generate() / generateUrl()?  <small>_(easy · single)_</small>
 
@@ -106,7 +106,7 @@ Full theory: [Routing](../routing/index.md).
 
     By default the generator returns a root-relative path; ABSOLUTE_URL adds the scheme and host.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q8.** generateUrl('blog_show', ['id' => 42, 'utm' => 'x']) produces what?  <small>_(easy · single)_</small>
 
@@ -120,7 +120,7 @@ Full theory: [Routing](../routing/index.md).
 
     Parameters that are not route placeholders are appended as query string arguments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q9.** Which type defines the constants ABSOLUTE_URL, ABSOLUTE_PATH, NETWORK_PATH, RELATIVE_PATH?  <small>_(easy · single)_</small>
 
@@ -134,7 +134,7 @@ Full theory: [Routing](../routing/index.md).
 
     The reference-type constants are declared on UrlGeneratorInterface.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q10.** Which Twig function outputs an absolute URL?  <small>_(easy · single)_</small>
 
@@ -148,7 +148,7 @@ Full theory: [Routing](../routing/index.md).
 
     url() maps to ABSOLUTE_URL; path() maps to the default ABSOLUTE_PATH.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls-in-templates)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls-in-templates)
 
 **Q11.** What does UrlGeneratorInterface::NETWORK_PATH produce for blog_show id 42?  <small>_(easy · single)_</small>
 
@@ -162,7 +162,7 @@ Full theory: [Routing](../routing/index.md).
 
     NETWORK_PATH emits a scheme-relative URL beginning with //, letting the browser reuse the current scheme. ABSOLUTE_URL includes the scheme, ABSOLUTE_PATH is root-relative, and RELATIVE_PATH gives something like ../42.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q12.** Which RedirectController action redirects to another route by name?  <small>_(easy · single)_</small>
 
@@ -176,7 +176,7 @@ Full theory: [Routing](../routing/index.md).
 
     redirectAction targets a route name and forwards parameters; urlRedirectAction targets a literal path or URL.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q13.** In a RedirectController route config, permanent: true means which status code?  <small>_(easy · single)_</small>
 
@@ -190,7 +190,7 @@ Full theory: [Routing](../routing/index.md).
 
     permanent toggles a 301; the default is a 302.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q14.** Which request attribute holds the name of the matched route?  <small>_(easy · single)_</small>
 
@@ -204,7 +204,7 @@ Full theory: [Routing](../routing/index.md).
 
     The matcher injects _route (the matched name) and _route_params (the placeholder values) into the request attributes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q15.** What does the special _format parameter do when matched?  <small>_(easy · single)_</small>
 
@@ -218,7 +218,7 @@ Full theory: [Routing](../routing/index.md).
 
     RouterListener applies _format via Request::setRequestFormat(), driving content negotiation.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q16.** What is the default regex applied to a host placeholder like {sub}?  <small>_(easy · single)_</small>
 
@@ -232,7 +232,7 @@ Full theory: [Routing](../routing/index.md).
 
     Host labels are separated by dots, so a host token matches any non-dot characters by default (contrast with the path default [^/]+).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 **Q17.** Which variables/functions are available inside a routing condition expression?  <small>_(easy · single)_</small>
 
@@ -246,7 +246,7 @@ Full theory: [Routing](../routing/index.md).
 
     The routing expression provider exposes the RequestContext (context), the Request (request), and the env()/service() functions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q18.** Do conditions affect URL generation with generateUrl()?  <small>_(easy · single)_</small>
 
@@ -260,7 +260,7 @@ Full theory: [Routing](../routing/index.md).
 
     There is no request to evaluate during generation, so conditions never influence generated URLs.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q19.** A route allows only GET. A POST to that same path returns?  <small>_(easy · single)_</small>
 
@@ -274,7 +274,7 @@ Full theory: [Routing](../routing/index.md).
 
     When the path matches but the method is not allowed, the matcher throws MethodNotAllowedException, producing a 405 with an Allow header. It is not a 404 — the path did match.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-http-methods)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 
 **Q20.** A route declared with methods: ['GET'] also matches which verb automatically?  <small>_(easy · single)_</small>
 
@@ -288,7 +288,7 @@ Full theory: [Routing](../routing/index.md).
 
     HttpKernel handles HEAD as a bodyless GET, so GET routes also match HEAD. Declaring HEAD explicitly is redundant.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-http-methods)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 
 **Q21.** How do you generate the French variant of a localized route named app_about?  <small>_(easy · single)_</small>
 
@@ -302,7 +302,7 @@ Full theory: [Routing](../routing/index.md).
 
     Pass the _locale special parameter to select a localized variant; omit it to reuse the current request locale.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
 **Q22.** For route app_help at /{_locale}/help, what does generateUrl('app_help', ['_locale' => 'es']) produce?  <small>_(easy · code)_</small>
 
@@ -316,7 +316,7 @@ Full theory: [Routing](../routing/index.md).
 
     _locale is a real placeholder in the path, so it fills the {_locale} segment giving /es/help — not a query string, and not the default en.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
 **Q23.** Which console command simulates matching a specific URL and explains rejections?  <small>_(easy · single)_</small>
 
@@ -330,7 +330,7 @@ Full theory: [Routing](../routing/index.md).
 
     router:match runs a TraceableUrlMatcher against the given path and reports which routes matched or why they failed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 **Q24.** After changing route definitions in the prod environment you must…  <small>_(easy · single)_</small>
 
@@ -344,7 +344,7 @@ Full theory: [Routing](../routing/index.md).
 
     The compiled router (url_matching_routes.php / url_generating_routes.php) is built at cache warmup and is not auto-refreshed in prod.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 **Q25.** Which command rebuilds the compiled router after editing routes in prod?  <small>_(easy · config)_</small>
 
@@ -358,7 +358,7 @@ Full theory: [Routing](../routing/index.md).
 
     cache:clear (or cache:warmup) in the prod env runs the RouterCacheWarmer and regenerates url_matching_routes.php / url_generating_routes.php. The other commands do not exist.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 **Q26.** Where in the web profiler can you see the matched _route for the current request?  <small>_(easy · single)_</small>
 
@@ -372,7 +372,7 @@ Full theory: [Routing](../routing/index.md).
 
     The profiler's Routing panel shows the matched _route and its parameters for the current request, so you do not need dump() calls to find them.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 **Q27.** Two routes can match the same request path. Which one wins?  <small>_(medium · internals)_</small>
 
@@ -386,7 +386,7 @@ Full theory: [Routing](../routing/index.md).
 
     The matcher iterates the collection in declaration order and returns the first route whose host and path match. It is first-match-wins, not most-specific-wins — so more specific routes must be declared before catch-all ones.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q28.** A class-level #[Route('/blog', name: 'app_blog_')] contributes what to its method routes?  <small>_(medium · single)_</small>
 
@@ -400,7 +400,7 @@ Full theory: [Routing](../routing/index.md).
 
     Class-level route data merges as prefixes: the path is prepended and the name becomes a prefix for each action's route. A class-level name is never a complete route name on its own.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#creating-routes-as-attributes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#creating-routes-as-attributes)
 
 **Q29.** With #[Route('/blog', name: 'app_blog_')] on the class and #[Route('/list', name: 'index')] on a method, what name and path result?  <small>_(medium · code)_</small>
 
@@ -414,7 +414,7 @@ Full theory: [Routing](../routing/index.md).
 
     The class path /blog is prepended to the method path /list (giving /blog/list) and the class name prefix app_blog_ is prepended to the method name index (giving app_blog_index). Both parts concatenate, not replace.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#creating-routes-as-attributes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#creating-routes-as-attributes)
 
 **Q30.** You omit the name: option on a #[Route]. What happens?  <small>_(medium · trap)_</small>
 
@@ -428,7 +428,7 @@ Full theory: [Routing](../routing/index.md).
 
     A missing name is generated from the class + method. This works but is brittle — renaming the method breaks every generateUrl() call — so an explicit, stable name is recommended.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q31.** A YAML import declares `resource: routes/api.yaml`, `prefix: /api`, `name_prefix: api_`. What is the effect on the imported routes?  <small>_(medium · config)_</small>
 
@@ -442,7 +442,7 @@ Full theory: [Routing](../routing/index.md).
 
     Import options cascade to every route in the resource: prefix is prepended to each path and name_prefix to each name. This is how you namespace a whole imported set without editing each definition.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q32.** A route path is /blog/{page<\d+>} and the request is /blog/latest. What happens?  <small>_(medium · trap)_</small>
 
@@ -456,7 +456,7 @@ Full theory: [Routing](../routing/index.md).
 
     Requirements are compiled into the route regex, so a non-matching value means the route is skipped — it is a matching concern, not validation. There is no 400 from routing itself.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#parameters-validation)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 
 **Q33.** Which two declarations are exactly equivalent?  <small>_(medium · single)_</small>
 
@@ -470,7 +470,7 @@ Full theory: [Routing](../routing/index.md).
 
     The inline <...> syntax is sugar for a matching entry in the requirements array. defaults is unrelated (it sets values, not patterns).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#parameters-validation)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 
 **Q34.** How do you allow a single parameter to capture several path segments (slashes)?  <small>_(medium · code)_</small>
 
@@ -484,7 +484,7 @@ Full theory: [Routing](../routing/index.md).
 
     The default [^/]+ stops at a slash; requiring .+ lets the token match across path segments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#slash-in-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#slash-in-parameters)
 
 **Q35.** You write requirements: {id: '^\d+$'} to constrain an id. What is wrong?  <small>_(medium · trap)_</small>
 
@@ -498,7 +498,7 @@ Full theory: [Routing](../routing/index.md).
 
     RouteCompiler substitutes the placeholder with a named capture group over the whole token, so the requirement is already anchored. Adding ^/$ injects them inside the group and breaks matching. Likewise, avoid capturing groups — use (?:...) if grouping is needed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#parameters-validation)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 
 **Q36.** Which placeholder is optional (matches /blog and /blog/N) with default 1 and digits only?  <small>_(medium · code)_</small>
 
@@ -512,7 +512,7 @@ Full theory: [Routing](../routing/index.md).
 
     The inline order is {name<requirement>?default}: the requirement comes first, then ? and the default value.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q37.** generateUrl('blog', ['page' => 1]) where page defaults to 1 produces?  <small>_(medium · internals)_</small>
 
@@ -526,7 +526,7 @@ Full theory: [Routing](../routing/index.md).
 
     The generator omits a trailing segment whose value equals its default, yielding the canonical shortest URL. This keeps generated URLs stable and avoids duplicate-content variants.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q38.** Why is the inline placeholder {page?1<\d+>} wrong?  <small>_(medium · trap)_</small>
 
@@ -540,7 +540,7 @@ Full theory: [Routing](../routing/index.md).
 
     The inline grammar is strictly {name<requirement>?default}. Putting ?1 before the <\\d+> requirement is a syntax error / misparse. Requirement and default can absolutely be combined — just in the right order.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q39.** For path /archive/{year<\\d+>}/{month}, which YAML makes month optional and null when absent?  <small>_(medium · config)_</small>
 
@@ -554,7 +554,7 @@ Full theory: [Routing](../routing/index.md).
 
     A trailing placeholder becomes optional by having a default; setting it to null in the defaults array is the array-form equivalent of the inline {month?}. '' is an empty string, not null, and there is no `optional` key.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q40.** Why might a console command generate URLs like http://localhost/... ?  <small>_(medium · debug)_</small>
 
@@ -568,7 +568,7 @@ Full theory: [Routing](../routing/index.md).
 
     Outside a web request the generator falls back to the RequestContext defaults; configure router.default_uri for correct absolute URLs.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls-in-commands)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls-in-commands)
 
 **Q41.** Generating a URL for a route name that does not exist throws which exception?  <small>_(medium · internals)_</small>
 
@@ -596,7 +596,7 @@ Full theory: [Routing](../routing/index.md).
 
     RequestContext is normally populated from the incoming Request. In CLI or a queue worker there is no request, so the generator uses default_uri to build correct absolute URLs instead of http://localhost.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls-in-commands)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls-in-commands)
 
 **Q43.** A route path is /blog/. A GET request to /blog results in?  <small>_(medium · single)_</small>
 
@@ -610,7 +610,7 @@ Full theory: [Routing](../routing/index.md).
 
     RedirectableUrlMatcher issues a 301 to the canonical trailing-slash URL for safe (GET/HEAD) methods.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes)
 
 **Q44.** You want /docs to redirect (302) to the literal path /docs/intro via RedirectController. Which controller + default do you use?  <small>_(medium · config)_</small>
 
@@ -624,7 +624,7 @@ Full theory: [Routing](../routing/index.md).
 
     urlRedirectAction targets a literal path/URL via the `path` default; redirectAction targets a route name via the `route` default. Mixing the action with the wrong default key does not work.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q45.** What status code does $this->redirectToRoute('blog_show', ['id' => $id]) return by default?  <small>_(medium · code)_</small>
 
@@ -638,7 +638,7 @@ Full theory: [Routing](../routing/index.md).
 
     redirectToRoute() builds a RedirectResponse with a 302 by default; pass a third status argument (e.g. 301) to change it. Use controller-level redirects when the target depends on logic/data.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q46.** What does #[Route(stateless: true)] primarily do?  <small>_(medium · internals)_</small>
 
@@ -652,7 +652,7 @@ Full theory: [Routing](../routing/index.md).
 
     It flags accidental session usage during development, raising UnexpectedSessionUsageException in debug; important for cacheable and API endpoints. It is an assertion, not a hard prod block.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#stateless-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#stateless-routes)
 
 **Q47.** Where does the special _fragment parameter take effect?  <small>_(medium · trap)_</small>
 
@@ -666,7 +666,7 @@ Full theory: [Routing](../routing/index.md).
 
     _fragment is honoured by the generator and ignored by the matcher (a URL fragment is never sent to the server).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q48.** How do you read the matched route name inside a controller or listener?  <small>_(medium · code)_</small>
 
@@ -680,7 +680,7 @@ Full theory: [Routing](../routing/index.md).
 
     _route (and _route_params) are read-only outputs stored in the request attribute bag by RouterListener. There is no Request::getRoute() helper, and it is not a query parameter.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q49.** For path /api/items.{_format} serving only JSON or XML defaulting to JSON, which config is correct?  <small>_(medium · config)_</small>
 
@@ -694,7 +694,7 @@ Full theory: [Routing](../routing/index.md).
 
     _format is a normal special parameter: a default gives it a value when the extension is absent, and a requirement whitelists the allowed formats. Without the requirement, items.exe would match. Formats are never HTTP methods.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q50.** Should you set _route or _route_params yourself in a route's defaults?  <small>_(medium · trap)_</small>
 
@@ -708,7 +708,7 @@ Full theory: [Routing](../routing/index.md).
 
     _route and _route_params are outputs the matcher writes; setting them in defaults is meaningless and would be overwritten. They exist for logging, subscribers and debugging.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q51.** Generating a URL for a route bound to a different host produces?  <small>_(medium · single)_</small>
 
@@ -722,7 +722,7 @@ Full theory: [Routing](../routing/index.md).
 
     A path-only URL cannot switch host, so the generator upgrades the reference type automatically.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q52.** Which config captures a subdomain {tenant} (lowercase alphanumerics/hyphen) on example.com, defaulting to www?  <small>_(medium · config)_</small>
 
@@ -736,7 +736,7 @@ Full theory: [Routing](../routing/index.md).
 
     Host placeholders obey the same requirements/defaults rules as path ones; you set the constraint and a base default on the route's `host`. There is no `subdomain`/`domain` key, and the host belongs in `host`, not `path`.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 **Q53.** For host '{tenant}.example.com', what does generateUrl('tenant_home', ['tenant' => 'acme'], UrlGeneratorInterface::ABSOLUTE_URL) produce (current host example.com)?  <small>_(medium · code)_</small>
 
@@ -750,7 +750,7 @@ Full theory: [Routing](../routing/index.md).
 
     The tenant placeholder fills the host label, and because the requested host differs from the current one an absolute URL on acme.example.com is produced. tenant is a host placeholder, so it is not appended as a query arg.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 **Q54.** How do you apply one host to a whole imported controller directory?  <small>_(medium · config)_</small>
 
@@ -764,7 +764,7 @@ Full theory: [Routing](../routing/index.md).
 
     Import-level options — host, prefix, name_prefix — cascade to every route in the imported resource, so you avoid repeating host: on each action.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 **Q55.** Why is a routing condition a poor substitute for a security voter/authorization check?  <small>_(medium · trap)_</small>
 
@@ -778,7 +778,7 @@ Full theory: [Routing](../routing/index.md).
 
     Conditions are a matching filter: failing one just hides the route (404), so there is no 403 and no way to trigger authentication. Use Security voters for authorization.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q56.** A DELETE-only route /tags/{id} gets a GET. What does the 405 response's Allow header contain?  <small>_(medium · debug)_</small>
 
@@ -792,7 +792,7 @@ Full theory: [Routing](../routing/index.md).
 
     On a 405 the matcher collects the allowed methods of the matching path and returns them in the Allow header (DELETE here), telling the client which verbs are valid.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-http-methods)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 
 **Q57.** How do you make one route accept both PUT and PATCH?  <small>_(medium · config)_</small>
 
@@ -806,7 +806,7 @@ Full theory: [Routing](../routing/index.md).
 
     methods accepts a list of verbs; any listed verb matches. A single route can serve several verbs — no pipe syntax or extra flags needed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-http-methods)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 
 **Q58.** Are HTTP method names in the methods option case-sensitive?  <small>_(medium · trap)_</small>
 
@@ -820,7 +820,7 @@ Full theory: [Routing](../routing/index.md).
 
     Method matching is case-insensitive, but you should write verbs in uppercase by convention for readability and debug:router clarity.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-http-methods)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 
 **Q59.** A #[Route(path: ['en' => '/about', 'fr' => '/a-propos'])] produces what?  <small>_(medium · config)_</small>
 
@@ -834,7 +834,7 @@ Full theory: [Routing](../routing/index.md).
 
     A localized path array expands at load time into one Route per locale, each with defaults['_locale'] set and a _locale requirement.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
 **Q60.** Matching a route that sets the _locale parameter causes what?  <small>_(medium · internals)_</small>
 
@@ -848,7 +848,7 @@ Full theory: [Routing](../routing/index.md).
 
     _locale is a special parameter applied by the LocaleListener on kernel.request, which calls Request::setLocale().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#special-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
 **Q61.** Which config exposes /{_locale}/blog restricted to en, fr or de and defaulting to en?  <small>_(medium · config)_</small>
 
@@ -862,7 +862,7 @@ Full theory: [Routing](../routing/index.md).
 
     The _locale placeholder is constrained by a requirement whitelist and given a default. Omitting the requirement lets any /xx/blog match; there is no top-level locale: list on a route. (Inline requirement is valid too, but a default is still needed for it to be optional at the root.)
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
 **Q62.** What goes wrong if /{_locale}/blog has no _locale requirement?  <small>_(medium · trap)_</small>
 
@@ -876,7 +876,7 @@ Full theory: [Routing](../routing/index.md).
 
     Without a requirement, _locale keeps the default [^/]+ and matches any label, so invalid locales like /xx/blog match. Always whitelist _locale with a requirement.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
 **Q63.** Which files hold the compiled router in the cache directory?  <small>_(medium · single)_</small>
 
@@ -890,7 +890,7 @@ Full theory: [Routing](../routing/index.md).
 
     The CompiledUrlMatcherDumper and CompiledUrlGeneratorDumper write these two files that the Router loads at runtime.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q64.** In debug:router output, a route shows Scheme=ANY and Host=ANY. What does that mean?  <small>_(medium · trap)_</small>
 
@@ -904,7 +904,7 @@ Full theory: [Routing](../routing/index.md).
 
     ANY is the compiled view's way of saying no constraint was set for that column; such a route matches regardless of scheme/host. It is not a literal value.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 **Q65.** Why do new routes appear immediately in dev but not in prod?  <small>_(medium · internals)_</small>
 
@@ -918,7 +918,7 @@ Full theory: [Routing](../routing/index.md).
 
     In dev, route files are registered as cache resources so Symfony detects changes and rebuilds the compiled matcher/generator automatically. In prod the cache is warmed once (cache:clear/warmup) and not auto-refreshed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 **Q66.** Which loader reads #[Route] attributes into the RouteCollection in a Symfony 8 app?  <small>_(hard · internals)_</small>
 
@@ -932,7 +932,7 @@ Full theory: [Routing](../routing/index.md).
 
     Attribute routes are read by AttributeClassLoader, wrapped by the framework's AttributeRouteControllerLoader. YamlFileLoader/XmlFileLoader handle those formats, and AnnotationClassLoader no longer exists in Symfony 8. All loaders implement LoaderInterface and are orchestrated by a DelegatingLoader.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q67.** Two routes share the path shape /blog/{x}: blog_show has {slug} (default [^/]+) declared first, blog_paged has {page<\\d+>} declared second. Which route matches /blog/42?  <small>_(hard · code)_</small>
 
@@ -946,7 +946,7 @@ Full theory: [Routing](../routing/index.md).
 
     Matching is first-match-wins in declaration order. Because blog_show's {slug} defaults to [^/]+, it also matches 42, so it captures /blog/42 before the numeric route is ever tried. Declare the numeric route first to disambiguate.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#parameters-validation)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 
 **Q68.** How does RouteCompiler represent /blog/{page<\d+>} in the CompiledRoute regex?  <small>_(hard · internals)_</small>
 
@@ -974,7 +974,7 @@ Full theory: [Routing](../routing/index.md).
 
     Only trailing placeholders can be optional; a gap in the middle cannot be located by the matcher. RouteCompiler emits nested optional groups from the tail, so an optional a with a required b is impossible.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q70.** A route declares schemes: ['https'], the current context is http, and you call generateUrl() with the default ABSOLUTE_PATH. What is returned?  <small>_(hard · trap)_</small>
 
@@ -988,7 +988,7 @@ Full theory: [Routing](../routing/index.md).
 
     When the target route's scheme differs from the context, the generator must emit an absolute URL with the correct (https) scheme, overriding the requested ABSOLUTE_PATH — a path-only URL could not change scheme.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q71.** A POST to /blog when the route is defined as /blog/ yields?  <small>_(hard · trap)_</small>
 
@@ -1002,7 +1002,7 @@ Full theory: [Routing](../routing/index.md).
 
     Redirecting a POST would alter the method, so the matcher returns 405 rather than a trailing-slash redirect. The auto-redirect is GET/HEAD only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes)
 
 **Q72.** For a RedirectController route, where is the 30x response actually produced?  <small>_(hard · internals)_</small>
 
@@ -1030,7 +1030,7 @@ Full theory: [Routing](../routing/index.md).
 
     A 301 tells clients the move is permanent, so browsers cache it hard and may not re-request the old URL. Use 302 (the default) while a target is still in flux.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q74.** Which component copies the matcher's output parameters into $request->attributes?  <small>_(hard · internals)_</small>
 
@@ -1058,7 +1058,7 @@ Full theory: [Routing](../routing/index.md).
 
     matchCollection() tests the compiled host regex against RequestContext::getHost() first; only if it matches does it test the path regex.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 **Q76.** How is the host constraint stored on a CompiledRoute?  <small>_(hard · internals)_</small>
 
@@ -1086,7 +1086,7 @@ Full theory: [Routing](../routing/index.md).
 
     RequestContext lowercases the incoming host. A case-sensitive constraint like Admin.Example.com would then fail against admin.example.com. Write host patterns in lowercase.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 **Q78.** A route's condition expression evaluates to false. What is the result?  <small>_(hard · trap)_</small>
 
@@ -1100,7 +1100,7 @@ Full theory: [Routing](../routing/index.md).
 
     A false condition means the route does not match; matching continues and may end in a 404. It is not authorization, so it never produces a 403.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q79.** To reference service('x') in a routing condition, service x must…  <small>_(hard · internals)_</small>
 
@@ -1114,7 +1114,7 @@ Full theory: [Routing](../routing/index.md).
 
     Only services tagged routing.condition_service are exposed to the routing expression language. Visibility/base class are irrelevant.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q80.** Which condition matches only when the request query string contains a 'preview' key?  <small>_(hard · code)_</small>
 
@@ -1128,7 +1128,7 @@ Full theory: [Routing](../routing/index.md).
 
     Inside a condition, `request` is the HttpFoundation Request, so request.query.has('preview') is the idiomatic check. `query` alone is not a variable, and there is no bare has() function.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q81.** How are route conditions executed at request time?  <small>_(hard · internals)_</small>
 
@@ -1156,7 +1156,7 @@ Full theory: [Routing](../routing/index.md).
 
     The alias becomes the argument to the service() function; you then call methods on the returned object and can pass request. There is no bare identifier, @ syntax or container variable in routing expressions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-expressions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
 **Q83.** An http request hits a route restricted with schemes: ['https']. What happens?  <small>_(hard · internals)_</small>
 
@@ -1170,7 +1170,7 @@ Full theory: [Routing](../routing/index.md).
 
     The RedirectableUrlMatcher redirects a scheme mismatch to the correct scheme rather than rejecting it — contrast with a wrong method, which is a 405.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-the-http-scheme)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-the-http-scheme)
 
 **Q84.** For a form's _method field to influence which route matches, you must…  <small>_(hard · trap)_</small>
 
@@ -1184,7 +1184,7 @@ Full theory: [Routing](../routing/index.md).
 
     Method override is opt-in; once enabled, getMethod() returns the overridden verb that the matcher uses. It is not on by default.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q85.** Does Symfony guess the user's locale from the Accept-Language header by default?  <small>_(hard · trap)_</small>
 
@@ -1198,7 +1198,7 @@ Full theory: [Routing](../routing/index.md).
 
     Locale precedence is a matched _locale, then the sticky session locale, then default_locale; Accept-Language is opt-in. To honour it, read Request::getPreferredLanguage($available) or enable the option.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
 **Q86.** Which two listeners cooperate to apply and propagate the request locale?  <small>_(hard · internals)_</small>
 
@@ -1226,7 +1226,7 @@ Full theory: [Routing](../routing/index.md).
 
     router:match builds a RequestContext from the options you pass; without --method/--host/--scheme it may not reproduce the real request and can report a no-match (or a method rejection) that does not happen in production. Pass the exact conditions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
 ---
 

@@ -269,7 +269,7 @@ applicative, écrivez une [custom command](custom-commands.md). N'appelez jamais
     - [ ] D. `debug:container`
 
     **Why:** `list` est la commande par défaut de l'Application. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. Which of these is NOT part of Symfony core / FrameworkBundle?"
     - [ ] A. `cache:clear`
@@ -278,7 +278,7 @@ applicative, écrivez une [custom command](custom-commands.md). N'appelez jamais
     - [ ] D. `about`
 
     **Why:** les commandes `make:*` viennent du MakerBundle optionnel. **Ref:**
-    [MakerBundle](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html).
+    [MakerBundle](https://symfony.com/doc/8.0/bundles/SymfonyMakerBundle/index.html).
 
 ??? question "Q3. How does `bin/console` obtain the `Application` in Symfony 8?"
     - [ ] A. It calls `Application::create()` statically
@@ -287,7 +287,7 @@ applicative, écrivez une [custom command](custom-commands.md). N'appelez jamais
     - [ ] D. The web front controller instantiates it
 
     **Why:** le composant Runtime exécute la closure retournée par `bin/console`.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html).
 
 ??? question "Q4. What does `php bin/console ca:cl` do when unambiguous?"
     - [x] A. Runs `cache:clear` via name abbreviation ✅
@@ -296,7 +296,7 @@ applicative, écrivez une [custom command](custom-commands.md). N'appelez jamais
     - [ ] D. Clears only the `cl` namespace
 
     **Why:** `find()` résout les abréviations non ambiguës. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -324,8 +324,8 @@ applicative, écrivez une [custom command](custom-commands.md). N'appelez jamais
   existantes vs déclarer vos propres métadonnées.
 
 ## Official References
-- [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
+- [Official Symfony docs — Console](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Runtime](https://symfony.com/doc/8.0/components/runtime.html)
 - [Symfony source — Application](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Application.php)
 
 ## Video references
@@ -337,7 +337,7 @@ applicative, écrivez une [custom command](custom-commands.md). N'appelez jamais
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

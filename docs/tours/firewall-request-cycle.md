@@ -272,9 +272,9 @@ strategy config, `access_denied_handler`, custom entry points.
 
 - [Firewall.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)
 - [AuthenticatorManager.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)
-- [Security — Firewalls & Authentication](https://symfony.com/doc/current/security.html)
-- [Custom Authenticators & Passport Badges](https://symfony.com/doc/current/security/custom_authenticator.html)
-- [Voters and Voting Strategies](https://symfony.com/doc/current/security/voters.html)
+- [Security — Firewalls & Authentication](https://symfony.com/doc/8.0/security.html)
+- [Custom Authenticators & Passport Badges](https://symfony.com/doc/8.0/security/custom_authenticator.html)
+- [Voters and Voting Strategies](https://symfony.com/doc/8.0/security/voters.html)
 
 ---
 <small>Related: [Firewalls](../security/firewalls.md) ·

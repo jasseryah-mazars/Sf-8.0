@@ -313,7 +313,7 @@ directement — mais dans les tests, préférez passer par `handleRequest` avec 
 
     **Why:** `handleRequest` remplit et soumet le form ; ce n'est qu'ensuite que
     `isSubmitted`/`isValid` ont un sens.
-    **Ref:** [Processing forms](https://symfony.com/doc/current/forms.html#processing-forms).
+    **Ref:** [Processing forms](https://symfony.com/doc/8.0/forms.html#processing-forms).
 
 ??? question "Q2. When does form validation run in the submit lifecycle?"
     - [ ] A. During `handleRequest` header parsing
@@ -323,7 +323,7 @@ directement — mais dans les tests, préférez passer par `handleRequest` avec 
 
     **Why:** La form extension de validation enregistre un listener `POST_SUBMIT`
     qui exécute le Validator sur les données modèles mappées.
-    **Ref:** [Form events](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q3. For a `PATCH` submission, `clearMissing` is…"
     - [x] A. `false`, enabling partial updates ✅
@@ -359,8 +359,8 @@ directement — mais dans les tests, préférez passer par `handleRequest` avec 
 - **Confused with:** [Data transformers](data-transformers.md) — les formes model/norm/view liées ici sont converties par les transformers.
 
 ## Official References
-- [Official Symfony docs — Processing forms](https://symfony.com/doc/current/forms.html)
-- [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
+- [Official Symfony docs — Processing forms](https://symfony.com/doc/8.0/forms.html)
+- [Official Symfony docs — Form events](https://symfony.com/doc/8.0/form/events.html)
 - [Symfony source — HttpFoundationRequestHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php)
 
 ## Video references
@@ -372,7 +372,7 @@ directement — mais dans les tests, préférez passer par `handleRequest` avec 
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/forms.html#processing-forms) — certaines pages de la doc Symfony embarquent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/forms.html#processing-forms) — certaines pages de la doc Symfony embarquent un screencast.
 
 ## Confidence check
 

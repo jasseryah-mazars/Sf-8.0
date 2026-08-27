@@ -219,7 +219,7 @@ gets the full middleware pipeline and handler discovery, just in-process.
 
     **Why:** `sync://` is the in-process transport; the others queue for
     later, out-of-process consumption.
-    **Ref:** [Messenger — sync transport](https://symfony.com/doc/current/messenger.html#transports-async-queued-messages).
+    **Ref:** [Messenger — sync transport](https://symfony.com/doc/8.0/messenger.html#transports-async-queued-messages).
 
 ??? question "Q2. Which serializer does a Messenger transport use by default?"
     - [x] A. `Transport\Serialization\PhpSerializer` (PHP's `serialize()`) ✅
@@ -229,7 +229,7 @@ gets the full middleware pipeline and handler discovery, just in-process.
 
     **Why:** the default is PHP's native `serialize()`; the Symfony
     Serializer is an explicit opt-in for interop.
-    **Ref:** [Messenger — serializer](https://symfony.com/doc/current/messenger.html#serializing-messages).
+    **Ref:** [Messenger — serializer](https://symfony.com/doc/8.0/messenger.html#serializing-messages).
 
 ??? question "Q3. Which transport is intended specifically for functional tests?"
     - [x] A. `in-memory://` ✅
@@ -239,7 +239,7 @@ gets the full middleware pipeline and handler discovery, just in-process.
 
     **Why:** `in-memory://` stores envelopes without external
     infrastructure, so tests can assert on what would have been sent.
-    **Ref:** [Messenger — Testing](https://symfony.com/doc/current/messenger.html#testing).
+    **Ref:** [Messenger — Testing](https://symfony.com/doc/8.0/messenger.html#testing).
 
 ## Key takeaways
 
@@ -272,7 +272,7 @@ gets the full middleware pipeline and handler discovery, just in-process.
 
 ## Official References
 
-- [Official docs — Messenger transports](https://symfony.com/doc/current/messenger.html#transports-async-queued-messages)
+- [Official docs — Messenger transports](https://symfony.com/doc/8.0/messenger.html#transports-async-queued-messages)
 - [Symfony source — TransportInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Transport/TransportInterface.php)
 
 ## Video references
@@ -284,7 +284,7 @@ gets the full middleware pipeline and handler discovery, just in-process.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#transports-async-queued-messages) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#transports-async-queued-messages) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

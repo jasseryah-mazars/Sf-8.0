@@ -304,7 +304,7 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
     - [ ] D. A random hash
 
     **Why:** PSR-4 auto-registration uses the FQCN as the id.
-    **Ref:** [Service container](https://symfony.com/doc/current/service_container.html).
+    **Ref:** [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. What does `autoconfigure: true` do?"
     - [ ] A. Fills constructor arguments by type
@@ -313,7 +313,7 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
     - [ ] D. Clears the cache
 
     **Why:** Autoconfigure adds tags (e.g. event subscriber) automatically;
-    autowire is what fills arguments. **Ref:** [Autoconfigure](https://symfony.com/doc/current/service_container.html#the-autoconfigure-option).
+    autowire is what fills arguments. **Ref:** [Autoconfigure](https://symfony.com/doc/8.0/service_container.html#the-autoconfigure-option).
 
 ??? question "Q3. How do you make an interface type-hint resolve to a class?"
     - [x] A. Define an alias `Interface: '@Class'` ✅
@@ -322,7 +322,7 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
     - [ ] D. Tag the class
 
     **Why:** An alias from the interface id to the concrete service lets autowiring
-    resolve the type-hint. **Ref:** [Aliasing](https://symfony.com/doc/current/service_container/alias_private.html).
+    resolve the type-hint. **Ref:** [Aliasing](https://symfony.com/doc/8.0/service_container/alias_private.html).
 
 ## Key takeaways
 
@@ -349,8 +349,8 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
   `services.yaml` vs a reusable bundle's typed config.
 
 ## Official References
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
-- [Official Symfony docs — Aliasing & private services](https://symfony.com/doc/current/service_container/alias_private.html)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
+- [Official Symfony docs — Aliasing & private services](https://symfony.com/doc/8.0/service_container/alias_private.html)
 - [Symfony source — Autoconfigure attribute](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Attribute/Autoconfigure.php)
 
 ## Video references
@@ -362,7 +362,7 @@ different flags. Use `#[Autoconfigure]` when the wiring belongs *with* the class
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

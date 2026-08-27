@@ -206,7 +206,7 @@ production, utilisez les logs — jamais `dump()`.
     - [ ] D. Dumps only globals
 
     **Why:** Un `dump()` sans argument affiche le contexte de rendu entier. **Ref:**
-    [dump function](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities).
+    [dump function](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities).
 
 ??? question "Q2. Difference between `{{ dump(x) }}` and `{% dump x %}`?"
     - [x] A. The function prints inline; the tag sends to the collector without markup ✅
@@ -215,7 +215,7 @@ production, utilisez les logs — jamais `dump()`.
     - [ ] D. The function only works in prod
 
     **Why:** La forme tag évite d'injecter du HTML dans la page. **Ref:**
-    [dump utilities](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities).
+    [dump utilities](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities).
 
 ??? question "Q3. Why does `dump()` error in `prod`?"
     - [x] A. The DumpExtension is only registered in debug mode ✅
@@ -224,7 +224,7 @@ production, utilisez les logs — jamais `dump()`.
     - [ ] D. It is deprecated
 
     **Why:** L'outillage de dump est réservé au dev. **Ref:**
-    [VarDumper](https://symfony.com/doc/current/components/var_dumper.html).
+    [VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html).
 
 ## Key takeaways
 
@@ -248,8 +248,8 @@ production, utilisez les logs — jamais `dump()`.
 - **Confused with:** [Profiler](../miscellaneous/profiler.md) — pour un diagnostic à l'échelle de la request (requêtes, events, timing), prenez le profiler, pas `dump()`.
 
 ## Official References
-- [Official — The dump Twig utilities](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
-- [Official — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
+- [Official — The dump Twig utilities](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities)
+- [Official — VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html)
 - [Symfony source — DumpExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/DumpExtension.php)
 
 ## Video references
@@ -262,7 +262,7 @@ production, utilisez les logs — jamais `dump()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

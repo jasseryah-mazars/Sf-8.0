@@ -281,7 +281,7 @@ not for heavy computation — it is interpreted.
     - [x] C. test ✅
 
     **Why:** Tests must be deterministic, so `.env.local` is skipped in `test`.
-    **Ref:** [Configuring environments](https://symfony.com/doc/current/configuration.html#selecting-the-active-environment).
+    **Ref:** [Configuring environments](https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment).
 
 ??? question "Q2. `ExpressionLanguage::compile()` returns…"
     - [ ] A. the evaluated value
@@ -289,7 +289,7 @@ not for heavy computation — it is interpreted.
     - [ ] C. an AST node
 
     **Why:** `compile()` transpiles the expression to PHP; `evaluate()` interprets it.
-    **Ref:** [ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html).
+    **Ref:** [ExpressionLanguage](https://symfony.com/doc/8.0/components/expression_language.html).
 
 ??? question "Q3. Which class validates raw config against a tree?"
     - [x] A. `Processor` ✅
@@ -297,7 +297,7 @@ not for heavy computation — it is interpreted.
     - [ ] C. `FileLocator`
 
     **Why:** `Processor::processConfiguration()` merges and validates against the
-    `Configuration` tree. **Ref:** [Config component](https://symfony.com/doc/current/components/config/definition.html).
+    `Configuration` tree. **Ref:** [Config component](https://symfony.com/doc/8.0/components/config/definition.html).
 
 ## Key takeaways
 
@@ -321,9 +321,9 @@ not for heavy computation — it is interpreted.
 - **Confused with:** app-level env vars — the Config component defines **bundle** schemas, not per-app settings.
 
 ## Official References
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Config component](https://symfony.com/doc/current/components/config.html)
-- [Official docs — ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Config component](https://symfony.com/doc/8.0/components/config.html)
+- [Official docs — ExpressionLanguage](https://symfony.com/doc/8.0/components/expression_language.html)
 - [Symfony source — Dotenv](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Dotenv/Dotenv.php)
 
 ## Video references
@@ -335,7 +335,7 @@ not for heavy computation — it is interpreted.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html#selecting-the-active-environment) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

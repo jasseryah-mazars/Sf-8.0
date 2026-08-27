@@ -256,7 +256,7 @@ services and configuration, not by instantiating them.
     - [ ] C. A bundle that only runs inside the framework
 
     **Why:** Components are decoupled libraries usable without the framework.
-    **Ref:** [The Components](https://symfony.com/doc/current/components/index.html).
+    **Ref:** [The Components](https://symfony.com/doc/8.0/components/index.html).
 
 ??? question "Q2. What do `symfony/*-contracts` packages contain?"
     - [x] A. Stable interfaces/traits to depend on ✅
@@ -272,7 +272,7 @@ services and configuration, not by instantiating them.
     - [ ] C. Only in dev
 
     **Why:** Components are decoupled and independently installable. **Ref:**
-    [Routing component](https://symfony.com/doc/current/components/routing.html).
+    [Routing component](https://symfony.com/doc/8.0/components/routing.html).
 
 ## Key takeaways
 
@@ -294,7 +294,7 @@ services and configuration, not by instantiating them.
 - **Confused with:** [Interoperability & PSRs](psr.md) — contracts are Symfony-specific interface packages; PSRs are cross-vendor standards.
 
 ## Official References
-- [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
+- [Official docs — The Components](https://symfony.com/doc/8.0/components/index.html)
 - [Symfony Contracts](https://github.com/symfony/contracts)
 - [Symfony source — components](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component)
 
@@ -307,7 +307,7 @@ services and configuration, not by instantiating them.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/index.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/index.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

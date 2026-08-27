@@ -36,7 +36,7 @@ est un joker qui peut s'intercaler n'importe où, puis rejoint le flux à `respo
     les autres events se déclenchent aussi pour les sub-requests (p. ex. `forward()`,
     fragments).
 
-**Ref:** [https://symfony.com/doc/current/reference/events.html](https://symfony.com/doc/current/reference/events.html)
+**Ref:** [https://symfony.com/doc/8.0/reference/events.html](https://symfony.com/doc/8.0/reference/events.html)
 
 ## 2. Listener priority rules
 
@@ -60,7 +60,7 @@ registration order.*
     à `0`. Les questions adorent inverser cela (« une priorité plus haute s'exécute
     plus tard » — faux).
 
-**Ref:** [https://symfony.com/doc/current/event_dispatcher.html](https://symfony.com/doc/current/event_dispatcher.html)
+**Ref:** [https://symfony.com/doc/8.0/event_dispatcher.html](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ## 3. Form event order
 
@@ -95,7 +95,7 @@ SUBMIT, done at POST_SUBMIT.*
     (brutes), pas `POST_SET_DATA`. Et `POST_SUBMIT` sert à *lire* l'objet final
     (ou ajuster la vue), pas à changer les données du modèle.
 
-**Ref:** [https://symfony.com/doc/current/form/events.html](https://symfony.com/doc/current/form/events.html)
+**Ref:** [https://symfony.com/doc/8.0/form/events.html](https://symfony.com/doc/8.0/form/events.html)
 
 ## 4. Console event order
 
@@ -114,7 +114,7 @@ always.*
     « terminate est sauté en cas d'erreur » est faux. C'est le jumeau console de
     `kernel.terminate`.
 
-**Ref:** [https://symfony.com/doc/current/components/console/events.html](https://symfony.com/doc/current/components/console/events.html)
+**Ref:** [https://symfony.com/doc/8.0/components/console/events.html](https://symfony.com/doc/8.0/components/console/events.html)
 
 ## 5. Security request cycle order
 
@@ -155,7 +155,7 @@ security is a "first match" world.*
     les règles en dessous. Placez les chemins spécifiques (p. ex. `^/admin/login`)
     **au-dessus** des généraux (`^/admin`).
 
-**Ref:** [https://symfony.com/doc/current/security.html](https://symfony.com/doc/current/security.html)
+**Ref:** [https://symfony.com/doc/8.0/security.html](https://symfony.com/doc/8.0/security.html)
 
 ## 6. Compiler pass phases
 
@@ -180,7 +180,7 @@ After-Removing — "M-BO-O-BR-R-AR".*
     élagués. Aussi : les compiler passes s'enregistrent dans `build()` — **aucun
     attribut** n'existe pour en enregistrer une.
 
-**Ref:** [https://symfony.com/doc/current/components/dependency_injection/compilation.html](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
+**Ref:** [https://symfony.com/doc/8.0/components/dependency_injection/compilation.html](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 
 ## 7. Argument/value resolver order
 
@@ -207,7 +207,7 @@ defaults come last.*
     d'attributs de request aurait remplis). Gardez une logique `supports` très
     ciblée et une priorité modeste.
 
-**Ref:** [https://symfony.com/doc/current/controller/value_resolver.html](https://symfony.com/doc/current/controller/value_resolver.html)
+**Ref:** [https://symfony.com/doc/8.0/controller/value_resolver.html](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 ## 8. Routing match order
 
@@ -231,7 +231,7 @@ wildcards downstream.*
     *première* correspondance dans l'ordre ; la spécificité ne gagne que si vous
     l'ordonnez (ou la `priority`-sez) ainsi.
 
-**Ref:** [https://symfony.com/doc/current/routing.html](https://symfony.com/doc/current/routing.html)
+**Ref:** [https://symfony.com/doc/8.0/routing.html](https://symfony.com/doc/8.0/routing.html)
 
 ## 9. HttpKernel::handle() call sequence
 
@@ -269,7 +269,7 @@ sequenceDiagram
 **Memory anchor:** *A request-event early-exit skips the controller entirely —
 that's how HttpCache-style shortcuts and security redirects work.*
 
-**Ref:** [https://symfony.com/doc/current/components/http_kernel.html](https://symfony.com/doc/current/components/http_kernel.html)
+**Ref:** [https://symfony.com/doc/8.0/components/http_kernel.html](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ## 10. Cache/response ordering nuggets
 
@@ -294,20 +294,20 @@ after the flush.*
     `kernel.response` retarde le client ; `kernel.terminate` (ou Messenger)
     s'exécute après l'envoi de la response.
 
-**Ref:** [https://symfony.com/doc/current/http_cache.html](https://symfony.com/doc/current/http_cache.html)
+**Ref:** [https://symfony.com/doc/8.0/http_cache.html](https://symfony.com/doc/8.0/http_cache.html)
 
 ## Official References
 
-- [Built-in Symfony events](https://symfony.com/doc/current/reference/events.html)
-- [The EventDispatcher (priorities)](https://symfony.com/doc/current/event_dispatcher.html)
-- [Form events](https://symfony.com/doc/current/form/events.html)
-- [Console events](https://symfony.com/doc/current/components/console/events.html)
-- [Security](https://symfony.com/doc/current/security.html)
-- [Container compilation & compiler passes](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
-- [Controller value resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
-- [Routing](https://symfony.com/doc/current/routing.html)
-- [The HttpKernel component](https://symfony.com/doc/current/components/http_kernel.html)
-- [HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [Built-in Symfony events](https://symfony.com/doc/8.0/reference/events.html)
+- [The EventDispatcher (priorities)](https://symfony.com/doc/8.0/event_dispatcher.html)
+- [Form events](https://symfony.com/doc/8.0/form/events.html)
+- [Console events](https://symfony.com/doc/8.0/components/console/events.html)
+- [Security](https://symfony.com/doc/8.0/security.html)
+- [Container compilation & compiler passes](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
+- [Controller value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html)
+- [Routing](https://symfony.com/doc/8.0/routing.html)
+- [The HttpKernel component](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
 
 ---
 

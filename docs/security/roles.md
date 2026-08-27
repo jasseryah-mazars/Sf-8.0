@@ -237,7 +237,7 @@ When a decision depends on the target object or runtime state, use a
 
     **Why:** Fully-authenticated users also satisfy `_REMEMBERED`; the reverse is
     not true.
-    **Ref:** [Special attributes](https://symfony.com/doc/current/security.html#security-authorization-access-decision).
+    **Ref:** [Special attributes](https://symfony.com/doc/8.0/security.html#security-authorization-access-decision).
 
 ??? question "Q2. In Symfony 8, 'allow everyone including anonymous' uses…"
     - [ ] A. `IS_AUTHENTICATED_ANONYMOUSLY`
@@ -246,7 +246,7 @@ When a decision depends on the target object or runtime state, use a
     - [ ] D. `IS_ANONYMOUS`
 
     **Why:** Anonymous tokens are gone; `PUBLIC_ACCESS` opts a path out of auth.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. A role `EDITOR` (no prefix) is checked with `is_granted('EDITOR')`. Result via RoleVoter?"
     - [ ] A. Granted if the user has it
@@ -256,7 +256,7 @@ When a decision depends on the target object or runtime state, use a
 
     **Why:** `RoleVoter` supports only `ROLE_*`; unprefixed strings abstain there
     (a custom voter could still handle them).
-    **Ref:** [Roles](https://symfony.com/doc/current/security.html#roles).
+    **Ref:** [Roles](https://symfony.com/doc/8.0/security.html#roles).
 
 ## Key takeaways
 
@@ -285,8 +285,8 @@ When a decision depends on the target object or runtime state, use a
   rules need a voter.
 
 ## Official References
-- [Symfony docs — Roles](https://symfony.com/doc/current/security.html#roles)
-- [Symfony docs — Role hierarchy](https://symfony.com/doc/current/security.html#hierarchical-roles)
+- [Symfony docs — Roles](https://symfony.com/doc/8.0/security.html#roles)
+- [Symfony docs — Role hierarchy](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
 - [Symfony source — RoleHierarchy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Role/RoleHierarchy.php)
 
 ## Video references
@@ -298,7 +298,7 @@ When a decision depends on the target object or runtime state, use a
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#security-authorization-access-decision) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#security-authorization-access-decision) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

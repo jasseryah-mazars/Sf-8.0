@@ -120,9 +120,9 @@ from Symfony 8 certification ».
 
 | Sujet | Où il est mentionné |
 |---|---|
-| Edge Side Includes (ESI) | [Chapitre exclu](http-caching/esi.md) — accessible depuis HTTP Caching par souci d'exhaustivité |
-| PHPUnit Bridge | [Chapitre exclu](testing/phpunit-bridge.md) — accessible depuis Automated Tests par souci d'exhaustivité |
-| Lock Component | [Chapitre exclu](miscellaneous/lock.md) — accessible depuis Miscellaneous par souci d'exhaustivité |
+| Edge Side Includes (ESI) | [Chapitre exclu](appendices/out-of-syllabus/esi.md) — accessible depuis HTTP Caching par souci d'exhaustivité |
+| PHPUnit Bridge | [Chapitre exclu](appendices/out-of-syllabus/phpunit-bridge.md) — accessible depuis Automated Tests par souci d'exhaustivité |
+| Lock Component | [Chapitre exclu](appendices/out-of-syllabus/lock.md) — accessible depuis Miscellaneous par souci d'exhaustivité |
 | Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, PHP Polyfills, composants String/Uid/TypeInfo, Amazon SQS, transports Messenger tiers | Mentions de frontière uniquement (distracteurs, notes de scope) — voir [Requirements.md](https://github.com/jasseryah-mazars/Sf-8.0/blob/master/specs/Requirements.md) FR-5 |
 
 ## Who it's for
@@ -208,4 +208,4 @@ approuvé par elle.</small>
 
 - [Official Symfony Certification](https://certification.symfony.com/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

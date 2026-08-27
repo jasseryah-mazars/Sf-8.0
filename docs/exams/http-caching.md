@@ -22,7 +22,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     s-maxage sets freshness for shared caches. Browsers (private caches) ignore it and fall back to max-age / Expires. It is a response directive, not a request one, and every cache honouring it would be max-age, not s-maxage.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/expiration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/expiration.html)
 
 **Q2.** What does the response header 'Vary: Accept-Language' instruct a cache to do?  <small>_(easy · single)_</small>
 
@@ -48,7 +48,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     A reverse proxy / gateway cache serves many users, so it is a shared cache you own and deploy in front of the app — it therefore honours s-maxage. Only the browser is a private cache.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q4.** What does the Cache-Control directive 'no-cache' mean?  <small>_(easy · single)_</small>
 
@@ -170,7 +170,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     HttpCache writes a trace to the trace_header (default X-Symfony-Cache), e.g. "GET /: fresh", "miss", or "store". Age reports elapsed seconds, not hit/miss, and the other header names are invented.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q13.** What is the simplest way to enable the reverse proxy in Symfony 8?  <small>_(easy · config)_</small>
 
@@ -184,7 +184,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     framework.http_cache: true wraps the kernel automatically. The alternative is wrapping it manually in public/index.php with the FrameworkBundle HttpCache subclass. There is no compiler pass or #[AsHttpCache] attribute, and Varnish is a separate external proxy.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
 
 **Q14.** What is the primary benefit of ESI over full-page caching?  <small>_(easy · single)_</small>
 
@@ -198,7 +198,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     ESI caches fragments as separate entries, so a long-lived shell can coexist with short-lived or per-user fragments on one page. It provides no encryption or compression, and it actually requires a surrogate (reverse proxy) to work.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q15.** Which component processes <esi:include> tags?  <small>_(easy · single)_</small>
 
@@ -226,7 +226,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     SSI is the sibling of ESI: same mixed-freshness idea, exposed through render_ssi(), the Ssi surrogate class and framework.ssi. hinclude is a pure client-side AJAX approach (no caching goal), and the others are unrelated.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q17.** Which Cache-Control value does a Symfony Response emit when you set no caching information at all?  <small>_(medium · internals)_</small>
 
@@ -240,7 +240,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     ResponseHeaderBag::computeCacheControlValue() defaults to "no-cache, private" when nothing is configured. It is safe (shared caches will not store it) but gives no caching benefit — you must opt in with public/max-age. It is not "no-store" (that forbids storage entirely) nor an empty header (Symfony always renders a value).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q18.** You call $response->setPublic() and then $response->setPrivate(). What is emitted?  <small>_(medium · trap)_</small>
 
@@ -254,7 +254,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     public and private are mutually exclusive; setPrivate() removes the public flag, so the later call wins. You can never emit "public, private", and no exception is thrown — the header bag simply keeps the last intent.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q19.** Given #[Cache(public: true, maxage: 3600, vary: ['Accept-Language', 'Accept-Encoding'])] on an action, which raw headers result?  <small>_(medium · config)_</small>
 
@@ -268,7 +268,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     maxage maps to max-age (all caches), public opts into shared caching, and vary is emitted verbatim as a comma-separated Vary header. maxage is not s-maxage (that is the smaxage option), the response stays public not private, and the attribute fully supports vary.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 
 **Q20.** Why is Vary: Cookie on a shared-cacheable response almost always a mistake? (choose 2)  <small>_(medium · trap)_</small>
 
@@ -310,7 +310,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     Shared caches resolve freshness as s-maxage > max-age > Expires. A private cache starts at max-age since it ignores s-maxage. Expires is the lowest-priority HTTP/1.0 fallback, and header order is irrelevant.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/expiration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/expiration.html)
 
 **Q23.** Which #[Cache] options accept a relative date string like '1 hour' as well as an integer?  <small>_(medium · internals)_</small>
 
@@ -324,7 +324,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     Those numeric-duration options accept an int (seconds) or a relative date string parsed via DateTimeImmutable. expires is a date string (an absolute moment), while public/private are booleans, not durations.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 
 **Q24.** What does Cache-Control: stale-while-revalidate=30 let a cache do?  <small>_(medium · single)_</small>
 
@@ -338,7 +338,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     stale-while-revalidate lets a cache immediately answer with a stale copy while it refreshes asynchronously, hiding origin latency. Serving stale only on origin errors is stale-if-error; it does not extend freshness nor schedule periodic revalidation.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/expiration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/expiration.html)
 
 **Q25.** When Response::isNotModified() returns true, what has it done to the response?  <small>_(medium · internals)_</small>
 
@@ -352,7 +352,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     isNotModified() mutates the response in place (status 304, strips the body and content-related headers like Content-Type/Length) and returns a bool. It never throws or sends the response — you still return it yourself. Assuming it is pure (returns bool only) is the classic trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
 
 **Q26.** How do you produce a weak ETag with the Response API?  <small>_(medium · trap)_</small>
 
@@ -366,7 +366,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     The second boolean argument to setEtag() prefixes the value with W/. There is no setWeakEtag() method and no weak_etag setCache key; passing 'W/abc' yourself would double the prefix. Conditional GET uses weak comparison regardless of which form you emit.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
 
 **Q27.** A developer sets $response->setLastModified(new \DateTimeImmutable()) but 304s never happen. Why?  <small>_(medium · debug)_</small>
 
@@ -380,7 +380,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     Using now() as the validator means every response looks freshly modified, so If-Modified-Since can never match and you always get 200. Use the resource's real modification time (e.g. an entity's updatedAt). setLastModified() accepts any \\DateTimeInterface (immutable included), and Last-Modified works without an ETag.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
 
 **Q28.** A normal browser reload (not hard reload) typically sends which request directive?  <small>_(medium · trap)_</small>
 
@@ -450,7 +450,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     HttpCache implements HttpKernelInterface and TerminableInterface and wraps the real kernel, acting as an in-PHP shared gateway cache. It is not a PSR-6 pool, a Twig extension, or a compiler pass.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
 
 **Q33.** By default, which request header makes the Symfony reverse proxy treat a request as private?  <small>_(medium · internals)_</small>
 
@@ -504,7 +504,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     The ESI renderer checks the Surrogate-Capability header. Without a surrogate it falls back to inline rendering so the same template works everywhere. It is not always-on, not dev-only, and not tied to content type.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q37.** Why does Symfony sign _fragment URIs (UriSigner)?  <small>_(medium · internals)_</small>
 
@@ -518,7 +518,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     Fragment URIs are signed with the application secret (via UriSigner) so only legitimately generated fragment calls are honoured by the kernel. Signing is a security measure, not compression, push, or ETag computation.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q38.** What is the minimal config to make render_esi emit real ESI tags that get processed?  <small>_(medium · config)_</small>
 
@@ -532,7 +532,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     You need ESI enabled (framework.esi: true) AND a surrogate to advertise the capability and process the includes — the Symfony reverse proxy (framework.http_cache: true) or Varnish. Enabling only one of them means render_esi falls back to inline rendering; ESI is not on by default.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q39.** Which Twig call embeds a controller as an ESI fragment?  <small>_(medium · code)_</small>
 
@@ -546,7 +546,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     render_esi() wraps a controller() reference and delegates to the fragment handler, which emits <esi:include> when a surrogate is present (else inline). There is no esi(), include_esi(), or 'esi:' render prefix in Twig — the pair is render()/render_esi()/render_ssi().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q40.** You set framework.esi: true but run no reverse proxy. A page uses render_esi for a fragment. What happens?  <small>_(medium · debug)_</small>
 
@@ -560,7 +560,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     With no surrogate advertising ESI capability, render_esi silently falls back to inline rendering, so the fragment is embedded and re-rendered each request — correct output, but none of the per-fragment caching benefit. No exception is thrown and no raw <esi:include> reaches the browser (that only happens if a broken proxy fails to process it).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q41.** A page is marked public with s-maxage=60 but still calls $request->getSession() and reads a cookie. What is the risk behind a CDN?  <small>_(hard · scenario)_</small>
 
@@ -574,7 +574,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     A public response with a shared TTL is storable by any shared cache regardless of the session it read; the CDN can leak one user's page to another. Symfony does not auto-add Vary:Cookie nor auto-downgrade to private. The Symfony reverse proxy protects you only because its private_headers default includes Cookie — a generic CDN does not. Keep such pages private/uncached or pull the personal part via ESI.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q42.** How do you emit a must-revalidate directive from a Response object?  <small>_(hard · trap)_</small>
 
@@ -588,7 +588,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     There is no dedicated setter; Response::mustRevalidate() is a getter returning bool (calling it with an argument is a type error, and it never mutates state). Use setCache(['must_revalidate' => true]) or #[Cache(mustRevalidate: true)]. no-cache does not imply must-revalidate.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q43.** What happens when you call $response->setCache(['s_maxage' => 300, 'foo' => true])?  <small>_(hard · code)_</small>
 
@@ -630,7 +630,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     CacheAttributeListener evaluates the expression on kernel.controller_arguments and SHA-256-hashes the result before using it as the ETag, so it can point at large content safely. The string is an expression (not a literal), and the raw value is never sent verbatim.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 
 **Q46.** With #[Cache(lastModified: 'post.getUpdatedAt()')], when can a 304 be returned?  <small>_(hard · internals)_</small>
 
@@ -658,7 +658,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     isNotModified() sets 304 and strips the body when the ETag matches, and the early return short-circuits before render() runs — so no template work happens at all. If you called render() first you would lose that saving. It never sends twice; you return the response once.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
 
 **Q48.** A user says 'I reloaded but still see the old CSS.' What is the cache-level cause and the real fix?  <small>_(hard · debug)_</small>
 
@@ -700,7 +700,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     enabled: true wraps the kernel; trace_header sets the debug header name; default_ttl is the TTL used ONLY when a response carries no freshness info — 0 means such responses are not cached by default, but responses that do set s-maxage/max-age are still cached normally. It does not override explicit freshness nor disable caching.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
 
 **Q51.** A page sets s-maxage=60 but logged-in users never get a shared-cache hit from HttpCache. Why, and how do you still cache the anonymous view?  <small>_(hard · scenario)_</small>
 
@@ -714,7 +714,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     Logged-in requests carry a session Cookie, which is in the default private_headers, so HttpCache treats them as private and neither serves from nor stores in the shared cache. Anonymous requests are cached. Raising s-maxage changes nothing, HttpCache caches any cacheable response, and private means no shared caching at all — instead isolate per-user bits with ESI fragments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#symfony-reverse-proxy)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
 
 **Q52.** Without ESI, adding a #[Cache(smaxage: 5)] fragment to an s-maxage=3600 page collapses the whole page to a 5-second TTL. Which mechanism causes this?  <small>_(hard · internals)_</small>
 
@@ -728,7 +728,7 @@ Full theory: [HTTP Caching](../http-caching/index.md).
 
     When a fragment is rendered inline into the master response, ResponseCacheStrategy merges freshness by taking the MINIMUM TTL, so the 5-second fragment caps the page. ESI avoids this by caching the fragment as a separate entry, leaving the shell's long TTL intact. It is not an attribute override, a kernel discard, or Twig stripping headers.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 ---
 

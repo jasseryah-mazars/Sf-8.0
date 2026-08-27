@@ -262,7 +262,7 @@ services:
     - [ ] D. `home_controller.invoke`
 
     **Why:** for an invokable controller you reference the **class only**; the
-    resolver detects `__invoke()`. **Ref:** [controllers](https://symfony.com/doc/current/controller.html#the-basics).
+    resolver detects `__invoke()`. **Ref:** [controllers](https://symfony.com/doc/8.0/controller.html#the-basics).
 
 ??? question "Q2. Is the `Action` method suffix required in Symfony 8?"
     - [ ] A. Yes, the router needs it.
@@ -271,7 +271,7 @@ services:
     - [ ] D. Only in YAML routing.
 
     **Why:** attribute routing binds the method explicitly, so no suffix is needed.
-    **Ref:** [controller conventions](https://symfony.com/doc/current/controller.html).
+    **Ref:** [controller conventions](https://symfony.com/doc/8.0/controller.html).
 
 ??? question "Q3. What visibility must an action method have?"
     - [x] A. `public` ✅
@@ -280,7 +280,7 @@ services:
     - [ ] D. Any visibility works.
 
     **Why:** the kernel invokes the callable externally, so the method must be
-    `public`. **Ref:** [controller](https://symfony.com/doc/current/controller.html).
+    `public`. **Ref:** [controller](https://symfony.com/doc/8.0/controller.html).
 
 ## Key takeaways
 
@@ -303,7 +303,7 @@ services:
 - **Confused with:** [Value Resolvers](value-resolvers.md) — the resolver names the *callable*; value resolvers fill its *arguments*.
 
 ## Official References
-- [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html)
+- [Official Symfony docs — Controllers](https://symfony.com/doc/8.0/controller.html)
 - [Symfony source — ControllerResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/ControllerResolver.php)
 
 ## Video references
@@ -315,7 +315,7 @@ services:
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#the-basics) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#the-basics) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

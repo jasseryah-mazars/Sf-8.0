@@ -304,7 +304,7 @@ pour les tableaux de bord de progression ; évitez-les pour des messages ponctue
     - [ ] D. `InputInterface::getError()`
 
     **Why:** la méthode de séparation des flux appartient à `ConsoleOutputInterface`. **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ??? question "Q2. `SymfonyStyle` requires which two constructor arguments?"
     - [x] A. `InputInterface` and `OutputInterface` ✅
@@ -313,7 +313,7 @@ pour les tableaux de bord de progression ; évitez-les pour des messages ponctue
     - [ ] D. Only `OutputInterface`
 
     **Why:** elle enveloppe à la fois l'entrée (pour les prompts) et la sortie. **Ref:**
-    [Console style](https://symfony.com/doc/current/console/style.html).
+    [Console style](https://symfony.com/doc/8.0/console/style.html).
 
 ??? question "Q3. What does `$output->section()` return?"
     - [x] A. A `ConsoleSectionOutput` you can `overwrite()`/`clear()` ✅
@@ -322,7 +322,7 @@ pour les tableaux de bord de progression ; évitez-les pour des messages ponctue
     - [ ] D. A boolean
 
     **Why:** les sections sont des zones réinscriptibles indépendamment. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q4. Difference between `write()` and `writeln()`?"
     - [x] A. `writeln()` appends a newline; `write()` does not ✅
@@ -331,7 +331,7 @@ pour les tableaux de bord de progression ; évitez-les pour des messages ponctue
     - [ ] D. They are identical
 
     **Why:** `writeln()` = `write()` + saut de ligne. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -361,8 +361,8 @@ pour les tableaux de bord de progression ; évitez-les pour des messages ponctue
   l'`OutputInterface` brute sert aux sorties exactes à l'octet près, sans style.
 
 ## Official References
-- [Official Symfony docs — Console style](https://symfony.com/doc/current/console/style.html)
-- [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/current/console/verbosity.html)
+- [Official Symfony docs — Console style](https://symfony.com/doc/8.0/console/style.html)
+- [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/8.0/console/verbosity.html)
 - [Symfony source — SymfonyStyle](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Style/SymfonyStyle.php)
 
 ## Video references
@@ -374,7 +374,7 @@ pour les tableaux de bord de progression ; évitez-les pour des messages ponctue
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/verbosity.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/verbosity.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

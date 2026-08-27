@@ -311,7 +311,7 @@ no memory of the previous one.
 
     **Why:** The SecurityBundle `Security` service wraps the authenticator
     pipeline; setting tokens manually skips badges, events and listeners.
-    **Ref:** [Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically).
+    **Ref:** [Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically).
 
 ??? question "Q2. When must you pass an authenticator name to `login()`?"
     - [ ] A. Always — it has no default
@@ -321,7 +321,7 @@ no memory of the previous one.
 
     **Why:** With a single authenticator it is unambiguous; with several,
     Symfony refuses to guess. Built-ins are referenced by their config key.
-    **Ref:** [Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically).
+    **Ref:** [Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically).
 
 ??? question "Q3. What does `Security::logout()` do about CSRF by default?"
     - [x] A. It validates the logout CSRF token; pass `false` to skip ✅
@@ -331,7 +331,7 @@ no memory of the previous one.
 
     **Why:** `logout(bool $validateCsrf = true)` — programmatic calls outside
     the logout form must opt out explicitly.
-    **Ref:** [Logout programmatically](https://symfony.com/doc/current/security.html#logging-out).
+    **Ref:** [Logout programmatically](https://symfony.com/doc/8.0/security.html#logging-out).
 
 ??? question "Q4. Which statement about `login()` and events is correct?"
     - [ ] A. It stores a token silently, skipping all events
@@ -342,7 +342,7 @@ no memory of the previous one.
     **Why:** `login()` delegates to the same authenticator machinery as an
     interactive login, so listeners (remember-me, throttling reset, audit)
     all run.
-    **Ref:** [Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically).
+    **Ref:** [Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically).
 
 ## Key takeaways
 
@@ -378,8 +378,8 @@ no memory of the previous one.
   wraps and preserves the original token; `login()` simply replaces it.
 
 ## Official References
-- [Symfony docs — Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically)
-- [Symfony docs — Logging out](https://symfony.com/doc/current/security.html#logging-out)
+- [Symfony docs — Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically)
+- [Symfony docs — Logging out](https://symfony.com/doc/8.0/security.html#logging-out)
 - [Symfony source — Security service](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/Security.php)
 
 ## Video references
@@ -391,7 +391,7 @@ no memory of the previous one.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#login-programmatically) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#login-programmatically) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

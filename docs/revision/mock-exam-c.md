@@ -42,7 +42,7 @@
 
     isNotModified() sets 304 and strips the body when the ETag matches, and the early return short-circuits before render() runs — so no template work happens at all. If you called render() first you would lose that saving. It never sends twice; you return the response once.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
 
 **Q3.** You set migrate_from and needsRehash() returns true, yet stored hashes are never upgraded. What is missing?  <small>_(Security)_</small>
 
@@ -56,7 +56,7 @@
 
     migrate_from + needsRehash() computes a fresh hash, but persisting it is the provider's job: only a provider implementing PasswordUpgraderInterface's upgradePassword() actually stores it (triggered by the PasswordUpgradeBadge / PasswordMigratingListener). Without it, the rehash is computed and discarded every login. migrate_from is not plaintext-only, you must not hash manually, and needsRehash() is fully supported.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html#password-migration)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html#password-migration)
 
 **Q4.** generateUrl('blog_show', ['id' => 42, 'utm' => 'x']) produces what?  <small>_(Routing)_</small>
 
@@ -70,7 +70,7 @@
 
     Parameters that are not route placeholders are appended as query string arguments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q5.** Your CacheInterface::get() callback returns null on the first call. What happens on the next call before expiry?  <small>_(Miscellaneous)_</small>
 
@@ -84,7 +84,7 @@
 
     null is a valid cached value: the contracts API stores whatever the callback returns and treats it as a hit until it expires. get() never uses null to mean 'miss' — that is exactly the PSR-6 footgun (getItem()->get() returning null for both absent and stored-null) that the callback API avoids. Caching 'no result' as null is fine, but it counts as a hit.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/cache.html#cache-contracts)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html#cache-contracts)
 
 **Q6.** What can autowiring resolve automatically?  <small>_(Dependency Injection)_</small>
 
@@ -98,7 +98,7 @@
 
     Autowiring maps a type-hint to a service; scalars and env vars must be bound explicitly with bind or #[Autowire].
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q7.** Which Twig call is wrong for rendering a single field's widget?  <small>_(Forms)_</small>
 
@@ -112,7 +112,7 @@
 
     form() renders an entire form (start, rows, end). For an individual field use form_row (label+widget+errors+help) or the granular form_widget/form_label/ form_errors/form_help. Calling form() on a child view is a common mistake.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/form/form_customization.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/form_customization.html)
 
 **Q8.** How does EventDispatcher store and order listeners internally?  <small>_(Architecture)_</small>
 
@@ -139,7 +139,7 @@
 
     A field holds data in three shapes: model (your PHP value), normalized (transport-neutral canonical), and view (strings for HTML). They are read with getData()/getNormData()/getViewData() respectively; transformers convert between adjacent shapes. There are no getModelData()/getRenderedData() methods.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/form/data_transformers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
 
 **Q10.** True or False: an interface may declare (non-constant) properties.  <small>_(PHP & Web Security)_</small>
 
@@ -165,7 +165,7 @@
 
     Higher priority decorators are applied first and end up innermost; consumers receive the lowest-priority, outermost decorator.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority)
 
 **Q12.** A class defines #[Assert\GroupSequence(['User','Strong'])]. You call validate($user, groups: ['User']). What runs?  <small>_(Validation)_</small>
 
@@ -179,7 +179,7 @@
 
     Validating the {ClassName} group ('User') runs the class's Default constraints flat, bypassing the sequence. Only validating 'Default' triggers the sequence.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/sequence_provider.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 
 **Q13.** In phpunit.dist.xml, how is the bridge's extension registered in PHPUnit 11/12?  <small>_(Testing)_</small>
 
@@ -193,7 +193,7 @@
 
     PHPUnit 10+ uses the <extensions><bootstrap .../></extensions> mechanism to load the SymfonyExtension. The old <listeners><listener> (SymfonyTestsListener) approach belongs to PHPUnit 9 and earlier; there is no <php><extension> tag, and the extension is not auto-registered.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html)
 
 **Q14.** Which password algorithm is the recommended default?  <small>_(Security)_</small>
 
@@ -207,7 +207,7 @@
 
     'auto' selects the best available algorithm (currently bcrypt) and can adapt over time; it also enables automatic rehash on cost changes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/passwords.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html)
 
 **Q15.** When is refreshUser() called?  <small>_(Security)_</small>
 
@@ -235,7 +235,7 @@
 
     MultiplierRetryStrategy multiplies the initial delay by the multiplier for each successive attempt: 1000, 1000×2=2000, 2000×2=4000 (capped by max_delay if set). It is exponential, not constant or linear, and starts at the configured delay, not delay×multiplier.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/messenger.html#retries-failures)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html#retries-failures)
 
 **Q17.** Which caching model can avoid contacting the server entirely? (choose one)  <small>_(HTTP)_</small>
 
@@ -249,7 +249,7 @@
 
     While a copy is fresh (within max-age), the cache serves it with no request; validation always sends a conditional request.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q18.** What is the signature of HttpKernelInterface::handle() and the role of its $catch argument?  <small>_(Architecture)_</small>
 
@@ -262,7 +262,7 @@
 
     The contract is handle(Request, int $type = MAIN_REQUEST, bool $catch = true): Response. handle() wraps the private handleRaw() in a try/catch when $catch is true, so an escaped exception is routed through handleThrowable()/kernel.exception into a Response. With $catch=false (common in sub-requests and tests) the exception simply propagates to the caller.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 **Q19.** What do the symfony/*-contracts packages contain?  <small>_(Architecture)_</small>
 
@@ -302,7 +302,7 @@
 
     The cookies ParameterBag wraps $_COOKIE; responses set cookies via $response->headers->setCookie().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q22.** Cache stampede protection in Symfony Cache is implemented by…  <small>_(Miscellaneous)_</small>
 
@@ -316,7 +316,7 @@
 
     As an item nears expiry, one request is probabilistically chosen to recompute early while others serve the cached value ($beta=INF forces it, 0 disables it). There is no per-key mutex.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/cache.html#stampede-prevention)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html#stampede-prevention)
 
 **Q23.** How is an abstract class conventionally named?  <small>_(Architecture)_</small>
 
@@ -329,7 +329,7 @@
 
     Abstract classes take the Abstract prefix; interfaces use the Interface suffix and traits use the Trait suffix.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/standards.html)
 
 **Q24.** How are custom form types made available by their FQCN and able to receive injected services?  <small>_(Forms)_</small>
 
@@ -343,7 +343,7 @@
 
     Service autoconfiguration tags any class implementing FormTypeInterface with form.type, so it is usable by FQCN and can autowire constructor dependencies. There is no #[AsFormType] attribute and no runtime directory scan; manual tagging is only needed when autoconfiguration is disabled.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/form/create_custom_field_type.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/create_custom_field_type.html)
 
 **Q25.** By default, what is the Serializer's circular reference limit before it throws?  <small>_(Miscellaneous)_</small>
 
@@ -357,7 +357,7 @@
 
     The default circular reference limit is 1; beyond it a CircularReferenceException is thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/serializer.html#handling-circular-references)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/serializer.html#handling-circular-references)
 
 **Q26.** How many times may createClient() be called within a single test?  <small>_(Testing)_</small>
 
@@ -371,7 +371,7 @@
 
     Only one kernel/client may be booted per test; calling createClient() again throws a LogicException.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#your-first-application-test)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#your-first-application-test)
 
 **Q27.** Which two arguments does SymfonyStyle require?  <small>_(Console)_</small>
 
@@ -385,7 +385,7 @@
 
     SymfonyStyle wraps both input (for prompts like ask/confirm) and output (for styled writing), so its constructor is (InputInterface, OutputInterface). It creates its own QuestionHelper internally and needs neither an Application nor a Command.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/console/style.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/style.html)
 
 **Q28.** How are route conditions executed at request time?  <small>_(Routing)_</small>
 
@@ -427,7 +427,7 @@
 
     Higher decoration_priority is applied first and ends up innermost (closest to the original), so caching needs the higher number to sit directly around the original, and logging the lower number to become the outermost wrapper consumers hit first. Assuming lower priority runs first inverts the chain.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority)
 
 **Q31.** DelayStamp(5000) delays delivery by how long?  <small>_(Miscellaneous)_</small>
 
@@ -441,7 +441,7 @@
 
     DelayStamp is expressed in milliseconds, so 5000 means 5 seconds. The classic trap is to read it as seconds; the retry strategy's initial delay is likewise in milliseconds.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/messenger.html#delaying-messages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html#delaying-messages)
 
 **Q32.** A parent declares `serialize(): string`. Is overriding it with `serialize(): never` legal?  <small>_(PHP & Web Security)_</small>
 
@@ -468,7 +468,7 @@
 
     BinaryFileResponse supports HTTP range requests and X-Sendfile/X-Accel offloading for efficient downloads.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#serving-files)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files)
 
 **Q34.** decoration_on_invalid: null is set, but .inner is typed as non-nullable MailerInterface and the decorated target is absent. What happens?  <small>_(Dependency Injection)_</small>
 
@@ -482,7 +482,7 @@
 
     With null, the compiler injects null as .inner; if the argument type is not nullable this becomes a TypeError at instantiation. The fix is a nullable type (?MailerInterface) and nullsafe delegation. ignore (not null) is what removes the decorator; exception is the default that throws at build.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 **Q35.** You want to assert that calling a method emits a specific deprecation. Which is correct in Symfony 8?  <small>_(Testing)_</small>
 
@@ -496,7 +496,7 @@
 
     ExpectUserDeprecationMessageTrait::expectUserDeprecationMessage() is the current API for asserting an emitted E_USER_DEPRECATED message. The old ExpectDeprecationTrait::expectDeprecation() and the @expectedDeprecation annotation were removed in Symfony 7.0, and deprecations are not exceptions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail)
 
 **Q36.** In the path /{a}/{b}, which placeholder can be made optional?  <small>_(Routing)_</small>
 
@@ -510,7 +510,7 @@
 
     Only trailing placeholders can be optional; a gap in the middle cannot be located by the matcher. RouteCompiler emits nested optional groups from the tail, so an optional a with a required b is impossible.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#optional-parameters)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
 **Q37.** How often does a new Symfony minor version ship?  <small>_(Architecture)_</small>
 
@@ -537,7 +537,7 @@
 
     The cloner captures the variable into an immutable, depth-limited Data object, which a CliDumper or HtmlDumper then renders — separating capture from output.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/var_dumper.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/var_dumper.html)
 
 **Q39.** 401 Unauthorized means the user is authenticated but lacks permission. True or false?  <small>_(HTTP)_</small>
 
@@ -563,7 +563,7 @@
 
     Symfony\\Component\\Console\\DependencyInjection\\AddConsoleCommandPass gathers every service tagged console.command and constructs a ContainerCommandLoader mapping each command name to its service id, so a command is instantiated only when its name is invoked. There is no CommandCompilerPass, commands are not instantiated eagerly at compile time, and Symfony 8 does not scan the filesystem for commands.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/console/commands_as_services.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/commands_as_services.html)
 
 **Q41.** You call $validator->validate(null). What happens?  <small>_(Validation)_</small>
 
@@ -577,7 +577,7 @@
 
     Passing null is legal: the value is wrapped in a node, no class metadata is found, and an empty violation list comes back. Validation is values against constraints, and a bare null carries none. The trap is that a null object silently passes when you expected a required value.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
 
 **Q42.** A controller runs $security->getUser()->getUserIdentifier() and fatals on some requests. What is the cause?  <small>_(Security)_</small>
 
@@ -591,7 +591,7 @@
 
     Security::getUser() returns ?UserInterface — it is null whenever no token holds a user (a truly anonymous request, or a lazy firewall whose token was never read). Dereferencing null is a fatal error. Guard with $user?->…, a ?? fallback, or an earlier #[IsGranted('IS_AUTHENTICATED_FULLY')] / denyAccessUnlessGranted() so $user is guaranteed non-null past that point. getUserIdentifier() is very much part of the 8.0 interface, and getUser() never throws for guests — it simply returns null.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 **Q43.** Which resolvers have the highest default priority (120) in Symfony 8?  <small>_(Controllers)_</small>
 
@@ -618,7 +618,7 @@
 
     Normal collect() runs on kernel.response, too early for post-response data (final dumps, cache calls). LateDataCollectorInterface::lateCollect() runs later at terminate, when that data is complete.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
 
 **Q45.** Which version string should you pass as the second argument of trigger_deprecation()?  <small>_(Architecture)_</small>
 
@@ -645,7 +645,7 @@
 
     access_control routes through the same AccessDecisionManager and voters as isGranted(), but it is purely URL-driven: the AccessListener calls decide() with the rule's roles/expression and no subject. There is no subject: key and path parameters are not passed as subjects. Per-object decisions require #[IsGranted]/denyAccessUnlessGranted() with an explicit subject.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/voters.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html)
 
 **Q47.** Which service does FormInterface::handleRequest() delegate to under FrameworkBundle?  <small>_(Forms)_</small>
 
@@ -673,7 +673,7 @@
 
     #[Target] binds to a named autowiring alias by name, so renaming the constructor parameter does not break wiring.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html#fixing-non-autowireable-arguments)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html#fixing-non-autowireable-arguments)
 
 **Q49.** An admin deletes a user's account while that user is browsing under a stateful firewall. What happens on the user's next request?  <small>_(Security)_</small>
 
@@ -701,7 +701,7 @@
 
     POSIX exit codes are a single byte (0–255), so Symfony normalises out-of-range values with % 256; 300 % 256 = 44. It is not passed through, not capped at 255, and not coerced to FAILURE. By convention a signal-terminated process exits with 128 + signalNumber.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/console/events.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
 
 **Q51.** What is true about kernel events when an inline fragment is rendered?  <small>_(Twig)_</small>
 
@@ -715,7 +715,7 @@
 
     Inline rendering calls HttpKernel::handle(..., SUB_REQUEST), so the whole listener chain (request, controller, response) runs independently for the fragment. The sub-request has its own Request object; parent attributes are not automatically shared.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html#handling-requests)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html#handling-requests)
 
 **Q52.** In a .html.twig file, what does {{ '<b>hi</b>' }} render to the browser?  <small>_(Twig)_</small>
 
@@ -729,7 +729,7 @@
 
     Auto-escaping (html strategy for .html.twig) converts the angle brackets to entities, so the literal markup is displayed as text rather than rendered as bold. To output real markup you would need |raw (only for trusted content).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#output-escaping)
 
 **Q53.** Under the unanimous strategy, a voter returns false from voteOnAttribute() for an attribute it does not actually care about. Effect?  <small>_(Security)_</small>
 
@@ -757,7 +757,7 @@
 
     Submission dispatches PRE_SUBMIT (raw view data), SUBMIT (normalized), then POST_SUBMIT (bound model), in that order.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/form/events.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/events.html)
 
 **Q55.** What is the fully-qualified class of the routing attribute in Symfony 8?  <small>_(Routing)_</small>
 
@@ -771,7 +771,7 @@
 
     The routing attribute lives in the Attribute namespace since 6.4; the old Annotation\Route alias is removed in Symfony 8.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q56.** Two services implement one interface with no default alias. Autowiring by that interface...  <small>_(Dependency Injection)_</small>
 
@@ -785,7 +785,7 @@
 
     Ambiguity is a hard build error; you disambiguate with a named alias, #[Target], #[Autowire(service:)] or bind.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
 **Q57.** What is the signature of KernelBrowser::submitForm()?  <small>_(Testing)_</small>
 
@@ -799,7 +799,7 @@
 
     You identify the submit button by its text/name/id/value first, then pass the field values and optionally the HTTP method. submitForm() locates the enclosing form for you; if you already hold a Form object, use submit($form).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#submitting-forms)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#submitting-forms)
 
 **Q58.** For the URL `/search` (no `?page=`), what does `(int) $request->query->get('page')` evaluate to, and what is the safer call?  <small>_(Controllers)_</small>
 
@@ -813,7 +813,7 @@
 
     InputBag::get() returns null for a missing key (default default is null), and (int) null is 0 — rarely the intended fallback. getInt('page', 1) coerces and guarantees the type with an explicit default.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q59.** Which clock is best for measuring elapsed durations and is immune to system clock changes?  <small>_(Miscellaneous)_</small>
 
@@ -827,7 +827,7 @@
 
     MonotonicClock uses a high-resolution monotonic source unaffected by NTP or manual clock adjustments, so duration diffs stay accurate. Wall-clock NativeClock can jump; MockClock is for tests; DatePoint is a date type, not a clock.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/clock.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/clock.html)
 
 **Q60.** At which point is auto-escaping applied to a value?  <small>_(Twig)_</small>
 
@@ -869,7 +869,7 @@
 
     Pick-one-of-many with heavy dependencies is the textbook case for a lazy locator: only the selected gateway is instantiated. A tagged_iterator or constructor-injecting all five would eagerly build every gateway, and injecting the whole container is the anti-pattern the locator replaces.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q63.** Which statement about PSR-6 vs PSR-16 is correct?  <small>_(Miscellaneous)_</small>
 
@@ -883,7 +883,7 @@
 
     PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or tags. PSR-6 uses CacheItem objects and supports tags through a TagAwareAdapter as well as expiration.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
 
 **Q64.** A POST to /blog when the route is defined as /blog/ yields?  <small>_(Routing)_</small>
 
@@ -897,7 +897,7 @@
 
     Redirecting a POST would alter the method, so the matcher returns 405 rather than a trailing-slash redirect. The auto-redirect is GET/HEAD only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes)
 
 **Q65.** What does dd() do that dump() does not?  <small>_(Miscellaneous)_</small>
 
@@ -911,7 +911,7 @@
 
     dd() means 'dump and die': it dumps then calls exit, halting the script. dump() records the variable and lets execution continue (the dump is shown in the toolbar/collector).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/var_dumper.html#the-dump-function)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/var_dumper.html#the-dump-function)
 
 **Q66.** For a factory-built service, where are its arguments passed?  <small>_(Dependency Injection)_</small>
 
@@ -925,7 +925,7 @@
 
     With a factory, the container calls the factory and passes the definition's arguments to it, not to a constructor.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/factories.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
 **Q67.** What does app.environment return?  <small>_(Twig)_</small>
 
@@ -939,7 +939,7 @@
 
     app.environment is the kernel environment (dev/prod/test); app.debug is the boolean debug flag. They are unrelated to OS env vars.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q68.** What gives Symfony's dump() its rich, collapsible HTML output rather than plain var_dump?  <small>_(Twig)_</small>
 
@@ -967,7 +967,7 @@
 
     Like Url, Regex and most value constraints, Email skips empty/null values. Combine it with NotBlank when an empty value must be rejected.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/constraints/Email.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Email.html)
 
 **Q70.** What is the key difference between getPreferredFormat() and getAcceptableContentTypes()? (choose one)  <small>_(HTTP)_</small>
 
@@ -994,7 +994,7 @@
 
     The service id is the FQCN; autowiring matches type-hints to these ids.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 **Q72.** What binds a single typed query parameter such as ?page=2 to an int argument?  <small>_(Controllers)_</small>
 
@@ -1007,7 +1007,7 @@
 
     #[MapQueryParameter] binds one query value with casting; #[MapQueryString] maps the whole query string into a DTO.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q73.** True or False: a firewall with stateless: true still calls refreshUser() on every request.  <small>_(Security)_</small>
 
@@ -1019,7 +1019,7 @@
 
     False. refreshUser() is invoked by the ContextListener, which only exists on stateful firewalls. A stateless firewall stores no token in the session, so there is nothing to refresh — the user is re-loaded from scratch by the authenticator on each request instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/user_providers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/user_providers.html)
 
 **Q74.** When does a lazy Symfony session actually start (session_start + Set-Cookie)?  <small>_(Controllers)_</small>
 
@@ -1032,7 +1032,7 @@
 
     Lazy sessions avoid emitting a session cookie for requests that never touch the session, preserving cacheability.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 **Q75.** Which default group name does an unqualified constraint belong to?  <small>_(Validation)_</small>
 
@@ -1046,7 +1046,7 @@
 
     The implicit group is 'Default' with a capital D; group names are case-sensitive, so 'default' would be a different (empty) group.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/groups.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/groups.html)
 
 ---
 

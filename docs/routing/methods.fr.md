@@ -261,7 +261,7 @@ comme mécanisme d'autorisation.
     - [ ] D. 301 redirect
 
     **Why:** le chemin correspond mais pas la méthode, d'où un 405 avec un header `Allow`.
-    **Ref:** [HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods).
+    **Ref:** [HTTP methods](https://symfony.com/doc/8.0/routing.html#matching-http-methods).
 
 ??? question "Q2. `methods: ['GET']` also matches which verb?"
     - [x] A. HEAD ✅
@@ -270,7 +270,7 @@ comme mécanisme d'autorisation.
     - [ ] D. PUT
 
     **Why:** HttpKernel traite HEAD comme un GET sans corps, donc les routes GET correspondent à HEAD.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-http-methods).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-http-methods).
 
 ??? question "Q3. An `http` request to an `https`-only route results in?"
     - [x] A. A redirect to the `https` URL ✅
@@ -279,7 +279,7 @@ comme mécanisme d'autorisation.
     - [ ] D. 404 Not Found
 
     **Why:** le matcher redirectable redirige les décalages de scheme.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-the-http-scheme).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-the-http-scheme).
 
 ??? question "Q4. For a form's `_method` field to change routing, you must…"
     - [x] A. Call `Request::enableHttpMethodParameterOverride()` ✅
@@ -288,7 +288,7 @@ comme mécanisme d'autorisation.
     - [ ] D. Set `framework.http_method_override: false`
 
     **Why:** le method override est optionnel (opt-in) via `enableHttpMethodParameterOverride()`.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ## Key takeaways
 
@@ -311,7 +311,7 @@ comme mécanisme d'autorisation.
 - **Confused with:** [Controllers → The Request](../controllers/request.md) — le matcher teste `Request::getMethod()` (override compris).
 
 ## Official References
-- [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods)
+- [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -323,7 +323,7 @@ comme mécanisme d'autorisation.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#matching-http-methods) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#matching-http-methods) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

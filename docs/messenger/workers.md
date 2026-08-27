@@ -190,7 +190,7 @@ unrouted), no worker is needed at all.
 
     **Why:** workers are long-running PHP processes with old code loaded in
     memory; `stop-workers` gracefully recycles them so a fresh process picks
-    up the new deploy. **Ref:** [Messenger — Deploying](https://symfony.com/doc/current/messenger.html#deploying-to-production).
+    up the new deploy. **Ref:** [Messenger — Deploying](https://symfony.com/doc/8.0/messenger.html#deploying-to-production).
 
 ??? question "Q2. Which options let `messenger:consume` stop a worker gracefully for zero-downtime deploys?"
     - [x] A. `--limit`, `--time-limit`, `--memory-limit` ✅
@@ -200,7 +200,7 @@ unrouted), no worker is needed at all.
 
     **Why:** all three are independent, graceful recycling mechanisms that
     let the current message finish first.
-    **Ref:** [Messenger — Consuming messages](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker).
+    **Ref:** [Messenger — Consuming messages](https://symfony.com/doc/8.0/messenger.html#consuming-messages-running-the-worker).
 
 ??? question "Q3. Which stamp does the worker add before pushing a received envelope back through the bus?"
     - [x] A. `ReceivedStamp` ✅
@@ -241,8 +241,8 @@ unrouted), no worker is needed at all.
 
 ## Official References
 
-- [Official docs — Consuming messages](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker)
-- [Official docs — Deploying to production](https://symfony.com/doc/current/messenger.html#deploying-to-production)
+- [Official docs — Consuming messages](https://symfony.com/doc/8.0/messenger.html#consuming-messages-running-the-worker)
+- [Official docs — Deploying to production](https://symfony.com/doc/8.0/messenger.html#deploying-to-production)
 - [Symfony source — Worker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Worker.php)
 
 ## Video references
@@ -254,7 +254,7 @@ unrouted), no worker is needed at all.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#consuming-messages-running-the-worker) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -262,7 +262,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
     **Why:** The whitelist form guarantees a supported locale; the others may
     return one you do not support.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. What sets the request locale when a route has `{_locale}`?"
     - [x] A. `LocaleListener` on `kernel.request` calls `setLocale()` ✅
@@ -282,7 +282,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
     **Why:** It restricts valid locales (routing `_locale`, translation
     compilation); `default_locale` sets the fallback.
-    **Ref:** [Translations config](https://symfony.com/doc/current/translation.html).
+    **Ref:** [Translations config](https://symfony.com/doc/8.0/translation.html).
 
 ## Key takeaways
 
@@ -307,8 +307,8 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 - **Confused with:** [Internationalization (Intl)](../miscellaneous/intl.md) — *detecting* the locale (HTTP) vs *translating* content.
 
 ## Official References
-- [Symfony docs — Translations & locale](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
-- [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
+- [Symfony docs — Translations & locale](https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations)
+- [Symfony docs — HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
 ## Video references
@@ -320,7 +320,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
