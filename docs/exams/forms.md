@@ -3,6 +3,9 @@
 !!! abstract "How to use"
     72 questions spanning every subchapter of **Forms**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
+!!! danger "Not an official exam"
+    Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
+
 Full theory: [Forms](../forms/index.md).
 
 ---

@@ -90,6 +90,10 @@ def render(picked, label="A"):
          "every question (there is no negative marking). Multiple answers may be "
          "correct — the stem says how many. Reveal a key only after you have "
          "committed to an answer.", "",
+         "!!! danger \"Not an official exam\"",
+         "    Practice question, not an official exam question. This bank is "
+         "community-authored and aligned with the syllabus — it is not sourced "
+         "from, or reviewed by, the official Symfony 8 certification.", "",
          "!!! tip \"Timing\"",
          "    90 min / 75 Q ≈ **72 seconds per question.** Flag hard ones, keep "
          "moving, and come back. Aim to finish with 10 minutes to review flags.", "",

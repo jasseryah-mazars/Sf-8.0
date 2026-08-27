@@ -5,6 +5,9 @@
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
 
+!!! danger "Not an official exam"
+    Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
+
 ??? question "1. How is an invokable single-action controller referenced in the `_controller` attribute? (choose one)"
     **✅ The fully-qualified class name only (Symfony calls __invoke)**
 

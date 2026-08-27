@@ -41,7 +41,11 @@ for f in sorted(glob.glob(os.path.join(ROOT, "quiz", "*.yml"))):
              f"{len(cards)} cards. **Read the question, answer in your head, then tap to reveal.** "
              f"Mark the ones you miss and cycle them again.", "",
              "!!! tip \"How to drill\"", "    First pass: reveal every card. "
-             "Later passes: only the ones you missed. Spread passes over days.", ""]
+             "Later passes: only the ones you missed. Spread passes over days.", "",
+             "!!! danger \"Not an official exam\"",
+             "    Practice question, not an official exam question. This bank is "
+             "community-authored and aligned with the syllabus — it is not sourced "
+             "from, or reviewed by, the official Symfony 8 certification.", ""]
     for i, (qq, corr, expl, doc) in enumerate(cards, 1):
         ans = " ; ".join(corr)
         lines.append(f"??? question \"{i}. {qq}\"")

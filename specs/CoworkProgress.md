@@ -180,6 +180,22 @@ historical drift. This is the same historical-drift issue flagged in Lot 1
 and Lot 2 — not new, just newly visible in one more place. Fixing it means
 doing the "full quiz-bank reformat" item below, area by area, with review.
 
+## Lot 4 — "Not an official exam" banner (same session, deploy branch)
+
+Added `!!! danger "Not an official exam" / Practice question, not an
+official exam question...` to all 15 `docs/exams/*.md`, all 15
+`docs/revision/flashcards/*.md`, all 3 `docs/revision/mock-exam*.md`, and
+`docs/exam-simulator.md`/`.fr.md` (hand-patched the already-generated files
+directly — no regeneration, no drift risk). Baked the same block into the
+generator templates (`gen_chapter_exams.py`, `gen_flashcards.py`,
+`mock_exam.py`) so future regenerations keep it. `docs/revision/quiz.md`
+already had an equivalent disclaimer ("Isn't: leaked or brain-dumped exam
+items") — left as-is, not duplicated. Also fixed a stale "14 areas" ->
+"15 areas" count in `exam-simulator.md`/`.fr.md` (Messenger is now its own
+area). Validated clean: `check_section_order.py` (176/176),
+`mkdocs build --strict` (0 warnings, no new-file noise this time — all
+edits to already-committed files).
+
 **Still NOT done (explicitly deferred — see matrix Anomaly column for
 each):**
 - Full quiz-bank reformat to the mission's mandated per-question fields
@@ -188,8 +204,6 @@ each):**
   the ~16 new/reclassified questions across all passes use that
   scenario-forward style. This is the single largest undone item in the
   brief, and now also the fix for the historical-drift inconsistency above.
-- The "Practice question, not an official exam question" banner — still not
-  added anywhere.
 - Recursive ecosystem term audit (Symfony UX/AI, Doctrine, Monolog,
   AssetMapper, Encore, third-party bundles) — counted only, not individually
   triaged file-by-file.

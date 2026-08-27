@@ -27,8 +27,14 @@ Les trois types d'interaction reproduisent exactement l'examen :
     la plateforme sont disponibles en français, mais la banque de questions reste
     volontairement dans la langue de l'examen.
 
+!!! danger "Pas un examen officiel"
+    Chaque question de ce simulateur est une question d'entraînement, pas une
+    question d'examen officielle. Cette banque est rédigée par la communauté et
+    alignée sur le programme — elle n'est ni issue de, ni relue par, la
+    certification Symfony 8 officielle.
+
 Filtrez par topic area, difficulté et type de question, ou lancez **Full mock
-exam** pour une simulation chronométrée de 75 questions tirées des 14 areas.
+exam** pour une simulation chronométrée de 75 questions tirées des 15 areas.
 
 <div id="sf-quiz" data-src="../assets/quiz-data.json">
   <noscript>Le simulateur interactif nécessite JavaScript. Consultez plutôt le

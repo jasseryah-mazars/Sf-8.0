@@ -12,6 +12,11 @@
     show you what to fix, and Exam mode as the real match: the bell rings, the clock
     runs, and you only hear the judges' scorecard once it's over.
 
+!!! danger "Not an official exam"
+    Every question in this simulator is a practice question, not an official exam
+    question. This bank is community-authored and aligned with the syllabus — it
+    is not sourced from, or reviewed by, the official Symfony 8 certification.
+
 The three interaction types mirror the exam exactly:
 
 - **True / False** — pick one of two options.
@@ -20,7 +25,7 @@ The three interaction types mirror the exam exactly:
   them and nothing else to score the point (checkboxes).
 
 Filter by topic area, difficulty, and question type, or hit **Full mock exam** to
-jump straight into a timed 75-question simulation drawn from all 14 areas.
+jump straight into a timed 75-question simulation drawn from all 15 areas.
 
 <div id="sf-quiz" data-src="../assets/quiz-data.json">
   <noscript>The interactive simulator needs JavaScript. Browse the

@@ -3,6 +3,9 @@
 !!! abstract "How to use"
     116 questions spanning every subchapter of **Symfony Architecture**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
+!!! danger "Not an official exam"
+    Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
+
 Full theory: [Symfony Architecture](../architecture/index.md).
 
 ---

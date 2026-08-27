@@ -5,6 +5,9 @@
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
 
+!!! danger "Not an official exam"
+    Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
+
 ??? question "1. What does the backed-enum method `Suit::tryFrom('X')` return when 'X' is not a valid case?"
     **✅ null**
 
