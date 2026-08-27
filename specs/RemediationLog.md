@@ -1000,6 +1000,160 @@ no `quiz/*.yml` question content, only the generated CSV row's wording),
 
 ---
 
+## Guided learner-navigation redesign (post-merge mission)
+
+**Mission:** after consolidating onto `master`, audit and redesign the
+navigation/UX so a beginner is guided from the dashboard with explicit
+journeys, direct buttons, numbered steps, and minimal decisions.
+
+**Phase 3 — Audit.** Read `docs/index.md`/`.fr.md`, `docs/roadmap.md`,
+`docs/exam-guide/index.md`, `docs/revision/index.md`,
+`docs/exam-simulator.md`, the complete `mkdocs.yml` nav tree,
+`docs/assets/quiz.js`, `docs/_meta/CHAPTER_TEMPLATE.md`, and representative
+area/chapter pages. Findings written to
+`specs/NavigationExperienceAudit.md`: the homepage was a 16-row/9-column
+reference table with no single "start here" action; three different pages
+each held a fragment of a step-by-step path, none linked from the
+homepage; `quiz.js` already had a working localStorage progress mechanism
+(`sfq-stats-v1`) never surfaced anywhere outside the quiz tool itself;
+`mkdocs.yml`'s nav had ~20 top-level tabs (15 of them the syllabus areas,
+each rendered as its own tab by `navigation.tabs`); the French homepage
+left several headings untranslated and `mkdocs.yml` had no
+`nav_translations` at all; `docs/revision/index.md` stated a stale
+"1,179" question/card count (live figure: 1,292) in two places.
+
+**Phase 4 — New guided dashboard.** Rewrote `docs/index.md` and
+`docs/index.fr.md` in full: a primary CTA, a "not sure where to start"
+single recommendation, 5 path cards (beginner/Advanced/Expert/revision/
+test-my-level), a numbered 7-step path, a `#sf-resume` placeholder for the
+new resume widget, the existing domain table demoted below the guided
+flow and its "Test" column changed from one shared simulator link to a
+per-area `?area=` deep link, and an explicit out-of-scope table kept
+clearly separated. **Real bug found and fixed during this rewrite:** raw
+HTML `<a href="...">` elements are NOT rewritten by MkDocs' relative-link
+resolution the way `[text](file.md)` Markdown links are — an initial
+draft using `.md`-style hrefs inside hand-written HTML rendered literal,
+unresolved paths in the built site (confirmed by inspecting the actual
+built HTML, not assumed). Fixed by writing the already-resolved
+directory-URL form (`roadmap/`, not `roadmap.md`) in every raw HTML
+anchor, and verified in the built output.
+
+**New `docs/assets/progress.js`:** extends `quiz.js`'s existing
+`sfq-stats-v1` mechanism (does not invent a second one) with a `sf-last-
+page-v1` localStorage record of the last area page visited, a universal
+quick-actions strip (back-to-domain / test-this-topic, URL-derived,
+covering all ~176 chapters with zero per-chapter edits) injected on every
+page inside a known area directory, and the dashboard's resume/weak-area
+widget renderer. No backend, no cookies — static-site compatible per
+mission constraint.
+
+**`docs/assets/quiz.js`:** added `?area=<exact area name>` URL param
+support — when present, skips the config screen and starts a practice
+session for that one area immediately (consumed once via
+`history.replaceState` so returning to config later doesn't re-trigger
+it).
+
+**New `docs/assets/navigation.css`:** the CTA/path-card/step-list/resume-
+widget/quick-actions styling, kept separate from `quiz.css`/`code.css`
+(distinct concern).
+
+**Two real, unrelated bugs found and fixed via the same link-checking
+pass:** (1) `tools/check_placeholders.py`'s internal-link checker stripped
+`#anchor` from a link target before checking the file exists, but not
+`?query` — every `?area=` deep link in the new dashboard false-flagged as
+broken (`mkdocs build --strict` itself was clean on the same links,
+proving it was the checker's gap, not a real broken link). Fixed to strip
+both. (2) The checker also doesn't understand mkdocs' directory-URL output
+convention for raw HTML hrefs (`roadmap/` vs. the source `roadmap.md`) —
+resolved by keeping raw-HTML hrefs consistent with normal Markdown-link
+targets wherever a genuine Markdown link was available, rather than
+teaching the checker a second resolution scheme for one page.
+
+**Phase 5 — Nav restructure.** Regrouped `mkdocs.yml`'s ~20 top-level
+entries into the mission's 8 buckets: Home, **Getting Started** (was "Exam
+Guide" — its content already is "what a beginner needs before starting";
+relabeled rather than duplicated with a near-identical new page), Roadmap,
+**Certification Domains** (all 15 areas nested one level deeper, +4-space
+reindent done via a small script over the exact existing text — not a
+full YAML round-trip, which would have risked reformatting the whole file
+given it contains Python-tag YAML this project's own tools can't
+`safe_load`), **Practice & Exams** (Exam Simulator + Chapter Exams),
+Revision Hub (unchanged), **Resources** (Recommended Resources/Glossary/
+Tags/Labs/Source Tours — "Resources" the leaf renamed "Recommended
+Resources" to disambiguate from the new parent group of the same name),
+**Out-of-Syllabus Appendices** (was "Appendices"). One script-generated
+line-concatenation bug (`- Recommended Resources: resources.md` glued to
+the next line) caught by `mkdocs build --strict` failing and fixed before
+commit. `tools/check_exclusions.py` hardcoded the literal string
+`"- Appendices:"` to locate the exclusions nav section — updated to match
+on any label containing "Appendices" (a regex), since the label is now
+legitimately different and may change again.
+
+**Phase 6 — French/English consistency.** Added `nav_translations` for
+French covering only the newly-introduced/renamed top-level structural
+labels (Home, Getting Started, Certification Domains, Practice & Exams,
+Resources, Recommended Resources, Out-of-Syllabus Appendices) — verified
+via the actual build log ("Translated 7 navigation elements to 'fr'") and
+by inspecting the rendered French tab bar text directly. Deliberately
+**not** translated: Roadmap, Revision Hub, Exam Simulator, the 15 area
+names — every existing French page already uses those same English proper
+nouns in its own prose (verified by `grep` against the real files, not
+assumed), so translating only the nav label would have created a new
+mismatch, not fixed one. Two inconsistencies of this same kind, introduced
+by my own first draft of `docs/index.fr.md`, found and fixed the same way:
+"Centre de Révision" (should have matched the existing untranslated
+"Revision Hub" the actual hub page already titles itself) and "Simulateur
+d'Examen" (should have matched `exam-simulator.fr.md`'s own untranslated
+"Interactive Exam Simulator" title). **Stated gap, not fabricated as
+fixed:** `docs/revision/mock-exam.fr.md` does not exist — the French
+"Examen Blanc" dashboard link falls back to English content
+(`fallback_to_default: true`, a pre-existing site behavior, not introduced
+here). Fixed the two stale "1,179" mentions in `docs/revision/index.md`
+to the live 1,292 figure (grepped the whole tree for the same stale
+number elsewhere first — the only other hits were in historical log
+entries, correctly left alone as factual records of a past state).
+
+**Phase 7 — Journey validation.** New `tools/check_navigation_journeys.py`
++ `tools/_navigation_journeys_check.js` (same Playwright architecture as
+`tools/check_site_quality.py`, P2-03): drives a real headless Chromium
+through all 6 named journeys (beginner, Advanced, Expert, quick revision,
+mobile, French) following actual links, plus functional checks for the
+`?area=` deep-link auto-start, the resume/weak-area widget (simulated
+prior `localStorage` activity, then verified the dashboard actually reads
+and renders it after a fresh page load — not just that the code exists),
+mobile viewport overflow, keyboard reachability, and an axe-core pass on
+the new dashboard. **Two real script bugs found and fixed while getting
+this running, not silently worked around:** (1) every page load stalled
+~13s because Playwright's `waitUntil: 'load'` waits for *all* subresources
+including this environment's already-known-blocked external hosts
+(`unpkg.com`, `fonts.googleapis.com`, `api.github.com` — confirmed during
+P2-03, not new) — fixed by switching to `waitUntil: 'domcontentloaded'`
+**and** intercepting+aborting requests to those hosts instantly via
+`page.route()`, since none of these checks depend on those resources
+loading; this cut total run time from a 100s watchdog timeout to well
+under a minute. (2) one check's own string match (`.includes('Exercises')`,
+case-sensitive) false-flagged a page whose prose said "exercises" in
+lowercase — fixed to a case-insensitive match after confirming by direct
+inspection that the content was correct and the test was wrong, not the
+reverse. **Final result: 42/44 checks pass.** The remaining 2 are
+axe-core's `color-contrast` and `link-in-text-block` on the dashboard —
+both the exact same, already-documented, deliberately-not-fixed
+`specs/SiteQualityReport.md` finding (the site's `primary: black`/
+`accent: indigo` palette choice), not a new regression; the dashboard
+naturally surfaces more instances of it simply by having more in-text
+links than the old homepage.
+
+**Tested (full suite, post-redesign):** `check_doc_version_refs.py`,
+`audit.py`, `check_exclusions.py`, `validate_quiz.py`,
+`check_quiz_duplicates.py`, `gen_quiz_json.py`, `check_section_order.py`,
+all four `lint_*.py` tools, `check_placeholders.py`,
+`check_editorial_structure.py`, `check_links.py --offline`,
+`check_report_freshness.py`, `check_navigation_journeys.py` (42/44, both
+remaining failures pre-existing and documented) — all clean or accounted
+for; `mkdocs build --strict` → exit 0.
+
+---
+
 _This log continues to grow as future subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._

@@ -15,8 +15,8 @@ have; it tells you what to open.
 | Tool | Use it to | When |
 |---|---|---|
 | **[Master Cheat Sheet](cheat-sheet.md)** | Refresh highest-yield facts per area | Quick |
-| **[Flashcards](flashcards/index.md)** | Active recall, 1,179 tap-to-reveal cards (+ Anki CSV) | Quick, daily |
-| **[Chapter Exams](../exams/index.md)** | Per-area exams (every subchapter, easy→hard) from the 1,179-question bank | Deep |
+| **[Flashcards](flashcards/index.md)** | Active recall, 1,292 tap-to-reveal cards (+ Anki CSV) | Quick, daily |
+| **[Chapter Exams](../exams/index.md)** | Per-area exams (every subchapter, easy→hard) from the 1,292-question bank | Deep |
 | **[Revision Sheets](sheets/index.md)** | Printable one-pager per area | Quick, final days |
 | **[Easily Confused](confusions.md)** | Kill the near-miss traps the exam loves | Quick, exam morning |
 | **[Top Certification Traps](traps.md)** | The subtle distinctions, gathered per area | Quick/Deep |
