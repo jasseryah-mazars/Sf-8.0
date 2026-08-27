@@ -33,7 +33,7 @@ def expected_subchapters() -> set[str]:
 
 
 def main() -> int:
-    files = total = 0
+    files = total = out_of_scope = 0
     errors: list[str] = []
     ids: dict[str, str] = {}
     by_type = collections.Counter()
@@ -80,11 +80,16 @@ def main() -> int:
                     by_type[t] += 1
                 if d:
                     by_diff[d] += 1
+                if q.get("out_of_scope"):
+                    out_of_scope += 1
+                    continue  # excluded from official syllabus coverage stats
                 sc = q.get("subchapter")
                 if sc:
                     covered.add(sc.removesuffix(".md"))
 
     print(f"validated {files} quiz files, {total} questions; {len(errors)} error(s)")
+    print(f"  official (in-scope): {total - out_of_scope} · "
+          f"out-of-scope/additional (excluded from certification): {out_of_scope}")
     print(f"  with v2 metadata: {meta_count}/{total}")
     if by_type:
         print("  by type:", dict(by_type))

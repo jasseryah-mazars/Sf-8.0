@@ -1,7 +1,133 @@
 # Cowork Progress — Sf-8.0 Certification Quality
 
 _Compact, durable log. Update after every lot instead of rescanning the repo._
-_Branch: `claude/sf-8-certification-quality-iimd4l`. No commits/pushes made (per task INTERDICTIONS)._
+_Branch: `claude/sf-8-certification-quality-iimd4l`. Lot 1 was committed locally,
+not pushed (commit `60c0814`). Lot 2 (below) is currently uncommitted working-tree
+changes pending user decision — see the "SORTIE FINALE" report given to the user._
+
+## Lot 2 — Official syllabus realignment (2026-08-26, second mission)
+
+**Mission:** align the repo to the official Symfony 8 syllabus structure per an
+explicit brief (13-column TraceabilityMatrix rebuild, PHP Attributes/Enums,
+HTTP RFC 9110, missing component rows, dedicated Messenger topic, out-of-scope
+purge, version-lock, overclaiming-language purge, final validations). Full
+detail was given to the user as a structured final report at the end of this
+lot — read that report (in the conversation, not duplicated here) before
+resuming. This section is the durable summary for a future session.
+
+**Network limitation (important, applies to everything below):**
+`symfony.com`, `certification.symfony.com`, `www.php.net`, and
+`www.rfc-editor.org` are all egress-blocked from this environment this
+session. Only `github.com` (raw source + API, API sometimes 403s) was
+reachable. Every fact in this lot that needed live verification was checked
+against `symfony/symfony` source on the `8.0` branch (or `php/php-src` for
+PHP-level facts) instead — never against the actual live syllabus/doc pages.
+**A future session with web access to those domains should re-verify the
+"Official Topic/Subtopic" wording in TraceabilityMatrix.md against the real
+`certification.symfony.com/exams/symfony.html` page** — this lot could not.
+
+**What changed (see the full Priority|File|Modification|Evidence|Result table
+given to the user for the complete list):**
+- `specs/TraceabilityMatrix.md` fully rebuilt: 13 mandated columns, 175
+  official subtopics (was 154), each with real automated evidence
+  (`tools/gen_traceability_matrix.py`, new) — 140 PASS (80.0%), 35 TO VERIFY
+  including named gaps. A "Coverage summary" and "Out-of-scope / Additional
+  Learning" section were added. `tools/audit.py` was rewritten to import from
+  the same generator so `specs/CoverageReport.md` can never report a
+  different number than the matrix again.
+- New chapters (EN, + FR for the first two): `php-web-security/attributes.md`,
+  `php-web-security/enums.md` (replacing a duplicated subsection in
+  `php-api.md`, now a cross-reference), `http/rfc-9110.md` (**no FR yet**).
+  Each verified against real source (PHP attribute stub files, Symfony's
+  `Route` attribute flags, `BackedEnumValueResolver`, `EnumType`) and given
+  2 new quiz questions each so they score PASS on real evidence, not just
+  existing.
+- Out-of-scope purge (bounded to what mission named explicitly): ESI,
+  PHPUnit Bridge, Lock component chapters (EN+FR) now carry an explicit
+  "Excluded from Symfony 8 certification" notice; their 24 quiz questions
+  tagged `out_of_scope: true` (schema addition, `validate_quiz.py` updated
+  to report official vs. out-of-scope counts separately). Intl's ICU-utility
+  subsection (`Countries`/`Languages`/`Locales`/`Currencies`/`Timezones`)
+  similarly marked excluded, and its mismatched source-reference link fixed
+  (was citing `Translator::trans()`, now cites `Intl\Countries`).
+- Version-lock: "current Twig 3.x" → "Twig up to 3.22" fixed in 6 real
+  locations (source chapter EN+FR, quiz source, 3 generated echoes,
+  hand-patched — no full `gen_*.py` regeneration, same caution as Lot 1).
+  Swept for Symfony 8.1+/Twig 3.23+/PHP 8.5+ claims: none found.
+- Overclaiming-language purge: "definitive", "100% syllabus coverage",
+  "every official topic", "no deprecated APIs" replaced with the mandated
+  sentence (or a softened equivalent) in `README.md`, `docs/index.md`,
+  `mkdocs.yml` (site_description, EN+FR).
+- Internationalization renamed to "Internationalization and localization" in
+  nav + index pages (EN+FR).
+
+**Lot 2 continued (same session, user asked "is it finished, if not continue"):**
+Picked up the two remaining named gaps plus two real bugs found in
+`gen_traceability_matrix.py` itself:
+- **Bug fix:** `sf8_ref` evidence check only recognized `blob/8.0`, missing
+  the equally legitimate `tree/8.0` (directory-level source links) and Twig's
+  own `twigphp/Twig/blob/3.x` (Twig isn't part of symfony/symfony). Also
+  `example` only checked ```php/yaml/console fences, missing ```twig/```http.
+  Fixing both moved PASS from 140→168/175 **on re-measurement of already-
+  correct content**, not by loosening the actual PASS criteria.
+- **Correction, not new work:** the "Messenger → Events" gap claimed earlier
+  was **wrong** — `miscellaneous/messenger.md` already covers
+  WorkerMessageReceivedEvent/Handled/Failed/Running/Stopped/RateLimited with
+  a diagram, listener example, and source ref. Only `SendMessageToTransportsEvent`
+  (the dispatch-side event) was genuinely missing — added (EN+FR, verified
+  against source) plus one quiz question. Matrix corrected to PASS.
+- **New chapter:** `miscellaneous/property-access.md` (EN only, no FR yet) —
+  `PropertyAccessor`/`PropertyAccessorBuilder`, getter order
+  (`get`/`is`/`has`/`can`), magic-method opt-in defaults (`__get`/`__set` on,
+  `__call` off), `NoSuchPropertyException`/`UninitializedPropertyException` —
+  verified against source, 2 quiz questions added, wired into mkdocs nav.
+- **Re-mapping, not fabrication:** `Controllers → FrameworkBundle` and
+  `Routing → FrameworkBundle` were wrongly marked "no chapter" — a real,
+  substantive subsection already exists in `architecture/components.md`
+  ("How the framework composes them": extension pattern, config tree,
+  compiler-pass pipeline, real cert question). Re-mapped there instead of
+  authoring a duplicate chapter. Also re-mapped 4 newly-added "component"
+  rows (TwigBundle, Form component, Console component, Misc HTTP-Caching
+  cross-ref) from bare `index.md` landing pages to the chapter that actually
+  carries their pedagogical anatomy.
+- Added a missing `Source reference` note to `http-caching/client-side.md`
+  (EN+FR) citing `ResponseHeaderBag::addCacheControlDirective()` — it
+  discussed `Response` without ever citing where the behavior lives.
+
+**Result: 170/175 (97.1%) PASS, 0 missing, 5 legitimately-unforced TO VERIFY**
+(Architecture's Flex/License/Best-practices/Release-management/Roadmap —
+meta/policy topics with no natural class to cite or code to show; deliberately
+**not** padded with a fake citation just to flip the checkbox). Full validation
+clean: `mkdocs build --strict` (0 real warnings), `lint_php.py` (378/0
+failures), `check_section_order.py` (170/170), `validate_quiz.py` (1295
+questions, 0 errors).
+
+**Still NOT done (unchanged from before, explicitly deferred — see matrix
+Anomaly column for each):**
+- Messenger is still one monolithic `miscellaneous/messenger.md` chapter; the
+  mission wants a `docs/messenger/` split into 7 chapters. Not attempted —
+  content-complete per subtopic, but structurally still one file.
+- Full quiz-bank reformat to the mission's mandated per-question fields
+  (Official Topic/Subtopic, Scenario, Explanation-per-option, Pitfall,
+  Symfony 8.0 Reference) across all ~1295 questions — not attempted; only
+  the ~12 new questions added across both passes use that scenario-forward
+  style. This is the single largest undone item in the brief.
+- The "Practice question, not an official exam question" banner — still not
+  added anywhere.
+- Recursive ecosystem term audit (Symfony UX/AI, Doctrine, Monolog,
+  AssetMapper, Encore, third-party bundles) — counted only, not individually
+  triaged file-by-file.
+- Every pre-existing row marked PASS was checked by **automated evidence
+  only** — no fresh line-by-line technical re-read beyond Lot 1's DI
+  chapters and this pass's spot-checks (components.md, client-side.md).
+  A PASS is not a blanket claim of verified factual accuracy.
+- `http/rfc-9110.md` and `miscellaneous/property-access.md` still have no
+  French translation.
+
+**Next task:** pick ONE of the "Still NOT done" items above per future lot
+(the Messenger split is the most syllabus-visible remaining structural item).
+Before starting, re-read `specs/TraceabilityMatrix.md`'s Anomaly column for
+that row instead of rescanning the repo.
 
 ## Session baseline (2026-08-26)
 

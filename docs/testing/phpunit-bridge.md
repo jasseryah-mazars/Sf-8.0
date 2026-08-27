@@ -1,5 +1,11 @@
 # The PHPUnit Bridge
 
+**Excluded from Symfony 8 certification.** The PHPUnit Bridge does not
+appear in the official Symfony 8 certification syllabus. This chapter is
+kept as additional/enrichment content — see `specs/TraceabilityMatrix.md`
+for the official-vs-additional split — and is not tested in generated exams
+or counted toward official syllabus coverage.
+
 !!! tip "In a nutshell"
     `symfony/phpunit-bridge` augments PHPUnit with deprecation collection plus clock
     and DNS mocking, all wired by registering `SymfonyExtension`. Exam hook:

@@ -306,7 +306,26 @@ sequenceDiagram
 Les events du worker (namespace `Symfony\Component\Messenger\Event\`) :
 `WorkerStartedEvent`, `WorkerMessageReceivedEvent`, `WorkerMessageHandledEvent`,
 `WorkerMessageFailedEvent`, `WorkerRunningEvent`, `WorkerStoppedEvent`,
-`WorkerRateLimitedEvent`.
+`WorkerRateLimitedEvent`. Il existe aussi un event **côté envoi**, déclenché
+*avant* même qu'un worker soit impliqué : `SendMessageToTransportsEvent`,
+levé par `SendMessageMiddleware` juste avant de remettre l'enveloppe aux
+senders configurés. Un listener peut appeler `setEnvelope()` pour réécrire
+l'enveloppe (par ex. ajouter un stamp) avant qu'elle n'atteigne réellement
+le transport.
+
+```php
+use Symfony\Component\Messenger\Event\SendMessageToTransportsEvent;
+
+#[AsEventListener]
+final class TagOutgoingMessage
+{
+    public function __invoke(SendMessageToTransportsEvent $event): void
+    {
+        // levé par SendMessageMiddleware, avant que l'enveloppe n'atteigne un transport
+        $event->getSenders();  // les noms des transports vers lesquels elle va être envoyée
+    }
+}
+```
 
 ```php
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;

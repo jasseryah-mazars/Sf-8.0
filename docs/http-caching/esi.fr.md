@@ -1,5 +1,11 @@
 # Edge Side Includes (ESI)
 
+**Exclu de la certification Symfony 8.** ESI ne figure pas au programme
+officiel de la certification Symfony 8. Ce chapitre est conservé comme
+contenu additionnel / d'approfondissement — voir `specs/TraceabilityMatrix.md`
+pour la séparation officiel/additionnel — et n'est pas testé dans les examens
+générés ni compté dans la couverture officielle du syllabus.
+
 !!! tip "In a nutshell"
     ESI permet à une même page de mélanger les fraîcheurs : les trous
     `<esi:include>` sont récupérés et mis en cache séparément par le reverse

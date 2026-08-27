@@ -171,6 +171,11 @@ Accept-Encoding: gzip
     entièrement gouverné par ces headers émis, plus la request générée par
     l'action de l'utilisateur.
 
+!!! note "Référence source"
+    `setPublic()`/`setPrivate()`/`setMaxAge()` délèguent à
+    `Symfony\Component\HttpFoundation\ResponseHeaderBag::addCacheControlDirective()` —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php).
+
 ### Requests that bypass the cache anyway
 
 Les méthodes non sûres (`POST`, `PUT`, `PATCH`, `DELETE`) ne sont **pas**

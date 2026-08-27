@@ -134,7 +134,7 @@ the generated PHP, so filters/functions cost a normal function call at runtime.
 
 ### Custom filters/functions
 
-Two equivalent registration styles in current Twig 3.x:
+Two equivalent registration styles in Twig up to 3.22:
 
 === "AbstractExtension (classic)"
 

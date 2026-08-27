@@ -36,6 +36,8 @@ rest of the syllabus becomes far easier.
 
 Work through them in order:
 
+- [ ] [HTTP Specification (RFC 9110)](rfc-9110.md) — the formal, version-independent
+  semantics spec every other chapter in this stage implements a slice of.
 - [ ] [Client / Server Interaction](client-server.md) — the request/response
   cycle, TCP/TLS, HTTP/1.1 vs HTTP/2.
 - [ ] [Status Codes](status-codes.md) — 1xx–5xx classes and the ones the exam

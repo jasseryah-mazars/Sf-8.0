@@ -1,5 +1,11 @@
 # Edge Side Includes (ESI)
 
+**Excluded from Symfony 8 certification.** ESI does not appear in the
+official Symfony 8 certification syllabus. This chapter is kept as
+additional/enrichment content — see `specs/TraceabilityMatrix.md` for the
+official-vs-additional split — and is not tested in generated exams or
+counted toward official syllabus coverage.
+
 !!! tip "In a nutshell"
     ESI lets one page mix freshness: `<esi:include>` holes are fetched and cached
     separately by the reverse proxy, so a long-lived shell can wrap a per-user

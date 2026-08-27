@@ -162,6 +162,11 @@ Accept-Encoding: gzip
     browser's cache is entirely governed by those emitted headers plus the
     request the user's action generates.
 
+!!! note "Source reference"
+    `setPublic()`/`setPrivate()`/`setMaxAge()` delegate to
+    `Symfony\Component\HttpFoundation\ResponseHeaderBag::addCacheControlDirective()` —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php).
+
 ### Requests that bypass the cache anyway
 
 Non-safe methods (`POST`, `PUT`, `PATCH`, `DELETE`) are **not** served from cache

@@ -1,6 +1,6 @@
 # Symfony 8 Expert Certification Prep
 
-> The definitive open-source platform to prepare for the **Symfony 8 Certification** (Advanced & Expert levels).
+> Community preparation resource aligned with the Symfony 8.0 certification syllabus. Coverage is validated through the traceability matrix and automated checks.
 
 [![Build & Deploy Docs](https://github.com/jasseryah-mazars/Sf-8.0/actions/workflows/deploy.yml/badge.svg)](https://github.com/jasseryah-mazars/Sf-8.0/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -10,11 +10,15 @@
 
 **👉 [jasseryah-mazars.github.io/Sf-8.0](https://jasseryah-mazars.github.io/Sf-8.0/)** — the full, searchable platform (works great on mobile).
 
-This repository is a complete, exam-focused learning platform built around the
+This repository is an exam-focused learning platform built around the
 **[official Symfony Certification syllabus](https://certification.symfony.com/exams/symfony.html)**.
-Every official topic is covered in depth with theory, internal deep dives,
-Mermaid diagrams, runnable Symfony 8 / PHP 8.4 code, exercises with solutions,
-certification traps, and last-minute revision material.
+Community preparation resource aligned with the Symfony 8.0 certification
+syllabus. Coverage is validated through the traceability matrix and
+automated checks — see [`specs/TraceabilityMatrix.md`](specs/TraceabilityMatrix.md)
+for the current, honestly-scored status per syllabus item. Chapters include
+theory, internal deep dives, Mermaid diagrams, runnable Symfony 8 / PHP 8.4
+code, exercises with solutions, certification traps, and last-minute
+revision material.
 
 It began as a rewrite of Thomas Berends'
 [Symfony Certification Preparation List](https://github.com/ThomasBerends/symfony-certification-preparation-list)
@@ -23,14 +27,14 @@ study resource.
 
 ## 🎯 What makes this different
 
-- **100% syllabus coverage** — tracked in a [Traceability Matrix](specs/TraceabilityMatrix.md).
+- **Coverage tracked and validated** — in a [Traceability Matrix](specs/TraceabilityMatrix.md); no status is marked done without a checked reference and a situational question.
 - **Deep dives, not summaries** — every concept explains *why* and *how internally*
   (classes, interfaces, lifecycle, extension points, performance).
 - **Certification traps & common mistakes** in every chapter.
 - **Micro-chapters** — small files, optimized for reading on a phone.
 - **Exercises + solutions** and a **practice quiz bank** (YAML,
   [certificationy](https://github.com/certificationy/certificationy-cli)-compatible).
-- **Modern code only** — PHP 8.4+, Symfony 8, attributes, no deprecated APIs.
+- **Modern code targeted** — PHP 8.4+, Symfony 8, attributes; deprecated APIs are avoided and flagged for removal when found.
 
 ## 📖 Read the docs
 

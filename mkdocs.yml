@@ -1,8 +1,9 @@
 site_name: Symfony 8 Expert Certification Prep
 site_description: >-
-  The definitive open-source preparation platform for the Symfony 8
-  Certification (Advanced & Expert). Deep dives, diagrams, exercises,
-  certification traps, and last-minute revision for every official syllabus topic.
+  Community preparation resource aligned with the Symfony 8.0 certification
+  syllabus (Advanced & Expert). Coverage is validated through the
+  traceability matrix and automated checks. Deep dives, diagrams, exercises,
+  certification traps, and last-minute revision.
 site_author: Community
 # Update site_url + repo_url to your fork before deploying.
 site_url: https://jasseryah-mazars.github.io/Sf-8.0/
@@ -77,10 +78,11 @@ plugins:
           name: Français
           build: true
           site_description: >-
-            La plateforme open-source de préparation à la Certification
-            Symfony 8 (Advanced & Expert). Deep dives, diagrammes, exercices,
-            pièges de certification et révision de dernière minute pour chaque
-            sujet officiel du syllabus.
+            Ressource communautaire de préparation alignée sur le programme
+            de la certification Symfony 8.0 (Advanced & Expert). La
+            couverture est validée via la matrice de traçabilité et des
+            contrôles automatisés. Deep dives, diagrammes, exercices, pièges
+            de certification et révision de dernière minute.
   - git-revision-date-localized:
       enable_creation_date: false
       fallback_to_build_date: true
@@ -158,17 +160,20 @@ nav:
       - php-web-security/index.md
       - PHP API (up to 8.4): php-web-security/php-api.md
       - Object-Oriented Programming: php-web-security/oop.md
-      - Namespaces: php-web-security/namespaces.md
+      - Attributes: php-web-security/attributes.md
       - Interfaces: php-web-security/interfaces.md
       - Anonymous Functions & Closures: php-web-security/closures.md
       - Abstract Classes: php-web-security/abstract-classes.md
-      - Traits: php-web-security/traits.md
       - Exception & Error Handling: php-web-security/exceptions.md
-      - PHP Extensions: php-web-security/extensions.md
-      - SPL: php-web-security/spl.md
-      - Web Security Fundamentals: php-web-security/web-security.md
+      - Traits: php-web-security/traits.md
+      - Enums: php-web-security/enums.md
+      - "Additional — Namespaces": php-web-security/namespaces.md
+      - "Additional — PHP Extensions": php-web-security/extensions.md
+      - "Additional — SPL": php-web-security/spl.md
+      - "Additional — Web Security Fundamentals": php-web-security/web-security.md
   - HTTP:
       - http/index.md
+      - HTTP Specification (RFC 9110): http/rfc-9110.md
       - Client / Server Interaction: http/client-server.md
       - Status Codes: http/status-codes.md
       - HTTP Request: http/request.md
@@ -336,12 +341,13 @@ nav:
       - Cache Component: miscellaneous/cache.md
       - Process Component: miscellaneous/process.md
       - Serializer Component: miscellaneous/serializer.md
+      - PropertyAccess Component: miscellaneous/property-access.md
       - Messenger Component: miscellaneous/messenger.md
       - Mime & Mailer Components: miscellaneous/mailer.md
       - Filesystem & Finder Components: miscellaneous/filesystem-finder.md
       - Lock Component: miscellaneous/lock.md
       - Web Profiler & Data Collectors: miscellaneous/profiler.md
-      - Internationalization (Intl): miscellaneous/intl.md
+      - Internationalization and localization: miscellaneous/intl.md
       - Runtime Component: miscellaneous/runtime.md
       - Clock Component: miscellaneous/clock.md
   - Labs:

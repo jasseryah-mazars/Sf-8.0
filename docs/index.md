@@ -1,13 +1,15 @@
 # Symfony 8 Expert Certification Prep
 
-The definitive, open-source, self-contained platform to prepare for the
-**Symfony 8 Certification** — both the **Advanced** and **Expert** levels. Every
-official syllabus topic is taught in depth: theory, internals, diagrams, runnable
-Symfony 8 / PHP 8.4 code, exercises, certification traps, and last-minute revision.
+Community preparation resource aligned with the Symfony 8.0 certification
+syllabus. Coverage is validated through the traceability matrix and
+automated checks. It targets both the **Advanced** and **Expert** levels,
+with theory, internals, diagrams, runnable Symfony 8 / PHP 8.4 code,
+exercises, certification traps, and last-minute revision.
 
 !!! abstract "What this is"
-    A complete study resource you can prepare with **without any other material**
-    except the official documentation it links to. It began as a rewrite of the
+    A study resource meant to be used **alongside the official Symfony
+    documentation** it links to, not as a replacement for it. It began as a
+    rewrite of the
     community [ThomasBerends preparation list](https://github.com/ThomasBerends/symfony-certification-preparation-list)
     (a list of links, targeting Symfony 7) and was rebuilt into full teaching
     content for Symfony 8.

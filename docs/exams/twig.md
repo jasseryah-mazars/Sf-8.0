@@ -185,7 +185,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
 
-**Q14.** Which attribute registers a custom Twig filter in current Twig 3.x?  <small>_(easy · single)_</small>
+**Q14.** Which attribute registers a custom Twig filter in Twig up to 3.22?  <small>_(easy · single)_</small>
 
 - A. #[AsTwigFilter]
 - B. #[TwigFilter]
@@ -449,7 +449,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#other-operators)
 
-**Q33.** How do you strip whitespace between HTML tags in current Twig 3.x?  <small>_(medium · trap)_</small>
+**Q33.** How do you strip whitespace between HTML tags in Twig up to 3.22?  <small>_(medium · trap)_</small>
 
 - A. {% apply spaceless %}...{% endapply %}
 - B. {% spaceless %}...{% endspaceless %}

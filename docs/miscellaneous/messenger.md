@@ -299,7 +299,25 @@ sequenceDiagram
 Worker events (namespace `Symfony\Component\Messenger\Event\`):
 `WorkerStartedEvent`, `WorkerMessageReceivedEvent`, `WorkerMessageHandledEvent`,
 `WorkerMessageFailedEvent`, `WorkerRunningEvent`, `WorkerStoppedEvent`,
-`WorkerRateLimitedEvent`.
+`WorkerRateLimitedEvent`. There is also a **dispatch-side** event, fired
+*before* a worker is even involved: `SendMessageToTransportsEvent`, raised by
+`SendMessageMiddleware` right before it hands the envelope to the configured
+senders. A listener can call `setEnvelope()` to rewrite the envelope (e.g.
+add a stamp) before it actually reaches the transport.
+
+```php
+use Symfony\Component\Messenger\Event\SendMessageToTransportsEvent;
+
+#[AsEventListener]
+final class TagOutgoingMessage
+{
+    public function __invoke(SendMessageToTransportsEvent $event): void
+    {
+        // fired by SendMessageMiddleware, before the envelope reaches a transport
+        $event->getSenders();  // the transport names it is about to be sent to
+    }
+}
+```
 
 ```php
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;

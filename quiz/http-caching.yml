@@ -958,6 +958,7 @@ categories:
         type: "trap"
         difficulty: "medium"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["render_esi", "surrogate-capability", "inline-fallback"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -980,6 +981,7 @@ categories:
         type: "single"
         difficulty: "easy"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["esi", "mixed-freshness", "fragment"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1002,6 +1004,7 @@ categories:
         type: "single"
         difficulty: "easy"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["surrogate", "reverse-proxy", "varnish"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1023,6 +1026,7 @@ categories:
         type: "internals"
         difficulty: "medium"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["UriSigner", "fragment", "security"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1047,6 +1051,7 @@ categories:
         type: "config"
         difficulty: "medium"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["framework.esi", "framework.http_cache", "fragments"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1070,6 +1075,7 @@ categories:
         type: "internals"
         difficulty: "hard"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["ResponseCacheStrategy", "min-ttl", "inline"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1093,6 +1099,7 @@ categories:
         type: "code"
         difficulty: "medium"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["render_esi", "controller", "twig"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1115,6 +1122,7 @@ categories:
         type: "single"
         difficulty: "easy"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["ssi", "render_ssi", "surrogate"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1137,6 +1145,7 @@ categories:
         type: "debug"
         difficulty: "medium"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["inline-fallback", "surrogate", "no-benefit"]
         syllabus: "HTTP Caching → Edge Side Includes"
         answers:
@@ -1236,6 +1245,7 @@ categories:
         type: "multiple"
         difficulty: "medium"
         subchapter: "http-caching/esi"
+        out_of_scope: true
         concepts: ["render_esi", "inline-fallback", "fragment-ttl", "UriSigner"]
         syllabus: "HTTP Caching → Edge Side Includes"
         question: "Which of the following statements are true about Edge Side Includes (ESI)? (select all that apply)"

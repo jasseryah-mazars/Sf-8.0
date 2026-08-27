@@ -68,7 +68,7 @@ categories:
         documentation: "https://twig.symfony.com/doc/3.x/templates.html#other-operators"
 
       - id: "TWIG-SYNTAX-04"
-        question: "How do you strip whitespace between HTML tags in current Twig 3.x?"
+        question: "How do you strip whitespace between HTML tags in Twig up to 3.22?"
         type: "trap"
         difficulty: "medium"
         subchapter: "twig/syntax"
@@ -833,7 +833,7 @@ categories:
       # filters-functions.md
       # =====================================================================
       - id: "TWIG-FILTERS-01"
-        question: "Which attribute registers a custom Twig filter in current Twig 3.x?"
+        question: "Which attribute registers a custom Twig filter in Twig up to 3.22?"
         type: "single"
         difficulty: "easy"
         subchapter: "twig/filters-functions"

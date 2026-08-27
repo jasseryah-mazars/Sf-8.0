@@ -1203,6 +1203,7 @@ categories:
         type: "single"
         difficulty: "easy"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["SymfonyExtension", "phpunit-extension", "registration"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "Which class must be registered to enable the PHPUnit bridge's deprecation collection and clock/DNS mocking?"
@@ -1224,6 +1225,7 @@ categories:
         type: "single"
         difficulty: "medium"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["SYMFONY_DEPRECATIONS_HELPER", "env-var", "configuration"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "How is SYMFONY_DEPRECATIONS_HELPER supplied to PHPUnit?"
@@ -1245,6 +1247,7 @@ categories:
         type: "single"
         difficulty: "medium"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["SYMFONY_DEPRECATIONS_HELPER", "max-total", "fail"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "Which SYMFONY_DEPRECATIONS_HELPER value makes the build fail on the very first deprecation?"
@@ -1266,6 +1269,7 @@ categories:
         type: "config"
         difficulty: "hard"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["phpunit.dist.xml", "extensions", "bootstrap"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: >-
@@ -1287,6 +1291,7 @@ categories:
         type: "trap"
         difficulty: "medium"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["clock-mock", "time-sensitive", "group"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "Your test calls sleep(61) expecting it to be instant (mocked), but it actually sleeps. What is missing?"
@@ -1306,6 +1311,7 @@ categories:
         type: "scenario"
         difficulty: "hard"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["MockClock", "ClockInterface", "clock-mock"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "A service injects Symfony\\Component\\Clock\\ClockInterface. What is the cleanest way to control time in its test?"
@@ -1326,6 +1332,7 @@ categories:
         type: "true-false"
         difficulty: "medium"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["simple-phpunit", "deprecated", "extension"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "True or False: the bin/simple-phpunit wrapper is the recommended way to run the suite in Symfony 8."
@@ -1650,6 +1657,7 @@ categories:
         type: "multiple"
         difficulty: "medium"
         subchapter: "testing/phpunit-bridge"
+        out_of_scope: true
         concepts: ["SymfonyExtension", "time-sensitive", "dns-sensitive", "env-var"]
         syllabus: "Automated Tests → PHPUnit bridge"
         question: "Which statements about the Symfony PHPUnit bridge are true? (select all that apply)"

@@ -64,71 +64,13 @@ l'examen.
 
 ### Enums (8.1)
 
-Les enums sont un type à part entière. Les enums **pures** n'ont que des cases ;
-les enums **backed** associent chaque case à un scalaire `int` ou `string` et
-exposent `from()`/`tryFrom()` ainsi qu'une propriété `->value` en lecture seule.
-Les deux implémentent `UnitEnum` ; les enums backed implémentent aussi
-`BackedEnum`. Les enums peuvent contenir des constantes, des méthodes et
-implémenter des interfaces, mais **ne peuvent pas** avoir d'état (non constant)
-— les cases sont des singletons, donc la comparaison d'identité `===` fonctionne
-toujours.
-
-```php
-enum Level                        // pure enum: cases only
-{
-    case Low;
-    case High;
-}
-
-enum Status: string               // backed enum: each case has a string value
-{
-    case Draft = 'draft';
-    case Published = 'published';
-
-    public const DEFAULT = self::Draft;          // constants allowed
-
-    public function label(): string              // methods allowed
-    {
-        return ucfirst($this->value);            // ->value is read-only
-    }
-}
-
-Status::from('draft');            // Status::Draft — throws ValueError if unknown
-Status::tryFrom('nope');          // null instead of throwing
-Status::Draft->value;             // 'draft'
-Status::Draft instanceof UnitEnum;    // true — every enum implements it
-Status::Draft instanceof BackedEnum;  // true — backed enums also implement it
-Level::Low instanceof BackedEnum;     // false — pure enums don't
-Status::Draft === Status::from('draft'); // true — cases are singletons
-```
-
-```php
-<?php
-declare(strict_types=1);
-
-enum Suit: string
-{
-    case Hearts = 'H';
-    case Spades = 'S';
-
-    public function color(): string
-    {
-        return match ($this) {
-            Suit::Hearts => 'red',
-            Suit::Spades => 'black',
-        };
-    }
-}
-
-Suit::from('H');        // Suit::Hearts
-Suit::tryFrom('X');     // null (no exception)
-Suit::cases();          // [Suit::Hearts, Suit::Spades]
-```
-
-`from()` lève une `\ValueError` sur une valeur inconnue ; `tryFrom()` retourne
-`null`. Cette distinction est un piège fréquent à l'examen. Le Serializer de
-Symfony, les Forms (`EnumType`) et le routing (une enum comme requirement)
-s'appuient tous sur les enums backed.
+Les enums forment leur propre sous-sujet de certification, avec un chapitre
+complet — **[Enums](enums.fr.md)** — qui couvre les enums purs vs backés,
+`UnitEnum`/`BackedEnum`, la distinction `from()`/`tryFrom()`, et comment le
+routing (`BackedEnumValueResolver`) et les Forms (`EnumType`) de Symfony les
+consomment. Le fait à retenir pour ce tour d'horizon des versions : `from()`
+**lève** `\ValueError` sur une valeur inconnue, `tryFrom()` renvoie `null` —
+un piège fréquent à l'examen.
 
 ### readonly properties (8.1) and readonly classes (8.2)
 

@@ -26,7 +26,7 @@
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#other-operators)
 
-??? question "4. How do you strip whitespace between HTML tags in current Twig 3.x?"
+??? question "4. How do you strip whitespace between HTML tags in Twig up to 3.22?"
     **✅ {% apply spaceless %}...{% endapply %}**
 
     The {% spaceless %} tag was removed in Twig 3; use the spaceless filter via {% apply spaceless %} (or the {{- -}} whitespace modifiers).
@@ -264,7 +264,7 @@
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
 
-??? question "38. Which attribute registers a custom Twig filter in current Twig 3.x?"
+??? question "38. Which attribute registers a custom Twig filter in Twig up to 3.22?"
     **✅ #[AsTwigFilter]**
 
     Twig 3.x provides Twig\Attribute\AsTwigFilter and AsTwigFunction as an attribute-based alternative to returning TwigFilter/TwigFunction from an AbstractExtension.

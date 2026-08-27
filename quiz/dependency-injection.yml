@@ -967,6 +967,30 @@ categories:
           priority. #[AutowireLocator] would give the lazy keyed locator; the
           attribute does not filter down to one service.
         documentation: "https://symfony.com/doc/current/service_container/tags.html"
+      - id: "DI-TAGS-SCENARIO-01"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "dependency-injection/tags"
+        concepts: ["index_by", "default_index_method", "collision"]
+        syllabus: "Dependency Injection → Tags"
+        question: "A new HandlerB is tagged app.handler and its getName() happens to return the same string as an existing HandlerA. Both are consumed via a tagged_locator indexed by that name. What happens at runtime?"
+        answers:
+          - value: "One of them silently wins the index key; the other becomes unreachable through the locator"
+            correct: true
+          - value: "The container fails to compile with a duplicate-index error"
+            correct: false
+          - value: "The locator merges both into a single service for that key"
+            correct: false
+          - value: "Both remain reachable; the locator falls back to array semantics for collisions"
+            correct: false
+        explanation: >-
+          A tagged_locator's index is a plain map: if two tagged services
+          resolve to the same index_by/default_index_method key, the later
+          one silently overwrites the earlier one — there is no compile-time
+          duplicate check and no error. This is the classic "my handler
+          vanished" bug; index keys must be treated as unique, like a
+          primary key.
+        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
 
       # --- semantic-config.md ---
       - id: "DI-SEMCFG-01"

@@ -1264,6 +1264,7 @@ categories:
         type: "trap"
         difficulty: "medium"
         subchapter: "miscellaneous/lock"
+        out_of_scope: true
         concepts: ["lock", "acquire", "non-blocking"]
         syllabus: "Miscellaneous → Lock"
         answers:
@@ -1285,6 +1286,7 @@ categories:
         type: "single"
         difficulty: "easy"
         subchapter: "miscellaneous/lock"
+        out_of_scope: true
         concepts: ["lock", "store", "distributed"]
         syllabus: "Miscellaneous → Lock"
         answers:
@@ -1306,6 +1308,7 @@ categories:
         type: "scenario"
         difficulty: "medium"
         subchapter: "miscellaneous/lock"
+        out_of_scope: true
         concepts: ["lock", "ttl", "refresh"]
         syllabus: "Miscellaneous → Lock"
         answers:
@@ -1327,6 +1330,7 @@ categories:
         type: "code"
         difficulty: "medium"
         subchapter: "miscellaneous/lock"
+        out_of_scope: true
         concepts: ["acquire", "boolean", "guard"]
         syllabus: "Miscellaneous → Lock"
         answers:
@@ -1350,6 +1354,7 @@ categories:
         type: "internals"
         difficulty: "medium"
         subchapter: "miscellaneous/lock"
+        out_of_scope: true
         concepts: ["lock-factory", "ttl", "auto-release"]
         syllabus: "Miscellaneous → Lock"
         answers:
@@ -1562,6 +1567,30 @@ categories:
           $_SERVER (env), and it can also inject Request, InputInterface, etc. You
           therefore never read $_SERVER manually in the entry point.
         documentation: "https://symfony.com/doc/current/components/runtime.html#using-the-runtime"
+      - id: "MISC-RUN-SCENARIO-01"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "miscellaneous/runtime"
+        concepts: ["public/index.php", "SymfonyRuntime", "APP_RUNTIME"]
+        syllabus: "Miscellaneous → Runtime"
+        question: "A teammate 'fixes' a bug by adding $kernel->handle($request)->send(); at the end of public/index.php, right after the file already returns its closure. What is wrong with this?"
+        answers:
+          - value: "public/index.php must only return a callable; the Runtime component itself builds the kernel, handles the request and sends the response"
+            correct: true
+          - value: "Nothing — calling handle()/send() manually is required in Symfony 8"
+            correct: false
+          - value: "It is wrong only when APP_RUNTIME is unset"
+            correct: false
+          - value: "It is wrong only under SymfonyRuntime, not GenericRuntime"
+            correct: false
+        explanation: >-
+          The whole point of symfony/runtime is that the front controller
+          only returns a callable (or an application object); the runtime
+          resolves its arguments, invokes it, and — for the Symfony flavor —
+          runs the kernel and sends the response itself. Hand-calling
+          handle()/send() after autoload_runtime.php has already done so
+          double-processes the request.
+        documentation: "https://symfony.com/doc/current/components/runtime.html"
       - id: "MISC-CLOCK-01"
         question: "ClockInterface::now() returns what type?"
         type: "internals"
@@ -2122,6 +2151,7 @@ categories:
         type: "multiple"
         difficulty: "hard"
         subchapter: "miscellaneous/lock"
+        out_of_scope: true
         concepts: ["acquire", "ttl", "stores"]
         syllabus: "Miscellaneous → Lock"
         question: "Which of the following statements are true about the Symfony Lock component? (select all that apply)"
@@ -2216,6 +2246,53 @@ categories:
           (ObjectNormalizer is the one using accessors), and null properties are
           serialized as null unless you enable the skip_null_values context option.
         documentation: "https://symfony.com/doc/current/serializer.html"
+      - id: "MISC-PROPACC-01"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "miscellaneous/property-access"
+        concepts: ["getter order", "magic methods", "enableMagicCall"]
+        syllabus: "Miscellaneous → PropertyAccess component"
+        question: "A class exposes its data only through __call() (no real getX()/setX() methods). You read a path with the default PropertyAccessor. What happens?"
+        answers:
+          - value: "It throws — __call fallback is not enabled by default, only __get/__set are"
+            correct: true
+          - value: "It works — all magic methods are enabled by default"
+            correct: false
+          - value: "It returns null silently"
+            correct: false
+          - value: "It works only for reading, never for writing"
+            correct: false
+        explanation: >-
+          PropertyAccessorBuilder defaults to MAGIC_GET | MAGIC_SET only;
+          __call is disabled unless enableMagicCall() is explicitly called.
+          Without it, a class reachable only via __call() is not accessible
+          through the default accessor, and getValue() throws rather than
+          returning null.
+        documentation: "https://symfony.com/doc/current/components/property_access.html#magic-getters-and-setters"
+      - id: "MISC-PROPACC-02"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "miscellaneous/property-access"
+        concepts: ["NoSuchPropertyException", "UninitializedPropertyException", "isReadable"]
+        syllabus: "Miscellaneous → PropertyAccess component"
+        question: "getValue() throws UninitializedPropertyException for one object and NoSuchPropertyException for another, both accessed via the same path 'title'. What distinguishes the two cases?"
+        answers:
+          - value: "The first object declares a typed $title property that was never assigned; the second has no title property/getter/setter at all"
+            correct: true
+          - value: "Both exceptions mean exactly the same thing; the name is arbitrary"
+            correct: false
+          - value: "UninitializedPropertyException means the path syntax itself is malformed"
+            correct: false
+          - value: "NoSuchPropertyException only happens with array paths, never objects"
+            correct: false
+        explanation: >-
+          UninitializedPropertyException (a subtype of AccessException) means
+          the property genuinely exists — typed, but never given a value —
+          while NoSuchPropertyException means no getter, public property, or
+          enabled magic method could resolve the path at all. isReadable()
+          would have returned false for both without distinguishing them;
+          only the thrown exception type tells them apart.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/Exception/UninitializedPropertyException.php"
       - id: "MISC-MC-07"
         type: "multiple"
         difficulty: "hard"
@@ -2242,3 +2319,27 @@ categories:
           messages that exhaust max_retries go to the configured failure transport,
           not into the void.
         documentation: "https://symfony.com/doc/current/messenger.html"
+      - id: "MISC-MSG-EVENT-01"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "miscellaneous/messenger"
+        concepts: ["SendMessageToTransportsEvent", "SendMessageMiddleware", "envelope rewrite"]
+        syllabus: "Miscellaneous → Messenger → Events"
+        question: "You need to tag every outgoing async message with a stamp right before it is handed to its transport, without touching every call site that dispatches it. Which event do you listen to, and why not a Worker* event?"
+        answers:
+          - value: "SendMessageToTransportsEvent — it fires on the dispatch side, before the envelope reaches a transport, and setEnvelope() lets you rewrite it"
+            correct: true
+          - value: "WorkerMessageReceivedEvent — it fires earliest, before anything else happens to the message"
+            correct: false
+          - value: "WorkerRunningEvent — it fires once per worker loop iteration, covering every message"
+            correct: false
+          - value: "WorkerMessageHandledEvent — tagging after handling still reaches the transport in time"
+            correct: false
+        explanation: >-
+          SendMessageToTransportsEvent is raised by SendMessageMiddleware on
+          the dispatching side, before the message is actually sent to any
+          transport, and exposes setEnvelope() to rewrite it (e.g. add a
+          stamp). The Worker* events all fire on the consuming side, inside a
+          `messenger:consume` worker process — too late to affect what gets
+          sent, and irrelevant for synchronous (non-transport) messages.
+        documentation: "https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Event/SendMessageToTransportsEvent.php"

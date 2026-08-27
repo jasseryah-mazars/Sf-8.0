@@ -1875,3 +1875,25 @@ categories:
           once streaming starts, and Response::HTTP_* constants keep status codes
           readable and typo-free.
         documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+      - id: "CTRL-NAMING-SCENARIO-01"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "controllers/naming-conventions"
+        concepts: ["invokable controller", "_controller", "__invoke"]
+        syllabus: "Controllers → Naming conventions"
+        question: "For an invokable controller (a class with __invoke()), what value does the router store as _controller?"
+        answers:
+          - value: "The class name only, e.g. App\\Controller\\ShowOrder"
+            correct: true
+          - value: "ClassName::__invoke, mirroring the classic method syntax"
+            correct: false
+          - value: "A closure wrapping the class"
+            correct: false
+          - value: "The route name, not the class"
+            correct: false
+        explanation: >-
+          Symfony recognizes an invokable controller by its bare class name;
+          it never appends "::__invoke" the way it does for a named action
+          method. Writing ClassName::__invoke as the _controller value is a
+          common but incorrect habit carried over from classic controllers.
+        documentation: "https://symfony.com/doc/current/controller.html#invokable-controllers"

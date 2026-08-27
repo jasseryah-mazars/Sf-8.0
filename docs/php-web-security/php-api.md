@@ -57,68 +57,12 @@ about.
 
 ### Enums (8.1)
 
-Enums are a first-class type. **Pure** enums have only cases; **backed** enums
-map each case to an `int` or `string` scalar and expose `from()`/`tryFrom()`
-plus a read-only `->value`. Both implement `UnitEnum`; backed enums also
-implement `BackedEnum`. Enums may hold constants, methods and implement
-interfaces, but **cannot** have (non-constant) state — cases are singletons, so
-`===` identity comparison always works.
-
-```php
-enum Level                        // pure enum: cases only
-{
-    case Low;
-    case High;
-}
-
-enum Status: string               // backed enum: each case has a string value
-{
-    case Draft = 'draft';
-    case Published = 'published';
-
-    public const DEFAULT = self::Draft;          // constants allowed
-
-    public function label(): string              // methods allowed
-    {
-        return ucfirst($this->value);            // ->value is read-only
-    }
-}
-
-Status::from('draft');            // Status::Draft — throws ValueError if unknown
-Status::tryFrom('nope');          // null instead of throwing
-Status::Draft->value;             // 'draft'
-Status::Draft instanceof UnitEnum;    // true — every enum implements it
-Status::Draft instanceof BackedEnum;  // true — backed enums also implement it
-Level::Low instanceof BackedEnum;     // false — pure enums don't
-Status::Draft === Status::from('draft'); // true — cases are singletons
-```
-
-```php
-<?php
-declare(strict_types=1);
-
-enum Suit: string
-{
-    case Hearts = 'H';
-    case Spades = 'S';
-
-    public function color(): string
-    {
-        return match ($this) {
-            Suit::Hearts => 'red',
-            Suit::Spades => 'black',
-        };
-    }
-}
-
-Suit::from('H');        // Suit::Hearts
-Suit::tryFrom('X');     // null (no exception)
-Suit::cases();          // [Suit::Hearts, Suit::Spades]
-```
-
-`from()` throws `\ValueError` on an unknown value; `tryFrom()` returns `null`.
-This distinction is a frequent exam trap. Symfony's Serializer, Forms
-(`EnumType`) and routing (enum as a requirement) all lean on backed enums.
+Enums are their own certification sub-topic with a full chapter —
+**[Enums](enums.md)** — covering pure vs. backed enums, `UnitEnum`/`BackedEnum`,
+the `from()`/`tryFrom()` distinction, and how Symfony's routing
+(`BackedEnumValueResolver`) and Forms (`EnumType`) consume them. The one fact
+worth carrying into this version tour: `from()` **throws** `\ValueError` on an
+unknown value, `tryFrom()` returns `null` — a frequent exam trap.
 
 ### readonly properties (8.1) and readonly classes (8.2)
 

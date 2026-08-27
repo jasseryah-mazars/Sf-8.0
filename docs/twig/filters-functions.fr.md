@@ -140,7 +140,7 @@ normal à l'exécution.
 
 ### Custom filters/functions
 
-Deux styles d'enregistrement équivalents en Twig 3.x actuel :
+Deux styles d'enregistrement équivalents en Twig jusqu'à la 3.22 :
 
 === "AbstractExtension (classic)"
 
@@ -322,7 +322,7 @@ existante (`value|price`).
     - [ ] C. `#[Filter]`
     - [ ] D. `#[AsFilter]`
 
-    **Why:** Twig 3.x actuel fournit `Twig\Attribute\AsTwigFilter` (et
+    **Why:** Twig jusqu'à la 3.22 fournit `Twig\Attribute\AsTwigFilter` (et
     `AsTwigFunction`). **Ref:**
     [Custom extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension).
 

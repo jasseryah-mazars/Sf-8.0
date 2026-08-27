@@ -1,5 +1,12 @@
 # Lock Component
 
+**Exclu de la certification Symfony 8.** Le composant Lock ne figure pas au
+programme officiel de la certification Symfony 8. Ce chapitre est conservé
+comme contenu additionnel / d'approfondissement — voir
+`specs/TraceabilityMatrix.md` pour la séparation officiel/additionnel — et
+n'est pas testé dans les examens générés ni compté dans la couverture
+officielle du syllabus.
+
 !!! tip "In a nutshell"
     Lock empêche deux processus d'exécuter le même travail critique en même
     temps : obtenez un `LockInterface` via `LockFactory`, `acquire()`,

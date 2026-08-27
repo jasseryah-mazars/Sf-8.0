@@ -1777,3 +1777,25 @@ categories:
           offline. You should depend on the HttpClientInterface contract, not a concrete
           transport, and scoped-client options only apply to URLs matching the scope/base URI.
         documentation: "https://symfony.com/doc/current/http_client.html"
+      - id: "HTTP-RFC9110-01"
+        type: "trap"
+        difficulty: "hard"
+        subchapter: "http/rfc-9110"
+        concepts: ["RFC 9110", "RFC 9111", "RFC 9112"]
+        syllabus: "HTTP → HTTP Specification (RFC 9110)"
+        question: "A teammate cites 'RFC 7231' to justify a status-code semantics decision in a Symfony 8 review. What is the accurate correction?"
+        answers:
+          - value: "RFC 7231 was obsoleted by RFC 9110, which now defines HTTP semantics (methods, status codes, headers)"
+            correct: true
+          - value: "RFC 7231 is still current; RFC 9110 only covers HTTP/2"
+            correct: false
+          - value: "RFC 7231 was replaced by RFC 9111, which covers all of HTTP semantics"
+            correct: false
+          - value: "RFC 7231 was merged into RFC 9112, the wire-format spec"
+            correct: false
+        explanation: >-
+          In 2022, RFC 9110 (HTTP Semantics) replaced RFC 7231/7232/7233/7235/7538.
+          Wire format became RFC 9112 (HTTP/1.1), and caching became its own
+          document, RFC 9111 — semantics and caching are deliberately separate
+          specs, and neither citation should still point at the 2014 RFCs.
+        documentation: "https://www.rfc-editor.org/rfc/rfc9110.html"

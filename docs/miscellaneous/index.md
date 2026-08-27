@@ -55,7 +55,7 @@ whole stage and revisit it last-minute.
   expiring/auto-refreshing and shared locks.
 - [Web Profiler & Data Collectors](profiler.md) — the toolbar, custom
   `DataCollectorInterface`, when it runs, prod disabling.
-- [Internationalization (Intl)](intl.md) — Translator, ICU MessageFormat,
+- [Internationalization and localization](intl.md) — Translator, ICU MessageFormat,
   domains, locale fallback, the Intl data component.
 - [Runtime Component](runtime.md) — the entry-point flow, `RuntimeInterface`,
   `SymfonyRuntime`, `autoload_runtime.php`.

@@ -2465,3 +2465,90 @@ categories:
           CSRF token only proves the request originated from your own form/session,
           not who the user is.
         documentation: "https://symfony.com/doc/current/security.html"
+      - id: "PHP-ATTR-01"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "php-web-security/attributes"
+        concepts: ["Attribute", "getAttributes", "newInstance"]
+        syllabus: "PHP → Attributes"
+        question: "You put #[LogCall] on a method but nothing in your code ever calls getAttributes() on it. Does LogCall's constructor run?"
+        answers:
+          - value: "No — nothing instantiates it, so the constructor never runs"
+            correct: true
+          - value: "Yes, immediately when the file is parsed"
+            correct: false
+          - value: "Yes, the first time the method is invoked"
+            correct: false
+          - value: "It depends on the attribute's target flags"
+            correct: false
+        explanation: >-
+          An attribute is inert metadata. getAttributes() only returns data
+          (name, arguments, target); newInstance() is the one call that
+          constructs the object and autoloads its class. With nothing reading
+          the attribute at all, LogCall's constructor never executes.
+        documentation: "https://www.php.net/manual/en/language.attributes.php"
+      - id: "PHP-ATTR-02"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "php-web-security/attributes"
+        concepts: ["IS_REPEATABLE", "TARGET_METHOD", "Route"]
+        syllabus: "PHP → Attributes"
+        question: "A team member declares #[\\Attribute(\\Attribute::TARGET_METHOD)] on a custom Endpoint attribute, then applies it twice to the same method to register two names. What happens?"
+        answers:
+          - value: "PHP raises a fatal error — the attribute is not marked IS_REPEATABLE"
+            correct: true
+          - value: "Both applications silently merge into one instance"
+            correct: false
+          - value: "Only the second application is kept"
+            correct: false
+          - value: "PHP allows it because TARGET_METHOD permits multiple uses by default"
+            correct: false
+        explanation: >-
+          A target flag alone does not allow repetition. Applying the same
+          non-repeatable attribute class more than once to the same target is
+          rejected outright; \Attribute::IS_REPEATABLE must be added to the
+          flags (as Symfony's own #[Route] does) for that to be legal.
+        documentation: "https://www.php.net/manual/en/language.attributes.reflection.php"
+      - id: "PHP-ENUM-01"
+        type: "trap"
+        difficulty: "medium"
+        subchapter: "php-web-security/enums"
+        concepts: ["from", "tryFrom", "ValueError"]
+        syllabus: "PHP → Enums"
+        question: "Status::from('unknown') is called where 'unknown' matches no case. What happens?"
+        answers:
+          - value: "\\ValueError is thrown"
+            correct: true
+          - value: "null is returned"
+            correct: false
+          - value: "false is returned"
+            correct: false
+          - value: "A new anonymous case is created"
+            correct: false
+        explanation: >-
+          from() is strict: an unmatched backing value throws \ValueError.
+          Only tryFrom() returns null on a miss — the two are not
+          interchangeable, and this exact distinction is a frequent exam trap.
+        documentation: "https://www.php.net/manual/en/language.enumerations.backed.php"
+      - id: "PHP-ENUM-02"
+        type: "scenario"
+        difficulty: "hard"
+        subchapter: "php-web-security/enums"
+        concepts: ["BackedEnumValueResolver", "routing", "404"]
+        syllabus: "PHP → Enums"
+        question: "A controller action is typed public function show(Status $status). A request arrives for a {status} route value that matches no Status case. What does the client receive?"
+        answers:
+          - value: "A 404 Not Found — the resolver catches the ValueError and raises NotFoundHttpException"
+            correct: true
+          - value: "A 500 Internal Server Error from an uncaught ValueError"
+            correct: false
+          - value: "A 200 response with $status resolved to null"
+            correct: false
+          - value: "A 200 response with $status resolved to the first declared case"
+            correct: false
+        explanation: >-
+          BackedEnumValueResolver calls Status::from($value) internally and
+          catches the resulting ValueError/TypeError itself, converting it
+          into a NotFoundHttpException — an invalid enum value in a route is a
+          404, never an unhandled exception reaching the client as a 500.
+        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"

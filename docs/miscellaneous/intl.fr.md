@@ -130,6 +130,15 @@ framework:
 
 ### Intl data component
 
+!!! quote "Hors périmètre"
+    **Les utilitaires du composant Intl utilisés pour accéder aux données
+    ICU ne sont pas inclus dans l'examen.** Les classes de lookup statiques
+    ci-dessous (`Countries`, `Languages`, `Locales`, `Currencies`,
+    `Timezones`) sont du contenu additionnel / d'approfondissement, hors du
+    programme officiel de la certification Symfony 8 — voir
+    `specs/TraceabilityMatrix.md`. Elles ne sont pas testées dans les
+    examens générés.
+
 `Symfony\Component\Intl` fournit des classes statiques :
 `Countries::getName('FR')`, `Languages::getName('de')`, `Locales::getName('pt_BR')`,
 `Currencies::getSymbol('EUR')`, `Timezones`. Elles lisent les données ICU
@@ -152,8 +161,8 @@ Countries::getName('FR', 'de');     // "Frankreich" — explicit display locale
 ```
 
 !!! note "Source reference"
-    `Symfony\Component\Translation\Translator::trans()` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php).
+    `Symfony\Component\Intl\Countries` —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Intl/Countries.php).
 
 ## Configuration & code
 

@@ -37,18 +37,26 @@ comprehension rather than discovery.
   new-in-initializer, **property hooks & asymmetric visibility (8.4)**, DNF types.
 - [Object-Oriented Programming](oop.md) — classes, visibility, `static`, late
   static binding, constructor promotion, `clone`, magic methods.
-- [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, aliasing, name
-  resolution rules.
+- [Attributes](attributes.md) — declaring `#[\Attribute]` classes, `TARGET_*`
+  flags, `IS_REPEATABLE`, and reading them back via Reflection.
 - [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
   `instanceof`, union/intersection/DNF types.
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, first-class callable syntax.
 - [Abstract Classes](abstract-classes.md) — abstract vs interface, the template
   method pattern.
-- [Traits](traits.md) — conflict resolution (`insteadof`/`as`), abstract/static
-  members, precedence.
 - [Exception & Error Handling](exceptions.md) — the `Throwable` hierarchy,
   `try`/`catch`/`finally`, custom exceptions, error levels, `set_error_handler`.
+- [Traits](traits.md) — conflict resolution (`insteadof`/`as`), abstract/static
+  members, precedence.
+- [Enums](enums.md) — pure vs. backed enums, `UnitEnum`/`BackedEnum`,
+  `from()`/`tryFrom()`, and how routing/Forms consume them.
+
+**Additional / depth chapters** (not on the official syllabus list, kept as
+enrichment — see the repository's `specs/TraceabilityMatrix.md`):
+
+- [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, aliasing, name
+  resolution rules.
 - [PHP Extensions](extensions.md) — `mbstring`, `intl`, `ctype`, `iconv`,
   `pdo`, `opcache` and how to detect/require them.
 - [SPL](spl.md) — `ArrayAccess`, `Iterator`/`IteratorAggregate`, `Countable`,
