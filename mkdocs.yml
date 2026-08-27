@@ -142,6 +142,7 @@ extra_css:
 
 extra_javascript:
   - assets/quiz.js
+  - assets/a11y.js
 
 nav:
   - Home: index.md

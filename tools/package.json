@@ -1,0 +1,8 @@
+{
+  "name": "sf-8-0-site-quality-tools",
+  "private": true,
+  "description": "Dev-only Node dependency for tools/check_site_quality.py (P2-03) — axe-core accessibility rules. Playwright itself is expected globally installed (see this environment's Playwright setup); only axe-core needs a local install here.",
+  "devDependencies": {
+    "axe-core": "4.13.0"
+  }
+}

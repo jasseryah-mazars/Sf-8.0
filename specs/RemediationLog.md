@@ -700,6 +700,90 @@ all clean; `mkdocs build --strict` → exit 0.
 
 ---
 
+## P2-03 — Site quality (real browser testing, not a heuristic)
+
+This environment has Chromium + Playwright pre-installed, so unlike the
+YAML/Twig/XML linters earlier in this run (necessarily heuristic — no real
+parser available), this subject was tested with an actual headless
+browser and axe-core, not simulated. New tools: `tools/check_site_quality.py`
+(Python orchestrator: serves `site/`, invokes the Node script, relays its
+result) + `tools/_site_quality_check.js` (Playwright + axe-core, launches
+real Chromium against 5 sampled pages) + `tools/package.json`
+(axe-core@4.13.0 as the one dev dependency; `tools/node_modules/`
+gitignored). Full narrative, every finding, every fix and every
+deliberately-not-fixed item with its reasoning: `specs/SiteQualityReport.md`
+— summarized here:
+
+**Fixed (3, each verified before/after with a fresh axe-core run):**
+1. Task-list checkbox labels (critical, 9 nodes on the sampled page) —
+   `pymdownx.tasklist`'s `custom_checkbox: true` output wraps each checkbox
+   in a `<label>` with no text of its own; these checkboxes are always
+   `disabled` (decorative bullets, never interactive), so the WCAG-correct
+   fix is `aria-hidden="true"`, not an invented label. New
+   `docs/assets/a11y.js` applies it, using the same `document$`-subscribe
+   pattern `quiz.js` already uses for instant-navigation compatibility.
+2. Light-scheme code-highlighting contrast (serious, 34 nodes) —
+   comment/variable/operator/punctuation tokens measured 4.48:1 (need
+   4.5:1) against the code background. Scoped override in
+   `docs/assets/code.css` darkens just those five tokens inside
+   `.md-typeset .highlight`, leaving the shared theme variable untouched
+   everywhere else it's used.
+3. Dark-scheme code-highlighting contrast (serious, 10 nodes) — number and
+   constant tokens measured 4.45:1/4.48:1 against the dark code background;
+   same file, dark-scheme-scoped override.
+
+**Found, documented, deliberately not fixed (3)** — each traces to either
+a stock Material template internal (`aria-dialog-name` on the search
+dialog; one `landmark-unique` finding) or the site's `primary: black` /
+`accent: indigo` palette choice (`link-in-text-block` +the remaining
+`color-contrast` findings, all on the same `<small>` in-text links) — fixing
+the latter properly means a visible, sitewide link-color/underline change,
+which is a design decision for whoever owns the project's branding, not
+something to make unilaterally mid-run. Both categories get a concrete,
+ready-to-implement recommended fix in the report.
+
+**Investigated in depth, left explicitly unresolved (2)** — not rounded up
+to "fixed" or down to "broken," per this run's explicit anti-fabrication
+instruction:
+- **Search result rendering.** Typing a query (and separately, navigating
+  to Material's own `/?q=` URL entry point) left the results list empty in
+  this headless environment. Not accepted at face value: intercepted the
+  actual `postMessage` traffic to/from Material's search Web Worker, which
+  showed the worker receives the query, initializes its index correctly,
+  and **returns 23 correct matching documents** — the backend is
+  provably correct. Only the on-page DOM update never happened, in every
+  variant tried. No network path exists from this environment to a vanilla
+  mkdocs-material install to run the same test as a control (confirmed via
+  a failed fetch, not assumed), so there is no way here to tell "real
+  front-end bug" apart from "headless-Chromium rendering-pipeline quirk."
+  Reported exactly that way — a human should confirm with a real query in
+  a real browser on the live site before this is called a defect.
+- **Mermaid rendering.** This site loads Mermaid from
+  `https://unpkg.com/mermaid@11` (a CDN, not bundled locally); this
+  environment's network egress proxy blocks/fails TLS for `unpkg.com`
+  (confirmed via a failed-request listener), so Mermaid.js never loads
+  here and diagrams cannot be verified to render, one way or the other.
+  Noted as a general resilience point regardless: an external-CDN
+  dependency for a core rendering feature is one outage/firewall block
+  away from failing for a real visitor too — bundling Mermaid locally is
+  the fix, but is a build-pipeline change out of this pass's scope.
+
+**Why not wired into CI:** needs a Chromium download + `npm install` (real
+CI cost), and its two hardest findings need human judgment to interpret,
+not a pass/fail gate — kept as an on-demand local tool. Documented as a
+deliberate scoping decision in the report, not an oversight.
+
+**Tested:** `check_site_quality.py` end-to-end run before the fixes (18
+total flagged issues across 5 pages) and after (15; the drop is
+concentrated in the fully-resolved `label` rule and the two contrast
+fixes, not a page-count change — the theme-level findings are unaffected,
+as expected); `validate_quiz.py`, `check_placeholders.py`,
+`check_editorial_structure.py` all clean after the `docs/assets/a11y.js` +
+`docs/assets/code.css` + `mkdocs.yml` changes; `mkdocs build --strict` →
+exit 0.
+
+---
+
 _This log continues to grow as P1/P2/P3 subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._

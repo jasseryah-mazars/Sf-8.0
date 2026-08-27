@@ -5,3 +5,29 @@
   overflow-wrap: anywhere;
 }
 /* Keep mermaid diagrams unaffected (they are not <pre><code>). */
+
+/* Code-highlighting contrast fixes (P2-03, verified with axe-core against
+   real rendered pages, not guessed). The stock Material-for-MkDocs palette
+   ships two token colors that sit just under the WCAG AA 4.5:1 threshold
+   in this site's build:
+   - Light scheme: comments/variables/operators/punctuation/generic tokens
+     share --md-code-hl-*-color: var(--md-default-fg-color--light), which
+     resolves to #717171 on the #f5f5f5 code background -> 4.48:1 (axe-core
+     measured). Darkened slightly to #666666 -> 5.27:1.
+   - Dark (slate) scheme: number and constant tokens (#e6695b on #272a35 ->
+     4.45:1; #9383e2 on the same background -> 4.48:1). Lightened slightly
+     to #ea7d70 -> 5.22:1 and #a196e8 -> 5.48:1 respectively.
+   Both fixes are scoped to .md-typeset .highlight only, so they change
+   nothing outside code blocks (in particular, --md-default-fg-color--light
+   itself is untouched, since it is reused elsewhere for secondary text). */
+:root:not([data-md-color-scheme="slate"]) .md-typeset .highlight {
+  --md-code-hl-comment-color: #666666;
+  --md-code-hl-variable-color: #666666;
+  --md-code-hl-operator-color: #666666;
+  --md-code-hl-punctuation-color: #666666;
+  --md-code-hl-generic-color: #666666;
+}
+[data-md-color-scheme="slate"] .md-typeset .highlight {
+  --md-code-hl-number-color: #ea7d70;
+  --md-code-hl-constant-color: #a196e8;
+}
