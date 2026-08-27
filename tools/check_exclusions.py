@@ -80,7 +80,11 @@ def main() -> int:
     # 4: quiz questions for these subchapters must be tagged out_of_scope: true
     for f in sorted(glob.glob(os.path.join(QUIZ, "*.yml"))):
         rel = os.path.relpath(f, ROOT)
-        data = yaml.safe_load(open(f, encoding="utf-8")) or {}
+        try:
+            data = yaml.safe_load(open(f, encoding="utf-8")) or {}
+        except Exception as e:
+            # P3: name the offending file rather than a bare traceback.
+            raise RuntimeError(f"check_exclusions: failed to parse {rel}: {e}") from e
         for cat in data.get("categories", []):
             for q in cat.get("questions", []):
                 sub = (q.get("subchapter") or "")

@@ -38,7 +38,34 @@ each subject and `specs/FinalComplianceAudit.md` for the end-state audit.
 
 ## P3 — Improvements
 
-Not started — P0/P1/P2 are not closed, so P3 has not begun per the mandated order.
+**Done this run**, per the mandated order (P0/P1/P2 all closed above).
+
+- **Reduce duplication:** the two real duplication defects surfaced this
+  run were fixed at their source, in P1-03 (a genuine quiz-question
+  near-duplicate, `PHP-EXT-09` vs `MISC-DEPLOY-03`) and P2-01 (a generator
+  bug duplicating every chapter's content in French+English inside
+  English-only revision sheets). No further duplication reduction attempted
+  this pass — see `specs/RemediationLog.md`'s P3 entry for why a full
+  sitewide duplication sweep is out of one-run reach.
+- **Improve pedagogical quality:** the P1-03 `PHP-EXT-09` rewrite is this
+  run's concrete pedagogical contribution (a duplicate "why" question
+  became a complementary "consequence" question, testing a genuinely
+  different fact instead of repeating one). A full pedagogical review
+  (analogy quality, explanation clarity, difficulty progression across all
+  175 chapters) is a human-judgment task outside this pass's reach —
+  documented, not fabricated as done.
+- **Strengthen script error handling:** `tools/gen_traceability_matrix.py`,
+  `tools/check_quiz_duplicates.py`, and `tools/check_exclusions.py` now
+  name the specific offending quiz YAML file on a parse error instead of
+  raising a bare, anonymous traceback — matching the pattern
+  `tools/validate_quiz.py` already used. Scoped to the tools most likely
+  to be run standalone/early, not every quiz-reading script in `tools/`.
+- **Document future syllabus-update process:** `specs/FutureMaintenance.md`
+  §10 (new) gives the concrete step order for a future official syllabus
+  revision (re-verify source → update baseline → regenerate matrix →
+  relocate/add chapters → re-run the full check suite → never claim
+  "conforme" without a live re-fetch), and §11 (new) documents every tool
+  this compliance run added, its purpose, and its CI status.
 
 ## Method applied per subject (mission brief, verbatim intent)
 

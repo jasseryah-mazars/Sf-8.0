@@ -784,6 +784,77 @@ exit 0.
 
 ---
 
+## P3 — Improvements
+
+**Reduce duplication.** No new duplication-reduction work this subject —
+both real duplication defects found during this run were already fixed at
+the point they were discovered: the quiz near-duplicate in P1-03
+(`PHP-EXT-09` reworded) and the revision-sheet FR/EN content duplication
+bug in P2-01 (`tools/gen_revision_sheets.py`'s glob fixed). A broader
+sitewide duplication sweep (prose repeated across chapters, not just quiz
+questions or one generator's output) was not attempted — no tooling exists
+for that class of check yet, and building one plus reviewing its output
+across ~500 files is a separate, larger undertaking than this pass's
+remaining budget supports.
+
+**Improve pedagogical quality.** Same honesty bar as P1-03's own quiz-audit
+report: a full pedagogical review (is every analogy apt, every explanation
+genuinely clear, every difficulty curve sound, across 175 chapters and
+1,292 questions) is a human-judgment task no script in this repository can
+perform, and was not attempted wholesale this run. This run's one concrete,
+verifiable pedagogical improvement is the P1-03 `PHP-EXT-09` rewrite: it
+no longer repeats `MISC-DEPLOY-03`'s "why set this" framing, and instead
+tests the consequence of forgetting to reset OPcache — a genuinely
+different, exam-relevant fact, not just different wording.
+
+**Strengthen script error handling.** Reviewed every `tools/*.py` call to
+`yaml.safe_load` (11 call sites across `tools/`). `tools/validate_quiz.py`
+already wrapped its YAML loading in a per-file try/except naming the
+offending file. Three more tools that read `quiz/*.yml` directly and are
+plausibly run standalone/early in a session did not:
+`tools/gen_traceability_matrix.py` (`_quiz_by_subchapter()`),
+`tools/check_quiz_duplicates.py`, and `tools/check_exclusions.py` — all
+three would have raised an anonymous PyYAML traceback with no indication
+of which of the 15 quiz files was malformed. Fixed by wrapping each in the
+same try/except-and-re-raise-with-filename pattern
+`validate_quiz.py` established. **Not** applied to every remaining call
+site (`tools/final_audit.py`, `tools/gen_chapter_exams.py`,
+`tools/gen_flashcards.py`, `tools/gen_quiz_json.py`, `tools/mock_exam.py`,
+`tools/check_links.py`) — `validate_quiz.py` runs first in both the CI
+pipeline and every validation pass performed this session, so a malformed
+quiz file is caught there, with a clear message, before any of those other
+tools would run against it in practice; scoped this fix to the tools most
+likely to be run on their own, not an exhaustive rewrite.
+
+**Document future syllabus-update process.** Added
+`specs/FutureMaintenance.md` §10 ("Official syllabus revision process") —
+a concrete, ordered checklist for the next time Symfony/the certification
+vendor revises the syllabus: re-verify the live source first (this run
+could not, network to `certification.symfony.com` confirmed blocked, not
+assumed), update `specs/OfficialSyllabusBaseline.md` before touching
+anything else, update the matrix's `SYLLABUS` source list (never hand-edit
+the generated `.md`), the exact relocation steps for a removed topic
+(including adding it to `tools/check_exclusions.py`'s own list) or
+addition steps for a new one, the full regeneration+check-suite order to
+run before committing, and an explicit reminder never to claim "conforme"
+or a coverage percentage as officially verified without having actually
+completed the live re-fetch in that same session. Added §11, a table of
+every tool this compliance run (P0–P3) introduced, its purpose, and
+whether it's wired into CI — for a future maintainer deciding whether one
+is safe to modify or remove.
+
+**Tested:** re-ran `tools/gen_traceability_matrix.py`,
+`tools/check_quiz_duplicates.py`, `tools/check_exclusions.py` after the
+error-handling changes (all three still produce identical output to
+before the change — the try/except only changes behavior on an actual
+parse failure, which none of the 15 quiz files currently has) plus the
+full suite (`audit.py`, `final_audit.py`, `check_section_order.py`,
+`validate_quiz.py`, `check_doc_version_refs.py`, all four `lint_*.py`
+tools, `check_placeholders.py`, `check_editorial_structure.py`,
+`check_report_freshness.py`) — all clean; `mkdocs build --strict` → exit 0.
+
+---
+
 _This log continues to grow as P1/P2/P3 subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._

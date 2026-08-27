@@ -60,7 +60,16 @@ def _quiz_by_subchapter() -> dict[str, list[dict]]:
         return _quiz_cache
     by_sub: dict[str, list[dict]] = collections.defaultdict(list)
     for f in glob.glob(os.path.join(QUIZ, "*.yml")):
-        data = yaml.safe_load(open(f, encoding="utf-8")) or {}
+        try:
+            data = yaml.safe_load(open(f, encoding="utf-8")) or {}
+        except Exception as e:
+            # A raw traceback here wouldn't say which of the 15 quiz files
+            # is at fault (P3: strengthen script error handling) — every
+            # other tool that reads quiz/*.yml already reports the file;
+            # this one should too instead of crashing anonymously.
+            raise RuntimeError(
+                f"gen_traceability_matrix: failed to parse {os.path.relpath(f, ROOT)}: {e}"
+            ) from e
         for cat in data.get("categories", []):
             for q in cat.get("questions", []):
                 sc = q.get("subchapter")

@@ -42,7 +42,11 @@ def load_all_questions() -> list[tuple[str, str, str]]:
     out = []
     for f in sorted(glob.glob(os.path.join(ROOT, "quiz", "*.yml"))):
         rel = os.path.relpath(f, ROOT)
-        data = yaml.safe_load(open(f, encoding="utf-8")) or {}
+        try:
+            data = yaml.safe_load(open(f, encoding="utf-8")) or {}
+        except Exception as e:
+            # P3: name the offending file rather than a bare traceback.
+            raise RuntimeError(f"check_quiz_duplicates: failed to parse {rel}: {e}") from e
         for cat in data.get("categories", []):
             for i, q in enumerate(cat.get("questions", [])):
                 qid = q.get("id", f"#{i}")
