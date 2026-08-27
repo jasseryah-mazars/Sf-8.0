@@ -10,8 +10,10 @@ of deleted, clearly marked" doesn't silently drift out of sync over time:
    docs/appendices/out-of-syllabus/ (not in the main syllabus tree).
 2. Each carries the explicit exclusion admonition
    ('Hors syllabus officiel Symfony 8.0') in both languages.
-3. mkdocs.yml's nav lists them only under "Appendices", not anywhere in
-   the main syllabus-topic nav sections.
+3. mkdocs.yml's nav lists them only under the top-level entry whose label
+   contains "Appendices" (the exact label has changed before — see the
+   in-code comment where it's matched), not anywhere in the main
+   syllabus-topic nav sections.
 4. Every quiz question whose `subchapter` matches one of these three
    chapters is tagged `out_of_scope: true` (a question about an excluded
    chapter must not silently count toward official coverage stats).
@@ -25,7 +27,7 @@ brief / human decision, recorded in specs/RemediationLog.md's P0-03 entry)
 marked, everywhere, going forward.
 """
 from __future__ import annotations
-import glob, os, sys
+import glob, os, re, sys
 import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,12 +63,18 @@ def main() -> int:
                 fail(errors, f"{os.path.relpath(path, ROOT)} is missing the "
                               f"'{MARKER}' exclusion admonition")
 
-    # 3: mkdocs.yml nav — the slug must appear only inside the Appendices block
+    # 3: mkdocs.yml nav — the slug must appear only inside the Appendices
+    # block. The nav label itself has changed before (e.g. the learner-
+    # navigation redesign renamed it to "Out-of-Syllabus Appendices") —
+    # match on the stable "Appendices" substring in the top-level nav key
+    # rather than the exact historical label, so a legitimate future rename
+    # doesn't false-positive here again.
     nav_path = os.path.join(ROOT, "mkdocs.yml")
     nav_text = open(nav_path, encoding="utf-8").read()
-    appendices_start = nav_text.find("- Appendices:")
+    appendices_match = re.search(r"^\s*-\s*[^:\n]*Appendices[^:\n]*:\s*$", nav_text, re.MULTILINE)
+    appendices_start = appendices_match.start() if appendices_match else -1
     if appendices_start == -1:
-        fail(errors, "mkdocs.yml has no 'Appendices:' nav section")
+        fail(errors, "mkdocs.yml has no top-level nav entry with 'Appendices' in its label")
     else:
         before = nav_text[:appendices_start]
         for slug, _ in EXCLUDED:
