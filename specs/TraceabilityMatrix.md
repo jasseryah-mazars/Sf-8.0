@@ -298,9 +298,9 @@ official question count (tagged `out_of_scope: true` where applicable):
 | PHP — additional/depth | PHP Extensions | php-web-security/extensions.md — kept as enrichment. |
 | PHP — additional/depth | SPL | php-web-security/spl.md — kept as enrichment. |
 | PHP — additional/depth | Web Security Fundamentals | php-web-security/web-security.md — kept as enrichment. |
-| HTTP Caching | Edge Side Includes (ESI) | http-caching/esi.md — excluded from the syllabus per mission brief; chapter now carries an explicit exclusion notice, its 10 quiz questions are tagged out_of_scope: true. |
-| Automated Tests | PHPUnit Bridge | testing/phpunit-bridge.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 8 quiz questions are tagged out_of_scope: true. |
-| Miscellaneous | Lock component | miscellaneous/lock.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 6 quiz questions are tagged out_of_scope: true. |
+| HTTP Caching | Edge Side Includes (ESI) | appendices/out-of-syllabus/esi.md — excluded from the syllabus per mission brief; chapter now carries an explicit exclusion notice, its 10 quiz questions are tagged out_of_scope: true. |
+| Automated Tests | PHPUnit Bridge | appendices/out-of-syllabus/phpunit-bridge.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 8 quiz questions are tagged out_of_scope: true. |
+| Miscellaneous | Lock component | appendices/out-of-syllabus/lock.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 6 quiz questions are tagged out_of_scope: true. |
 | Messenger | Doctrine / Redis / Amazon SQS transports | Third-party Messenger transports — excluded per mission brief; messenger/transports.md says so explicitly. No quiz questions found testing them specifically. |
 | Internationalization | Intl component ICU utilities | Countries/Languages/Locales/Currencies/Timezones static lookup classes in miscellaneous/intl.md — excluded from the exam per mission brief; chapter now carries an explicit exclusion notice. No quiz question found testing this API. |
 | Ecosystem (never taught) | Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, third-party bundles/bridges | Out of scope by design since the project's original GapAnalysis.md; mentions found are contextual/comparative, not taught content — not re-audited line-by-line this lot. |

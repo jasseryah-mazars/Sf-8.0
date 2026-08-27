@@ -309,7 +309,6 @@ nav:
       - Validation (ETag, Last-Modified): http-caching/validation.md
       - Client-Side Caching: http-caching/client-side.md
       - Server-Side Caching: http-caching/server-side.md
-      - Edge Side Includes (ESI): http-caching/esi.md
   - Console:
       - console/index.md
       - Built-in Commands: console/built-in-commands.md
@@ -339,7 +338,6 @@ nav:
       - Framework Objects Access: testing/framework-objects.md
       - Client Configuration: testing/client-configuration.md
       - Request/Response Introspection: testing/introspection.md
-      - PHPUnit Bridge: testing/phpunit-bridge.md
       - Handling Deprecated Code: testing/deprecations.md
   - Miscellaneous:
       - miscellaneous/index.md
@@ -353,11 +351,15 @@ nav:
       - PropertyAccess Component: miscellaneous/property-access.md
       - Mime & Mailer Components: miscellaneous/mailer.md
       - Filesystem & Finder Components: miscellaneous/filesystem-finder.md
-      - Lock Component: miscellaneous/lock.md
       - Web Profiler & Data Collectors: miscellaneous/profiler.md
       - Internationalization and localization: miscellaneous/intl.md
       - Runtime Component: miscellaneous/runtime.md
       - Clock Component: miscellaneous/clock.md
+  - Appendices:
+      - appendices/out-of-syllabus/index.md
+      - Edge Side Includes (ESI): appendices/out-of-syllabus/esi.md
+      - PHPUnit Bridge: appendices/out-of-syllabus/phpunit-bridge.md
+      - Lock Component: appendices/out-of-syllabus/lock.md
   - Labs:
       - labs/index.md
       - PHP & Web Security — SPL Collection: labs/php-web-security.md
