@@ -73,7 +73,13 @@ def check_internal_links(path: str, text: str) -> list[str]:
         target = m.group(1).strip()
         if not target or target.startswith(("#", "http://", "https://", "mailto:")):
             continue
-        target_path = target.split("#", 1)[0]
+        # Strip both a trailing #anchor and a ?query (e.g. the dashboard's
+        # own exam-simulator.md?area=... deep links) before checking the
+        # file exists — mkdocs' own link resolution does the same (a
+        # `mkdocs build --strict` run with such a link present is clean),
+        # so this checker must match that behavior instead of false-
+        # flagging every query-string link as broken.
+        target_path = target.split("#", 1)[0].split("?", 1)[0]
         if not target_path:
             continue
         resolved = os.path.normpath(os.path.join(base_dir, target_path))
