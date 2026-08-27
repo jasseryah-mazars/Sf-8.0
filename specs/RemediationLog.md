@@ -345,6 +345,72 @@ verification, not a re-statement of an existing tool's output.
 
 ---
 
+---
+
+## P1-02 — Code/config fragment testing (PHP, YAML, XML, Twig)
+
+**Found:** PHP fragment testing already existed and works
+(`tools/lint_php.py`, PHP 8.4.19). YAML/XML/Twig fragment-level testing did
+not exist.
+
+**Changed — three new tools, each honest about its real scope:**
+
+- **`tools/lint_yaml.py`:** every ```yaml fenced block parses with PyYAML.
+  Registered a passthrough constructor for Symfony's own custom YAML tags
+  (`!service_locator`, `!tagged_iterator`, ...) — these are real, valid
+  Symfony DI configuration syntax that generic YAML doesn't recognize by
+  default; without the passthrough, 6 entirely correct snippets
+  (`dependency-injection/service-locators.md`+`.fr`,
+  `dependency-injection/tags.md`+`.fr`, 2 occurrences each) would have been
+  wrongly reported as broken. **Result: 373 snippets, 0 failures**, after
+  that fix (initial run before the fix: 6 false-positive failures, all
+  traced to the same cause and corrected in the tool, not by editing valid
+  docs content).
+- **`tools/lint_twig.py`:** no real Twig lexer is available in this
+  environment (no `Twig\Environment` PHP class installed; Composer plugins
+  are disabled in this sandbox; no network to `packagist.org` to install one
+  — not attempted and not fabricated as attempted). Implemented a
+  block-tag-pairing check instead (`if`/`endif`, `for`/`endfor`,
+  `block`/`endblock`, etc.) — real but explicitly partial, stated in the
+  tool's own docstring. **A first version also tried counting raw `{{`/`}}`
+  occurrences for balance; this was removed after producing false positives
+  on entirely valid Twig containing nested hash/array literals** (e.g.
+  `{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}` — the
+  adjacent `}}` from two nested `{'...': ...}` literals is not a
+  print-delimiter close, and naive substring counting cannot tell the
+  difference). A second bug was found and fixed the same way: `{# ... #}`
+  Twig comments were not stripped before scanning for block tags, so a
+  chapter's own prose *mentioning* `{% block %}` inside a comment
+  (`docs/forms/theming.md`) was wrongly counted as a real, unclosed opening
+  tag. **Result after both fixes: 222 snippets, 0 failures.**
+- **`tools/lint_xml.py`:** every ```xml block starting with `<?xml` (a
+  complete document, mirroring `lint_php.py`'s file-vs-excerpt distinction)
+  is parsed with Python's `xml.dom.minidom` for well-formedness (no
+  DTD/XSD schema validation — no network access to fetch a schema). A
+  multi-root fragment (documentation shorthand showing two sibling config
+  sections without an enclosing root) is skipped, not false-flagged. One
+  bug found and fixed: fences inside Material's indented tab-content blocks
+  need dedenting before parsing (same fix `lint_php.py` already applies) —
+  without it, both real documents failed with a spurious "XML declaration
+  not at start of entity" error caused by the leading indentation, not a
+  real content problem. **Result after the fix: 2 complete documents
+  linted, 2 fragments correctly skipped, 0 failures.**
+
+**Explicitly not done, not fabricated:** no schema-level validation against
+Symfony's actual `Config`/`ExtensionInterface` tree (would require
+instantiating Symfony's DI container, out of scope for a static-analysis
+pass) — a green run from these tools proves **syntactic validity**, not that
+every configuration key/option shown is a real, current Symfony 8.0 option.
+
+**Tested (combined):** `lint_yaml.py` → 373/0; `lint_twig.py` → 222/0;
+`lint_xml.py` → 2 linted + 2 skipped/0; `lint_php.py` → 382/0 (unchanged,
+re-verified); `mkdocs build --strict` → exit 0.
+
+Wired all three new tools into `.github/workflows/deploy.yml` alongside the
+existing `lint_php.py` step so CI blocks on regression.
+
+---
+
 _This log continues to grow as P1/P2/P3 subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._

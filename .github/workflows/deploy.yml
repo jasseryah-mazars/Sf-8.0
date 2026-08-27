@@ -68,6 +68,18 @@ jobs:
       - name: Lint PHP snippets
         run: python tools/lint_php.py
 
+      - name: Lint YAML snippets
+        run: python tools/lint_yaml.py
+
+      - name: Lint Twig snippets (block-tag pairing)
+        run: python tools/lint_twig.py
+
+      - name: Lint XML snippets
+        run: python tools/lint_xml.py
+
+      - name: Structural checks (Official References, placeholders, internal links)
+        run: python tools/check_placeholders.py
+
       - name: Build site (strict)
         run: mkdocs build --strict
 
