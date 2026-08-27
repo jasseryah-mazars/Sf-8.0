@@ -8,8 +8,9 @@ unitaires pour les services isolés, et des tests *fonctionnels* (au niveau HTTP
 qui démarrent le vrai kernel, envoient des requests à travers un navigateur
 synthétique et vérifient la response, le DOM et l'état interne du framework.
 Cette étape enseigne l'outillage qui intéresse l'examen — `KernelTestCase`,
-`WebTestCase`, le **Client** de test, le **Crawler**, le **Profiler**, les
-assertions de response et le bridge PHPUnit.
+`WebTestCase`, le **Client** de test, le **Crawler**, le **Profiler**, et les
+assertions de response. Le bridge PHPUnit est couvert ici par souci
+d'exhaustivité mais est **exclu de la certification Symfony 8**.
 
 !!! abstract "Stage at a glance"
     - **Prerequisites:** [Controllers](../controllers/index.md),
@@ -55,7 +56,8 @@ d'étude.
 - [Request/Response Introspection](introspection.md) — `getRequest()`/`getResponse()`
   et les helpers `assertResponse*` / `assertSelector*`.
 - [PHPUnit Bridge](phpunit-bridge.md) — collecte des dépréciations, mocking de l'horloge/du DNS,
-  `SYMFONY_DEPRECATIONS_HELPER`, l'extension PHPUnit de Symfony.
+  `SYMFONY_DEPRECATIONS_HELPER`, l'extension PHPUnit de Symfony. **Exclu de la
+  certification Symfony 8.**
 - [Handling Deprecated Code](deprecations.md) — `#[IgnoreDeprecations]`, modes du
   helper (`max`, `disabled`, `weak`), baselines.
 

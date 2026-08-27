@@ -42,8 +42,9 @@ L'examen sonde les règles de précédence exactes (`s-maxage` > `max-age` >
 `Expires` pour les caches partagés), la différence entre `no-cache`, `no-store`
 et `must-revalidate`, et l'aller-retour 304 « Not Modified ». Il teste aussi
 l'outillage propre à Symfony : l'attribut `#[Cache]`,
-`Response::isNotModified()`, le reverse proxy intégré et les Edge Side
-Includes.
+`Response::isNotModified()`, et le reverse proxy intégré. Les Edge Side
+Includes sont couverts ici par souci d'exhaustivité mais sont **exclus de la
+certification Symfony 8**.
 
 ```mermaid
 flowchart LR
@@ -70,7 +71,7 @@ Parcourez-les dans l'ordre :
   kernel `HttpCache`), `Store`, son activation, comparaison avec Varnish.
 - [ ] [Edge Side Includes (ESI)](esi.md) — `<esi:include>`, `render_esi`, quand
   le cache de fragments l'emporte sur le cache de page entière, l'alternative
-  SSI.
+  SSI. **Exclu de la certification Symfony 8.**
 
 ## How to study it
 

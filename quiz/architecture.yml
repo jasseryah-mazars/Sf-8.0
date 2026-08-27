@@ -1654,24 +1654,6 @@ categories:
           Deprecations survive the whole major line and are only removed in the
           next major, per the BC promise.
         documentation: "https://symfony.com/doc/current/contributing/code/bc.html"
-      - id: "ARCH-DEP-03"
-        type: "internals"
-        difficulty: "medium"
-        subchapter: "architecture/deprecations"
-        concepts: ["phpunit-bridge", "SYMFONY_DEPRECATIONS_HELPER", "ci"]
-        syllabus: "Symfony Architecture → Deprecations"
-        question: "Which tool lets you fail the test suite when new deprecations appear?"
-        answers:
-          - value: "symfony/phpunit-bridge configured via SYMFONY_DEPRECATIONS_HELPER"
-            correct: true
-          - value: "symfony/console"
-            correct: false
-          - value: "symfony/flex"
-            correct: false
-        explanation: >-
-          The PHPUnit bridge collects deprecations; SYMFONY_DEPRECATIONS_HELPER
-          (e.g. max[total]=0) can make the suite fail on any deprecation.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
       - id: "ARCH-DEP-04"
         type: "internals"
         difficulty: "medium"

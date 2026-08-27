@@ -106,19 +106,10 @@ flowchart LR
 | **Tests** | `symfony/phpunit-bridge` les collecte et affiche un résumé |
 | **Static** | L'IDE et les docblocks `@deprecated` signalent les points d'appel |
 
-Le **PHPUnit bridge** installe un `DeprecationErrorHandler`. Son comportement se
-règle via la variable d'environnement `SYMFONY_DEPRECATIONS_HELPER` — vous pouvez
-définir des seuils (p. ex. `max[total]=0`), faire **échouer** la suite de tests sur
-les dépréciations, ou en ignorer certaines via une regex/un fichier de baseline.
-C'est la barrière CI standard pour une montée de version propre.
-
-```console
-# DeprecationErrorHandler reads SYMFONY_DEPRECATIONS_HELPER:
-$ SYMFONY_DEPRECATIONS_HELPER="max[total]=0" php bin/phpunit   # fail on any deprecation
-
-# Ignore deprecations matching the regexes listed in a baseline file
-$ SYMFONY_DEPRECATIONS_HELPER="ignoreFile=./tests/deprecations-baseline" php bin/phpunit
-```
+Verrouiller la CI sur le nombre de dépréciations (le `SYMFONY_DEPRECATIONS_HELPER`
+du PHPUnit bridge) est couvert dans
+[Automated Tests → PHPUnit bridge](../testing/phpunit-bridge.md) — **exclu de la
+certification Symfony 8**.
 
 ### Marking your own deprecations
 
@@ -145,9 +136,7 @@ final class Mailer
 
 !!! note "Source reference"
     `trigger_deprecation()` —
-    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php);
-    PHPUnit bridge `DeprecationErrorHandler` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge/PhpUnit).
+    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php).
 
 ### Compilation vs runtime
 
@@ -207,19 +196,12 @@ trigger_deprecation('app/mailer', '8.1', 'Calling "%s()" is deprecated.', __METH
                 message: 'The "%service_id%" service is deprecated.'
     ```
 
-=== "Fail tests on deprecations"
-
-    ```console
-    $ SYMFONY_DEPRECATIONS_HELPER="max[total]=0" php bin/phpunit
-    ```
-
 ## Best practices & anti-patterns
 
 | ✅ Do | ❌ Avoid |
 |---|---|
 | Utiliser `trigger_deprecation()` pour les notices d'exécution | Appeler `trigger_error()` au cas par cas |
 | Associer docblock `@deprecated` + notice d'exécution | Un simple docblock (l'outillage passe à côté) |
-| Verrouiller la CI avec `SYMFONY_DEPRECATIONS_HELPER` | Ignorer le compteur de dépréciations de la toolbar |
 | Corriger les dépréciations à chaque mineure | Toutes les traiter d'un coup à la frontière de la majeure |
 
 ## When (not) to use it / alternatives
@@ -243,17 +225,12 @@ car il est hors du périmètre de la [BC promise](bc-promise.md).
 
 1. **(Advanced)** Ajoutez une dépréciation d'exécution à une méthode en cours de
    remplacement, avec un message de migration correct.
-2. **(Expert)** Configurez la suite de tests pour que toute nouvelle dépréciation fasse échouer la CI.
 
 ??? success "Solutions"
 
     **1.** Appelez
     `trigger_deprecation('app/foo', '8.1', 'Method "%s::old()" is deprecated, use "new()".', self::class);`
     en tête de l'ancienne méthode et ajoutez le docblock `@deprecated` correspondant.
-
-    **2.** Définissez `SYMFONY_DEPRECATIONS_HELPER="max[total]=0"` (via `<env>` dans
-    `phpunit.xml.dist` ou l'environnement de CI) avec `symfony/phpunit-bridge`
-    installé ; toute dépréciation fait alors échouer l'exécution.
 
 ## Certification questions
 
@@ -273,27 +250,18 @@ car il est hors du périmètre de la [BC promise](bc-promise.md).
     **Why:** Les dépréciations survivent jusqu'à une majeure, conformément à la promesse de BC. **Ref:**
     [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
 
-??? question "Q3. What tool makes tests fail on deprecations?"
-    - [x] A. `symfony/phpunit-bridge` + `SYMFONY_DEPRECATIONS_HELPER` ✅
-    - [ ] B. `symfony/console`
-    - [ ] C. `symfony/flex`
-
-    **Why:** Le PHPUnit bridge collecte les dépréciations et applique des seuils.
-    **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html).
-
 ## Key takeaways
 
 - Utilisez `trigger_deprecation(package, version, message, ...args)` du package de contracts.
 - Les dépréciations sont des notices `E_USER_DEPRECATED`, supprimées uniquement dans la prochaine majeure.
-- Détectez-les via le profiler, les logs et le PHPUnit bridge.
-- Verrouillez la CI avec `SYMFONY_DEPRECATIONS_HELPER` pour garder le code prêt à monter de version.
+- Détectez-les via le profiler et le canal de log `deprecation`.
 
 ## Last-minute revision
 
 !!! tip "Cheat sheet"
     - `trigger_deprecation('pkg', 'X.Y', 'msg %s', $arg)` — package, version, message, arguments.
     - Niveau : `E_USER_DEPRECATED`. Suppression : prochaine majeure.
-    - Détection : toolbar/profiler, canal de log `deprecation`, phpunit-bridge.
+    - Détection : toolbar/profiler, canal de log `deprecation`.
     - DI : clé `deprecated:` / `Definition::setDeprecated()`.
 
 ## Connections
@@ -305,7 +273,6 @@ car il est hors du périmètre de la [BC promise](bc-promise.md).
 ## Official References
 - [Official docs — deprecations](https://symfony.com/doc/current/setup/upgrade_minor.html)
 - [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
-- [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
 
 ## Video references
 
@@ -326,7 +293,6 @@ Je suis prêt lorsque je peux :
 - [ ] en émettre une correctement avec `trigger_deprecation(package, version, message, ...args)`
 - [ ] déboguer une notice de dépréciation et retrouver son point d'appel via le profiler ou les logs
 - [ ] repérer le piège consistant à passer la version actuelle au lieu de la version de dépréciation
-- [ ] verrouiller la CI sur les dépréciations avec `SYMFONY_DEPRECATIONS_HELPER`
 
 ---
 

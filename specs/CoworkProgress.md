@@ -307,12 +307,80 @@ instead, never Edit/Write on that file.
 - `check_links.py` has not been run with real network access this session (only `--offline`
   catalogued 670 URLs). A live link-rot sweep is still owed (priority #3-adjacent maintenance).
 
+## Lot 5 — P0-06 recursive out-of-scope audit
+
+**Mission:** full recursive audit of `docs/`, `specs/`, `quiz/`, `tasks/` for 16 named
+out-of-scope terms (Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore,
+PHP Polyfills, String/Uid/TypeInfo components, Lock component, Doctrine/Redis transports,
+Amazon SQS, ESI, PHPUnit Bridge). Per occurrence: authorized/unauthorized verdict +
+justification. Remove all evaluated ("évalué") content on these subjects; keep only the
+literal phrase "Excluded from Symfony 8 certification." as a residual mention.
+
+**Method:** grep every term (precise patterns to avoid substring false-positives like
+"design"/"ESI" inside "design"), classify each hit, fix violations, re-validate.
+
+**Verdict pattern that held across ~180 occurrences checked:** the overwhelming majority
+are AUTHORIZED — wrong-answer distractors naming an excluded technology (e.g. "D. Doctrine",
+"RedisAdapter" as one of 4 cache-adapter options), explicit boundary-testing questions whose
+correct answer confirms exclusion, brief factual naming (e.g. `render_esi` named alongside
+`render`/`render_hinclude` as one of three `FragmentHandler` strategies, with no behavior/config
+taught), and spec/task-tracker documentation whose entire purpose is declaring the exclusion
+(`specs/Requirements.md` FR-5, `specs/GapAnalysis.md` §5, `specs/DefinitionOfDone.md`, etc.).
+
+**Confirmed violations found and fixed (evaluated content leaking an excluded topic into an
+in-scope subchapter/chapter):**
+
+| # | File | What | Fix |
+|---|---|---|---|
+| 1 | `quiz/twig.yml` `TWIG-RENDER-02` | Tested ESI fallback behavior under `twig/controller-rendering` (in-scope subchapter, not the dedicated excluded ESI chapter) | Deleted the question |
+| 2 | `quiz/twig.yml` `TWIG-RENDER-07` | Tested `framework.esi.enabled` config under the same in-scope subchapter | Deleted the question |
+| 3 | `quiz/architecture.yml` `ARCH-DEP-03` | Tested "which tool fails the suite on deprecations" (PHPUnit bridge/`SYMFONY_DEPRECATIONS_HELPER`) under `architecture/deprecations` (in-scope) | Deleted the question |
+| 4 | `docs/twig/controller-rendering.md`+`.fr.md` | Whole "Predict first/Reveal" block, YAML `esi: {enabled: true}` config, an exercise, and Certification-questions Q2 taught/tested ESI fallback + config as core chapter content | Trimmed to one factual line ("`render_esi` also exists… **Excluded from Symfony 8 certification**") + removed the ESI exercise/question, replaced with `render_hinclude` (in-scope) equivalents |
+| 5 | `docs/architecture/deprecations.md`+`.fr.md` | A "Fail tests on deprecations" config tab, an Expert exercise, and Certification-questions Q3 taught/tested `SYMFONY_DEPRECATIONS_HELPER`/PHPUnit-bridge CI gating as Architecture content | Removed the tab/exercise/question/cheat-sheet & takeaway bullets; left one cross-reference line to the excluded PHPUnit-bridge chapter |
+| 6 | `docs/http-caching/index.md`+`.fr.md` | Said "the exam probes… Edge Side Includes" (false — ESI is excluded) | Reworded to name only the in-scope tooling as exam-probed; added exclusion notice on the ESI micro-chapter bullet |
+| 7 | `docs/testing/index.md`+`.fr.md` | Same overclaiming pattern ("the exam cares about… the PHPUnit bridge") | Reworded; added exclusion notice on the PHPUnit-bridge micro-chapter bullet |
+| 8 | `docs/revision/cheat-sheet.md`+`.fr.md` | "ESI = `<esi:include>` fragments. *(Down-weighted in the Symfony 8 exam.)*" — implies ESI is tested, just less | Reworded: ESI is out of scope, excluded |
+| 9 | `docs/revision/edge-cases.md`+`.fr.md` | Two `??? question` self-checks evaluated ESI fallback behavior and ESI-as-the-fix for fragment TTL capping | Both removed (kept the general TTL-capping fact only in `execution-order-codex.md`, which doesn't hinge on ESI specifically) |
+
+All propagated to every generated echo that carried the deleted quiz questions:
+`docs/exams/{architecture,twig}.md`, `docs/exams/index.md`, `docs/revision/flashcards/{architecture,twig}.md`,
+`docs/revision/flashcards/index.md`, `docs/assets/quiz-data.json`, `quiz/flashcards.csv` (byte-level,
+CRLF-safe), `docs/revision/mock-exam.md` (hand-patched, not regenerated — full regen would have
+reshuffled the whole paper via the shared `random.Random` sequence, see the generator note above).
+Only the touched areas' `*.md`/index lines were regenerated/hand-fixed; every other area's exam,
+flashcard and sheet page was reverted with `git checkout --` to avoid resurfacing the pre-existing,
+unrelated drift documented above. New counts: Architecture 122 (was 123), Twig 109 (was 111 before
+this lot's 2 deletions, 104 in the already-stale generated echo before that).
+
+**Notable finding flagged, not acted on unilaterally:** `docs/testing/deprecations.md`
+("Automated Tests → Handling legacy deprecated code", `TraceabilityMatrix.md` row PASS, its
+own quiz subchapter `testing/deprecations`, not tagged `out_of_scope`) is substantively built
+on PHPUnit-bridge mechanics (`SYMFONY_DEPRECATIONS_HELPER` threshold buckets, baseline files,
+`#[IgnoreDeprecations]`). This reads as a deliberate prior-session decision to treat
+"deprecation-handling in tests" as its own legitimate Automated-Tests syllabus item, distinct
+from "PHPUnit Bridge" (`SymfonyExtension` registration, clock/DNS mocking, `simple-phpunit`) —
+but it is in tension with the blanket "PHPUnit Bridge excluded" instruction taken literally.
+Left untouched (mature, matrix-tracked, PASS-status chapter with its own quiz bank) pending an
+explicit decision from the user rather than unilaterally dismantling it.
+
+**Residual mentions after this lot** (all AUTHORIZED — verified none teach/test the excluded
+subject): distractor-only mentions of Doctrine/Monolog/Redis/AssetMapper/Webpack Encore/Lock
+across `quiz/*.yml` and `docs/*.md`; boundary-declaration mentions in `specs/*.md` and
+`tasks/*.md`; cross-reference links from in-scope chapters to the dedicated excluded chapters
+(`http-caching/esi.md`, `testing/phpunit-bridge.md`, `miscellaneous/lock.md`), each of which
+itself still carries its own "**Excluded from Symfony 8 certification.**" notice from Lot 2.
+`specs/TraceabilityMatrix.md`'s Out-of-scope section note updated to record that this line-by-line
+re-audit happened (previously said "not re-audited line-by-line this lot").
+
+Validation after this lot: `validate_quiz.py` (1292 q, 0 errors, 157/157 subchapter coverage),
+`lint_php.py` (382 snippets, 0 failures), `check_section_order.py` (176/176 compliant),
+`mkdocs build --strict` (clean, both `en`/`fr`).
+
 ## Next task
 
-Pick up with: open `miscellaneous/runtime.md` and `testing/phpunit-bridge.md` (still on the
-task's explicit sources-of-vérité list, not yet read this session), verify against
-`symfony/symfony` `8.0` branch source + `symfony/doc/8.0/components/phpunit_bridge.html` /
-`runtime.html`, fix any confirmed errors the same way (source file + every generated echo,
-hand-patched, never a full `gen_*.py` rerun). Then continue down the priority list per-lot:
-next bad-quiz-answer sweep on another area's `quiz/*.yml`, then a real (non-`--offline`)
-`check_links.py` run.
+Pick up with: open `miscellaneous/runtime.md` (still on the task's explicit sources-of-vérité
+list, not yet read this session), verify against `symfony/symfony` `8.0` branch source, fix any
+confirmed errors the same way (source file + every generated echo, hand-patched, never a full
+`gen_*.py` rerun). Then continue down the priority list per-lot: next bad-quiz-answer sweep on
+another area's `quiz/*.yml`, a real (non-`--offline`) `check_links.py` run, and the
+`docs/testing/deprecations.md` scope question flagged above.

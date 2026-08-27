@@ -303,7 +303,7 @@ official question count (tagged `out_of_scope: true` where applicable):
 | Miscellaneous | Lock component | miscellaneous/lock.md — excluded per mission brief; chapter now carries an explicit exclusion notice, its 6 quiz questions are tagged out_of_scope: true. |
 | Messenger | Doctrine / Redis / Amazon SQS transports | Third-party Messenger transports — excluded per mission brief; messenger/transports.md says so explicitly. No quiz questions found testing them specifically. |
 | Internationalization | Intl component ICU utilities | Countries/Languages/Locales/Currencies/Timezones static lookup classes in miscellaneous/intl.md — excluded from the exam per mission brief; chapter now carries an explicit exclusion notice. No quiz question found testing this API. |
-| Ecosystem (never taught) | Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, third-party bundles/bridges | Out of scope by design since the project's original GapAnalysis.md; mentions found are contextual/comparative, not taught content — not re-audited line-by-line this lot. |
+| Ecosystem (never taught) | Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, PHP Polyfills, String/Uid/TypeInfo components, Amazon SQS | Out of scope by design since the project's original GapAnalysis.md. P0-06 recursive audit (see CoworkProgress.md — Lot 5) re-checked every occurrence in docs/, specs/, quiz/, tasks/ line-by-line: all residual mentions are contextual/comparative (wrong-answer distractors, explicit scope-boundary notes) except two leaked ESI-teaching quiz questions and one leaked PHPUnit-Bridge-teaching quiz question, which were removed. |
 
 ## Coverage summary
 

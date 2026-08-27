@@ -1,7 +1,7 @@
 # Chapter Exam — Templating (Twig)
 
 !!! abstract "How to use"
-    104 questions spanning every subchapter of **Templating (Twig)**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    109 questions spanning every subchapter of **Templating (Twig)**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -858,605 +858,682 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#embedding-controllers)
 
-**Q62.** What happens with render_esi() when no ESI-capable reverse proxy is present?  <small>_(medium · single)_</small>
-
-- A. It transparently falls back to inline rendering
-- B. It throws an exception
-- C. It renders nothing
-- D. It caches the fragment forever
-
-??? success "Answer Q62"
-    **A**
-
-    Without a proxy that understands ESI, Symfony degrades render_esi to an inline sub-request so the page still works.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
-
-**Q63.** A sidebar just needs variables the parent already has. include or render(controller())?  <small>_(medium · scenario)_</small>
+**Q62.** A sidebar just needs variables the parent already has. include or render(controller())?  <small>_(medium · scenario)_</small>
 
 - A. include — it is the cheapest option when no extra logic/data is needed
 - B. render(controller()) — always prefer embedding controllers
 - C. render_esi — fragments should always be cached separately
 - D. render_hinclude — load everything asynchronously by default
 
-??? success "Answer Q63"
+??? success "Answer Q62"
     **A**
 
     Each inline embed is a real sub-request with its own overhead. If the fragment only needs data you already have, a plain include is far cheaper. Reserve render(controller()) for fragments that need their own services/data/cache.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#embedding-controllers)
 
-**Q64.** What does render_hinclude() do differently from inline rendering?  <small>_(medium · single)_</small>
+**Q63.** What does render_hinclude() do differently from inline rendering?  <small>_(medium · single)_</small>
 
 - A. It emits a placeholder that the browser resolves asynchronously via JavaScript
 - B. It renders the fragment inline but caches it in the profiler
 - C. It always requires a reverse proxy
 - D. It renders nothing until the page reloads
 
-??? success "Answer Q64"
+??? success "Answer Q63"
     **A**
 
     HIncludeFragmentRenderer outputs a placeholder tag resolved by the browser with JavaScript, so the main page renders immediately and the fragment loads asynchronously afterwards. Inline instead blocks on a synchronous sub-request.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
 
-**Q65.** What is the argument order of the `trans` filter?  <small>_(medium · single)_</small>
+**Q64.** What is the argument order of the `trans` filter?  <small>_(medium · single)_</small>
 
 - A. (parameters, domain, locale)
 - B. (domain, parameters, locale)
 - C. (locale, domain, parameters)
 - D. (parameters, locale, domain)
 
-??? success "Answer Q65"
+??? success "Answer Q64"
     **A**
 
     The signature is message|trans(parameters = {}, domain = 'messages', locale = null).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html#translations-in-templates)
 
-**Q66.** How do you pluralize a message in Symfony 8 templates?  <small>_(medium · trap)_</small>
+**Q65.** How do you pluralize a message in Symfony 8 templates?  <small>_(medium · trap)_</small>
 
 - A. Use ICU MessageFormat {count, plural, ...} in a +intl-icu domain
 - B. Use the removed transchoice() function
 - C. Use the |plural filter
 - D. Use a {% pluralize %} tag
 
-??? success "Answer Q66"
+??? success "Answer Q65"
     **A**
 
     transchoice was removed; pluralization uses ICU MessageFormat, which is applied to catalogues whose domain ends with +intl-icu.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
 
-**Q67.** What replaced the removed transchoice() for count-based messages?  <small>_(medium · trap)_</small>
+**Q66.** What replaced the removed transchoice() for count-based messages?  <small>_(medium · trap)_</small>
 
 - A. ICU MessageFormat plural syntax in a +intl-icu domain
 - B. The |transchoice filter, which is still available
 - C. The trans filter's fourth 'count' argument
 - D. A dedicated Pluralizer service you call in the controller
 
-??? success "Answer Q67"
+??? success "Answer Q66"
     **A**
 
     Both transchoice() and the |transchoice filter were removed. Pluralization is now expressed with ICU MessageFormat ({count, plural, one{...} other{...}}) in a +intl-icu domain. trans has no separate count argument — you pass count as an ICU parameter.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
 
-**Q68.** After {% trans_default_domain 'admin' %}, what does {{ 'dashboard.title'|trans }} use?  <small>_(medium · code)_</small>
+**Q67.** After {% trans_default_domain 'admin' %}, what does {{ 'dashboard.title'|trans }} use?  <small>_(medium · code)_</small>
 
 - A. The 'admin' domain, because trans_default_domain sets it for the rest of the template
 - B. The 'messages' domain, since the filter did not name one
 - C. It errors because a domain is required
 - D. The 'dashboard' domain, inferred from the key prefix
 
-??? success "Answer Q68"
+??? success "Answer Q67"
     **A**
 
     {% trans_default_domain 'admin' %} changes the default domain for the remainder of the template, so a trans call without an explicit domain uses 'admin'. Domains are never inferred from the key's dotted prefix.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html#translations-in-templates)
 
-**Q69.** What is the result of {{ 1 + 2 ~ 3 }}?  <small>_(medium · code)_</small>
+**Q68.** What is the result of {{ 1 + 2 ~ 3 }}?  <small>_(medium · code)_</small>
 
 - A. "33"
 - B. "123"
 - C. 6
 - D. "15"
 
-??? success "Answer Q69"
+??? success "Answer Q68"
     **A**
 
     + binds tighter than ~, so (1 + 2) ~ 3 => 3 ~ 3 => the string "33".
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#other-operators)
 
-**Q70.** Given {% set name = 'Ada' %}, what does {{ 'Hi #{name}' }} render?  <small>_(medium · trap)_</small>
+**Q69.** Given {% set name = 'Ada' %}, what does {{ 'Hi #{name}' }} render?  <small>_(medium · trap)_</small>
 
 - A. Hi #{name} — single quotes are literal, so no interpolation happens
 - B. Hi Ada — interpolation works in any string
 - C. An error about #{ in a single-quoted string
 - D. Hi  — the #{name} is stripped
 
-??? success "Answer Q70"
+??? success "Answer Q69"
     **A**
 
     Interpolation with #{...} works only in double-quoted strings. In a single-quoted literal the sequence is printed verbatim, so you get the raw text 'Hi #{name}'. Use double quotes ("Hi #{name}") for interpolation.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#string-interpolation)
 
-**Q71.** What are the results of {{ "1" + "2" }} and {{ "1" ~ "2" }}?  <small>_(medium · code)_</small>
+**Q70.** What are the results of {{ "1" + "2" }} and {{ "1" ~ "2" }}?  <small>_(medium · code)_</small>
 
 - A. 3 and "12" — + is numeric addition, ~ is string concatenation
 - B. "12" and "12" — both concatenate
 - C. 3 and 3 — both add numerically
 - D. An error, because + cannot be used on strings
 
-??? success "Answer Q71"
+??? success "Answer Q70"
     **A**
 
     In Twig, + is arithmetic addition (numeric strings are coerced), so "1" + "2" is 3. ~ concatenates after casting operands to string, so "1" ~ "2" is "12". Using + to "join" strings is a classic mistake.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#other-operators)
 
-**Q72.** Which service does the Twig asset() function delegate to?  <small>_(medium · internals)_</small>
+**Q71.** Which service does the Twig asset() function delegate to?  <small>_(medium · internals)_</small>
 
 - A. Symfony\Component\Asset\Packages
 - B. Symfony\Component\Routing\Generator\UrlGenerator
 - C. Symfony\Contracts\Translation\TranslatorInterface
 - D. Symfony\Component\HttpKernel\Fragment\FragmentHandler
 
-??? success "Answer Q72"
+??? success "Answer Q71"
     **A**
 
     AssetExtension wraps the Packages service. Each package pairs a base path/URL with a VersionStrategyInterface (Empty, Static, or JsonManifest), and Packages::getUrl() applies the version.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Asset/Packages.php)
 
-**Q73.** How do you point image assets at a CDN while CSS stays local?  <small>_(medium · config)_</small>
+**Q72.** How do you point image assets at a CDN while CSS stays local?  <small>_(medium · config)_</small>
 
 - A. Define a named package with base_urls and call asset('img/x.png', 'cdn')
 - B. Hard-code the CDN URL in the template
 - C. Use url('cdn', {path: 'img/x.png'})
 - D. Set framework.assets.cdn: true
 
-??? success "Answer Q73"
+??? success "Answer Q72"
     **A**
 
     framework.assets.packages lets you declare a named package (e.g. cdn with base_urls). asset('img/x.png', 'cdn') uses that package while the default package still serves CSS locally. There is no framework.assets.cdn flag.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/asset.html)
 
-**Q74.** True or false: you should use asset() to generate a link to a route-controlled page.  <small>_(medium · trap)_</small>
+**Q73.** True or false: you should use asset() to generate a link to a route-controlled page.  <small>_(medium · trap)_</small>
 
 - A. False — asset() is for static files under public/; use path()/url() for routes
 - B. True — asset() works for both routes and files
 
-??? success "Answer Q74"
+??? success "Answer Q73"
     **A**
 
     asset() only resolves a public file path (with base path + version); it does not know about routes. Route-controlled URLs come from path()/url() via the RoutingExtension. Swapping the two is a common confusion.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
 
-**Q75.** Why does dump() error in the prod environment?  <small>_(medium · debug)_</small>
+**Q74.** Why does dump() error in the prod environment?  <small>_(medium · debug)_</small>
 
 - A. The DumpExtension is only registered in debug mode
 - B. It is a syntax error
 - C. VarDumper is never installed
 - D. It has been deprecated
 
-??? success "Answer Q75"
+??? success "Answer Q74"
     **A**
 
     The dump function/tag come from the debug-only DumpExtension (backed by VarDumper); in prod the function is undefined, so leftover dumps throw.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/var_dumper.html)
 
-**Q76.** What is the difference between {{ dump(x) }} and {% dump x %}?  <small>_(medium · single)_</small>
+**Q75.** What is the difference between {{ dump(x) }} and {% dump x %}?  <small>_(medium · single)_</small>
 
 - A. The function prints inline; the tag sends data to the collector without injecting markup
 - B. They are identical
 - C. The tag works in prod, the function does not
 - D. The function only works in prod
 
-??? success "Answer Q76"
+??? success "Answer Q75"
     **A**
 
     The dump() function outputs where called; the {% dump %} tag routes the data to the profiler/toolbar without adding markup to the page.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
 
-**Q77.** You add {% dump items %} but see nothing in the page HTML. Why?  <small>_(medium · trap)_</small>
+**Q76.** You add {% dump items %} but see nothing in the page HTML. Why?  <small>_(medium · trap)_</small>
 
 - A. The tag form intentionally injects no page markup; it sends data to the collector/toolbar
 - B. The tag only works in prod
 - C. items must be a scalar for {% dump %} to work
 - D. {% dump %} was removed; only dump() exists
 
-??? success "Answer Q77"
+??? success "Answer Q76"
     **A**
 
     Unlike the dump() function, the {% dump %} tag does not print inline — by design it routes the data to the dump destination (profiler/toolbar) so it does not pollute the page. Look in the web debug toolbar, not the page source.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
 
-**Q78.** A deploy fails with 'Unknown "dump" function' on a page. What is the cause and fix?  <small>_(medium · debug)_</small>
+**Q77.** A deploy fails with 'Unknown "dump" function' on a page. What is the cause and fix?  <small>_(medium · debug)_</small>
 
 - A. A stray {{ dump() }} left in a template; dump is undefined in prod, so remove it
 - B. VarDumper is missing from require-dev; move it to require
 - C. The Twig cache is stale; clear it and dump will work in prod
 - D. dump was renamed in Symfony 8; use var_dump instead
 
-??? success "Answer Q78"
+??? success "Answer Q77"
     **A**
 
     dump tooling is registered only in debug mode, so a leftover dump() in a committed template throws 'Unknown "dump" function' in prod. The fix is to remove debug dumps before deploy (use logging/profiler in non-prod envs) — not to enable the extension in production.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/var_dumper.html)
 
-**Q79.** For {{ user.name }}, in which order does Twig try to resolve the attribute?  <small>_(hard · internals)_</small>
+**Q78.** Which of the following statements are true about Twig syntax? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. {{ }} prints (and escapes) a value, {% %} executes logic without printing, {# #} is a comment
+- B. // performs floor division, so {{ 7 // 2 }} outputs 3
+- C. Filters bind tighter than arithmetic: {{ 1 + 2|abs }} is evaluated as 1 + (2|abs)
+- D. {% %} statements also print their result into the output
+- E. {% spaceless %} is still the recommended tag for stripping whitespace
+
+??? success "Answer Q78"
+    **A, B, C**
+
+    The three delimiters split cleanly into print/do/comment: only {{ }} produces (escaped) output while {% %} never prints. // is floor division (7 // 2 gives 3, unlike / which yields a float), and filters have higher precedence than arithmetic operators, so 1 + 2|abs applies abs to 2 first. The standalone {% spaceless %} tag no longer exists — the modern form is {% apply spaceless %}.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#twig-templating-language)
+
+**Q79.** Which statements about Twig template inheritance are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. A template can extend exactly one parent, but can pull in blocks from many templates with {% use %}
+- B. A child template that extends a parent cannot output markup outside of blocks
+- C. parent() inside a block renders the parent template's version of that block
+- D. A template may list several parents in a single {% extends %} tag to combine layouts
+- E. {% use %} sets the referenced template as an additional parent for the hierarchy
+
+??? success "Answer Q79"
+    **A, B, C**
+
+    Inheritance is single and vertical: one parent per template, with blocks as the overridable holes, and any child markup outside blocks is invalid. parent() extends rather than replaces a block by rendering the parent's version. {% use %} is horizontal reuse — it imports blocks only and does not set a parent, and {% extends %} accepts a single parent, never several to combine.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts)
+
+**Q80.** Which statements about {{ include() }} in Twig are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Without the only keyword, the included template inherits the whole context of the parent template
+- B. With only, the local context is isolated, but the app global variable is still available
+- C. ignore missing skips a missing template but does not swallow errors raised inside an existing template
+- D. include can override blocks defined in the included template
+- E. Passing a list of templates renders every template in the list that exists
+
+??? success "Answer Q80"
+    **A, B, C**
+
+    By default the full parent context is merged into the include; only isolates the local variables while globals such as app remain accessible. ignore missing only prevents the error for a template that does not exist — exceptions thrown inside the included template still propagate. Overriding blocks is the job of {% embed %}, not include, and a template list renders only the first template that exists.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#including-templates)
+
+**Q81.** Which statements about generating URLs in Twig are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. path() generates a relative URL while url() generates an absolute URL, both from route names
+- B. Parameters that are not part of the route definition are appended to the URL as a query string
+- C. Using an unknown route name throws a RouteNotFoundException when the template is rendered
+- D. Extra parameters not defined in the route are silently dropped from the generated URL
+- E. path() is the right choice for links inside emails since mail clients resolve relative URLs
+
+??? success "Answer Q81"
+    **A, B, C**
+
+    path() and url() both take a route name (plus parameters): path() yields a relative URL, url() an absolute one, and any parameter the route does not declare ends up in the query string rather than being dropped. An unknown route name fails at render time with RouteNotFoundException. Email bodies, canonical links and feeds leave the page context, so they need url() — relative links from path() break in mail clients.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-pages)
+
+**Q82.** For {{ user.name }}, in which order does Twig try to resolve the attribute?  <small>_(hard · internals)_</small>
 
 - A. $user['name'], then $user->name, then $user->name(), getName(), isName(), hasName()
 - B. getName() first, then the public property, then array access
 - C. Only $user->getName() is ever tried
 - D. Only array access $user['name']
 
-??? success "Answer Q79"
+??? success "Answer Q82"
     **A**
 
     Twig's attribute resolver tries array/index access first, then a public property, then method calls name(), getName(), isName() and hasName(). Force pure array access with user['name'] and dynamic names with attribute(user, key). A missing attribute yields null unless strict_variables is on.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#variables)
 
-**Q80.** What does {{ -5|abs }} produce, given filters bind tighter than any operator?  <small>_(hard · code)_</small>
+**Q83.** What does {{ -5|abs }} produce, given filters bind tighter than any operator?  <small>_(hard · code)_</small>
 
 - A. -5, because it parses as -(5|abs)
 - B. 5, because abs is applied to -5
 - C. An error about applying a filter to a negative literal
 - D. 0
 
-??? success "Answer Q80"
+??? success "Answer Q83"
     **A**
 
     The pipe binds tighter than the unary minus, so the expression is -(5|abs) = -(5) = -5, not (-5)|abs. Wrap in parentheses — (-5)|abs — to get 5. This tight binding of filters is a recurring exam trap.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#math)
 
-**Q81.** At which point is auto-escaping applied to a value?  <small>_(hard · internals)_</small>
+**Q84.** At which point is auto-escaping applied to a value?  <small>_(hard · internals)_</small>
 
 - A. At print time on {{ }}, via EscaperExtension adding an implicit |escape
 - B. When the variable is assigned with {% set %}
 - C. When the controller passes the variable to the template
 - D. During template compilation, once, on the source string
 
-??? success "Answer Q81"
+??? success "Answer Q84"
     **A**
 
     EscaperExtension inserts an implicit |escape(strategy) on every {{ }} output node that is not already marked safe — escaping happens when a value is printed, not when it is set. So {% set x = untrusted %} stores it raw; the escaping occurs only when you later print {{ x }}.
 
     :material-book-open-variant: [Docs](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
 
-**Q82.** Which PHP function backs Twig's default 'html' escaping strategy?  <small>_(hard · internals)_</small>
+**Q85.** Which PHP function backs Twig's default 'html' escaping strategy?  <small>_(hard · internals)_</small>
 
 - A. htmlspecialchars() with ENT_QUOTES | ENT_SUBSTITUTE
 - B. strip_tags()
 - C. htmlentities() with ENT_NOQUOTES
 - D. addslashes()
 
-??? success "Answer Q82"
+??? success "Answer Q85"
     **A**
 
     The EscaperRuntime maps 'html' to htmlspecialchars() with ENT_QUOTES|ENT_SUBSTITUTE (encoding single and double quotes and substituting invalid code units). html_attr uses a stricter attribute encoder, js uses \\xNN hex, css uses CSS hex and url uses rawurlencode — each context has its own encoder because escaping is context-specific.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/filters/escape.html)
 
-**Q83.** Why must {% extends %} be the first tag, and what can a child template NOT do?  <small>_(hard · internals)_</small>
+**Q86.** Why must {% extends %} be the first tag, and what can a child template NOT do?  <small>_(hard · internals)_</small>
 
 - A. A child that extends a parent cannot output markup outside blocks; rendering starts at the root ancestor
 - B. Markup outside blocks is allowed and rendered before the parent
 - C. extends may appear anywhere; order does not matter
 - D. A child can define its own <html> wrapper around the parent
 
-??? success "Answer Q83"
+??? success "Answer Q86"
     **A**
 
     When a template extends another, rendering begins at the root ancestor and walks down, so any top-level text a child writes outside a block is ignored (or errors). extends can be a dynamic expression resolved at runtime, which is why it must be resolvable first. Put all child content inside blocks.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tags/extends.html)
 
-**Q84.** How does template inheritance work at the compiled-PHP level?  <small>_(hard · internals)_</small>
+**Q87.** How does template inheritance work at the compiled-PHP level?  <small>_(hard · internals)_</small>
 
 - A. Each {% block %} becomes a block_<name>() method; extends makes the child class override the parent's methods
 - B. Blocks are stored as strings and concatenated at runtime
 - C. The child template is textually copied into the parent before compilation
 - D. Inheritance is resolved by regular expressions on the source
 
-??? success "Answer Q84"
+??? success "Answer Q87"
     **A**
 
     Every template compiles to a class extending Twig\Template; a block becomes a block_<name>() method and extends wires up parentage so child methods override parent ones — exactly like PHP method overriding. A block table ($this->blocks) lets an override anywhere in the chain win.
 
     :material-book-open-variant: [Docs](https://github.com/twigphp/Twig/blob/3.x/src/Template.php)
 
-**Q85.** Which app.* accesses have a side effect? (choose 2)  <small>_(hard · multiple)_</small>
+**Q88.** Which app.* accesses have a side effect? (choose 2)  <small>_(hard · multiple)_</small>
 
 - A. app.session — accessing it can start the session
 - B. app.flashes — reading flash messages consumes (clears) them
 - C. app.environment — pure read, no side effect
 - D. app.debug — pure read, no side effect
 
-??? success "Answer Q85"
+??? success "Answer Q88"
     **A, B**
 
     Accessing app.session may start the session (which can defeat HTTP caching), and reading app.flashes consumes the messages so they are cleared after display — both have side effects. app.environment and app.debug are plain reads with no side effect.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
 
-**Q86.** You need a global whose value is computed from an injected service. Which approach fits best?  <small>_(hard · internals)_</small>
+**Q89.** You need a global whose value is computed from an injected service. Which approach fits best?  <small>_(hard · internals)_</small>
 
 - A. An extension implementing GlobalsInterface::getGlobals() returning the computed value
 - B. A {% set %} at the top of base.html.twig
 - C. A #[AsGlobal] attribute on the service
 - D. Hard-coding it in every controller's render() call
 
-??? success "Answer Q86"
+??? success "Answer Q89"
     **A**
 
     GlobalsInterface::getGlobals() lets an extension inject a service and return computed values, resolved lazily when the extension is instantiated. A static YAML twig.globals entry (even '@service') is fine for simple references, but computed/lazy values belong in a GlobalsInterface extension. There is no #[AsGlobal] attribute.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#global-variables)
 
-**Q87.** A controller passes a variable named `app` to the template. What happens?  <small>_(hard · trap)_</small>
+**Q90.** A controller passes a variable named `app` to the template. What happens?  <small>_(hard · trap)_</small>
 
 - A. The local variable shadows the global, so app.user etc. refer to the passed value
 - B. Symfony throws because 'app' is reserved
 - C. The global always wins and the local value is ignored
 - D. Both are merged into a single object
 
-??? success "Answer Q87"
+??? success "Answer Q90"
     **A**
 
     Globals are merged into the render context, so a local variable of the same name shadows the global. Passing your own `app` variable breaks app.user/app.request access inside that template — avoid reusing reserved global names.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#global-variables)
 
-**Q88.** A TwigFilter is declared with needs_environment: true. What changes about the callable?  <small>_(hard · internals)_</small>
+**Q91.** A TwigFilter is declared with needs_environment: true. What changes about the callable?  <small>_(hard · internals)_</small>
 
 - A. Twig passes the Environment as the first argument, shifting the user arguments right
 - B. Nothing changes; it is only documentation metadata
 - C. The filter can only be used inside {% apply %} blocks
 - D. The callable must return a Twig\Environment
 
-??? success "Answer Q88"
+??? success "Answer Q91"
     **A**
 
     needs_environment injects Twig\Environment as the first callable argument (and needs_context injects the render context array), so your declared parameters come after it. Forgetting this argument shift is a common cause of TypeErrors when writing extensions.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping)
 
-**Q89.** With {% include '_card.html.twig' with { title: t } only %}, is the app global still available inside the partial?  <small>_(hard · trap)_</small>
+**Q92.** With {% include '_card.html.twig' with { title: t } only %}, is the app global still available inside the partial?  <small>_(hard · trap)_</small>
 
 - A. Yes — only isolates the parent's local variables but globals like app remain available
 - B. No — only removes everything including globals
 - C. Only if you also pass app in the with hash
 - D. Globals are never available inside an include
 
-??? success "Answer Q89"
+??? success "Answer Q92"
     **A**
 
     only restricts the include to just the with variables from the caller's local scope, but Twig globals (such as app) are merged into every template's context independently, so app.user etc. still work. Assuming only strips globals is a common misconception.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tags/include.html)
 
-**Q90.** How is an included template handled by Twig internally?  <small>_(hard · internals)_</small>
+**Q93.** How is an included template handled by Twig internally?  <small>_(hard · internals)_</small>
 
 - A. It is a separate compiled class, loaded via the loader and invoked at runtime — not textually inlined
 - B. Its source is pasted into the parent before compilation
 - C. It is re-parsed from disk on every render with no caching
 - D. It is merged into the parent's single block table
 
-??? success "Answer Q90"
+??? success "Answer Q93"
     **A**
 
     The include tag compiles to a call to Twig\Template::display()/render() on the sub-template, which the FilesystemLoader resolves and which is compiled and cached like any other template. Includes are separate compiled classes invoked at runtime, not inlined text.
 
     :material-book-open-variant: [Docs](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
 
-**Q91.** Why might loop.length and loop.last be unavailable inside a for loop?  <small>_(hard · internals)_</small>
+**Q94.** Why might loop.length and loop.last be unavailable inside a for loop?  <small>_(hard · internals)_</small>
 
 - A. The iterable is not countable (e.g. a bare Generator), so Twig cannot know the total up front
 - B. They are only available under strict_variables
 - C. They never work in nested loops
 - D. They require the collection to be an array of objects
 
-??? success "Answer Q91"
+??? success "Answer Q94"
     **A**
 
     loop.length, loop.last and loop.revindex require a countable iterable (array or Countable/Traversable Twig can count). For a non-countable Generator, Twig cannot determine the total without buffering, so those members may be omitted; loop.index and loop.first are always available.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tags/for.html#the-loop-variable)
 
-**Q92.** Which is true about the tests `is null`, `is empty`, and `is defined`?  <small>_(hard · trap)_</small>
+**Q95.** Which is true about the tests `is null`, `is empty`, and `is defined`?  <small>_(hard · trap)_</small>
 
 - A. is empty is broadest — true for null, false, 0, '' and []; is null is only for null; is defined checks existence
 - B. All three are equivalent
 - C. is empty is true only for '' (empty string)
 - D. is defined is true only when the value is not null
 
-??? success "Answer Q92"
+??? success "Answer Q95"
     **A**
 
     is defined tests whether the variable exists at all (undefined is not the same as null); is null tests exact null; is empty is the broadest — true for null, false, 0, '' and []. Use is null when you must distinguish "no value" from "empty list", and combine with is defined for maybe-missing variables.
 
     :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tests/empty.html)
 
-**Q93.** Which UrlGenerator reference types back path() and url() respectively?  <small>_(hard · internals)_</small>
+**Q96.** Which UrlGenerator reference types back path() and url() respectively?  <small>_(hard · internals)_</small>
 
 - A. path() => ABSOLUTE_PATH; url() => ABSOLUTE_URL
 - B. path() => RELATIVE_PATH; url() => NETWORK_PATH
 - C. Both use ABSOLUTE_URL, differing only in caching
 - D. path() => ABSOLUTE_URL; url() => ABSOLUTE_PATH
 
-??? success "Answer Q93"
+??? success "Answer Q96"
     **A**
 
     RoutingExtension calls UrlGenerator::generate() with ABSOLUTE_PATH for path() (a root-relative /path) and ABSOLUTE_URL for url() (scheme + host + path). The generator reads the RequestContext to build the host for absolute URLs.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php)
 
-**Q94.** Which snippet builds a 'next page' link for the current route, incrementing page?  <small>_(hard · code)_</small>
+**Q97.** Which snippet builds a 'next page' link for the current route, incrementing page?  <small>_(hard · code)_</small>
 
 - A. path(app.current_route, app.current_route_parameters|merge({ page: page + 1 }))
 - B. path(app.request.uri, { page: page + 1 })
 - C. url(app.route, { page: page + 1 })
 - D. path('current', app.params + { page: page + 1 })
 
-??? success "Answer Q94"
+??? success "Answer Q97"
     **A**
 
     app.current_route and app.current_route_parameters expose the active route and its params; merging a new page value onto them and passing to path() rebuilds the current URL with one changed parameter. app.route/app.params are not real members, and + does not merge hashes (~ /merge do).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
 
-**Q95.** Which service selects the fragment renderer for render()/render_esi()?  <small>_(hard · internals)_</small>
+**Q98.** Which service selects the fragment renderer for render()/render_esi()?  <small>_(hard · internals)_</small>
 
 - A. Symfony\Component\HttpKernel\Fragment\FragmentHandler
 - B. Symfony\Component\Routing\Generator\UrlGenerator
 - C. Twig\Extension\EscaperExtension
 - D. Symfony\Bridge\Twig\AppVariable
 
-??? success "Answer Q95"
+??? success "Answer Q98"
     **A**
 
     HttpKernelExtension delegates to FragmentHandler, which picks a FragmentRendererInterface (inline, esi, hinclude) by strategy name.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php)
 
-**Q96.** What is true about kernel events when an inline fragment is rendered?  <small>_(hard · internals)_</small>
+**Q99.** What is true about kernel events when an inline fragment is rendered?  <small>_(hard · internals)_</small>
 
 - A. The full request lifecycle runs again for the sub-request (kernel.request, kernel.controller, kernel.response, etc.)
 - B. No events fire because it is an internal call
 - C. Only kernel.response fires for the fragment
 - D. The parent request's events are re-dispatched for the fragment
 
-??? success "Answer Q96"
+??? success "Answer Q99"
     **A**
 
     Inline rendering calls HttpKernel::handle(..., SUB_REQUEST), so the whole listener chain (request, controller, response) runs independently for the fragment. The sub-request has its own Request object; parent attributes are not automatically shared.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html#handling-requests)
 
-**Q97.** Which config enables direct fragment URLs for ESI/hinclude?  <small>_(hard · config)_</small>
-
-- A. framework.fragments.enabled: true (with a path), plus framework.esi.enabled: true for ESI
-- B. twig.fragments.enabled: true
-- C. framework.router.fragments: true
-- D. No config is needed; fragment URLs are always public
-
-??? success "Answer Q97"
-    **A**
-
-    Embedded controllers are normally reachable only via sub-requests. To expose signed fragment URLs (for ESI/hinclude) you enable framework.fragments (with a path like /_fragment) and framework.esi for ESI support. There is no twig.fragments key.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
-
-**Q98.** By default, can a browser hit an embedded controller's fragment URL directly?  <small>_(hard · trap)_</small>
+**Q100.** By default, can a browser hit an embedded controller's fragment URL directly?  <small>_(hard · trap)_</small>
 
 - A. No — embedded controllers are exposed to direct URLs only when fragments are enabled, and the URL is signed
 - B. Yes — every embedded controller has a public URL automatically
 - C. Yes, but only in dev
 - D. No, direct fragment URLs are impossible in Symfony
 
-??? success "Answer Q98"
+??? success "Answer Q100"
     **A**
 
     Inline embedding uses internal sub-requests, not public URLs. Direct fragment access requires enabling framework.fragments, and Symfony signs the fragment URL (URI signer) so attackers cannot forge arbitrary controller calls. Assuming embeds are publicly routable is a security trap.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
 
-**Q99.** Which catalogue file name enables ICU MessageFormat parsing for English?  <small>_(hard · config)_</small>
+**Q101.** Which catalogue file name enables ICU MessageFormat parsing for English?  <small>_(hard · config)_</small>
 
 - A. messages+intl-icu.en.yaml
 - B. messages.icu.en.yaml
 - C. messages.en.icu.yaml
 - D. icu-messages.en.yaml
 
-??? success "Answer Q99"
+??? success "Answer Q101"
     **A**
 
     A domain suffixed +intl-icu (e.g. messages+intl-icu.en.yaml) is parsed with the IntlFormatter, unlocking plural/select and locale-aware formatting. Putting ICU syntax in a plain messages.en.yaml file makes the braces render literally.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
 
-**Q100.** For the ICU message '{count, plural, =0 {none} one {# item} other {# items}}', what does count=1 render?  <small>_(hard · code)_</small>
+**Q102.** For the ICU message '{count, plural, =0 {none} one {# item} other {# items}}', what does count=1 render?  <small>_(hard · code)_</small>
 
 - A. 1 item
 - B. # item
 - C. one item
 - D. none
 
-??? success "Answer Q100"
+??? success "Answer Q102"
     **A**
 
     count=1 matches the CLDR 'one' category in English, and # inside the branch is replaced by the number, giving '1 item'. # prints the value (not a literal hash), 'one' is a category label not output, and =0 only matches the exact value 0.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
 
-**Q101.** Which service does the Twig trans filter ultimately call?  <small>_(hard · internals)_</small>
+**Q103.** Which service does the Twig trans filter ultimately call?  <small>_(hard · internals)_</small>
 
 - A. Symfony\Contracts\Translation\TranslatorInterface::trans() (via TranslationExtension)
 - B. Twig\Extension\CoreExtension::translate()
 - C. Symfony\Component\Intl\Locale directly
 - D. Symfony\Bridge\Twig\AppVariable::trans()
 
-??? success "Answer Q101"
+??? success "Answer Q103"
     **A**
 
     TranslationExtension provides the trans filter/tag and delegates to TranslatorInterface::trans(), which loads catalogues, resolves the message, substitutes parameters, and runs ICU messages through the IntlFormatter.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
 
-**Q102.** How does Twig implement #{...} interpolation internally?  <small>_(hard · internals)_</small>
+**Q104.** How does Twig implement #{...} interpolation internally?  <small>_(hard · internals)_</small>
 
 - A. It is a lexer feature: #{expr} in a double-quoted string is tokenised and compiled into ~ concatenation
 - B. It is a runtime str_replace over the rendered output
 - C. It calls PHP's built-in string interpolation on the template
 - D. It is a filter applied after escaping
 
-??? success "Answer Q102"
+??? success "Answer Q104"
     **A**
 
     Inside a "..." string the lexer detects #{, tokenises the embedded expression, and the parser compiles the whole literal into a ~ (string concatenation) chain — so "a #{x} b" becomes 'a ' ~ x ~ ' b'. It has nothing to do with PHP's own interpolation.
 
     :material-book-open-variant: [Docs](https://github.com/twigphp/Twig/blob/3.x/src/Lexer.php)
 
-**Q103.** With a JSON manifest configured, what does asset('app.css') resolve to?  <small>_(hard · trap)_</small>
+**Q105.** With a JSON manifest configured, what does asset('app.css') resolve to?  <small>_(hard · trap)_</small>
 
 - A. The content-hashed name looked up in manifest.json (e.g. app.7f3c.css), not the literal path
 - B. The literal /app.css path with ?v appended
 - C. An error if app.css is not physically present
 - D. The manifest.json file itself
 
-??? success "Answer Q103"
+??? success "Answer Q105"
     **A**
 
     JsonManifestVersionStrategy maps the logical name to its hashed filename from manifest.json, so asset('app.css') returns the resolved hashed path. Expecting the literal path with a ?v query (that is StaticVersionStrategy) is the trap.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/asset.html)
 
-**Q104.** What gives Symfony's dump() its rich, collapsible HTML output rather than plain var_dump?  <small>_(hard · internals)_</small>
+**Q106.** What gives Symfony's dump() its rich, collapsible HTML output rather than plain var_dump?  <small>_(hard · internals)_</small>
 
 - A. Symfony's DumpExtension backed by VarDumper (VarCloner + HtmlDumper), replacing Twig's plain DebugExtension
 - B. Twig's core DebugExtension already produces collapsible HTML
 - C. PHP's native var_dump() with an ini setting
 - D. The Profiler rewrites var_dump output
 
-??? success "Answer Q104"
+??? success "Answer Q106"
     **A**
 
     Twig core ships DebugExtension with a plain var_dump-based dump(). Symfony augments it with DumpExtension wired to VarDumper (VarCloner clones the variable, HtmlDumper renders collapsible, syntax-highlighted output and routes dumps to the toolbar). Cloning first also makes dumping large graphs safe (depth-limited).
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/DumpExtension.php)
+
+**Q107.** Which statements about Twig output escaping in Symfony are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. The default escaping strategy is chosen from the template file extension, so a .txt.twig template escapes nothing
+- B. Escaping is applied when a value is printed with {{ }}, not when it is assigned with {% set %}
+- C. |raw and {% autoescape false %} disable protection, so they must only wrap trusted content
+- D. The html_attr strategy is just an alias of html and produces identical output
+- E. All templates always use the html strategy regardless of their extension
+
+??? success "Answer Q107"
+    **A, B, C**
+
+    The auto-escaping context is derived from the file extension (html, js, css, url, html_attr are available), which is why a .txt.twig template gets no escaping at all — it is not a fixed html default. Escaping happens at print time via the escaper, and |raw / {% autoescape false %} switch the protection off entirely, making them XSS holes for untrusted data. The html_attr strategy is a stricter encoder than html, not an alias.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+
+**Q108.** Which statements about the app global variable are true? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. app.user is null for anonymous/unauthenticated requests, so templates must not assume it exists
+- B. Reading app.flashes consumes the flash messages, so they are gone after being displayed
+- C. Accessing app.session can start the session as a side effect
+- D. app.environment exposes the operating-system environment variables
+- E. The app global can never be shadowed by a local template variable
+
+??? success "Answer Q108"
+    **A, B, C**
+
+    app is an AppVariable instance: app.user is null when nobody is authenticated, app.flashes consumes messages when read, and app.session starts the session on access (which can defeat HTTP caching). The distractors are wrong because app.environment is the kernel environment (dev/prod), not OS variables, and defining a local variable named app shadows the global.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+
+**Q109.** Which statements about translations in Twig are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. The trans filter arguments are ordered (parameters, domain, locale)
+- B. A missing translation key does not throw; the key string itself is returned
+- C. ICU MessageFormat pluralization is only parsed for catalogues in domains with the +intl-icu suffix
+- D. transchoice is the recommended filter for pluralization in current Symfony versions
+- E. Requesting a missing translation key raises an exception at render time
+
+??? success "Answer Q109"
+    **A, B, C**
+
+    The trans filter signature is message|trans(parameters, domain, locale) — passing the domain first is a classic mistake. Missing keys fall back to returning the key itself instead of erroring, and ICU {n, plural, ...} syntax is only interpreted for domains suffixed with +intl-icu. The transchoice filter was removed; ICU MessageFormat is the modern way to pluralize.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html)
 
 ---
 

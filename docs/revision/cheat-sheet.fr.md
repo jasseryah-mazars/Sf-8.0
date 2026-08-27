@@ -135,8 +135,8 @@ complet pour le détail. Tout ici est Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Directives Cache-Control :** `public`, `private`, `no-cache` (revalider avant
   usage), `no-store` (ne jamais stocker), `must-revalidate`, `max-age`, `s-maxage`.
 - **`Vary`** fait varier la clé de cache ; Symfony fournit un reverse proxy
-  **`HttpCache`** ; **ESI** = fragments `<esi:include>`. *(Pondération réduite dans
-  l'examen Symfony 8.)*
+  **`HttpCache`**. *(Pondération réduite dans l'examen Symfony 8.)* L'ESI est
+  hors programme — **exclu de la certification Symfony 8**.
 
 ## 12. Console → [area](../console/index.md)
 

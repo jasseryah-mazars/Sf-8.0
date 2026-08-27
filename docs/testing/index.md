@@ -8,7 +8,9 @@ services in isolation, and *functional* (HTTP-level) tests that boot the real
 kernel, send requests through a synthetic browser, and assert on the response,
 the DOM, and the internal state of the framework. This stage teaches the tooling
 the exam cares about — `KernelTestCase`, `WebTestCase`, the test **Client**, the
-**Crawler**, the **Profiler**, the response assertions, and the PHPUnit bridge.
+**Crawler**, the **Profiler**, and the response assertions. The PHPUnit bridge
+is covered here for completeness but is **excluded from Symfony 8
+certification**.
 
 !!! abstract "Stage at a glance"
     - **Prerequisites:** [Controllers](../controllers/index.md),
@@ -53,7 +55,8 @@ high value per minute of study.
 - [Request/Response Introspection](introspection.md) — `getRequest()`/`getResponse()`
   and the `assertResponse*` / `assertSelector*` helpers.
 - [PHPUnit Bridge](phpunit-bridge.md) — deprecation collection, clock/DNS mocking,
-  `SYMFONY_DEPRECATIONS_HELPER`, the Symfony PHPUnit extension.
+  `SYMFONY_DEPRECATIONS_HELPER`, the Symfony PHPUnit extension. **Excluded from
+  Symfony 8 certification.**
 - [Handling Deprecated Code](deprecations.md) — `#[IgnoreDeprecations]`, helper
   modes (`max`, `disabled`, `weak`), baselines.
 

@@ -244,13 +244,6 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     est définie avec `set`.
     **Ref:** [Auto-escaping](../twig/auto-escaping.md)
 
-??? question "What happens if a template uses `render_esi()` but no ESI-capable surrogate is in front of the app?"
-    Le fragment est rendu **en ligne via une sub-request classique** — même sortie,
-    silencieusement, sans aucune erreur. Le tag `<esi:include>` n'est émis que
-    lorsqu'un surrogate annonce sa capacité ESI, donc vous perdez le bénéfice du
-    TTL par fragment sans vous en apercevoir.
-    **Ref:** [Embedding controllers](../twig/controller-rendering.md)
-
 ??? question "What happens if a child template that `extends` a parent prints markup outside of any block?"
     Une **erreur Twig** — un template qui en étend un autre ne peut définir que des
     blocks (`{% extends %}` doit venir en premier). De plus, un template ne peut
@@ -461,13 +454,6 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     privées et vont au backend. C'est pourquoi un seul cookie de session peut
     discrètement tuer votre taux de hit.
     **Ref:** [Server-side caching (HttpCache)](../http-caching/server-side.md)
-
-??? question "What happens to a fully-cacheable page that embeds one short-lived fragment *without* ESI?"
-    Le **TTL de la page entière est plafonné** par le fragment embarqué à la durée
-    de vie la plus courte — `ResponseCacheStrategy` les fusionne vers le bas. ESI
-    est le remède : chaque fragment garde son propre TTL parce que le surrogate
-    assemble la page lui-même.
-    **Ref:** [ESI](../http-caching/esi.md)
 
 ## Console
 

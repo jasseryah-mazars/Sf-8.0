@@ -4,21 +4,19 @@
     Quand un fragment a besoin de ses propres données, embarquez un controller
     avec `render(controller(...))` plutôt que de faire des requêtes dans le
     template. Point d'examen : le rendu inline est une vraie sous-request
-    HttpKernel ; `render_esi` délègue à un reverse proxy.
+    HttpKernel.
 
 !!! example "Real-world analogy"
     Embarquer un controller, c'est comme une page de journal qui envoie un jeune
     reporter chercher l'encadré « dernières nouvelles » pendant que l'article
     principal est mis en page. `render(controller(...))` dépêche ce reporter —
     une vraie sous-request — qui revient avec une coupure finie et autonome.
-    L'ESI confie le même travail à la presse d'imprimerie (un reverse proxy) pour
-    que l'encadré puisse être réutilisé d'une édition à l'autre.
 
 !!! abstract "Learning objectives"
     À la fin de ce chapitre, vous saurez :
 
     - [ ] Embarquer la sortie d'un controller avec `render(controller(...))`.
-    - [ ] Choisir entre le rendu de fragment inline, ESI et hinclude.
+    - [ ] Choisir entre le rendu de fragment inline et hinclude.
     - [ ] Décider quand embarquer un controller vaut mieux qu'un `include`.
 
     **Syllabus:** `Templating (Twig) → Controller rendering` ·
@@ -54,17 +52,6 @@ controller ; `render()` l'exécute en **sous-request** et insère le contenu de 
 {# render() runs it as a sub-request and inlines the Response body #}
 {{ render(ref) }}
 ```
-
-!!! question "Predict first"
-    Vous livrez `render_esi(controller(...))` mais la production n'a **aucun**
-    reverse proxy compatible ESI. Le fragment plante-t-il, se rend-il vide, ou
-    autre chose ?
-
-??? note "Reveal"
-    Il **retombe sur le rendu inline** — une sous-request HttpKernel normale.
-    L'ESI est une amélioration progressive : `FragmentHandler` se dégrade
-    gracieusement vers le renderer inline quand aucun proxy n'annonce le support
-    ESI, si bien que la page se rend quand même (juste sans cache indépendant).
 
 ## Deep Dive — how it works internally
 
@@ -106,24 +93,20 @@ flowchart LR
 - **Inline** émet une vraie sous-request via `HttpKernel::handle(..., SUB_REQUEST)`,
   donc tout le cycle de vie de la request (listeners, resolver) s'exécute pour le
   fragment. Cela coûte une sous-request mais reste transparent et fonctionne partout.
-- **ESI** délègue le rendu à un **reverse proxy** (le `HttpCache` de Symfony ou
-  Varnish) : le fragment peut être mis en cache indépendamment de la page. Si
-  aucun proxy ne supporte l'ESI, Symfony retombe sur l'inline. Voir
-  [HTTP Caching → ESI](../http-caching/esi.md).
 - **hinclude** retourne un placeholder résolu par le **navigateur** via
   JavaScript — la page se rend immédiatement et le fragment se charge de façon
   asynchrone.
 - Les controllers embarqués ne sont normalement exposés qu'aux sous-requests ;
-  pour autoriser des URL ESI/hinclude directes, activez le listener/la route
+  pour autoriser des URL hinclude directes, activez le listener/la route
   **`fragments`** (`framework.fragments`).
+- `render_esi(...)` existe aussi comme troisième stratégie, qui délègue le
+  fragment à un reverse proxy. **Excluded from Symfony 8 certification** — voir
+  [HTTP Caching → ESI](../http-caching/esi.md).
 
 ```yaml
 # config/packages/framework.yaml
 framework:
-    # ESI: defer fragments to a reverse proxy (Symfony HttpCache or Varnish);
-    # inline stays the fallback via HttpKernel::handle(..., SUB_REQUEST)
-    esi: { enabled: true }
-    # fragments listener/route: allow direct (signed) ESI/hinclude URLs;
+    # fragments listener/route: allow direct (signed) hinclude URLs;
     # hinclude placeholders are resolved by the browser via JavaScript
     fragments:
         enabled: true
@@ -143,8 +126,8 @@ framework:
     {# inline sub-request #}
     {{ render(controller('App\\Controller\\CartController::summary')) }}
 
-    {# cached independently by a reverse proxy #}
-    {{ render_esi(controller('App\\Controller\\NewsController::latest', { max: 5 })) }}
+    {# placeholder resolved asynchronously by the browser #}
+    {{ render_hinclude(controller('App\\Controller\\NewsController::latest', { max: 5 })) }}
     ```
 
 === "The embedded controller"
@@ -178,7 +161,6 @@ framework:
         fragments:
             enabled: true
             path: /_fragment
-        esi: { enabled: true }
     ```
 
 ## Best practices & anti-patterns
@@ -186,7 +168,7 @@ framework:
 | ✅ À faire | ❌ À éviter |
 |---|---|
 | Embarquer un controller pour ses propres données | Interroger la BDD dans un template |
-| `render_esi` pour les morceaux mis en cache indépendamment | L'ESI pour de petits fragments toujours frais |
+| `render_hinclude` pour du contenu qui peut charger de façon asynchrone | Bloquer toute la page sur un fragment inline lent |
 | Garder les controllers embarqués petits | Embarquer de nombreux fragments inline par page |
 | Passer des scalaires via les arguments de `controller()` | Passer de gros objets entre sous-requests |
 
@@ -194,8 +176,7 @@ framework:
 
 - **`include`** — le fragment n'a besoin que de variables déjà disponibles. Le moins cher.
 - **`render(controller())`** — le fragment a besoin de **ses propres** services/données/cache.
-- **`render_esi`** — le fragment a une **durée de cache différente** de la page et
-  un reverse proxy est disponible.
+- **`render_hinclude`** — le fragment peut charger de façon asynchrone après la page principale.
 
 Chaque embed inline est une sous-request ; en abuser nuit aux performances.
 Préférez les includes simples sauf si le fragment a réellement besoin d'une
@@ -207,7 +188,6 @@ logique isolée.
       construit la référence.
     - Le rendu inline est une **vraie sous-request** (les listeners s'exécutent à
       nouveau), pas un appel de fonction.
-    - `render_esi` **retombe sur l'inline** si aucun proxy compatible ESI n'est présent.
     - Les controllers embarqués ne sont joignables directement que lorsque les
       **fragments** sont activés (et l'URL signée).
 
@@ -220,8 +200,8 @@ logique isolée.
 ## Exercises
 
 1. **(Basic)** Embarquez `CartController::summary` en inline dans le header.
-2. **(Intermediate)** Rendez la liste des nouvelles via ESI pour qu'elle soit
-   mise en cache séparément.
+2. **(Intermediate)** Rendez la liste des nouvelles via hinclude pour qu'elle
+   charge de façon asynchrone.
 3. **(Advanced)** Expliquez ce qu'il advient des listeners quand le fragment
    inline est rendu.
 
@@ -229,8 +209,7 @@ logique isolée.
 
     **1.** `{{ render(controller('App\\Controller\\CartController::summary')) }}`.
 
-    **2.** `{{ render_esi(controller('App\\Controller\\NewsController::latest')) }}`
-    avec `framework.esi.enabled: true`.
+    **2.** `{{ render_hinclude(controller('App\\Controller\\NewsController::latest')) }}`.
 
     **3.** Une sous-request complète traverse `HttpKernel`, déclenchant les events
     du kernel (`REQUEST`, `CONTROLLER`, `RESPONSE`) pour le fragment de façon
@@ -247,16 +226,7 @@ logique isolée.
     **Why:** Le renderer inline émet une `SUB_REQUEST`. **Ref:**
     [Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers).
 
-??? question "Q2. What happens with `render_esi` and no ESI-capable proxy?"
-    - [x] A. It falls back to inline rendering ✅
-    - [ ] B. It throws
-    - [ ] C. It renders nothing
-    - [ ] D. It caches forever
-
-    **Why:** Symfony dégrade l'ESI vers l'inline quand aucun proxy ne le gère. **Ref:**
-    [ESI](https://symfony.com/doc/current/http_cache/esi.html).
-
-??? question "Q3. Which handler chooses the fragment renderer?"
+??? question "Q2. Which handler chooses the fragment renderer?"
     - [x] A. `FragmentHandler` ✅
     - [ ] B. `UrlGenerator`
     - [ ] C. `EscaperExtension`
@@ -268,7 +238,7 @@ logique isolée.
 ## Key takeaways
 
 - `render(controller(...))` embarque un controller en sous-request (inline).
-- `render_esi` délègue à un reverse proxy ; `render_hinclude` au navigateur.
+- `render_hinclude` délègue le chargement au navigateur via un placeholder JS.
 - Soutenu par `HttpKernelExtension` → `FragmentHandler` → un `FragmentRenderer`.
 - N'utilisez-le que quand le fragment a besoin de sa propre logique/données/cache.
 
@@ -276,19 +246,18 @@ logique isolée.
 
 !!! tip "Cheat sheet"
     - `render(controller('C::m', {a:1}))` = sous-request inline.
-    - `render_esi(...)` = cache par reverse proxy, retombe sur l'inline.
-    - Activation via `framework.fragments` / `framework.esi`.
+    - `render_hinclude(...)` = placeholder asynchrone résolu par le navigateur.
+    - Activation des URL de fragment directes via `framework.fragments`.
     - `include` pour les fragments peu coûteux ; embed pour la logique isolée.
 
 ## Connections
 
 - **Depends on:** [Includes](includes.md) — l'embed est l'alternative plus lourde quand un simple `include` ne peut pas récupérer ses propres données.
-- **Reused in:** [HTTP Caching → ESI](../http-caching/esi.md) — `render_esi` est là où le cache de fragments par un reverse proxy devient rentable.
+- **Related but excluded:** [HTTP Caching → ESI](../http-caching/esi.md) — `render_esi` utilise le même `FragmentHandler`, mais l'ESI elle-même est **exclue de la certification Symfony 8**.
 - **Confused with:** [Controllers](../controllers/index.md) — le rendu inline est une vraie **sous-request**, pas un simple appel de méthode.
 
 ## Official References
 - [Official — Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers)
-- [Official — ESI](https://symfony.com/doc/current/http_cache/esi.html)
 - [Symfony source — FragmentHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php)
 
 ## Video references
@@ -308,11 +277,10 @@ logique isolée.
 Je suis prêt quand je peux :
 
 - [ ] expliquer **pourquoi** embarquer un controller plutôt que de faire des requêtes dans le template
-- [ ] embarquer un controller en inline et via ESI en Symfony 8
+- [ ] embarquer un controller en inline et via hinclude en Symfony 8
 - [ ] déboguer un fragment qui relance les listeners du kernel dans sa propre sous-request
-- [ ] repérer la réponse piège sur `render_esi` sans proxy ESI
 - [ ] expliquer le chemin `HttpKernelExtension` → `FragmentHandler` → renderer
 
 ---
 
-<small>Related: [Includes](includes.md) · [HTTP Caching → ESI](../http-caching/esi.md) · [Controllers](../controllers/index.md)</small>
+<small>Related: [Includes](includes.md) · [Controllers](../controllers/index.md)</small>

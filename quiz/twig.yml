@@ -1548,27 +1548,6 @@ categories:
           kernel events run again for the fragment.
         documentation: "https://symfony.com/doc/current/templates.html#embedding-controllers"
 
-      - id: "TWIG-RENDER-02"
-        question: "What happens with render_esi() when no ESI-capable reverse proxy is present?"
-        type: "single"
-        difficulty: "medium"
-        subchapter: "twig/controller-rendering"
-        concepts: ["render_esi", "fallback", "reverse-proxy"]
-        syllabus: "Templating (Twig) → Controller rendering"
-        answers:
-          - value: "It transparently falls back to inline rendering"
-            correct: true
-          - value: "It throws an exception"
-            correct: false
-          - value: "It renders nothing"
-            correct: false
-          - value: "It caches the fragment forever"
-            correct: false
-        explanation: >-
-          Without a proxy that understands ESI, Symfony degrades render_esi to an
-          inline sub-request so the page still works.
-        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
-
       - id: "TWIG-RENDER-03"
         question: "Which service selects the fragment renderer for render()/render_esi()?"
         type: "internals"
@@ -1658,29 +1637,6 @@ categories:
           fragment. The sub-request has its own Request object; parent attributes are
           not automatically shared.
         documentation: "https://symfony.com/doc/current/components/http_kernel.html#handling-requests"
-
-      - id: "TWIG-RENDER-07"
-        question: "Which config enables direct fragment URLs for ESI/hinclude?"
-        type: "config"
-        difficulty: "hard"
-        subchapter: "twig/controller-rendering"
-        concepts: ["framework.fragments", "esi", "configuration"]
-        syllabus: "Templating (Twig) → Controller rendering"
-        answers:
-          - value: "framework.fragments.enabled: true (with a path), plus framework.esi.enabled: true for ESI"
-            correct: true
-          - value: "twig.fragments.enabled: true"
-            correct: false
-          - value: "framework.router.fragments: true"
-            correct: false
-          - value: "No config is needed; fragment URLs are always public"
-            correct: false
-        explanation: >-
-          Embedded controllers are normally reachable only via sub-requests. To
-          expose signed fragment URLs (for ESI/hinclude) you enable
-          framework.fragments (with a path like /_fragment) and framework.esi for ESI
-          support. There is no twig.fragments key.
-        documentation: "https://symfony.com/doc/current/http_cache/esi.html"
 
       - id: "TWIG-RENDER-08"
         question: "By default, can a browser hit an embedded controller's fragment URL directly?"

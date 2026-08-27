@@ -5,16 +5,16 @@ Active-recall decks generated from the practice-question bank — one per topic 
 !!! abstract "Why flashcards"
     Testing yourself (active recall) beats re-reading. Spacing the reviews beats cramming. These decks turn the 534-question bank into that workflow.
 
-**Total cards:** 1190
+**Total cards:** 1201
 
 ## Decks
 
 - [PHP & Web Security](php-web-security.md) — 112 cards
 - [HTTP](http.md) — 76 cards
-- [Symfony Architecture](architecture.md) — 116 cards
+- [Symfony Architecture](architecture.md) — 122 cards
 - [Controllers](controllers.md) — 94 cards
 - [Routing](routing.md) — 87 cards
-- [Templating (Twig)](twig.md) — 104 cards
+- [Templating (Twig)](twig.md) — 109 cards
 - [Forms](forms.md) — 72 cards
 - [Data Validation](validation.md) — 74 cards
 - [Dependency Injection](dependency-injection.md) — 81 cards

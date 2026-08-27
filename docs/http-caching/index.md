@@ -39,8 +39,9 @@ Two response headers decide almost everything, and they behave differently for
 precedence rules (`s-maxage` > `max-age` > `Expires` for shared caches), the
 difference between `no-cache`, `no-store` and `must-revalidate`, and the 304
 "Not Modified" round-trip. It also tests Symfony-specific tooling: the
-`#[Cache]` attribute, `Response::isNotModified()`, the built-in reverse proxy
-and Edge Side Includes.
+`#[Cache]` attribute, `Response::isNotModified()`, and the built-in reverse
+proxy. Edge Side Includes is covered here for completeness but is **excluded
+from Symfony 8 certification**.
 
 ```mermaid
 flowchart LR
@@ -66,7 +67,8 @@ Work through them in order:
 - [ ] [Server-Side Caching](server-side.md) — the Symfony reverse proxy
   (`HttpCache` kernel), `Store`, enabling it, Varnish comparison.
 - [ ] [Edge Side Includes (ESI)](esi.md) — `<esi:include>`, `render_esi`, when
-  fragment caching beats full-page caching, the SSI alternative.
+  fragment caching beats full-page caching, the SSI alternative. **Excluded
+  from Symfony 8 certification.**
 
 ## How to study it
 

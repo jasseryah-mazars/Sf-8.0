@@ -1,6 +1,6 @@
 # Flashcards — Symfony Architecture
 
-116 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+122 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -589,236 +589,278 @@
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
 
-??? question "84. Which tool lets you fail the test suite when new deprecations appear?"
-    **✅ symfony/phpunit-bridge configured via SYMFONY_DEPRECATIONS_HELPER**
-
-    The PHPUnit bridge collects deprecations; SYMFONY_DEPRECATIONS_HELPER (e.g. max[total]=0) can make the suite fail on any deprecation.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html)
-
-??? question "85. What is the argument order of trigger_deprecation()?"
+??? question "84. What is the argument order of trigger_deprecation()?"
     **✅ package, version, message, ...args**
 
     The signature is trigger_deprecation(string $package, string $version, string $message, mixed ...$args) with sprintf-style formatting.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/deprecation-contracts)
 
-??? question "86. Which call correctly deprecates ReportBuilder::generate() (deprecated in your app version 8.1)?"
+??? question "85. Which call correctly deprecates ReportBuilder::generate() (deprecated in your app version 8.1)?"
     **✅ trigger_deprecation('app/reports', '8.1', 'Using "%s::generate()" is deprecated, use "build()".', self::class);**
 
     The signature is (package, version, message, ...args) with sprintf-style formatting for the message. The first option passes the package, the version it was deprecated IN, a message with a %s placeholder, and self::class as the arg. Putting the message first, or misusing trigger_error with these arguments, is wrong.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/deprecation-contracts)
 
-??? question "87. How do you mark a service as deprecated in config/services.yaml?"
+??? question "86. How do you mark a service as deprecated in config/services.yaml?"
     **✅ Add a `deprecated:` key with package, version and message under the service definition**
 
     A service is deprecated via the `deprecated:` key (package/version/message), which maps to Definition::setDeprecated() and triggers a deprecation when the service is referenced. Container-level deprecations like this surface during cache:clear/compile time, whereas method-call deprecations fire at runtime.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/dependency_injection.html)
 
-??? question "88. At what error level are Symfony deprecations emitted, and do they throw?"
+??? question "87. At what error level are Symfony deprecations emitted, and do they throw?"
     **✅ They are E_USER_DEPRECATED notices — they do not throw unless your test suite/CI is configured to fail on them**
 
     trigger_deprecation() ultimately calls @trigger_error(..., E_USER_DEPRECATED), producing a notice that is logged/collected but does not interrupt execution. Only when tooling (e.g. the PHPUnit bridge via SYMFONY_DEPRECATIONS_HELPER) is configured to fail on deprecations does a deprecation cause a failure.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/deprecation-contracts)
 
-??? question "89. Which version string should you pass as the second argument of trigger_deprecation()?"
+??? question "88. Which version string should you pass as the second argument of trigger_deprecation()?"
     **✅ The version in which the API was DEPRECATED (e.g. '8.1'), not the current running version**
 
     The version argument records when the deprecation was introduced, producing the \"Since <package> <version>: <message>\" format tooling parses. A common mistake is passing the current version, or the removal version — both are wrong. Use the version the API was deprecated in.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/deprecation-contracts)
 
-??? question "90. Where do you place a template that overrides a bundle template?"
+??? question "89. Where do you place a template that overrides a bundle template?"
     **✅ templates/bundles/<BundleName>/path.html.twig**
 
     Twig resolves overrides from templates/bundles/<BundleName>/, which takes precedence over the bundle's own templates.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
 
-??? question "91. What is the current mechanism to override an inherited bundle resource?"
+??? question "90. What is the current mechanism to override an inherited bundle resource?"
     **✅ Per-resource overriding of templates, services, translations and config**
 
     Bundle inheritance via getParent() was deprecated in 4.4 and removed in 5.0; modern Symfony overrides each resource type individually.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
 
-??? question "92. How do you augment a bundle service without replacing it?"
+??? question "91. How do you augment a bundle service without replacing it?"
     **✅ Decorate it with #[AsDecorator] / the decorates: key**
 
     Decoration wraps the original service (injected as .inner), letting you add behaviour and delegate.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
 
-??? question "93. When you decorate a service with #[AsDecorator(decorates: 'acme.mailer')], how do you access the original?"
+??? question "92. When you decorate a service with #[AsDecorator(decorates: 'acme.mailer')], how do you access the original?"
     **✅ Inject the renamed original (the .inner service) via #[AutowireDecorated] and delegate to it**
 
     Decoration renames the original service to a .inner id and injects it into the decorator. The #[AutowireDecorated] attribute (or the special .inner reference in YAML) gives you that original instance so you can add behaviour and delegate. Re-creating it with `new` or fetching it publicly defeats the decoration pattern.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
 
-??? question "94. A bundle ships translations/messages.en.yaml and your app defines the same domain/locale in translations/. Whose strings win?"
+??? question "93. A bundle ships translations/messages.en.yaml and your app defines the same domain/locale in translations/. Whose strings win?"
     **✅ The application's translations/ take priority over the bundle's translations**
 
     The application's translations/ directory has higher priority than any bundle's translations. Providing a catalogue with the same domain and locale overrides the bundle's strings — the same convention-based precedence used for template overrides.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html)
 
-??? question "95. What happened to bundle inheritance (getParent()) and the legacy Resources/ folder?"
+??? question "94. What happened to bundle inheritance (getParent()) and the legacy Resources/ folder?"
     **✅ getParent() inheritance was deprecated in 4.4 and removed in 5.0; modern bundles use top-level config/, templates/, translations/ instead of Resources/**
 
     Bundle inheritance via getParent() is gone (deprecated 4.4, removed 5.0) and must not be presented as current. Modern bundles also drop the legacy Resources/ layout in favour of top-level config/, templates/ and translations/. Overriding is done per resource type instead.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
 
-??? question "96. In which months do Symfony minor releases ship?"
+??? question "95. In which months do Symfony minor releases ship?"
     **✅ May and November**
 
     The cadence is fixed: a new minor every May and every November.
 
     :material-book-open-variant: [Docs](https://symfony.com/releases)
 
-??? question "97. When does 8.4 (LTS) release relative to 9.0?"
+??? question "96. When does 8.4 (LTS) release relative to 9.0?"
     **✅ At the same time (both November 2027)**
 
     The LTS (X.4) always ships together with the next major (X+1).0.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
 
-??? question "98. How often is a new major (and its LTS) released?"
+??? question "97. How often is a new major (and its LTS) released?"
     **✅ Every two years**
 
     Majors, and the accompanying LTS, come every two years.
 
     :material-book-open-variant: [Docs](https://symfony.com/releases)
 
-??? question "99. Which sequence correctly lists the Symfony 8.x release dates?"
+??? question "98. Which sequence correctly lists the Symfony 8.x release dates?"
     **✅ 8.0 Nov 2025, 8.1 May 2026, 8.2 Nov 2026, 8.3 May 2027, 8.4 LTS Nov 2027**
 
     8.0 opened the cycle in Nov 2025; a minor lands every six months (May/Nov): 8.1 May 2026, 8.2 Nov 2026, 8.3 May 2027, and 8.4 (LTS) Nov 2027 alongside 9.0. The pattern repeats for every major: X.0 opens, four minors follow, X.4 is the LTS shipping with (X+1).0.
 
     :material-book-open-variant: [Docs](https://symfony.com/releases)
 
-??? question "100. Which statement about the LTS timing is correct?"
+??? question "99. Which statement about the LTS timing is correct?"
     **✅ The LTS (X.4) ships at the same time as the next major (X+1).0, not before it**
 
     A frequent misconception is that the LTS precedes the next major. In fact X.4 (the LTS) and (X+1).0 release together (8.4 and 9.0 both Nov 2027). Another trap: 8.0 is a standard release, not the LTS — 8.4 is.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
 
-??? question "101. A product must run 3+ years without a major upgrade. Which 8.x version should you target and why?"
+??? question "100. A product must run 3+ years without a major upgrade. Which 8.x version should you target and why?"
     **✅ 8.4 (LTS) — it provides 3 years of bug fixes and 4 years of security fixes, the longest support window in 8.x**
 
     Only the LTS (X.4) offers the long maintenance windows (3 years bug fixes, 4 years security fixes). Standard minors get 8 months bug + 14 months security, far short of 3 years. So a long-lived product should pin to 8.4 and plan the jump to the next major deliberately.
 
     :material-book-open-variant: [Docs](https://symfony.com/releases)
 
-??? question "102. Which PSR does Symfony's EventDispatcher implement?"
+??? question "101. Which PSR does Symfony's EventDispatcher implement?"
     **✅ PSR-14 (Event Dispatcher)**
 
     Symfony's EventDispatcherInterface extends the PSR-14 Psr\\EventDispatcher\\EventDispatcherInterface.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
 
-??? question "103. Is HttpFoundation's Request a PSR-7 message?"
+??? question "102. Is HttpFoundation's Request a PSR-7 message?"
     **✅ No — a psr-http-message bridge converts between them**
 
     HttpFoundation predates and differs from PSR-7; the psr-http-message bridge converts between HttpFoundation and PSR-7/15/17.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/psr7.html)
 
-??? question "104. Which PSR interface does Symfony's service container implement?"
+??? question "103. Which PSR interface does Symfony's service container implement?"
     **✅ PSR-11 (Container)**
 
     Symfony's ContainerInterface extends Psr\\Container\\ContainerInterface (PSR-11).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
 
-??? question "105. Which PSR does Symfony primarily consume (rather than implement) so you can inject any implementation?"
+??? question "104. Which PSR does Symfony primarily consume (rather than implement) so you can inject any implementation?"
     **✅ PSR-3 (Logger) via Psr\Log\LoggerInterface**
 
     Components type-hint Psr\\Log\\LoggerInterface (PSR-3), so any compliant logger can be injected. PSR-11, PSR-14, PSR-6 and PSR-20 are implemented by Symfony.
 
     :material-book-open-variant: [Docs](https://www.php-fig.org/psr/)
 
-??? question "106. Which PSRs does Symfony IMPLEMENT (i.e. Symfony objects ARE valid PSR objects)? (choose all that apply)"
+??? question "105. Which PSRs does Symfony IMPLEMENT (i.e. Symfony objects ARE valid PSR objects)? (choose all that apply)"
     **✅ PSR-6 (Cache pool) ; PSR-11 (Container) ; PSR-14 (Event Dispatcher) ; PSR-20 (Clock)**
 
     Symfony implements PSR-6 (Cache pool), PSR-11 (Container), PSR-14 (EventDispatcher), PSR-16 (Simple Cache adapter) and PSR-20 (Clock) — its objects can be handed to any library expecting those interfaces. PSR-3 (Logger) is CONSUMED: Symfony type-hints LoggerInterface so you inject any implementation, but it does not ship the logger itself.
 
     :material-book-open-variant: [Docs](https://www.php-fig.org/psr/)
 
-??? question "107. What is the difference between PSR-6 and PSR-16 in Symfony's Cache?"
+??? question "106. What is the difference between PSR-6 and PSR-16 in Symfony's Cache?"
     **✅ PSR-6 is the pool/CacheItem model (CacheItemPoolInterface); PSR-16 is the simpler get/set SimpleCache API (Psr16Cache adapter)**
 
     PSR-6 models caching as a pool of CacheItem objects (CacheItemPoolInterface::getItem()/save()); PSR-16 (Simple Cache) is a lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter. Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16) is a common trap.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/cache.html)
 
-??? question "108. Which PSR does Symfony's Clock component implement, and why inject its interface?"
+??? question "107. Which PSR does Symfony's Clock component implement, and why inject its interface?"
     **✅ PSR-20 via Psr\Clock\ClockInterface — injecting it makes time testable instead of calling new \DateTime() directly**
 
     Symfony\\Component\\Clock\\Clock implements Psr\\Clock\\ClockInterface (PSR-20). Type-hinting ClockInterface lets you inject a MockClock in tests and control time deterministically, instead of hard-coding new \\DateTime()/now() calls that are impossible to freeze.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/clock.html)
 
-??? question "109. What is the practical difference between Symfony implementing a PSR and consuming a PSR?"
+??? question "108. What is the practical difference between Symfony implementing a PSR and consuming a PSR?"
     **✅ Implementing means a Symfony object satisfies the PSR (hand it to any PSR consumer); consuming means Symfony type-hints the PSR so you can inject any implementation**
 
     Implements: Symfony's class IS a valid PSR object (e.g. its Container is a PSR-11 container), usable by any library expecting that interface. Consumes: Symfony depends on the PSR interface as a type-hint (e.g. PSR-3 LoggerInterface) so you can plug in any compliant implementation. The direction of the dependency is what differs.
 
     :material-book-open-variant: [Docs](https://www.php-fig.org/psr/)
 
-??? question "110. How are application service IDs written in modern Symfony?"
+??? question "109. How are application service IDs written in modern Symfony?"
     **✅ As the fully-qualified class name (FQCN)**
 
     The service id is the FQCN; autowiring matches type-hints to these ids.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
 
-??? question "111. What naming case do environment variables use?"
+??? question "110. What naming case do environment variables use?"
     **✅ UPPER_SNAKE_CASE, usually with an APP_ prefix**
 
     Env vars use upper snake case (APP_ENV, APP_DEBUG) and are read in config via processors such as %env(int:APP_PAGE_SIZE)%.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html)
 
-??? question "112. Which is a correctly named route?"
+??? question "111. Which is a correctly named route?"
     **✅ invoice_show**
 
     Route names use snake_case, conventionally entity_action.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
 
-??? question "113. How is an abstract class conventionally named?"
+??? question "112. How is an abstract class conventionally named?"
     **✅ With an Abstract prefix, e.g. AbstractController**
 
     Abstract classes take the Abstract prefix; interfaces use the Interface suffix and traits use the Trait suffix.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
 
-??? question "114. Which set correctly fixes these names: httpClientInterface, Abstract_Controller, blogShow (route), app-page-size (parameter), app_env (env var)?"
+??? question "113. Which set correctly fixes these names: httpClientInterface, Abstract_Controller, blogShow (route), app-page-size (parameter), app_env (env var)?"
     **✅ HttpClientInterface, AbstractController, blog_show, app.page_size, APP_ENV**
 
     Interfaces are PascalCase with the Interface suffix (HttpClientInterface); abstract classes take the Abstract prefix in PascalCase (AbstractController); routes are snake_case (blog_show); parameters are snake/dot-separated lowercase (app.page_size); env vars are UPPER_SNAKE with APP_ prefix (APP_ENV).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
 
-??? question "115. Why is the Interface suffix more than cosmetic in Symfony?"
+??? question "114. Why is the Interface suffix more than cosmetic in Symfony?"
     **✅ Autoconfiguration inspects implemented interfaces (e.g. EventSubscriberInterface) to auto-tag services, so correct interface naming/implementation is part of a working contract**
 
     When autoconfigure is on, Symfony auto-tags services based on the interfaces they implement — e.g. implementing EventSubscriberInterface auto-adds the kernel.event_subscriber tag, and ServiceSubscriberInterface, and voter/command interfaces behave similarly. So the Interface suffix marks a real, functional contract that drives wiring, not just style.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
 
-??? question "116. Which casing pair is correct for PHP class constants and bundle config keys?"
+??? question "115. Which casing pair is correct for PHP class constants and bundle config keys?"
     **✅ Constants are UPPER_SNAKE_CASE (e.g. MAIN_REQUEST); bundle config keys are snake_case (e.g. framework.http_method_override)**
 
     PHP constants follow UPPER_SNAKE_CASE (HttpKernelInterface::MAIN_REQUEST) and enum cases are PascalCase. Bundle configuration keys are snake_case under the extension's alias (e.g. framework.http_method_override). Mixing these up — camelCase config keys, for instance — is a planted mistake.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
+
+??? question "116. Which of the following statements are true about Symfony Flex? (select all that apply)"
+    **✅ Flex is a Composer plugin that resolves package aliases and applies recipes at install/update time ; symfony.lock records which recipes are installed and should be committed to version control ; Bundles enabled by recipes are registered in config/bundles.php, which the kernel reads at boot**
+
+    Flex is a Composer plugin that runs only at Composer install/update time, resolving aliases and applying recipes; it plays no role during request handling, so the runtime option is wrong. Applied recipes are tracked in symfony.lock (committed), not in composer.lock which only tracks package versions, and recipe configurators write bundle registrations into config/bundles.php for the kernel to read at boot.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/setup.html)
+
+??? question "117. Which statements accurately describe the Symfony release process? (select all that apply)"
+    **✅ Minor versions are released on a time-based schedule in May and November, and a new major arrives every two years ; 8.4 is the Symfony 8 LTS version and ships alongside 9.0**
+
+    Symfony follows a time-based schedule: minors in May and November and a new major every two years, with the last minor of a branch (X.4, e.g. 8.4) being the LTS that ships alongside the next major. BC breaks happen only in major versions, never in minors even after deprecation, and standard versions get 8 months of bug fixes / 14 months of security fixes — the 3-year bug-fix window belongs to LTS releases only.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
+
+??? question "118. Which statements are true about Symfony's backward compatibility promise? (select all that apply)"
+    **✅ Public API that is not marked @internal or @experimental stays stable within a major version ; Existing behavior is removed only in the next major version, and only after being deprecated first**
+
+    The BC promise guarantees that public, non-@internal, non-@experimental API remains stable within a major, and removals happen only in the next major after a deprecation phase. @internal and @experimental annotations carve exceptions out of the promise regardless of method visibility, and the recommended extension mechanisms are events, decoration and dependency injection rather than inheriting framework classes.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+
+??? question "119. Which statements about HttpKernel's request handling and its events are correct? (select all that apply)"
+    **✅ kernel.view is dispatched only when the controller returns something other than a Response ; kernel.terminate is dispatched after the response has been sent to the client ; When handle() is called with catch: true, exceptions are caught and kernel.exception is dispatched**
+
+    kernel.view fires only for non-Response controller return values, and kernel.terminate runs after the response was already sent, which makes it suitable for heavy post-response work; with catch: true, HttpKernel catches throwables and dispatches kernel.exception. The event order puts kernel.controller before kernel.response, and the controller callable is resolved by ControllerResolverInterface — ArgumentResolverInterface only resolves the controller's arguments.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+
+??? question "120. Which statements about Symfony's relationship to the PSR standards are true? (select all that apply)"
+    **✅ The service container implements PSR-11 and the Clock component implements PSR-20 ; Components type-hint the PSR-3 Psr\Log\LoggerInterface, so any PSR-3 logger can be injected ; The psr-http-message bridge converts between HttpFoundation objects and PSR-7 messages**
+
+    Symfony implements PSR-6, PSR-11, PSR-14, PSR-16 and PSR-20 (the container is a PSR-11 ContainerInterface and Clock is PSR-20), and it consumes PSR-3 by type-hinting LoggerInterface so any compliant logger works. HttpFoundation predates and does not implement PSR-7 — the psr-http-message bridge converts between the two object models — and autoloading follows PSR-4, not PSR-0.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/psr7.html)
+
+??? question "121. Which statements about the EventDispatcher component are correct? (select all that apply)"
+    **✅ Listeners for an event are invoked in descending priority order (highest priority first) ; stopPropagation() prevents only the remaining listeners of the current event from running**
+
+    The dispatcher sorts listeners by priority in descending order, and stopPropagation() halts only the not-yet-called listeners of the event currently being dispatched — other events are unaffected. Subscribers declare all their events in getSubscribedEvents() and are wired automatically (autoconfiguration tags them), and dispatch() follows the PSR-14 signature: the event object first, then an optional event name.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+
+??? question "122. Which are valid ways to override parts of Symfony or a third-party bundle in an application? (select all that apply)"
+    **✅ Override a bundle template by placing a file with the same path under templates/bundles/<BundleName>/ ; Override a service by decorating it or replacing its definition, e.g. via a compiler pass ; Override translations by defining the same key in the application's translations/ directory, which wins over the bundle's**
+
+    Per-resource overriding is the supported model: templates placed under templates/bundles/<BundleName>/ shadow the bundle's own, application translations take precedence over bundle translations, and services can be redefined, decorated or altered through a compiler pass. Bundle inheritance via getParent() has been removed, and copying whole bundles into src/ is not an override mechanism at all.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
 
 ---
 

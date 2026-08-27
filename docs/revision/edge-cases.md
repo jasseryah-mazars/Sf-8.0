@@ -226,13 +226,6 @@ precise, verifiable behaviour.
     not when a variable is `set`.
     **Ref:** [Auto-escaping](../twig/auto-escaping.md)
 
-??? question "What happens if a template uses `render_esi()` but no ESI-capable surrogate is in front of the app?"
-    The fragment renders **inline via a regular sub-request** — same output,
-    silently, with no error. The `<esi:include>` tag is only emitted when a
-    surrogate advertises ESI capability, so you lose the per-fragment TTL benefit
-    without noticing.
-    **Ref:** [Embedding controllers](../twig/controller-rendering.md)
-
 ??? question "What happens if a child template that `extends` a parent prints markup outside of any block?"
     A **Twig error** — a template that extends another may only define blocks
     (`{% extends %}` must come first). Also, a template can `extends` exactly
@@ -434,12 +427,6 @@ precise, verifiable behaviour.
     default `private_headers`, so such requests are treated as private and go to
     the backend. This is why one session cookie can quietly kill your hit rate.
     **Ref:** [Server-side caching (HttpCache)](../http-caching/server-side.md)
-
-??? question "What happens to a fully-cacheable page that embeds one short-lived fragment *without* ESI?"
-    The **whole page's TTL is capped** by the shortest-lived embedded fragment —
-    `ResponseCacheStrategy` merges them down. ESI is the fix: each fragment keeps
-    its own TTL because the surrogate assembles the page itself.
-    **Ref:** [ESI](../http-caching/esi.md)
 
 ## Console
 

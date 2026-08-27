@@ -132,8 +132,9 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
   `If-Modified-Since` → **`304 Not Modified`**.
 - **Cache-Control directives:** `public`, `private`, `no-cache` (revalidate before
   use), `no-store` (never store), `must-revalidate`, `max-age`, `s-maxage`.
-- **`Vary`** varies the cache key; Symfony ships a **`HttpCache`** reverse proxy;
-  **ESI** = `<esi:include>` fragments. *(Down-weighted in the Symfony 8 exam.)*
+- **`Vary`** varies the cache key; Symfony ships a **`HttpCache`** reverse proxy.
+  *(Down-weighted in the Symfony 8 exam.)* ESI is out of scope — **excluded
+  from Symfony 8 certification**.
 
 ## 12. Console → [area](../console/index.md)
 

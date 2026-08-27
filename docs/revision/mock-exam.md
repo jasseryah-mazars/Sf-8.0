@@ -841,19 +841,6 @@
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation.html)
 
-**Q60.** Which tool lets you fail the test suite when new deprecations appear?  <small>_(Architecture)_</small>
-
-- A. symfony/phpunit-bridge configured via SYMFONY_DEPRECATIONS_HELPER
-- B. symfony/console
-- C. symfony/flex
-
-??? success "Answer Q60"
-    **A**
-
-    The PHPUnit bridge collects deprecations; SYMFONY_DEPRECATIONS_HELPER (e.g. max[total]=0) can make the suite fail on any deprecation.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html)
-
 **Q61.** What is the classic gotcha with `ctype_digit(123)` (passing an integer)?  <small>_(PHP & Web Security)_</small>
 
 - A. Small integers are interpreted as ASCII codes, not their digits, giving surprising results
