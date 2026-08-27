@@ -27,7 +27,7 @@ study resource.
 
 ## 🎯 What makes this different
 
-- **Coverage tracked and validated** — in a [Traceability Matrix](specs/TraceabilityMatrix.md); no status is marked done without a checked reference and a situational question.
+- **Coverage tracked and validated** — in a [Traceability Matrix](specs/TraceabilityMatrix.md) using a six-level status per syllabus item (absent → structure → partial → technically validated → editorially validated → conforme); no item reaches the top status without a checked official-docs reference and a matching quiz question. Read the matrix's own "What the [N]-subtopic count is, and is not" notes before quoting a coverage percentage — it distinguishes this project's own tracked completeness from an independently-verified match to the live official syllabus page (which this environment cannot always re-fetch — see [`specs/OfficialSyllabusBaseline.md`](specs/OfficialSyllabusBaseline.md)).
 - **Deep dives, not summaries** — every concept explains *why* and *how internally*
   (classes, interfaces, lifecycle, extension points, performance).
 - **Certification traps & common mistakes** in every chapter.
@@ -81,6 +81,19 @@ mkdocs.yml       # Site configuration and navigation
 
 Per the syllabus, the following are **not** taught here: Symfony UX, Symfony AI,
 Doctrine, Monolog, AssetMapper, Webpack Encore, and third-party bundles/bridges.
+
+Three chapters this repository used to present as in-scope were re-checked
+against the mission brief and moved to
+[`docs/appendices/`](docs/appendices/out-of-syllabus/index.md) as clearly-marked
+supplementary content (Edge Side Includes, the PHPUnit Bridge, the Lock
+component) — kept for enrichment, excluded from official coverage stats,
+generated exams, and the quiz bank's official question count. The full,
+current list of exclusions — including a few additional out-of-scope APIs
+inside otherwise in-scope chapters (e.g. third-party Messenger transports,
+the Intl component's ICU utility classes) — is in
+[`specs/TraceabilityMatrix.md`](specs/TraceabilityMatrix.md)'s "Out-of-scope
+/ Additional Learning" section, kept in sync by
+[`tools/check_exclusions.py`](tools/check_exclusions.py) in CI.
 
 ## 🤝 Contributing
 

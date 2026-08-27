@@ -11,7 +11,10 @@ Thank you for helping build the best Symfony 8 Certification resource.
   [official topics](https://certification.symfony.com/exams/symfony.html) and the
   [Traceability Matrix](specs/TraceabilityMatrix.md). Do **not** add content for
   excluded subjects (Symfony UX/AI, Doctrine, Monolog, AssetMapper, Encore,
-  third-party bundles/bridges).
+  third-party bundles/bridges) or expand the three chapters already relocated to
+  [`docs/appendices/out-of-syllabus/`](docs/appendices/out-of-syllabus/index.md)
+  as if they were in-scope again — see the Traceability Matrix's "Out-of-scope /
+  Additional Learning" section for the complete, current exclusion list.
 - **Every claim is verifiable** against official documentation or the Symfony
   source. Link the official docs for each major concept.
 

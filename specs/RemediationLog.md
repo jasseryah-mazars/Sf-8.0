@@ -651,6 +651,55 @@ three checks; `validate_quiz.py` → 1292/0 (unaffected — this fix touches
 
 ---
 
+## P2-02 — README and documentation corrections
+
+**Verified, not assumed:** all 24 non-external links in `README.md` were
+extracted and checked against the filesystem with a small script (not by
+eye) — 0 broken. No stale hardcoded coverage percentage was found in
+`README.md` to begin with (it already only linked to the matrix rather
+than quoting a number) — checked, not taken on faith.
+
+**Fixed — stale exclusion list:** `README.md`'s "Out of scope" section
+only listed the "never taught" ecosystem items (Symfony UX/AI, Doctrine,
+Monolog, AssetMapper, Encore, third-party bundles) inherited from the
+project's original `GapAnalysis.md` scoping. It did not mention the three
+chapters (ESI, PHPUnit Bridge, Lock component) that P0-03 physically moved
+to `docs/appendices/out-of-syllabus/` earlier in this run, nor the
+additional in-chapter exclusions (third-party Messenger transports, Intl
+ICU utilities) already documented in `specs/TraceabilityMatrix.md`'s
+"Out-of-scope / Additional Learning" section. Expanded the README section
+to mention both, link to the appendices index and the matrix section, and
+name `tools/check_exclusions.py` (P1-05) as the mechanism keeping them in
+sync going forward. `CONTRIBUTING.md`'s equivalent scoping paragraph
+updated the same way, so a contributor reading either file gets the
+complete picture.
+
+**Fixed — overclaim risk in the "Coverage tracked and validated" bullet:**
+reworded to name the six-status schema explicitly (per this run's user
+caveat: a bare "coverage tracked" claim invites reading it as officially
+verified) and to point readers at the matrix's own "What the [N]-subtopic
+count is, and is not" section before they quote a percentage anywhere,
+rather than letting the README imply a stronger guarantee than the matrix
+itself claims.
+
+**Not changed, reviewed and found accurate:** the "Exam facts (Symfony 8)"
+table (75 questions/90 minutes/Advanced-Expert split) is sourced and cited
+inside `docs/exam-guide/index.md`'s own "Official References" section
+(fetched in a prior session when `certification.symfony.com` was reachable
+— this run's network access to that domain is confirmed blocked, so it was
+not and could not be re-fetched this run; the existing citation was
+checked for presence, not re-verified against a live fetch). The local-dev
+command block (`python -m venv`, `pip install -r requirements.txt`,
+`mkdocs serve`) matches `requirements.txt` and was exercised indirectly
+all run via the repeated `mkdocs build --strict` calls in every other
+subject's testing step.
+
+**Tested:** README/CONTRIBUTING link check (script, 24/24 resolve);
+`validate_quiz.py`, `check_placeholders.py`, `check_editorial_structure.py`
+all clean; `mkdocs build --strict` → exit 0.
+
+---
+
 _This log continues to grow as P1/P2/P3 subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._
