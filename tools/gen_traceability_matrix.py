@@ -456,9 +456,12 @@ def fmt_paths(paths: list[str]) -> str:
 
 def render() -> str:
     import datetime
+    from repo_meta import stamp_line
     today = datetime.date.today().isoformat()
     lines = [
         "# Traceability Matrix",
+        "",
+        stamp_line("tools/gen_traceability_matrix.py"),
         "",
         "_Regenerate: `python tools/gen_traceability_matrix.py`. Six-status schema",
         f"(P0-04, this run). \"Dernière validation\" below is the date this file was",
