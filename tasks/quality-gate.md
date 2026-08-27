@@ -23,9 +23,15 @@ Run after content tasks; some are recurring.
   `explanation`, and `documentation`; no deprecated APIs. **Complexity:** M.
 
 ## T-QG-05 — Traceability closure
-- **Description:** Set every [Traceability Matrix](../specs/TraceabilityMatrix.md)
-  row to ✅ and update the coverage summary to 100%.
-- **Acceptance:** 154/154 items done. **Complexity:** S.
+- **Description:** Regenerate the [Traceability Matrix](../specs/TraceabilityMatrix.md)
+  from `tools/gen_traceability_matrix.py` and drive down the `TO VERIFY` count with
+  real, checked evidence — never by editing a status cell without the evidence.
+- **Acceptance:** Coverage summary regenerated live (row count and PASS/TO
+  VERIFY/missing figures come from the matrix's own current content — never a
+  hardcoded total; see `tools/audit.py` / `tools/final_audit.py`). **Never claim
+  100%** — several `TO VERIFY` rows are named, real content gaps, not just
+  unchecked boxes; closing them individually with evidence is the acceptance
+  criterion, not hitting a round-number total. **Complexity:** S.
 
 ## T-QG-06 — Mobile readability spot-check
 - **Description:** Verify chapters render on a narrow viewport (tables ≤4 cols,
