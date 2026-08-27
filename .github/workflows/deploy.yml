@@ -2,11 +2,16 @@ name: Build & Deploy Docs
 
 on:
   push:
+    # master is the project's sole development/integration/publication
+    # branch as of this workflow revision (main kept as a defensive
+    # fallback in case the repo's default branch is ever renamed to it —
+    # ci runs there too, but only master ever deploys, see the `deploy`
+    # job below). The old per-session `claude/...` feature branches are
+    # intentionally no longer triggers: they merge into master, which is
+    # what builds and deploys from here on.
     branches:
       - main
       - master
-      - claude/symfony8-cert-platform-mgkdkr
-      - claude/sf-8-certification-quality-iimd4l
   pull_request:
     branches:
       - main
@@ -97,14 +102,24 @@ jobs:
         run: mkdocs build --strict
 
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr' || github.ref == 'refs/heads/claude/sf-8-certification-quality-iimd4l'
+        # master only — see the `deploy` job's own comment for why.
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
-    # Deploy from main/master (canonical branches) or the current working branch.
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr' || github.ref == 'refs/heads/claude/sf-8-certification-quality-iimd4l'
+    # master is this project's sole publication branch (see Objective 2 of
+    # the master-consolidation mission this comment was added under). Not
+    # main: this repo's actual default/working branch is master, and the
+    # github-pages environment's deployment-branch policy is scoped to it
+    # accordingly — deploying from anything else would need that policy
+    # widened, which is explicitly against project policy (never open Pages
+    # deployment to arbitrary branches). If the repo's default branch is
+    # ever genuinely renamed to main, update this condition and the Pages
+    # environment's branch policy together, deliberately, not by widening
+    # this check on its own.
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     environment:

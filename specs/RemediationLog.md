@@ -855,6 +855,85 @@ tools, `check_placeholders.py`, `check_editorial_structure.py`,
 
 ---
 
-_This log continues to grow as P1/P2/P3 subjects are executed. Entries below
+## Master consolidation — merge `claude/sf-8-certification-quality-iimd4l` into `master`
+
+**Mission:** make `master` the project's sole development/integration/
+publication branch going forward, merging in all P0–P3 compliance work.
+
+**Pre-merge verification (per the mission's explicit checklist):**
+- `git fetch origin --prune` — clean, no stale refs removed of note.
+- Working tree: clean on both the source branch and after switching to
+  local `master` — nothing to preserve.
+- `HEAD` (source branch) at merge time: `ac38576`. Confirmed via
+  `git branch -a --contains ac38576` that this commit belongs to
+  `claude/sf-8-certification-quality-iimd4l` (and, after the fast-forward
+  below, to `master`).
+- `origin/master` (`c28e33f`) confirmed to be the exact merge-base of the
+  two branches, and a strict ancestor of `origin/claude/sf-8-certification-
+  quality-iimd4l` (`git merge-base --is-ancestor` → true) — **zero
+  divergent commits on master's side** (`git log origin/claude/...
+  ..origin/master` → 0 commits). This made the merge a pure, conflict-free
+  fast-forward, not a three-way merge — there was nothing on `master` to
+  reconcile against.
+- Local `master` (pre-merge, at `294b27d`) was itself already a prefix of
+  the source branch's history — a leftover from this multi-session
+  mission's earlier branch mix-up (documented in this log's P1-05 entry) —
+  so no independent local work existed there either.
+- Scanned the full diff (`git diff origin/master
+  origin/claude/sf-8-certification-quality-iimd4l`, 518 files) for secrets
+  (API keys, private key headers, AWS-style tokens) and accidentally
+  committed local/build artifacts (`node_modules/`, `.env`, `site/`,
+  stray lockfiles) — 0 real hits. Every "secret"-adjacent match was
+  legitimate educational prose about Symfony's Secrets vault feature or a
+  `doc/current`→`doc/8.0` link-pinning diff line. `tools/package-lock.json`
+  is an intentional, already-reviewed dependency lockfile (P2-03), not a
+  build artifact — correctly not gitignored.
+
+**Merge:** `git switch master && git merge origin/claude/sf-8-certification-
+quality-iimd4l` → **fast-forward, `294b27d..ac38576`, 0 conflicts** (a true
+fast-forward, since master had no divergent commits to merge against —
+there was nothing to reconcile, so "resolve conflicts file by file" did
+not apply this time). `master`'s history now contains, unmodified, all 15
+commits from `4c484da` (P0-01) through `ac38576` (validation finale
+report), exactly as authored — no rebase, no squash, no rewrite.
+
+**Post-merge validation (full suite, on `master`):** `check_doc_version_
+refs.py`, `audit.py` (175 subtopics, six-status breakdown unchanged),
+`check_exclusions.py` (0 inconsistencies), `validate_quiz.py` (1292/0),
+`check_quiz_duplicates.py` (16 candidates, all previously reviewed),
+`gen_quiz_json.py`, `check_section_order.py` (176/176), all four
+`lint_*.py` tools, `check_placeholders.py`, `check_editorial_structure.py`
+(0/0/0), `check_links.py --offline`, `check_report_freshness.py` — all
+clean. `mkdocs build --strict` → exit 0. No regression from the merge
+(expected, since it was a fast-forward of already-tested content — but
+re-run in full anyway, not assumed clean).
+
+**CI/Pages workflow change (`.github/workflows/deploy.yml`):** the `push`
+trigger's branch list dropped the two per-session `claude/...` branches
+(work now merges into `master`, which is the trigger going forward); `main`
+kept as a defensive fallback. The `deploy` job's `if:` condition (and the
+`Upload Pages artifact` step gating the `build` job's own contribution to
+it) was narrowed from `main OR master OR either claude branch` to
+**`master` only** — GitHub Pages now deploys from exactly one branch.
+This is a workflow-file change only; it does **not** touch the GitHub-side
+`github-pages` environment's own deployment-branch protection rule (that
+remains a repository Settings permission this session doesn't have, and
+was correctly not "solved" by asking GitHub to allow more branches, which
+this mission explicitly forbids).
+
+**Reports regenerated post-merge to refresh their provenance stamp to the
+new HEAD:** `specs/TraceabilityMatrix.md`, `specs/CoverageReport.md`,
+`specs/FinalAudit.md`, `specs/SectionOrderReport.md` — content unchanged
+(same 175/176/1292 figures), only the `tools/repo_meta.py` stamp line
+moved to the merge commit.
+
+**Tested:** see "Post-merge validation" above; re-confirmed once more
+after this log entry + the workflow edit were added, immediately before
+committing (see this subject's actual commit for the exact final-state
+numbers).
+
+---
+
+_This log continues to grow as future subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._
