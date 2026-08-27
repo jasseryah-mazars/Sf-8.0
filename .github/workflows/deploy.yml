@@ -6,6 +6,7 @@ on:
       - main
       - master
       - claude/symfony8-cert-platform-mgkdkr
+      - claude/sf-8-certification-quality-iimd4l
   pull_request:
     branches:
       - main
@@ -43,6 +44,9 @@ jobs:
 
       - name: Completeness & references audit
         run: python tools/audit.py
+
+      - name: Exclusions consistency check (blocking)
+        run: python tools/check_exclusions.py
 
       - name: Doc/source version-pin check (blocking — Symfony 8.0 exclusively)
         run: python tools/check_doc_version_refs.py
@@ -83,18 +87,21 @@ jobs:
       - name: Structural checks (Official References, placeholders, internal links)
         run: python tools/check_placeholders.py
 
+      - name: Report freshness check (informational only)
+        run: python tools/check_report_freshness.py
+
       - name: Build site (strict)
         run: mkdocs build --strict
 
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr' || github.ref == 'refs/heads/claude/sf-8-certification-quality-iimd4l'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
     # Deploy from main/master (canonical branches) or the current working branch.
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr' || github.ref == 'refs/heads/claude/sf-8-certification-quality-iimd4l'
     needs: build
     runs-on: ubuntu-latest
     environment:

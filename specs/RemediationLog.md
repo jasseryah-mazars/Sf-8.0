@@ -499,6 +499,96 @@ name), consistent with the script's own stated scope.
 
 ---
 
+## P1-05 — CI hardening
+
+**Bug found and fixed first (via a new consistency check, not by manual
+inspection):** `tools/gen_traceability_matrix.py`'s `OUT_OF_SCOPE` table
+still referenced the *pre-P0-03* paths for the three excluded chapters
+(`http-caching/esi.md`, `testing/phpunit-bridge.md`, `miscellaneous/lock.md`)
+even though P0-03 physically moved those files to
+`docs/appendices/out-of-syllabus/` several commits ago. `specs/
+TraceabilityMatrix.md`'s "Out-of-scope / Additional Learning" section was
+therefore pointing at paths that no longer exist. Fixed by updating the
+three table entries to the current `appendices/out-of-syllabus/*.md` paths
+(with a note on where they moved from), and regenerating the matrix.
+
+**New source:** `tools/check_exclusions.py` — checks, for each of the 3
+excluded chapters, that (1) its `.md`/`.fr.md` files exist under
+`docs/appendices/out-of-syllabus/`, (2) both carry the explicit "Hors
+syllabus officiel Symfony 8.0" admonition, (3) `mkdocs.yml`'s nav lists them
+only inside the `Appendices` block, never earlier (i.e. not mixed into the
+main syllabus nav), (4) every quiz question whose `subchapter` matches one
+of the three is tagged `out_of_scope: true`, and (5)
+`specs/TraceabilityMatrix.md`'s own exclusions section still names all
+three at their current path. **Result after the path fix above: 0
+inconsistencies.** Wired into CI as a **blocking** step (this is exactly
+the kind of drift that should fail a build, not just get noticed by an
+occasional human read).
+
+**New source:** `tools/check_report_freshness.py` (also serves P1-04) —
+wired into CI as an **informational, non-blocking** step. It is
+deliberately not blocking: every report it checks necessarily names its
+own *parent* commit (the commit that embeds the stamp doesn't exist until
+after generation), so a freshly-committed report reads "stale" for exactly
+one commit by construction — making it blocking would fail every push that
+touches a report, which is not a real problem to catch.
+
+**CI trigger/deploy scope fixed:** `.github/workflows/deploy.yml` only
+triggered on `main`/`master`/`claude/symfony8-cert-platform-mgkdkr` — it did
+not cover this mission's actual working branch,
+`claude/sf-8-certification-quality-iimd4l`. Added that branch to the `push`
+trigger and to both the artifact-upload and deploy `if` conditions, so a
+push to this branch (as this mission's final step requires) actually runs
+CI and deploys to Pages, instead of being silently skipped.
+
+**Also discovered and corrected while reviewing this:** the working
+checkout had drifted onto `master` at some point in this multi-session
+mission instead of the harness-designated
+`claude/sf-8-certification-quality-iimd4l` branch. Confirmed via
+`git merge-base --is-ancestor` that `origin/claude/sf-8-certification-
+quality-iimd4l`'s tip (`3d81b56`) is a strict ancestor of `master`'s current
+HEAD — i.e. `master`'s history is a pure fast-forward continuation of that
+branch's already-pushed tip, with no divergent/conflicting commits. Moved
+the local `claude/sf-8-certification-quality-iimd4l` branch pointer forward
+to `master`'s HEAD (a fast-forward, not a rewrite — nothing on the
+already-pushed branch tip was discarded or altered) and switched the
+working checkout to it. All work from this point in the mission onward
+happens on the correctly-designated branch.
+
+**Existing CI already covers, reviewed and kept as-is:**
+- Blocking: `tools/audit.py` (fails only on a genuinely `absent` mapped
+  chapter), `tools/check_doc_version_refs.py`, `tools/validate_quiz.py`,
+  `tools/lint_php.py`/`lint_yaml.py`/`lint_twig.py`/`lint_xml.py`,
+  `tools/check_placeholders.py`, `mkdocs build --strict`.
+- Report-only/non-blocking, by design (each documented in its own
+  docstring as a heuristic, not a ground-truth check): `tools/
+  check_quiz_duplicates.py`, `tools/check_section_order.py`, `tools/
+  check_links.py --offline`.
+- **Permissions:** already minimal at the workflow level (`contents: read`,
+  `pages: write`, `id-token: write` — no broader scope, no job-level
+  overrides). **Secrets:** none referenced anywhere in the workflow.
+- **Version pinning:** third-party Actions are pinned to major-version tags
+  (`actions/checkout@v4`, `actions/setup-python@v5`, `shivammathur/
+  setup-php@v2`, `actions/upload-pages-artifact@v3`, `actions/
+  deploy-pages@v4`) and `python-version: "3.12"` / `php-version: "8.4"` are
+  explicit, not floating `latest`. Full commit-SHA pinning (vs. major-version
+  tags) was considered and not applied — it is stronger supply-chain
+  hardening but wasn't asked for and adds real maintenance burden (every
+  Action update needs a new SHA); documented here as a deliberate choice,
+  not an oversight, should a future session want to tighten it further.
+
+**Tested:** `check_exclusions.py` → 0 inconsistencies (after the path fix);
+full suite re-run end to end (`audit.py`, `check_doc_version_refs.py`,
+`validate_quiz.py`, `check_quiz_duplicates.py` → 16 pairs now, down from 17
+— confirms the P1-03 fix removed exactly the one real duplicate,
+`gen_quiz_json.py`, `check_section_order.py`, `check_links.py --offline`,
+`lint_php.py`/`lint_yaml.py`/`lint_twig.py`/`lint_xml.py`,
+`check_placeholders.py`, `check_report_freshness.py`) — all clean;
+`mkdocs build --strict` → exit 0 (theme `DeprecationWarning` still present
+in the log, still documented, still not a structural MkDocs failure).
+
+---
+
 _This log continues to grow as P1/P2/P3 subjects are executed. Entries below
 this line are added as each subject actually runs — nothing is pre-written
 before its subject is executed._
