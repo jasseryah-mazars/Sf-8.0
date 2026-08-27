@@ -27,6 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Roles](roles.md) · [Authorization](authorization.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La hiérarchie des rôles fait qu'un rôle "supérieur" hérite automatiquement des droits d'un rôle "inférieur" — sans jamais avoir à les lister tous explicitement.
+
+### Imagine dans la vraie vie
+Les grades militaires : le badge d'un colonel dit "colonel" — rien d'autre. Mais chaque poste de contrôle connaît la chaîne de commandement : colonel implique commandant implique capitaine, donc le colonel passe toute porte qu'un capitaine peut ouvrir.
+
+### Dans Symfony
+Un utilisateur avec seulement `ROLE_ADMIN` stocké sur son token passe automatiquement un `#[IsGranted('ROLE_USER')]` grâce à la hiérarchie — sans que `ROLE_USER` n'ait jamais été explicitement attribué.
+
+### Exemple simple
+```yaml
+role_hierarchy: { ROLE_ADMIN: [ROLE_USER, ROLE_EDITOR] } # un rôle peut impliquer plusieurs
+```
+
+### Comment le mémoriser 🧠
+`$user->getRoles()` **n'étend jamais** la hiérarchie — elle renvoie seulement les rôles réellement stockés. Seuls `isGranted()` et `access_control` résolvent la hiérarchie complète.
+
 ---
 
 ## Theory
@@ -273,6 +296,8 @@ forcing an artificial parent/child link.
     `AuthorizationCheckerInterface` with `isGranted('ROLE_EMPLOYEE')`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `ROLE_ADMIN: ROLE_USER` is configured; the user entity stores `[ROLE_ADMIN]`. What does `$user->getRoles()` return?"
     - [ ] A. `['ROLE_ADMIN', 'ROLE_USER']`

@@ -24,9 +24,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Le validateur ne dit jamais juste "oui/non" — il te rend une liste détaillée de tout ce qui cloche, même vide.
+
+### Imagine dans la vraie vie
+Le contrôle des bagages à l'aéroport. Toi (la compagnie) ne fouilles jamais les bagages toi-même — tu envoies chacun sur le tapis de contrôle (le `ValidatorInterface`) et reçois un rapport détaillé de tout ce qui a été signalé (la `ConstraintViolationList`). Le tapis ne crie jamais "refusé" — il te tend une liste, même vide.
+
+### Dans Symfony
+`$violations = $validator->validate($produit);` renvoie toujours une liste (jamais un booléen, jamais une exception) — c'est `count($violations)` qui te dit si c'est valide.
+
+### Exemple simple
+```php
+$violations = $validator->validate($produit);
+if (count($violations) > 0) { /* traiter les erreurs */ }
+```
+
+### Comment le mémoriser 🧠
+Le validateur ne **lance jamais** d'exception sur un échec de validation — il rend toujours une liste, même vide. Confondre ça avec un booléen est le piège numéro un.
 
 Symfony validates **values against constraints**. The usual value is an object
 whose *constraints* are declared with PHP attributes. You do not validate by
@@ -348,6 +368,8 @@ automatically.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does `ValidatorInterface::validate()` return when the object is invalid?"
     - [ ] A. `false`

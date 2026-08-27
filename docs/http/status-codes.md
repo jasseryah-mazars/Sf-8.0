@@ -26,7 +26,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Client / Server](client-server.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un code de statut est le tampon que le serveur appose sur sa réponse pour dire, en un coup d'œil, comment ça s'est passé.
+
+### Imagine dans la vraie vie
+La poste appose un tampon sur un colis retourné : "Livré" (vert, `2xx`), "Adresse changée, réexpédié" (`3xx`), "Destinataire inconnu / refusé" (`4xx`), ou "Incendie au centre de tri" (`5xx`). Le client se fie au tampon, pas à la note manuscrite à côté.
+
+### Dans Symfony
+`new Response('...', Response::HTTP_NOT_FOUND)` fixe le tampon exact que le navigateur va lire — et c'est ce tampon (pas le contenu du corps) qui décide, par exemple, si un navigateur va mettre la réponse en cache.
+
+### Exemple simple
+```php
+return new Response('Introuvable', Response::HTTP_NOT_FOUND); // tampon = 404
+```
+
+### Comment le mémoriser 🧠
+Le premier chiffre = la famille : **2**=succès, **3**=redirection, **4**=ta faute, **5**=leur faute. Et retiens la paire souvent confondue : **401 = "je ne sais pas qui tu es"**, **403 = "je sais qui tu es, et c'est non"**.
 
 ## Theory
 
@@ -262,6 +283,8 @@ Symfony's security layer picks the code for you.
     for validation failures.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A POST must be redirected while preserving its method and body. Which code?"
     - [ ] A. 301

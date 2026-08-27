@@ -25,7 +25,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Authorization](authorization.md) · [Users](users.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un rôle est une chaîne préfixée `ROLE_` portée sur le token — `IS_AUTHENTICATED_*`/`PUBLIC_ACCESS` ne sont **pas** des rôles malgré les apparences.
+
+### Imagine dans la vraie vie
+Les rôles sont des niveaux d'habilitation imprimés sur ton badge. L'habilitation "Admin" implique l'habilitation "User", comme le badge d'un manager ouvre aussi toutes les portes du personnel — c'est la **hiérarchie des rôles**.
+
+### Dans Symfony
+`role_hierarchy: { ROLE_ADMIN: ROLE_USER }` signifie qu'un utilisateur avec `ROLE_ADMIN` passe automatiquement les vérifications `ROLE_USER`.
+
+### Exemple simple
+```yaml
+security:
+    role_hierarchy: { ROLE_ADMIN: ROLE_USER }
+```
+
+### Comment le mémoriser 🧠
+`IS_AUTHENTICATED_FULLY` n'est **pas** un niveau d'habilitation — c'est *depuis combien de temps* tu t'es identifié (géré par `AuthenticatedVoter`).
 
 ## Theory
 
@@ -228,6 +250,8 @@ When a decision depends on the target object or runtime state, use a
     guarantees and `_REMEMBERED` does not.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which attribute is broader?"
     - [x] A. `IS_AUTHENTICATED_REMEMBERED` (includes fully-authenticated) ✅

@@ -26,8 +26,31 @@
 
     **Syllabus:** `Security → Access Decision Strategies` ·
     **Level:** Expert ·
+
     **Est. time:** 20 min ·
     **Prerequisites:** [Voters](voters.md) · [Authorization](authorization.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La stratégie décide comment combiner les votes de tous les voters en une seule décision finale — accordé ou refusé.
+
+### Imagine dans la vraie vie
+Quatre façons de faire tourner le même jury : *affirmative* — un seul juré disant "innocent" suffit ; *unanimous* — un seul "coupable" fait couler le verdict peu importe combien disent "innocent" ; *priority* — le juré le plus haut placé qui daigne lever la main tranche seul.
+
+### Dans Symfony
+Avec la stratégie par défaut (`affirmative`), avoir 10 voters qui s'abstiennent et 1 seul qui accorde suffit à autoriser l'accès — même face à une majorité de silence.
+
+### Exemple simple
+```yaml
+security:
+    access_decision_manager: { strategy: unanimous }
+```
+
+### Comment le mémoriser 🧠
+Quand **tous** les voters s'abstiennent, l'accès est **refusé par défaut** — sauf si `allow_if_all_abstain: true` est explicitement configuré.
 
 ---
 
@@ -261,6 +284,8 @@ choice is irrelevant by construction.
     `security.access_decision_manager.strategy_service: App\Security\TwoPersonStrategy`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Default strategy, and its rule?"
     - [x] A. `affirmative` — grants as soon as any voter grants ✅

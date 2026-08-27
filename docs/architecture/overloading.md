@@ -28,7 +28,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Code Organization](code-organization.md), [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Surcharger un bundle, c'est changer son comportement sans jamais toucher à ses fichiers dans `vendor/` — chaque type de ressource a son propre "bon endroit" pour être remplacé.
+
+### Imagine dans la vraie vie
+Personnaliser un appartement meublé en location : tu n'arraches jamais les meubles du propriétaire (modifier `vendor/`) ; tu glisses une housse sur son canapé pour changer son aspect (décoration de service), tu accroches tes propres rideaux sur la tringle prévue à cet effet (`templates/bundles/<Nom>/`), et tu règles le chauffage depuis son panneau mural dédié (`config/packages/`).
+
+### Dans Symfony
+Pour changer l'apparence d'une page d'erreur fournie par un bundle tiers, tu crées un template au même chemin sous `templates/bundles/<NomDuBundle>/` — Symfony le préfère automatiquement à celui du bundle, sans toucher au code du bundle.
+
+### Exemple simple
+```
+templates/bundles/TwigBundle/Exception/error404.html.twig
+```
+Ce fichier remplace automatiquement la page 404 par défaut du bundle, sans modifier `vendor/`.
+
+### Comment le mémoriser 🧠
+Chaque changement a **un seul emplacement prévu** — mettre les rideaux sur la mauvaise tringle ne fait tout simplement rien. Et l'héritage de bundle (`getParent()`) a été **définitivement muré** — il n'existe plus.
 
 ## Theory
 
@@ -249,6 +271,8 @@ third-party resources.
     inject the original via `#[AutowireDecorated]`, log, then delegate.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Where do you place an overriding bundle template?"
     - [x] A. `templates/bundles/<BundleName>/path.html.twig` ✅

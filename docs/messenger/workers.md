@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Transports](transports.md), [Console](../console/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un worker est un processus de longue durée qui tourne en boucle — et il ne recharge **jamais** automatiquement ton code après un déploiement, il faut le redémarrer explicitement.
+
+### Imagine dans la vraie vie
+Un worker est un coursier qui fait sa tournée : ramasser une lettre à la salle de tri (receive), tenter la livraison (dispatch via le bus), puis soit la marquer livrée (ack) soit la remettre pour un autre essai (reject). Livré à lui-même, le coursier continue sa tournée pour toujours.
+
+### Dans Symfony
+Après un déploiement, un worker `messenger:consume` déjà lancé continue de tourner avec l'**ancien** code chargé en mémoire jusqu'à ce qu'il soit explicitement recyclé — c'est une source classique de bugs "pourquoi mon correctif n'est pas pris en compte ?".
+
+### Exemple simple
+```console
+$ php bin/console messenger:consume async --time-limit=3600
+$ php bin/console messenger:stop-workers  # arrêt propre, entre deux messages
+```
+
+### Comment le mémoriser 🧠
+`messenger:stop-workers` est un arrêt **propre** — il ne tue jamais un message en cours de traitement, il pose juste un drapeau vérifié entre deux messages.
 
 ## Theory
 
@@ -181,6 +203,8 @@ unrouted), no worker is needed at all.
     starts a fresh worker that loads the newly deployed code.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. After a deploy, long-running workers keep executing the old code. Which command addresses this?"
     - [x] A. `messenger:stop-workers` ✅

@@ -26,9 +26,31 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Configuration](configuration.md), [URL generation](url-generation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+`RedirectController` permet de rediriger uniquement via la configuration de route — sans écrire la moindre classe PHP.
+
+### Imagine dans la vraie vie
+Un ordre de réexpédition de courrier au bureau de poste : le courrier pour l'ancienne adresse est automatiquement transféré vers la nouvelle, et tu décides si le déménagement est permanent (301) ou temporaire (302).
+
+### Dans Symfony
+Une ancienne URL SEO-importante (`/anciens-produits`) peut rediriger en 301 vers `/produits` directement dans la config de routes — sans jamais créer de contrôleur dédié pour ça.
+
+### Exemple simple
+```yaml
+ancienne_url:
+    path: /anciens-produits
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults: { route: 'produits', permanent: true }
+```
+
+### Comment le mémoriser 🧠
+Un GET vers une URL avec un slash final manquant est redirigé automatiquement en 301 — mais un **POST** dans la même situation reçoit un **405**, jamais une redirection silencieuse qui perdrait le corps de la requête.
 
 Sometimes a URL should not run business logic — it should just **redirect** to
 another URL or route. Symfony ships a ready-made controller,
@@ -244,6 +266,8 @@ cached by browsers — prefer 302 while a target is still in flux.
     The matched `{id}` is forwarded to `blog_show` automatically.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A route path is `/blog/`. A `GET /blog` request results in?"
     - [x] A. 301 redirect to `/blog/` ✅

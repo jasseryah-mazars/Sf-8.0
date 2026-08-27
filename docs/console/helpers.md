@@ -27,6 +27,30 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Input & output](input-output.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les helpers sont des widgets d'interface réutilisables (prompts, barres de progression, tableaux) accessibles via le `HelperSet` de la commande.
+
+### Imagine dans la vraie vie
+Les helpers sont l'armoire à outils partagée d'un atelier : le mètre ruban, l'étiqueteuse et le tableau perforé sont des outils réutilisables que tout le monde va chercher, en le demandant par nom (`$this->getHelper('question')`) depuis l'armoire (le `HelperSet`).
+
+### Dans Symfony
+Une invite de confirmation avant une opération destructive (`$io->confirm('Supprimer tout ?', false)`) utilise en coulisses `QuestionHelper`, mais `SymfonyStyle` te l'offre déjà tout enveloppé — tu n'as presque jamais besoin d'aller chercher le helper toi-même.
+
+### Exemple simple
+```php
+$progress = $io->createProgressBar(100);
+$progress->advance();
+```
+
+### Comment le mémoriser 🧠
+`SymfonyStyle` est le "couteau suisse" qui enveloppe déjà la plupart des helpers courants — tu n'as besoin de `getHelper()` explicitement que pour un besoin vraiment sur mesure.
+
 ---
 
 ## Theory
@@ -278,6 +302,8 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How does a classic command obtain the QuestionHelper?"
     - [x] A. `$this->getHelper('question')` ✅

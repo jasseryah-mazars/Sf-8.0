@@ -26,7 +26,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Handling submissions](handling.md) · [Validation](../validation/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un champ `FileType` te donne un fichier téléversé — le plus souvent, tu le gères "à côté" du formulaire plutôt que directement lié à ton entité.
+
+### Imagine dans la vraie vie
+Une candidature avec un CV agrafé. Le formulaire vérifie quand même la pièce jointe — elle doit être un PDF sous une certaine taille (le champ est non-mappé mais quand même validé) — mais le formulaire papier lui-même ne classe jamais ton CV directement dans ton dossier permanent. Un employé le détache, lui donne une nouvelle référence, et le classe séparément.
+
+### Dans Symfony
+`mapped: false` empêche Symfony de chercher un setter `setCv()` inexistant sur ton entité — tu récupères le fichier via `$form->get('cv')->getData()` et tu le gères toi-même.
+
+### Exemple simple
+```php
+$fichier = $form->get('cv')->getData(); // UploadedFile, pas lié à l'entité
+$fichier->move($this->getParameter('uploads_dir'), uniqid().'.pdf');
+```
+
+### Comment le mémoriser 🧠
+Ne fais **jamais confiance** au nom ou au type MIME envoyé par le client — renomme toujours le fichier et valide avec la contrainte `File`/`Image`.
 
 ## Theory
 
@@ -280,6 +302,8 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
     content) so a `.pdf` renamed `.png` is rejected.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Where do you read an unmapped `FileType` value?"
     - [ ] A. From the bound model object

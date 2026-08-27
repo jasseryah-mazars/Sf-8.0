@@ -29,7 +29,30 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [OOP](oop.md), [Interfaces](interfaces.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un attribut `#[...]` est une étiquette collée sur du code — elle ne fait rien toute seule, il faut que quelqu'un la lise pour qu'elle serve à quelque chose.
+
+### Imagine dans la vraie vie
+Un post-it collé sur un dossier disant "à relire par le service juridique" ne déclenche rien par magie : il faut que le service juridique passe, lise le post-it, et agisse en fonction. Sans personne pour le lire, le dossier avec post-it se comporte exactement comme un dossier sans post-it.
+
+### Dans Symfony
+`#[Route('/produits')]` au-dessus d'une méthode de contrôleur ne "route" rien par lui-même : au démarrage, Symfony lit tous ces attributs via Reflection et construit sa table de routage à partir de ce qu'il a trouvé. L'attribut est passif ; c'est Symfony qui agit dessus.
+
+### Exemple simple
+```php
+#[Route('/bonjour')]
+public function bonjour(): Response { return new Response('Salut !'); }
+// Symfony lit cet attribut au démarrage — la méthode elle-même ignore qu'il existe
+```
+
+### Comment le mémoriser 🧠
+Un attribut, c'est une **étiquette muette** : elle ne parle que si quelqu'un (Symfony, via Reflection) la lit à voix haute.
 
 ## Theory
 
@@ -289,6 +312,8 @@ itself invoked.
     arguments without calling `newInstance()`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. When does declaring `#[LogCall]` on a method run `LogCall`'s constructor?"
     - [ ] A. Immediately when the file is parsed

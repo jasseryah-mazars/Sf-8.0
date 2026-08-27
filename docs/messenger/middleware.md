@@ -27,7 +27,34 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Messenger Component](component.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque middleware peut agir avant **et** après le reste du pipeline — comme une poupée russe, on entre dans chaque couche puis on en ressort dans l'ordre inverse.
+
+### Imagine dans la vraie vie
+Le middleware, c'est la sécurité de l'aéroport : ton sac (l'enveloppe) passe par une file de points de contrôle, chacun capable de l'inspecter ou de le tamponner **à l'aller** et de nouveau **au retour** (poupée russe).
+
+### Dans Symfony
+Un middleware custom de logging placé en premier dans la chaîne peut logger "requête entrante" avant `$stack->next()->handle(...)`, puis "requête terminée" juste après — même si un middleware plus profond a routé le message vers un transport asynchrone.
+
+### Exemple simple
+```php
+public function handle(Envelope $envelope, StackInterface $stack): Envelope
+{
+    // avant
+    $envelope = $stack->next()->handle($envelope, $stack);
+    // après (même si le message a été routé en asynchrone plus loin)
+    return $envelope;
+}
+```
+
+### Comment le mémoriser 🧠
+`sync://` fait quand même tourner le **pipeline complet de middleware** — ce n'est pas "pas de bus", c'est juste un transport qui ne dévie jamais vers `HandleMessageMiddleware`.
 
 ## Theory
 
@@ -261,6 +288,8 @@ instead — a middleware that branches on message class is a smell.
     later, in the **worker's** process, adding a `HandledStamp` there instead.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which middleware invokes the handler?"
     - [ ] A. `SendMessageMiddleware`

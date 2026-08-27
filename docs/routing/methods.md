@@ -27,7 +27,29 @@
     **Est. time:** 18 min ·
     **Prerequisites:** [Configuration](configuration.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`methods` restreint une route à certains verbes HTTP — une bonne URL, mauvaise méthode, donne un 405, pas un 404.
+
+### Imagine dans la vraie vie
+Un chemin avec `methods` est comme un guichet de banque qui existe bel et bien mais ne traite que certaines opérations. Va au guichet "Dépôts" (le bon chemin) et demande à ouvrir un crédit immobilier (le mauvais verbe) : le guichetier ne fait pas semblant que le guichet n'existe pas (404) — il te dit "ce guichet ne fait que dépôts et retraits" (405 avec une liste `Allow`).
+
+### Dans Symfony
+`#[Route('/articles', methods: ['POST'])]` renvoie automatiquement un 405 (pas un 404) si quelqu'un appelle cette même URL en GET — la route "existe" mais refuse la méthode.
+
+### Exemple simple
+```php
+#[Route('/articles/{id}', methods: ['DELETE'])]
+public function supprimer(int $id): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Une route acceptant `GET` accepte automatiquement `HEAD` aussi — c'est la même demande "montre-moi ça", juste sans le corps de la réponse.
 
 ## Theory
 
@@ -251,6 +273,8 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     `/tags/{id}` gets **405 Method Not Allowed** with `Allow: DELETE`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A route allows only `GET`. A `POST` to that path returns?"
     - [ ] A. 404 Not Found

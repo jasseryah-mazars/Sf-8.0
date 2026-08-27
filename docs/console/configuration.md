@@ -27,6 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Custom commands](custom-commands.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les métadonnées d'une commande (nom, description, alias) se déclarent une fois, et un nom déclaré via l'attribut permet à Symfony de charger la commande paresseusement.
+
+### Imagine dans la vraie vie
+Une fiche de catalogue de bibliothèque pour un livre : elle enregistre le titre (nom), un court résumé (description), des titres alternatifs (alias), et si le livre est en libre accès ou en réserve (hidden) — tout ça sans jamais ouvrir le livre lui-même.
+
+### Dans Symfony
+Le nom déclaré directement dans `#[AsCommand(name: '...')]` permet à Symfony de lister toutes les commandes disponibles (`php bin/console list`) sans jamais instancier réellement chaque classe de commande — un vrai gain de performance au démarrage.
+
+### Exemple simple
+```php
+#[AsCommand(name: 'app:export', description: 'Exporte les données', hidden: false)]
+```
+
+### Comment le mémoriser 🧠
+Le cycle de vie complet est : **configure → initialize → interact → execute** — dans cet ordre exact, jamais mélangé.
+
 ---
 
 ## Theory
@@ -304,6 +327,8 @@ nothing to share between `interact()` and `execute()`.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the correct command lifecycle order?"
     - [ ] A. initialize → configure → execute → interact

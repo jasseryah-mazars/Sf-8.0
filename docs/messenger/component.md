@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [DI & Tags](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Messenger envoie des objets PHP tout simples à travers un "bus" jusqu'à un handler — le travail lent peut ainsi s'exécuter plus tard, en arrière-plan, au lieu de bloquer la requête.
+
+### Imagine dans la vraie vie
+Messenger est un **bureau de poste**. `dispatch()` dépose une lettre dans la boîte — tu reçois un reçu (l'`Envelope`), pas une réponse. Le **transport** est la salle de tri où les lettres attendent ; le **worker** est le facteur qui les distribue plus tard ; le **handler** est le destinataire qui agit enfin sur la lettre.
+
+### Dans Symfony
+Envoyer un email de bienvenue après une inscription peut se faire via Messenger : la requête HTTP répond immédiatement à l'utilisateur, pendant qu'un worker en arrière-plan envoie réellement l'email quelques secondes plus tard.
+
+### Exemple simple
+```php
+$bus->dispatch(new EnvoyerEmailBienvenue($utilisateur->getId()));
+// la requête HTTP répond tout de suite, l'email part plus tard
+```
+
+### Comment le mémoriser 🧠
+`dispatch()` ne renvoie **jamais** la valeur du handler directement — toujours un `Envelope`, comme un reçu postal ne contient jamais la réponse du destinataire, seulement la preuve du dépôt.
 
 ## Theory
 
@@ -220,6 +242,8 @@ service directly is simpler and has no dispatch overhead.
     the `Envelope` and lets you inspect what actually happened via its stamps.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does `MessageBusInterface::dispatch()` return?"
     - [ ] A. The handler's return value

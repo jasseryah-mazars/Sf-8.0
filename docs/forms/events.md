@@ -27,7 +27,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Handling submissions](handling.md) · [Data transformers](data-transformers.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les événements de formulaire sont des points de contrôle pendant qu'un formulaire se construit et se soumet — l'occasion d'ajouter des champs dynamiquement ou de nettoyer les données brutes.
+
+### Imagine dans la vraie vie
+Ce sont des **postes de contrôle pendant qu'un formulaire se remplit et se soumet**. Pendant la préparation du formulaire vierge, tu passes par `PRE_SET_DATA`/`POST_SET_DATA` — le moment d'ajouter des champs selon qui le remplit. Quand tu le rends, tu passes par `PRE_SUBMIT`, puis `SUBMIT`, puis `POST_SUBMIT`.
+
+### Dans Symfony
+Un formulaire de commande affichant des champs différents selon un produit déjà choisi utilise typiquement `PRE_SET_DATA` pour ajouter dynamiquement les bons champs avant l'affichage.
+
+### Exemple simple
+```php
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) { /* ... */ });
+```
+
+### Comment le mémoriser 🧠
+On ne peut **ajouter des champs** qu'aux points de contrôle précoces (`PRE_SET_DATA`, `PRE_SUBMIT`) — jamais après que le formulaire est déjà lié.
 
 ## Theory
 
@@ -345,6 +366,8 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
     field exists in time to accept its value.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the correct submit event order?"
     - [x] A. PRE_SUBMIT → SUBMIT → POST_SUBMIT ✅

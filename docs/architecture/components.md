@@ -27,7 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Code Organization](code-organization.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony, c'est une boîte à outils d'appareils indépendants (les composants) plus une cuisine tout équipée qui les branche ensemble pour toi (le framework).
+
+### Imagine dans la vraie vie
+Une bouilloire, un grille-pain et un mixeur fonctionnent très bien chacun de leur côté, débranchés de tout le reste — ce sont les composants. Les "contrats" sont la prise électrique standard sur laquelle chacun se branche, permettant d'échanger une marque contre une autre sans tout recâbler. Le framework, lui, est la cuisine entièrement équipée qui fixe chaque appareil à sa place et fait tout le câblage pour toi.
+
+### Dans Symfony
+Tu peux utiliser `symfony/finder` ou `symfony/console` dans un projet PHP qui n'a rien à voir avec le framework Symfony complet — Laravel et Drupal font exactement ça avec plusieurs composants.
+
+### Exemple simple
+```console
+$ composer require symfony/finder --no-install-recommends
+```
+Aucune installation du framework complet n'est nécessaire pour utiliser ce seul composant.
+
+### Comment le mémoriser 🧠
+**Composant** = appareil autonome. **Contrat** = prise standard entre appareils. **Framework** = cuisine qui branche tout. **Bundle** = meuble qui range un appareil dans la cuisine.
 
 ## Theory
 
@@ -249,6 +271,8 @@ services and configuration, not by instantiating them.
     avoiding hard version coupling.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is a Symfony component?"
     - [x] A. A standalone, reusable PHP library shipped as its own package ✅

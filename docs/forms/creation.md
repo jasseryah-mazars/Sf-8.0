@@ -24,7 +24,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Controllers](../controllers/index.md) · [DI](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un type de formulaire est un modèle de papier réutilisable — tu le décris une fois dans une classe, et Symfony construit le formulaire réel à partir de ce modèle.
+
+### Imagine dans la vraie vie
+Un type de formulaire est un **formulaire papier vierge** ; `createForm()` te remet une copie neuve avec un **employé** attaché. Quand tu soumets, l'employé lit chaque champ et classe les réponses dans ton **dossier** — `data_class` nomme quel dossier (une classe `InscriptionData`). Sans `data_class`, l'employé garde juste une pile de notes libres (un tableau associatif).
+
+### Dans Symfony
+`ProduitType` (une classe de type de formulaire) peut être réutilisée pour créer le formulaire d'ajout **et** le formulaire d'édition d'un produit — même code, deux contextes différents.
+
+### Exemple simple
+```php
+$form = $this->createForm(ProduitType::class, $produit); // $produit = data_class
+```
+
+### Comment le mémoriser 🧠
+Sans `data_class`, les données soumises restent un simple **tableau** — pas un objet. C'est le piège classique : oublier `data_class` et se demander pourquoi `$data->getNom()` plante.
 
 ## Theory
 
@@ -355,6 +376,8 @@ CSRF for you).
     `getData()` returns `null` (or the initial array you gave `createForm`).
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which two methods do you override on `AbstractType`?"
     - [ ] A. `build()` and `getOptions()`

@@ -26,7 +26,31 @@
     **Est. time:** 11 min ·
     **Prerequisites:** [Naming](naming-conventions.md), [HTTP Redirects](http-redirects.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`TemplateController` et `RedirectController` te permettent de créer une route sans écrire la moindre classe PHP — juste de la configuration.
+
+### Imagine dans la vraie vie
+Un réceptionniste gère les deux demandes les plus triviales sans jamais appeler un responsable. Pour "montrez-moi les conditions", elle remet une brochure préimprimée (`TemplateController`) ; pour "où est passé l'ancien bureau ?", elle lit une carte plastifiée collée sur son bureau et t'indique le couloir (`RedirectController`).
+
+### Dans Symfony
+Une page statique de type "À propos" n'a besoin d'aucun contrôleur PHP : `TemplateController` suffit, directement configuré dans les routes.
+
+### Exemple simple
+```yaml
+a_propos:
+    path: /a-propos
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults: { template: 'pages/a_propos.html.twig' }
+```
+
+### Comment le mémoriser 🧠
+`permanent: true` transforme un redirect en 301/308 (permanent) ; une cible vide renvoie un 410 Gone ("cette ressource n'existe plus", différent d'un 404 "introuvable").
 
 ## Theory
 
@@ -249,6 +273,8 @@ flowchart LR
     `permanent + keepRequestMethod` yields a **308**.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which controller renders a template purely from route config?"
     - [x] A. `TemplateController` ✅

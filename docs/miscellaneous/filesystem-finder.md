@@ -27,6 +27,29 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [PHP](../php-web-security/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Filesystem lève une exception dès qu'une opération échoue (au lieu de renvoyer `false` silencieusement) ; Finder cherche des fichiers avec une syntaxe fluide et lisible.
+
+### Imagine dans la vraie vie
+Filesystem est un déménageur prudent qui crie dès que quelque chose ne va pas plutôt que de laisser tomber silencieusement un carton. Son `dumpFile()` est comme un chef qui dresse un plat entièrement sur une assiette de réserve puis seulement ensuite l'échange sur la table.
+
+### Dans Symfony
+`$finder->files()->in('src')->name('*.php')->date('since yesterday')` trouve tous les fichiers PHP modifiés depuis hier — bien plus lisible que du code `scandir()`/`filemtime()` fait à la main.
+
+### Exemple simple
+```php
+$fs->dumpFile('config/genere.yaml', $contenu); // écriture atomique, jamais de fichier à moitié écrit
+```
+
+### Comment le mémoriser 🧠
+`dumpFile()` écrit dans un **fichier temporaire puis renomme** — cette atomicité garantit qu'un processus concurrent ne verra jamais un fichier à moitié écrit, seulement l'ancienne ou la nouvelle version complète.
+
 ---
 
 ## Theory
@@ -236,6 +259,8 @@ file — it needs directories via `in()`.
     **2.** See the `Finder` snippet: `->files()->name('*.log')->size('> 1K')->date('since yesterday')->sortByModifiedTime()`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What makes `dumpFile()` safe against partial reads?"
     - [x] A. It writes to a temp file then atomically renames ✅

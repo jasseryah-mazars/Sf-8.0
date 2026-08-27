@@ -25,7 +25,28 @@
     **Est. time:** 45 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Sérialiser se fait en deux étapes : normaliser (objet → tableau) puis encoder (tableau → chaîne JSON/XML/CSV) — jamais directement objet vers chaîne.
+
+### Imagine dans la vraie vie
+Sérialiser, c'est **faire sa valise** ; désérialiser, c'est la défaire. Les normaliseurs **plient tes objets en une disposition plate et standard** (des tableaux) ; les encodeurs **ferment la valise en une seule chaîne** (JSON/XML/CSV) pour le voyage.
+
+### Dans Symfony
+`$serializer->serialize($produit, 'json')` fait les deux étapes en une seule fois — comprendre qu'il y a réellement deux étapes distinctes explique pourquoi on peut normaliser sans encoder.
+
+### Exemple simple
+```php
+$json = $serializer->serialize($produit, 'json', ['groups' => ['api']]);
+```
+
+### Comment le mémoriser 🧠
+`#[Groups]` ne filtre les champs **que** si tu passes explicitement `['groups' => [...]]` dans le contexte — sans ce contexte, tous les champs sont sérialisés, groupe ou pas.
 
 ## Theory
 
@@ -372,6 +393,8 @@ groups + max-depth to keep payloads bounded.
     and pass `['enable_max_depth' => true]`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. In `serialize()`, which runs first?"
     - [x] A. Normalizer, then encoder ✅

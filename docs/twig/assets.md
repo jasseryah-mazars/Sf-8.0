@@ -26,7 +26,28 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`asset()` transforme un nom de fichier simple et stable en une URL publique, avec un numéro de version qui change dès que le fichier change — pour casser le cache automatiquement.
+
+### Imagine dans la vraie vie
+`asset()` est le comptoir du vestiaire. Tu donnes un nom simple et stable — "le manteau gris", `css/app.css` — et il te rend le ticket exact de l'objet actuel, avec le numéro du jour. Quand tu remplaces le manteau par un nouveau, le numéro change, donc personne ne peut repartir avec l'ancien manteau en réutilisant un vieux ticket.
+
+### Dans Symfony
+`{{ asset('css/app.css') }}` génère `/css/app.abc123.css` — quand tu modifies le CSS et redéploies, le hash change automatiquement, forçant le navigateur du visiteur à retélécharger la nouvelle version au lieu de garder l'ancienne en cache.
+
+### Exemple simple
+```twig
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+```
+
+### Comment le mémoriser 🧠
+`asset()` sert les **fichiers statiques** (CSS, JS, images) ; `path()`/`url()` servent les **routes**. Ne les confonds jamais — un fichier statique n'est pas une route Symfony.
 
 !!! info "Scope"
     This chapter covers the **`asset()` function and versioning only**. The build
@@ -202,6 +223,8 @@ here**; `asset()` merely resolves the final public path/version.
     the default package.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does `asset('css/app.css')` return?"
     - [x] A. A public URL/path (with base path + version) to the file ✅

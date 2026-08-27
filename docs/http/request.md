@@ -27,7 +27,31 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Client / Server](client-server.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`Request` range chaque morceau de la requête HTTP dans un tiroir étiqueté, plutôt que de te laisser fouiller dans un tas de superglobales `$_GET`/`$_POST`.
+
+### Imagine dans la vraie vie
+Un employé de bureau ouvre ton courrier et trie chaque partie dans un bac étiqueté : "questions" (query), "formulaire joint" (request/body), "notes en marge" (headers). Tu ne fouilles jamais dans l'enveloppe brute — tu demandes juste le bon bac.
+
+### Dans Symfony
+`$request->query->get('page')` va chercher dans le bac des paramètres d'URL ; `$request->attributes->get('id')` va chercher dans le bac — différent — des paramètres de route extraits par le routeur. Confondre les deux bacs est une source classique d'erreurs.
+
+### Exemple simple
+```php
+public function show(Request $request): Response
+{
+    $id = $request->attributes->get('id'); // vient de la route, pas de l'URL en ?query
+}
+```
+
+### Comment le mémoriser 🧠
+Les paramètres de **route** vivent dans **`attributes`** — pas dans `query`. Retiens : "les attributs, c'est ce que le routeur a *déjà* deviné pour toi."
 
 ## Theory
 
@@ -315,6 +339,8 @@ for the raw `Request` when you need low-level access (headers, IP, raw body).
     `getPayload()` decodes a JSON body (or reads form data) into an `InputBag`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Where does the Router place matched route parameters?"
     - [ ] A. `$request->query`

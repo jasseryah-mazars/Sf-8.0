@@ -25,7 +25,31 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Providers](providers.md) · [Password Hashers](password-hashers.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un utilisateur est n'importe quel objet qui implémente `UserInterface` — en Symfony 8, seulement deux méthodes : `getRoles()` et `getUserIdentifier()`.
+
+### Imagine dans la vraie vie
+Un utilisateur est la fiche d'identité au dossier : un nom qui ne change jamais (`getUserIdentifier()`) et une liste d'habilitations (`getRoles()`). Ça dit *qui* tu es et *ce que* tu peux atteindre — pas *comment* tu l'as prouvé au portail.
+
+### Dans Symfony
+Toute classe métier — pas seulement une entité Doctrine — peut implémenter `UserInterface` : un "utilisateur API" chargé depuis un service externe fonctionne exactement pareil qu'un utilisateur en base.
+
+### Exemple simple
+```php
+class Utilisateur implements UserInterface {
+    public function getRoles(): array { return ['ROLE_USER']; }
+    public function getUserIdentifier(): string { return $this->email; }
+}
+```
+
+### Comment le mémoriser 🧠
+`eraseCredentials()` a été **supprimée** en 8.0 — pour retirer un secret avant sérialisation, utilise `__serialize()` à la place.
 
 ## Theory
 
@@ -283,6 +307,8 @@ changes to invalidate existing sessions immediately.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which methods does `UserInterface` declare in Symfony 8?"
     - [ ] A. `getUsername()` and `getRoles()`

@@ -24,9 +24,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Object Validation](object-validation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Les groupes permettent de valider seulement un sous-ensemble de règles selon le contexte — pas les mêmes règles à l'inscription et à l'édition du profil.
+
+### Imagine dans la vraie vie
+Les groupes sont les **différentes files de contrôle** à l'aéroport. Un membre d'équipage, un passager national et un passager international passent par des jeux de scanners différents alors que c'est le même point de contrôle. Valider un groupe, c'est choisir la file.
+
+### Dans Symfony
+Un formulaire d'inscription peut exiger un mot de passe (`groups: ['inscription']`), tandis qu'un formulaire d'édition de profil valide le même objet **sans** ce groupe — même entité, règles différentes selon le contexte.
+
+### Exemple simple
+```php
+$validator->validate($utilisateur, null, ['inscription']);
+```
+
+### Comment le mémoriser 🧠
+Le groupe `Default` (celui utilisé quand tu n'en précises aucun) se comporte différemment sur une classe avec une `GroupSequence` — c'est la nuance la plus testée de ce chapitre.
 
 Sometimes only *some* constraints apply — a `User` at *registration* needs a
 password, but at *profile edit* it does not. **Groups** let you tag constraints
@@ -240,6 +259,8 @@ context** is often clearer than many groups. In forms, set the group via the
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. You call `validate($obj, groups: ['edit'])`. Which constraints run?"
     - [ ] A. `Default` + `edit`

@@ -26,9 +26,28 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Defaults](defaults.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Certains paramètres de route commençant par `_` sont réservés à Symfony — tu en écris certains (`_locale`), et Symfony t'en donne d'autres en lecture seule (`_route`).
+
+### Imagine dans la vraie vie
+Une étiquette d'expédition avec des cases réservées que le système du transporteur comprend. Certaines cases, tu les remplis toi-même — "fragile", "documents en français" — et elles changent le traitement du colis. D'autres cases sont tamponnées par le centre de tri au moment du scan — le numéro de suivi et l'itinéraire emprunté — que tu peux lire sur l'étiquette mais jamais écrire toi-même.
+
+### Dans Symfony
+`{_locale}` dans une route peut être utilisé pour construire des URL multilingues (`/fr/accueil`, `/en/home`) qui définissent automatiquement la langue de toute la requête.
+
+### Exemple simple
+```php
+#[Route('/{_locale}/accueil', name: 'accueil', requirements: ['_locale' => 'fr|en'])]
+```
+
+### Comment le mémoriser 🧠
+Tu **écris** `_controller`/`_format`/`_locale`/`_fragment` ; Symfony te **rend** `_route`/`_route_params` en lecture seule — jamais l'inverse.
 
 Some parameters that appear in a route's `defaults`/placeholders are **reserved**:
 Symfony reads them to configure the request rather than passing them as ordinary
@@ -269,6 +288,8 @@ in templates you can just append `#anchor` in the href.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which attribute holds the name of the matched route?"
     - [ ] A. `_controller`

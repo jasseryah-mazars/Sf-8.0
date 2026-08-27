@@ -26,8 +26,31 @@
 
     **Syllabus:** `Security → Impersonation` ·
     **Level:** Expert ·
+
     **Est. time:** 20 min ·
     **Prerequisites:** [Firewalls](firewalls.md) · [Roles](roles.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`switch_user` permet à un administrateur de "devenir" temporairement un autre utilisateur pour voir l'application exactement comme lui — sans connaître son mot de passe.
+
+### Imagine dans la vraie vie
+Un superviseur du support avec un badge maître peut temporairement "pointer" en tant que n'importe quel employé pour voir le bâtiment exactement comme cet employé le voit. Le garde garde le propre badge du superviseur au comptoir (le token original) et le lui rend quand il signe le registre de sortie.
+
+### Dans Symfony
+Un support client peut se connecter en tant qu'un client qui signale un bug (`?_switch_user=client@exemple.com`) pour reproduire exactement ce qu'il voit — sans jamais avoir eu accès à son mot de passe.
+
+### Exemple simple
+```
+https://monapp.com/admin?_switch_user=jean@exemple.com   # devenir Jean
+https://monapp.com/admin?_switch_user=_exit               # revenir à soi-même
+```
+
+### Comment le mémoriser 🧠
+Vérifie l'impersonation avec l'attribut **`IS_IMPERSONATOR`** — l'ancien style `ROLE_PREVIOUS_ADMIN` est obsolète, ne l'utilise plus.
 
 ---
 
@@ -295,6 +318,8 @@ full session swap.
     veto when the target equals the original token's user.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How does a privileged user stop impersonating?"
     - [ ] A. `?_switch_user=exit`

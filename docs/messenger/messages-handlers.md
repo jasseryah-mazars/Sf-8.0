@@ -27,7 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Messenger Component](component.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Il existe trois "styles" de bus par convention : commande (un seul handler, pas de réponse), requête (un seul handler, réponse lue à part), événement (zéro à plusieurs handlers).
+
+### Imagine dans la vraie vie
+Trois bacs de bureau différents. Un bac **commande** contient une tâche pour exactement un employé — aucune réponse attendue. Un bac **requête** contient une demande dont la réponse de l'employé est agrafée au dossier pour que tu la lises plus tard. Un bac **événement** est un panneau d'affichage public — zéro, un, ou plusieurs collègues peuvent y jeter un œil et agir.
+
+### Dans Symfony
+Un `GetInvoiceTotal` (requête) sur un query bus renvoie son résultat via `$envelope->last(HandledStamp::class)?->getResult()` — jamais directement depuis `dispatch()`, même si un seul handler existe.
+
+### Exemple simple
+```php
+$envelope = $queryBus->dispatch(new GetInvoiceTotal(orderId: 7));
+$total = $envelope->last(HandledStamp::class)?->getResult();
+```
+
+### Comment le mémoriser 🧠
+Ce découpage commande/requête/événement est une **convention de nommage**, pas une règle imposée par le composant lui-même — Messenger ne connaît pas ces trois catégories en interne.
 
 ## Theory
 
@@ -238,6 +260,8 @@ differ per kind.
     email from ever going out.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which statements about Messenger buses are correct? (choose 2)"
     - [x] A. Each bus is an independent `MessageBus` with its own middleware list ✅

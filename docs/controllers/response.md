@@ -27,7 +27,28 @@
     **Est. time:** 14 min ·
     **Prerequisites:** [HTTP → Response](../http/response.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrôleur doit rendre une enveloppe scellée (`Response`) — repartir les mains vides fait planter l'application.
+
+### Imagine dans la vraie vie
+Le réceptionniste (le contrôleur) doit toujours rendre une enveloppe scellée au visiteur — jamais le laisser repartir les mains vides. Le type d'enveloppe dépend du contenu : une simple lettre (`Response`, HTML), un mémo structuré (`JsonResponse`), un colis entier (`BinaryFileResponse`), ou une dictée en direct page par page (`StreamedResponse`).
+
+### Dans Symfony
+Oublier de retourner une `Response` dans une action déclenche une `LogicException` — sauf si un listener `kernel.view` sait construire une réponse à partir de ce que tu as retourné (par exemple un tableau, avec un bundle dédié).
+
+### Exemple simple
+```php
+public function api(): JsonResponse { return $this->json(['statut' => 'ok']); }
+```
+
+### Comment le mémoriser 🧠
+Choisis le sous-type par la nature du contenu : JSON → `JsonResponse`, fichier téléchargeable → `BinaryFileResponse`, flux progressif → `StreamedResponse`.
 
 ## Theory
 
@@ -249,6 +270,8 @@ $file->setAutoLastModified();
     `$response->headers->set('Content-Disposition', 'attachment; filename="report.csv"');`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What must every controller return?"
     - [x] A. A `Symfony\Component\HttpFoundation\Response` (or trigger a view listener). ✅

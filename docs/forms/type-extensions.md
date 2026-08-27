@@ -25,9 +25,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Form types](types.md) · [Form events](events.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une extension de type ajoute un comportement à un type de formulaire que tu ne possèdes pas — sans jamais le sous-classer.
+
+### Imagine dans la vraie vie
+Une extension de type est comme une coque de téléphone qui ajoute un emplacement de carte et une meilleure prise en main à un téléphone que tu n'as ni conçu ni fabriqué. Tu ne démontes jamais l'appareil pour le reconstruire (pas de sous-classe) ; tu glisses juste la coque, et elle indique clairement quels modèles elle recouvre (`getExtendedTypes()`).
+
+### Dans Symfony
+Ajouter automatiquement un attribut `help` à **tous** les champs de type `TextType` du projet, sans modifier un seul `FormType` existant, est le cas d'usage classique d'une extension de type.
+
+### Exemple simple
+```php
+public static function getExtendedTypes(): iterable { return [TextType::class]; }
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **pas** d'attribut `#[AsFormTypeExtension]` — l'enregistrement se fait uniquement via la méthode statique `getExtendedTypes()`, jamais par attribut PHP.
 
 A **type extension** injects options and behaviour into form types you do **not**
 own — without subclassing them. One extension can target many types at once. The
@@ -299,6 +318,8 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
     all forms. Prefer the narrowest type.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which method declares the types an extension applies to?"
     - [x] A. `public static function getExtendedTypes(): iterable` ✅

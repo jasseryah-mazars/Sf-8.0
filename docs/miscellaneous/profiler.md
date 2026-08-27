@@ -27,6 +27,29 @@
     **Est. time:** 35 min ·
     **Prerequisites:** [Request Handling](../architecture/request-handling.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le profiler stocke un instantané par requête (timing, requêtes SQL, logs) — c'est un outil de développement uniquement, désactivé en production.
+
+### Imagine dans la vraie vie
+Le profiler est l'enregistreur de vol d'un avion. Tout au long de chaque vol (requête), des capteurs (les data collectors) notent les temps, la consommation, les requêtes et événements, et l'enregistreur écrit un instantané par vol à un moment fixe proche de l'atterrissage.
+
+### Dans Symfony
+La barre de débogage tout en bas de chaque page en environnement `dev` (nombre de requêtes SQL, temps de rendu Twig) est directement alimentée par le profiler — invisible et absente en production.
+
+### Exemple simple
+```console
+$ php bin/console debug:container --show-hidden # complète l'inspection via le profiler
+```
+
+### Comment le mémoriser 🧠
+La collecte se fait sur `kernel.response` — et tout ce que stocke un collecteur (`$this->data`) doit être **sérialisable**, jamais un objet vivant comme une connexion PDO ouverte.
+
 ---
 
 ## Theory
@@ -252,6 +275,8 @@ data. For prod observability use proper metrics/tracing.
     serializable, so store scalar/array data (VarDumper-clonable) instead.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. When does the profiler collect data for a request?"
     - [x] A. On `kernel.response` (late collectors at terminate) ✅

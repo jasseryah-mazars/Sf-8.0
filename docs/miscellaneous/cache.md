@@ -26,6 +26,32 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le cache mémorise le résultat d'un calcul coûteux — la prochaine fois qu'on le demande, on relit la note au lieu de refaire le calcul.
+
+### Imagine dans la vraie vie
+Un cache est un **bloc-notes que tu consultes avant de faire un travail coûteux**. Avant de recalculer une valeur chère, tu jettes un œil au bloc (`get()`) : si la réponse y est déjà (un hit) tu la lis ; sinon (un miss) tu fais le travail **une fois**, tu la notes, et tu la rends.
+
+### Dans Symfony
+Mettre en cache le résultat d'un appel API externe coûteux (météo, taux de change) évite de re-solliciter ce service à chaque requête — la première requête calcule, toutes les suivantes lisent juste le cache.
+
+### Exemple simple
+```php
+$valeur = $cache->get('taux_change', function (ItemInterface $item) {
+    $item->expiresAfter(3600);
+    return $this->api->recupererTaux(); // appelé UNE seule fois par heure
+});
+```
+
+### Comment le mémoriser 🧠
+Seul **PSR-6** (via `TagAwareAdapter`) supporte les tags — **PSR-16 ne les supporte pas du tout**. Choisis PSR-6 dès que tu as besoin d'invalider un groupe entier d'entrées d'un coup.
+
 ---
 
 ## Theory
@@ -347,6 +373,8 @@ Use `ArrayAdapter`/`NullAdapter` in tests to keep them deterministic.
     still-valid cached value — avoiding a thundering-herd recompute.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `Symfony\Contracts\Cache\CacheInterface::get()` runs its callback…"
     - [x] A. only on a cache miss ✅

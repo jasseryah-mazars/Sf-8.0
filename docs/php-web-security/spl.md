@@ -25,7 +25,35 @@
     **Est. time:** 35 min ·
     **Prerequisites:** [Interfaces](interfaces.md)
 
+!!! quote "🎯 Examen Symfony 8 : NON"
+    Ce chapitre n'est **pas** sur la liste officielle des 9 sous-sujets PHP du
+    syllabus (voir [PHP & Web Security](index.md)) — il est conservé comme
+    contenu d'enrichissement/prérequis, pas comme matière notée à l'examen.
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La SPL fournit des interfaces qui font qu'un objet "se comporte" comme un tableau, un compteur ou une boucle native — sans être vraiment un tableau.
+
+### Imagine dans la vraie vie
+Un appareil équipé de la prise, des boutons et du cadran standards de la maison (`ArrayAccess`, `Countable`, `Iterator`) se branche directement dans les prises murales existantes — `$obj[$k]`, `count($obj)`, `foreach` — sans câblage spécial. Un générateur, lui, ressemble à une bobine de film à usage unique : il déroule les images à la demande, mais une fois visionnée jusqu'au bout, impossible de rembobiner — il faut recharger une bobine neuve.
+
+### Dans Symfony
+Le composant Finder (recherche de fichiers) et certaines collections de résultats implémentent `IteratorAggregate`, ce qui permet d'écrire un simple `foreach` sur le résultat sans jamais charger toute la liste en mémoire d'un coup.
+
+### Exemple simple
+```php
+function nombres(): \Generator {
+    yield 1;
+    yield 2; // produit à la demande, pas d'un coup
+}
+foreach (nombres() as $n) { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Un générateur, c'est un **Iterator jetable** : on ne le parcourt qu'**une seule fois**, comme une bobine de film qu'on ne peut pas rembobiner.
 
 ## Theory
 
@@ -312,6 +340,8 @@ function readLines(string $path): \Generator
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which methods must an `Iterator` implement?"
     - [x] A. `current`, `key`, `next`, `rewind`, `valid` ✅

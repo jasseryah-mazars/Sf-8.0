@@ -28,6 +28,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [The Service Container](container.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit des centaines de services tout prêts — tu les réclames par leur **type** (une interface), jamais par un identifiant brut à mémoriser.
+
+### Imagine dans la vraie vie
+Les services intégrés du framework sont le garde-manger de la maison — des centaines de produits déjà en stock (`router`, `logger`, `serializer`). Tu ne les cherches pas par numéro d'étagère (id brut) ; tu demandes par *type d'ingrédient* (l'interface autowirée) et la cuisine sait quel bocal prendre.
+
+### Dans Symfony
+Injecter `LoggerInterface` fonctionne sans jamais connaître le nom exact du service de log configuré — Symfony résout automatiquement quelle implémentation concrète fournir.
+
+### Exemple simple
+```console
+$ php bin/console debug:autowiring logger
+```
+
+### Comment le mémoriser 🧠
+Injecte toujours `RequestStack` (puis `getCurrentRequest()`) dans un service — **jamais** un `Request` brut, qui n'existe pas encore au moment où le container construit tes services.
+
 ---
 
 ## Theory
@@ -245,6 +268,8 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     a value via `#[Autowire]`.) A `Request` cannot be injected directly.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How do you inject the current request into a service?"
     - [ ] A. Type-hint `Request`

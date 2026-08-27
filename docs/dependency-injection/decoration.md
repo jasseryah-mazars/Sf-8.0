@@ -28,6 +28,32 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Service Registration](registration.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Décorer un service, c'est l'envelopper dans un nouveau service qui garde la même interface et ajoute un comportement — sans jamais toucher à l'original.
+
+### Imagine dans la vraie vie
+Un décorateur est une station de finition par laquelle passe chaque plat en sortant : le plat original (le service d'origine) n'est pas modifié, mais reçoit une touche supplémentaire (log, cache) sous le même nom.
+
+### Dans Symfony
+Décorer `LoggerInterface` pour ajouter un préfixe à chaque message de log fonctionne sans que le reste de l'application ne sache jamais qu'une décoration existe — l'interface reste identique.
+
+### Exemple simple
+```php
+#[AsDecorator(decorates: LoggerInterface::class)]
+class LoggerAvecPrefixe implements LoggerInterface {
+    public function __construct(private LoggerInterface $inner) {} // le service original
+}
+```
+
+### Comment le mémoriser 🧠
+**Priorité plus haute = appliquée en premier = la plus proche de l'original** (la plus "intérieure") — comme la station de finition la plus proche de la cuisine.
+
 ---
 
 ## Theory
@@ -291,6 +317,8 @@ run *many* handlers, use [tags](tags.md) instead.
     then the original.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. In a decorator, what is `@.inner`?"
     - [ ] A. The decorator itself

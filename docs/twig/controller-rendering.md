@@ -23,7 +23,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Includes](includes.md), [Controllers](../controllers/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Quand un fragment de page a besoin de ses propres données, on lui fait exécuter son propre mini-contrôleur plutôt que de tout charger dans le contrôleur principal.
+
+### Imagine dans la vraie vie
+Intégrer un contrôleur, c'est comme une page de journal qui envoie un journaliste junior chercher l'encadré "dernières actualités" pendant que l'article principal est déjà mis en page. `render(controller(...))` envoie ce journaliste — une vraie sous-requête — qui revient avec une coupure de presse finie et autonome.
+
+### Dans Symfony
+Un panneau "produits recommandés" affiché sur *chaque* page du site est un candidat idéal : plutôt que de faire calculer les recommandations par chaque contrôleur qui affiche une page, un seul contrôleur dédié s'en charge, appelé depuis le template.
+
+### Exemple simple
+```twig
+{{ render(controller('App\\Controller\\RecoController::afficher')) }}
+```
+
+### Comment le mémoriser 🧠
+`render(controller(...))` déclenche une **vraie sous-requête HttpKernel** — ce n'est pas un simple appel de fonction PHP, le fragment traverse tout le cycle de requête comme une page normale.
 
 ## Theory
 
@@ -216,6 +237,8 @@ includes unless the fragment genuinely needs isolated logic.
     (`REQUEST`, `CONTROLLER`, `RESPONSE`) for the fragment independently.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `render(controller('C::m'))` executes the controller as…"
     - [x] A. A sub-request through HttpKernel ✅

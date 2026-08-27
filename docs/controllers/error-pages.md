@@ -24,7 +24,30 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [The Response](response.md), [Architecture → Events](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Pour renvoyer une erreur HTTP, on **lance** une exception — on ne construit jamais soi-même une `Response` d'erreur.
+
+### Imagine dans la vraie vie
+Quand un visiteur demande quelqu'un qui n'est pas dans le bâtiment, le réceptionniste n'invente pas de réponse — il lève un drapeau (`throw`) et le bureau des erreurs du bâtiment (le kernel) émet l'avis officiel "introuvable" sur papier à en-tête (la page d'erreur avec le bon statut). Ton travail est de lever le bon drapeau ; rédiger l'avis formel, c'est le travail de quelqu'un d'autre.
+
+### Dans Symfony
+`createNotFoundException()` **construit** l'exception mais ne fait rien tant que tu ne la lances pas avec `throw` — l'oublier laisse simplement l'exécution continuer normalement, sans aucune erreur 404.
+
+### Exemple simple
+```php
+if (!$produit) {
+    throw $this->createNotFoundException('Produit introuvable.'); // le throw est obligatoire
+}
+```
+
+### Comment le mémoriser 🧠
+"Create ne lance rien" : `createNotFoundException()` **retourne** l'exception, il ne la lance jamais tout seul — c'est le piège favori de l'examen sur ce chapitre.
 
 ## Theory
 
@@ -281,6 +304,8 @@ lines later, not a clean 404.
     call `$event->setResponse(new JsonResponse([...], $e->getStatusCode()))`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How do you produce a 404 from a controller?"
     - [ ] A. `return new Response('', 404);`

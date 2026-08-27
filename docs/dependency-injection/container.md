@@ -29,7 +29,28 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Symfony Architecture](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le container fabrique tes objets et leur injecte leurs dépendances à ta place — tu décris *comment* construire un service, il fait le reste.
+
+### Imagine dans la vraie vie
+Le container est une cuisine de restaurant. Tu commandes un plat (tu demandes un service) ; la cuisine rassemble et assemble les ingrédients (ses dépendances) et le dresse — tu ne touches jamais aux casseroles (`new`) toi-même.
+
+### Dans Symfony
+Injecter `LoggerInterface` dans le constructeur d'un service suffit — tu n'écris jamais `new Logger(...)` toi-même ; le container sait déjà comment le construire et te le fournit tout prêt.
+
+### Exemple simple
+```php
+public function __construct(private LoggerInterface $logger) {} // le container fournit tout
+```
+
+### Comment le mémoriser 🧠
+Les services sont **privés et partagés par défaut** — "privé" veut dire que seul le container peut les injecter (pas de `$container->get()` direct depuis ton code applicatif), "partagé" veut dire qu'une seule instance est réutilisée partout dans la même requête.
 
 ## Theory
 
@@ -434,6 +455,8 @@ register value objects, entities, or DTOs — build those with `new`. When you n
     `ConfigCache` rebuilds it automatically when a tracked config file changes.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Why are Symfony services private by default?"
     - [ ] A. To make them read-only

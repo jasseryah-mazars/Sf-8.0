@@ -27,7 +27,28 @@
     **Est. time:** 14 min ·
     **Prerequisites:** [HTTP Redirects](http-redirects.md), [Architecture → Request lifecycle](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`forward()` fait exécuter un autre contrôleur en coulisses, sans jamais que le visiteur ne bouge ni que l'URL ne change.
+
+### Imagine dans la vraie vie
+Un guichetier de banque. Un redirect, c'est "ce n'est pas mon bureau — allez au guichet 4", tu bouges physiquement et tout le monde voit que tu fais la queue ailleurs (une nouvelle URL, un aller-retour 3xx). Un forward, c'est le guichetier qui va discrètement en coulisses demander à un collègue de préparer les papiers, puis te les rend au même guichet : tu n'as jamais bougé et l'enseigne au-dessus du guichet n'a jamais changé.
+
+### Dans Symfony
+`$this->forward('AutreController::action', ['id' => $id])` exécute un second contrôleur dans une sous-requête, sans jamais informer le navigateur — celui-ci ne voit qu'une seule requête, une seule URL.
+
+### Exemple simple
+```php
+return $this->forward(ApercuController::class.'::rapide', ['id' => $produit->getId()]);
+```
+
+### Comment le mémoriser 🧠
+Une sous-requête déclenchée par `forward()` a `isMainRequest() === false` — c'est le signal technique qu'on est "en coulisses", pas dans la requête principale du visiteur.
 
 ## Theory
 
@@ -233,6 +254,8 @@ controller output in a template.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does `forward()` do?"
     - [x] A. Runs another controller in a sub-request and returns its Response. ✅

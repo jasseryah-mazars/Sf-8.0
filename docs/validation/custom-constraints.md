@@ -24,9 +24,28 @@
     **Est. time:** 28 min ·
     **Prerequisites:** [Callbacks](callbacks.md), [Violations Builder](violations-builder.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une contrainte réutilisable, c'est deux classes séparées : une qui décrit la règle (`Constraint`), une qui l'applique (`ConstraintValidator`).
+
+### Imagine dans la vraie vie
+Quand les scanners standards ne détectent pas ta contrebande spécifique, l'aéroport commande un **scanner sur mesure** : la machine qui déclare ce qu'elle cherche (la `Constraint`) plus l'opérateur formé qui la lit et rédige le rapport (le `ConstraintValidator`). L'une décrit la règle, l'autre l'applique.
+
+### Dans Symfony
+Une contrainte `#[NumeroSirenValide]` réutilisable dans toute l'application (client, fournisseur, partenaire) évite de dupliquer la même logique de validation SIREN dans trois callbacks différents.
+
+### Exemple simple
+```php
+class NumeroSirenValide extends Constraint { public string $message = 'SIREN invalide.'; }
+```
+
+### Comment le mémoriser 🧠
+Par défaut, le nom du validateur est le nom de la contrainte **+ "Validator"** — et une règle au niveau classe doit surcharger `getTargets()` pour renvoyer `CLASS_CONSTRAINT`.
 
 When a rule is **reusable** across classes, promote it from a callback to a
 **custom constraint**. A constraint is *two* classes:
@@ -391,6 +410,8 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. By default, which validator is used for constraint `App\Validator\Foo`?"
     - [ ] A. `FooConstraintValidator`

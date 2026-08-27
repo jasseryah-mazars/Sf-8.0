@@ -28,7 +28,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Web Security Fundamentals](../php-web-security/web-security.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+HTTP ne se souvient de rien entre deux échanges — chaque requête est une lettre indépendante, sans mémoire de la précédente.
+
+### Imagine dans la vraie vie
+Tu écris à un service client par courrier : chaque lettre reçoit exactement une réponse, et l'entreprise ne se souvient pas de toi d'une lettre à l'autre — sauf si tu rappelles ton numéro de client à chaque fois (c'est le rôle des cookies/sessions). Charger une seule page web revient à envoyer des dizaines de lettres d'un coup : une pour la page, et une par image ou feuille de style.
+
+### Dans Symfony
+Chaque requête HTTP arrivant sur ton application déclenche un cycle complet et indépendant (front controller → kernel → contrôleur → réponse) — Symfony ne "se souvient" d'un visiteur entre deux requêtes que si tu utilises explicitement la session ou un cookie.
+
+### Exemple simple
+```
+Requête 1 : GET /panier → réponse : panier vide
+Requête 2 : GET /panier → réponse : panier vide (encore !) sauf si une session le mémorise
+```
+
+### Comment le mémoriser 🧠
+"HTTP a la mémoire d'un poisson rouge" : sans état (**stateless**) par défaut ; c'est toi qui ajoutes la mémoire via cookies/sessions.
 
 ## Theory
 
@@ -268,6 +290,8 @@ scope) instead of polling.
     (keep-alive / multiplexed) connection, so they skip those setup round-trips.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which component chooses whether a request is served over HTTP/2?"
     - [ ] A. `Symfony\Component\HttpFoundation\Request`

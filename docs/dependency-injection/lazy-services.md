@@ -32,6 +32,28 @@
     **Level:** Expert ·
     **Est. time:** 20 min ·
     **Prerequisites:** [Services Registration](registration.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un service paresseux est livré comme une "coquille vide" — le vrai travail de construction (connexion base de données, lecture de fichier) n'a lieu qu'à la première utilisation réelle.
+
+### Imagine dans la vraie vie
+Un service paresseux est une station sous-vide en veille dans un restaurant : le ticket (l'objet) est déjà sur le pass et tout le monde peut le pointer du doigt, mais la cuisson coûteuse (le constructeur) ne démarre que lorsqu'un serveur récupère réellement l'assiette (premier accès).
+
+### Dans Symfony
+Un service de connexion à une API tierce marqué `lazy: true` ne se connecte réellement que si le code appelle une de ses méthodes — s'il n'est jamais utilisé sur une requête donnée, aucune connexion n'est ouverte pour rien.
+
+### Exemple simple
+```php
+#[Autoconfigure(lazy: true)]
+class ConnexionExterne { public function __construct() { /* coûteux */ } }
+```
+
+### Comment le mémoriser 🧠
+Pour une classe concrète, PHP 8.4 crée un **ghost** (même instance, initialisée sur place) ; pour une interface, un **proxy** (objet séparé qui délègue) — deux mécanismes différents selon ce que tu déclares paresseux.
 
 ---
 
@@ -274,6 +296,8 @@ something that is itself instantiated.
     must compare behaviour, not instances.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does the container inject for a `lazy: true` concrete service in Symfony 8?"
     - [x] A. A native PHP 8.4 lazy ghost — the same instance, initialized on first use ✅

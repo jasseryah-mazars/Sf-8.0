@@ -25,7 +25,30 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Configuration](configuration.md) · [Authentication](authentication.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un firewall définit *comment* les requêtes d'une zone d'URL sont authentifiées — et exactement **un seul** est actif par requête.
+
+### Imagine dans la vraie vie
+Un firewall est le poste de sécurité à l'entrée d'un bâtiment. Chaque aile a son propre poste, mais tu passes exactement **un seul** poste en entrant — le premier dont tu franchis la zone.
+
+### Dans Symfony
+Le firewall `dev` doit être déclaré en **premier** dans `security.yaml`, sinon un firewall plus strict le capturerait avant qu'il n'ait sa chance.
+
+### Exemple simple
+```yaml
+firewalls:
+    dev: { pattern: ^/(_(profiler|wdt)|css|images|js)/, security: false }
+    main: { lazy: true, provider: app_user_provider }
+```
+
+### Comment le mémoriser 🧠
+`security: false` **compte quand même comme un match** — ce firewall doit toujours venir en premier, avant tout firewall qui exigerait une authentification.
 
 ## Theory
 
@@ -239,6 +262,8 @@ differs per path.
     security before any protecting firewall is considered.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How many firewalls are active for a given request?"
     - [ ] A. All that match

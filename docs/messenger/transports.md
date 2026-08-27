@@ -28,7 +28,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Middleware](middleware.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un transport est le service de livraison auquel tu confies un message — immédiat sur place, ou mis en file d'attente pour plus tard.
+
+### Imagine dans la vraie vie
+Un transport est un service de livraison précis auquel tu peux confier une lettre — le coursier interne (`sync://`, livré immédiatement, même bâtiment), un service postal partagé (`doctrine://`/`amqp://`/`redis://`, mis en file, livré plus tard par quelqu'un d'autre), ou une boîte aux lettres d'entraînement qui ne quitte jamais la pièce (`in-memory://`, pour les tests).
+
+### Dans Symfony
+Un message qui n'a **aucune** entrée de routage n'est pas une erreur — il est simplement traité **synchroniquement**, en place, exactement comme s'il était routé vers `sync://`.
+
+### Exemple simple
+```yaml
+routing:
+    'App\Message\EnvoyerEmailBienvenue': async
+```
+
+### Comment le mémoriser 🧠
+Les transports **tiers** (Doctrine, Redis, AMQP, Amazon SQS) sont **explicitement exclus de l'examen** — attends-toi à des questions sur les contrats Messenger eux-mêmes, pas sur l'exploitation d'un broker précis.
 
 ## Theory
 
@@ -210,6 +232,8 @@ gets the full middleware pipeline and handler discovery, just in-process.
     dispatching process — exactly as if it had been routed to `sync://`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which built-in transport handles a message immediately in the same process?"
     - [x] A. `sync://` ✅

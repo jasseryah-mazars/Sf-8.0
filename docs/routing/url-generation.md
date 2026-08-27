@@ -28,7 +28,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Configuration](configuration.md), [Defaults](defaults.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Générer une URL, c'est composer un numéro depuis les contacts de ton téléphone plutôt que de mémoriser les chiffres — tu appelles "Alice" (le nom de la route), pas son numéro brut.
+
+### Imagine dans la vraie vie
+Tu appelles "Alice" depuis tes contacts plutôt que de mémoriser son numéro — si elle change de numéro, tu le mets à jour une seule fois et tous tes futurs appels fonctionnent encore. Le type de référence, c'est combien du numéro tu composes : le poste interne (`ABSOLUTE_PATH`) ou le numéro complet avec indicatif pour appeler depuis l'étranger (`ABSOLUTE_URL`).
+
+### Dans Symfony
+Écrire `path('produit_show', ['id' => 5])` au lieu de `/produits/5` en dur signifie que si la route change de chemin demain, tous les liens générés se mettent à jour automatiquement.
+
+### Exemple simple
+```php
+$this->generateUrl('produit_show', ['id' => 5]); // jamais '/produits/5' en dur
+```
+
+### Comment le mémoriser 🧠
+Tout paramètre qui ne correspond à aucun placeholder de la route finit automatiquement en **query string** — comme un PIN de conférence qui voyage à côté du numéro composé, pas dedans.
 
 ## Theory
 
@@ -319,6 +340,8 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
     `RequestContext` has a real host/scheme outside a web request.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the default reference type of `generateUrl()`?"
     - [ ] A. `ABSOLUTE_URL`

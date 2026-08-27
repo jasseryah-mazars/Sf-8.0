@@ -25,7 +25,33 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [PHP API](php-api.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`self::` regarde toujours la classe où le code est écrit ; `static::` regarde la classe réellement utilisée au moment de l'exécution.
+
+### Imagine dans la vraie vie
+Un formulaire pré-rempli avec "signé par : [nom de l'auteur du modèle]" (`self::`) porte toujours la même signature, peu importe qui le remplit. Un formulaire avec "signé par : [nom de la personne qui remplit maintenant]" (`static::`) s'adapte à qui l'utilise réellement — même si ce formulaire a été copié depuis un modèle parent.
+
+### Dans Symfony
+La liaison statique tardive (`static::`) est ce qui permet à des méthodes "usine" définies dans une classe parente (comme certaines méthodes de service) de renvoyer correctement une instance de la sous-classe réelle, sans que le parent ait besoin de connaître ses futurs enfants.
+
+### Exemple simple
+```php
+class Animal {
+    public static function creer(): static { return new static(); }
+}
+class Chien extends Animal {}
+
+Chien::creer(); // instance de Chien, pas d'Animal — grâce à static::
+```
+
+### Comment le mémoriser 🧠
+`self` = **s**crit une fois pour toutes dans le code source. `static` = **s**'adapte à qui appelle **s**tatiquement, au moment présent.
 
 ## Theory
 
@@ -274,6 +300,8 @@ flowchart TD
     `Order` example above.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `new static()` vs `new self()` inside a parent factory method?"
     - [x] A. `static` respects the called subclass; `self` is fixed to the parent ✅

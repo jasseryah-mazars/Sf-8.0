@@ -26,8 +26,33 @@
 
     **Syllabus:** `HTTP Caching → Validation model` ·
     **Level:** Advanced → Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [Expiration](expiration.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La validation attache une empreinte à une réponse — le serveur peut répondre "rien n'a changé" (304, sans contenu) au lieu de renvoyer toute la page.
+
+### Imagine dans la vraie vie
+Tu gardes une photocopie d'un document et, avant de t'y fier, tu appelles le bureau en citant le numéro de version imprimé dessus : "j'ai la version v3 — toujours à jour ?". Si rien n'a changé, on te dit juste "oui, garde la tienne" au lieu de tout réenvoyer.
+
+### Dans Symfony
+`$response->isNotModified($request)` compare automatiquement l'ETag/Last-Modified de la requête avec celui que tu viens de calculer — s'ils correspondent, la réponse devient un 304 sans corps, économisant toute la bande passante du contenu.
+
+### Exemple simple
+```php
+$response->setEtag(md5($article->getContenu()));
+if ($response->isNotModified($request)) {
+    return $response; // 304, corps automatiquement vidé
+}
+```
+
+### Comment le mémoriser 🧠
+Quand les deux sont envoyés, **ETag l'emporte sur Last-Modified** — le numéro de version imprimé est plus fiable que la date "modifié le".
 
 ---
 
@@ -305,6 +330,8 @@ shell by expiration and revalidate the rest via [ESI](../appendices/out-of-sylla
     method body never runs.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does `Response::isNotModified()` do when it returns `true`?"
     - [ ] A. Nothing to the response; just returns a bool

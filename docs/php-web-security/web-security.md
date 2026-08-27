@@ -26,7 +26,33 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Exceptions](exceptions.md)
 
+!!! quote "🎯 Examen Symfony 8 : PARTIEL"
+    Ce chapitre n'est **pas** un sous-sujet nommé individuellement dans la
+    liste officielle des 9 items PHP (voir [PHP & Web Security](index.md)),
+    mais les mécanismes qu'il introduit (CSRF, mots de passe) recoupent des
+    sujets **directement examinés** dans le domaine Security — voir
+    [CSRF](../forms/csrf.md) et [Password Hashers](../security/password-hashers.md).
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque protection Symfony existe pour contrer une attaque précise et nommée — comprendre l'attaque rend la défense évidente.
+
+### Imagine dans la vraie vie
+Sécuriser un site web ressemble à sécuriser une maison : on ne répète jamais mot pour mot ce qu'un inconnu crie par la boîte aux lettres (XSS → échappement Twig), on vérifie l'identité de qui prétend agir en ton nom (CSRF → jeton + SameSite), et on installe des serrures inviolables plutôt que de faire confiance à qui secoue la porte (injection SQL → requêtes préparées).
+
+### Dans Symfony
+Twig échappe automatiquement toute variable affichée (protection XSS par défaut), le composant Form ajoute un jeton CSRF caché à chaque formulaire, et le Validator + l'ORM utilisent systématiquement des requêtes préparées — la plupart des défenses sont actives **sans configuration supplémentaire**.
+
+### Exemple simple
+```twig
+{{ commentaire }} {# échappé automatiquement par Twig : pas de <script> exécuté #}
+```
+
+### Comment le mémoriser 🧠
+Associe chaque sigle à son remède en une paire : **XSS → échappement**, **CSRF → jeton**, **SQLi → requêtes préparées**, **mots de passe → `password_hash()`** (jamais en clair, jamais un simple hash MD5).
 
 ## Theory
 
@@ -254,6 +280,8 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Twig's default protection against XSS is…"
     - [x] A. Context auto-escaping of variables ✅

@@ -27,7 +27,30 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Flex](flex.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un projet Symfony range tout à un endroit prévisible — chaque type de fichier a un tiroir dédié, comme dans un atelier bien organisé.
+
+### Imagine dans la vraie vie
+Dans un atelier bien rangé, chaque outil a son tiroir étiqueté : n'importe quel ouvrier — ou tout nouvel outil livré — sait exactement où chercher sans demander. `public/` est le comptoir que voient les clients, `src/` est l'établi de travail, `var/` est le bac de sciure qu'on balaie régulièrement, `config/` est le classeur d'instructions.
+
+### Dans Symfony
+Une recette Flex sait automatiquement où déposer un nouveau fichier de config (`config/packages/`) précisément parce que la structure est standardisée partout — c'est ce qui rend l'automatisation possible.
+
+### Exemple simple
+```
+public/index.php   ← seul point d'entrée web
+src/Controller/    ← tes contrôleurs
+config/bundles.php ← bundles activés
+```
+
+### Comment le mémoriser 🧠
+`public/` est **le seul** dossier exposé au web — tout le reste (`src/`, `config/`, `var/`) est invisible depuis l'extérieur, même si le serveur les lit en coulisses.
 
 ## Theory
 
@@ -267,6 +290,8 @@ code.
     so the class only needs to `use` the trait.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which directory is the web root?"
     - [x] A. `public/` ✅

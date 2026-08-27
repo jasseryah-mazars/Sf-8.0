@@ -26,9 +26,28 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [Defaults](defaults.md), [Special attributes](special-attributes.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony ne devine **jamais** ta langue à partir du navigateur par défaut — il faut soit une route localisée, soit activer explicitement la détection.
+
+### Imagine dans la vraie vie
+Un musée où le même exposant a deux entrées signalées dans des langues différentes : "/about" et "/a-propos" mènent à la même salle, mais la porte par laquelle tu es entré fixe la langue de toutes les étiquettes, de l'audioguide et du reçu de la boutique pour le reste de ta visite. L'accueil ne devine *jamais* ta langue depuis ton passeport — sauf si tu demandes explicitement au personnel de lire ta préférence.
+
+### Dans Symfony
+Une route déclarée avec `path: { fr: '/a-propos', en: '/about' }` fixe automatiquement `_locale` selon la porte d'entrée choisie par le visiteur — sans jamais consulter l'en-tête `Accept-Language`, sauf activation explicite.
+
+### Exemple simple
+```php
+#[Route(path: ['fr' => '/a-propos', 'en' => '/about'], name: 'a_propos')]
+```
+
+### Comment le mémoriser 🧠
+"La porte choisie fixe la langue" — pas le passeport dans ta poche. `Accept-Language` reste **opt-in**, jamais activé par défaut.
 
 Internationalized apps often expose the **same action under different paths per
 language**: `/about` (en) and `/a-propos` (fr). Symfony supports this natively:
@@ -279,6 +298,8 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Does Symfony guess the locale from `Accept-Language` by default?"
     - [ ] A. Yes, always

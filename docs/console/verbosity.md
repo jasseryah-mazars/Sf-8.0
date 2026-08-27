@@ -27,6 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Input & output](input-output.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La verbosité contrôle **combien** une commande affiche, sans jamais changer **ce qu'elle fait** — c'est un réglage d'affichage, pas de logique.
+
+### Imagine dans la vraie vie
+La verbosité est comme le niveau de zoom sur une carte numérique. Zoomer ou dézoomer ne change jamais le territoire lui-même — les routes et rivières restent les mêmes, comme la logique d'une commande reste inchangée — ça ne fait que contrôler le niveau de détail affiché.
+
+### Dans Symfony
+`$output->writeln('Détail interne', OutputInterface::VERBOSITY_DEBUG)` n'affiche cette ligne que si l'utilisateur a lancé la commande avec `-vvv` — invisible en usage normal, utile pour le débogage fin.
+
+### Exemple simple
+```php
+if ($output->isVerbose()) { $io->writeln('Traitement du fichier ' . $fichier); }
+```
+
+### Comment le mémoriser 🧠
+La verbosité vit sur la **sortie** (`OutputInterface`), jamais sur l'entrée — logique, puisque c'est le réglage de "combien on affiche", pas de "quoi on lit".
+
 ---
 
 ## Theory
@@ -233,6 +256,8 @@ formats. In `-vvv` (debug), Symfony also shows full exception traces on errors.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which flag corresponds to `VERBOSITY_VERY_VERBOSE`?"
     - [ ] A. `-v`

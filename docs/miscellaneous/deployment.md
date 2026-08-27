@@ -27,6 +27,31 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Configuration](configuration.md), [Runtime](runtime.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+En production, Symfony charge le container **déjà compilé** tel quel — il ne redétecte jamais tout seul un changement de config, il faut vider et réchauffer le cache à chaque déploiement.
+
+### Imagine dans la vraie vie
+Déployer en production, c'est la mise en place d'un restaurant avant le service. Pendant la fenêtre calme de préparation, la cuisine pré-découpe et pré-portionne tout (réchauffage du cache) pour qu'aucune préparation ne vole de temps pendant le coup de feu du dîner.
+
+### Dans Symfony
+Modifier `services.yaml` puis déployer sans lancer `cache:clear --env=prod` fait tourner l'application avec l'**ancienne** version compilée du container — le changement n'a strictement aucun effet tant que le cache n'est pas régénéré.
+
+### Exemple simple
+```console
+$ composer install --no-dev --optimize-autoloader
+$ php bin/console cache:clear --env=prod
+$ php bin/console cache:warmup --env=prod
+```
+
+### Comment le mémoriser 🧠
+Si tu changes une "recette" (la config) mais sautes la "re-préparation" (le réchauffage du cache), la cuisine continue de servir l'ancien plat — c'est pour ça qu'il faut toujours vider **et** réchauffer à chaque déploiement.
+
 ---
 
 ## Theory
@@ -205,6 +230,8 @@ image build so the running container does zero setup.
     must be (re)built explicitly on deploy.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which flag excludes dev dependencies during deploy?"
     - [x] A. `--no-dev` ✅

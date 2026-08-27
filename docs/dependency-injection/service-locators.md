@@ -29,6 +29,32 @@
     **Est. time:** 35 min ·
     **Prerequisites:** [Tags](tags.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un service locator est une petite boîte contenant un ensemble fixe de services, construits **paresseusement** seulement quand tu les demandes.
+
+### Imagine dans la vraie vie
+Un service locator est le tableau des suggestions du jour : une liste courte et fixe de plats que la cuisine *peut* faire sur demande. Rien n'est cuisiné tant que tu ne pointes pas vers un plat (`get('stripe')`) — commande le spécial Stripe et seule cette poêle s'allume ; celle de PayPal reste froide.
+
+### Dans Symfony
+Un service qui doit choisir parmi plusieurs passerelles de paiement selon la config n'a pas besoin d'injecter les 5 passerelles à chaque fois — un service locator n'en construit qu'une seule, celle réellement utilisée.
+
+### Exemple simple
+```php
+public function __construct(
+    #[AutowireLocator(['stripe' => StripeGateway::class, 'paypal' => PaypalGateway::class])]
+    private ServiceLocator $passerelles,
+) {}
+```
+
+### Comment le mémoriser 🧠
+C'est **l'alternative sanctionnée** à l'injection du container entier — jamais injecter `ContainerInterface` directement dans un service applicatif, c'est un anti-pattern classique repéré par l'examen.
+
 ---
 
 ## Theory
@@ -276,6 +302,8 @@ exactly one dependency, inject it directly — a locator adds needless indirecti
     only when needed — Twig is never built unless used.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How is a `ServiceLocator` different from injecting the container?"
     - [x] A. It exposes only a declared, whitelisted set of services ✅

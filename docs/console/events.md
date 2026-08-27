@@ -26,7 +26,30 @@
     **Syllabus:** `Console → Events` ·
     **Level:** Advanced ·
     **Est. time:** 25 min ·
+
     **Prerequisites:** [Custom commands](custom-commands.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une commande exécutée via le framework déclenche quatre événements dans un ordre fixe — et `TERMINATE` s'exécute **toujours**, même en cas d'erreur.
+
+### Imagine dans la vraie vie
+Un vol commercial diffuse la même séquence fixe d'annonces. L'embarquement est annoncé avant que l'avion ne bouge (COMMAND). Si un incident moteur survient, l'équipage note un rapport — mais seulement si quelque chose a vraiment mal tourné (ERROR). L'annonce "nous avons atteint la porte, merci d'avoir volé avec nous" passe toujours, que le vol ait été fluide ou détourné (TERMINATE).
+
+### Dans Symfony
+Un listener sur `ConsoleEvents::TERMINATE` peut forcer un code de sortie différent (par exemple, transformer un avertissement non bloquant en échec explicite pour le pipeline CI) — c'est la toute dernière chance de changer le résultat.
+
+### Exemple simple
+```php
+#[AsEventListener(event: ConsoleEvents::TERMINATE)]
+public function onTerminate(ConsoleTerminateEvent $event): void { $event->setExitCode(1); }
+```
+
+### Comment le mémoriser 🧠
+L'ordre est **COMMAND → (ERROR seulement si quelque chose lève une exception) → TERMINATE** — `TERMINATE` s'exécute toujours, c'est ta dernière chance de changer le code de sortie.
 
 ---
 
@@ -278,6 +301,8 @@ use the `SIGNAL` event for app-wide concerns.
     `handleSignal()`, then break the loop in `execute()` (see `WorkerCommand`).
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the correct dispatch order for a successful command?"
     - [x] A. `COMMAND` then `TERMINATE` ✅

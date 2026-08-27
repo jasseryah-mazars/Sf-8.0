@@ -25,9 +25,32 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Object Validation](object-validation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrainte est un scanner spécialisé — `NotBlank` refuse une chaîne vide, `NotNull` accepte une chaîne vide mais refuse `null`.
+
+### Imagine dans la vraie vie
+Chaque contrainte est **un scanner** sur la ligne de contrôle : le rayon X vérifie la forme (`Length`), le renifleur détecte les liquides (`Email`/`Regex`). `NotBlank` signifie "le sac doit contenir quelque chose" ; `NotNull` signifie seulement "un sac doit être sur le tapis" — un sac vide compte encore.
+
+### Dans Symfony
+```php
+#[Assert\NotBlank]   // refuse '', null, et les tableaux vides
+#[Assert\NotNull]     // accepte '' mais refuse null
+```
+
+### Exemple simple
+```php
+#[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+public string $nom = '';
+```
+
+### Comment le mémoriser 🧠
+"Blank refuse le vide, Null refuse seulement l'absence" — `NotBlank` est presque toujours ce que tu veux pour un champ texte utilisateur.
 
 All built-in constraints live in `Symfony\Component\Validator\Constraints\` and
 are imported as `use Symfony\Component\Validator\Constraints as Assert;`. Each is
@@ -378,6 +401,8 @@ domain-specific, or a [callback](callbacks.md) for one-off cross-field logic.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which is true about `NotBlank` and `NotNull`?"
     - [ ] A. They are aliases

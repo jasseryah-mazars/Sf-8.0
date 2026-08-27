@@ -24,7 +24,34 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Namespaces](namespaces.md)
 
+!!! quote "🎯 Examen Symfony 8 : NON"
+    Ce chapitre n'est **pas** sur la liste officielle des 9 sous-sujets PHP du
+    syllabus (voir [PHP & Web Security](index.md)) — il est conservé comme
+    contenu d'enrichissement. Utile pour comprendre les prérequis d'un
+    déploiement Symfony, mais non testé en tant que tel à l'examen.
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+PHP tout nu ne sait presque rien faire ; les extensions sont les outils qu'on branche dessus pour lui donner des capacités précises.
+
+### Imagine dans la vraie vie
+Un atelier livré avec juste un établi ne permet pas grand-chose : pour percer, il faut une perceuse ; pour scier, une scie. Ces outils, ce sont les extensions. La fiche de commande du chantier (`composer.json` et ses `ext-*`) liste les outils obligatoires avant même de démarrer — pour ne pas découvrir en plein travail que la perceuse manque.
+
+### Dans Symfony
+Symfony déclare explicitement dans `composer.json` les extensions dont il a besoin (`ext-mbstring`, `ext-intl`...) : Composer refuse l'installation si l'une d'elles manque, plutôt que de laisser planter l'application plus tard au runtime.
+
+### Exemple simple
+```php
+if (!extension_loaded('intl')) {
+    throw new \RuntimeException('L\'extension intl est requise.');
+}
+```
+
+### Comment le mémoriser 🧠
+`strlen()` compte des **octets** (aveugle aux accents), `mb_strlen()` compte des **caractères** (avec un accent = un caractère). "mb" = **m**ulti-**b**yte-conscient, l'ordinaire ne l'est pas.
 
 ## Theory
 
@@ -195,6 +222,8 @@ flowchart LR
     `mb_strlen('café', 'UTF-8')` returns **4** (character count).
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which reliably reports whether an extension is loaded?"
     - [x] A. `extension_loaded('intl')` ✅

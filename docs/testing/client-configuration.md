@@ -26,8 +26,30 @@
 
     **Syllabus:** `Automated Tests → Client configuration` ·
     **Level:** Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [The Client](client.md), [Functional Tests](functional-tests.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`createClient($options, $server)` fixe une bonne fois pour toutes des paramètres qui s'appliqueront ensuite à **chaque** requête du test — pas besoin de les répéter à chaque appel.
+
+### Imagine dans la vraie vie
+Briefer un coursier avant une tournée de livraisons. `createClient()` est le moment où tu donnes les instructions permanentes que chaque colis hérite : toujours prendre l'autoroute (`HTTPS`), toujours se présenter à ce dépôt (`HTTP_HOST`).
+
+### Dans Symfony
+Simuler que chaque requête du test vient d'un client HTTPS avec un header d'authentification précis évite de répéter ce header dans chaque appel `$client->request()` du test.
+
+### Exemple simple
+```php
+$client = static::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
+```
+
+### Comment le mémoriser 🧠
+`$server` est le **deuxième** argument de `createClient()` — pas une liste de chaînes de header ; les headers de requête deviennent des paramètres serveur préfixés `HTTP_`.
 
 ---
 
@@ -327,6 +349,8 @@ on.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `createClient()`'s second argument is…"
     - [x] A. An array of default server parameters ✅

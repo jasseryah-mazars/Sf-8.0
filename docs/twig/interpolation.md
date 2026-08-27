@@ -26,9 +26,31 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+`#{...}` insère une variable dans une chaîne — mais ça ne fonctionne que dans des guillemets **doubles**, jamais des guillemets simples.
+
+### Imagine dans la vraie vie
+Assembler une lettre type. `#{...}` est le champ de fusion — mais la fusion ne se déclenche que sur le papier à en-tête officiel (les chaînes en guillemets doubles) ; tape-le sur un brouillon (guillemets simples) et le champ s'imprime tel quel, comme du texte littéral.
+
+### Dans Symfony
+```twig
+"Bonjour #{nom}"   {# fusion : affiche "Bonjour Alice" #}
+'Bonjour #{nom}'   {# littéral : affiche "Bonjour #{nom}" tel quel #}
+```
+
+### Exemple simple
+```twig
+{% set message = "Total : #{prix} €" %}
+```
+
+### Comment le mémoriser 🧠
+`~` colle des morceaux **en texte** (comme des feuilles agrafées bout à bout) ; `+` additionne des **nombres**. Le calcul (`+`) se termine toujours avant l'agrafage (`~`) — précédence plus basse pour `~`.
 
 Three ways to build a string from parts:
 
@@ -180,6 +202,8 @@ placeholders (translation strings use `%name%` placeholders — see
     **3.** `{{ "%.2f €"|format(amount) }}`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Where does `#{...}` interpolation work?"
     - [x] A. Only inside double-quoted strings ✅

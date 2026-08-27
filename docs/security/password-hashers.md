@@ -24,7 +24,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Users](users.md) · [Configuration](configuration.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un mot de passe n'est jamais stocké en clair — seulement une empreinte lente et salée, comparée sans jamais être inversée.
+
+### Imagine dans la vraie vie
+Un hacheur de mot de passe est une broyeuse à sens unique. Tu ne gardes jamais le papier original — seulement son motif broyé unique. Quand quelqu'un prétend connaître le mot de passe, tu broies sa tentative de la même façon et compares les motifs (`verify()`).
+
+### Dans Symfony
+`auto` (actuellement bcrypt) choisit toujours le meilleur algorithme disponible — tu n'as jamais besoin de choisir manuellement entre bcrypt et sodium sauf besoin spécifique.
+
+### Exemple simple
+```php
+$hash = $hasher->hashPassword($utilisateur, $motDePasseClair);
+```
+
+### Comment le mémoriser 🧠
+Le rehash transparent nécessite **les deux** : `migrate_from` **et** un `PasswordUpgraderInterface` — l'un sans l'autre ne fait rien.
 
 ## Theory
 
@@ -255,6 +276,8 @@ verification usually lives in a `token_handler`, not the password hasher.
     provider's `upgradePassword()` to persist it.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which algorithm is the recommended default?"
     - [x] A. `auto` ✅

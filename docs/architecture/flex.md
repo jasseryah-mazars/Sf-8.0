@@ -27,7 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Code Organization](code-organization.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Flex transforme `composer require` en une fonctionnalité déjà configurée, au lieu de te laisser tout brancher toi-même à la main.
+
+### Imagine dans la vraie vie
+C'est la notice de montage illustrée d'un meuble en kit : le colis livré (le paquet Composer) contient les planches, mais la notice (la recette Flex) te dit exactement où va chaque vis — créer les fichiers de config, enregistrer le bundle, ajouter les variables `.env`. `symfony.lock` est le reçu qui note quelle version de notice tu as suivie.
+
+### Dans Symfony
+Un simple `composer require orm` déclenche Flex, qui télécharge la bibliothèque **et** applique automatiquement sa configuration — sans ça, il faudrait créer chaque fichier de config à la main.
+
+### Exemple simple
+```console
+$ composer require orm
+# Flex ajoute automatiquement config/packages/doctrine.yaml, met à jour .env, etc.
+```
+
+### Comment le mémoriser 🧠
+Flex agit **seulement au moment de `composer require`** — jamais pendant qu'une requête HTTP est traitée. C'est un ouvrier de chantier, pas un employé du magasin ouvert au public.
 
 ## Theory
 
@@ -172,7 +194,11 @@ reads this file at boot, so no manual bundle wiring is needed.
 
 !!! note "Source reference"
     `symfony/flex` Composer plugin — [github.com/symfony/flex](https://github.com/symfony/flex);
-    recipes — [github.com/symfony/recipes](https://github.com/symfony/recipes).
+    recipes — [github.com/symfony/recipes](https://github.com/symfony/recipes). The
+    kernel method Flex-managed bundles feed —
+    `Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait::registerBundles()` —
+    lives in
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php).
 
 ### Compilation vs runtime
 
@@ -274,6 +300,8 @@ You would only avoid it in a non-Symfony project consuming components standalone
     reproducible, and Flex can detect/rollback recipe changes consistently.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is Symfony Flex?"
     - [x] A. A Composer plugin that applies recipes and resolves aliases ✅

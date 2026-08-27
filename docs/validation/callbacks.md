@@ -25,9 +25,34 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Scopes](scopes.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Un callback exécute ta propre méthode pendant la validation — le moyen le plus rapide de vérifier une règle qui croise plusieurs champs.
+
+### Imagine dans la vraie vie
+Un callback est le **superviseur qui inspecte tout le sac d'un coup**, repérant des combinaisons que les scanners spécialisés manquent — un couteau **et** une carte d'embarquement qui ne correspond pas. Il n'annonce pas un verdict ; il écrit l'incident dans le même journal que tout le monde utilise.
+
+### Dans Symfony
+Vérifier que `dateFin` est bien après `dateDebut` — une règle qui compare deux champs — est le cas d'usage classique d'un `#[Assert\Callback]`, impossible à exprimer avec une seule contrainte simple.
+
+### Exemple simple
+```php
+#[Assert\Callback]
+public function validate(ExecutionContextInterface $context): void
+{
+    if ($this->dateFin < $this->dateDebut) {
+        $context->buildViolation('La date de fin doit être après le début.')->addViolation();
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+On ajoute des erreurs via `$context->buildViolation()` — **jamais** en retournant une valeur ou en lançant une exception.
 
 A **callback** is the quickest way to run arbitrary validation logic that touches
 several properties of one object, without writing a reusable constraint. You mark
@@ -291,6 +316,8 @@ without gating it behind a group/sequence.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. The instance-method callback signature is:"
     - [ ] A. `(mixed $value): bool`

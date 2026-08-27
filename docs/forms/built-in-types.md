@@ -26,7 +26,30 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Form types](types.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit une bibliothèque de champs prêts à l'emploi — pas besoin de fabriquer un champ "liste déroulante" ou "case à cocher" à la main.
+
+### Imagine dans la vraie vie
+Les types intégrés sont le mur des attaches d'un magasin de bricolage — vis, boulons déjà calibrés, donc tu prends la bonne pièce plutôt que d'en usiner une toi-même. Commander au restaurant montre comment `ChoiceType` choisit son widget : peux-tu prendre plusieurs plats (`multiple`) ? les options sont-elles affichées ouvertement ou cachées derrière un menu (`expanded`) ?
+
+### Dans Symfony
+`ChoiceType` avec `expanded: true, multiple: true` devient automatiquement une liste de cases à cocher ; avec les deux à `false`, c'est un simple menu déroulant.
+
+### Exemple simple
+```php
+$builder->add('couleurs', ChoiceType::class, [
+    'choices' => ['Rouge' => 'r', 'Bleu' => 'b'], 'expanded' => true, 'multiple' => true,
+]);
+```
+
+### Comment le mémoriser 🧠
+`expanded` × `multiple` = 4 combinaisons, 4 widgets : menu déroulant, boutons radio, cases à cocher, ou menu multi-sélection.
 
 ## Theory
 
@@ -310,6 +333,8 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
     association in sync.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which options make `ChoiceType` render checkboxes?"
     - [x] A. `expanded => true, multiple => true` ✅

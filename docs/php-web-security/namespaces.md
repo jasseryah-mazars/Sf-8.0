@@ -27,7 +27,34 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [OOP](oop.md)
 
+!!! quote "🎯 Examen Symfony 8 : NON"
+    Ce chapitre n'est **pas** sur la liste officielle des 9 sous-sujets PHP du
+    syllabus (voir [PHP & Web Security](index.md)) — il est conservé comme
+    contenu d'enrichissement/prérequis. Il ne sera pas noté comme tel à
+    l'examen, mais comprendre l'autoloading aide à lire tout code Symfony.
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un namespace, c'est une adresse postale complète pour une classe — elle évite que deux classes portant le même nom se marchent dessus.
+
+### Imagine dans la vraie vie
+Deux personnes s'appellent "Jean Dupont" dans la même ville : on les distingue par leur rue et leur numéro. `App\Service\Mailer` et `Vendor\Lib\Mailer` sont deux "Jean Dupont" différents — leur adresse complète (le namespace) lève toute ambiguïté, et le facteur (l'autoloader) sait dans quel casier chercher.
+
+### Dans Symfony
+Composer utilise PSR-4 pour faire correspondre `App\` au dossier `src/` : quand Symfony a besoin de `App\Controller\HomeController`, l'autoloader sait immédiatement dans quel fichier chercher, sans qu'aucun `require` manuel ne soit écrit.
+
+### Exemple simple
+```php
+namespace App\Service;
+
+class Mailer {} // adresse complète : App\Service\Mailer
+```
+
+### Comment le mémoriser 🧠
+Une fonction non qualifiée sans équivalent local **retombe** dans l'espace global (comme un appel à une hotline nationale faute de service local) — mais un **nom de classe**, lui, ne retombe jamais : il doit toujours porter son adresse complète.
 
 ## Theory
 
@@ -193,6 +220,8 @@ builds a static classmap so no filesystem stat per class is needed.
     `\` with `/`, append `.php`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Inside `namespace App;`, an unqualified call `count($x)` resolves to…"
     - [x] A. `App\count` if defined, else global `\count` ✅

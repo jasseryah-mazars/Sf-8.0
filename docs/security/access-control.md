@@ -24,7 +24,30 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Roles](roles.md) · [Firewalls](firewalls.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`access_control` est une liste ordonnée de règles basées sur l'URL — seule la **première** règle qui correspond s'applique, jamais "la plus précise".
+
+### Imagine dans la vraie vie
+`access_control` est la liste de règles affichée à l'entrée : "réservé au personnel au-delà de ce point", "visiteurs, inscrivez-vous", "tout le monde bienvenu dans le hall". Le garde lit de haut en bas et applique la **première** ligne qui correspond.
+
+### Dans Symfony
+Une règle `{ path: ^/admin, roles: ROLE_ADMIN }` placée **après** une règle générique `{ path: ^/, roles: PUBLIC_ACCESS }` ne s'appliquerait jamais.
+
+### Exemple simple
+```yaml
+access_control:
+    - { path: ^/admin, roles: ROLE_ADMIN }  # spécifique en premier
+    - { path: ^/, roles: PUBLIC_ACCESS }    # général en dernier
+```
+
+### Comment le mémoriser 🧠
+Range toujours du **spécifique vers le général** — et utilise `PUBLIC_ACCESS`, jamais l'ancien `IS_AUTHENTICATED_ANONYMOUSLY` supprimé.
 
 ## Theory
 
@@ -253,6 +276,8 @@ use `#[IsGranted]` + a [voter](voters.md) — `access_control` has no subject.
     evaluated — admin becomes public.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How many `access_control` rules apply to a request?"
     - [ ] A. All that match

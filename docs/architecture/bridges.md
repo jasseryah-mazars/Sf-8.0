@@ -27,7 +27,26 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [Components](components.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un bridge est un adaptateur qui fait parler entre eux un composant Symfony et une bibliothèque tierce précise — sans forcer le composant lui-même à dépendre de cette bibliothèque.
+
+### Imagine dans la vraie vie
+Un adaptateur de voyage électrique : ton chargeur (le composant Symfony) est conçu pour un standard de prise, la prise murale étrangère (une bibliothèque tierce précise) en utilise un autre — l'adaptateur existe uniquement pour faire correspondre les deux formes. Ce n'est ni le chargeur ni la prise ; tu l'achètes séparément justement pour que le chargeur reste universel.
+
+### Dans Symfony
+Le composant PropertyInfo reste indépendant de PHPStan, mais un bridge dédié permet de l'utiliser avec cet outil précis, sans forcer tous les utilisateurs de PropertyInfo à installer PHPStan.
+
+### Exemple simple
+Un bridge vit dans `src/Symfony/Bridge/` — par exemple, un bridge PSR-7 convertit entre les objets `Request`/`Response` de Symfony et les interfaces PSR-7 attendues par une bibliothèque tierce.
+
+### Comment le mémoriser 🧠
+L'adaptateur seul ne branche rien : il faut encore brancher l'ensemble dans le mur (activer le bundle qui l'intègre) avant que le courant ne passe.
 
 ## Theory
 
@@ -167,6 +186,8 @@ building your **own** integration package or debugging why a class from a bridge
     so it requires it.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is a Symfony bridge?"
     - [x] A. An integration layer between a component and a specific third-party library ✅

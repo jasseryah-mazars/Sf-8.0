@@ -26,6 +26,31 @@
     **Level:** Advanced → Expert ·
     **Est. time:** 30 min ·
     **Prerequisites:** [Authentication](authentication.md) ·
+
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`security.yaml` est le plan directeur unique qui décrit toute la sécurité de l'application — d'où viennent les utilisateurs, comment ils se connectent, ce qu'ils peuvent faire.
+
+### Imagine dans la vraie vie
+`security.yaml` est le plan directeur du bâtiment. Un seul document raccorde le bureau des dossiers (`providers`), chaque poste de sécurité (`firewalls`), les règles affichées sur les portes (`access_control`), la broyeuse (`password_hashers`) et les niveaux d'habilitation (`role_hierarchy`).
+
+### Dans Symfony
+Toute la config de sécurité d'une application — quels utilisateurs existent, comment ils se connectent, quelles URL sont protégées — vit dans ce **seul** fichier, jamais éparpillée ailleurs.
+
+### Exemple simple
+```yaml
+security:
+    providers: { app_user_provider: { entity: { class: App\Entity\User } } }
+    firewalls: { main: { lazy: true, provider: app_user_provider } }
+```
+
+### Comment le mémoriser 🧠
+Symfony 8 a **définitivement supprimé** `enable_authenticator_manager` — le système authenticator est désormais le seul et unique système, il n'y a plus de choix à faire.
     [Dependency Injection](../dependency-injection/index.md)
 
 ---
@@ -253,6 +278,8 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
     registered in the `FirewallMap`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. In Symfony 8, `enable_authenticator_manager` is…"
     - [ ] A. Required and set to `true`

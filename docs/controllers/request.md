@@ -28,7 +28,32 @@
     **Est. time:** 14 min ·
     **Prerequisites:** [HTTP → Request](../http/request.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Dans un contrôleur, la `Request` range chaque morceau de la requête dans un tiroir étiqueté — il suffit d'ouvrir le bon tiroir.
+
+### Imagine dans la vraie vie
+Un dossier d'accueil visiteur avec des tiroirs étiquetés : `query` contient ce qui a été crié depuis la porte (le `?...` de l'URL), `request` contient le formulaire que le visiteur a réellement rempli et posté (le corps POST), `attributes` contient les post-it que le bureau lui-même a collés dessus (les paramètres de route trouvés par le routeur). Ouvrir le mauvais tiroir donne un tiroir vide.
+
+### Dans Symfony
+`$request->attributes->get('id')` récupère le `{id}` capturé par la route — chercher ce même `id` dans `$request->query` renverrait `null`, même si la route a bien matché.
+
+### Exemple simple
+```php
+#[Route('/produits/{id}')]
+public function show(Request $request): Response
+{
+    $id = $request->attributes->get('id'); // depuis la route, pas depuis ?id=
+}
+```
+
+### Comment le mémoriser 🧠
+Type-hinte toujours `Request` directement dans l'action — jamais l'autowirer dans le constructeur d'un service, où il faut `RequestStack` à la place.
 
 ## Theory
 
@@ -273,6 +298,8 @@ returns a scalar or `null`, never an array.)
     The nullsafe operator handles the CLI/no-request context.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which resolver fills a `Request` type-hinted argument?"
     - [x] A. `RequestValueResolver` ✅

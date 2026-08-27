@@ -25,9 +25,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Creating forms](creation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque champ de formulaire est un "type", et les types héritent les uns des autres jusqu'au type racine `FormType` — comme des modèles de formulaires qui héritent d'un modèle maître.
+
+### Imagine dans la vraie vie
+Les types sont des **modèles de formulaires standardisés qui héritent de modèles maîtres**. Un formulaire spécialisé (un champ numéro de TVA) part d'un modèle générique de champ texte et y ajoute quelques règles supplémentaires ; ce modèle s'appuie à son tour sur la mise en page de base commune à tout le bureau (`FormType`).
+
+### Dans Symfony
+`EmailType extends TextType` : un champ email hérite de tout le comportement d'un champ texte, plus une validation de format email en prime — sans dupliquer aucun code.
+
+### Exemple simple
+```php
+public function getParent(): string { return TextType::class; } // FQCN, jamais un nom raccourci
+```
+
+### Comment le mémoriser 🧠
+`getParent()` retourne toujours une **chaîne de classe complète (FQCN)** — il n'existe **pas** de `getName()` en Symfony 8 ; l'identifiant du type, c'est son FQCN lui-même.
 
 Every field *is* a form, and every form is an instance of some **type**. Types
 form an inheritance chain: your custom type declares a **parent**, which declares
@@ -297,6 +316,8 @@ For a one-off, just configure options at `->add()`.
     options drive the view, not the class.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What does `getParent()` return?"
     - [ ] A. A `FormBuilderInterface`

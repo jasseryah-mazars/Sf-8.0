@@ -24,9 +24,32 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [Custom Constraints](custom-constraints.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Le constructeur de violations n'enregistre **rien** tant que tu n'appelles pas explicitement `addViolation()` à la fin.
+
+### Imagine dans la vraie vie
+Le constructeur de violations est le **formulaire de déclaration d'incident**. L'agent remplit les champs — quel objet, la valeur fautive, un code de référence — mais rien n'est enregistré tant qu'il n'appuie pas sur "soumettre" (`addViolation()`).
+
+### Dans Symfony
+```php
+$context->buildViolation('Le %champ% ne peut pas être négatif.')
+    ->setParameter('%champ%', 'stock')
+    ->addViolation(); // RIEN n'est enregistré avant cet appel
+```
+
+### Exemple simple
+```php
+$context->buildViolation('Erreur.')->atPath('email')->addViolation();
+```
+
+### Comment le mémoriser 🧠
+Oublier `->addViolation()` à la fin de la chaîne fait échouer silencieusement ta validation personnalisée — le builder reste "en brouillon" sans jamais être soumis.
 
 Validation produces **violations**. Inside a validator or callback you create
 them through the `Symfony\Component\Validator\Context\ExecutionContextInterface`;
@@ -276,6 +299,8 @@ only when you render errors yourself.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. When is a built violation actually recorded?"
     - [ ] A. Immediately on `buildViolation()`

@@ -27,6 +27,29 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Service Registration](registration.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La configuration sémantique est le formulaire de commande d'un bundle, avec un employé qui valide chaque champ avant de le transformer en services réels.
+
+### Imagine dans la vraie vie
+La configuration sémantique est le formulaire de commande imprimé d'un bundle, avec un employé qui valide. L'arbre `Configuration` est le formulaire — quels champs existent, leurs types, leurs valeurs par défaut — et il rejette le non-sens avant qu'il n'atteigne la cuisine.
+
+### Dans Symfony
+Écrire `framework:` dans `config/packages/framework.yaml` déclenche la validation de l'arbre `Configuration` de FrameworkBundle — une clé mal orthographiée est immédiatement rejetée avec une erreur claire, avant même que le container ne compile.
+
+### Exemple simple
+```yaml
+mon_bundle:
+    activer: true  # validé contre l'arbre Configuration du bundle
+```
+
+### Comment le mémoriser 🧠
+`prepend()` s'exécute **avant** tous les appels `load()` — c'est ce qui permet à un bundle de fixer des valeurs par défaut sensées sur la configuration d'un *autre* bundle avant que quiconque ne la remplisse.
 ---
 
 ## Theory
@@ -308,6 +331,8 @@ to set sane defaults for another bundle, not to override user intent.
     — it runs before FrameworkBundle's `load()`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which class validates a bundle's config schema?"
     - [x] A. `Configuration` (via `TreeBuilder`) ✅

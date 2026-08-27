@@ -27,7 +27,32 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Code Organization](code-organization.md), [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les bonnes pratiques Symfony disent, en substance : "garde tes contrôleurs fins, mets ta logique dans des services, et range chaque type de config à sa place."
+
+### Imagine dans la vraie vie
+Dans un restaurant bien tenu, le serveur (le contrôleur) prend seulement la commande et rapporte l'assiette finie — il ne cuisine jamais lui-même ; la cuisine se fait à des postes spécialisés (les services) qui partagent le même plan de travail (le container). Garder le serveur "léger" est ce qui permet de servir plusieurs tables à la fois.
+
+### Dans Symfony
+Un contrôleur qui interroge directement la base de données et formate du HTML à la main viole deux règles à la fois — la logique devrait vivre dans un service autowiré et injectable, testable indépendamment du contrôleur.
+
+### Exemple simple
+```php
+// ❌ logique dans le contrôleur
+public function show(): Response { $data = $this->db->query('SELECT ...'); ... }
+
+// ✅ logique déléguée à un service
+public function show(ProductFinder $finder): Response { return $this->render('...', ['p' => $finder->find()]); }
+```
+
+### Comment le mémoriser 🧠
+"Le serveur ne cuisine jamais" : un contrôleur qui contient de la logique métier est le signal d'alarme numéro un à repérer en review de code.
 
 ## Theory
 
@@ -86,6 +111,12 @@ flowchart LR
 !!! note "Source reference"
     Best Practices guide —
     [symfony.com/doc/8.0/best_practices.html](https://symfony.com/doc/8.0/best_practices.html).
+    The attribute this guide recommends for routing —
+    `Symfony\Component\Routing\Attribute\Route` — lives in
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Attribute/Route.php);
+    the `_defaults: { autowire: true, public: false }` pattern it recommends is
+    read by
+    [`Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Loader/Configurator/ServicesConfigurator.php).
 
 ### Compilation vs runtime angle
 
@@ -185,6 +216,8 @@ clear reason, and document it.
     it varies per environment); API private key → **Secrets vault**.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Where should business logic live?"
     - [x] A. In autowired services ✅

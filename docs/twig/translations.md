@@ -27,7 +27,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+On traduit avec une clé stable (`welcome.title`), jamais avec la phrase française elle-même écrite en dur — le "livre de traductions" fait la conversion.
+
+### Imagine dans la vraie vie
+Traduire avec `trans` ressemble à utiliser un dictionnaire de phrases organisé en sections (les domaines — `messages`, `admin`) avec une édition par langue (les locales). Tu n'écris jamais une phrase complète en français ; tu cherches un code d'entrée stable comme `welcome.title`, et le dictionnaire renvoie la phrase dans la langue du lecteur.
+
+### Dans Symfony
+`{{ 'welcome.title'|trans }}` reste identique dans le code, peu importe la langue du visiteur — seul le fichier de traduction (`messages.fr.yaml`, `messages.en.yaml`) change selon la locale active.
+
+### Exemple simple
+```twig
+{{ 'cart.items'|trans({'%count%': panier.total}, 'messages') }}
+```
+
+### Comment le mémoriser 🧠
+`transchoice` a été **supprimé** — le seul chemin de pluralisation aujourd'hui est le **format ICU MessageFormat** (`{n, plural, ...}`) dans un domaine `+intl-icu`.
 
 ## Theory
 
@@ -234,6 +255,8 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     `{{ 'notifications'|trans({ 'count': n }) }}`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the argument order of the `trans` filter?"
     - [x] A. `(parameters, domain, locale)` ✅

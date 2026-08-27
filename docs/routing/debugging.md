@@ -26,7 +26,28 @@
     **Est. time:** 18 min ·
     **Prerequisites:** [Configuration](configuration.md), [Methods](methods.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`router:match` simule une requête et t'explique précisément pourquoi chaque route a matché ou a été rejetée — un GPS pour le routeur.
+
+### Imagine dans la vraie vie
+`router:match` ressemble à un simulateur d'itinéraire GPS : tu entres une destination et il te dit non seulement quelle route il prendrait, mais *pourquoi* il a rejeté les autres — "cette rue est en sens interdit dans ce sens" (mauvaise méthode), "cette route est interdite aux camions" (mauvais host).
+
+### Dans Symfony
+Avant de déboguer "pourquoi mon URL donne-t-elle un 404 ?", lance `php bin/console router:match /mon-url` — la réponse (aucune route ne correspond, ou laquelle correspond) apparaît immédiatement, sans avoir à parcourir tout `mkdocs.yml` équivalent en config de routes.
+
+### Exemple simple
+```console
+$ php bin/console router:match /produits/42 --method=POST
+```
+
+### Comment le mémoriser 🧠
+Le GPS conduit depuis une carte téléchargée sur l'appareil : en production, changer les routes ne change rien tant que tu n'as pas "retéléchargé la carte" (`cache:clear`) — contrairement à `dev`, qui détecte le changement tout seul.
 
 ## Theory
 
@@ -198,6 +219,8 @@ instead of scraping HTML.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which command simulates matching a specific URL?"
     - [ ] A. `debug:router`

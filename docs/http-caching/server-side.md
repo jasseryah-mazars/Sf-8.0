@@ -26,8 +26,31 @@
 
     **Syllabus:** `HTTP Caching → Server-side (reverse proxy)` ·
     **Level:** Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [Cache Types](cache-types.md), [Expiration](expiration.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit son propre reverse proxy écrit en PHP (`HttpCache`) qui répond directement aux requêtes fréquentes sans jamais réveiller ton application.
+
+### Imagine dans la vraie vie
+Un employé d'accueil posté dans le hall, devant les spécialistes à l'étage. Les questions courantes ("quels sont vos horaires ?"), l'employé répond directement depuis une fiche sur le bureau, sans jamais déranger les spécialistes.
+
+### Dans Symfony
+Une page d'accueil publique, identique pour tous les visiteurs anonymes, peut être servie des milliers de fois par seconde par `HttpCache` sans jamais réveiller le kernel Symfony complet — un gain de performance énorme.
+
+### Exemple simple
+```yaml
+framework:
+    http_cache: { enabled: true }
+```
+
+### Comment le mémoriser 🧠
+Si un visiteur présente un cookie de session ou un header `Authorization`, `HttpCache` **refuse toujours** de servir une réponse en cache — ces requêtes remontent systématiquement jusqu'à l'application.
 
 ---
 
@@ -321,6 +344,8 @@ Varnish).
     outer page stays anonymous/cacheable.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is `Symfony\Component\HttpKernel\HttpCache\HttpCache`?"
     - [ ] A. A Twig extension for cache tags

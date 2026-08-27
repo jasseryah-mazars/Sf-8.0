@@ -26,7 +26,33 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [OOP](oop.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une interface est une promesse de forme ("j'aurai telle méthode qui prend tel type et rend tel autre type") — pas une implémentation.
+
+### Imagine dans la vraie vie
+Une offre d'emploi précise : "vous devrez livrer un rapport, et accepter n'importe quel type de dossier en entrée." Un candidat qui promet de livrer un rapport encore plus précis (un PDF signé, par exemple) respecte la promesse — il en fait "plus". Un candidat qui refuserait certains dossiers pourtant annoncés comme acceptés trahirait le contrat.
+
+### Dans Symfony
+Symfony s'appuie massivement sur les interfaces (`UserInterface`, `EventSubscriberInterface`...) : le framework n'a besoin de connaître que le contrat, jamais la classe concrète — c'est ce qui permet d'échanger une implémentation sans casser le reste de l'application.
+
+### Exemple simple
+```php
+interface Notifieur {
+    public function envoyer(string $message): bool;
+}
+class NotifieurEmail implements Notifieur {
+    public function envoyer(string $message): bool { /* ... */ return true; }
+}
+```
+
+### Comment le mémoriser 🧠
+Le retour peut se **r**étrécir (covariance = plus précis, ok), le paramètre peut s'**é**largir (contravariance = plus tolérant, ok). Promettre moins au retour ou exiger plus en entrée casse le contrat — et PHP le refuse.
 
 ## Theory
 
@@ -246,6 +272,8 @@ $r instanceof \Stringable;                    // false (Response isn't)
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A child overrides a parent method returning `Animal`. Which return type is legal?"
     - [x] A. `Cat` (a subclass of Animal) — covariant ✅

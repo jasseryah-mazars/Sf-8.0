@@ -24,9 +24,29 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [Validation Groups](groups.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une séquence de groupes valide dans un ordre fixe et s'arrête au premier groupe en échec — les vérifications bon marché filtrent avant les coûteuses.
+
+### Imagine dans la vraie vie
+Une séquence de groupes est le **couloir de contrôle** : vérification des papiers, puis rayons X, puis fouille. Rate le contrôle des papiers et tu es refoulé sur place — les postes suivants ne te voient même jamais.
+
+### Dans Symfony
+Valider d'abord le format d'un email (bon marché) avant de vérifier s'il existe déjà en base (coûteux, requête SQL) évite une requête inutile quand le format est déjà invalide.
+
+### Exemple simple
+```php
+#[Assert\GroupSequence(['Utilisateur', 'verification_lourde'])]
+class Utilisateur {}
+```
+
+### Comment le mémoriser 🧠
+À l'intérieur d'une séquence, référence toujours le groupe `{ClassName}` — jamais `Default`, qui provoquerait une boucle infinie.
 
 A **group sequence** validates groups **in order** and **stops at the first group
 that produces a violation**. This avoids showing "password too weak" before
@@ -297,6 +317,8 @@ stages depend on runtime state.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A group sequence stops when…"
     - [ ] A. The first constraint in any group fails

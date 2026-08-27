@@ -28,7 +28,33 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [OOP](oop.md), [Interfaces](interfaces.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un enum est une liste fermée de valeurs nommées et fixes — comme les jours de la semaine, on ne peut jamais en "inventer" un huitième par erreur.
+
+### Imagine dans la vraie vie
+Pense aux boutons d'un ascenseur : RDC, 1, 2, 3. Impossible d'appuyer sur "4.5" — seuls les boutons qui existent physiquement sont utilisables. Un enum, c'est exactement ça : un jeu de valeurs prédéfinies, et rien d'autre n'est possible.
+
+### Dans Symfony
+Symfony s'appuie sur les enums pour des états fermés : le statut d'une commande (brouillon/publié), un rôle, une méthode HTTP. Dès qu'un contrôleur ou un formulaire attend un enum, Symfony refuse automatiquement toute valeur qui n'existe pas dans la liste — sans code de validation supplémentaire à écrire.
+
+### Exemple simple
+```php
+enum Statut: string {
+    case Brouillon = 'brouillon';
+    case Publie = 'publie';
+}
+
+$s = Statut::from('publie'); // Statut::Publie
+```
+
+### Comment le mémoriser 🧠
+`from()` = **f**âché : il explose (throw) si la valeur n'existe pas. `tryFrom()` = il **try** gentiment et répond juste "non" (`null`) sans drame.
 
 ## Theory
 
@@ -277,6 +303,8 @@ or needs per-instance state, which enum cases cannot hold.
     `NotFoundHttpException`, so the response is **404**, never a 500.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `Status::from('missing')` when no case matches does what?"
     - [ ] A. Returns `null`

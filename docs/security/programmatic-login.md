@@ -26,8 +26,30 @@
 
     **Syllabus:** `Security → Programmatic Login` ·
     **Level:** Expert ·
+
     **Est. time:** 20 min ·
     **Prerequisites:** [Authenticators](authenticators.md) · [Authentication](authentication.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le service `Security::login()` permet de connecter un utilisateur depuis le code — après une inscription réussie, par exemple, sans lui faire remplir un formulaire de connexion séparé.
+
+### Imagine dans la vraie vie
+La réception d'un hôtel peut enregistrer un client sans qu'il remplisse lui-même le formulaire — après une réservation de mariage, le réceptionniste swipe le terminal maître et remet une carte-clé. La carte passe par la *même* machine d'encodage et les mêmes registres qu'un enregistrement classique.
+
+### Dans Symfony
+Après une inscription réussie (`$em->persist($utilisateur)`), appeler `$security->login($utilisateur)` connecte immédiatement le nouvel utilisateur — pas besoin de le renvoyer vers une page de connexion pour ressaisir son mot de passe.
+
+### Exemple simple
+```php
+$this->security->login($utilisateur, 'form_login', 'main');
+```
+
+### Comment le mémoriser 🧠
+`login()` exécute le **même pipeline authenticator et les mêmes événements** qu'une connexion interactive classique — ce n'est **pas** un raccourci qui contourne la sécurité normale.
 
 ---
 
@@ -302,6 +324,8 @@ no memory of the previous one.
     CSRF-protected (form) and does not originate from the logout route.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which service logs a user in programmatically in Symfony 8?"
     - [ ] A. `TokenStorageInterface::setToken()` is the supported API

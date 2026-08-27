@@ -25,7 +25,31 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Handling submissions](handling.md) · [Form types](types.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un transformateur de données convertit une valeur entre ce que ton modèle stocke et ce que le navigateur affiche — dans les deux sens.
+
+### Imagine dans la vraie vie
+Un transformateur est un **bureau de change** entre ce que l'utilisateur tape et ce que ton objet stocke. `transform()` remet ta monnaie convertie en devise locale que le navigateur comprend (modèle → vue) ; `reverseTransform()` la reconvertit dans ta devise d'origine à l'entrée (vue → modèle). Présente un montant que le bureau ne peut pas convertir, et il refuse la transaction — il ne te rend pas silencieusement rien.
+
+### Dans Symfony
+Un champ texte "12,50 €" saisi par l'utilisateur doit être reconverti en `float` (12.50) pour l'entité — c'est exactement le travail de `reverseTransform()`, appelé automatiquement à la soumission.
+
+### Exemple simple
+```php
+public function reverseTransform($value): ?float
+{
+    return $value === null ? null : (float) str_replace(',', '.', $value);
+}
+```
+
+### Comment le mémoriser 🧠
+"**T**ransform va vers la **v**ue (affichage), **r**everseTransform revient au **m**odèle (soumission)" — retiens le sens par la lettre : Transform = vers l'écran, Reverse = en arrière vers l'objet.
 
 ## Theory
 
@@ -332,6 +356,8 @@ rules belong to the Validator.
     later transformers do not run, and `invalid_message` is shown.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `reverseTransform()` runs in which direction?"
     - [x] A. View → model (on submission) ✅

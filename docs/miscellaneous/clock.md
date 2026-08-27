@@ -25,7 +25,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Testing](../appendices/out-of-syllabus/phpunit-bridge.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le composant Clock remplace `new \DateTime()` par une horloge injectable, pour que le code dépendant du temps devienne facilement testable.
+
+### Imagine dans la vraie vie
+Une horloge, c'est **l'horloge murale de la pièce — que tu peux remplacer par un accessoire de théâtre**. En production, c'est la vraie horloge murale (`NativeClock`). En test, tu accroches une fausse horloge (`MockClock`) dont tu règles les aiguilles à la main.
+
+### Dans Symfony
+Tester qu'un abonnement expire bien "dans 30 jours" sans attendre 30 jours réels devient trivial avec `MockClock` — tu avances le temps instantanément.
+
+### Exemple simple
+```php
+$horloge = new MockClock('2026-01-01');
+$horloge->sleep(86400); // avance d'un jour, instantanément
+```
+
+### Comment le mémoriser 🧠
+`ClockInterface::now()` renvoie toujours un **`DatePoint` immuable** (un `\DateTimeImmutable`) — jamais un `\DateTime` mutable classique.
 
 ## Theory
 
@@ -287,6 +309,8 @@ clock. Trivial scripts with no time-dependent logic don't need it.
     and assert the result is `13:00:00`, with no real waiting.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. `ClockInterface::now()` returns…"
     - [x] A. a `\DateTimeImmutable` (a `DatePoint`) ✅

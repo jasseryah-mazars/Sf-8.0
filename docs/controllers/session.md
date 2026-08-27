@@ -26,7 +26,29 @@
     **Est. time:** 16 min ·
     **Prerequisites:** [The Request](request.md), [Web Security](../php-web-security/web-security.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La session est un casier privé par visiteur, qui ne se loue (n'ouvre un cookie) que le jour où tu y déposes vraiment quelque chose.
+
+### Imagine dans la vraie vie
+Le vestiaire de l'accueil : un casier privé par visiteur, identifié par un ticket de réclamation (le cookie de session). Rien n'est loué tant que le visiteur n'a rien déposé — c'est ça, la paresse : un visiteur qui ne dépose rien ne reçoit aucun ticket (`Set-Cookie`). Régénérer le ticket après qu'il devienne VIP (`migrate()` après connexion) empêche quiconque de réutiliser un ancien talon glissé plus tôt — la fixation de session.
+
+### Dans Symfony
+Appeler `RequestStack::getSession()` dans un service évite de casser le cache HTTP des pages qui n'utilisent jamais la session — injecter la session directement forcerait Symfony à la démarrer systématiquement.
+
+### Exemple simple
+```php
+$session = $requestStack->getSession();
+$session->set('panier', $items);
+```
+
+### Comment le mémoriser 🧠
+"Pas de casier ouvert tant que rien n'est déposé" — la session Symfony est **paresseuse** : aucun cookie n'est envoyé si tu ne l'as jamais touchée.
 
 ## Theory
 
@@ -294,6 +316,8 @@ code.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Recommended way for a service to access the session?"
     - [ ] A. Inject `SessionInterface` in the constructor.

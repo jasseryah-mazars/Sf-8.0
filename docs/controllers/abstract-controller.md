@@ -28,7 +28,31 @@
     **Est. time:** 18 min ·
     **Prerequisites:** [DI → Service Subscribers](../dependency-injection/index.md), [Naming](naming-conventions.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`AbstractController` te prête des outils tout faits (`render()`, `redirectToRoute()`...) qu'il ne va chercher qu'au moment où tu les utilises réellement — pas avant.
+
+### Imagine dans la vraie vie
+Ton contrôleur est un réceptionniste qui prend une demande et rend une réponse. `AbstractController` est le comptoir bien équipé derrière lui : un téléphone (`redirectToRoute`), un tampon (`json`), un contrôle de badge (`getUser`), une imprimante (`render`). Le réceptionniste ne va chercher un outil que lorsqu'un visiteur en a réellement besoin — c'est ça, le "aller le chercher à la demande" (le service locator paresseux), pas un tiroir pré-rempli au début de chaque service.
+
+### Dans Symfony
+Étendre `AbstractController` reste 100 % optionnel : un contrôleur qui n'en a pas besoin peut très bien injecter directement les services dont il a réellement besoin via son constructeur.
+
+### Exemple simple
+```php
+class ProduitController extends AbstractController
+{
+    public function afficher(): Response { return $this->render('produit.html.twig'); }
+}
+```
+
+### Comment le mémoriser 🧠
+Les services d'`AbstractController` arrivent via un **service locator paresseux** (`getSubscribedServices()`), **jamais** via le constructeur — c'est le fait préféré de l'examen sur ce chapitre.
 
 ## Theory
 
@@ -328,6 +352,8 @@ does not abort — it returns a `NotFoundHttpException` you must `throw`. See
     $this->container->get(RateLimiterFactory::class); }`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How does AbstractController receive its services?"
     - [ ] A. Constructor injection of each service.

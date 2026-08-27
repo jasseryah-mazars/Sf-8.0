@@ -24,7 +24,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un template enfant hérite d'un gabarit parent et ne remplit que les "trous" qui l'intéressent — le reste vient automatiquement du parent.
+
+### Imagine dans la vraie vie
+Un formulaire imprimé sur papier à en-tête d'entreprise. Le parent `base.html.twig` est la page maîtresse déjà imprimée — logo, pied de page, mise en page globale — et chaque `{% block %}` est une ligne vide laissée pour que tu la remplisses. Une page enfant garde le papier à en-tête et n'écrit que dans les blancs qui l'intéressent.
+
+### Dans Symfony
+Toutes les pages d'un site partagent typiquement un seul `base.html.twig` avec un `{% block content %}` — chaque page enfant n'écrit que ce bloc, le header/footer restent identiques partout automatiquement.
+
+### Exemple simple
+```twig
+{% extends 'base.html.twig' %}
+{% block content %}<p>Contenu de cette page seulement</p>{% endblock %}
+```
+
+### Comment le mémoriser 🧠
+`{{ parent() }}` = "garde ce qui était déjà écrit ici, puis ajoute par-dessus" — un enfant ne peut `extends` qu'**un seul** parent, mais peut `use` plusieurs blocs d'ailleurs (réutilisation horizontale).
 
 ## Theory
 
@@ -236,6 +258,8 @@ definitions — no `extends`, no surrounding HTML.
     the imported block.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How many templates can a single template `extends`?"
     - [x] A. Exactly one ✅

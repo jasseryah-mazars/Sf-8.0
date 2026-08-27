@@ -23,9 +23,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Object Validation](object-validation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une contrainte peut viser une propriété, un getter, ou la classe entière — et un objet imbriqué n'est validé que si tu le demandes explicitement.
+
+### Imagine dans la vraie vie
+La portée, c'est **où pointe le scanner** : sur un seul objet (propriété), sur ce qu'un capteur calcule à partir du sac (getter), ou sur le sac entier et la cohérence de son contenu (classe). Et un sac-dans-le-sac n'est ouvert que s'il porte une étiquette "inspecter le contenu" — cette étiquette, c'est `#[Assert\Valid]`.
+
+### Dans Symfony
+Un `Commande` qui contient une collection de `LigneCommande` ne validera **aucune** ligne si `#[Assert\Valid]` manque sur la propriété `$lignes` — même si chaque `LigneCommande` a ses propres contraintes.
+
+### Exemple simple
+```php
+#[Assert\Valid]
+private Collection $lignes; // sans #[Assert\Valid], jamais validées
+```
+
+### Comment le mémoriser 🧠
+"Pas d'étiquette, pas d'inspection" — un objet imbriqué sans `#[Assert\Valid]` explicite reste **invisible** au validateur, même s'il a ses propres règles.
 
 A constraint can be attached at three **scopes**:
 
@@ -312,6 +332,8 @@ graph on every request has a cost. For collections of scalars use `All`
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What makes the validator recurse into a nested object?"
     - [ ] A. Nothing — it always recurses

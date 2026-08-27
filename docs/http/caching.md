@@ -27,7 +27,30 @@
     **Est. time:** 12 min ·
     **Prerequisites:** [HTTP Response](response.md) · [Status Codes](status-codes.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Il y a deux façons d'éviter de refaire un travail déjà fait : ne rien redemander tant que c'est "encore bon" (fraîcheur), ou redemander mais recevoir un "rien de neuf" ultra-rapide (validation).
+
+### Imagine dans la vraie vie
+Un plat au frigo porte une date limite : tant qu'elle n'est pas dépassée, tu le manges sans te poser de question — c'est la **fraîcheur**, aucune question posée. L'autre option : tu appelles la personne qui a cuisiné et demandes "c'est toujours pareil ?" — si la réponse est "oui, rien n'a changé", tu t'épargnes de tout recuisiner — c'est la **validation**, et cette réponse courte "rien de neuf" est le fameux `304` sans corps.
+
+### Dans Symfony
+`$response->setPublic()->setMaxAge(3600)` active la fraîcheur (aucune requête au serveur pendant une heure) ; `$response->setETag($hash)` active la validation (le serveur est recontacté, mais répond en 304 si rien n'a changé).
+
+### Exemple simple
+```php
+$response->setLastModified($article->getUpdatedAt());
+$response->setEtag(md5($article->getContent()));
+// Symfony renvoie 304 tout seul si le navigateur montre qu'il a déjà la bonne version
+```
+
+### Comment le mémoriser 🧠
+**Fraîcheur = pas de question du tout** (`max-age`/`s-maxage`). **Validation = question posée, réponse parfois vide** (`ETag`/`Last-Modified` → `304`).
 
 !!! info "Scope"
     This chapter is a **map, not the territory**. HTTP caching is a whole stage.
@@ -204,6 +227,8 @@ shelf life. Full patterns (ESI, reverse proxy, `Vary`) live in the
     browser from long-term caching).
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which model can avoid contacting the server entirely?"
     - [x] A. Expiration (freshness) ✅

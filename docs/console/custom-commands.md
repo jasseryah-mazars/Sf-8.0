@@ -27,6 +27,35 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Built-in commands](built-in-commands.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une commande custom se déclare avec `#[AsCommand]` et renvoie toujours l'une des trois constantes de statut — jamais un simple entier écrit à la main.
+
+### Imagine dans la vraie vie
+Une commande custom est un appareil de cuisine mono-fonction : un grille-pain fait un seul travail, et tu le démarres en appuyant sur le seul levier (`__invoke()`) plutôt qu'en assemblant une machine à partir de pièces détachées.
+
+### Dans Symfony
+Une commande `app:nettoyer-cache` type `#[AsCommand(name: 'app:nettoyer-cache')]` avec une méthode `__invoke()` n'a besoin d'aucune classe parente à étendre — c'est le style moderne recommandé.
+
+### Exemple simple
+```php
+#[AsCommand(name: 'app:bonjour')]
+class BonjourCommand {
+    public function __invoke(SymfonyStyle $io): int {
+        $io->success('Bonjour !');
+        return Command::SUCCESS; // jamais juste "0"
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+Retourne toujours `Command::SUCCESS` (0), `Command::FAILURE` (1) ou `Command::INVALID` (2) — jamais un entier brut, même si les valeurs numériques coïncident.
+
 ---
 
 ## Theory
@@ -370,6 +399,8 @@ call from HTTP.
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What integer value does `Command::INVALID` represent?"
     - [ ] A. 0

@@ -26,7 +26,29 @@
     **Syllabus:** `HTTP Caching → Cache types & Cache-Control` ·
     **Level:** Advanced ·
     **Est. time:** 20 min ·
+
     **Prerequisites:** [HTTP Response](../http/response.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Il existe trois endroits où une réponse peut être mise en cache — ton navigateur seul, un cache partagé entre plusieurs personnes, ou un proxy que tu contrôles toi-même — et par défaut, Symfony ne partage rien.
+
+### Imagine dans la vraie vie
+Une photocopie que tu gardes dans ton propre tiroir (le cache **privé** du navigateur) n'est que pour toi. Une pile laissée sur un comptoir de bibliothèque publique (un cache **partagé**) peut être prise par n'importe qui — il ne faut donc jamais y laisser quelque chose portant un nom personnel.
+
+### Dans Symfony
+Une page contenant des données personnelles (panier, profil) ne doit **jamais** être marquée `public` — sinon un CDN partagé pourrait servir les données d'un visiteur à un autre.
+
+### Exemple simple
+```php
+$response->setPublic(); // autorise les caches PARTAGÉS à stocker cette réponse
+```
+
+### Comment le mémoriser 🧠
+Par défaut, Symfony envoie `no-cache, private` — **rien n'est partagé** tant que tu ne l'annonces pas explicitement avec `public`.
 
 ---
 
@@ -298,6 +320,8 @@ assets). Keep authenticated dashboards `private` or uncached. When a page is
     per-user.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A Symfony `Response` with no cache headers set emits which `Cache-Control`?"
     - [ ] A. `public, max-age=0`

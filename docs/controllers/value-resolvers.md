@@ -27,7 +27,29 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [The Request](request.md), [DI](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un résolveur d'arguments transforme la requête brute en objets typés que ton action attend — un `Uuid`, une entité, un DTO validé — automatiquement.
+
+### Imagine dans la vraie vie
+Une file de traducteurs spécialisés : chacun lit les métadonnées de l'argument, et soit le traduit, soit hausse les épaules et fait passer le bordereau au traducteur suivant. Ce haussement d'épaules — refuser en ne produisant rien — est comment la chaîne trouve le seul traducteur qui parle la langue de l'argument.
+
+### Dans Symfony
+`public function show(Article $article)` reçoit automatiquement l'entité `Article` déjà chargée depuis la base, sans que tu écrives toi-même `$em->find($id)` — un résolveur dédié fait ce travail à ta place.
+
+### Exemple simple
+```php
+#[Route('/commandes/{status}')]
+public function parStatut(Status $status): Response { /* Status déjà résolu depuis l'enum */ }
+```
+
+### Comment le mémoriser 🧠
+Les résolveurs sont classés par **priorité** (`Request`/`Session` à 120, en tête de chaîne) — le premier qui accepte de traduire gagne ; les autres n'ont jamais leur mot à dire sur cet argument.
 
 ## Theory
 
@@ -344,6 +366,8 @@ returned nothing.
     Autoconfigure tags it; set `priority: 150` if it must precede a built-in.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which interface does a custom value resolver implement in Symfony 8?"
     - [ ] A. `ArgumentValueResolverInterface`

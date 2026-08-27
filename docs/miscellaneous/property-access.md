@@ -30,7 +30,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [OOP](../php-web-security/oop.md), [Serializer component](serializer.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`PropertyAccessor` lit et écrit des propriétés via un simple chemin en texte (`'user.address.city'`) — sans jamais avoir à écrire de getters à la main.
+
+### Imagine dans la vraie vie
+Un chemin de propriété est une étiquette d'expédition avec une chaîne d'adresses de réexpédition : `entrepot.etagere[3].casier`. Le coursier (`PropertyAccessor`) ne sait ni ne se soucie de savoir si "etagere" est un champ public, une méthode `getEtagere()`, ou un flag `isEtagere()` — il essaie les formats standards dans un ordre fixe.
+
+### Dans Symfony
+C'est exactement ce mécanisme qui permet à un `ChoiceType` de formulaire de lire `$produit->getCategorie()->getNom()` juste en configurant `'choice_label' => 'categorie.nom'` — sans jamais écrire ce code manuellement.
+
+### Exemple simple
+```php
+$nom = $propertyAccessor->getValue($produit, 'categorie.nom'); // appelle getCategorie()->getNom()
+```
+
+### Comment le mémoriser 🧠
+L'ordre des getters essayés est fixe : **`get`, `is`, `has`, `can`** — et les méthodes magiques (`__call`) ne sont **pas** activées par défaut, il faut explicitement appeler `enableMagicCall()`.
 
 ## Theory
 
@@ -251,6 +272,8 @@ overhead.
     — without that call, `__call` is never tried.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. In which order does PropertyAccessor try getter method prefixes?"
     - [x] A. `get`, `is`, `has`, `can` ✅

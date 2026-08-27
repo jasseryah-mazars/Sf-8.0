@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Configuration](configuration.md), [Requirements](requirements.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+L'option `host` restreint une route à un domaine précis — et peut même capturer un sous-domaine comme un paramètre de route classique.
+
+### Imagine dans la vraie vie
+Un grand campus de bureaux où plusieurs bâtiments partagent les mêmes numéros de salle. L'accueil vérifie d'abord *quel bâtiment* tu cherches avant même de regarder le numéro de salle — donc "Salle 101" dans le bâtiment Admin et "Salle 101" dans le bâtiment Ventes mènent à des personnes différentes.
+
+### Dans Symfony
+Une application multi-tenant peut router `{tenant}.monapp.com` vers le même contrôleur, avec `{tenant}` injecté automatiquement comme paramètre — une seule route sert tous les clients.
+
+### Exemple simple
+```php
+#[Route('/', host: '{tenant}.monapp.com')]
+public function accueil(string $tenant): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Le **host est vérifié avant le chemin** — deux routes avec le même chemin mais des hosts différents ne se marchent jamais dessus, exactement comme deux bâtiments partageant les mêmes numéros de salle.
 
 ## Theory
 
@@ -231,6 +253,8 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     ```
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the default regex for a host placeholder?"
     - [ ] A. `[^/]+`

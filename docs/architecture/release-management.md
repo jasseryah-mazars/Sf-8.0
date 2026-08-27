@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Components](components.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony sort une nouvelle version mineure tous les six mois pile, à date fixe — et une mineure ne casse jamais ton code existant.
+
+### Imagine dans la vraie vie
+Un train qui roule sur un horaire imprimé et fixe : les trains locaux (versions mineures) partent chaque mai et novembre sans jamais changer les quais qui fonctionnent déjà — ils ajoutent seulement de nouveaux wagons (fonctionnalités) et affichent "cette porte sera retirée" (dépréciations). Seul le grand chantier tous les deux ans (une version majeure) retire réellement ces portes signalées.
+
+### Dans Symfony
+Passer de Symfony 8.0 à 8.3 devrait toujours être sûr si tu as corrigé tes dépréciations en cours de route — c'est la garantie même du versionnage sémantique appliqué par Symfony.
+
+### Exemple simple
+```json
+{ "require": { "symfony/framework-bundle": "^8.0" } }
+```
+Le `^8.0` accepte automatiquement toutes les futures versions mineures (8.1, 8.2...) sans jamais risquer une rupture.
+
+### Comment le mémoriser 🧠
+`X.4` est **toujours** la version LTS (support long) et sort **en même temps** que la prochaine version majeure (`8.4` sort avec `9.0`).
 
 ## Theory
 
@@ -101,7 +123,10 @@ $ git merge 8.0
 !!! note "Source reference"
     Release process is documented at
     [symfony.com/releases](https://symfony.com/releases) and enforced across
-    [symfony/symfony branches](https://github.com/symfony/symfony/branches).
+    [symfony/symfony branches](https://github.com/symfony/symfony/branches) —
+    the 8.0 branch itself is browsable at
+    [github.com/symfony/symfony/tree/8.0](https://github.com/symfony/symfony/tree/8.0),
+    and its `CHANGELOG.md` records exactly which release each change shipped in.
 
 ### Why time-based releases
 
@@ -171,6 +196,8 @@ alternative cadence to opt into.
     deprecations while still on the 8.x line so the `8.x → 9.0` jump is clean.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. How often does a new Symfony minor release ship?"
     - [x] A. Every 6 months (May and November) ✅

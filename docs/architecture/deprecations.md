@@ -28,7 +28,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [BC Promise](bc-promise.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une dépréciation est un panneau d'avertissement — "ça marche encore aujourd'hui, mais ça disparaîtra à la prochaine version majeure" — pas une panne immédiate.
+
+### Imagine dans la vraie vie
+Un panneau d'autoroute annonce : "cette sortie ferme au prochain chantier — utilisez la sortie 12 à la place." La bretelle fonctionne parfaitement aujourd'hui ; rien ne t'empêche de l'emprunter, et le panneau n'est qu'un avertissement, pas une barrière. Mais il prévient largement à l'avance et nomme le nouvel itinéraire, te laissant toute une saison pour changer tes habitudes.
+
+### Dans Symfony
+Lancer ton application en environnement `dev` avec le profiler activé fait apparaître chaque dépréciation dans la barre de débogage — c'est le moyen le plus rapide de repérer le code à migrer avant la prochaine version majeure.
+
+### Exemple simple
+```php
+trigger_deprecation('acme/lib', '2.3', 'Method "%s()" is deprecated, use "%s()" instead.', 'oldMethod', 'newMethod');
+```
+
+### Comment le mémoriser 🧠
+Le panneau annonce la sortie **à l'avance**, mais la sortie n'est **réellement démolie qu'au prochain grand chantier** (la prochaine version majeure) — jamais avant.
 
 ## Theory
 
@@ -226,6 +247,8 @@ without a deprecation because it is outside the [BC promise](bc-promise.md).
     at the top of the old method and add a matching `@deprecated` docblock.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which function emits a Symfony deprecation notice?"
     - [x] A. `trigger_deprecation($package, $version, $message, ...$args)` ✅

@@ -26,9 +26,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Controllers](../controllers/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une route associe un chemin d'URL à un contrôleur sous un nom unique — et la première règle qui correspond gagne, jamais "la plus précise".
+
+### Imagine dans la vraie vie
+Le carnet de règles d'une salle de tri postal : chaque règle associe un motif d'adresse (le chemin) à un bureau de destination (le contrôleur) sous une étiquette unique (le nom). Le trieur lit les règles strictement de haut en bas et remet la lettre au *premier* bureau dont le motif correspond — jamais "le plus précis" — c'est pourquoi les règles étroites doivent être placées au-dessus des règles larges attrape-tout.
+
+### Dans Symfony
+Si `/produits/nouveau` est déclarée *après* `/produits/{id}`, la route générique capture "nouveau" comme un `{id}` avant même que la route spécifique n'ait sa chance — l'ordre de déclaration compte vraiment.
+
+### Exemple simple
+```php
+#[Route('/produits/nouveau', name: 'produit_nouveau')] // doit venir AVANT
+#[Route('/produits/{id}', name: 'produit_show')]
+```
+
+### Comment le mémoriser 🧠
+"Premier arrivé, premier servi" — pas "le plus précis gagne". Range toujours tes routes spécifiques avant les routes génériques.
 
 A **route** binds a URL *path* to a *controller*, under a unique *name*. Symfony 8
 offers two first-class ways to declare routes (the syllabus covers only these):
@@ -289,6 +309,8 @@ is no runtime performance difference.
     and `legacy_` name prefix.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. What is the fully-qualified class of the routing attribute in Symfony 8?"
     - [ ] A. `Symfony\Component\Routing\Annotation\Route`

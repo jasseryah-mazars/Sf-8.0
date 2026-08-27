@@ -28,7 +28,31 @@
     **Est. time:** 12 min ·
     **Prerequisites:** [Architecture](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un contrôleur, c'est n'importe quel morceau de PHP appelable — Symfony n'impose aucune règle de nom, juste qu'il soit joignable.
+
+### Imagine dans la vraie vie
+Le standard téléphonique se moque du titre imprimé sur ta carte de visite — il a juste besoin d'un numéro qui aboutisse. Que tu sois listé comme "ProductController::show" ou joignable directement par ton nom seul (une classe invocable), le standardiste ne demande qu'un numéro qui connecte à quelqu'un de réel.
+
+### Dans Symfony
+Une classe invocable avec une seule méthode `__invoke()` peut être une route entière — pas besoin d'une classe "Controller" avec 10 méthodes si une seule action suffit.
+
+### Exemple simple
+```php
+final class AfficherProduit
+{
+    public function __invoke(int $id): Response { /* ... */ }
+}
+```
+
+### Comment le mémoriser 🧠
+Le suffixe `Action` est un vestige mort — Symfony 8 ne le lit jamais. Nomme pour les humains qui liront ton code, pas pour un standard téléphonique imaginaire.
 
 ## Theory
 
@@ -254,6 +278,8 @@ services:
     Note: extending `AbstractController` is optional — a plain callable works.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which `_controller` value correctly targets an invokable controller?"
     - [ ] A. `App\Controller\HomeController#invoke`

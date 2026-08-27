@@ -26,9 +26,30 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Host matching](host-matching.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une `condition` est un dernier filtre custom, évalué seulement quand le chemin, l'host et la méthode ne suffisent pas déjà à décider.
+
+### Imagine dans la vraie vie
+Un videur de boîte de nuit posté à la bonne porte du bon bâtiment. Tu as déjà trouvé la bonne adresse (host) et la bonne entrée (chemin + méthode), et maintenant le videur fait un dernier contrôle sur mesure — le bracelet, la liste d'invités. Échoue ce contrôle et tu es simplement refoulé comme si la porte n'existait pas (un 404), jamais "interdit avec une raison".
+
+### Dans Symfony
+`condition: "request.headers.get('User-Agent') matches '/mobile/i'"` peut router les visiteurs mobiles vers un contrôleur dédié, sans jamais toucher au chemin de l'URL lui-même.
+
+### Exemple simple
+```yaml
+api_beta:
+    path: /api/data
+    condition: "context.getMethod() === 'GET' and request.query.has('beta')"
+```
+
+### Comment le mémoriser 🧠
+Une condition **n'affecte jamais** `generateUrl()` — seulement le matching entrant. Le videur ne touche jamais aux invitations imprimées que le club envoie par la poste.
 
 When path, host, method and scheme are not expressive enough, a **`condition`** lets
 you match on an arbitrary boolean **ExpressionLanguage** expression evaluated
@@ -238,6 +259,8 @@ also cannot show a login page).
     `service('feature_checker').isEnabled(request)`.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. A route's `condition` returns false. What is the outcome?"
     - [ ] A. 403 Forbidden
