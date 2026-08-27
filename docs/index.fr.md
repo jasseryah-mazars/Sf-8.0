@@ -1,57 +1,90 @@
 # Symfony 8 Expert Certification Prep
 
-Ressource communautaire de préparation alignée sur le programme de la
-certification Symfony 8.0. La couverture est validée via la matrice de
-traçabilité et des contrôles automatisés. Elle cible à la fois les niveaux
-**Advanced** et **Expert**, avec théorie, mécanismes internes, diagrammes,
-code Symfony 8 / PHP 8.4 exécutable, exercices, pièges de certification et
-révision de dernière minute.
+Une plateforme d'étude gratuite et autonome pour la **certification Symfony 8**
+(Advanced & Expert). Suivez le parcours guidé ci-dessous : vous saurez toujours
+quoi ouvrir ensuite, sans avoir besoin de comprendre la structure du site.
 
-!!! abstract "What this is"
-    Une ressource d'étude à utiliser **en complément de la documentation
-    officielle Symfony** qu'elle référence, pas en remplacement. Le projet a
-    commencé comme une réécriture de la
-    [liste de préparation communautaire de ThomasBerends](https://github.com/ThomasBerends/symfony-certification-preparation-list)
-    (une liste de liens, ciblant Symfony 7) et a été reconstruit en contenu
-    pédagogique complet pour Symfony 8.
+<a class="sf-cta-primary" href="php-web-security/">▶ Commencer ma préparation</a>
 
-## Learning Dashboard
+<div id="sf-resume"></div>
 
-Nouveau ici ? Ce tableau **est** la carte : une ligne par domaine officiel,
-dans l'ordre que le graphe de dépendances de la [Roadmap](roadmap.md) impose
-réellement — pas l'ordre du syllabus — avec chaque ressource de la plateforme
-pour ce domaine à un clic. Colonnes expliquées sous le tableau.
+## Vous ne savez pas par où commencer ?
 
-!!! tip "Comment lire ce tableau"
-    - **#** — ordre d'étude recommandé (issu du [graphe de dépendances](roadmap.md#dependency-graph)).
-    - **Prérequis** — domaine(s) à terminer avant ; source : les métadonnées de
-      chaque chapitre, jamais devinées.
-    - **Statut** — preuve automatisée issue de la
-      [Traceability Matrix](https://github.com/jasseryah-mazars/Sf-8.0/blob/master/specs/TraceabilityMatrix.md) :
-      sous-sujets avec un chapitre confirmé, un exemple travaillé, un exercice
-      et une couverture quiz. *Pas* une affirmation que toute question
-      possible est déjà posée.
-    - **Cours** — l'index du chapitre (la théorie, les deep dives, les
-      exercices et les questions de certification vivent à l'intérieur de
-      chaque chapitre ; il n'existe pas de page d'exercices séparée par
-      domaine).
-    - **TP** — le lab pratique (exercice guidé, test-first).
-    - **Quiz** — l'[Exam Simulator](exam-simulator.md), filtrable sur ce
-      domaine (même lien sur chaque ligne ; c'est un seul outil interactif
-      pour tous les sujets).
-    - **Flashcards**, **Examens**, **Révision** — le deck de répétition
-      espacée, l'examen à questions fixes et la fiche de révision d'une page
-      du domaine.
+!!! tip "Une seule recommandation, pas une nouvelle liste"
+    **Commencez par le domaine [PHP & Web Security](php-web-security/index.md), puis
+    suivez la [Roadmap](roadmap.md) dans l'ordre.** Si vous connaissez déjà bien
+    Symfony et voulez d'abord évaluer votre niveau, faites un
+    **[petit tour de pratique](exam-simulator.md)** — 20 questions, feedback
+    immédiat, aucune configuration.
+
+## Choisissez votre parcours
+
+<div class="sf-paths">
+
+<a class="sf-path-card" href="php-web-security/">
+<strong>🌱 Je débute avec Symfony</strong>
+<span>Partez des fondamentaux PHP, puis suivez l'ordre recommandé complet.</span>
+</a>
+
+<a class="sf-path-card" href="roadmap/">
+<strong>📘 Je prépare le niveau Advanced</strong>
+<span>Suivez la roadmap complète — une couverture large et solide des 15
+domaines.</span>
+</a>
+
+<a class="sf-path-card" href="tours/">
+<strong>🎓 Je prépare le niveau Expert</strong>
+<span>Allez directement aux mécanismes internes : Source Tours, Deep Dives
+et pièges de certification.</span>
+</a>
+
+<a class="sf-path-card" href="revision/">
+<strong>⏱ Je révise avant l'examen</strong>
+<span>Fiche de révision, flashcards, pièges et examens blancs chronométrés —
+le Revision Hub.</span>
+</a>
+
+<a class="sf-path-card" href="exam-simulator/">
+<strong>🎯 Je veux tester mon niveau</strong>
+<span>Lancez le simulateur interactif — mode Entraînement ou Examen complet.</span>
+</a>
+
+</div>
+
+## Votre parcours pas à pas
+
+<ol class="sf-steps">
+<li><strong>Évaluer mon niveau.</strong> Lisez <a href="exam-guide/levels/">Advanced vs Expert</a> pour savoir ce que vous visez.</li>
+<li><strong>Suivre le parcours conseillé.</strong> Ouvrez la <a href="roadmap/">Roadmap</a> — l'ordre d'étude qui évite d'utiliser une notion avant qu'elle soit enseignée.</li>
+<li><strong>Étudier un domaine.</strong> Commencez par <a href="php-web-security/">PHP & Web Security</a> — chaque domaine suit la même anatomie (théorie, deep dive, exercices).</li>
+<li><strong>Faire les exercices.</strong> Chaque domaine a un TP guidé : <a href="labs/">TP</a>.</li>
+<li><strong>Tester mes connaissances.</strong> Faites une session d'entraînement dans l'<a href="exam-simulator/">Exam Simulator</a>.</li>
+<li><strong>Réviser mes points faibles.</strong> Le <a href="revision/">Revision Hub</a> choisit le bon outil selon le temps disponible.</li>
+<li><strong>Passer un examen blanc.</strong> Format complet, chronométré : <a href="revision/mock-exam/">Examen Blanc</a>.</li>
+</ol>
+
+## Domaines de certification
+
+Chaque domaine officiel, dans l'ordre d'étude recommandé par la plateforme.
+**Étudier** ouvre l'index du chapitre ; **Tester** lance directement des
+questions de pratique pour ce domaine uniquement.
+
+!!! tip "Ce que signifient les colonnes"
+    **Statut** est le suivi de couverture automatisé propre à ce projet (voir
+    la [Traceability Matrix](https://github.com/jasseryah-mazars/Sf-8.0/blob/master/specs/TraceabilityMatrix.md))
+    — ce n'est pas une affirmation que toute question d'examen possible est
+    couverte. **Flashcards / Examen / Fiche** sont des liens rapides vers le
+    matériel de révision du domaine.
 
 ### 🧱 Fondations
 
 Pas encore de Symfony — le langage et le protocole sur lesquels tout le reste
 s'appuie.
 
-| # | Domaine | Statut | Prérequis | Cours | TP | Quiz | Flashcards | Examens | Révision |
-|---|---|---|---|---|---|---|---|---|---|
-| 1 | [PHP & Web Security](php-web-security/index.md) | 9/9 PASS | — | [Cours](php-web-security/index.md) | [TP](labs/php-web-security.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/php-web-security.md) | [Examen](exams/php-web-security.md) | [Fiche](revision/sheets/php-web-security.md) |
-| 2 | [HTTP](http/index.md) | 11/11 PASS | PHP & Web Security | [Cours](http/index.md) | [TP](labs/http.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/http.md) | [Examen](exams/http.md) | [Fiche](revision/sheets/http.md) |
+| # | Domaine | Statut | Étudier | Tester | Flashcards | Examen | Fiche |
+|---|---|---|---|---|---|---|---|
+| 1 | [PHP & Web Security](php-web-security/index.md) | 9/9 PASS | [Étudier](php-web-security/index.md) | [Tester](exam-simulator.md?area=PHP%20%26%20Web%20Security) | [Cartes](revision/flashcards/php-web-security.md) | [Examen](exams/php-web-security.md) | [Fiche](revision/sheets/php-web-security.md) |
+| 2 | [HTTP](http/index.md) | 11/11 PASS | [Étudier](http/index.md) | [Tester](exam-simulator.md?area=HTTP) | [Cartes](revision/flashcards/http.md) | [Examen](exams/http.md) | [Fiche](revision/sheets/http.md) |
 
 ### 🧠 Cœur Symfony (le modèle mental)
 
@@ -59,118 +92,79 @@ Le kernel et le container — les deux machines sur lesquelles tous les autres
 composants se branchent. Rendement examen maximal ; ne jamais bâcler ces deux
 domaines.
 
-| # | Domaine | Statut | Prérequis | Cours | TP | Quiz | Flashcards | Examens | Révision |
-|---|---|---|---|---|---|---|---|---|---|
-| 3 | [Symfony Architecture](architecture/index.md) | 12/17 PASS · 5 TO VERIFY | HTTP | [Cours](architecture/index.md) | [TP](labs/architecture.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/architecture.md) | [Examen](exams/architecture.md) | [Fiche](revision/sheets/architecture.md) |
-| 4 | [Dependency Injection](dependency-injection/index.md) | 12/12 PASS | Symfony Architecture | [Cours](dependency-injection/index.md) | [TP](labs/dependency-injection.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/dependency-injection.md) | [Examen](exams/dependency-injection.md) | [Fiche](revision/sheets/dependency-injection.md) |
+| # | Domaine | Statut | Étudier | Tester | Flashcards | Examen | Fiche |
+|---|---|---|---|---|---|---|---|
+| 3 | [Symfony Architecture](architecture/index.md) | 12/17 PASS · 5 TO VERIFY | [Étudier](architecture/index.md) | [Tester](exam-simulator.md?area=Symfony%20Architecture) | [Cartes](revision/flashcards/architecture.md) | [Examen](exams/architecture.md) | [Fiche](revision/sheets/architecture.md) |
+| 4 | [Dependency Injection](dependency-injection/index.md) | 12/12 PASS | [Étudier](dependency-injection/index.md) | [Tester](exam-simulator.md?area=Dependency%20Injection) | [Cartes](revision/flashcards/dependency-injection.md) | [Examen](exams/dependency-injection.md) | [Fiche](revision/sheets/dependency-injection.md) |
 
-### 🧩 Composants applicatifs (la couche fonctionnelle et l'étendue)
+### 🧩 Composants applicatifs (couche fonctionnelle et largeur)
 
-Le traitement de request au quotidien, puis le bloc sécurité à fort
-coefficient, puis l'étendue. Chaque domaine ne liste que ses **vrais**
-prérequis — plusieurs (Security, HTTP Caching, Console) sont techniquement
-débloqués plus tôt qu'ils n'apparaissent ci-dessous ; ils sont séquencés plus
-tard pour des raisons de pondération d'examen expliquées dans la
-[Roadmap](roadmap.md).
+La gestion des requêtes au quotidien, puis le bloc sécurité à fort coefficient,
+puis la largeur. Chaque domaine ne liste que ses **vrais** prérequis —
+plusieurs (Security, HTTP Caching, Console) sont techniquement débloqués plus
+tôt qu'ils n'apparaissent ci-dessous ; ils sont séquencés plus tard pour des
+raisons de poids d'examen expliquées dans la [Roadmap](roadmap.md).
 
-| # | Domaine | Statut | Prérequis | Cours | TP | Quiz | Flashcards | Examens | Révision |
-|---|---|---|---|---|---|---|---|---|---|
-| 5 | [Controllers](controllers/index.md) | 15/15 PASS | Architecture, DI, HTTP | [Cours](controllers/index.md) | [TP](labs/controllers.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/controllers.md) | [Examen](exams/controllers.md) | [Fiche](revision/sheets/controllers.md) |
-| 6 | [Routing](routing/index.md) | 13/13 PASS | Controllers, HTTP | [Cours](routing/index.md) | [TP](labs/routing.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/routing.md) | [Examen](exams/routing.md) | [Fiche](revision/sheets/routing.md) |
-| 7 | [Templating (Twig)](twig/index.md) | 14/14 PASS | Controllers, PHP API | [Cours](twig/index.md) | [TP](labs/twig.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/twig.md) | [Examen](exams/twig.md) | [Fiche](revision/sheets/twig.md) |
-| 8 | [Data Validation](validation/index.md) | 9/9 PASS | Dependency Injection | [Cours](validation/index.md) | [TP](labs/validation.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/validation.md) | [Examen](exams/validation.md) | [Fiche](revision/sheets/validation.md) |
-| 9 | [Forms](forms/index.md) | 13/13 PASS | Twig, Validation | [Cours](forms/index.md) | [TP](labs/forms.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/forms.md) | [Examen](exams/forms.md) | [Fiche](revision/sheets/forms.md) |
-| 10 | [Security](security/index.md) | 13/13 PASS | Symfony Architecture | [Cours](security/index.md) | [TP](labs/security.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/security.md) | [Examen](exams/security.md) | [Fiche](revision/sheets/security.md) |
-| 11 | [HTTP Caching](http-caching/index.md) | 5/5 PASS | HTTP, Controllers | [Cours](http-caching/index.md) | [TP](labs/http-caching.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/http-caching.md) | [Examen](exams/http-caching.md) | [Fiche](revision/sheets/http-caching.md) |
-| 12 | [Console](console/index.md) | 9/9 PASS | Dependency Injection | [Cours](console/index.md) | [TP](labs/console.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/console.md) | [Examen](exams/console.md) | [Fiche](revision/sheets/console.md) |
-| 13 | [Messenger](messenger/index.md) | 7/7 PASS | DI, Console, Events | [Cours](messenger/index.md) | [TP](labs/miscellaneous.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/messenger.md) | [Examen](exams/messenger.md) | [Fiche](revision/sheets/messenger.md) |
-| 14 | [Automated Tests](testing/index.md) | 12/12 PASS | Controllers, Routing, Forms | [Cours](testing/index.md) | [TP](labs/testing.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/testing.md) | [Examen](exams/testing.md) | [Fiche](revision/sheets/testing.md) |
-| 15 | [Miscellaneous](miscellaneous/index.md) | 15/15 PASS | Architecture, DI | [Cours](miscellaneous/index.md) | [TP](labs/miscellaneous.md) | [Quiz](exam-simulator.md) | [Cartes](revision/flashcards/miscellaneous.md) | [Examen](exams/miscellaneous.md) | [Fiche](revision/sheets/miscellaneous.md) |
-| — | [Internationalization and localization](miscellaneous/intl.md) | 1/1 PASS | Miscellaneous | [Cours](miscellaneous/intl.md) | — | [Quiz](exam-simulator.md) | — | — | — |
+| # | Domaine | Statut | Étudier | Tester | Flashcards | Examen | Fiche |
+|---|---|---|---|---|---|---|---|
+| 5 | [Controllers](controllers/index.md) | 15/15 PASS | [Étudier](controllers/index.md) | [Tester](exam-simulator.md?area=Controllers) | [Cartes](revision/flashcards/controllers.md) | [Examen](exams/controllers.md) | [Fiche](revision/sheets/controllers.md) |
+| 6 | [Routing](routing/index.md) | 13/13 PASS | [Étudier](routing/index.md) | [Tester](exam-simulator.md?area=Routing) | [Cartes](revision/flashcards/routing.md) | [Examen](exams/routing.md) | [Fiche](revision/sheets/routing.md) |
+| 7 | [Templating (Twig)](twig/index.md) | 14/14 PASS | [Étudier](twig/index.md) | [Tester](exam-simulator.md?area=Templating%20%28Twig%29) | [Cartes](revision/flashcards/twig.md) | [Examen](exams/twig.md) | [Fiche](revision/sheets/twig.md) |
+| 8 | [Data Validation](validation/index.md) | 9/9 PASS | [Étudier](validation/index.md) | [Tester](exam-simulator.md?area=Data%20Validation) | [Cartes](revision/flashcards/validation.md) | [Examen](exams/validation.md) | [Fiche](revision/sheets/validation.md) |
+| 9 | [Forms](forms/index.md) | 13/13 PASS | [Étudier](forms/index.md) | [Tester](exam-simulator.md?area=Forms) | [Cartes](revision/flashcards/forms.md) | [Examen](exams/forms.md) | [Fiche](revision/sheets/forms.md) |
+| 10 | [Security](security/index.md) | 13/13 PASS | [Étudier](security/index.md) | [Tester](exam-simulator.md?area=Security) | [Cartes](revision/flashcards/security.md) | [Examen](exams/security.md) | [Fiche](revision/sheets/security.md) |
+| 11 | [HTTP Caching](http-caching/index.md) | 5/5 PASS | [Étudier](http-caching/index.md) | [Tester](exam-simulator.md?area=HTTP%20Caching) | [Cartes](revision/flashcards/http-caching.md) | [Examen](exams/http-caching.md) | [Fiche](revision/sheets/http-caching.md) |
+| 12 | [Console](console/index.md) | 9/9 PASS | [Étudier](console/index.md) | [Tester](exam-simulator.md?area=Console) | [Cartes](revision/flashcards/console.md) | [Examen](exams/console.md) | [Fiche](revision/sheets/console.md) |
+| 13 | [Messenger](messenger/index.md) | 7/7 PASS | [Étudier](messenger/index.md) | [Tester](exam-simulator.md?area=Messenger) | [Cartes](revision/flashcards/messenger.md) | [Examen](exams/messenger.md) | [Fiche](revision/sheets/messenger.md) |
+| 14 | [Automated Tests](testing/index.md) | 12/12 PASS | [Étudier](testing/index.md) | [Tester](exam-simulator.md?area=Automated%20Tests) | [Cartes](revision/flashcards/testing.md) | [Examen](exams/testing.md) | [Fiche](revision/sheets/testing.md) |
+| 15 | [Miscellaneous](miscellaneous/index.md) | 15/15 PASS | [Étudier](miscellaneous/index.md) | [Tester](exam-simulator.md?area=Miscellaneous) | [Cartes](revision/flashcards/miscellaneous.md) | [Examen](exams/miscellaneous.md) | [Fiche](revision/sheets/miscellaneous.md) |
+| — | [Internationalization and localization](miscellaneous/intl.md) | 1/1 PASS | [Étudier](miscellaneous/intl.md) | [Tester](exam-simulator.md?area=Miscellaneous) | — | — | — |
 
-<small>L'internationalisation est un unique sous-sujet à l'intérieur des
-chapitres Miscellaneous (aucun fichier de lab/flashcard/examen dédié
-n'existe pour l'instant) — son lien « Cours » pointe directement vers cette
-section ; les cellules vides sont des lacunes honnêtes, pas des liens
-cassés.</small>
-
-### 🎓 Révision Certification
-
-Pas des domaines de contenu — les outils méta qui enveloppent les quinze
-domaines : comment fonctionne l'examen, le parcours d'étude complet, et
-toutes les surfaces de révision de dernière minute.
-
-| Outil | À quoi ça sert |
-|---|---|
-| [Exam Guide](exam-guide/index.md) | Format, notation, Advanced vs Expert, stratégie du jour J |
-| [Roadmap](roadmap.md) | Le graphe de dépendances complet, 4 phases, 15 étapes, checkpoints |
-| [Exam Simulator](exam-simulator.md) | Modes Practice/Exam interactifs, filtrables par domaine et difficulté |
-| [Chapter Exams](exams/index.md) | Séries fixes par domaine, page d'index pour les 15 |
-| [Revision Hub](revision/index.md) | Cheat sheet, confusions, pièges, codex, cas limites, index flashcards, mock exams |
-| [Glossary](glossary.md) | Définitions en une ligne renvoyant au chapitre qui enseigne chaque terme |
+<small>L'internationalisation est un unique sous-sujet à l'intérieur du
+chapitre Miscellaneous (aucun fichier flashcard/examen dédié n'existe encore
+pour lui) — son lien "Étudier" va directement à cette section ; les cellules
+vides sont des lacunes honnêtes, pas des liens cassés.</small>
 
 ### 🚫 Hors programme (exclu, non enseigné)
 
-Mentionné ici **uniquement** pour marquer la frontière — rien de tout cela
-n'est enseigné ni évalué comme contenu substantiel. Deux composants existent
-dans la navigation en tant que chapitres complets *parce que* le programme
-les nomme explicitement comme exclus et qu'un candidat doit pouvoir les
-reconnaître au premier coup d'œil ; chacun porte sa propre mention « Excluded
-from Symfony 8 certification ».
+Nommé ici **uniquement** pour marquer la frontière — rien de tout cela n'est
+enseigné ou évalué comme contenu substantiel. Trois composants existent dans
+la navigation en tant que chapitres complets *parce que* le programme les
+nomme explicitement comme exclus et qu'un candidat doit pouvoir le reconnaître
+au premier coup d'œil ; chacun porte sa propre mention « Exclu de la
+certification Symfony 8 ».
 
 | Sujet | Où il est mentionné |
 |---|---|
-| Edge Side Includes (ESI) | [Chapitre exclu](appendices/out-of-syllabus/esi.md) — accessible depuis HTTP Caching par souci d'exhaustivité |
-| PHPUnit Bridge | [Chapitre exclu](appendices/out-of-syllabus/phpunit-bridge.md) — accessible depuis Automated Tests par souci d'exhaustivité |
-| Lock Component | [Chapitre exclu](appendices/out-of-syllabus/lock.md) — accessible depuis Miscellaneous par souci d'exhaustivité |
-| Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, PHP Polyfills, composants String/Uid/TypeInfo, Amazon SQS, transports Messenger tiers | Mentions de frontière uniquement (distracteurs, notes de scope) — voir [Requirements.md](https://github.com/jasseryah-mazars/Sf-8.0/blob/master/specs/Requirements.md) FR-5 |
+| Edge Side Includes (ESI) | [Chapitre exclu](appendices/out-of-syllabus/esi.md) |
+| PHPUnit Bridge | [Chapitre exclu](appendices/out-of-syllabus/phpunit-bridge.md) |
+| Lock Component | [Chapitre exclu](appendices/out-of-syllabus/lock.md) |
+| Symfony UX, Symfony AI, Doctrine, Monolog, AssetMapper, Webpack Encore, PHP Polyfills, composants String/Uid/TypeInfo, Amazon SQS, transports Messenger tiers | Mentions de frontière uniquement (distracteurs, notes de périmètre) |
 
-## Who it's for
+## Actions rapides
 
-- **The Practitioner** — 2 à 5 ans d'expérience Symfony, visant **Advanced**.
-  Vous voulez une couverture structurée et de l'assurance sur les cas limites.
-- **The Expert candidate** — senior, visant **Expert**. Vous voulez les
-  mécanismes internes, les arbitrages et le repérage des pièges.
+- [Roadmap](roadmap.md) — le graphe de dépendances complet et l'ordre d'étude.
+- [Exam Simulator](exam-simulator.md) — modes interactifs Entraînement/Examen.
+- [Chapter Exams](exams/index.md) — jeux de questions fixes par domaine.
+- [Mock Exams](revision/mock-exam.md) — épreuves complètes chronométrées.
+- [Revision Hub](revision/index.md) — tous les outils de révision de dernière minute.
+- [Master Cheat Sheet](revision/cheat-sheet.md) — faits à plus fort rendement par domaine.
+- [Top Certification Traps](revision/traps.md) — les distinctions subtiles que l'examen adore.
+- [Study Planner](revision/study-planner.md) — choisissez un planning 8/4/1 semaine(s).
+- [Glossary](glossary.md) — définitions en une ligne renvoyant au chapitre qui enseigne chaque terme.
+- [Official Symfony Certification](https://certification.symfony.com/) — le site officiel de l'examen.
+
+## À qui ça s'adresse
+
+- **Le Praticien** — 2 à 5 ans de Symfony, visant **Advanced**. Vous voulez une
+  couverture structurée et de la confiance sur les cas limites.
+- **Le candidat Expert** — senior, visant **Expert**. Vous voulez les
+  mécanismes internes, les compromis, et le repérage des pièges.
 
 Les deux niveaux sont le *même examen*, noté différemment — voir
 [Advanced vs Expert](exam-guide/levels.md).
 
-## How to use this platform
-
-```mermaid
-flowchart LR
-    G[Exam Guide] --> R[Roadmap]
-    R --> A[Dashboard : domaines dans l'ordre d'étude]
-    A --> Q[Exam Simulator]
-    Q --> V[Revision Hub]
-    V -.révision espacée.-> A
-```
-
-1. Lisez l'**[Exam Guide](exam-guide/index.md)** pour connaître le format et la notation.
-2. Suivez le **[Learning Dashboard](#learning-dashboard)** ci-dessus (ou la
-   **[Roadmap](roadmap.md)** complète) — l'ordre d'étude optimisé,
-   délibérément différent de l'ordre du syllabus.
-3. Travaillez les chapitres de chaque domaine ; tentez les exercices et les
-   questions intégrées *avant* de révéler les réponses.
-4. Auto-évaluez-vous avec l'**[Exam Simulator](exam-simulator.md)**.
-5. Dans les derniers jours, entraînez-vous avec le **[Revision Hub](revision/index.md)** —
-   choisissez un **[mode de révision](revision/modes.md)** selon le temps dont vous disposez.
-
-!!! tip "Trois façons d'étudier (votre coach choisit selon le temps)"
-    - :material-flash: **Rapide (5–15 min) :** [Cheat Sheet](revision/cheat-sheet.md),
-      [Flashcards](revision/flashcards/index.md), [Easily Confused](revision/confusions.md).
-    - :material-book-open-page-variant: **Approfondi (45–90 min) :** un domaine
-      de bout en bout (Deep Dive + exercices).
-    - :material-timer: **Examen (90 min) :** le [Mock Exam](revision/mock-exam.md) chronométré.
-
-!!! tip "Start here"
-    Vous découvrez la plateforme ? Lisez l'[Exam Format](exam-guide/format.md),
-    puis regardez le [Learning Dashboard](#learning-dashboard) ci-dessus et
-    commencez par **PHP & Web Security**. Peu de temps ? Priorisez les
-    domaines **Critical** : Architecture, Dependency Injection, Security et
-    Messenger.
-
-## Exam facts (Symfony 8)
+## Faits sur l'examen (Symfony 8)
 
 | Fait | Valeur |
 |---|---|
@@ -179,30 +173,25 @@ flowchart LR
 | Types de questions | Choix unique, choix multiple, vrai/faux |
 | Niveaux | **Advanced** et **Expert** (déterminés par le score) |
 | Base PHP | **PHP 8.4+** (exigence de Symfony 8) |
-| Changement de pondération | Messenger **davantage pondéré** ; HTTP Caching **moins pondéré** |
+| Changement de poids | Messenger **renforcé** ; HTTP Caching **allégé** |
 
-## Scope
-
-!!! info "In scope"
-    Les 15 domaines officiels et tous leurs sous-sujets — voir le
-    [Learning Dashboard](#learning-dashboard) ci-dessus pour la liste complète
-    avec le statut de couverture par domaine.
-
-!!! warning "Out of scope — not taught here"
-    Voir [Hors programme](#hors-programme-exclu-non-enseigne) ci-dessus.
-
-## Where to go next
+## Où aller ensuite
 
 - [Exam Guide](exam-guide/index.md) — format, notation, Advanced vs Expert, stratégie.
 - [Roadmap](roadmap.md) — le parcours d'étude ordonné et le graphe de dépendances.
-- [Revision Hub](revision/index.md) — modes, cheat sheets, flashcards, confusions,
-  mock exam, pièges, aides-mémoire, quiz.
+- [Revision Hub](revision/index.md) — modes, fiches de révision, flashcards, confusions,
+  examen blanc, pièges, aides mémoire, quiz.
 
 ---
 
-<small>Contenu sous licence MIT. Symfony est une marque de Symfony SAS. Ceci
-est un projet communautaire indépendant, non affilié à Symfony SAS et non
-approuvé par elle.</small>
+<small>Sous licence MIT. Symfony est une marque déposée de Symfony SAS. Ceci est
+un projet communautaire indépendant, non affilié à Symfony SAS et non
+approuvé par elle. Le projet a commencé comme une réécriture de la
+[liste de préparation communautaire de ThomasBerends](https://github.com/ThomasBerends/symfony-certification-preparation-list)
+(une liste de liens, ciblant Symfony 7) et a été reconstruit en contenu
+pédagogique complet pour Symfony 8. Une ressource d'étude à utiliser **en
+complément de la documentation officielle Symfony** qu'elle référence, pas en
+remplacement.</small>
 
 ## Official References
 
