@@ -27,6 +27,55 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le constructeur de violations n'enregistre **rien** tant que tu n'appelles pas explicitement `addViolation()` à la fin.
+
+### Imagine dans la vraie vie
+Le constructeur de violations est le **formulaire de déclaration d'incident**. L'agent remplit les champs — quel objet, la valeur fautive, un code de référence — mais rien n'est enregistré tant qu'il n'appuie pas sur "soumettre" (`addViolation()`).
+
+### Dans Symfony
+```php
+$context->buildViolation('Le %champ% ne peut pas être négatif.')
+    ->setParameter('%champ%', 'stock')
+    ->addViolation(); // RIEN n'est enregistré avant cet appel
+```
+
+### Exemple simple
+```php
+$context->buildViolation('Erreur.')->atPath('email')->addViolation();
+```
+
+### Comment le mémoriser 🧠
+Oublier `->addViolation()` à la fin de la chaîne fait échouer silencieusement ta validation personnalisée — le builder reste "en brouillon" sans jamais être soumis.
+
+Validation produces **violations**. Inside a validator or callback you create
+them through the `Symfony\Component\Validator\Context\ExecutionContextInterface`;
+callers read them back from a
+`Symfony\Component\Validator\ConstraintViolationListInterface`. Understanding
+both ends is essential for custom constraints and API error responses.
+
+```php
+// Producer side — inside a validator/callback, via the ExecutionContextInterface
+$this->context->buildViolation('Invalid SKU.')->addViolation();
+
+// Consumer side — read the ConstraintViolationListInterface back
+$violations = $validator->validate($product);
+foreach ($violations as $violation) {
+    echo $violation->getMessage();
+}
+```
+
+!!! question "Predict first"
+    A custom validator calls `$this->context->buildViolation('Bad SKU')` and sets a
+    few parameters, but the field always validates. What is wrong?
+
+??? note "Reveal"
+    It never calls `addViolation()`. The builder records nothing until you commit
+    with `addViolation()` — the missing terminal call silently passes the value.
+
+
 ## Theory
 
 La validation produit des **violations**. À l'intérieur d'un validator ou d'un

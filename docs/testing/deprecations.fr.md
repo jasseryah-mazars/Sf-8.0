@@ -34,6 +34,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le PHPUnit bridge classe chaque dépréciation déclenchée selon qui en est responsable — ton propre code, une dépendance directe, ou une dépendance de dépendance.
+
+### Imagine dans la vraie vie
+Un inspecteur du bâtiment relève des infractions au code, chacune étiquetée selon le responsable. Certaines, c'est *toi* qui les as mal construites (**self**) ; certaines viennent d'un entrepreneur *que tu as engagé directement* (**direct**) ; certaines sont enterrées profondément dans le travail d'un sous-traitant (**indirect**).
+
+### Dans Symfony
+Configurer `max[self]=0` fait échouer le build seulement si **ton propre code** déclenche une dépréciation — les dépréciations venant de bibliothèques tierces (que tu ne contrôles pas) sont tolérées jusqu'à ce que tu puisses les mettre à jour.
+
+### Exemple simple
+```php
+#[IgnoreDeprecations]
+public function testAncienneApi(): void { /* teste volontairement du code déprécié */ }
+```
+
+### Comment le mémoriser 🧠
+`#[IgnoreDeprecations]` remplace l'ancien `@group legacy` **supprimé** — ne cherche jamais cette annotation dans du code Symfony 8, elle n'existe plus.
+
+---
+
+
 ## Theory
 
 Symfony annonce les suppressions d'API à l'avance en déclenchant

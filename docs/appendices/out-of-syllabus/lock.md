@@ -34,7 +34,23 @@
     **Est. time:** 35 min ·
     **Prerequisites:** [Dependency Injection](../../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** NON — hors syllabus officiel, conservé comme enrichissement (voir l'avertissement ci-dessus).
+
 ---
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** Le composant Lock empêche deux processus de faire le même travail critique en même temps — par exemple, éviter que deux tâches planifiées identiques ne s'exécutent en double.
+
+**Pourquoi ça existe ?** Sans verrou, deux workers qui démarrent en même temps pourraient tous les deux, par exemple, envoyer la même facture deux fois.
+
+**🏠 Analogie de la vraie vie :** Le panneau "occupé" d'une porte de toilettes. `acquire()` essaie la porte : si elle est libre, tu retournes le panneau et entres ; si elle est déjà occupée, tu reçois un simple "non" et tu repars — tu ne fais pas la queue sauf si tu le demandes explicitement (mode bloquant).
+
+**Symfony dans la vraie vie :** `$lock = $lockFactory->createLock('tache-quotidienne'); if ($lock->acquire()) { /* travail */ $lock->release(); }` — un seul worker à la fois exécute réellement la tâche.
+
+**⚠️ Erreur fréquente :** croire que le Lock component est testé à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus.
+
+**🧠 Comment le mémoriser :** "Un verrou, c'est un panneau `occupé` — `acquire()` par défaut ne fait jamais la queue, il dit juste oui ou non."
 
 ## Theory
 

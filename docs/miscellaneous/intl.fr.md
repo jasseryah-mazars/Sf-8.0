@@ -32,6 +32,32 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La traduction associe un identifiant de message à une chaîne localisée par langue — et si aucune traduction n'existe, Symfony affiche l'identifiant lui-même plutôt que de planter.
+
+### Imagine dans la vraie vie
+La traduction est un audioguide multilingue de musée. Chaque exposition a un code (l'identifiant du message), et le guide joue la phrase correspondante dans ta langue choisie, se repliant sur une langue régionale puis par défaut quand ta langue exacte n'a pas d'enregistrement. Si aucun enregistrement n'existe nulle part, il lit simplement le code à voix haute au lieu de se taire.
+
+### Dans Symfony
+```twig
+{{ 'produit.ajoute_panier'|trans }}
+```
+Si la clé `produit.ajoute_panier` n'existe dans aucun fichier de traduction, la page affiche littéralement "produit.ajoute_panier" — un signal visible immédiat qu'une traduction manque, plutôt qu'une erreur ou un texte vide.
+
+### Exemple simple
+```yaml
+# messages.fr.yaml
+produit.ajoute_panier: "Ajouté au panier"
+```
+
+### Comment le mémoriser 🧠
+Symfony 8 utilise le **format ICU MessageFormat** (`{count, plural, ...}`) pour la pluralisation — c'est la seule voie, `transchoice` n'existe plus.
+
+---
+
+
 ## Theory
 
 Deux composants coopèrent. **Translation** associe des clés de message à des

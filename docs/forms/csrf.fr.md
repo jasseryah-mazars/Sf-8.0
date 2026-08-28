@@ -28,6 +28,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony ajoute automatiquement un champ caché invisible qui prouve que le formulaire a bien été soumis depuis ton propre site — pas depuis un site pirate.
+
+### Imagine dans la vraie vie
+Le champ caché `_token` est un **badge délivré au poste de sécurité**. Quand le formulaire est affiché, le poste délivre un badge lié à ta visite. À la soumission, le garde vérifie que le badge correspond avant de laisser passer la requête. Un site pirate peut faire toquer ton navigateur à la porte, mais il ne peut ni lire ni forger ton badge.
+
+### Dans Symfony
+Le champ `_token` est ajouté **automatiquement** par le composant Form dans chaque formulaire — tu n'as jamais besoin de l'ajouter toi-même.
+
+### Exemple simple
+```php
+$resolver->setDefaults(['csrf_token_id' => 'inscription_item']);
+```
+
+### Comment le mémoriser 🧠
+Le token est validé sur **`PRE_SUBMIT`**. Le **CSRF sans état** (`stateless_token_ids`, 7.2+) ne nécessite aucune session — utile pour les API.
+
+
 ## Theory
 
 Le **CSRF** (Cross-Site Request Forgery) piège le navigateur d'un utilisateur

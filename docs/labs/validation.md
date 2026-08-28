@@ -14,6 +14,20 @@ tags:
     [Violations Builder](../validation/violations-builder.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Construire ta propre règle de validation réutilisable (ici, "mot de passe suffisamment fort") au lieu d'utiliser uniquement les contraintes déjà fournies par Symfony.
+
+**Pourquoi ça existe ?** Les contraintes intégrées (`NotBlank`, `Email`...) ne couvrent pas des règles métier spécifiques — savoir créer les tiennes est indispensable dès qu'un projet a des besoins particuliers.
+
+**🏠 Analogie de la vraie vie :** Un scanner sur mesure à l'aéroport, conçu spécifiquement pour détecter un objet que les scanners standards ne repèrent pas — deux pièces séparées : la machine qui déclare ce qu'elle cherche (la `Constraint`), et l'opérateur qui l'applique réellement (le `ConstraintValidator`).
+
+**Symfony dans la vraie vie :** `#[StrongPassword]` sur une propriété déclenche automatiquement ton `ConstraintValidator` personnalisé, exactement comme `#[Assert\Email]` déclenche le validateur intégré d'email.
+
+**⚠️ Erreur fréquente :** oublier de gérer le cas `null`/vide dans le validateur — par convention, une valeur vide est valide (c'est `NotBlank` qui doit s'en occuper séparément), pas ta contrainte personnalisée.
+
+**🧠 Comment le mémoriser :** "Deux classes, un seul travail : la Constraint décrit la règle, le Validator l'applique."
+
 ## Objective
 
 After this lab you can **write a custom validation rule test-first**: assert that

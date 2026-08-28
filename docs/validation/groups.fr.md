@@ -28,6 +28,47 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les groupes permettent de valider seulement un sous-ensemble de règles selon le contexte — pas les mêmes règles à l'inscription et à l'édition du profil.
+
+### Imagine dans la vraie vie
+Les groupes sont les **différentes files de contrôle** à l'aéroport. Un membre d'équipage, un passager national et un passager international passent par des jeux de scanners différents alors que c'est le même point de contrôle. Valider un groupe, c'est choisir la file.
+
+### Dans Symfony
+Un formulaire d'inscription peut exiger un mot de passe (`groups: ['inscription']`), tandis qu'un formulaire d'édition de profil valide le même objet **sans** ce groupe — même entité, règles différentes selon le contexte.
+
+### Exemple simple
+```php
+$validator->validate($utilisateur, null, ['inscription']);
+```
+
+### Comment le mémoriser 🧠
+Le groupe `Default` (celui utilisé quand tu n'en précises aucun) se comporte différemment sur une classe avec une `GroupSequence` — c'est la nuance la plus testée de ce chapitre.
+
+Sometimes only *some* constraints apply — a `User` at *registration* needs a
+password, but at *profile edit* it does not. **Groups** let you tag constraints
+and validate a chosen set.
+
+Every constraint has a `groups` option (default: `['Default']`). You pick which
+groups run by passing them to `validate()`:
+
+```php
+$violations = $validator->validate($user, groups: ['registration']);
+```
+
+If you pass no groups, the validator uses `['Default']`.
+
+!!! question "Predict first"
+    A `User` class defines a `#[Assert\GroupSequence]`. You validate the `Default`
+    group, then the `User` group. Do they behave the same?
+
+??? note "Reveal"
+    No. `Default` triggers the *sequence* (stepwise, stop-on-first-failure); the
+    `{ClassName}` group `User` runs the same constraints *flat*, bypassing the order.
+
+
 ## Theory
 
 Parfois, seules *certaines* constraints s'appliquent — un `User` à

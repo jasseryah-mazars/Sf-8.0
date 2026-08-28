@@ -22,6 +22,20 @@ Routing, Security, HTTP Caching) assumes you already know it cold.
     | **Revision priority** | **High** |
     | **Est. time** | 3–4 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** HTTP est le langage que ton navigateur et le serveur Symfony parlent ensemble : une requête part, une réponse revient. Cette étape t'apprend ce langage avant de te montrer comment Symfony le manipule.
+
+**Pourquoi ça existe ?** Sans un modèle mental exact de "requête → réponse", tout le reste (routeur, contrôleurs, sécurité, cache) reste flou — ce sont tous des couches construites au-dessus de ce même échange.
+
+**🏠 Analogie de la vraie vie :** Pense à une lettre envoyée à une administration. Tu remplis un formulaire (la requête : quelle question, quelles pièces jointes), tu l'envoies, et un fonctionnaire te répond (la réponse : accepté, refusé, ou "revenez avec un autre document"). HTTP fixe les règles de ce courrier — quels formulaires existent, quels tampons de réponse sont valides.
+
+**Symfony dans la vraie vie :** `Request` est ta lettre déjà ouverte et triée en tiroirs (query, body, headers) ; `Response` est la réponse que Symfony prépare et renvoie. `HttpClient` fait l'inverse : c'est Symfony qui *envoie* une lettre à quelqu'un d'autre.
+
+**⚠️ Erreur fréquente :** confondre "l'URL" avec "la requête entière" — l'URL n'est qu'une partie (le chemin) ; la méthode, les en-têtes et le corps comptent tout autant pour la certification.
+
+**🧠 Comment le mémoriser :** "Une requête pose une question, une réponse y répond — jamais l'inverse."
+
 ## Why this stage matters
 
 Symfony is, at heart, a machine that maps `Request → Response`. `HttpKernel`,

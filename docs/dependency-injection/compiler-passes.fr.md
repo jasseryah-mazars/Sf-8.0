@@ -32,6 +32,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un compiler pass réécrit les définitions de services **pendant** la compilation, avant que quoi que ce soit ne soit réellement instancié.
+
+### Imagine dans la vraie vie
+Un compiler pass est un manager de cuisine qui fait la mise en place *avant* le service : il parcourt les fiches de poste (les définitions) et — disons — rassemble toutes les recettes de "sauce" étiquetées sur le tableau et les agrafe dans la checklist du poste principal. Il réorganise sur papier ; aucun plat n'est encore cuisiné.
+
+### Dans Symfony
+L'autowiring et la collecte des services tagués de Symfony **sont eux-mêmes** des compiler passes — ce ne sont pas des mécanismes magiques séparés, juste des passes exécutées avant les tiennes.
+
+### Exemple simple
+```php
+class MonPass implements CompilerPassInterface {
+    public function process(ContainerBuilder $container): void { /* réécrit des définitions */ }
+}
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **pas** d'attribut `#[CompilerPass]` — l'enregistrement se fait toujours dans `Kernel::build()` ou le `build()` d'un bundle. Et une priorité plus haute s'exécute **plus tôt** dans sa phase.
+
+---
+
+
 ## Theory
 
 Un **compiler pass** est un hook qui s'exécute pendant la **compilation** du

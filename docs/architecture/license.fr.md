@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le code de Symfony est gratuit à utiliser, modifier et même revendre — la seule règle est de garder la petite mention de copyright ; le nom "Symfony" lui-même est protégé séparément.
+
+### Imagine dans la vraie vie
+Une recette de cuisine publiée gratuitement dans un livre communautaire : n'importe qui peut la cuisiner, l'adapter, et même la vendre dans son propre restaurant fermé au public — la seule règle est de garder la petite mention "recette de…". Le nom et le logo du restaurant original, eux, restent protégés : tu peux dire "fait à partir de la recette de Mamie", mais tu ne peux pas ouvrir un restaurant appelé "Chez Mamie" sans autorisation.
+
+### Dans Symfony
+Tu peux construire une application commerciale et fermée avec Symfony sans jamais publier ton propre code — mais tu ne peux pas appeler ton produit "SymfonyCloud" ou utiliser son logo comme si c'était officiel.
+
+### Exemple simple
+```json
+{ "license": "MIT" }
+```
+
+### Comment le mémoriser 🧠
+**Licence = le CODE** (utilisable librement). **Marque déposée = le NOM/logo** (protégé séparément). Deux papiers différents, deux règles différentes.
+
+
 ## Theory
 
 Symfony (le framework et ses components) est publié sous la **licence MIT** — une

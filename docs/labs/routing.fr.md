@@ -15,6 +15,21 @@ tags:
     **Theory:** [Configuration](../routing/configuration.md) ·
     **Mode:** Manual verification + Conceptual simulation
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** T'entraîner à prédire, sur papier, quelle route va matcher une URL donnée — puis vérifier ta prédiction avec les vrais outils Symfony.
+
+**Pourquoi ça existe ?** L'examen pose souvent des questions du type "quelle route matche cette URL ?" — ce lab entraîne exactement ce réflexe, en le vérifiant immédiatement avec le vrai comportement du routeur.
+
+**🏠 Analogie de la vraie vie :** Un examen de code de la route où tu dois d'abord prédire ce que fait un panneau avant de vérifier la réponse au dos de la carte — l'entraînement à prédire est ce qui fixe la règle en mémoire.
+
+**Symfony dans la vraie vie :** `php bin/console router:match /produits/42 --method=POST` te dit exactement quelle route matche (ou pourquoi aucune ne matche) — la vérité terrain contre laquelle comparer ta prédiction.
+
+**⚠️ Erreur fréquente :** oublier qu'une bonne URL avec la mauvaise méthode HTTP donne un 405, pas un 404 — une confusion fréquente que ce lab t'entraîne à éviter.
+
+**🧠 Comment le mémoriser :** "Prédis d'abord, vérifie ensuite avec `router:match` — jamais l'inverse."
+
+
 ## Objective
 
 À l'issue de ce lab, vous saurez, face à une `RouteCollection` et pour n'importe

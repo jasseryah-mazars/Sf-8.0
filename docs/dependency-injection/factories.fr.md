@@ -32,6 +32,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une factory construit un service que le container ne peut pas simplement `new` tout seul — il faut une méthode spécialisée qui l'assemble.
+
+### Imagine dans la vraie vie
+Une factory est un plat que la cuisine ne peut pas juste attraper sur l'étagère — il est fait sur commande par un spécialiste (une méthode statique, un autre service) qui l'assemble à partir d'entrées en direct et rend l'assiette finie.
+
+### Dans Symfony
+Construire un client HTTP configuré différemment selon l'environnement (URL de base, timeout) via une méthode statique `HttpClientFactory::creer()` est le cas d'usage classique d'une factory.
+
+### Exemple simple
+```yaml
+services:
+    App\Http\Client:
+        factory: ['App\Http\ClientFactory', 'creer']
+        arguments: ['%env(API_URL)%']
+```
+
+### Comment le mémoriser 🧠
+Les `arguments:` vont à la **méthode de la factory**, jamais à un constructeur — et il n'existe **pas** d'attribut `#[Factory]`, seulement `#[Autowire(factory: ...)]`.
+
+---
+
+
 ## Theory
 
 Parfois, un service ne peut pas être créé en instanciant simplement la classe avec

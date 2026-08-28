@@ -30,6 +30,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+L'authentification répond à une seule question : "qui fait cette requête ?" — elle ne décide jamais ce que cette personne a le droit de faire.
+
+### Imagine dans la vraie vie
+S'authentifier, c'est montrer sa carte d'identité au poste de garde. Tu tends un justificatif — le **Passport** de badges — le garde le vérifie contre les registres, et s'il tient la route, tu reçois un bracelet (le **token**) qui prouve qui tu es pour le reste de ta visite.
+
+### Dans Symfony
+Une fois le token créé après un login réussi, chaque requête suivante sur la même session le retrouve automatiquement — tu n'as pas besoin de re-présenter tes identifiants à chaque page.
+
+### Exemple simple
+```php
+$token = $tokenStorage->getToken();
+$token?->getUser()?->getUserIdentifier(); // qui est connecté maintenant
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **plus** de flag `enable_authenticator_manager` en Symfony 8 — le système authenticator **est** le seul système de sécurité, pas une option parmi d'autres.
+
+---
+
+
 ## Theory
 
 L'**authentification** répond à *« qui effectue cette request ? »*. En

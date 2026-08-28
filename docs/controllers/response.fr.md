@@ -30,6 +30,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrôleur doit rendre une enveloppe scellée (`Response`) — repartir les mains vides fait planter l'application.
+
+### Imagine dans la vraie vie
+Le réceptionniste (le contrôleur) doit toujours rendre une enveloppe scellée au visiteur — jamais le laisser repartir les mains vides. Le type d'enveloppe dépend du contenu : une simple lettre (`Response`, HTML), un mémo structuré (`JsonResponse`), un colis entier (`BinaryFileResponse`), ou une dictée en direct page par page (`StreamedResponse`).
+
+### Dans Symfony
+Oublier de retourner une `Response` dans une action déclenche une `LogicException` — sauf si un listener `kernel.view` sait construire une réponse à partir de ce que tu as retourné (par exemple un tableau, avec un bundle dédié).
+
+### Exemple simple
+```php
+public function api(): JsonResponse { return $this->json(['statut' => 'ok']); }
+```
+
+### Comment le mémoriser 🧠
+Choisis le sous-type par la nature du contenu : JSON → `JsonResponse`, fichier téléchargeable → `BinaryFileResponse`, flux progressif → `StreamedResponse`.
+
+
 ## Theory
 
 Tout controller doit retourner une `Symfony\Component\HttpFoundation\Response`. Les

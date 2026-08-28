@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony choisit la langue d'un visiteur en suivant un ordre de priorité précis — et ne propose jamais une langue que le site ne sait pas réellement servir.
+
+### Imagine dans la vraie vie
+Un réceptionniste d'hôtel accueille un client étranger en suivant un ordre : si la réservation précise une langue (`_locale` dans l'URL), il l'utilise ; sinon une préférence enregistrée dans le profil ; sinon les langues que le client dit parler, dans son ordre (`Accept-Language`) ; sinon la langue par défaut de l'hôtel. Il ne choisit jamais une langue que personne au comptoir ne parle réellement (la liste des locales supportées).
+
+### Dans Symfony
+`enabled_locales` définit la liste blanche des langues réellement servies ; deviner une locale hors de cette liste produirait une expérience cassée (templates, traductions absentes) — c'est pour ça que la liste blanche est obligatoire dans l'API sûre.
+
+### Exemple simple
+```php
+$locale = $request->getPreferredLanguage(['fr', 'en']); // jamais autre chose que fr ou en
+```
+
+### Comment le mémoriser 🧠
+`getPreferredLanguage()` **sans argument** peut renvoyer n'importe quoi venant du navigateur — **toujours** lui passer la liste blanche des locales supportées.
+
+
 ## Theory
 
 La **locale** détermine la langue et le formatage régional utilisés par l'application.

@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+L'autowiring lit le type d'un paramètre de constructeur et injecte le service correspondant — tout se résout à la compilation, jamais au hasard à l'exécution.
+
+### Imagine dans la vraie vie
+L'autowiring est un serveur qui lit ta commande par *type* — "je prendrai le poisson" — et la cuisine sait exactement quel plat ça signifie. Commande "le poisson" quand deux plats de poisson existent et qu'aucun n'est le choix par défaut, et le serveur s'arrête pour demander lequel (l'erreur d'ambiguïté) plutôt que de deviner.
+
+### Dans Symfony
+Deux classes implémentant `NotifieurInterface` sans alias par défaut déclenché l'exact message d'erreur que l'examen aime tester : "cannot autowire, multiple candidates" — résolu avec `#[Target]` ou un alias nommé.
+
+### Exemple simple
+```php
+public function __construct(#[Target('email')] NotifieurInterface $notifieur) {}
+```
+
+### Comment le mémoriser 🧠
+L'autowiring **ne devine jamais** les scalaires (`string`, `int`) — seuls les types-objets (classes, interfaces) sont résolus automatiquement ; les scalaires ont besoin d'un `bind` explicite.
+---
+
+
 ## Theory
 
 L'**autowiring** supprime la corvée de lister chaque argument de constructeur.

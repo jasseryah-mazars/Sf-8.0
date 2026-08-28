@@ -10,6 +10,20 @@ block; this page seeds the well-known ones and links to the full area.
     "never", "must"** — or by an old-but-familiar (deprecated) option offered next
     to the current one. Slow down on those.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une liste, domaine par domaine, des **pièges classiques** que l'examen tend le plus souvent — des nuances subtiles ("toujours", "par défaut", "seulement") qui font basculer une bonne réponse apparente vers une mauvaise réponse réelle.
+
+**Pourquoi ça existe ?** Certaines erreurs reviennent chez presque tous les candidats (ex. confondre `kernel.view` et `kernel.response`). Les rassembler en une seule page permet de les vérifier une dernière fois, juste avant l'examen, sans avoir à rouvrir chaque chapitre.
+
+**🏠 Analogie de la vraie vie :** C'est la liste des **questions pièges classiques du code de la route** qu'une auto-école affiche en fin de formation : "attention, la priorité à droite ne s'applique pas sur un rond-point" — les pièges connus de tous les moniteurs, réunis en une fiche.
+
+**Symfony dans la vraie vie :** Chaque puce → un piège précis, formulé comme une phrase-vérité à retenir (ex. "kernel.view ne se déclenche que si le contrôleur retourne un non-Response") / Le lien "area" → le chapitre complet si le piège ne fait pas encore sens.
+
+**⚠️ Erreur fréquente :** Lire cette page comme une simple liste de curiosités, sans la relier au chapitre correspondant. Un piège compris sans le mécanisme sous-jacent se dissout vite ; un piège relié à sa cause réelle reste en mémoire.
+
+**🧠 Comment le mémoriser :** *« Les mots absolus ("toujours", "jamais", "seulement") sont des signaux d'alerte »* — dès qu'une option d'examen en contient un, relis-la deux fois.
+
 ## Architecture → [area](../architecture/index.md)
 
 - **`kernel.view` only fires when the controller returns a *non-`Response`*.** If it

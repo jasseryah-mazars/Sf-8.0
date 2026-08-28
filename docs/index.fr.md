@@ -193,6 +193,21 @@ pédagogique complet pour Symfony 8. Une ressource d'étude à utiliser **en
 complément de la documentation officielle Symfony** qu'elle référence, pas en
 remplacement.</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce site ?** Un support de préparation complet et gratuit à la certification Symfony 8 — chaque page t'apprend un concept précis, avec des exemples et des questions d'entraînement.
+
+**Pourquoi ça existe ?** Le syllabus officiel liste 15 domaines à connaître, mais ne fournit aucun contenu pédagogique lui-même — ce site comble ce vide avec des cours structurés, testés et vérifiés.
+
+**🏠 Analogie de la vraie vie :** Une auto-école complète plutôt qu'une simple liste de règles du code de la route : ici, chaque règle est expliquée, illustrée, et suivie d'exercices — pas juste énumérée.
+
+**Symfony dans la vraie vie :** Choisis une des trois cartes ci-dessous selon ton niveau (débutant, préparation Advanced, préparation Expert) — le site s'adapte à ton point de départ plutôt que de t'imposer un seul chemin.
+
+**⚠️ Erreur fréquente :** essayer de tout lire dans l'ordre de la barre de navigation (alphabétique) au lieu de suivre le [Roadmap](roadmap.md) — l'ordre alphabétique ignore les prérequis entre domaines.
+
+**🧠 Comment le mémoriser :** "Pas sûr par où commencer ? PHP & Web Security d'abord, puis le Roadmap dans l'ordre."
+
+
 ## Official References
 
 - [Official Symfony Certification](https://certification.symfony.com/)

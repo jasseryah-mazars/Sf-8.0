@@ -7,6 +7,20 @@ Active-recall decks generated from the practice-question bank — one per topic 
 
 **Total cards:** 1201
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** La page d'accueil des **decks de flashcards** : 15 paquets de cartes question/réponse, un par domaine du syllabus, plus une option d'import dans une vraie application de répétition espacée (Anki).
+
+**Pourquoi ça existe ?** Avec 1201 cartes au total, il faut un point d'entrée qui répartit par domaine — réviser "toutes les cartes en vrac" serait décourageant et peu ciblé quand on veut travailler un domaine précis.
+
+**🏠 Analogie de la vraie vie :** C'est le **classeur de cartes-vocabulaire** rangé par thème (animaux, nourriture, voyage…) : on choisit le thème qu'on veut réviser aujourd'hui plutôt que de mélanger tout le classeur.
+
+**Symfony dans la vraie vie :** Chaque lien de la liste → un deck de flashcards dédié à un domaine du syllabus / "Total cards: 1201" → la taille de la banque complète / Import Anki → pour ceux qui préfèrent une vraie appli de répétition espacée avec planification automatique.
+
+**⚠️ Erreur fréquente :** Ouvrir un deck de 122 cartes (Architecture) et vouloir le finir en une seule session. Les flashcards sont conçues pour de courtes sessions répétées, pas pour un marathon unique.
+
+**🧠 Comment le mémoriser :** *« Un domaine à la fois, plusieurs fois »* — mieux vaut revoir 20 cartes chaque jour qu'épuiser 122 cartes une seule fois.
+
 ## Decks
 
 - [PHP & Web Security](php-web-security.md) — 112 cards

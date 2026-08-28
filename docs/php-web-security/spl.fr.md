@@ -30,6 +30,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La SPL fournit des interfaces qui font qu'un objet "se comporte" comme un tableau, un compteur ou une boucle native — sans être vraiment un tableau.
+
+### Imagine dans la vraie vie
+Un appareil équipé de la prise, des boutons et du cadran standards de la maison (`ArrayAccess`, `Countable`, `Iterator`) se branche directement dans les prises murales existantes — `$obj[$k]`, `count($obj)`, `foreach` — sans câblage spécial. Un générateur, lui, ressemble à une bobine de film à usage unique : il déroule les images à la demande, mais une fois visionnée jusqu'au bout, impossible de rembobiner — il faut recharger une bobine neuve.
+
+### Dans Symfony
+Le composant Finder (recherche de fichiers) et certaines collections de résultats implémentent `IteratorAggregate`, ce qui permet d'écrire un simple `foreach` sur le résultat sans jamais charger toute la liste en mémoire d'un coup.
+
+### Exemple simple
+```php
+function nombres(): \Generator {
+    yield 1;
+    yield 2; // produit à la demande, pas d'un coup
+}
+foreach (nombres() as $n) { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Un générateur, c'est un **Iterator jetable** : on ne le parcourt qu'**une seule fois**, comme une bobine de film qu'on ne peut pas rembobiner.
+
+
 ## Theory
 
 La **Standard PHP Library** fournit des interfaces et des classes de structures

@@ -31,6 +31,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les arguments sont dans un ordre fixe et obligatoire par position ; les options sont nommées et peuvent venir dans n'importe quel ordre.
+
+### Imagine dans la vraie vie
+Commander à un comptoir à café montre la différence. Tu énonces l'essentiel dans un ordre fixe — "grand, latte" — et si tu inverses, le barista est perdu, exactement comme les arguments positionnels où l'ordre compte. Les extras, eux, sont nommés et peuvent venir dans n'importe quel ordre : "avec lait d'avoine", "sans sucre".
+
+### Dans Symfony
+```console
+$ php bin/console app:export csv --limite=100  # 'csv' = argument, '--limite' = option
+```
+
+### Exemple simple
+```php
+#[Argument] string $format,
+#[Option] int $limite = 50,
+```
+
+### Comment le mémoriser 🧠
+Les modes se mémorisent en puissances de 2 : arguments REQUIRED=**1**/OPTIONAL=**2**/IS_ARRAY=**4** ; options VALUE_NONE=**1**/REQUIRED=**2**/OPTIONAL=**4**/IS_ARRAY=**8**/NEGATABLE=**16**.
+
+---
+
+
 ## Theory
 
 Il existe deux types d'entrées :

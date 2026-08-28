@@ -20,6 +20,20 @@ Messenger) assumes you already know how services are defined, resolved and injec
     | **Revision priority** | **Critical** |
     | **Est. time** | 6–8 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** L'injection de dépendances (DI), c'est laisser Symfony construire tes objets et leur fournir tout ce dont ils ont besoin — au lieu d'écrire `new MonService(new AutreService(...))` toi-même partout.
+
+**Pourquoi ça existe ?** Construire les objets à la main crée des dépendances rigides et difficiles à tester. Le container centralise cette construction : tu déclares "j'ai besoin de X", et il te le fournit déjà assemblé.
+
+**🏠 Analogie de la vraie vie :** Une cuisine de restaurant. Tu commandes un plat (tu demandes un service) ; la cuisine (le container) réunit et assemble les ingrédients (les dépendances) et te sert l'assiette prête — tu ne touches jamais aux fourneaux toi-même.
+
+**Symfony dans la vraie vie :** `public function __construct(private LoggerInterface $logger)` — tu déclares juste ce dont tu as besoin dans le constructeur, et Symfony le fournit automatiquement, sans jamais écrire `new`.
+
+**⚠️ Erreur fréquente :** injecter le container entier (`ContainerInterface`) dans un service applicatif au lieu de déclarer précisément les dépendances nécessaires — un anti-pattern classique repéré à l'examen.
+
+**🧠 Comment le mémoriser :** "Ne construis jamais tes services toi-même — déclare-les, et laisse le container les assembler."
+
 ## Why this stage matters
 
 Symfony is a container that boots a kernel. The

@@ -32,6 +32,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`login_throttling` bloque automatiquement les tentatives de connexion en force brute — après un nombre d'essais ratés, le compte est temporairement gelé.
+
+### Imagine dans la vraie vie
+La porte du coffre d'une banque : après cinq codes PIN erronés pour *un* compte, le clavier bloque l'accès à ce compte pendant un moment. Mais la porte surveille aussi la *personne* : quelqu'un qui essaie plein de numéros de compte différents est totalement bloqué après 25 essais, même si aucun compte individuel n'a atteint sa propre limite.
+
+### Dans Symfony
+Sans cette protection, un attaquant pourrait essayer des milliers de mots de passe par seconde contre un seul compte — `login_throttling` ralentit ça automatiquement, sans code supplémentaire à écrire.
+
+### Exemple simple
+```yaml
+main:
+    login_throttling: { max_attempts: 5, interval: '15 minutes' }
+```
+
+### Comment le mémoriser 🧠
+Deux limites cumulées : par **username+IP** (spécifique) ET une limite plus large par **IP seule, à 5× max_attempts** — pour arrêter aussi un attaquant qui change de nom d'utilisateur à chaque essai.
+
+---
+
+
 ## Theory
 
 La protection contre la force brute est intégrée au système d'authenticators

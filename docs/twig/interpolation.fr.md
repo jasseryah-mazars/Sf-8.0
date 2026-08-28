@@ -31,6 +31,64 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`#{...}` insère une variable dans une chaîne — mais ça ne fonctionne que dans des guillemets **doubles**, jamais des guillemets simples.
+
+### Imagine dans la vraie vie
+Assembler une lettre type. `#{...}` est le champ de fusion — mais la fusion ne se déclenche que sur le papier à en-tête officiel (les chaînes en guillemets doubles) ; tape-le sur un brouillon (guillemets simples) et le champ s'imprime tel quel, comme du texte littéral.
+
+### Dans Symfony
+```twig
+"Bonjour #{nom}"   {# fusion : affiche "Bonjour Alice" #}
+'Bonjour #{nom}'   {# littéral : affiche "Bonjour #{nom}" tel quel #}
+```
+
+### Exemple simple
+```twig
+{% set message = "Total : #{prix} €" %}
+```
+
+### Comment le mémoriser 🧠
+`~` colle des morceaux **en texte** (comme des feuilles agrafées bout à bout) ; `+` additionne des **nombres**. Le calcul (`+`) se termine toujours avant l'agrafage (`~`) — précédence plus basse pour `~`.
+
+Three ways to build a string from parts:
+
+```twig
+{# 1. interpolation — double quotes only #}
+{{ "Hello #{name}, you have #{count} items" }}
+
+{# 2. concatenation with ~ #}
+{{ "Hello " ~ name ~ "!" }}
+
+{# 3. format filter (sprintf) #}
+{{ "Hello %s, %d items"|format(name, count) }}
+```
+
+- **`#{...}`** evaluates a Twig expression inside a **double-quoted** string.
+- **`~`** joins values as strings (numbers are cast to string).
+- **`format`** applies `sprintf` placeholders (`%s`, `%d`, `%.2f`, `%1$s`).
+
+```twig
+{# the three tools side by side #}
+{# #{...}: any expression, double quotes only #}
+{{ "user #{name} (#{count})" }}
+{# ~ casts values to string and joins them #}
+{{ 'user ' ~ name ~ ' (' ~ count ~ ')' }}
+{# %1$s reuses arg 1 #}
+{{ '%s: %d items, %.2f kg (%1$s)'|format(name, count, weight) }}
+```
+
+!!! question "Predict first"
+    What does `{{ 1 + 2 ~ 3 }}` produce — `6`, `"123"`, or `"33"`?
+
+??? note "Reveal"
+    `"33"`. `+` binds **tighter** than `~`, so it evaluates as `(1 + 2) ~ 3` →
+    `3 ~ 3` → the string `"33"`. `~` concatenates (casting to string); `+` is
+    arithmetic — they are not interchangeable.
+
+
 ## Theory
 
 Trois façons de construire une chaîne à partir de morceaux :

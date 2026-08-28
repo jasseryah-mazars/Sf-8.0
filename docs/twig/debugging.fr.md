@@ -30,6 +30,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`{{ dump(x) }}` affiche un aperçu riche et dépliable d'une variable directement dans la page — un outil qui n'existe qu'en développement, jamais en production.
+
+### Imagine dans la vraie vie
+`dump()` est le boîtier de diagnostic du garagiste branché sur une voiture sur le pont élévateur. Il affiche un relevé riche et déroulant de l'état de n'importe quel composant — bien plus qu'un simple témoin lumineux (`var_dump`). Le port de diagnostic n'existe que sur les voitures en atelier (debug/dev) ; livrer une voiture à un client avec le scanner encore branché (prod) bloque totalement le démarrage.
+
+### Dans Symfony
+```twig
+{{ dump(produit) }} {# affiche toute la structure de l'objet, dépliable, directement dans la page #}
+```
+
+### Exemple simple
+```twig
+{% dump produit %} {# envoie vers la barre d'outils au lieu d'afficher dans la page #}
+```
+
+### Comment le mémoriser 🧠
+Un `dump()` oublié dans du code qui part en production ne se contente pas d'être inutile — il **plante littéralement l'application**, car l'outillage de dump n'existe qu'en `debug`/`dev`.
+
+
 ## Theory
 
 `dump()` rend une vue riche et dépliable de n'importe quelle variable —

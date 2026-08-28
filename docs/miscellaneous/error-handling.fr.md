@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le composant ErrorHandler transforme même les erreurs PHP classiques (warnings, notices) en exceptions rattrapables — pour que tout soit géré de façon uniforme.
+
+### Imagine dans la vraie vie
+Les urgences d'un hôpital. Les incidents bruts arrivant sous toutes les formes — avertissements, erreurs fatales — sont d'abord inscrits sur une fiche patient standard (transformés en exceptions rattrapables), pour être tous traités de la même façon.
+
+### Dans Symfony
+Une simple division par zéro (`DivisionByZeroError`, une erreur PHP native) devient rattrapable exactement comme une exception métier que tu aurais lancée toi-même — grâce à l'ErrorHandler qui uniformise tout.
+
+### Exemple simple
+```php
+try { intdiv(1, 0); } catch (\DivisionByZeroError $e) { /* une VRAIE erreur PHP, rattrapée */ }
+```
+
+### Comment le mémoriser 🧠
+Seule une exception implémentant **`HttpExceptionInterface`** porte un statut personnalisé — tout le reste devient automatiquement une **500**, même une simple `\RuntimeException` sans rapport avec HTTP.
+
+---
+
+
 ## Theory
 
 Deux couches coopèrent. Le composant bas niveau **ErrorHandler** convertit les

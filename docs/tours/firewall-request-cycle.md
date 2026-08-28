@@ -16,6 +16,20 @@ see in the profiler is a debug-only wrapper around the same flow — read the re
     - Who enforces `access_control`, with what inputs, and what exception turns
       into a 403 vs a redirect to login?
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce tour ?** Le trajet exact que fait une requête à travers le système de sécurité de Symfony — du moment où le firewall l'intercepte jusqu'à la décision finale d'autoriser ou refuser l'accès.
+
+**Pourquoi ça existe ?** Le firewall est un des listeners les plus discutés à l'examen (priorités, ordre d'exécution) — le voir tracé dans le vrai code lève toute ambiguïté.
+
+**🏠 Analogie de la vraie vie :** Un poste de sécurité d'aéroport avec plusieurs contrôles successifs (papiers, scanner, fouille) — chaque contrôle doit réussir dans un ordre précis avant d'accéder à l'embarquement (l'accès à la ressource protégée).
+
+**Symfony dans la vraie vie :** Le routeur doit s'exécuter **avant** la sécurité (priorité 32 contre 8) — sans ça, le firewall ne saurait même pas quel pattern d'URL vérifier.
+
+**⚠️ Erreur fréquente :** croire que le firewall vérifie lui-même les permissions précises (`ROLE_ADMIN`) — c'est le rôle de `AccessDecisionManager` et des voters, une étape séparée après l'authentification.
+
+**🧠 Comment le mémoriser :** "D'abord savoir où tu vas (routage), ensuite vérifier qui tu es (firewall), enfin si tu as le droit d'y aller (voters)."
+
 ## The map
 
 ```mermaid

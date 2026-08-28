@@ -17,7 +17,21 @@ Response cache API. Symfony 8 / PHP 8.4. All complete <?php snippets compile.
     `setLastModified` + `isNotModified`), then verify the behaviour with `curl`. ·
     **Difficulty:** Medium ·
     **Theory:** [Expiration](../http-caching/expiration.md) ·
-    [Validation](../http-caching/validation.md) ·
+    [Validation](../http-caching/validation.md)
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Rendre une réponse de contrôleur "cacheable" des deux façons possibles — fraîcheur (pas de question posée) et validation (question posée, réponse parfois vide) — puis vérifier avec `curl` que ça marche vraiment.
+
+**Pourquoi ça existe ?** Configurer le cache HTTP en théorie et voir ses effets réels avec les vrais en-têtes HTTP (`Cache-Control`, `ETag`) sont deux choses différentes — ce lab connecte les deux.
+
+**🏠 Analogie de la vraie vie :** Une date de péremption sur un produit (fraîcheur, `setSharedMaxAge`) contre un coup de fil pour vérifier que rien n'a changé (validation, `setEtag`) — deux stratégies différentes pour éviter de tout refaire.
+
+**Symfony dans la vraie vie :** `curl -I` après avoir configuré `setEtag()` te montre littéralement l'en-tête `ETag:` généré par Symfony — la théorie devient un fait vérifiable dans ton terminal.
+
+**⚠️ Erreur fréquente :** oublier `setPublic()` — une réponse reste privée par défaut, donc invisible à un cache partagé même avec un `max-age` bien configuré.
+
+**🧠 Comment le mémoriser :** "Sans `setPublic()`, ton cache bien configuré reste invisible aux caches partagés." ·
     **Mode:** Manual verification (+ TDD appendix)
 
 ## Objective

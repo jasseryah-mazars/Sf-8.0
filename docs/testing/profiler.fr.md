@@ -33,6 +33,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le profiler doit être armé **avant** la requête — l'activer après, ou l'oublier, donne un résultat vide, pas une erreur.
+
+### Imagine dans la vraie vie
+Le profiler est une boîte noire d'avion qu'il faut armer *avant* le décollage. Pendant les vols de test normaux, l'enregistreur est éteint pour économiser. Si tu actionnes l'interrupteur après l'atterrissage — ou l'oublies — puis vas lire la boîte noire, il n'y a tout simplement rien : elle lit vide (`false`), pas juste un enregistrement blanc.
+
+### Dans Symfony
+Vérifier qu'un email a bien été envoyé pendant un test nécessite `$client->enableProfiler()` **avant** l'appel `$client->request()` — sinon `getProfile()` renverra `false` et le test échouera pour la mauvaise raison.
+
+### Exemple simple
+```php
+$client->enableProfiler(); // AVANT la requête
+$client->request('POST', '/inscription');
+$profile = $client->getProfile();
+```
+
+### Comment le mémoriser 🧠
+`getProfile()` renvoie **`false`**, pas `null`, quand le profiler n'a rien enregistré — vérifie toujours avec `!== false`, pas juste un test de vérité classique.
+
+---
+
+
 ## Theory
 
 Le **Profiler** enregistre ce qui s'est passé pendant une request — controller,

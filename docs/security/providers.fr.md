@@ -28,6 +28,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un user provider **trouve** un utilisateur par son identifiant et le **rafraîchit** à chaque requête — il ne vérifie jamais lui-même un mot de passe.
+
+### Imagine dans la vraie vie
+Un user provider est le bureau des dossiers. Donne-lui un identifiant ("employé n°4471") et il sort le dossier correspondant (`loadUserByIdentifier()`) ; il re-vérifie aussi ce dossier à chaque visite (`refreshUser()`) pour repérer un badge révoqué.
+
+### Dans Symfony
+Si un administrateur révoque les droits d'un utilisateur pendant qu'il est déjà connecté, `refreshUser()` sur la requête suivante recharge ses rôles à jour depuis la base — sans attendre une reconnexion.
+
+### Exemple simple
+```php
+public function loadUserByIdentifier(string $identifier): UserInterface { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+La méthode s'appelle `loadUserByIdentifier()` — l'ancienne `loadUserByUsername()` a **disparu**. Et `refreshUser()` tourne à **chaque** requête statefull.
+
+
 ## Theory
 
 Un **user provider** charge les users depuis un stockage. Ce n'est *pas* la

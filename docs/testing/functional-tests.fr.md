@@ -35,6 +35,34 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un test fonctionnel démarre le **vrai** kernel et le pilote comme un navigateur pour vérifier qu'une requête entière fonctionne de bout en bout.
+
+### Imagine dans la vraie vie
+Un test fonctionnel est une répétition générale complète sur la vraie scène — décors réels, éclairage réel, toute la troupe — plutôt que des acteurs qui lisent leurs répliques dans une salle annexe. `WebTestCase` est la version avec un siège spectateur (un client navigateur) ; `KernelTestCase` amène juste la troupe sur scène sans public.
+
+### Dans Symfony
+Tester qu'un formulaire d'inscription complet fonctionne — de l'affichage de la page jusqu'à l'enregistrement en base et la redirection — nécessite `WebTestCase`, jamais un simple test unitaire qui ne teste qu'un morceau isolé.
+
+### Exemple simple
+```php
+class InscriptionTest extends WebTestCase {
+    public function testInscription(): void {
+        $client = static::createClient();
+        $client->request('GET', '/inscription');
+        $this->assertResponseIsSuccessful();
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+`self::getContainer()` renvoie le container **spécial de test**, qui te donne accès même aux services **privés** — impossible en production, mais essentiel pour inspecter l'état interne pendant un test.
+
+---
+
+
 ## Theory
 
 Un **test fonctionnel** démarre le *vrai* kernel Symfony et le pilote comme un

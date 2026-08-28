@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Toute application Symfony vient déjà avec des commandes que tu n'as jamais écrites — `list`, `help`, `about`, et toute la famille `debug:*`.
+
+### Imagine dans la vraie vie
+Un smartphone tout neuf fait déjà tourner des applications que tu n'as jamais installées : le composeur, l'appareil photo et les réglages sont livrés avec le système d'exploitation lui-même, tout comme `list`, `help`, `about` existent dans chaque `Application` Console.
+
+### Dans Symfony
+`php bin/console` sans aucun argument affiche automatiquement la liste de toutes les commandes disponibles — c'est la commande `list`, exécutée par défaut, pas `help`.
+
+### Exemple simple
+```console
+$ php bin/console about   # infos sur l'environnement, sans écrire de code
+```
+
+### Comment le mémoriser 🧠
+`make:*` vient du **MakerBundle optionnel** — pas du cœur de Symfony. Ne jamais présumer qu'une commande `make:*` existe sur un projet sans ce bundle installé.
+
+---
+
+
 ## Theory
 
 Une **Application** est le conteneur qui détient et exécute les commandes. Le

@@ -34,6 +34,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le client de test parle au kernel directement en mémoire, comme un navigateur sans interface — et ne suit **jamais** les redirections automatiquement.
+
+### Imagine dans la vraie vie
+Un robot assis à un simulateur de conduite plutôt qu'une vraie voiture sur une vraie route. Il actionne les pédales (envoie des requêtes au kernel en interne, sans vrai réseau), et garde ta session active — se souvenant de tes tickets de parking (le pot de cookies). Mais quand un panneau dit "déviation par ici" (une redirection 302), le robot s'arrête net devant le panneau et attend.
+
+### Dans Symfony
+Tester qu'un formulaire redirige bien après soumission nécessite d'appeler explicitement `$client->followRedirect()` — sinon le test s'arrête à la page intermédiaire de redirection, avant la page finale.
+
+### Exemple simple
+```php
+$client->submitForm('Envoyer', ['form[email]' => 'a@b.com']);
+$client->followRedirect(); // sinon on reste sur la page de redirection
+```
+
+### Comment le mémoriser 🧠
+Le client suit les liens et boutons comme un humain (`clickLink()`, `submitForm()`) mais **jamais** les redirections HTTP sans qu'on le lui demande explicitement.
+
+---
+
+
 ## Theory
 
 Le client retourné par `static::createClient()` est un

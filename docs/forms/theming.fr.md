@@ -30,6 +30,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un thème de formulaire est un jeu de blocs Twig qui décide à quoi ressemble chaque fragment (label, widget, erreurs) — et Symfony cherche toujours le bloc le plus précis d'abord.
+
+### Imagine dans la vraie vie
+Résoudre un bloc de formulaire, c'est comme une réceptionniste qui cherche quelqu'un : elle essaie d'abord le nom complet et unique, puis le nom de famille, puis juste le service, et enfin "n'importe quel employé" — la première entrée qui existe gagne.
+
+### Dans Symfony
+Un thème comme `bootstrap_5_layout.html.twig` fournit uniquement le **balisage HTML** — il ne fournit **aucun CSS** ; tu dois toujours inclure Bootstrap toi-même pour que ça s'affiche correctement.
+
+### Exemple simple
+```twig
+{% form_theme form 'form/mon_theme.html.twig' %}
+```
+
+### Comment le mémoriser 🧠
+"Un patron de couturier taille les coutures, pas le tissu" : un thème intégré façonne le balisage, jamais le style visuel — le CSS reste toujours ta responsabilité.
+
+
 ## Theory
 
 Un **form theme** est un template Twig composé de `{% block %}` qui définissent

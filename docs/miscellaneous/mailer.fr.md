@@ -30,6 +30,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Mime construit l'email (texte, HTML, pièces jointes) ; Mailer l'envoie via un transport choisi par une seule variable d'environnement.
+
+### Imagine dans la vraie vie
+Une salle de courrier. Mime **assemble l'enveloppe et son contenu** — la lettre (texte/HTML), les photos et pièces jointes imbriquées dans le bon ordre. Mailer est le **commis qui la remet à un transporteur** choisi par `MAILER_DSN`.
+
+### Dans Symfony
+Changer `MAILER_DSN` de `smtp://...` à un service tiers ne nécessite **aucun** changement dans le code qui construit et envoie l'email — seule la configuration change, jamais le code métier.
+
+### Exemple simple
+```php
+$email = (new TemplatedEmail())->to($destinataire)->htmlTemplate('email/bienvenue.html.twig');
+$mailer->send($email);
+```
+
+### Comment le mémoriser 🧠
+Une fois `SendEmailMessage` routé via Messenger, `send()` **met en file d'attente** au lieu d'envoyer immédiatement — l'email part seulement quand un worker consomme le message.
+
+---
+
+
 ## Theory
 
 Le composant **Mime** modélise un message email comme un arbre de **parts**

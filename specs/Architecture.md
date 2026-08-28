@@ -32,7 +32,7 @@ Sf-8.0/
 │   ├── revision/         # Cheat sheet, traps, memory aids, quiz guide
 │   └── <topic-area>/     # One folder per syllabus area (14), micro-chapters + index.md
 ├── quiz/                 # certificationy-compatible YAML bank, one file per area
-├── specs/                # SpecKit planning artifacts (this set of 13 docs)
+├── specs/                # SpecKit planning artifacts (started at 13, now 25 docs)
 ├── tasks/                # Granular, independently-executable authoring tasks
 ├── mkdocs.yml            # Site config + navigation
 ├── requirements.txt      # Pinned Python build toolchain

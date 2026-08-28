@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Filesystem lève une exception dès qu'une opération échoue (au lieu de renvoyer `false` silencieusement) ; Finder cherche des fichiers avec une syntaxe fluide et lisible.
+
+### Imagine dans la vraie vie
+Filesystem est un déménageur prudent qui crie dès que quelque chose ne va pas plutôt que de laisser tomber silencieusement un carton. Son `dumpFile()` est comme un chef qui dresse un plat entièrement sur une assiette de réserve puis seulement ensuite l'échange sur la table.
+
+### Dans Symfony
+`$finder->files()->in('src')->name('*.php')->date('since yesterday')` trouve tous les fichiers PHP modifiés depuis hier — bien plus lisible que du code `scandir()`/`filemtime()` fait à la main.
+
+### Exemple simple
+```php
+$fs->dumpFile('config/genere.yaml', $contenu); // écriture atomique, jamais de fichier à moitié écrit
+```
+
+### Comment le mémoriser 🧠
+`dumpFile()` écrit dans un **fichier temporaire puis renomme** — cette atomicité garantit qu'un processus concurrent ne verra jamais un fichier à moitié écrit, seulement l'ancienne ou la nouvelle version complète.
+
+---
+
+
 ## Theory
 
 **Filesystem** enveloppe les fonctions fichier de PHP avec des méthodes

@@ -47,7 +47,8 @@ categories:
 
 `php-web-security.yml`, `http.yml`, `architecture.yml`, `controllers.yml`,
 `routing.yml`, `twig.yml`, `forms.yml`, `validation.yml`, `dependency-injection.yml`,
-`security.yml`, `http-caching.yml`, `console.yml`, `testing.yml`, `miscellaneous.yml`.
+`security.yml`, `http-caching.yml`, `console.yml`, `testing.yml`, `miscellaneous.yml`,
+`messenger.yml`.
 
 ---
 

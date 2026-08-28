@@ -7,6 +7,20 @@ follow the link for the full chapter.
     Skim before the exam to lock in vocabulary. If a definition feels fuzzy, open
     the linked chapter and do its lab.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Un dictionnaire de tous les termes techniques Symfony utilisés dans ce site, classés par ordre alphabétique — une définition rapide, avec un lien vers le chapitre complet.
+
+**Pourquoi ça existe ?** Pendant une révision rapide, tomber sur un terme oublié ("c'est quoi déjà un Voter ?") ne devrait pas obliger à rouvrir tout un chapitre — une seule ligne suffit souvent à te rafraîchir la mémoire.
+
+**🏠 Analogie de la vraie vie :** Le dictionnaire à la fin d'un manuel scolaire, qu'on consulte vite fait pour un mot précis, sans relire tout le chapitre qui l'explique en détail.
+
+**Symfony dans la vraie vie :** Chercher "Badge" ici te donne une phrase de rappel plus un lien direct vers le chapitre Authenticators — utile pendant un quiz, sans perdre ton fil de révision.
+
+**⚠️ Erreur fréquente :** utiliser le glossaire comme unique moyen d'apprentissage — une ligne de définition ne remplace jamais la compréhension en profondeur du chapitre complet.
+
+**🧠 Comment le mémoriser :** "Le glossaire rafraîchit la mémoire, il ne construit pas la compréhension — pour ça, ouvre le chapitre lié."
+
 ## A
 
 - **AbstractController** — Base controller with helper shortcuts (`render`, `json`,

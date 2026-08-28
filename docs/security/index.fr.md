@@ -26,6 +26,21 @@ les anciens authentication providers ont disparu, et
       badges du passport et les attributs `IS_AUTHENTICATED_*` sont des pièges de
       premier ordre.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** La sécurité Symfony répond à deux questions séparées : "qui es-tu ?" (authentification) et "as-tu le droit de faire ça ?" (autorisation).
+
+**Pourquoi ça existe ?** Sans ce découpage, chaque contrôleur devrait réinventer sa propre logique de connexion et de permissions. Symfony centralise les deux dans un système cohérent et testé.
+
+**🏠 Analogie de la vraie vie :** Un immeuble de bureaux sécurisé. Le poste de garde à l'entrée vérifie ton identité avec un badge (authentification) ; une fois entré, chaque porte verrouillée vérifie séparément si TON badge précis ouvre CETTE porte précise (autorisation).
+
+**Symfony dans la vraie vie :** Un `authenticator` construit un `Passport` de badges pour vérifier qui tu es (authentification) ; `#[IsGranted('ROLE_ADMIN')]` vérifie ensuite si tu as le droit d'accéder à une page précise (autorisation).
+
+**⚠️ Erreur fréquente :** croire qu'être connecté (authentifié) suffit à tout autoriser — un utilisateur authentifié peut très bien se voir refuser l'accès à une ressource précise par un voter.
+
+**🧠 Comment le mémoriser :** "Authentification = qui es-tu ? Autorisation = as-tu le droit ? — deux questions, deux systèmes."
+
+
 ## Why this stage is Critical
 
 La sécurité concentre les questions d'examen les plus subtiles, car énormément

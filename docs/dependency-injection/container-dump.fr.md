@@ -41,6 +41,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le container compilé est du PHP tout ce qu'il y a de plus ordinaire, écrit sur disque une seule fois — c'est pour ça qu'utiliser Symfony en production est rapide.
+
+### Imagine dans la vraie vie
+La compilation, c'est transformer le plan d'un architecte en maison préfabriquée. Le plan (YAML/attributs/`Definition`) est examiné par des inspecteurs dans un ordre fixe (les phases de compiler pass), les couloirs internes redondants sont fusionnés en pièces (services privés inlinés), puis l'usine coule le béton (`PhpDumper` écrit les fichiers PHP).
+
+### Dans Symfony
+Modifier `services.yaml` en production **ne change absolument rien** tant que le cache n'est pas reconstruit — le container à l'exécution lit uniquement les fichiers PHP déjà générés dans `var/cache/{env}/`, jamais le YAML source.
+
+### Exemple simple
+```console
+$ php bin/console cache:clear --env=prod  # seule façon de faire prendre en compte un changement
+```
+
+### Comment le mémoriser 🧠
+Un service privé visible dans `debug:container` peut n'avoir **aucune factory du tout** — inliné ou supprimé pendant les passes de nettoyage. Voir un service dans le debug ne garantit pas qu'il existe encore comme objet séparé dans le container compilé.
+          → `PhpDumper::dump()`.
+    - [ ] Explain why `debug:container` lists services the dumped code
+          inlined, and what a frozen container forbids at runtime.
+
+---
+
+
 ## Theory
 
 Le `ContainerBuilder` que vous configurez — définitions, références,

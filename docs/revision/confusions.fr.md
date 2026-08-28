@@ -84,6 +84,21 @@ confondent, côte à côte. Parcourez-la le matin de l'examen.
 
 <small>Related: [Top Certification Traps](traps.md) · [Memory Aids](memory-aids.md) · [Cheat Sheet](cheat-sheet.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Un tableau de **paires de notions qui se ressemblent** (301 vs 302, 401 vs 403…) avec, en face de chaque paire, la phrase exacte qui les distingue.
+
+**Pourquoi ça existe ?** L'examen ne teste presque jamais "connais-tu 401 ?" tout seul — il teste "sais-tu distinguer 401 de 403 dans telle situation ?". Apprendre les notions séparément ne prépare pas à ce genre de question.
+
+**🏠 Analogie de la vraie vie :** C'est comme apprendre à distinguer des **jumeaux** : les présenter côte à côte, avec un détail précis pour chacun ("celui avec le grain de beauté"), marche mieux que les décrire séparément dans deux pièces différentes.
+
+**Symfony dans la vraie vie :** Colonne de gauche → les deux notions qui se ressemblent (ex. 401/403) / Colonne de droite → LE détail qui les sépare, à retenir mot pour mot.
+
+**⚠️ Erreur fréquente :** Lire la distinction, se dire "oui c'est logique", et l'oublier 5 minutes après faute d'avoir répété la phrase à voix haute. La méthode conseillée en haut de page (cacher la colonne de droite) est là pour forcer le rappel actif.
+
+**🧠 Comment le mémoriser :** *« Si deux mots se ressemblent, l'examen les oppose »* — dès qu'une paire te semble familière-mais-floue, c'est probablement une paire de ce tableau.
+
+
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

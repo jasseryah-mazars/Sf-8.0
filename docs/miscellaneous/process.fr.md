@@ -31,6 +31,32 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Construis toujours une commande shell avec un tableau d'arguments — chaque élément est automatiquement échappé, ce qu'une simple chaîne shell n'offre jamais.
+
+### Imagine dans la vraie vie
+Process, c'est **confier une course à un assistant**. Écrire la commande sous forme de tableau met **chaque mot dans son propre sac étiqueté** (auto-échappé, rien de mal interprété) — contre aboyer une seule chaîne shell qu'il pourrait mal interpréter.
+
+### Dans Symfony
+```php
+new Process(['ls', '-la', $dossierUtilisateur]); // sûr même si $dossierUtilisateur contient des espaces ou `;`
+```
+
+### Exemple simple
+```php
+$process = new Process(['git', 'log', '--oneline']);
+$process->run();
+echo $process->getOutput();
+```
+
+### Comment le mémoriser 🧠
+`fromShellCommandline()` n'échappe **rien** — c'est un risque d'injection de commande si tu y insères une valeur utilisateur. Préfère toujours le constructeur avec un tableau d'arguments.
+
+---
+
+
 ## Theory
 
 Le composant Process exécute des commandes OS dans des sous-processus,

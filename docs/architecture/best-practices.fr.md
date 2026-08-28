@@ -31,6 +31,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les bonnes pratiques Symfony disent, en substance : "garde tes contrôleurs fins, mets ta logique dans des services, et range chaque type de config à sa place."
+
+### Imagine dans la vraie vie
+Dans un restaurant bien tenu, le serveur (le contrôleur) prend seulement la commande et rapporte l'assiette finie — il ne cuisine jamais lui-même ; la cuisine se fait à des postes spécialisés (les services) qui partagent le même plan de travail (le container). Garder le serveur "léger" est ce qui permet de servir plusieurs tables à la fois.
+
+### Dans Symfony
+Un contrôleur qui interroge directement la base de données et formate du HTML à la main viole deux règles à la fois — la logique devrait vivre dans un service autowiré et injectable, testable indépendamment du contrôleur.
+
+### Exemple simple
+```php
+// ❌ logique dans le contrôleur
+public function show(): Response { $data = $this->db->query('SELECT ...'); ... }
+
+// ✅ logique déléguée à un service
+public function show(ProductFinder $finder): Response { return $this->render('...', ['p' => $finder->find()]); }
+```
+
+### Comment le mémoriser 🧠
+"Le serveur ne cuisine jamais" : un contrôleur qui contient de la logique métier est le signal d'alarme numéro un à repérer en review de code.
+
+
 ## Theory
 
 Symfony publie un guide officiel de **Best Practices** : des conventions pragmatiques

@@ -28,6 +28,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un redirect fait faire au navigateur un vrai aller-retour vers une nouvelle URL — contrairement à un simple traitement interne, l'adresse dans la barre change vraiment.
+
+### Imagine dans la vraie vie
+Le réceptionniste dit "c'est traité au guichet 4 — allez-y." Le visiteur traverse physiquement le hall et rejoint une nouvelle file : une requête toute neuve, une nouvelle URL dans la barre d'adresse. Contraste avec un `forward()` : le réceptionniste va lui-même chercher la réponse en coulisses — même visite, même URL, pas de trajet supplémentaire.
+
+### Dans Symfony
+`redirectToRoute('accueil')` génère l'URL depuis le nom de route (résiste aux changements de config de routing) — `redirect('/accueil')` prend une URL brute, plus fragile si l'URL change un jour.
+
+### Exemple simple
+```php
+return $this->redirectToRoute('produit_liste', [], Response::HTTP_MOVED_PERMANENTLY); // 301
+```
+
+### Comment le mémoriser 🧠
+**302** (par défaut) et **303** peuvent changer la méthode HTTP en GET ; **307** et **308** la préservent toujours — retiens "3 et 8 tiennent parole" (307/308 préservent la méthode).
+
+
 ## Theory
 
 Un **HTTP redirect** indique au navigateur d'effectuer une *nouvelle* request

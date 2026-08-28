@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque protection Symfony existe pour contrer une attaque précise et nommée — comprendre l'attaque rend la défense évidente.
+
+### Imagine dans la vraie vie
+Sécuriser un site web ressemble à sécuriser une maison : on ne répète jamais mot pour mot ce qu'un inconnu crie par la boîte aux lettres (XSS → échappement Twig), on vérifie l'identité de qui prétend agir en ton nom (CSRF → jeton + SameSite), et on installe des serrures inviolables plutôt que de faire confiance à qui secoue la porte (injection SQL → requêtes préparées).
+
+### Dans Symfony
+Twig échappe automatiquement toute variable affichée (protection XSS par défaut), le composant Form ajoute un jeton CSRF caché à chaque formulaire, et le Validator + l'ORM utilisent systématiquement des requêtes préparées — la plupart des défenses sont actives **sans configuration supplémentaire**.
+
+### Exemple simple
+```twig
+{{ commentaire }} {# échappé automatiquement par Twig : pas de <script> exécuté #}
+```
+
+### Comment le mémoriser 🧠
+Associe chaque sigle à son remède en une paire : **XSS → échappement**, **CSRF → jeton**, **SQLi → requêtes préparées**, **mots de passe → `password_hash()`** (jamais en clair, jamais un simple hash MD5).
+
+
 ## Theory
 
 Chaque fonctionnalité de sécurité de Symfony existe pour contrer une menace web

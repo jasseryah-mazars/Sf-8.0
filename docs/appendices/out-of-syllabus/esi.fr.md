@@ -42,6 +42,21 @@
 
 ---
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** ESI permet de découper une page en morceaux mis en cache séparément — le menu du site (rarement modifié) et ton panier personnel (qui change tout le temps) n'ont pas besoin d'être rafraîchis à la même vitesse.
+
+**Pourquoi ça existe ?** Sans ESI, la moindre partie qui change (comme ton panier) obligerait à invalider tout le cache de la page entière — même les parties qui ne changent jamais.
+
+**🏠 Analogie de la vraie vie :** Un panneau d'information de musée : le grand panneau permanent est réimprimé rarement, mais une petite carte encartée "événements du jour" est changée à son propre rythme, sans jamais réimprimer tout le panneau.
+
+**Symfony dans la vraie vie :** `render_esi(controller(...))` insère un morceau qui sera rafraîchi séparément par le reverse proxy — si celui-ci ne supporte pas ESI, Symfony bascule automatiquement sur un rendu classique inline.
+
+**⚠️ Erreur fréquente :** croire qu'ESI est enseigné à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus, seulement un complément utile pour comprendre le cache avancé.
+
+**🧠 Comment le mémoriser :** "ESI = un panneau permanent avec des cartes encartées changées séparément."
+
+
 ## Theory
 
 Une même page mélange souvent les fraîcheurs : une coquille statique (en cache

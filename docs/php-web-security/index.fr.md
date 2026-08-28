@@ -76,6 +76,21 @@ devient de la lecture plutôt que de la découverte.
 
 <small>Next stage: [HTTP](../http/index.md) · Related: [Security](../security/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le socle de langage PHP moderne (enums, closures, attributs...) plus le vocabulaire des attaques web courantes (XSS, CSRF...) — les deux bases sur lesquelles tout le reste de Symfony est construit.
+
+**Pourquoi ça existe ?** Symfony est du PHP moderne idiomatique : sans maîtriser les enums, les closures ou la promotion de constructeur, une bonne partie du code Symfony reste illisible. Et sans connaître les attaques qu'il défend, les fonctionnalités de sécurité paraissent arbitraires.
+
+**🏠 Analogie de la vraie vie :** Apprendre l'alphabet et la grammaire avant de lire un roman. Tu ne peux pas comprendre une phrase complexe (un service Symfony) si tu ne reconnais pas encore les mots de base (enums, interfaces, closures) qui la composent.
+
+**Symfony dans la vraie vie :** Le service container utilise massivement les interfaces et l'injection par constructeur — deux concepts purement PHP enseignés ici, avant même de parler de Symfony.
+
+**⚠️ Erreur fréquente :** vouloir sauter cette étape parce qu'elle "n'est que du PHP" — plusieurs pièges de l'examen portent précisément sur des subtilités PHP (ex. `NotBlank` vs `NotNull`, `===` sur les enums) que Symfony réutilise partout ensuite.
+
+**🧠 Comment le mémoriser :** "Maîtrise la langue avant de lire le livre — chaque chapitre Symfony suivant suppose que celui-ci est déjà acquis."
+
+
 ## Official References
 
 - [Symfony documentation — PHP Manual](https://www.php.net/manual/en/)

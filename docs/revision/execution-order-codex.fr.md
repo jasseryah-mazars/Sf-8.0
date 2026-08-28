@@ -13,6 +13,21 @@ routing et du caching.
     avec `debug:event-dispatcher`, `debug:router` ou `debug:container` — ces outils
     montrent l'ordre *effectif*.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Un recueil de **tous les ordres d'exécution** de Symfony rassemblés au même endroit : quel événement se déclenche avant quel autre, dans quel ordre les listeners s'exécutent, dans quel ordre passe une requête dans le firewall, etc.
+
+**Pourquoi ça existe ?** Ces séquences sont dispersées dans des dizaines de chapitres différents. Les regrouper en un seul endroit permet de les réviser toutes ensemble juste avant l'examen, qui adore poser des questions du type "que se passe-t-il en premier ?".
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de procédure d'un pompier** : au lieu de relire tout le manuel, on a la liste ordonnée exacte des étapes ("1. sécuriser, 2. évaluer, 3. agir") affichée sur un seul panneau.
+
+**Symfony dans la vraie vie :** Chaque tableau → une séquence Symfony précise (ex. les événements du kernel) / La colonne "Fires when" → le déclencheur exact de chaque étape / Le "memory anchor" → une phrase-mnémonique pour retenir l'ordre sans réfléchir.
+
+**⚠️ Erreur fréquente :** Mémoriser un ordre "à peu près" (par exemple confondre `kernel.response` et `kernel.terminate`) — l'examen pose justement des questions qui piègent sur l'ordre exact, pas sur l'existence de l'événement.
+
+**🧠 Comment le mémoriser :** *« Un ordre approximatif est un ordre faux »* — utilise les mnémoniques fournis (comme "ReCoCA-View, Respond, Finish, Terminate") plutôt que d'essayer de retenir la liste brute.
+
+
 ## 1. Kernel request events
 
 | # | Event | Se déclenche quand | Sub-requests aussi ? |

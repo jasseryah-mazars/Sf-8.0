@@ -12,6 +12,20 @@ study and sit it efficiently.
     - Covers the **15 official topic areas**; Messenger is up-weighted, HTTP Caching
       down-weighted versus Symfony 7.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Le mode d'emploi de la certification elle-même — avant d'apprendre Symfony, comprends comment l'examen fonctionne.
+
+**Pourquoi ça existe ?** Se présenter à un examen sans connaître son format (nombre de questions, durée, types de questions) désavantage un candidat par ailleurs compétent — le stress de l'inconnu coûte des points.
+
+**🏠 Analogie de la vraie vie :** Lire le règlement d'un jeu avant de jouer plutôt que de découvrir les règles en cours de partie — savoir combien de temps tu as, combien de manches il y a, et comment on gagne change complètement ta stratégie.
+
+**Symfony dans la vraie vie :** Savoir que l'examen est **un seul examen à deux issues** (Advanced ou Expert selon ton score) évite de te demander "dois-je choisir un niveau ?" le jour J — la réponse est non.
+
+**⚠️ Erreur fréquente :** commencer à réviser le contenu technique sans avoir lu ce guide — tu perds du temps à découvrir le format en pleine révision au lieu de te concentrer sur Symfony.
+
+**🧠 Comment le mémoriser :** "Connais les règles du jeu avant d'apprendre à jouer."
+
 ## In this section
 
 - **[How to Use This Platform](how-to-use.md)** — a study workflow that turns these

@@ -21,6 +21,21 @@ trouve naturellement sa place.
     - **Revision priority:** **Critical** — l'étape la plus testée à l'examen ;
       l'ordre des kernel events et la politique BC/dépréciations apparaissent dans presque chaque examen.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** L'architecture Symfony, c'est comment le framework s'assemble : un noyau (kernel) qui reçoit chaque requête, un système d'événements qui prévient tout le monde à chaque étape, et un container qui fabrique tes objets.
+
+**Pourquoi ça existe ?** Sans cette organisation, ajouter une fonctionnalité obligerait à modifier le cœur du framework. Ici, tout composant peut "s'accrocher" au passage de la requête via des événements, sans jamais toucher au code du kernel.
+
+**🏠 Analogie de la vraie vie :** Une chaîne de production d'usine avec des postes de contrôle fixes. Chaque poste (événement) peut inspecter ou modifier la pièce qui passe, sans que la chaîne elle-même ne change — on ajoute un inspecteur à un poste existant, on ne redessine pas toute l'usine.
+
+**Symfony dans la vraie vie :** `HttpKernel::handle()` fait avancer la requête sur la chaîne ; chaque événement (`kernel.request`, `kernel.controller`...) est un poste de contrôle où tes propres listeners peuvent intervenir.
+
+**⚠️ Erreur fréquente :** croire que Symfony est un bloc monolithique — c'est en réalité un ensemble de composants découplés, utilisables même sans le framework complet.
+
+**🧠 Comment le mémoriser :** "Suis la chaîne : Request → Controller → Response, avec un poste de contrôle (événement) entre chaque étape."
+
+
 ## Why this stage is Critical
 
 Symfony n'est pas un monolithe que l'on configure — c'est un ensemble de

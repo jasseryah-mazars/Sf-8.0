@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un paramètre est figé une fois pour toutes à la compilation ; une variable d'environnement est lue à chaque démarrage — deux mécanismes, deux moments différents.
+
+### Imagine dans la vraie vie
+Les paramètres sont les mesures imprimées d'une recette — fixées au moment où le livre de cuisine est imprimé (compile time). Les variables d'environnement sont la note "sel à volonté" : remplie devant les fourneaux (runtime), pour que la même recette imprimée fonctionne dans chaque cuisine.
+
+### Dans Symfony
+`%env(DATABASE_URL)%` permet au **même** container compilé de fonctionner en local, en test et en production — seule la valeur de la variable d'environnement change, jamais le code ni la config compilée.
+
+### Exemple simple
+```yaml
+parameters:
+    app.page_size: '%env(int:APP_PAGE_SIZE)%' # processeur "int" convertit la chaîne
+```
+
+### Comment le mémoriser 🧠
+Les processeurs d'env (`%env(int:MAX)%`) s'enchaînent **de droite à gauche** — comme des étapes de préparation appliquées une par une avant que le plat n'arrive à table.
+---
+
+
 ## Theory
 
 Un **parameter** est une valeur de configuration nommée, stockée dans le

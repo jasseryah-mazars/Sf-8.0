@@ -27,6 +27,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une seule action de contrôleur affiche **et** traite un formulaire — `handleRequest()` détecte tout seul si le visiteur vient de le soumettre ou juste de le consulter.
+
+### Imagine dans la vraie vie
+Un guichetier au comptoir. `handleRequest` remarque si tu as réellement **rendu le formulaire rempli** (cette requête est la soumission) ou si tu viens juste en chercher un vierge (GET). `isSubmitted()` = "l'as-tu rendu ?" ; `isValid()` = "a-t-il passé les vérifications ?". La redirection après succès, c'est le guichetier qui tamponne un **reçu** pour qu'actualiser la page ne classe pas ton formulaire deux fois.
+
+### Dans Symfony
+Appeler `$form->isValid()` **sans** avoir vérifié `isSubmitted()` d'abord plante avec une exception sur un formulaire vierge — c'est le piège numéro un de ce chapitre.
+
+### Exemple simple
+```php
+$form->handleRequest($request);
+if ($form->isSubmitted() && $form->isValid()) {
+    return $this->redirectToRoute('succes'); // Post-Redirect-Get
+}
+```
+
+### Comment le mémoriser 🧠
+"Jamais `isValid()` seul" — toujours `isSubmitted() && isValid()`, dans cet ordre, comme un garde qui vérifie d'abord que tu as bien un dossier avant de l'évaluer.
+
+
 ## Theory
 
 Un form a deux vies : **affichage** (GET) et **traitement** (POST). Une seule

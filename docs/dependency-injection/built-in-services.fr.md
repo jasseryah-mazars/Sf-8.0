@@ -32,6 +32,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit des centaines de services tout prêts — tu les réclames par leur **type** (une interface), jamais par un identifiant brut à mémoriser.
+
+### Imagine dans la vraie vie
+Les services intégrés du framework sont le garde-manger de la maison — des centaines de produits déjà en stock (`router`, `logger`, `serializer`). Tu ne les cherches pas par numéro d'étagère (id brut) ; tu demandes par *type d'ingrédient* (l'interface autowirée) et la cuisine sait quel bocal prendre.
+
+### Dans Symfony
+Injecter `LoggerInterface` fonctionne sans jamais connaître le nom exact du service de log configuré — Symfony résout automatiquement quelle implémentation concrète fournir.
+
+### Exemple simple
+```console
+$ php bin/console debug:autowiring logger
+```
+
+### Comment le mémoriser 🧠
+Injecte toujours `RequestStack` (puis `getCurrentRequest()`) dans un service — **jamais** un `Request` brut, qui n'existe pas encore au moment où le container construit tes services.
+
+---
+
+
 ## Theory
 
 FrameworkBundle (et les autres bundles) enregistrent des centaines de services

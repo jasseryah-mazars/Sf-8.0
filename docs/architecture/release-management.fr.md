@@ -32,6 +32,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony sort une nouvelle version mineure tous les six mois pile, à date fixe — et une mineure ne casse jamais ton code existant.
+
+### Imagine dans la vraie vie
+Un train qui roule sur un horaire imprimé et fixe : les trains locaux (versions mineures) partent chaque mai et novembre sans jamais changer les quais qui fonctionnent déjà — ils ajoutent seulement de nouveaux wagons (fonctionnalités) et affichent "cette porte sera retirée" (dépréciations). Seul le grand chantier tous les deux ans (une version majeure) retire réellement ces portes signalées.
+
+### Dans Symfony
+Passer de Symfony 8.0 à 8.3 devrait toujours être sûr si tu as corrigé tes dépréciations en cours de route — c'est la garantie même du versionnage sémantique appliqué par Symfony.
+
+### Exemple simple
+```json
+{ "require": { "symfony/framework-bundle": "^8.0" } }
+```
+Le `^8.0` accepte automatiquement toutes les futures versions mineures (8.1, 8.2...) sans jamais risquer une rupture.
+
+### Comment le mémoriser 🧠
+`X.4` est **toujours** la version LTS (support long) et sort **en même temps** que la prochaine version majeure (`8.4` sort avec `9.0`).
+
+
 ## Theory
 
 Symfony suit le **Semantic Versioning** (`MAJOR.MINOR.PATCH`) selon un calendrier **à

@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le calendrier de sortie de Symfony est public et fixé des années à l'avance — pas de surprise, pas de date annoncée à la dernière minute.
+
+### Imagine dans la vraie vie
+Un calendrier scolaire publié des années en avance : tout le monde sait déjà que les rentrées ont lieu à dates fixes (les mineures de mai et novembre), et qu'une nouvelle promotion "longue durée" arrive tous les deux ans (la LTS `X.4` avec la nouvelle version majeure). Comme les dates sont fixées si loin à l'avance, chacun peut planifier son inscription sans être pris de court.
+
+### Dans Symfony
+Une équipe technique peut planifier sa migration Symfony 9 dès aujourd'hui, car la date de sortie (novembre 2027, avec la LTS 8.4) est connue publiquement des années à l'avance.
+
+### Exemple simple
+```console
+$ php bin/console about
+# Affiche la version Symfony actuelle et sa date de fin de vie
+```
+
+### Comment le mémoriser 🧠
+Le calendrier ne change jamais de rythme : **mai + novembre** pour les mineures, **tous les deux ans** pour les majeures — retiens-le comme une horloge qui ne s'arrête jamais.
+
+
 ## Theory
 
 La roadmap de Symfony est **pilotée par le calendrier et publique** : vous

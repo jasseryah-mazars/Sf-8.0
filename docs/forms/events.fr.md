@@ -31,6 +31,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les événements de formulaire sont des points de contrôle pendant qu'un formulaire se construit et se soumet — l'occasion d'ajouter des champs dynamiquement ou de nettoyer les données brutes.
+
+### Imagine dans la vraie vie
+Ce sont des **postes de contrôle pendant qu'un formulaire se remplit et se soumet**. Pendant la préparation du formulaire vierge, tu passes par `PRE_SET_DATA`/`POST_SET_DATA` — le moment d'ajouter des champs selon qui le remplit. Quand tu le rends, tu passes par `PRE_SUBMIT`, puis `SUBMIT`, puis `POST_SUBMIT`.
+
+### Dans Symfony
+Un formulaire de commande affichant des champs différents selon un produit déjà choisi utilise typiquement `PRE_SET_DATA` pour ajouter dynamiquement les bons champs avant l'affichage.
+
+### Exemple simple
+```php
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) { /* ... */ });
+```
+
+### Comment le mémoriser 🧠
+On ne peut **ajouter des champs** qu'aux points de contrôle précoces (`PRE_SET_DATA`, `PRE_SUBMIT`) — jamais après que le formulaire est déjà lié.
+
+
 ## Theory
 
 Le cycle de vie du form dispatch des events à des points fixes pour vous permettre

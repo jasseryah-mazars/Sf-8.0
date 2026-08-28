@@ -35,6 +35,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un test unitaire teste une seule classe en isolation — tous ses collaborateurs sont remplacés par des faux, pour que l'échec pointe exactement vers un seul coupable.
+
+### Imagine dans la vraie vie
+Un test unitaire, c'est tester une seule pièce de voiture sur l'établi avec des connecteurs factices, plutôt que de la boulonner dans la voiture entière et de rouler. Comme tout autour de la pièce est simulé, si le voyant passe au rouge, tu sais que le défaut est dans *cette* pièce.
+
+### Dans Symfony
+Tester un service qui envoie des emails sans jamais réellement en envoyer utilise un mock du `MailerInterface` — le test vérifie que `send()` a été appelé, sans qu'aucun email réel ne parte.
+
+### Exemple simple
+```php
+$mailer = $this->createMock(MailerInterface::class);
+$mailer->expects($this->once())->method('send');
+```
+
+### Comment le mémoriser 🧠
+Un **stub** nourrit juste la pièce d'une valeur fixe (tu ne vérifies jamais le capteur lui-même) ; un **mock** compte en plus si et comment on l'a sollicité, et proteste si l'appel attendu n'a jamais eu lieu.
+
+---
+
+
 ## Theory
 
 Un **test unitaire** exerce une seule classe isolément, en remplaçant ses

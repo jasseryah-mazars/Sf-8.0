@@ -84,6 +84,21 @@ dans la navigation pour correspondre à ce graphe.
 
 ---
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** L'ordre d'étude recommandé pour les 15 domaines — pas dans l'ordre alphabétique de la navigation, mais dans l'ordre où chaque concept s'appuie sur le précédent.
+
+**Pourquoi ça existe ?** Étudier la Sécurité avant l'Injection de Dépendances serait comme apprendre à conduire avant de savoir ce qu'est une pédale — la Sécurité s'appuie directement sur des concepts enseignés avant elle dans ce parcours.
+
+**🏠 Analogie de la vraie vie :** Un GPS qui calcule le meilleur itinéraire plutôt que de te laisser deviner ton chemin sur une carte routière complète — le Roadmap fait ce travail pour ton apprentissage.
+
+**Symfony dans la vraie vie :** Les 15 domaines sont groupés en 4 phases (Fondations → Modèle mental → Couche fonctionnelle → Renforcement) — chaque phase se termine par un "checkpoint" qui vérifie que tu es prêt avant de continuer.
+
+**⚠️ Erreur fréquente :** suivre la navigation de gauche (ordre alphabétique) au lieu de ce Roadmap — l'ordre alphabétique ignore complètement les prérequis réels entre domaines.
+
+**🧠 Comment le mémoriser :** "Le Roadmap, c'est le GPS de ta révision — suis-le plutôt que de deviner ton propre chemin."
+
+
 ## 🧱 Phase 1 — Foundations (stages 1–2, ~8–10 h)
 
 *Objectif : être capable de décrire ce qui se passe entre la saisie d'une URL et

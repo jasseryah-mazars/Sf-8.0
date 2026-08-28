@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une exception non attrapée déclenche une alarme incendie interne (`kernel.exception`) que Symfony écoute pour la transformer en page d'erreur propre, au lieu de laisser planter l'application.
+
+### Imagine dans la vraie vie
+Une alarme incendie retentit dans un bâtiment. Le kernel capte la fumée et diffuse l'alerte à tous les secouristes (les listeners). Tes propres secouristes interviennent en premier ; les pompiers par défaut du bâtiment (`ErrorListener`, priorité -128) n'agissent que si personne d'autre ne l'a fait.
+
+### Dans Symfony
+Une `NotFoundHttpException` lancée dans un contrôleur devient automatiquement une page 404 stylée — sans que tu aies écrit le moindre code pour la transformer en réponse HTTP.
+
+### Exemple simple
+```php
+throw new NotFoundHttpException('Produit introuvable.');
+// → devient automatiquement une réponse 404, grâce à HttpExceptionInterface
+```
+
+### Comment le mémoriser 🧠
+Seule une exception qui implémente `HttpExceptionInterface` porte un code de statut précis — toutes les autres deviennent une **500** par défaut. Retiens : "pas d'étiquette HTTP = urgence générique."
+
+
 ## Theory
 
 Quand du code du cycle de la request lève une exception qui n'est pas attrapée, le

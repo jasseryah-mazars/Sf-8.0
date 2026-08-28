@@ -31,6 +31,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La promesse BC dit : "si tu utilises l'API publique stable, ton code continuera de fonctionner à travers toutes les mineures et patchs — jusqu'à la prochaine version majeure."
+
+### Imagine dans la vraie vie
+Un bail de location garantit que l'appartement que tu as signé — la porte d'entrée, la cuisine, les équipements convenus — reste identique pendant toute la durée du bail. Le propriétaire ne peut abattre un mur porteur qu'au renouvellement du bail (une version majeure), et seulement après t'avoir prévenu formellement à l'avance (une dépréciation).
+
+### Dans Symfony
+Une classe marquée `@internal` peut changer de signature d'une mineure à l'autre sans préavis — car elle n'a jamais fait partie de la promesse BC, même si tu l'utilises depuis longtemps sans problème.
+
+### Exemple simple
+```php
+/**
+ * @internal
+ */
+class DetailImplementation {} // peut changer sans préavis, même en version mineure
+```
+
+### Comment le mémoriser 🧠
+Les pièces "réservées au personnel" (`@internal`) ou "encore en travaux" (`@experimental`) ne faisaient jamais partie du bail — elles peuvent changer n'importe quand, contrairement au reste de l'appartement.
+
+
 ## Theory
 
 La **promesse de rétrocompatibilité (BC)** est le contrat de Symfony avec ses

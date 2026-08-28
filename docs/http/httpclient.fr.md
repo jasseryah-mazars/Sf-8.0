@@ -29,6 +29,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+HttpClient, c'est ton application qui devient elle-même cliente et appelle d'autres services web — l'inverse de `Request`/`Response`, qui gèrent ce que ton app *reçoit*.
+
+### Imagine dans la vraie vie
+Si `Request`/`Response` gèrent le courrier qui arrive à ton bureau, `HttpClient` c'est toi qui postes des lettres vers d'autres bureaux et attends leur réponse. Tu écris la requête, la confies au coursier (`request()`) — et comme le coursier travaille en asynchrone, tu peux envoyer toute une pile de lettres d'un coup et n'attendre que lorsque tu ouvres vraiment une réponse.
+
+### Dans Symfony
+`HttpClientInterface` te permet d'appeler une API météo ou de paiement externe sans jamais coder toi-même la gestion des sockets, des retries ou du TLS — Symfony s'en charge.
+
+### Exemple simple
+```php
+$response = $client->request('GET', 'https://api.exemple.com/meteo');
+$donnees = $response->toArray(); // le transfert réseau se fait ici, pas avant
+```
+
+### Comment le mémoriser 🧠
+`request()` **ne fait rien tout de suite** — c'est un ticket de coursier, pas l'envoi lui-même. Le vrai transfert réseau n'a lieu qu'à la première lecture de la réponse (`getContent()`, `toArray()`...) — d'où la concurrence "gratuite" quand tu lances plusieurs requêtes avant de lire la première.
+
+
 ## Theory
 
 `Symfony\Component\HttpClient` est le versant **sortant** de HTTP : votre application

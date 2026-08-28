@@ -34,6 +34,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Utilise les assertions intégrées (`assertResponseIsSuccessful()`...) plutôt que de lire `getResponse()` à la main — elles affichent la réponse en cas d'échec, ce qui accélère énormément le débogage.
+
+### Imagine dans la vraie vie
+Les helpers d'introspection sont la checklist qualité en bout de chaîne de montage, plutôt que toi qui scrutes chaque pièce à la main. Au lieu de démonter le produit fini pour lire un numéro de série, tu coches des contrôles standards qui tamponnent succès ou échec — et quand un échoue, le poste photographie automatiquement l'objet défectueux.
+
+### Dans Symfony
+`$this->assertResponseIsSuccessful()` échoue avec un message détaillé montrant tout le contenu de la réponse (utile pour voir une trace d'erreur PHP) — bien plus lisible qu'un simple `assertEquals(200, $response->getStatusCode())`.
+
+### Exemple simple
+```php
+$this->assertResponseStatusCodeSame(201); // code exact, pas juste "un 2xx"
+```
+
+### Comment le mémoriser 🧠
+`assertResponseIsSuccessful()` accepte **n'importe quel 2xx** — utilise `assertResponseStatusCodeSame()` quand tu veux vérifier un code **exact** (201 précisément, pas juste "un succès").
+
+---
+
+
 ## Theory
 
 Après une request, vous pouvez inspecter deux choses : les **objets** bruts

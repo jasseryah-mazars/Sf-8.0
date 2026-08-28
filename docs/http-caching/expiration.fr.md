@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+L'expiration dit combien de temps une réponse reste "fraîche" — les caches peuvent répondre sans jamais recontacter le serveur pendant cette période.
+
+### Imagine dans la vraie vie
+La fraîcheur est la date "à consommer avant" sur une brique de lait. Tant que la date n'est pas dépassée, tu la sers directement du frigo sans la sentir (un cache la sert sans contacter le serveur d'origine).
+
+### Dans Symfony
+`$response->setMaxAge(3600)` dit au navigateur "ne me redemande rien pendant une heure" — la page suivante visitée dans l'heure est servie instantanément, sans requête réseau.
+
+### Exemple simple
+```php
+$response->setSharedMaxAge(3600); // active AUSSI public automatiquement
+```
+
+### Comment le mémoriser 🧠
+`no-cache` ne veut **pas** dire "ne jamais stocker" (c'est `no-store`) — ça veut dire "toujours revérifier avant de servir", même si la copie semble bonne.
+
+---
+
+
 ## Theory
 
 Le modèle d'**expiration** (fraîcheur) permet à un cache de servir une response

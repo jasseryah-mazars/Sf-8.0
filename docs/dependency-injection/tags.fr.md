@@ -31,6 +31,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un tag est une étiquette posée sur un service à la compilation — elle ne fait rien toute seule tant qu'un collecteur ne vient pas la ramasser.
+
+### Imagine dans la vraie vie
+Un tag est un autocollant sur une fiche recette — "menu brunch". L'autocollant seul ne fait rien ; un collecteur (le chef qui prépare le service brunch) rassemble toutes les fiches portant cet autocollant sur un même plateau.
+
+### Dans Symfony
+Tous les validateurs de contraintes personnalisés portent le tag `validator.constraint_validator`, ce qui permet au composant Validator de tous les découvrir automatiquement — sans liste manuelle à maintenir.
+
+### Exemple simple
+```php
+#[AutowireIterator('app.notifieur')]
+private iterable $notifieurs; // tous les services tagués 'app.notifieur'
+```
+
+### Comment le mémoriser 🧠
+**Priorité plus haute = plus tôt** dans l'itérateur — comme la place d'une fiche sur le plateau, celles avec une priorité plus haute sont servies en premier.
+---
+
+
 ## Theory
 
 Un **tag** est une étiquette attachée à une définition de service (par ex.

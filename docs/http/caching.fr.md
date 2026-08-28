@@ -38,6 +38,34 @@
     `stale-while-revalidate`, `Vary`, le kernel HttpCache de Symfony — lisez le
     stage dédié : [HTTP Caching](../http-caching/index.md).
 
+## Pour les nuls
+
+### L'idée en une phrase
+Il y a deux façons d'éviter de refaire un travail déjà fait : ne rien redemander tant que c'est "encore bon" (fraîcheur), ou redemander mais recevoir un "rien de neuf" ultra-rapide (validation).
+
+### Imagine dans la vraie vie
+Un plat au frigo porte une date limite : tant qu'elle n'est pas dépassée, tu le manges sans te poser de question — c'est la **fraîcheur**, aucune question posée. L'autre option : tu appelles la personne qui a cuisiné et demandes "c'est toujours pareil ?" — si la réponse est "oui, rien n'a changé", tu t'épargnes de tout recuisiner — c'est la **validation**, et cette réponse courte "rien de neuf" est le fameux `304` sans corps.
+
+### Dans Symfony
+`$response->setPublic()->setMaxAge(3600)` active la fraîcheur (aucune requête au serveur pendant une heure) ; `$response->setETag($hash)` active la validation (le serveur est recontacté, mais répond en 304 si rien n'a changé).
+
+### Exemple simple
+```php
+$response->setLastModified($article->getUpdatedAt());
+$response->setEtag(md5($article->getContent()));
+// Symfony renvoie 304 tout seul si le navigateur montre qu'il a déjà la bonne version
+```
+
+### Comment le mémoriser 🧠
+**Fraîcheur = pas de question du tout** (`max-age`/`s-maxage`). **Validation = question posée, réponse parfois vide** (`ETag`/`Last-Modified` → `304`).
+
+!!! info "Scope"
+    This chapter is a **map, not the territory**. HTTP caching is a whole stage.
+    For depth — reverse proxies, ESI, `s-maxage`, `stale-while-revalidate`,
+    `Vary`, the Symfony HttpCache kernel — read the dedicated stage:
+    [HTTP Caching](../http-caching/index.md).
+
+
 ## Theory
 
 Le cache HTTP permet à un magasin (navigateur, CDN, reverse proxy) de réutiliser

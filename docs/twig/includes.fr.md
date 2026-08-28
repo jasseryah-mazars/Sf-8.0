@@ -31,6 +31,49 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`include` colle un morceau de template réutilisable à l'endroit voulu — et voit par défaut toutes les variables de la page qui l'accueille.
+
+### Imagine dans la vraie vie
+Inclure un fragment, c'est coller une fiche recette réutilisable sur la page d'un plus grand livre de cuisine que tu écris. Par défaut, la fiche peut lire tous les ingrédients déjà listés sur cette page (elle hérite du contexte parent). Ajoute `only` et tu lui donnes à la place une boîte à repas scellée contenant uniquement les ingrédients que tu as choisis pour elle.
+
+### Dans Symfony
+`{{ include('partials/_carte_produit.html.twig', {produit: p}, {with_context: false}) }}` (équivalent à `only`) garantit que le fragment ne dépend d'aucune variable "ambiante" de la page — plus facile à réutiliser ailleurs sans surprise.
+
+### Exemple simple
+```twig
+{{ include('partials/_alerte.html.twig', {message: 'Enregistré !'}, with_context: false) }}
+```
+
+### Comment le mémoriser 🧠
+`include` ne peut **jamais** réécrire un bloc du fragment inclus — c'est `embed` qui ajoute cette capacité, en combinant `include` + surcharge de blocs.
+
+Where **inheritance** fills holes in a layout, **includes** drop a reusable
+fragment *in place* — a card, a menu, a form row. Two forms exist:
+
+```twig
+{# tag form — renders immediately #}
+{% include 'partials/_card.html.twig' %}
+
+{# function form — usable inside expressions #}
+{{ include('partials/_card.html.twig') }}
+```
+
+By default the partial inherits **the current context** (all variables in scope).
+
+!!! question "Predict first"
+    `{% include '_card.html.twig' with { title: 'Sales' } %}` — inside `_card`, can
+    you still read a variable `product` that only the parent set? What if you add `only`?
+
+??? note "Reveal"
+    Without `only`, **yes** — the include inherits the whole parent context *plus*
+    the `with` vars. Add `only` and the include sees **just** `title` (the `with`
+    set) — the parent scope is hidden. `with` merges; `only` isolates. (The `app`
+    global stays available either way.)
+
+
 ## Theory
 
 Là où l'**héritage** remplit des trous dans un layout, les **includes** déposent

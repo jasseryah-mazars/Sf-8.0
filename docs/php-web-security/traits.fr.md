@@ -29,6 +29,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un trait, c'est un tampon encreur : ses méthodes sont recopiées physiquement dans la classe qui l'utilise, comme si tu les avais écrites toi-même à la main.
+
+### Imagine dans la vraie vie
+Un tampon "SIGNÉ ET APPROUVÉ" apposé sur une page en imprime le texte à l'encre, directement sur cette page — le tampon lui-même n'est pas "un document" que tu pourrais ranger dans un dossier à part. Si la page a déjà été écrite à la main sur ce point précis, l'écriture manuscrite l'emporte sur le tampon.
+
+### Dans Symfony
+Les traits servent à partager du comportement entre plusieurs classes sans passer par l'héritage (par exemple un trait de logging réutilisé dans plusieurs services). Comme un trait n'est pas un type, on ne peut jamais écrire `instanceof MonTrait` ni type-hinter dessus.
+
+### Exemple simple
+```php
+trait Horodatable {
+    public function estimee(): \DateTimeImmutable { return new \DateTimeImmutable(); }
+}
+class Commande { use Horodatable; }
+
+(new Commande())->estimee(); // méthode "copiée" depuis le trait
+```
+
+### Comment le mémoriser 🧠
+Ordre de priorité, du plus fort au plus faible : **classe > trait > parent hérité**. La classe elle-même a toujours le dernier mot sur le tampon.
+
+
 ## Theory
 
 Un **trait** est un mécanisme de réutilisation **horizontale** de code : un lot

@@ -8,6 +8,20 @@
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Un jeu de **74 flashcards** (question au recto, réponse au verso) sur Data Validation. On lit la question, on répond mentalement, puis on tape pour révéler la réponse.
+
+**Pourquoi ça existe ?** Se tester activement (essayer de répondre avant de voir la réponse) ancre l'information bien mieux que relire passivement un chapitre. Répété à intervalles espacés, c'est la technique de mémorisation la plus efficace connue.
+
+**🏠 Analogie de la vraie vie :** Ce sont les **cartes-vocabulaire** utilisées pour apprendre une langue étrangère : un mot d'un côté, sa traduction de l'autre — on ne progresse qu'en essayant de deviner avant de retourner la carte.
+
+**Symfony dans la vraie vie :** Recto de la carte → une question précise sur Data Validation / Verso → la réponse avec sa justification et un lien vers la doc officielle / Cartes marquées "ratées" → à revoir en priorité au prochain passage.
+
+**⚠️ Erreur fréquente :** Taper pour révéler la réponse trop vite, sans avoir vraiment tenté de répondre — cela transforme l'exercice en simple lecture, avec un gain de mémorisation presque nul.
+
+**🧠 Comment le mémoriser :** *« Je réponds avant de retourner la carte »* — et je note les cartes ratées pour les revoir plus souvent que les autres (répétition espacée).
+
 ??? question "1. What does ValidatorInterface::validate() return when the value is invalid?"
     **✅ A ConstraintViolationListInterface containing the violations**
 

@@ -29,6 +29,48 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Certains paramètres de route commençant par `_` sont réservés à Symfony — tu en écris certains (`_locale`), et Symfony t'en donne d'autres en lecture seule (`_route`).
+
+### Imagine dans la vraie vie
+Une étiquette d'expédition avec des cases réservées que le système du transporteur comprend. Certaines cases, tu les remplis toi-même — "fragile", "documents en français" — et elles changent le traitement du colis. D'autres cases sont tamponnées par le centre de tri au moment du scan — le numéro de suivi et l'itinéraire emprunté — que tu peux lire sur l'étiquette mais jamais écrire toi-même.
+
+### Dans Symfony
+`{_locale}` dans une route peut être utilisé pour construire des URL multilingues (`/fr/accueil`, `/en/home`) qui définissent automatiquement la langue de toute la requête.
+
+### Exemple simple
+```php
+#[Route('/{_locale}/accueil', name: 'accueil', requirements: ['_locale' => 'fr|en'])]
+```
+
+### Comment le mémoriser 🧠
+Tu **écris** `_controller`/`_format`/`_locale`/`_fragment` ; Symfony te **rend** `_route`/`_route_params` en lecture seule — jamais l'inverse.
+
+Some parameters that appear in a route's `defaults`/placeholders are **reserved**:
+Symfony reads them to configure the request rather than passing them as ordinary
+controller arguments. They are conventionally prefixed with an underscore.
+
+| Attribute | Purpose |
+|---|---|
+| `_controller` | The controller callable to run |
+| `_format` | Request format → `Content-Type` (e.g. `json`) |
+| `_locale` | The request locale |
+| `_fragment` | The URL fragment (`#...`) when generating |
+| `_route` | Name of the matched route (read-only) |
+| `_route_params` | The matched route's parameters (read-only) |
+
+!!! question "Predict first"
+    Can you set `_route` in a route's `defaults` to change what
+    `$request->attributes->get('_route')` returns?
+
+??? note "Reveal"
+    No. `_route` and `_route_params` are **read-only outputs** injected by the
+    matcher — you read them, never set them. The inputs you *do* set are
+    `_controller`, `_format`, `_locale` and `_fragment`.
+
+
 ## Theory
 
 Certains paramètres qui apparaissent dans les `defaults`/placeholders d'une route sont

@@ -27,6 +27,20 @@ constraints and violations. It is the direct prerequisite for
     | **Revision priority** | **Medium** |
     | **Est. time** | 3–4 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le composant Validator vérifie automatiquement qu'un objet PHP respecte des règles données (email valide, champ obligatoire...) et te rend une liste précise de ce qui ne va pas.
+
+**Pourquoi ça existe ?** Vérifier chaque champ à la main avec des `if` partout dans le code est répétitif et source d'oublis. Le Validator centralise les règles à un seul endroit, directement sur la classe concernée.
+
+**🏠 Analogie de la vraie vie :** Le contrôle des bagages à l'aéroport. Chaque bagage passe par des scanners spécialisés (les contraintes), et à la sortie tu reçois une liste précise de ce qui a été signalé (les violations) — jamais juste un "refusé" sans explication.
+
+**Symfony dans la vraie vie :** `#[Assert\Email]` sur une propriété déclare la règle ; `$validator->validate($utilisateur)` la vérifie et renvoie une liste d'erreurs (vide si tout est valide).
+
+**⚠️ Erreur fréquente :** croire que le Validator renvoie un simple `true`/`false` — il renvoie toujours une liste, même vide ; c'est `count()` sur cette liste qui indique si c'est valide.
+
+**🧠 Comment le mémoriser :** "Le Validator ne dit jamais juste oui/non — il rend toujours une liste détaillée, même vide."
+
 ## Why this stage matters
 
 Validation is a component the exam tests both at the *usage* level (which

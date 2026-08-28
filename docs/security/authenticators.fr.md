@@ -31,6 +31,32 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un authenticator prépare un dossier de candidature (le Passport) avec les documents fournis (les badges) — mais c'est toujours quelqu'un d'autre, plus tard, qui vérifie ces documents.
+
+### Imagine dans la vraie vie
+Au guichet d'une administration, un employé assemble ton dossier : pièce d'identité, justificatif de domicile. Il agrafe tout ensemble mais ne vérifie rien lui-même — un service dédié en arrière-boutique contrôle chaque pièce avant de valider ton dossier. L'authenticator, c'est cet employé au guichet : il construit, il ne juge pas.
+
+### Dans Symfony
+Chaque fois qu'un visiteur se connecte (formulaire, token API, etc.), Symfony appelle un authenticator dont le seul travail est de construire un `Passport` avec les bonnes preuves (badges). La vérification réelle des identifiants se fait ensuite automatiquement, dans un événement séparé.
+
+### Exemple simple
+```php
+public function authenticate(Request $request): Passport
+{
+    return new Passport(
+        new UserBadge($request->request->getString('email')),
+        new PasswordCredentials($request->request->getString('password')),
+    );
+}
+```
+
+### Comment le mémoriser 🧠
+"Le Passeport se **construit**, il ne se **contrôle** pas ici." `authenticate()` = fabrique le dossier ; `CheckPassportEvent` = le douanier qui tamponne (ou refuse).
+
+
 ## Theory
 
 Un **authenticator** transforme une request en token authentifié. Dans

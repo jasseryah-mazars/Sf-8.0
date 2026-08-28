@@ -27,6 +27,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`app` est une variable spéciale disponible dans **tous** les templates sans jamais avoir à la passer depuis le contrôleur — ta fenêtre sur la requête, l'utilisateur, la session.
+
+### Imagine dans la vraie vie
+`app` est un tableau blanc partagé, accroché au mur du bureau : n'importe quel template peut y jeter un œil pour connaître l'utilisateur actuel, la requête, la session ou la langue, sans que personne n'ait besoin de lui en fournir une copie manuellement.
+
+### Dans Symfony
+`{% if app.user %}Bonjour {{ app.user.userIdentifier }}{% endif %}` fonctionne dans n'importe quel template, sans que le contrôleur n'ait jamais explicitement passé une variable "utilisateur".
+
+### Exemple simple
+```twig
+{% if app.user %}
+    Connecté en tant que {{ app.user.userIdentifier }}
+{% else %}
+    Non connecté
+{% endif %}
+```
+
+### Comment le mémoriser 🧠
+`app.user` vaut **`null`** quand personne n'est connecté — toujours le protéger avec un `{% if %}`, jamais l'utiliser directement sans vérification.
+
+
 ## Theory
 
 Une **globale** est une variable disponible dans **chaque** template sans la

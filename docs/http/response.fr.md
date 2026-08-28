@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`Response` est la lettre que ton application renvoie — un tampon de statut, des notes en marge (headers), et le contenu (body).
+
+### Imagine dans la vraie vie
+Le bureau qui a reçu ta lettre te répond : un tampon sur l'enveloppe ("200 OK" ou "404"), des notes de traitement (type de contenu, mise en cache, cookies à garder), et la réponse elle-même à l'intérieur. `prepare()` est l'agent qui vérifie que l'enveloppe est conforme à ta lettre d'origine avant que `send()` ne la poste réellement.
+
+### Dans Symfony
+`JsonResponse`, `BinaryFileResponse`, `StreamedResponse` sont des variantes toutes prêtes de `Response` pour des besoins courants (JSON, fichier, flux) — pas besoin de tout construire à la main à chaque fois.
+
+### Exemple simple
+```php
+return new JsonResponse(['ok' => true]); // statut 200, Content-Type: application/json automatique
+```
+
+### Comment le mémoriser 🧠
+`prepare()` **avant**, `send()` **après** : d'abord on rend l'enveloppe conforme à ce que le client a demandé, ensuite seulement on la poste.
+
+
 ## Theory
 
 Une response HTTP est le miroir de la request :

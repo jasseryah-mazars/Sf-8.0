@@ -14,6 +14,21 @@ tags:
     **Theory:** [Event Dispatcher & Kernel Events](../architecture/events.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Créer ton propre événement personnalisé et plusieurs écouteurs qui réagissent dans un ordre précis — pour comprendre comment le mécanisme d'événements de Symfony fonctionne de l'intérieur.
+
+**Pourquoi ça existe ?** Comprendre la théorie des priorités et de `stopPropagation()` reste abstrait tant qu'on ne l'a pas vu s'exécuter réellement, avec plusieurs listeners qui se disputent l'ordre de passage.
+
+**🏠 Analogie de la vraie vie :** Une alarme incendie que plusieurs personnes entendent en même temps, mais où celles avec le badge "responsable sécurité" (priorité plus haute) agissent en premier — et l'une d'elles peut décider d'arrêter l'alarme avant que les autres n'interviennent.
+
+**Symfony dans la vraie vie :** `#[AsEventListener(priority: 100)]` s'exécute avant `#[AsEventListener(priority: 10)]` sur le même événement — exactement ce que ce lab te fait vérifier toi-même.
+
+**⚠️ Erreur fréquente :** supposer que tous les listeners s'exécutent toujours, même après un `stopPropagation()` — un listener qui l'appelle empêche définitivement tous les listeners restants de s'exécuter.
+
+**🧠 Comment le mémoriser :** "Priorité plus haute = passe en premier — et `stopPropagation()` ferme la porte aux suivants."
+
+
 ## Objective
 
 À l'issue de ce lab, vous saurez :

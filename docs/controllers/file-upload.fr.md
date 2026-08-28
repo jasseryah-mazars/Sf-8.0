@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Ne jamais faire confiance à ce qu'un fichier envoyé *dit* être — toujours vérifier ce qu'il *est réellement*.
+
+### Imagine dans la vraie vie
+La douane d'un aéroport inspectant un colis. L'étiquette d'expédition peut prétendre "livres" (le nom et le MIME envoyés par le client), mais l'agent se fie à la radiographie du contenu réel (`getMimeType()`), pas à l'autocollant. Une fois seulement le contrôle passé, le colis est réétiqueté avec une nouvelle référence et déplacé dans un entrepôt sécurisé en arrière-boutique — jamais laissé dans le hall d'arrivée public où n'importe qui pourrait l'ouvrir.
+
+### Dans Symfony
+`UploadedFile::getClientOriginalName()` renvoie un nom **totalement contrôlé par le visiteur** — l'utiliser tel quel pour nommer le fichier stocké est une faille de sécurité classique (path traversal, écrasement de fichier).
+
+### Exemple simple
+```php
+$nouveauNom = uniqid().'.'.$fichier->guessExtension(); // jamais le nom original du client
+$fichier->move($this->getParameter('uploads_dir'), $nouveauNom);
+```
+
+### Comment le mémoriser 🧠
+"L'étiquette ment, la radiographie ne ment pas" : vérifie toujours `getMimeType()` (détecté par le contenu réel), jamais le nom ou le type MIME envoyé par le client.
+
+
 ## Theory
 
 Un fichier uploadé arrive dans le bag `files` sous forme de

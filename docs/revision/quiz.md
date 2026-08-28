@@ -11,6 +11,20 @@ can self-test in the terminal and repeat it as often as you like.
     - **Isn't:** leaked or brain-dumped exam items. Questions teach the distinctions
       the exam tests; they are not the exam.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une banque de questions **au format YAML brut**, faite pour être exécutée dans un terminal via un outil externe (`certificationy-cli`) plutôt que lue dans un navigateur.
+
+**Pourquoi ça existe ?** Certaines personnes révisent mieux en ligne de commande, dans leur flux de travail habituel (entre deux sessions de code), plutôt qu'en ouvrant un site web séparé. Ce format permet aussi de scripter des révisions automatisées.
+
+**🏠 Analogie de la vraie vie :** C'est la différence entre lire une recette **sur un site de cuisine** et la charger dans une **appli de courses** qui en tire automatiquement la liste d'ingrédients : même contenu, format pensé pour un usage outillé plutôt que pour la lecture.
+
+**Symfony dans la vraie vie :** Chaque fichier `quiz/<domaine>.yml` → la traduction machine-lisible des questions de ce domaine / `certificationy-cli` → le programme qui lit ces YAML et fait passer le quiz dans le terminal / `explanation` + `documentation` dans chaque question → l'équivalent de la réponse dépliable des pages web.
+
+**⚠️ Erreur fréquente :** Éditer ces fichiers YAML à la main en pensant réviser — ce sont des données pour un outil, pas une page de cours ; le contenu pédagogique correspondant vit dans les chapitres eux-mêmes.
+
+**🧠 Comment le mémoriser :** *« Web pour lire, CLI pour s'entraîner en continu »* — deux formats, un seul contenu de fond.
+
 ## Where the questions live
 
 ```text

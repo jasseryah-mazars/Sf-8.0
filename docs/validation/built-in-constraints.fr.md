@@ -28,6 +28,58 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrainte est un scanner spécialisé — `NotBlank` refuse une chaîne vide, `NotNull` accepte une chaîne vide mais refuse `null`.
+
+### Imagine dans la vraie vie
+Chaque contrainte est **un scanner** sur la ligne de contrôle : le rayon X vérifie la forme (`Length`), le renifleur détecte les liquides (`Email`/`Regex`). `NotBlank` signifie "le sac doit contenir quelque chose" ; `NotNull` signifie seulement "un sac doit être sur le tapis" — un sac vide compte encore.
+
+### Dans Symfony
+```php
+#[Assert\NotBlank]   // refuse '', null, et les tableaux vides
+#[Assert\NotNull]     // accepte '' mais refuse null
+```
+
+### Exemple simple
+```php
+#[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+public string $nom = '';
+```
+
+### Comment le mémoriser 🧠
+"Blank refuse le vide, Null refuse seulement l'absence" — `NotBlank` est presque toujours ce que tu veux pour un champ texte utilisateur.
+
+All built-in constraints live in `Symfony\Component\Validator\Constraints\` and
+are imported as `use Symfony\Component\Validator\Constraints as Assert;`. Each is
+a small value object; its options are constructor arguments. You attach it as an
+attribute on the value it guards.
+
+```php
+// all built-in constraints live in Symfony\Component\Validator\Constraints\
+use Symfony\Component\Validator\Constraints as Assert; // conventional alias
+
+class Product
+{
+    // the constraint is a small value object; options are constructor arguments
+    #[Assert\Length(min: 3, max: 50)]
+    public string $name = '';
+}
+```
+
+The catalogue is large — the exam tests the **common ones and their edge cases**,
+not obscure options. Learn the categories below.
+
+!!! question "Predict first"
+    A nullable `?string $email` carries only `#[Assert\Email]` and is left `null`.
+    Does validation report an error?
+
+??? note "Reveal"
+    No. Like most constraints, `Email` skips `null`/`''` and never runs. To make
+    "missing" an error, stack `#[Assert\NotBlank]` (or `NotNull`) in front of it.
+
+
 ## Theory
 
 Toutes les constraints intégrées vivent dans

@@ -14,6 +14,21 @@ tags:
     **Theory:** [Argument Value Resolvers](../controllers/value-resolvers.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Construire ton propre "traducteur" d'arguments de contrôleur — un composant qui transforme automatiquement des données brutes de la requête en un objet PHP typé prêt à l'emploi.
+
+**Pourquoi ça existe ?** Les résolveurs intégrés couvrent les cas courants, mais un vrai projet a souvent besoin d'un type d'argument sur mesure — savoir en écrire un est un signe de maîtrise Expert.
+
+**🏠 Analogie de la vraie vie :** Un traducteur spécialisé supplémentaire qu'on ajoute à une équipe existante : il ne remplace pas les autres, il prend en charge un cas précis (ici, transformer des paramètres de pagination) et laisse passer poliment tout le reste.
+
+**Symfony dans la vraie vie :** Ton résolveur doit "décliner" (ne rien produire) pour tout argument qui n'est pas de son ressort, afin que la chaîne de résolveurs intégrés continue de fonctionner normalement pour les autres arguments.
+
+**⚠️ Erreur fréquente :** oublier `#[ValueResolver(...)]` ou l'autoconfiguration par tag — sans ça, ton résolveur n'est jamais appelé, même s'il est parfaitement écrit.
+
+**🧠 Comment le mémoriser :** "Un bon résolveur sait dire non poliment — il décline plutôt que de planter sur ce qui n'est pas de son ressort."
+
+
 ## Objective
 
 À l'issue de ce lab, vous saurez **écrire, tester et brancher un value resolver de qualité production**.

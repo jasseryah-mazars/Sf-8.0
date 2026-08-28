@@ -8,6 +8,20 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
     Cover the right-hand column and recite it. If a section feels thin, open its
     topic index (linked in each heading) for the full chapters and cheat sheets.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche récapitulative ultra-condensée** : une ou deux lignes par notion clé, pour les 15 domaines du syllabus, sans aucune explication détaillée.
+
+**Pourquoi ça existe ?** La veille de l'examen, il est trop tard pour relire 15 chapitres complets. Ce dont on a besoin, c'est de vérifier que les faits sont encore frais en mémoire — pas de les réapprendre.
+
+**🏠 Analogie de la vraie vie :** C'est **l'antisèche autorisée par le prof** avant un contrôle : une feuille recto-verso avec juste les formules, pas les démonstrations. Elle ne sert qu'à rafraîchir une mémoire déjà construite.
+
+**Symfony dans la vraie vie :** Chaque ligne de la fiche → un fait déjà appris en détail dans le chapitre correspondant / Le lien "area" en tête de section → retour au cours complet si le fait ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Utiliser cette fiche comme *premier* support d'apprentissage. Elle est illisible pour quelqu'un qui découvre la notion — elle ne fonctionne que comme rappel après un vrai apprentissage.
+
+**🧠 Comment le mémoriser :** *« Cache la colonne de droite, récite-la »* — si tu n'y arrives pas, c'est que ce n'est pas une fiche qu'il te faut, mais le chapitre complet.
+
 ## 1. PHP & Web Security → [area](../php-web-security/index.md)
 
 - **PHP 8.4:** property hooks, asymmetric visibility (`public private(set)`),

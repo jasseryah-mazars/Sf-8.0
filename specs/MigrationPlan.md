@@ -81,7 +81,7 @@ flowchart LR
 | Phase | Deliverable | Exit criterion |
 |---|---|---|
 | P0 Scaffold | Repo, `mkdocs.yml` nav, template, conventions, CI | `mkdocs build --strict` green on empty stubs |
-| P1 Specs | This SpecKit set (13 docs) | All specs complete, cross-linked, no TODOs |
+| P1 Specs | This SpecKit set (started at 13 docs, now 25) | All specs complete, cross-linked, no TODOs |
 | P2 Roadmap + IA | Landing pages (Home, Roadmap, Exam Guide, Revision Hub) | Nav resolves; entry paths clear |
 | P3 Author chapters | 14 area indexes + all micro-chapters | Each passes [DefinitionOfDone](DefinitionOfDone.md) |
 | P4 Quiz bank | `quiz/<area>.yml`, 3–6 Q per chapter | Valid schema; explanations + docs present |

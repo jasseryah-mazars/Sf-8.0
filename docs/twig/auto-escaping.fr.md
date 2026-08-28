@@ -27,6 +27,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Twig neutralise automatiquement tout ce qu'un visiteur pourrait injecter dans une page — pas besoin d'y penser toi-même, à chaque `{{ }}`.
+
+### Imagine dans la vraie vie
+L'auto-escaping est un filet de sécurité tendu sous un trapèze. Quoi qu'un visiteur jette dans ta page — `<script>`, guillemets, chevrons — tombe dans le filet et est neutralisé en texte inoffensif avant que le public ne le voie. Tu ne décroches le filet (`|raw`) que pour des artistes que tu as personnellement vérifiés.
+
+### Dans Symfony
+`{{ commentaire_utilisateur }}` affiche en toute sécurité même si le visiteur a écrit `<script>alert(1)</script>` — le texte apparaît littéralement à l'écran, il ne s'exécute jamais.
+
+### Exemple simple
+```twig
+{{ commentaire }}          {# échappé automatiquement, toujours sûr #}
+{{ commentaire|raw }}      {# ⚠️ dangereux : jamais sur du contenu utilisateur non vérifié #}
+```
+
+### Comment le mémoriser 🧠
+`.txt.twig` n'échappe **rien** (ce n'est pas du HTML, il n'y a rien à échapper) — seule une extension comme `.html.twig` déclenche la protection XSS.
+
+
 ## Theory
 
 L'auto-escaping est la défense intégrée de Twig contre les **XSS** : chaque

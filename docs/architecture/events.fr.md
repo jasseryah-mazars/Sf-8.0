@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le dispatcher d'événements permet à un morceau de code de crier "il s'est passé un truc !" sans savoir qui écoute — n'importe quel listener intéressé peut réagir.
+
+### Imagine dans la vraie vie
+Une tour de contrôle d'aéroport ne pilote jamais les avions elle-même — elle diffuse une information à tous ceux qui écoutent sur la bonne fréquence, et les avions prioritaires (listeners à haute priorité) sont traités en premier. N'importe quel contrôleur peut fermer la piste (`stopPropagation()`) et empêcher les suivants d'agir.
+
+### Dans Symfony
+Un listener sur l'événement `kernel.request` peut intercepter chaque requête entrante pour, par exemple, vérifier une clé API — sans jamais modifier le code du contrôleur lui-même.
+
+### Exemple simple
+```php
+#[AsEventListener(event: KernelEvents::REQUEST, priority: 10)]
+public function onRequest(RequestEvent $event): void { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+**Priorité plus haute = passe en premier** — comme un avion prioritaire à l'atterrissage. Une priorité de 100 s'exécute avant une priorité de 10.
+
+
 ## Theory
 
 L'**EventDispatcher** implémente le pattern *mediator* : le code dispatche un objet

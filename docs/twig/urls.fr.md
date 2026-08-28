@@ -32,6 +32,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`path()` donne une URL relative utile *à l'intérieur* du site ; `url()` donne une URL absolue utile *en dehors* (email, flux RSS).
+
+### Imagine dans la vraie vie
+Générer une URL, c'est donner des indications à quelqu'un. `path()` est le raccourci "interne au bâtiment" — "salle 204, troisième porte à gauche" — parfaitement clair une fois qu'on est déjà dans le même bâtiment (le même site), mais incompréhensible pour quelqu'un ailleurs. `url()` est l'adresse postale complète avec rue, ville et pays : la seule forme qui fonctionne encore quand le mot est emporté au loin et lu ailleurs.
+
+### Dans Symfony
+Un email envoyé à un utilisateur doit toujours utiliser `url()`, jamais `path()` — un lien relatif dans un email n'a aucun sens hors du contexte d'un navigateur déjà sur ton site.
+
+### Exemple simple
+```twig
+<a href="{{ path('produit_show', {id: p.id}) }}">Voir</a>  {# lien interne au site #}
+<!-- Dans un email : {{ url('produit_show', {id: p.id}) }} -->
+```
+
+### Comment le mémoriser 🧠
+"Si le lien quitte la page (email, RSS, balise canonique), utilise `url()`." Sinon, `path()` suffit et reste plus léger.
+
+
 ## Theory
 
 Ne codez jamais les URL en dur. Générez-les à partir des **noms de routes** pour

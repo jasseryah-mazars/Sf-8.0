@@ -26,6 +26,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`{% for %}` parcourt une liste et te donne gratuitement des infos utiles (index, premier, dernier) via la variable spéciale `loop`.
+
+### Imagine dans la vraie vie
+`{% for %}` est un guide de musée qui fait visiter chaque exposition à un groupe : la variable `loop` est le presse-papier du guide qui indique à quel arrêt on en est (`index`), si c'est le premier ou le dernier (`first`/`last`), et combien il en reste. `for … else` est le panneau "galerie fermée" affiché quand il n'y a rien à visiter.
+
+### Dans Symfony
+`{% for produit in produits %}...{% else %}<p>Aucun produit.</p>{% endfor %}` affiche automatiquement un message de repli sans jamais avoir à écrire un `{% if produits is empty %}` séparé.
+
+### Exemple simple
+```twig
+{% for p in produits %}
+    {{ loop.index }}. {{ p.nom }}{% if loop.last %} (dernier){% endif %}
+{% else %}
+    Aucun produit.
+{% endfor %}
+```
+
+### Comment le mémoriser 🧠
+Twig n'a **pas** de `break`/`continue` — pour filtrer, écris `for x in items if condition` directement dans la boucle, pas un `if` imbriqué avec un `continue` imaginaire.
+
+
 ## Theory
 
 ### `for`

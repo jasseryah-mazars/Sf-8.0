@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La méthode HTTP dit ce que tu comptes faire — regarder (GET), remplacer entièrement (PUT), ajouter du neuf (POST) — et chacune a ses propres règles de "sécurité" et de répétabilité.
+
+### Imagine dans la vraie vie
+Choisir une méthode HTTP, c'est choisir un type d'envoi postal. `GET` = demander une copie d'un document (rien ne change). `PUT`/`DELETE` = une instruction enregistrée qui laisse le même résultat final peu importe le nombre de doublons envoyés (idempotent). `POST` = déposer un *nouveau* bon de commande à chaque envoi — envoie-le deux fois, tu obtiens deux commandes.
+
+### Dans Symfony
+`#[Route('/articles', methods: ['POST'])]` restreint la route à une seule méthode — appeler cette URL en GET renvoie une erreur 405 (Method Not Allowed), pas 404.
+
+### Exemple simple
+```php
+#[Route('/articles/{id}', methods: ['DELETE'])]
+public function supprimer(int $id): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+"GET regarde, ne touche à rien" (sûre). "PUT/DELETE répètent sans dégât" (idempotentes mais pas sûres). "POST double à chaque appel" (ni sûre, ni idempotente).
+
+
 ## Theory
 
 La **méthode** (verbe) exprime l'intention du client. Les méthodes principales :

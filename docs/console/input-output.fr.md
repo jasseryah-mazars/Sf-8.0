@@ -31,6 +31,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`InputInterface` lit, `OutputInterface` écrit — mais `SymfonyStyle` est le wrapper stylé que tu devrais utiliser par défaut plutôt que ces deux interfaces brutes.
+
+### Imagine dans la vraie vie
+Un drive de fast-food a deux canaux clairement séparés. Tu dis ta commande dans le micro (l'entrée, lue via `InputInterface`) et reçois ta nourriture à la fenêtre (la sortie, écrite via `OutputInterface`) ; le sac de nourriture (STDOUT) sort par une fenêtre tandis qu'une réclamation ("plus de frites") passe par un haut-parleur séparé (STDERR).
+
+### Dans Symfony
+```php
+$io = new SymfonyStyle($input, $output);
+$io->title('Export'); $io->progressStart(100); // remplace des dizaines de lignes manuelles
+```
+
+### Exemple simple
+```php
+$output->getErrorOutput()->writeln('Erreur !'); // STDERR, jamais mélangé au flux piped
+```
+
+### Comment le mémoriser 🧠
+`getErrorOutput()` n'existe **que** sur `ConsoleOutputInterface` — garde toujours les données destinées à être piped (`| grep ...`) sur STDOUT, jamais sur STDERR.
+
+---
+
+
 ## Theory
 
 Chaque commande communique avec le monde extérieur via deux contrats :

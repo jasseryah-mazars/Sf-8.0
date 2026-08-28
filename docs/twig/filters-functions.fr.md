@@ -28,6 +28,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un filtre transforme une valeur avec un tuyau (`|`) ; une fonction se convoque par son nom — deux syntaxes, une même boîte à outils.
+
+### Imagine dans la vraie vie
+Les filtres, c'est une chaîne d'assemblage en cuisine : une valeur glisse sur le tapis et chaque `|` est un poste qui la transforme (`|lower`, `|round`) avant l'emplacement final. Les fonctions, c'est le chef que tu appelles par son nom (`path()`, `max()`) pour aller chercher ou produire quelque chose de neuf.
+
+### Dans Symfony
+`{{ prix|round(2) }}` transforme une valeur déjà en main (le filtre) ; `{{ path('accueil') }}` va chercher une nouvelle information depuis le routeur (la fonction) — deux usages différents, jamais interchangeables.
+
+### Exemple simple
+```twig
+{{ nom|lower|capitalize }}   {# filtres enchaînés, lus de gauche à droite #}
+{{ path('produit_show', {id: 5}) }} {# fonction, appelée par son nom #}
+```
+
+### Comment le mémoriser 🧠
+Un filtre transforme **ce que tu as déjà** ; une fonction **va chercher ou calcule** quelque chose de nouveau. Retiens l'image : le tuyau transporte, la fonction fabrique.
+
+
 ## Theory
 
 Un **filtre** transforme une valeur avec le pipe : `{{ price|round(2) }}`. Les

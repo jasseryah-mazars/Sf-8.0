@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Surcharger un bundle, c'est changer son comportement sans jamais toucher à ses fichiers dans `vendor/` — chaque type de ressource a son propre "bon endroit" pour être remplacé.
+
+### Imagine dans la vraie vie
+Personnaliser un appartement meublé en location : tu n'arraches jamais les meubles du propriétaire (modifier `vendor/`) ; tu glisses une housse sur son canapé pour changer son aspect (décoration de service), tu accroches tes propres rideaux sur la tringle prévue à cet effet (`templates/bundles/<Nom>/`), et tu règles le chauffage depuis son panneau mural dédié (`config/packages/`).
+
+### Dans Symfony
+Pour changer l'apparence d'une page d'erreur fournie par un bundle tiers, tu crées un template au même chemin sous `templates/bundles/<NomDuBundle>/` — Symfony le préfère automatiquement à celui du bundle, sans toucher au code du bundle.
+
+### Exemple simple
+```
+templates/bundles/TwigBundle/Exception/error404.html.twig
+```
+Ce fichier remplace automatiquement la page 404 par défaut du bundle, sans modifier `vendor/`.
+
+### Comment le mémoriser 🧠
+Chaque changement a **un seul emplacement prévu** — mettre les rideaux sur la mauvaise tringle ne fait tout simplement rien. Et l'héritage de bundle (`getParent()`) a été **définitivement muré** — il n'existe plus.
+
+
 ## Theory
 
 « Overloading » signifie modifier ce que fournit un **bundle tiers** sans éditer son

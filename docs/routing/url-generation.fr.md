@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Générer une URL, c'est composer un numéro depuis les contacts de ton téléphone plutôt que de mémoriser les chiffres — tu appelles "Alice" (le nom de la route), pas son numéro brut.
+
+### Imagine dans la vraie vie
+Tu appelles "Alice" depuis tes contacts plutôt que de mémoriser son numéro — si elle change de numéro, tu le mets à jour une seule fois et tous tes futurs appels fonctionnent encore. Le type de référence, c'est combien du numéro tu composes : le poste interne (`ABSOLUTE_PATH`) ou le numéro complet avec indicatif pour appeler depuis l'étranger (`ABSOLUTE_URL`).
+
+### Dans Symfony
+Écrire `path('produit_show', ['id' => 5])` au lieu de `/produits/5` en dur signifie que si la route change de chemin demain, tous les liens générés se mettent à jour automatiquement.
+
+### Exemple simple
+```php
+$this->generateUrl('produit_show', ['id' => 5]); // jamais '/produits/5' en dur
+```
+
+### Comment le mémoriser 🧠
+Tout paramètre qui ne correspond à aucun placeholder de la route finit automatiquement en **query string** — comme un PIN de conférence qui voyage à côté du numéro composé, pas dedans.
+
+
 ## Theory
 
 Le routing fonctionne dans les deux sens. Le **matching** transforme une URL en

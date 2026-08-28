@@ -30,6 +30,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un cookie fonctionne de façon asymétrique : on le lit depuis la requête, mais on l'écrit sur la réponse — jamais l'inverse.
+
+### Imagine dans la vraie vie
+Un ticket de vestiaire : quand tu déposes ton manteau, le préposé écrit un talon et te le remet (`Set-Cookie` sur la réponse) ; à ta prochaine visite, tu présentes ce même talon et il le lit (le navigateur le renvoie dans la requête suivante). C'est ça, l'asymétrie : tu n'écris jamais sur un talon que tu es en train de rendre.
+
+### Dans Symfony
+`$request->cookies->get('theme')` lit ; `$response->headers->setCookie(Cookie::create('theme', 'sombre'))` écrit — deux objets différents, deux moments différents du cycle de requête.
+
+### Exemple simple
+```php
+$response->headers->setCookie(Cookie::create('theme')->withValue('sombre')->withSecure(true));
+```
+
+### Comment le mémoriser 🧠
+Un vestiaire sérieux refuse un talon sans marquage de sécurité — de même, le navigateur refuse un cookie `SameSite=None` qui n'est pas aussi `Secure`.
+
+
 ## Theory
 
 Les cookies sont asymétriques : vous les **lisez** depuis la request et vous les

@@ -30,6 +30,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Trois outils différents se cachent ici : Config valide une structure, DotEnv charge des fichiers `.env`, ExpressionLanguage évalue des règles dynamiques.
+
+### Imagine dans la vraie vie
+Préparer le poste de travail d'un nouvel employé. Une checklist de réglages (le schéma Config) rejette les choix impossibles avant qu'ils ne s'appliquent. Les préférences par défaut viennent d'une pile de documents de politique (les fichiers `.env`), mais une instruction directe déjà épinglée sur la machine (une vraie variable d'environnement OS) l'emporte toujours sur ce que dit un document.
+
+### Dans Symfony
+Une vraie variable d'environnement OS (`export DATABASE_URL=...`) l'emporte **toujours** sur ce qui est défini dans `.env` ou `.env.local` — utile pour surcharger une config en production sans toucher aux fichiers du projet.
+
+### Exemple simple
+```bash
+# .env.local est ignoré en environnement 'test' — utilise .env.test.local à la place
+```
+
+### Comment le mémoriser 🧠
+`.env.local` est **ignoré en environnement `test`** spécifiquement — c'est le piège classique de ce chapitre, à ne jamais oublier lors du débogage d'une config de test.
+
+---
+
+
 ## Theory
 
 Trois composants distincts se rangent sous « configuration » :

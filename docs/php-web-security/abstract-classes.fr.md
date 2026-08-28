@@ -30,6 +30,32 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une classe abstraite est un plan à moitié rempli : elle fixe le socle commun, mais laisse volontairement des cases vides que chaque sous-classe doit compléter.
+
+### Imagine dans la vraie vie
+Le manuel d'une franchise de restauration fixe tout ce qui est commun (logo, procédure d'ouverture, disposition de caisse) mais laisse une case obligatoire : "préparez ici votre spécialité locale". Tu ne peux jamais ouvrir "la franchise" elle-même comme boutique — seulement une succursale concrète qui a rempli chaque case obligatoire.
+
+### Dans Symfony
+`AbstractController` en est l'exemple le plus fréquent : il fournit des méthodes toutes faites (`render()`, `redirectToRoute()`...) mais reste, par construction, un socle à étendre — jamais instancié directement par l'application.
+
+### Exemple simple
+```php
+abstract class Forme {
+    abstract public function aire(): float; // case vide, à remplir
+}
+class Cercle extends Forme {
+    public function __construct(private float $rayon) {}
+    public function aire(): float { return M_PI * $this->rayon ** 2; }
+}
+```
+
+### Comment le mémoriser 🧠
+**Une seule** méthode abstraite oblige **toute** la classe à être `abstract` — c'est tout ou rien, comme un formulaire qui devient "brouillon" tant qu'une seule case obligatoire manque.
+
+
 ## Theory
 
 Une **classe abstraite** ne peut pas être instanciée directement. Elle peut

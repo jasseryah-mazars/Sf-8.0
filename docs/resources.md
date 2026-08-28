@@ -9,6 +9,20 @@ quality for certification prep.
     search for* — it deliberately does **not** invent exact URLs or run-times.
     Always open the source and confirm the current version targets **Symfony 8**.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Une liste de ressources externes complémentaires (vidéos, documentation officielle) pour approfondir un sujet au-delà de ce que ce site couvre.
+
+**Pourquoi ça existe ?** Regarder quelqu'un expliquer un concept en vidéo, ou lire la documentation officielle directement, aide certains apprenants différemment qu'un texte écrit seul.
+
+**🏠 Analogie de la vraie vie :** La bibliographie recommandée à la fin d'un cours universitaire — pas obligatoire pour réussir, mais utile pour qui veut creuser un sujet précis plus en profondeur.
+
+**Symfony dans la vraie vie :** La documentation officielle (`symfony.com/doc/8.0/`) reste la source de vérité ultime — l'examen est écrit en se basant dessus, donc en cas de doute, elle prime toujours sur toute autre ressource, y compris ce site.
+
+**⚠️ Erreur fréquente :** regarder une vidéo ancienne présentant une version de Symfony antérieure à la 8.0 et mémoriser des comportements devenus obsolètes.
+
+**🧠 Comment le mémoriser :** "En cas de doute, la doc officielle 8.0 a toujours le dernier mot."
+
 ## Primary sources (in priority order)
 
 1. **[SymfonyCasts](https://symfonycasts.com/)** — the gold standard. Scripted,

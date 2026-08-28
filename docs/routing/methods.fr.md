@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`methods` restreint une route à certains verbes HTTP — une bonne URL, mauvaise méthode, donne un 405, pas un 404.
+
+### Imagine dans la vraie vie
+Un chemin avec `methods` est comme un guichet de banque qui existe bel et bien mais ne traite que certaines opérations. Va au guichet "Dépôts" (le bon chemin) et demande à ouvrir un crédit immobilier (le mauvais verbe) : le guichetier ne fait pas semblant que le guichet n'existe pas (404) — il te dit "ce guichet ne fait que dépôts et retraits" (405 avec une liste `Allow`).
+
+### Dans Symfony
+`#[Route('/articles', methods: ['POST'])]` renvoie automatiquement un 405 (pas un 404) si quelqu'un appelle cette même URL en GET — la route "existe" mais refuse la méthode.
+
+### Exemple simple
+```php
+#[Route('/articles/{id}', methods: ['DELETE'])]
+public function supprimer(int $id): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Une route acceptant `GET` accepte automatiquement `HEAD` aussi — c'est la même demande "montre-moi ça", juste sans le corps de la réponse.
+
+
 ## Theory
 
 L'option `methods` limite les verbes HTTP qu'une route accepte. C'est ainsi qu'un même

@@ -184,6 +184,21 @@ complet pour le détail. Tout ici est Symfony 8 / PHP 8.4 / Twig 3.x.
 
 <small>Related: [Top Certification Traps](traps.md) · [Memory Aids](memory-aids.md) · [Revision Hub](index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche récapitulative ultra-condensée** : une ou deux lignes par notion clé, pour les 15 domaines du syllabus, sans aucune explication détaillée.
+
+**Pourquoi ça existe ?** La veille de l'examen, il est trop tard pour relire 15 chapitres complets. Ce dont on a besoin, c'est de vérifier que les faits sont encore frais en mémoire — pas de les réapprendre.
+
+**🏠 Analogie de la vraie vie :** C'est **l'antisèche autorisée par le prof** avant un contrôle : une feuille recto-verso avec juste les formules, pas les démonstrations. Elle ne sert qu'à rafraîchir une mémoire déjà construite.
+
+**Symfony dans la vraie vie :** Chaque ligne de la fiche → un fait déjà appris en détail dans le chapitre correspondant / Le lien "area" en tête de section → retour au cours complet si le fait ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Utiliser cette fiche comme *premier* support d'apprentissage. Elle est illisible pour quelqu'un qui découvre la notion — elle ne fonctionne que comme rappel après un vrai apprentissage.
+
+**🧠 Comment le mémoriser :** *« Cache la colonne de droite, récite-la »* — si tu n'y arrives pas, c'est que ce n'est pas une fiche qu'il te faut, mais le chapitre complet.
+
+
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

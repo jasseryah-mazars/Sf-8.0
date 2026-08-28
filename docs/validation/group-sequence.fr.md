@@ -28,6 +28,72 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une séquence de groupes valide dans un ordre fixe et s'arrête au premier groupe en échec — les vérifications bon marché filtrent avant les coûteuses.
+
+### Imagine dans la vraie vie
+Une séquence de groupes est le **couloir de contrôle** : vérification des papiers, puis rayons X, puis fouille. Rate le contrôle des papiers et tu es refoulé sur place — les postes suivants ne te voient même jamais.
+
+### Dans Symfony
+Valider d'abord le format d'un email (bon marché) avant de vérifier s'il existe déjà en base (coûteux, requête SQL) évite une requête inutile quand le format est déjà invalide.
+
+### Exemple simple
+```php
+#[Assert\GroupSequence(['Utilisateur', 'verification_lourde'])]
+class Utilisateur {}
+```
+
+### Comment le mémoriser 🧠
+À l'intérieur d'une séquence, référence toujours le groupe `{ClassName}` — jamais `Default`, qui provoquerait une boucle infinie.
+
+A **group sequence** validates groups **in order** and **stops at the first group
+that produces a violation**. This avoids showing "password too weak" before
+"password is required", and avoids running expensive checks (a remote lookup)
+until cheap ones pass.
+
+You declare it at class scope with `#[Assert\GroupSequence([...])]`. Each element
+is a group name; the special short **class-name** group represents "this class's
+own `Default` constraints".
+
+```php
+#[Assert\GroupSequence(['User', 'Strict'])] // class-name group, then 'Strict'
+class User
+{
+    #[Assert\NotBlank]                      // Default constraint => "User" step
+    public string $username = '';
+
+    #[Assert\Email(groups: ['Strict'])]     // runs only if the "User" step passed
+    public string $email = '';
+}
+```
+
+Each group is a **gate**: all of its constraints run, then the sequence halts on
+the first group that produced any violation — later groups are skipped.
+
+```mermaid
+flowchart TD
+    S[validate Default → GroupSequence] --> A[Run group A: all constraints]
+    A --> QA{Any violation in A?}
+    QA -->|yes| X[Halt — skip later groups]
+    QA -->|no| B[Run group B]
+    B --> QB{Any violation in B?}
+    QB -->|yes| X
+    QB -->|no| C[Run group C ...]
+    C --> R[ConstraintViolationList]
+    X --> R
+```
+
+!!! question "Predict first"
+    A sequence `[User, Strong]`: group `User` yields one violation. Does any
+    constraint in `Strong` run?
+
+??? note "Reveal"
+    No. The sequence stops at the first *group* that produces any violation — all of
+    `User` runs, then it halts, so `Strong` is skipped entirely.
+
+
 ## Theory
 
 Une **group sequence** valide les groupes **dans l'ordre** et **s'arrête au

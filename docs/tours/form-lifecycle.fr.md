@@ -15,6 +15,21 @@ C'est un long fichier ; ce tour est votre carte de randonnée pour le parcourir.
     - Où la validation a-t-elle réellement lieu — et pourquoi appeler `isValid()`
       avant `isSubmitted()` provoque-t-il une `LogicException` ?
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce tour ?** Le trajet complet d'un formulaire Symfony, de sa création jusqu'à sa validation — avec les six événements qui se déclenchent en chemin.
+
+**Pourquoi ça existe ?** Mémoriser les deux séquences d'événements (`PRE_SET_DATA`→`POST_SET_DATA` et `PRE_SUBMIT`→`SUBMIT`→`POST_SUBMIT`) sans les avoir vues dans le vrai fichier `Form.php` reste abstrait — ce tour ancre cette théorie dans le code réel.
+
+**🏠 Analogie de la vraie vie :** Le cycle de vie d'une commande dans un restaurant : la carte est présentée vierge (création), remplie par le client (soumission), puis vérifiée en cuisine avant d'être confirmée (validation) — chaque étape a son propre moment précis.
+
+**Symfony dans la vraie vie :** Appeler `$form->isValid()` **avant** `$form->isSubmitted()` déclenche une `LogicException` — ce tour montre exactement pourquoi, en suivant le code qui refuse de valider un formulaire jamais soumis.
+
+**⚠️ Erreur fréquente :** confondre les données "modèle", "normalisées" et "vue" — ce sont trois représentations différentes des mêmes données, transformées à des moments précis du cycle.
+
+**🧠 Comment le mémoriser :** "Créer, puis remplir, puis soumettre, puis valider — jamais dans le désordre."
+
+
 ## The map
 
 ```mermaid

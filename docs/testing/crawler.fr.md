@@ -33,6 +33,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le `Crawler` te permet d'interroger le HTML d'une réponse comme avec un sélecteur CSS — sans jamais toucher la réponse originale.
+
+### Imagine dans la vraie vie
+Poser un pochoir sur une page de journal imprimée. Chaque filtrage découpe un nouveau pochoir qui n'expose que les parties correspondantes — la page originale n'est jamais altérée, et chaque découpe te rend un pochoir tout neuf, plus étroit (le Crawler est immuable).
+
+### Dans Symfony
+```php
+$crawler->filter('h1.titre')->text(); // récupère le texte du premier titre trouvé
+```
+
+### Exemple simple
+```php
+$lien = $crawler->selectLink('Voir plus')->link();
+$client->click($lien);
+```
+
+### Comment le mémoriser 🧠
+`text()` **lève une exception** sur un match vide, sauf si tu lui passes explicitement une valeur par défaut — "pas de pochoir découpé ici, rien à lire" nécessite que tu prévois ce cas.
+
+---
+
+
 ## Theory
 
 `Symfony\Component\DomCrawler\Crawler` enveloppe le DOM de la response et vous

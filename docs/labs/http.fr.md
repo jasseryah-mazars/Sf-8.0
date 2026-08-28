@@ -14,6 +14,21 @@ tags:
     **Theory:** [HttpClient Component](../http/httpclient.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Construire un client qui appelle une API externe, et prouver qu'il envoie la bonne requête sans jamais réellement toucher au réseau pendant les tests.
+
+**Pourquoi ça existe ?** Tester du vrai code réseau est lent et fragile (l'API externe peut être en panne pendant ton test) — `MockHttpClient` simule les réponses pour des tests rapides et fiables.
+
+**🏠 Analogie de la vraie vie :** Répéter un appel téléphonique important avec un collègue qui joue le rôle de l'interlocuteur, plutôt que d'appeler le vrai client à chaque répétition.
+
+**Symfony dans la vraie vie :** `new MockHttpClient([new MockResponse($json)])` remplace le vrai `HttpClientInterface` dans un test — ton code de production reste identique, seul le test simule la réponse.
+
+**⚠️ Erreur fréquente :** type-hinter directement une classe concrète de transport au lieu de `HttpClientInterface` — ça empêche de substituer un mock dans les tests.
+
+**🧠 Comment le mémoriser :** "Teste ton client sans jamais vraiment décrocher le téléphone — simule la réponse, ne l'attends pas."
+
+
 ## Objective
 
 À l'issue de ce lab, vous saurez **écrire et tester unitairement une intégration d'API

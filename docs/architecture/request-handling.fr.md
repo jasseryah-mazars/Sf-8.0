@@ -30,6 +30,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque requête traverse une chaîne d'étapes fixes et prévisibles avant de devenir une réponse — comme un colis qui passe par plusieurs postes de contrôle dans un centre de tri.
+
+### Imagine dans la vraie vie
+Un colis avance sur un tapis roulant dans un centre de tri. Chaque poste de contrôle est un événement kernel : le scan de l'étiquette d'expédition (`kernel.request`), l'ouvrier qui remplit le carton (le contrôleur), l'emballage final avant expédition (`kernel.response`). La paperasse classée *après* que le camion a déjà quitté le quai, c'est `kernel.terminate`.
+
+### Dans Symfony
+Un listener enregistré sur `kernel.request` peut court-circuiter tout le reste — par exemple rediriger un visiteur non connecté avant même que le contrôleur ne s'exécute.
+
+### Exemple simple
+```php
+public function onKernelRequest(RequestEvent $event): void
+{
+    if (!$this->security->isGranted('ROLE_USER')) {
+        $event->setResponse(new RedirectResponse('/login')); // court-circuite le reste
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+Retiens l'ordre par une phrase : "**R**equest arrive, **C**ontrôleur est choisi, ses **A**rguments sont résolus, la **V**ue devient réponse, la **R**éponse part, puis on **F**init, et enfin on **T**ermine" — Request → Controller → Arguments → View → Response → Finish → Terminate.
+
+
 ## Theory
 
 Chaque request HTTP Symfony est transformée en response par un unique contrat :

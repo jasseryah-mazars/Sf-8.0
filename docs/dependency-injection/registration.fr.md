@@ -31,6 +31,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Enregistrer un service, c'est dire au container "cette classe est un service" — le glob `App\:` fait ça automatiquement pour presque tout ton code.
+
+### Imagine dans la vraie vie
+L'enregistrement, c'est écrire la liste des postes de la cuisine : quelles classes sont des cuisiniers en service (services) et lesquelles ne sont que du stock en réserve (objets valeur, entités). Le glob `App\:` est un "tout le monde dans cette pièce est de service" général.
+
+### Dans Symfony
+Une classe placée dans `src/Service/MonService.php` devient automatiquement un service disponible pour l'autowiring — sans une seule ligne de config manuelle, grâce au glob `App\:` par défaut.
+
+### Exemple simple
+```yaml
+services:
+    _defaults: { autowire: true, autoconfigure: true, public: false }
+    App\: { resource: '../src/' }
+```
+
+### Comment le mémoriser 🧠
+L'id d'un service auto-enregistré est son **FQCN complet** — et `autowire` (injecter par type) et `autoconfigure` (taguer par interface) sont deux réglages **indépendants**, pas liés l'un à l'autre.
+---
+
+
 ## Theory
 
 Enregistrer, c'est dire au container quelles classes sont des services et comment

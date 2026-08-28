@@ -16,6 +16,21 @@ tags:
     [Tags](../dependency-injection/tags.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Écrire un compiler pass qui collecte automatiquement tous les services portant une étiquette (tag) précise, et les assemble dans un registre — sans jamais lister ces services à la main.
+
+**Pourquoi ça existe ?** Un projet peut avoir des dizaines de "handlers" ou de "providers" ajoutés au fil du temps — un compiler pass évite de maintenir une liste manuelle à jour à chaque ajout.
+
+**🏠 Analogie de la vraie vie :** Un manager de cuisine qui fait sa ronde avant le service et rassemble toutes les fiches recettes portant l'étiquette "brunch" dans un même classeur — sans jamais avoir à connaître leur nombre exact à l'avance.
+
+**Symfony dans la vraie vie :** `$container->findTaggedServiceIds('app.mon_tag')` retourne automatiquement tous les services tagués, même ceux ajoutés dans un bundle tiers après coup — ton registre reste toujours à jour.
+
+**⚠️ Erreur fréquente :** oublier d'enregistrer le compiler pass dans `Kernel::build()` — sans cet enregistrement explicite, le pass n'est jamais exécuté, même s'il est parfaitement écrit.
+
+**🧠 Comment le mémoriser :** "Un compiler pass rassemble à la compilation — jamais de liste à maintenir à la main."
+
+
 ## Objective
 
 À l'issue de ce lab, vous saurez construire le point d'extension classique de Symfony :

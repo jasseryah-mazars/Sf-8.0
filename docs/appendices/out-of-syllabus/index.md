@@ -8,6 +8,20 @@
     of it is tested in generated exams, counted toward official syllabus
     coverage, or scored in the quiz bank's official statistics.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette section ?** Une pièce à part, clairement étiquetée "hors examen", qui garde des chapitres intéressants mais **non testés** à la certification — pour ne jamais les confondre avec le contenu noté.
+
+**Pourquoi ça existe ?** Certains sujets (ESI, Lock, PHPUnit Bridge) sont utiles à connaître en vrai projet Symfony, mais absents de la liste officielle du syllabus — les supprimer aurait perdu du contenu utile, les laisser mélangés aurait risqué de faire réviser du hors-programme comme si c'était noté.
+
+**🏠 Analogie de la vraie vie :** Les annexes à la fin d'un manuel scolaire : utiles à lire, mais jamais interrogées à l'examen — clairement séparées du programme officiel pour qu'aucun élève ne s'y perde.
+
+**Symfony dans la vraie vie :** Ces trois chapitres restent d'authentiques cours Symfony complets (théorie, exemples, quiz) — seule leur position (hors du dossier syllabus) et leur bandeau d'avertissement changent.
+
+**⚠️ Erreur fréquente :** réviser ces chapitres en pensant qu'ils comptent pour l'examen — vérifie toujours le tag `🎯 Examen Symfony 8` en haut de chaque chapitre avant d'y consacrer du temps de révision.
+
+**🧠 Comment le mémoriser :** "Si c'est dans les annexes, ce n'est pas noté — mais ça reste bon à savoir."
+
 ## Why these exist at all
 
 Each topic below sits right next to an in-scope chapter that mentions it in

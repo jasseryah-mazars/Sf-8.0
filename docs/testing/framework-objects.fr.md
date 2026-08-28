@@ -34,6 +34,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+En environnement de test, tu as accès à **tous** les services — y compris les privés — via `self::getContainer()`, ce qui est impossible en production.
+
+### Imagine dans la vraie vie
+Un pass backstage dans un théâtre. Pendant la vraie représentation (prod), l'équipe, les accessoires et les doublures restent cachés derrière le rideau — le public ne peut pas les atteindre (services privés). Mais en répétition (l'environnement de test), on te délivre un pass tout accès.
+
+### Dans Symfony
+Remplacer temporairement un service de paiement réel par un double dans un test avec `$container->set('app.paiement', $double)` fonctionne — mais ce remplacement disparaît au prochain redémarrage du kernel.
+
+### Exemple simple
+```php
+$container = static::getContainer();
+$container->set(PaiementInterface::class, $doublePaiement);
+```
+
+### Comment le mémoriser 🧠
+Un remplacement `set()` est **jeté** au prochain redémarrage du kernel — associe-le systématiquement à `disableReboot()` si tu as besoin qu'il survive à plusieurs requêtes dans le même test.
+
+---
+
+
 ## Theory
 
 Les tests ont souvent besoin de vrais objets du framework — un repository, un

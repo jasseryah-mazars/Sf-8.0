@@ -37,6 +37,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Dans un runtime longue durée (worker Messenger, FrankenPHP), le container survit entre les requêtes — donc l'état mémorisé d'un service peut "fuir" vers la requête suivante si on ne le réinitialise pas.
+
+### Imagine dans la vraie vie
+Un runtime worker est une chambre d'hôtel louée à l'heure plutôt que reconstruite pour chaque client : les murs et meubles (le container et ses services) restent, mais le ménage doit changer les draps entre deux clients. Le `services_resetter` est la checklist du ménage.
+
+### Dans Symfony
+Un service qui accumule un cache interne (`private array $cacheLocal = []`) dans un worker Messenger doit être réinitialisé entre chaque message — sinon le cache grossit indéfiniment et peut mélanger les données de deux messages différents.
+
+### Exemple simple
+```php
+#[AsTaggedItem('kernel.reset', method: 'reinitialiser')]
+class ServiceAvecEtat implements ResetInterface {
+    public function reset(): void { $this->cacheLocal = []; }
+}
+```
+
+### Comment le mémoriser 🧠
+Seuls les services **déjà instanciés** sont réinitialisés — un service jamais utilisé pendant le cycle n'a rien à nettoyer, donc `services_resetter` ne le touche même pas.
+
+---
+
+
 ## Theory
 
 Le PHP-FPM classique vous offre un superpouvoir gratuit : **le processus meurt

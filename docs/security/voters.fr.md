@@ -28,6 +28,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un voter répond OUI / NON / je-ne-sais-pas pour un droit précis — c'est le moyen d'exprimer des règles par objet que les rôles seuls ne peuvent pas capturer.
+
+### Imagine dans la vraie vie
+Un voter est un juge dans un jury. Interrogé "cette personne peut-elle faire X à Y ?", chaque juge lève une carte pour **accorder** ou **refuser**, ou s'abstient. Une **stratégie** compte les cartes pour rendre le verdict final.
+
+### Dans Symfony
+Un `ArticleVoter` peut décider "cet utilisateur peut éditer *cet* article précis" (parce qu'il en est l'auteur) — une règle qu'aucun simple `ROLE_` ne peut exprimer.
+
+### Exemple simple
+```php
+protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+{
+    return $attribute === 'EDIT' && $subject->getAuteur() === $token->getUser();
+}
+```
+
+### Comment le mémoriser 🧠
+La stratégie par défaut est **affirmative** (un seul "accordé" suffit) — et **s'abstenir n'est PAS refuser** : un voter qui s'abstient n'influence jamais le résultat.
+
+
 ## Theory
 
 Un **voter** décide si un token peut exercer un **attribut** sur un **subject**

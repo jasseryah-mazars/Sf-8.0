@@ -43,6 +43,21 @@
 
 ---
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** Le PHPUnit Bridge ajoute à PHPUnit la capacité de compter les dépréciations rencontrées pendant les tests, plus des outils pour figer l'heure ou simuler le réseau dans un test.
+
+**Pourquoi ça existe ?** Sans lui, une dépréciation silencieuse pourrait passer inaperçue jusqu'à ce qu'une future version majeure supprime la fonctionnalité concernée — le bridge la fait remonter dès maintenant, pendant les tests.
+
+**🏠 Analogie de la vraie vie :** Un scripte de plateau de cinéma qui note chaque réplique obsolète prononcée pendant le tournage, pour faire le bilan à la fin — plus une horloge de studio réglable qui permet de sauter des heures instantanément pour une scène.
+
+**Symfony dans la vraie vie :** Activer `SymfonyExtension` dans `phpunit.dist.xml` fait échouer la suite de tests si trop de dépréciations sont détectées — un signal précoce avant une montée de version majeure.
+
+**⚠️ Erreur fréquente :** croire que le PHPUnit Bridge est testé à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus Automated Tests.
+
+**🧠 Comment le mémoriser :** "Le bridge est le scripte de plateau qui note chaque réplique dépassée — pas testé à l'examen, mais indispensable en vrai projet."
+
+
 ## Theory
 
 `symfony/phpunit-bridge` est un petit paquet qui **augmente PHPUnit** avec des

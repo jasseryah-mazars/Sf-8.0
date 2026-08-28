@@ -9,6 +9,20 @@ that way, not as a book to read once.
     question *before* revealing → self-test with the [quiz bank](../revision/quiz.md)
     → drill the [Revision Hub](../revision/index.md) as the exam approaches.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Le mode d'emploi de la plateforme elle-même — comment étudier avec ce site pour retenir vraiment, pas juste lire une fois et oublier.
+
+**Pourquoi ça existe ?** Lire passivement un chapitre du début à la fin donne l'illusion d'avoir appris, mais la mémoire s'évapore vite. Cette page explique la méthode qui fonctionne vraiment (rappel actif, répétition espacée).
+
+**🏠 Analogie de la vraie vie :** Apprendre à nager en lisant un livre sur la natation versus s'entraîner réellement dans l'eau. Lire les chapitres, c'est le livre ; faire les exercices et quiz avant de regarder la solution, c'est nager réellement.
+
+**Symfony dans la vraie vie :** Essaie de répondre à une question de certification **avant** de dérouler la réponse cachée (`??? question`) — c'est ce test actif, pas la simple lecture, qui fixe l'information en mémoire.
+
+**⚠️ Erreur fréquente :** lire la navigation de A à Z au lieu de suivre le [Roadmap](../roadmap.md) — l'ordre alphabétique ignore complètement les prérequis entre domaines.
+
+**🧠 Comment le mémoriser :** "Ne lis pas — teste-toi. La mémoire se construit en se rappelant, pas en relisant."
+
 ## 1. Follow the Roadmap, not the A–Z nav
 
 The left navigation lists areas A–Z, but the [Roadmap](../roadmap.md) gives the

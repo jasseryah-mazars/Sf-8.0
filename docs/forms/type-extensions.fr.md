@@ -30,6 +30,59 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une extension de type ajoute un comportement à un type de formulaire que tu ne possèdes pas — sans jamais le sous-classer.
+
+### Imagine dans la vraie vie
+Une extension de type est comme une coque de téléphone qui ajoute un emplacement de carte et une meilleure prise en main à un téléphone que tu n'as ni conçu ni fabriqué. Tu ne démontes jamais l'appareil pour le reconstruire (pas de sous-classe) ; tu glisses juste la coque, et elle indique clairement quels modèles elle recouvre (`getExtendedTypes()`).
+
+### Dans Symfony
+Ajouter automatiquement un attribut `help` à **tous** les champs de type `TextType` du projet, sans modifier un seul `FormType` existant, est le cas d'usage classique d'une extension de type.
+
+### Exemple simple
+```php
+public static function getExtendedTypes(): iterable { return [TextType::class]; }
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **pas** d'attribut `#[AsFormTypeExtension]` — l'enregistrement se fait uniquement via la méthode statique `getExtendedTypes()`, jamais par attribut PHP.
+
+A **type extension** injects options and behaviour into form types you do **not**
+own — without subclassing them. One extension can target many types at once. The
+canonical example: add an `help_inline` option, or a file-upload helper, to every
+`FileType` in the app.
+
+```php
+// One extension adds a help_inline option to every FileType in the app
+final class FileHelpExtension extends AbstractTypeExtension
+{
+    public static function getExtendedTypes(): iterable
+    {
+        return [FileType::class];   // the types to augment — no subclassing
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['help_inline' => null]);   // the new option
+    }
+}
+```
+
+Create a custom type when you need a *new field identity*; use a type extension
+when you want to *augment existing types* uniformly.
+
+!!! question "Predict first"
+    A teammate reaches for `#[AsFormTypeExtension]` to register an extension on
+    `FileType`. Does that attribute exist?
+
+??? note "Reveal"
+    No. Type extensions have **no dedicated attribute**. Autoconfiguration tags any
+    `FormTypeExtensionInterface` service with `form.type_extension`; the static
+    `getExtendedTypes(): iterable` names the target types.
+
+
 ## Theory
 
 Une **type extension** injecte des options et du comportement dans des form types

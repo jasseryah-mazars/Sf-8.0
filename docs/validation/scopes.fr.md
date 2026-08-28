@@ -27,6 +27,69 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une contrainte peut viser une propriété, un getter, ou la classe entière — et un objet imbriqué n'est validé que si tu le demandes explicitement.
+
+### Imagine dans la vraie vie
+La portée, c'est **où pointe le scanner** : sur un seul objet (propriété), sur ce qu'un capteur calcule à partir du sac (getter), ou sur le sac entier et la cohérence de son contenu (classe). Et un sac-dans-le-sac n'est ouvert que s'il porte une étiquette "inspecter le contenu" — cette étiquette, c'est `#[Assert\Valid]`.
+
+### Dans Symfony
+Un `Commande` qui contient une collection de `LigneCommande` ne validera **aucune** ligne si `#[Assert\Valid]` manque sur la propriété `$lignes` — même si chaque `LigneCommande` a ses propres contraintes.
+
+### Exemple simple
+```php
+#[Assert\Valid]
+private Collection $lignes; // sans #[Assert\Valid], jamais validées
+```
+
+### Comment le mémoriser 🧠
+"Pas d'étiquette, pas d'inspection" — un objet imbriqué sans `#[Assert\Valid]` explicite reste **invisible** au validateur, même s'il a ses propres règles.
+
+A constraint can be attached at three **scopes**:
+
+| Scope | Attached to | Validates |
+|---|---|---|
+| **Property** | a property (public/protected/private) | the property value |
+| **Getter** | an `isX`/`getX`/`hasX` method | the method's return value |
+| **Class** | the class itself | the whole object (needs a class-target constraint) |
+
+Property and getter constraints target *one* value. Class-level constraints
+(e.g. `#[Assert\Callback]`, `#[Assert\Expression]`, or a custom class constraint)
+see the whole object — ideal for **cross-field** rules.
+
+```php
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+// Class scope: #[Assert\Expression] sees the whole object (cross-field rule)
+#[Assert\Expression('this.start < this.end', message: 'Start must be before end.')]
+class Slot
+{
+    public \DateTimeImmutable $start;
+    public \DateTimeImmutable $end;
+
+    // #[Assert\Callback] is also a class-target constraint: plain PHP cross-field logic
+    #[Assert\Callback]
+    public function check(ExecutionContextInterface $context): void
+    {
+        if ($this->start >= $this->end) {
+            $context->buildViolation('Start must be before end.')->atPath('start')->addViolation();
+        }
+    }
+}
+```
+
+!!! question "Predict first"
+    An `Order` has a `?Address $shippingAddress` whose own `#[Assert\NotBlank]`
+    constraints never fire. What is missing?
+
+??? note "Reveal"
+    `#[Assert\Valid]` on the property. Nested objects are not traversed unless the
+    property opts into cascading; without it the address node is skipped.
+
+
 ## Theory
 
 Une constraint peut s'attacher à trois **portées** :

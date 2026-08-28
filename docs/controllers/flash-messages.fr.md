@@ -27,6 +27,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un flash est un post-it à usage unique : tu le lis une fois, à la prochaine visite, puis il disparaît tout seul.
+
+### Imagine dans la vraie vie
+Le réceptionniste colle un post-it sur le comptoir pour ta *prochaine* visite : "Profil enregistré". Tu reviens (la requête fraîche après redirection), tu le lis une fois, et il est décollé et jeté — la lecture le consomme. `peek()` revient à juste jeter un œil sur le post-it en le laissant collé pour quelqu'un d'autre.
+
+### Dans Symfony
+Le pattern Post/Redirect/Get est fait pour ça : après un formulaire soumis avec succès, on redirige (nouvelle requête) et c'est *cette* nouvelle requête qui affiche et consomme le message flash — pas la requête POST elle-même.
+
+### Exemple simple
+```php
+$this->addFlash('success', 'Produit enregistré !');
+return $this->redirectToRoute('produit_liste'); // le flash s'affichera sur cette page
+```
+
+### Comment le mémoriser 🧠
+Lire un flash **le consomme** — toujours l'associer à une redirection, jamais l'afficher directement sur la même requête qui l'a créé.
+
+
 ## Theory
 
 Un **flash message** est une notification à usage unique stockée dans la session

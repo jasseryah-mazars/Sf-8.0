@@ -29,6 +29,73 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un callback exécute ta propre méthode pendant la validation — le moyen le plus rapide de vérifier une règle qui croise plusieurs champs.
+
+### Imagine dans la vraie vie
+Un callback est le **superviseur qui inspecte tout le sac d'un coup**, repérant des combinaisons que les scanners spécialisés manquent — un couteau **et** une carte d'embarquement qui ne correspond pas. Il n'annonce pas un verdict ; il écrit l'incident dans le même journal que tout le monde utilise.
+
+### Dans Symfony
+Vérifier que `dateFin` est bien après `dateDebut` — une règle qui compare deux champs — est le cas d'usage classique d'un `#[Assert\Callback]`, impossible à exprimer avec une seule contrainte simple.
+
+### Exemple simple
+```php
+#[Assert\Callback]
+public function validate(ExecutionContextInterface $context): void
+{
+    if ($this->dateFin < $this->dateDebut) {
+        $context->buildViolation('La date de fin doit être après le début.')->addViolation();
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+On ajoute des erreurs via `$context->buildViolation()` — **jamais** en retournant une valeur ou en lançant une exception.
+
+A **callback** is the quickest way to run arbitrary validation logic that touches
+several properties of one object, without writing a reusable constraint. You mark
+a method with `#[Assert\Callback]`; the validator calls it with the current
+`ExecutionContext`, and you add violations manually.
+
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
+class Event
+{
+    public function __construct(
+        public \DateTimeImmutable $start,
+        public \DateTimeImmutable $end,
+    ) {}
+
+    #[Assert\Callback]
+    public function validateDates(ExecutionContextInterface $context, mixed $payload): void
+    {
+        if ($this->start >= $this->end) {
+            $context->buildViolation('End must be after start.')
+                ->atPath('end')
+                ->addViolation();
+        }
+    }
+}
+```
+
+!!! question "Predict first"
+    Your `#[Assert\Callback]` method returns `false` when the data is invalid, yet no
+    error ever appears. Why?
+
+??? note "Reveal"
+    Return values are ignored. A callback must call
+    `$context->buildViolation('…')->addViolation()`; the boolean does nothing.
+
+
 ## Theory
 
 Un **callback** est le moyen le plus rapide d'exécuter une logique de validation

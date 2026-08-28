@@ -16,6 +16,21 @@ et
     - Quel statut HTTP résulte d'un `#[MapRequestPayload]` en échec vs un
       `#[MapQueryParameter]` en échec vs un attribut de route manquant ?
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce tour ?** Comment Symfony transforme le nom d'un contrôleur (une simple chaîne comme `"App\Controller\Foo::bar"`) en un vrai appel PHP, puis comment chaque argument de ta méthode reçoit sa valeur.
+
+**Pourquoi ça existe ?** Ce mécanisme est totalement invisible en usage normal — tu écris juste `public function show(int $id)` et ça marche — mais l'examen teste ce qui se passe derrière ce "ça marche".
+
+**🏠 Analogie de la vraie vie :** Une chaîne de traducteurs spécialisés en file. Chaque traducteur regarde l'étiquette d'un argument et soit le traduit (résout sa valeur), soit hausse les épaules et passe au traducteur suivant — jusqu'à ce qu'un le résolve, ou que la chaîne entière échoue.
+
+**Symfony dans la vraie vie :** Un contrôleur `public function show(Produit $produit)` reçoit directement l'entité déjà chargée depuis la base — un résolveur dédié a déjà fait `$produit = $repo->find($id)` à ta place, avant même que ta méthode ne s'exécute.
+
+**⚠️ Erreur fréquente :** supposer qu'un seul résolveur gère tous les types d'arguments — en réalité, une **chaîne** de résolveurs est essayée dans l'ordre de priorité jusqu'à ce que l'un d'eux accepte.
+
+**🧠 Comment le mémoriser :** "Refuser un argument, c'est hausser les épaules et le passer au suivant — jamais planter tout de suite."
+
+
 ## The map
 
 ```mermaid

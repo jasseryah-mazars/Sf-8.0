@@ -18,6 +18,20 @@ All code: Symfony 8 / PHP 8.4. Complete <?php snippets compile with php -l.
     **Theory:** [Voters](../security/voters.md) · [Authorization](../security/authorization.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Construire un juge qui décide, au cas par cas, si une personne précise a le droit de modifier un article précis — pas juste "es-tu admin", mais "es-tu l'auteur de CET article".
+
+**Pourquoi ça existe ?** Les rôles seuls (`ROLE_ADMIN`) ne suffisent pas à exprimer des règles fines comme "seul l'auteur ou un admin peut modifier ce post" — un Voter comble ce manque.
+
+**🏠 Analogie de la vraie vie :** Un jury qui vote sur un cas précis, pas sur une règle générale. Chaque juré (voter) répond "accordé", "refusé", ou "je m'abstiens" selon le cas exact soumis, pas selon une règle universelle.
+
+**Symfony dans la vraie vie :** `#[IsGranted('POST_EDIT', subject: 'post')]` sur un contrôleur déclenche ton Voter, qui compare l'auteur du post à l'utilisateur connecté avant de décider.
+
+**⚠️ Erreur fréquente :** oublier de gérer le cas `supports()` qui retourne false — un Voter qui répond toujours quelque chose, même pour des cas qui ne le concernent pas, fausse le vote final.
+
+**🧠 Comment le mémoriser :** "supports() filtre le cas ; voteOnAttribute() tranche — ne mélange jamais les deux rôles."
+
 ## Objective
 
 After this lab you can:

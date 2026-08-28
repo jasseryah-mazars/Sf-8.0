@@ -21,6 +21,20 @@ and lazy loading, which is why it sits after DI in the roadmap.
     | **Revision priority** | Medium |
     | **Est. time** | 2–3 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le composant Console transforme une classe PHP en commande exécutable dans le terminal — `php bin/console ma:commande`.
+
+**Pourquoi ça existe ?** Toute application a besoin de tâches qu'on lance à la main ou depuis un script (vider un cache, importer des données) — le composant Console fournit un cadre commun pour toutes ces tâches, avec arguments, options et retours d'erreur cohérents.
+
+**🏠 Analogie de la vraie vie :** Un distributeur automatique. Tu tapes un code (la commande), éventuellement des options (grande taille, sans sucre), et la machine exécute une procédure fixe et prévisible, puis affiche un message de succès ou d'échec.
+
+**Symfony dans la vraie vie :** `php bin/console app:envoyer-rappels --limite=50` — `app:envoyer-rappels` est la commande, `--limite=50` est une option, et la classe `#[AsCommand]` correspondante exécute le travail.
+
+**⚠️ Erreur fréquente :** renvoyer un entier arbitraire au lieu de `Command::SUCCESS`/`FAILURE`/`INVALID` — les scripts qui enchaînent des commandes (CI/CD) dépendent de ces codes précis.
+
+**🧠 Comment le mémoriser :** "Une commande, c'est configure → initialize → interact → execute — toujours dans cet ordre."
+
 ## Why this stage matters
 
 CLI tooling is where cron jobs, workers, migrations and maintenance scripts live.
