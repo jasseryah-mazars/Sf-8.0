@@ -94,9 +94,22 @@ def check_nav_consistency() -> list[str]:
     # verified by spot-checking exams/index.md and revision/index.md link
     # to every sibling file in their own directory, not via mkdocs nav).
     _generated_dirs = {"exams", "revision"}
+
+    # Per-topic learning-journey activities are deliberately not nav entries. Each
+    # topic owns three of them, so listing all four files per topic would take
+    # "Certification Domains" from 184 to 691 entries under navigation.tabs — an
+    # unusable menu. They are reached from their lesson's "Continue your learning"
+    # section and from the domain index, and each links back, so there is no dead
+    # end. tools/check_topic_journey.py enforces that those links exist and resolve;
+    # this exemption only says "absence from nav is expected here", never
+    # "unreachable is fine".
+    _journey_suffixes = ("-exercises.md", "-exam.md", "-flashcards.md")
+
     for p in sorted(disk_paths):
         top = p.split("/")[0]
         if top in _generated_dirs:
+            continue
+        if p.endswith(_journey_suffixes):
             continue
         if p not in nav_paths:
             errors.append(f"docs/{p} exists but is not referenced anywhere in mkdocs.yml nav (orphan page)")

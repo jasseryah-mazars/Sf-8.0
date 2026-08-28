@@ -54,7 +54,9 @@ comprehension rather than discovery.
 - [Attributes](attributes.md) — declaring `#[\Attribute]` classes, `TARGET_*`
   flags, `IS_REPEATABLE`, and reading them back via Reflection.
 - [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
-  `instanceof`, union/intersection/DNF types.
+  `instanceof`, union/intersection/DNF types, interface properties (8.4).
+  Full journey: [exercises](interfaces-exercises.md) ·
+  [exam](interfaces-exam.md) · [flashcards](interfaces-flashcards.md).
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, first-class callable syntax.
 - [Abstract Classes](abstract-classes.md) — abstract vs interface, the template
