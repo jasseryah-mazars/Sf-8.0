@@ -98,6 +98,40 @@ jobs:
       - name: Report freshness check (informational only)
         run: python tools/check_report_freshness.py
 
+      - name: Per-topic learning-journey checks (blocking)
+        # Four files per migrated topic, no Certification questions left in a
+        # lesson, every answer/hint/solution collapsed, a reference after each
+        # explanation, journey links resolving both ways.
+        run: python tools/check_topic_journey.py
+
+      - name: Set up Node (for the Mermaid engine)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+
+      - name: Install Mermaid + install Chromium
+        # The validator parses and renders each diagram with the real engine, so
+        # it needs the pinned mermaid build and a browser to run it in.
+        run: |
+          npm ci --prefix tools
+          npx --prefix tools playwright install --with-deps chromium
+
+      - name: Vendored Mermaid matches the pin (blocking)
+        # Guarantees the version the site ships is the version the next step
+        # validates against. Without this the validator's guarantee is hollow.
+        run: python tools/vendor_mermaid.py --check
+
+      - name: Mermaid diagrams parse and render (blocking)
+        # `mkdocs build --strict` cannot catch a broken diagram: MkDocs only copies
+        # the fenced text and Mermaid renders in the visitor's browser, so a syntax
+        # error would otherwise ship green and show "Syntax error in text" to the
+        # reader. This must run BEFORE the build, per the mission brief.
+        env:
+          NODE_PATH: ${{ github.workspace }}/tools/node_modules
+        run: python tools/validate_mermaid.py
+
       - name: Build site (strict)
         run: mkdocs build --strict
 
