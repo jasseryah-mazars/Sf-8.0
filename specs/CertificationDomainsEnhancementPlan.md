@@ -153,9 +153,9 @@ Status values: `pending` · `in progress` · `done`.
 | 2 | `oop` | done | done | done | done | done | green | see log |
 | 3 | `attributes` | done | done | done | done | done | green | see log |
 | 4 | `interfaces` | done | done | done | done | done | green | see log |
-| 5 | `closures` | pending | pending | pending | pending | pending | pending | — |
-| 6 | `abstract-classes` | pending | pending | pending | pending | pending | pending | — |
-| 7 | `exceptions` | pending | pending | pending | pending | pending | pending | — |
+| 5 | `closures` | done | done | done | done | done | green | see log |
+| 6 | `abstract-classes` | done | done | done | done | done | green | see log |
+| 7 | `exceptions` | done | done | done | done | done | green | see log |
 | 8 | `traits` | pending | pending | pending | pending | pending | pending | — |
 | 9 | `enums` | pending | pending | pending | pending | pending | pending | — |
 | 10 | `namespaces` | pending | pending | pending | pending | pending | pending | — |

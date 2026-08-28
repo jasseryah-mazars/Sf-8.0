@@ -126,7 +126,7 @@ arithmetic in precedence (see [Syntax](syntax.md)), so `1 + 1 ~ "x"` is `"2x"`.
 
 ```mermaid
 flowchart LR
-    A["\"a #{x} b\""] --> L[Lexer detects #{ }]
+    A["&quot;a #35;{x} b&quot;"] --> L["Lexer detects #35;{ }"]
     L --> E[Expression token x]
     E --> C["compile: 'a ' ~ x ~ ' b'"]
     C --> O[echo]

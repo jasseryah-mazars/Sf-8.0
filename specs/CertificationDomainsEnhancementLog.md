@@ -194,8 +194,65 @@ are sections, not files). Three attribute-class ids still resolve through neithe
 the check. Symfony and Twig ids map deterministically and stay blocking — and that is the
 side that caught the `blob/` bug.
 
-## Topics 5–13 — not started
+## Topics 5–7 — `closures`, `abstract-classes`, `exceptions`
 
-`closures`, `abstract-classes`, `exceptions`, `traits`, `enums`, `namespaces`, `extensions`,
-`spl`, `web-security` remain in their original single-file form. `enums` carries only 2
-quiz-bank questions and will need substantive new exam content rather than migration alone.
+Dispatched to `certification-domain-expert`, one topic per invocation. All three again hit the
+account's session rate limit, but this time **after** writing all twelve files — verified by
+count, not by the agents' own reports, which stopped mid-sentence ("Now the flashcards.")
+while the files were already on disk. Reading the tree rather than the transcript is what
+established that.
+
+| Topic | Exam questions | Exercises | Cards | Lesson lines |
+|---|---|---|---|---|
+| `closures` | 20 (4 migrated + 16 new) | 7 | 31 | 850 |
+| `abstract-classes` | 17 (4 migrated + 13 new) | 7 | 30 | 874 |
+| `exceptions` | 17 (4 migrated + 13 new) | 7 | 30 | 892 |
+
+Question conservation checked concept by concept against the pre-migration text captured
+from `git show HEAD:<file>` before the agents ran: all four original questions per topic are
+represented (`use ($x)` capture timing, `Closure::bind` scope, first-class callables, arrow
+functions · unimplemented abstract method, what an abstract class has that an interface does
+not, template method, single inheritance · catching `TypeError` and `RuntimeException`
+together, `return` inside `finally`, `set_error_handler`, `strict_types`).
+
+## Two checkers were wrong about markdown, and said so loudly
+
+`check_topic_journey.py` and `check_placeholders.py` both flagged four "broken internal
+links" to a file named `...` in the closures files. The links were not links: the topic
+teaches first-class callable syntax, and `[$obj, 'method'](...)` written inline is
+indistinguishable from `[text](target)` to a link regex.
+
+Both now blank out inline `` ` `` spans before extracting links (`strip_inline_code`,
+length-preserving so nothing else shifts). This is the second time in this lot that a check
+failing loudly was wrong about the world rather than the world being wrong — and the second
+time the fix made the check usable on the very content it exists to guard.
+
+## Master went red, and why
+
+**CI run #189 (`4fd68cf`) failed.** The blocking Mermaid gate added in that same commit
+immediately caught the five diagrams the repo had been shipping broken all along. The gate
+worked; what was missing was any way to turn master green without editing files this mission
+is forbidden to touch.
+
+Resolved in two parts:
+
+- **Fixed the two English diagrams**, both outside lot 1 but genuinely broken, and both
+  one-liners: `docs/miscellaneous/error-handling.md:135` (`[\ErrorException]` — `[\ … \]` is
+  a shape delimiter, so the label was parsed as a shape; now `Ex["#92;ErrorException"]`) and
+  `docs/twig/interpolation.md:127` (`\"` is not an escape in mermaid and `#` opens an entity
+  code; now `A["&quot;a #35;{x} b&quot;"]`). Verified by rendering, not by inspection.
+- **Quarantined the three `.fr.md` twins** in `validate_mermaid.py`. They are printed on
+  every run with their exact one-line fix and do not fail the build. The quarantine is
+  self-expiring: an entry that no longer matches a broken diagram **fails** the check, so the
+  list can only shrink, and a scoped run cannot retire an entry for a file it never scanned.
+
+This is a deliberate trade-off, recorded rather than hidden: three French pages still show
+"Syntax error in text" to a reader. Each is a 30-second fix the moment `.fr.md` edits are
+permitted. Leaving master permanently red instead would have made every later gate
+meaningless.
+
+## Topics 8–13 — not started
+
+`traits`, `enums`, `namespaces`, `extensions`, `spl`, `web-security` remain in their original
+single-file form. `enums` carries only 2 quiz-bank questions and will need substantive new
+exam content rather than migration alone.

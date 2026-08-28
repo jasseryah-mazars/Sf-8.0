@@ -62,10 +62,16 @@ comprehension rather than discovery.
   [exam](interfaces-exam.md) · [flashcards](interfaces-flashcards.md).
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, first-class callable syntax.
+  Full journey: [exercises](closures-exercises.md) · [exam](closures-exam.md) ·
+  [flashcards](closures-flashcards.md).
 - [Abstract Classes](abstract-classes.md) — abstract vs interface, the template
   method pattern.
+  Full journey: [exercises](abstract-classes-exercises.md) ·
+  [exam](abstract-classes-exam.md) · [flashcards](abstract-classes-flashcards.md).
 - [Exception & Error Handling](exceptions.md) — the `Throwable` hierarchy,
   `try`/`catch`/`finally`, custom exceptions, error levels, `set_error_handler`.
+  Full journey: [exercises](exceptions-exercises.md) · [exam](exceptions-exam.md) ·
+  [flashcards](exceptions-flashcards.md).
 - [Traits](traits.md) — conflict resolution (`insteadof`/`as`), abstract/static
   members, precedence.
 - [Enums](enums.md) — pure vs. backed enums, `UnitEnum`/`BackedEnum`,

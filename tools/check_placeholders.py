@@ -34,6 +34,17 @@ def strip_code_fences(text: str) -> str:
     return FENCE_RE.sub("", text)
 
 
+def strip_inline_code(text: str) -> str:
+    """Blank out `…` spans, preserving length so nothing else shifts.
+
+    Link extraction has to ignore them: PHP written inline can look exactly like
+    a markdown link. `[$obj, 'method'](...)` is a first-class callable — flagging
+    it as a link to a file named `...` would make this check unusable on any page
+    that teaches the syntax.
+    """
+    return re.sub(r"`+[^`\n]*`+", lambda m: " " * len(m.group(0)), text)
+
+
 def md_files():
     for dirpath, dirnames, filenames in os.walk(DOCS):
         dirnames[:] = [d for d in dirnames if not d.startswith("_meta")]
@@ -68,7 +79,7 @@ def check_placeholders(path: str, text: str) -> list[str]:
 def check_internal_links(path: str, text: str) -> list[str]:
     out = []
     base_dir = os.path.dirname(path)
-    clean = strip_code_fences(text)
+    clean = strip_inline_code(strip_code_fences(text))
     for m in MD_LINK_RE.finditer(clean):
         target = m.group(1).strip()
         if not target or target.startswith(("#", "http://", "https://", "mailto:")):

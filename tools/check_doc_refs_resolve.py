@@ -19,7 +19,16 @@ written from something real; a URL that does not is either a typo or invented, a
 both are failures.
 
 php.net page names are dotted ids (`language.oop5.interfaces`) rather than paths,
-so the php/doc-en tree is indexed once by `xml:id` and cached.
+and they do not map to `doc-en` files by any single rule, so resolution tries the
+known layouts and then falls back to looking the id up as an `xml:id` inside a
+containing file — many php.net pages are sections rather than whole files.
+
+Severity is split deliberately. Symfony and Twig ids map deterministically, so a
+miss there is a real broken link and **fails**. A handful of php.net ids resolve
+through neither route; those are **reported without failing**, because a false
+failure on a valid link teaches people to ignore the check. The blocking half is
+the half that has caught real breakage — `blob/` used on a directory, which
+GitHub 404s.
 
 Usage:
     python3 tools/check_doc_refs_resolve.py                    # whole docs/ tree
@@ -50,9 +59,6 @@ TWIG_RE = re.compile(r"https://twig\.symfony\.com/doc/3\.x/([A-Za-z0-9_./-]+?)\.
 SF_DOCS_RAW = "https://raw.githubusercontent.com/symfony/symfony-docs/8.0/{}.rst"
 SF_SRC_RAW = "https://raw.githubusercontent.com/symfony/symfony/8.0/{}"
 TWIG_RAW = "https://raw.githubusercontent.com/twigphp/Twig/3.x/doc/{}.rst"
-PHP_INDEX_API = (
-    "https://api.github.com/repos/php/doc-en/git/trees/master?recursive=1"
-)
 
 
 def load_cache() -> dict:
@@ -217,24 +223,6 @@ def main() -> int:
         print("check_doc_refs_resolve: no citations found.")
         return 0
 
-    php_index = cache.get("_php_index")
-    if php_index is None and not args.offline:
-        try:
-            with urllib.request.urlopen(PHP_INDEX_API, timeout=60) as r:
-                tree = json.load(r)
-            php_index = sorted(
-                e["path"] for e in tree.get("tree", []) if e["path"].endswith(".xml")
-            )
-            cache["_php_index"] = php_index
-        except Exception:
-            php_index = None  # api.github.com is 403 in some environments
-
-    # php.net page ids do not map to doc-en paths by any single rule, and some
-    # pages (notably attribute classes) resolve through neither a path nor an
-    # xml:id we can derive. Those are reported but do not fail the run: a false
-    # failure on a valid link would train people to ignore this check. Symfony and
-    # Twig ids DO map deterministically, so they stay blocking — and that is the
-    # side that has actually caught broken links (blob/ used on a directory).
     unresolved, unresolved_soft, checked, from_cache = [], [], 0, 0
     for key, sources in sorted(cited.items()):
         kind, value = key.split(":", 1)

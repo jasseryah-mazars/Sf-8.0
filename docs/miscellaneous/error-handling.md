@@ -135,7 +135,7 @@ echo $html->getAsString(); // rich debug page with stack traces
 ```mermaid
 flowchart LR
     E[PHP error] --> H[ErrorHandler]
-    H -->|throw| Ex[\ErrorException]
+    H -->|throw| Ex["#92;ErrorException"]
     T[Uncaught throwable] --> FE[FlattenException]
     FE --> R[ErrorRendererInterface]
     R --> O[HTML / JSON / XML]

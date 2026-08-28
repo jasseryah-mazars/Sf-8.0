@@ -74,6 +74,17 @@ def strip_code_fences(text: str) -> str:
     return re.sub(r"(?ms)^```.*?^```", "", text)
 
 
+def strip_inline_code(text: str) -> str:
+    """Blank out `…` spans, keeping the newlines so line offsets still line up.
+
+    Needed before link extraction: PHP written inline reads as a markdown link to
+    the link regex. `[$obj, 'method'](...)` is a first-class callable, not a link
+    to a file named `...`, and flagging it would make the check unusable on any
+    page that teaches the syntax.
+    """
+    return re.sub(r"`+[^`\n]*`+", lambda m: " " * len(m.group(0)), text)
+
+
 def pour_les_nuls_span(text: str) -> tuple[int, int] | None:
     m = POUR_LES_NULS_RE.search(text)
     if not m:
@@ -171,7 +182,7 @@ def check_collapsed_answers(rel: str, text: str, kind: str) -> list[str]:
 
 def check_links_resolve(rel: str, text: str, domain_dir: str) -> list[str]:
     errors = []
-    for target in MD_LINK_RE.findall(strip_code_fences(text)):
+    for target in MD_LINK_RE.findall(strip_inline_code(strip_code_fences(text))):
         if target.startswith(("http://", "https://", "mailto:", "#")):
             continue
         resolved = os.path.normpath(os.path.join(domain_dir, target.split("?")[0]))
