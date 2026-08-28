@@ -251,6 +251,38 @@ This is a deliberate trade-off, recorded rather than hidden: three French pages 
 permitted. Leaving master permanently red instead would have made every later gate
 meaningless.
 
+## Repo-wide link rot, measured but deliberately not fixed in this lot
+
+Running `check_doc_refs_resolve.py` over the whole tree rather than just lot 1
+surfaced **21 citations that do not resolve at their canonical source**, spread across
+31 English files and 15 French sidecars in 14 domains this lot does not touch. Sixteen
+are `symfony.com/doc/8.0/` pages that have moved; four confirmed relocations:
+
+| Cited as | Actually lives at |
+|---|---|
+| `components/cache.html` | `cache.html` |
+| `components/lock.html` | `lock.html` |
+| `components/routing.html` | `routing.html` |
+| `components/serializer.html` | `serializer.html` |
+
+The other twelve (`components/error_handler`, `components/stopwatch`,
+`components/cache/adapters/memcached_adapter`, `form/data_class`, `form/direct_submit`,
+`messenger/multiple_buses`, `messenger/dispatch_after_current_bus`,
+`profiler/data_collector`, `translation/message_format`,
+`contributing/code/experimental`, `contributing/community/releases`,
+`bundles/SymfonyMakerBundle/index`) need per-page resolution, and three `blob/`-on-a-
+directory links remain in `console/helpers`, `testing/framework-objects` and
+`controllers/value-resolvers`. Two entries — `sfsrc:...` and `sfsrc:src/Symfony/...` —
+are literal ellipses in `docs/_meta/CHAPTER_TEMPLATE.md` and are not real citations;
+the checker should learn to ignore the template.
+
+Not fixed here, and not gated in CI, for one reason: every affected page has a French
+sidecar carrying the identical dead link, and this mission may not edit `.fr.md`.
+Fixing only the English half would leave the repo internally inconsistent and the
+French reader still on a 404. It is recorded with its resolutions so the fix is a
+short, mechanical job the moment `.fr.md` is in scope — not left as an unexplained
+red check.
+
 ## Topics 8–13 — not started
 
 `traits`, `enums`, `namespaces`, `extensions`, `spl`, `web-security` remain in their original
