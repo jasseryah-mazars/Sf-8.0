@@ -1,8 +1,9 @@
 {
   "name": "sf-8-0-site-quality-tools",
   "private": true,
-  "description": "Dev-only Node dependency for tools/check_site_quality.py (P2-03) — axe-core accessibility rules. Playwright itself is expected globally installed (see this environment's Playwright setup); only axe-core needs a local install here.",
+  "description": "Dev-only Node dependencies for the site quality tools: axe-core for tools/check_site_quality.py, and mermaid for tools/validate_mermaid.py. The mermaid version here is the contract: it must match the version the built site loads (docs/assets/mermaid.min.js, vendored by tools/vendor_mermaid.py) so a diagram that passes validation is the same diagram a visitor renders.",
   "devDependencies": {
-    "axe-core": "4.13.0"
+    "axe-core": "4.13.0",
+    "mermaid": "11.17.2"
   }
 }

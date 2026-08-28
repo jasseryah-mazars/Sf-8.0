@@ -147,7 +147,7 @@ sequenceDiagram
     U->>A: POST /login (valid creds)
     A->>A: authenticate()
     A->>A: session->migrate() (new id)
-    A-->>U: Set-Cookie: PHPSESSID=NEW; Secure; HttpOnly; SameSite=Lax
+    A-->>U: Set-Cookie PHPSESSID=NEW · Secure · HttpOnly · SameSite=Lax
 ```
 
 ### Clickjacking
