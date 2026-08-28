@@ -226,74 +226,6 @@ final class Mailer
     - Expecting a trait method to override the class's own method (it does not).
     - Confusing the class-body `use TraitName;` with the file-level namespace `use`.
 
-## Exercises
-
-1. **(Advanced)** Two traits both define `init()`. Keep trait A's version and
-   expose trait B's as `initLegacy()`.
-2. **(Expert)** Show that a static counter in a trait is not shared between two
-   classes that use it.
-
-??? success "Solutions"
-
-    **1.**
-    ```php
-    <?php
-    declare(strict_types=1);
-
-    trait A { public function init(): string { return 'A'; } }
-    trait B { public function init(): string { return 'B'; } }
-
-    final class C
-    {
-        use A, B {
-            A::init insteadof B;
-            B::init as initLegacy;
-        }
-    }
-    ```
-
-    **2.** Each using class gets its own copy of `self::$count`; calling
-    `X::tick()` does not affect `Y::tick()` because static trait state is per
-    class, not global to the trait.
-
-## Certification questions
-
-*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
-
-??? question "Q1. A class, its parent, and a used trait all define `run()`. Which wins?"
-    - [x] A. The class's own `run()` ✅
-    - [ ] B. The trait's `run()`
-    - [ ] C. The parent's `run()`
-    - [ ] D. Fatal error
-
-    **Why:** Precedence is class > trait > inherited. **Ref:** [Traits](https://www.php.net/manual/en/language.oop5.traits.php).
-
-??? question "Q2. Two used traits define the same method with no resolution. Result?"
-    - [x] A. Fatal error ✅
-    - [ ] B. The first trait wins
-    - [ ] C. The last trait wins
-    - [ ] D. Both run in order
-
-    **Why:** Unresolved trait conflicts are fatal; use `insteadof`/`as`.
-    **Ref:** [Conflict resolution](https://www.php.net/manual/en/language.oop5.traits.php#language.oop5.traits.conflict).
-
-??? question "Q3. `SyslogLogger::log as protected logToSyslog;` does what?"
-    - [x] A. Aliases the method to `logToSyslog` with `protected` visibility ✅
-    - [ ] B. Deletes the method
-    - [ ] C. Makes it abstract
-    - [ ] D. Makes it static
-
-    **Why:** `as` can both rename and change visibility. **Ref:** [Traits](https://www.php.net/manual/en/language.oop5.traits.php).
-
-??? question "Q4. A `static` property in a trait used by classes X and Y is…"
-    - [x] A. Separate per class (X and Y have independent copies) ✅
-    - [ ] B. Shared across X and Y
-    - [ ] C. Illegal
-    - [ ] D. Read-only
-
-    **Why:** Static trait state is bound to each using class independently.
-    **Ref:** [Traits: static properties](https://www.php.net/manual/en/language.oop5.traits.php#language.oop5.traits.static).
-
 ## Key takeaways
 
 - Traits = compile-time horizontal reuse; not types.
@@ -314,6 +246,12 @@ final class Mailer
 - **Depends on:** [OOP](oop.md) — traits copy members into the class's object model at compile time.
 - **Reused in:** [Abstract Classes](abstract-classes.md) — abstract trait methods impose a contract like abstract class methods.
 - **Confused with:** [Interfaces](interfaces.md) — a trait is *not* a type (no type-hint); pair it with an interface for the contract.
+
+## Continue your learning
+
+1. **[Guided exercises](traits-exercises.md)** — compose, collide, and resolve conflicts with `insteadof` and `as` until precedence is reflex.
+2. **[Topic exam](traits-exam.md)** — every certification question for this topic, answers hidden.
+3. **[Flashcards](traits-flashcards.md)** — active recall on precedence, conflict resolution, static members and abstract requirements.
 
 ## Official References
 - [PHP: Traits](https://www.php.net/manual/en/language.oop5.traits.php)

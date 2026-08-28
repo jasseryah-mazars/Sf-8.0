@@ -268,84 +268,6 @@ or needs per-instance state, which enum cases cannot hold.
       objects (both work for enums, but `===` is the idiomatic, always-safe form).
     - Forgetting that a pure enum has no `->value` at all.
 
-## Exercises
-
-1. **(Advanced)** Declare a backed `enum Role: int` with three cases and a
-   `label()` method using `match($this)`.
-2. **(Expert)** Wire a `#[Route('/roles/{role}')]` controller argument typed
-   `Role` and explain exactly what HTTP status an unknown `{role}` produces
-   and why.
-
-??? success "Solutions"
-
-    **1.**
-    ```php
-    enum Role: int
-    {
-        case Viewer = 0;
-        case Editor = 1;
-        case Admin = 2;
-
-        public function label(): string
-        {
-            return match ($this) {
-                self::Viewer => 'Viewer',
-                self::Editor => 'Editor',
-                self::Admin  => 'Admin',
-            };
-        }
-    }
-    ```
-
-    **2.** `public function show(Role $role): Response { ... }` — an unknown
-    `{role}` makes `BackedEnumValueResolver` call `Role::from($value)`, which
-    throws `\ValueError`; the resolver catches it and raises
-    `NotFoundHttpException`, so the response is **404**, never a 500.
-
-## Certification questions
-
-*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
-
-??? question "Q1. `Status::from('missing')` when no case matches does what?"
-    - [ ] A. Returns `null`
-    - [x] B. Throws `\ValueError` ✅
-    - [ ] C. Returns a new anonymous case
-    - [ ] D. Returns `false`
-
-    **Why:** `from()` is strict — an unmatched value is a thrown
-    `\ValueError`; only `tryFrom()` returns `null`.
-    **Ref:** [PHP: Backed enumerations](https://www.php.net/manual/en/language.enumerations.backed.php).
-
-??? question "Q2. Which interface do only backed enums implement?"
-    - [x] A. `BackedEnum` ✅
-    - [ ] B. `UnitEnum`
-    - [ ] C. `Stringable`
-    - [ ] D. `Countable`
-
-    **Why:** every enum implements `UnitEnum`; only a backed enum
-    additionally implements `BackedEnum` and exposes `->value`.
-    **Ref:** [PHP: Enumerations](https://www.php.net/manual/en/language.enumerations.php).
-
-??? question "Q3. A route argument type-hinted as a backed enum receives an invalid value. What happens?"
-    - [x] A. `BackedEnumValueResolver` converts the failure into a 404 ✅
-    - [ ] B. An uncaught `\ValueError` produces a 500
-    - [ ] C. The argument resolves to `null`
-    - [ ] D. The route silently falls back to the first case
-
-    **Why:** the resolver calls `from()` and catches `\ValueError`/`TypeError`
-    itself, raising `NotFoundHttpException`.
-    **Ref:** [Symfony source — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
-
-??? question "Q4. What can an enum case NOT have?"
-    - [ ] A. Methods
-    - [ ] B. Constants
-    - [ ] C. Implemented interfaces
-    - [x] D. Non-constant instance state ✅
-
-    **Why:** cases are singletons; allowing mutable per-instance state would
-    break the guarantee that `===` always identifies the same case.
-    **Ref:** [PHP: Enumerations](https://www.php.net/manual/en/language.enumerations.php).
-
 ## Key takeaways
 
 - Pure enums implement `UnitEnum`; backed enums additionally implement
@@ -374,6 +296,12 @@ or needs per-instance state, which enum cases cannot hold.
 - **Confused with:** [PHP API](php-api.md) — `match` (used heavily with
   enums) and other 8.0+ language features live there; this chapter is the
   enum type itself.
+
+## Continue your learning
+
+1. **[Guided exercises](enums-exercises.md)** — build pure and backed enums, break `from()` on purpose, and wire one through Symfony.
+2. **[Topic exam](enums-exam.md)** — every certification question for this topic, answers hidden.
+3. **[Flashcards](enums-flashcards.md)** — active recall on `from()`/`tryFrom()`, the two interfaces, identity, and what an enum cannot have.
 
 ## Official References
 - [PHP manual — Enumerations](https://www.php.net/manual/en/language.enumerations.php)

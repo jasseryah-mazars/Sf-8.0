@@ -74,14 +74,20 @@ comprehension rather than discovery.
   [flashcards](exceptions-flashcards.md).
 - [Traits](traits.md) — conflict resolution (`insteadof`/`as`), abstract/static
   members, precedence.
+  Full journey: [exercises](traits-exercises.md) · [exam](traits-exam.md) ·
+  [flashcards](traits-flashcards.md).
 - [Enums](enums.md) — pure vs. backed enums, `UnitEnum`/`BackedEnum`,
   `from()`/`tryFrom()`, and how routing/Forms consume them.
+  Full journey: [exercises](enums-exercises.md) · [exam](enums-exam.md) ·
+  [flashcards](enums-flashcards.md).
 
 **Additional / depth chapters** (not on the official syllabus list, kept as
 enrichment — see the repository's `specs/TraceabilityMatrix.md`):
 
 - [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, aliasing, name
   resolution rules.
+  Full journey: [exercises](namespaces-exercises.md) · [exam](namespaces-exam.md) ·
+  [flashcards](namespaces-flashcards.md).
 - [PHP Extensions](extensions.md) — `mbstring`, `intl`, `ctype`, `iconv`,
   `pdo`, `opcache` and how to detect/require them.
 - [SPL](spl.md) — `ArrayAccess`, `Iterator`/`IteratorAggregate`, `Countable`,

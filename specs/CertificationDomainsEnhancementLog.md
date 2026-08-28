@@ -251,6 +251,40 @@ This is a deliberate trade-off, recorded rather than hidden: three French pages 
 permitted. Leaving master permanently red instead would have made every later gate
 meaningless.
 
+## Topics 8–10 — `traits`, `enums`, `namespaces`
+
+Dispatched with one change to the agent brief, written directly from the batch-1 near-miss:
+**write the exam file before removing `## Certification questions` from the lesson.** All
+three agents again stopped at the session rate limit — but this time they stopped *after*
+the nine activity files and *before* touching a lesson, so nothing was ever at risk. The
+ordering rule did exactly what it was added for.
+
+| Topic | Exam questions | Exercises | Cards |
+|---|---|---|---|
+| `traits` | 23 (4 migrated + 19 new) | 7 | 38 |
+| `enums` | 27 (4 migrated + 23 new) | 7 | 34 |
+| `namespaces` | 25 (4 migrated + 21 new) | 7 | 34 |
+
+`enums` started from only 2 quiz-bank questions and ends with 27 — the largest net addition
+in the lot so far.
+
+All twelve original questions verified present concept by concept: trait/parent/class
+precedence, `insteadof`, `as` for visibility, per-class `static` properties · `from()` on a
+miss, which interface only backed enums implement, an invalid enum in a route argument, what
+a case cannot have · the global fallback for unqualified calls, what `use` actually does,
+PSR-4 mapping, referencing global `\DateTime`.
+
+**Lesson phase completed by hand**, as for topics 2–4: the three lessons were still at their
+original line counts (346 / 407 / 311), so the questions and exercises were migrated out and
+the journey links written in. Recorded as `migrated`, not `done` — the four-file contract
+holds and the checks are green, but these three lessons still carry their pre-lot depth. The
+tracking table says so rather than rounding up.
+
+**One real defect found by `lint_php`**: `namespaces-exam.md` Question 13 shows a file that
+declares `class MyClass` after `use another\thing as MyClass`. The snippet is *supposed* to
+be a fatal error — that is the question — but the linter had no way to know. Marked with the
+repo's existing `// lint-skip` convention, which exists for exactly this case.
+
 ## Repo-wide link rot, measured but deliberately not fixed in this lot
 
 Running `check_doc_refs_resolve.py` over the whole tree rather than just lot 1
@@ -283,8 +317,9 @@ French reader still on a 404. It is recorded with its resolutions so the fix is 
 short, mechanical job the moment `.fr.md` is in scope — not left as an unexplained
 red check.
 
-## Topics 8–13 — not started
+## Topics 11–13 — not started
 
-`traits`, `enums`, `namespaces`, `extensions`, `spl`, `web-security` remain in their original
-single-file form. `enums` carries only 2 quiz-bank questions and will need substantive new
-exam content rather than migration alone.
+`extensions`, `spl` and `web-security` remain in their original single-file form.
+
+Outstanding within the lot: the lessons for `traits`, `enums` and `namespaces` are migrated
+but not yet enriched to Expert depth.

@@ -145,7 +145,11 @@ to run if the installed version differs. Two facts forced the design:
 
 ## 8. Per-topic tracking
 
-Status values: `pending` · `in progress` · `done`.
+Status values: `pending` · `in progress` · `migrated` · `done`.
+
+`migrated` in the Lesson column means the four-file contract holds — the questions and
+exercises are in their own files, the journey links resolve — but the lesson itself still
+carries its pre-lot depth. It is an honest half-step, not a synonym for done.
 
 | # | Topic | Lesson | Exercises | Exam | Flashcards | Mermaid | Checks | Commit |
 |---|---|---|---|---|---|---|---|---|
@@ -156,9 +160,9 @@ Status values: `pending` · `in progress` · `done`.
 | 5 | `closures` | done | done | done | done | done | green | see log |
 | 6 | `abstract-classes` | done | done | done | done | done | green | see log |
 | 7 | `exceptions` | done | done | done | done | done | green | see log |
-| 8 | `traits` | pending | pending | pending | pending | pending | pending | — |
-| 9 | `enums` | pending | pending | pending | pending | pending | pending | — |
-| 10 | `namespaces` | pending | pending | pending | pending | pending | pending | — |
+| 8 | `traits` | migrated | done | done | done | done | green | see log |
+| 9 | `enums` | migrated | done | done | done | done | green | see log |
+| 10 | `namespaces` | migrated | done | done | done | done | green | see log |
 | 11 | `extensions` | pending | pending | pending | pending | pending | pending | — |
 | 12 | `spl` | pending | pending | pending | pending | pending | pending | — |
 | 13 | `web-security` | pending | pending | pending | pending | pending | pending | — |

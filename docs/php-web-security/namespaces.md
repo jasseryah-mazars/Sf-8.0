@@ -203,61 +203,6 @@ builds a static classmap so no filesystem stat per class is needed.
       is always absolute already).
     - Assuming `use App\Foo;` also imports `App\Foo\Bar` (it imports only `Foo`).
 
-## Exercises
-
-1. **(Advanced)** Given `namespace App;` and a call to `strlen()`, explain why it
-   works without a `use`.
-2. **(Advanced)** Map `App\Repository\UserRepository` to a file path under a
-   `"App\\": "src/"` PSR-4 rule.
-
-??? success "Solutions"
-
-    **1.** `strlen` is a function; unqualified function calls fall back to the
-    global namespace when no `App\strlen` exists. Adding `\strlen()` skips the
-    lookup and is marginally faster.
-
-    **2.** `src/Repository/UserRepository.php` — strip the `App\` prefix, replace
-    `\` with `/`, append `.php`.
-
-## Certification questions
-
-*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
-
-??? question "Q1. Inside `namespace App;`, an unqualified call `count($x)` resolves to…"
-    - [x] A. `App\count` if defined, else global `\count` ✅
-    - [ ] B. Always `App\count`
-    - [ ] C. A fatal error
-    - [ ] D. `\count` only
-
-    **Why:** Functions fall back to the global namespace. **Ref:** [Namespace resolution](https://www.php.net/manual/en/language.namespaces.rules.php).
-
-??? question "Q2. What does `use App\Service\Mailer;` do?"
-    - [ ] A. Loads the file immediately
-    - [x] B. Creates a compile-time alias so `Mailer` means the FQCN ✅
-    - [ ] C. Instantiates the class
-    - [ ] D. Registers an autoloader
-
-    **Why:** `use` is a pure alias; loading happens later via the autoloader.
-    **Ref:** [Using namespaces](https://www.php.net/manual/en/language.namespaces.importing.php).
-
-??? question "Q3. Under PSR-4 `\"App\\\\\": \"src/\"`, where does `App\\Foo\\Bar` live?"
-    - [ ] A. `src/App/Foo/Bar.php`
-    - [x] B. `src/Foo/Bar.php` ✅
-    - [ ] C. `src/foo/bar.php`
-    - [ ] D. `App/Foo/Bar.php`
-
-    **Why:** The prefix `App\` maps to `src/`, so only the remainder becomes the path.
-    **Ref:** [PSR-4](https://www.php-fig.org/psr/psr-4/).
-
-??? question "Q4. Inside `namespace App;`, which correctly references the global `DateTime`?"
-    - [ ] A. `new DateTime()`
-    - [x] B. `new \DateTime()` ✅
-    - [ ] C. `new App\DateTime()`
-    - [ ] D. `new DateTime\Global()`
-
-    **Why:** Class names do not fall back to global, so a leading `\` (or a `use`)
-    is required. **Ref:** [Namespace resolution](https://www.php.net/manual/en/language.namespaces.rules.php).
-
 ## Key takeaways
 
 - Functions/constants fall back to global; **classes do not**.
@@ -278,6 +223,12 @@ builds a static classmap so no filesystem stat per class is needed.
 - **Depends on:** [OOP](oop.md) — namespaces organise the classes/interfaces you define.
 - **Reused in:** [Extensions](extensions.md) — the same `composer.json` declares `ext-*` beside PSR-4; [Interfaces](interfaces.md) type-hints imported FQCNs.
 - **Confused with:** [Traits](traits.md) — file-level `use Some\Class;` (import) vs class-body `use TraitName;` (trait inclusion).
+
+## Continue your learning
+
+1. **[Guided exercises](namespaces-exercises.md)** — resolve every name kind by hand, then watch the global fallback fire and not fire.
+2. **[Topic exam](namespaces-exam.md)** — every certification question for this topic, answers hidden.
+3. **[Flashcards](namespaces-flashcards.md)** — active recall on resolution rules, `use` semantics, PSR-4 and the autoloading boundary.
 
 ## Official References
 - [PHP: Namespaces](https://www.php.net/manual/en/language.namespaces.php)
