@@ -49,10 +49,13 @@ comprehension rather than discovery.
   enums, readonly classes, first-class callables, named args, `match`,
   nullsafe, typed constants, `#[\Override]`, `json_validate()`,
   new-in-initializer, **property hooks & asymmetric visibility (8.4)**, DNF types.
+  Full journey: [exercises](php-api-exercises.md) · [exam](php-api-exam.md) · [flashcards](php-api-flashcards.md).
 - [Object-Oriented Programming](oop.md) — classes, visibility, `static`, late
   static binding, constructor promotion, `clone`, magic methods.
+  Full journey: [exercises](oop-exercises.md) · [exam](oop-exam.md) · [flashcards](oop-flashcards.md).
 - [Attributes](attributes.md) — declaring `#[\Attribute]` classes, `TARGET_*`
   flags, `IS_REPEATABLE`, and reading them back via Reflection.
+  Full journey: [exercises](attributes-exercises.md) · [exam](attributes-exam.md) · [flashcards](attributes-flashcards.md).
 - [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
   `instanceof`, union/intersection/DNF types, interface properties (8.4).
   Full journey: [exercises](interfaces-exercises.md) ·

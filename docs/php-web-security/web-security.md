@@ -201,7 +201,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 !!! note "Source reference"
     Symfony's `Symfony\Component\PasswordHasher\Hasher\SodiumPasswordHasher` and
     the CSRF `HttpFoundation` cookie flags implement these defences —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher).
 
 ## Configuration & code
 
@@ -353,7 +353,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 - [Symfony — CSRF](https://symfony.com/doc/8.0/security/csrf.html)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - [PHP — password_hash](https://www.php.net/manual/en/function.password-hash.php)
-- [Symfony source — PasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher)
+- [Symfony source — PasswordHasher](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher)
 
 ## Video references
 

@@ -121,12 +121,81 @@ the chapter's actual rule; validated with mermaid 11.17.2.
 
 ---
 
-## Topics 2–13
+## Topics 2–4 — `php-api`, `oop`, `attributes`
 
-Dispatched to `certification-domain-expert`, one topic per invocation, in nav order:
-`php-api`, `oop`, `attributes`, `closures`, `abstract-classes`, `exceptions`, `traits`,
-`enums`, `namespaces`, `extensions`, `spl`, `web-security`. Entries are appended below as
-each completes and passes its checks.
+Dispatched to `certification-domain-expert`, one topic per invocation. All three agents hit
+the account's session rate limit **mid-write**, after producing their lessons and exercises
+but before finishing the exam/flashcard files. The partial state was completed by hand
+rather than discarded, because the lessons were substantial and verified.
 
-`attributes` and `enums` carry only 2 quiz-bank questions each and need substantive new exam
-content rather than migration alone.
+**Recovery detail that matters.** Two agents had already removed `## Certification questions`
+from their lesson without having written the exam file. Left alone, that would have **lost**
+5 questions from `php-api` and 4 from `attributes`. They were recovered from
+`git show HEAD:<file>` and migrated intact. `tools/check_topic_journey.py` is what surfaced
+the half-migrated state — a topic with some but not all four files fails loudly instead of
+shipping a dead end.
+
+| Topic | Exam questions | Exercises | Cards | Notes |
+|---|---|---|---|---|
+| `php-api` | 15 (5 migrated + 10 new) | 7 | 25 | Version-dating is the spine: one theme per release, 8.0→8.4 |
+| `oop` | 28 (agent-authored) | 7 | 18 | Property hooks, asymmetric visibility, LSB, `__clone` |
+| `attributes` | 15 (4 migrated + 11 new) | 7 | 20 | Started from only 2 quiz-bank questions |
+
+Verified depth worth recording, each fetched from source before citing:
+
+- **`readonly` is implicitly `protected(set)` as of 8.4**, not `private(set)` — so a child
+  class may perform the one-time initialisation. Any statement restricting it to the
+  declaring class describes ≤ 8.3.
+- **Hooks and `readonly` are mutually exclusive**, a compile-time fatal; the manual redirects
+  to asymmetric visibility.
+- **`private(set)` is implicitly `final`** — an invisible consequence, since nothing in the
+  syntax says so.
+- **Implicitly nullable parameters (`f(string $a = null)`) are deprecated in 8.4.**
+- **User-land attributes are validated on read, built-in attributes by the compiler.** A
+  forbidden target or an illegal repetition raises an `Error` at `newInstance()`, *not* at
+  parse time, and `getAttributes()` still returns every occurrence.
+- **`TARGET_ALL` is 63 and `IS_REPEATABLE` is a separate bit, 64**, deliberately excluded.
+- **`getAttributes()`'s `$flags` is silently ignored unless `$name` is passed** — a failure
+  mode that produces wrong results rather than an error.
+
+## Real defects found by the new tooling
+
+The checks were written for this lot but immediately found pre-existing bugs, which is the
+point of writing them:
+
+| Defect | Location | Status |
+|---|---|---|
+| `blob/8.0/<directory>` — GitHub 404s a `blob/` URL that points at a directory; it needs `tree/` | `extensions.md` ×2, `web-security.md` ×2 | **fixed** |
+| same broken link | `extensions.fr.md`, `web-security.fr.md` | **not fixed** — `.fr.md` out of scope |
+| broken `sequenceDiagram` (`;` is a statement separator) | `web-security.md:143` | **fixed** |
+| same broken diagram | `web-security.fr.md:146` | **not fixed** — `.fr.md` out of scope |
+| broken diagram, lexical error | `miscellaneous/error-handling.md:135` | outside lot 1 |
+| broken diagram, parse error | `twig/interpolation.md:127` | outside lot 1 |
+
+The browser check independently confirmed the CLI validator on a real page: at both desktop
+and mobile viewports, `/miscellaneous/error-handling/` leaves its block as an unrendered
+`<pre>` and shows **"Syntax error in text"** to the reader. Two separate tools, same verdict,
+one of them looking at what a visitor actually sees.
+
+## Tooling corrected during the lot
+
+`tools/check_mermaid_render.py` initially reported **all 20 checks failing**, including pages
+whose diagrams were fine. The cause was in the checker, not the site: mkdocs-material renders
+each diagram into a **closed shadow root** (`r.attachShadow({mode:"closed"})`), which
+`document.querySelectorAll('.mermaid svg')` can never see. The fix forces `mode:"open"` via
+an init script — behaviour-identical for the page — so the check asserts on the real SVG
+instead of a proxy. Worth recording as a caution: a check that fails everything is more often
+wrong about the world than the world is wrong.
+
+`tools/check_doc_refs_resolve.py` resolves php.net ids through several known `doc-en` layouts
+and, failing that, by looking up the `xml:id` inside the containing file (many php.net pages
+are sections, not files). Three attribute-class ids still resolve through neither and are
+**reported without failing**, because a false failure on a valid link trains people to ignore
+the check. Symfony and Twig ids map deterministically and stay blocking — and that is the
+side that caught the `blob/` bug.
+
+## Topics 5–13 — not started
+
+`closures`, `abstract-classes`, `exceptions`, `traits`, `enums`, `namespaces`, `extensions`,
+`spl`, `web-security` remain in their original single-file form. `enums` carries only 2
+quiz-bank questions and will need substantive new exam content rather than migration alone.

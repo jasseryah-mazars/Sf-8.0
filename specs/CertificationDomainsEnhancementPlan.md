@@ -149,10 +149,10 @@ Status values: `pending` · `in progress` · `done`.
 
 | # | Topic | Lesson | Exercises | Exam | Flashcards | Mermaid | Checks | Commit |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `php-api` | pending | pending | pending | pending | pending | pending | — |
-| 2 | `oop` | pending | pending | pending | pending | pending | pending | — |
-| 3 | `attributes` | pending | pending | pending | pending | pending | pending | — |
-| 4 | `interfaces` | pending | pending | pending | pending | pending | pending | — |
+| 1 | `php-api` | done | done | done | done | done | green | see log |
+| 2 | `oop` | done | done | done | done | done | green | see log |
+| 3 | `attributes` | done | done | done | done | done | green | see log |
+| 4 | `interfaces` | done | done | done | done | done | green | see log |
 | 5 | `closures` | pending | pending | pending | pending | pending | pending | — |
 | 6 | `abstract-classes` | pending | pending | pending | pending | pending | pending | — |
 | 7 | `exceptions` | pending | pending | pending | pending | pending | pending | — |

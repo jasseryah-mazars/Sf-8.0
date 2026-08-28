@@ -65,6 +65,20 @@ function readStdin() {
         if (/mermaid/i.test(u) && !u.startsWith(base)) cdnHits.push(u.slice(0, 160));
       });
 
+      // mkdocs-material renders each diagram into a CLOSED shadow root:
+      //   r = div.mermaid; {svg} = await mermaid.render(id, text);
+      //   a = r.attachShadow({mode:"closed"}); a.innerHTML = svg; e.replaceWith(r)
+      // A closed root is unreachable from page scripts and from Playwright, so
+      // `.mermaid svg` can never match and a naive check reports a false failure.
+      // Forcing the mode to "open" for the test is behaviour-identical for the page
+      // and lets us assert on the real rendered SVG instead of guessing from proxies.
+      await page.addInitScript(() => {
+        const orig = Element.prototype.attachShadow;
+        Element.prototype.attachShadow = function (init) {
+          return orig.call(this, { ...init, mode: 'open' });
+        };
+      });
+
       let entry = { viewport: vp.name, path, ok: false, error: null };
       try {
         await page.goto(base + path, { waitUntil: 'domcontentloaded', timeout: 30000 });
@@ -78,23 +92,49 @@ function readStdin() {
 
         const blocks = await page.locator('.mermaid').count();
 
-        // Wait until each block has an <svg>, or time out and report the shortfall.
+        // Success is `pre.mermaid` becoming `div.mermaid` carrying a shadow root with
+        // an <svg>: replaceWith only runs after mermaid.render() resolves, so an
+        // unreplaced <pre> means the render threw.
         try {
           await page.waitForFunction((n) => {
-            return document.querySelectorAll('.mermaid svg').length >= n;
-          }, blocks, { timeout: 20000 });
+            const rendered = [...document.querySelectorAll('div.mermaid')]
+              .filter((d) => d.shadowRoot && d.shadowRoot.querySelector('svg'));
+            return rendered.length >= n;
+          }, blocks, { timeout: 25000 });
         } catch { /* fall through to the counted assertion below */ }
 
-        const svgs = await page.locator('.mermaid svg').count();
-        const errNodes = await page.locator('.mermaid-error, .error-text').count();
+        const probe = await page.evaluate(() => {
+          const divs = [...document.querySelectorAll('div.mermaid')];
+          const withSvg = divs.filter((d) => d.shadowRoot && d.shadowRoot.querySelector('svg'));
+          const shadowText = divs
+            .map((d) => (d.shadowRoot ? d.shadowRoot.textContent || '' : ''))
+            .join('\n');
+          const errInShadow = divs.filter(
+            (d) => d.shadowRoot && d.shadowRoot.querySelector('.error-text, .mermaid-error')
+          ).length;
+          return {
+            svgs: withSvg.length,
+            unrendered: document.querySelectorAll('pre.mermaid').length,
+            errInShadow,
+            shadowSyntaxError: /Syntax error in text/i.test(shadowText),
+            zeroHeight: withSvg.filter((d) => d.getBoundingClientRect().height < 2).length,
+          };
+        });
+
+        const svgs = probe.svgs;
         const bodyText = await page.evaluate(() => document.body.innerText || '');
-        const hasSyntaxError = /Syntax error in text/i.test(bodyText);
+        const hasSyntaxError = /Syntax error in text/i.test(bodyText) || probe.shadowSyntaxError;
 
         const problems = [];
         if (blocks === 0) problems.push('no .mermaid blocks found on a page expected to have one');
+        if (probe.unrendered > 0)
+          problems.push(`${probe.unrendered} block(s) left as <pre> — mermaid.render() threw`);
         if (svgs < blocks) problems.push(`${blocks} block(s) but only ${svgs} rendered <svg>`);
-        if (errNodes > 0) problems.push(`${errNodes} mermaid error node(s) in the DOM`);
-        if (hasSyntaxError) problems.push('"Syntax error in text" is visible on the page');
+        if (probe.zeroHeight > 0)
+          problems.push(`${probe.zeroHeight} diagram(s) rendered with no height`);
+        if (probe.errInShadow > 0)
+          problems.push(`${probe.errInShadow} mermaid error node(s) in the rendered SVG`);
+        if (hasSyntaxError) problems.push('"Syntax error in text" is present in the rendered output');
         if (cdnHits.length) problems.push(`external mermaid request: ${cdnHits[0]}`);
         const mermaidConsole = consoleErrors.filter((t) => /mermaid|svg|diagram/i.test(t));
         if (mermaidConsole.length) problems.push(`console error: ${mermaidConsole[0]}`);
