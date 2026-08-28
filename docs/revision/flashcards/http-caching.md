@@ -1,6 +1,6 @@
 # Flashcards — HTTP Caching
 
-52 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+58 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -385,6 +385,48 @@
     With no surrogate advertising ESI capability, render_esi silently falls back to inline rendering, so the fragment is embedded and re-rendered each request — correct output, but none of the per-fragment caching benefit. No exception is thrown and no raw <esi:include> reaches the browser (that only happens if a broken proxy fails to process it).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
+
+??? question "53. Which of the following statements are true about cache types and Cache-Control? (select all that apply)"
+    **✅ A Symfony response with no explicit caching headers defaults to Cache-Control: no-cache, private ; s-maxage is honoured only by shared caches — the browser ignores it ; setPublic() and setPrivate() are mutually exclusive: the last call wins and removes the other directive**
+
+    Symfony's conservative default is no-cache, private, so shared caching is strictly opt-in; s-maxage targets shared caches only; and you can never end up with both public and private on one response. Vary: Cookie makes a shared cache near-useless because nearly every user has a distinct key, and max-age applies to all caches — s-maxage is the shared-only directive.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
+
+??? question "54. Which of the following statements are true about the expiration caching model? (select all that apply)"
+    **✅ setSharedMaxAge() also marks the response public — no separate setPublic() call is needed ; For a shared cache the freshness precedence is s-maxage > max-age > Expires**
+
+    setSharedMaxAge() implies public since s-maxage only makes sense for shared caches, and shared caches resolve freshness as s-maxage > max-age > Expires. no-cache means "revalidate before reuse" (never-store is no-store), mustRevalidate() is only a getter — emit the directive via setCache(['must_revalidate' => true]) or #[Cache] — and the #[Cache] attribute is applied late without overriding explicit controller headers.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/expiration.html)
+
+??? question "55. Which of the following statements are true about the validation caching model? (select all that apply)"
+    **✅ isNotModified() mutates the response into a 304, strips the body, and returns a bool — you must still return the response yourself ; When both If-None-Match and If-Modified-Since are sent, the ETag comparison takes precedence ; A 304 Not Modified response must not carry a message body**
+
+    isNotModified() only mutates the Response (304 + stripped body/content headers) and reports a bool — returning it to the kernel is still your job — ETag beats Last-Modified when both conditional headers are present, and 304 responses are bodiless by definition (Symfony enforces it). The #[Cache] etag expression is SHA-256 hashed before becoming the header, and nothing is sent automatically by isNotModified().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
+
+??? question "56. Which of the following statements are true about Edge Side Includes (ESI)? (select all that apply)"
+    **✅ When no surrogate advertises ESI capability, render_esi() silently renders the fragment inline ; Each ESI fragment can carry its own TTL, allowing mixed freshness on a single page ; Fragment URIs are signed with the UriSigner to prevent forged _fragment requests**
+
+    render_esi() degrades gracefully to inline rendering without a surrogate, ESI's whole point is per-fragment TTLs instead of the shortest fragment capping the page's TTL, and _fragment URIs are signed for security. Processing happens in the reverse proxy — either Symfony's own HttpCache (via the Esi surrogate) or Varnish — never in the browser.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
+
+??? question "57. Which of the following statements are true about Symfony's HttpCache reverse proxy? (select all that apply)"
+    **✅ HttpCache is a shared cache, so it prefers s-maxage over max-age when computing freshness ; Requests carrying a Cookie or Authorization header are treated as private by default and bypass the shared cache**
+
+    As a shared/gateway cache HttpCache follows s-maxage first, and its private_headers default (Cookie, Authorization) keeps authenticated traffic out of the shared cache. allow_reload/allow_revalidate are off by default, the default Store writes to the filesystem, and HttpCache is a kernel wrapper (framework.http_cache: true or wrapping in public/index.php), implementing HttpKernelInterface and TerminableInterface.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#symfony-reverse-proxy)
+
+??? question "58. Which of the following statements are true about client-side (browser) caching? (select all that apply)"
+    **✅ The browser's private cache ignores s-maxage; only max-age and Expires govern it ; Cache-Control is also a request header — clients can send directives like no-cache, max-age=0 or only-if-cached ; Only responses to safe methods are cached — a POST response is never served from the browser cache**
+
+    s-maxage is shared-cache-only so the browser ignores it, Cache-Control request directives let the client steer caches independently of response semantics, and browser caching is restricted to safe methods. A normal reload roughly means max-age=0 (revalidate) while a hard reload means no-cache (full refetch), and bfcache restores the page instantly from memory without a network round trip.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 ---
 

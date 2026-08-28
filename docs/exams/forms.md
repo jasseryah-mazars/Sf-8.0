@@ -1,7 +1,7 @@
 # Chapter Exam — Forms
 
 !!! abstract "How to use"
-    72 questions spanning every subchapter of **Forms**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    79 questions spanning every subchapter of **Forms**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -822,215 +822,320 @@ Full theory: [Forms](../forms/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
 
-**Q58.** When you call $this->createForm(RegistrationType::class, $data), which object resolves the type's parent chain and extensions before the builder tree is built?  <small>_(hard · internals)_</small>
+**Q58.** Which of the following statements are true about creating a custom form type? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. buildForm() receives a FormBuilderInterface — the form does not exist yet, so you cannot read submitted data there
+- B. Without a data_class option, a compound form's getData() returns an array, not an object
+- C. getBlockPrefix() — not getName() — determines the Twig block names used for theming
+- D. configureOptions() must return a plain array of default options
+- E. getName() is the method that controls Twig theming block names
+
+??? success "Answer Q58"
+    **A, B, C**
+
+    buildForm() works on a FormBuilderInterface before any FormInterface exists; without data_class the data mapper falls back to an array; and getBlockPrefix() drives theming block resolution. configureOptions() configures an OptionsResolver instance rather than returning an array, and getName() was removed long ago in favour of getBlockPrefix().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html)
+
+**Q59.** Which of the following statements are true about form submission handling? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Calling isValid() on a form that was never submitted throws a LogicException — guard with isSubmitted() first
+- B. handleRequest() silently ignores a request whose HTTP method does not match the form's method option
+- C. For a PATCH form, clearMissing is false, so fields missing from the submission keep their existing value
+- D. Validation runs while handleRequest() parses the request, before any form events fire
+- E. handleRequest() automatically redirects the user after a successful submission
+
+??? success "Answer Q59"
+    **A, B, C**
+
+    isValid() on an unsubmitted form throws a LogicException; a method mismatch means the form is simply treated as not submitted; and PATCH implies clearMissing = false for partial updates. Validation actually fires as a POST_SUBMIT listener, not during request parsing, and the redirect after success is your controller's responsibility.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html#processing-forms)
+
+**Q60.** Which of the following statements are true about CSRF protection in Symfony forms? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. CSRF protection is enabled by default and adds a hidden _token field that is checked on submission
+- B. The CSRF token is validated on PRE_SUBMIT by the CsrfValidationListener, before data transformation
+- C. The default csrf_token_id is always the literal string 'form', regardless of the form type
+- D. Stateless CSRF tokens (stateless_token_ids) still require an active session to work
+- E. The default CSRF field name is 'csrf_token'
+
+??? success "Answer Q60"
+    **A, B**
+
+    CSRF protection is on by default via a hidden _token field, and the token check runs on PRE_SUBMIT via CsrfValidationListener. The default token id is the form's block prefix (not a fixed 'form' string) unless csrf_token_id is set, the default field name is _token, and stateless_token_ids uses SameOriginCsrfTokenManager with no session needed.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/csrf.html)
+
+**Q61.** Which of the following statements are true about rendering forms in Twig? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. form_end() renders all remaining unrendered fields by default, including the hidden CSRF token
+- B. form_row() renders the label, widget, errors and help text for a field
+- C. form_errors(form) on the root form shows form-level errors; per-field errors require form_errors(form.field)
+- D. form_widget() renders the field's label together with its control
+- E. Passing render_rest: false to form_end() still outputs the CSRF token automatically
+
+??? success "Answer Q61"
+    **A, B, C**
+
+    form_end() emits remaining fields (hidden ones and the CSRF _token) unless render_rest is disabled; form_row() bundles label + widget + errors + help; and error display is split between the root form and individual fields. form_widget() outputs only the control itself, and with render_rest: false you must render the CSRF field yourself.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/form_customization.html)
+
+**Q62.** When you call $this->createForm(RegistrationType::class, $data), which object resolves the type's parent chain and extensions before the builder tree is built?  <small>_(hard · internals)_</small>
 
 - A. FormFactory::create() asks FormRegistry for a ResolvedFormType, which builds the FormBuilder and walks buildForm() parent→child
 - B. The controller instantiates the FormInterface tree directly
 - C. OptionsResolver builds the form tree from the declared defaults
 - D. The DataMapper creates the child forms from data_class metadata
 
-??? success "Answer Q58"
+??? success "Answer Q62"
     **A**
 
     createForm() delegates to FormFactory::create(), which via FormRegistry obtains a ResolvedFormType wrapping the type, its resolved parent chain and applicable type extensions. The resolved type creates a FormBuilder and runs each buildForm() from parent to child; getForm() then produces the immutable FormInterface tree. OptionsResolver only resolves options; the DataMapper maps data at submit/view time.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
 
-**Q59.** Which service does FormInterface::handleRequest() delegate to under FrameworkBundle?  <small>_(hard · internals)_</small>
+**Q63.** Which service does FormInterface::handleRequest() delegate to under FrameworkBundle?  <small>_(hard · internals)_</small>
 
 - A. HttpFoundationRequestHandler
 - B. NativeRequestHandler
 - C. FormFactory
 - D. RequestStack
 
-??? success "Answer Q59"
+??? success "Answer Q63"
     **A**
 
     With HttpFoundation available, the form's request handler is HttpFoundationRequestHandler; NativeRequestHandler is the fallback when working with PHP superglobals directly.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/HttpFoundation/HttpFoundationRequestHandler.php)
 
-**Q60.** Which accessor returns each of a field's three data representations after submit?  <small>_(hard · internals)_</small>
+**Q64.** Which accessor returns each of a field's three data representations after submit?  <small>_(hard · internals)_</small>
 
 - A. getData() = model, getNormData() = normalized, getViewData() = view
 - B. getData() = view, getViewData() = model, getNormData() = raw
 - C. getModelData(), getNormalizedData(), getRenderedData()
 - D. All three return the same array
 
-??? success "Answer Q60"
+??? success "Answer Q64"
     **A**
 
     A field holds data in three shapes: model (your PHP value), normalized (transport-neutral canonical), and view (strings for HTML). They are read with getData()/getNormData()/getViewData() respectively; transformers convert between adjacent shapes. There are no getModelData()/getRenderedData() methods.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
 
-**Q61.** In configureOptions(), which OptionsResolver call derives one option's value from the values of others?  <small>_(hard · config)_</small>
+**Q65.** In configureOptions(), which OptionsResolver call derives one option's value from the values of others?  <small>_(hard · config)_</small>
 
 - A. setNormalizer('opt', fn (Options $o, $value) => ...)
 - B. setAllowedTypes('opt', 'string')
 - C. setRequired('opt')
 - D. setDefault('opt', fn () => ...) only
 
-??? success "Answer Q61"
+??? success "Answer Q65"
     **A**
 
     setNormalizer() receives the resolved Options plus the raw value, letting one option depend on others (e.g. force expanded when multiple is false). setAllowedTypes validates a type, setRequired marks an option mandatory, and a default closure cannot read sibling options the way a normalizer can.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/options_resolver.html)
 
-**Q62.** How are custom form types made available by their FQCN and able to receive injected services?  <small>_(hard · internals)_</small>
+**Q66.** How are custom form types made available by their FQCN and able to receive injected services?  <small>_(hard · internals)_</small>
 
 - A. FrameworkBundle autoconfigures FormTypeInterface implementers with the form.type tag
 - B. You must register each type manually in config/services.yaml with form.type
 - C. Types are discovered by a #[AsFormType] attribute
 - D. The FormFactory scans the Form/ directory at runtime
 
-??? success "Answer Q62"
+??? success "Answer Q66"
     **A**
 
     Service autoconfiguration tags any class implementing FormTypeInterface with form.type, so it is usable by FQCN and can autowire constructor dependencies. There is no #[AsFormType] attribute and no runtime directory scan; manual tagging is only needed when autoconfiguration is disabled.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/create_custom_field_type.html)
 
-**Q63.** How do partial rendering (form_row on some fields) and form_rest avoid rendering the same field twice?  <small>_(hard · internals)_</small>
+**Q67.** How do partial rendering (form_row on some fields) and form_rest avoid rendering the same field twice?  <small>_(hard · internals)_</small>
 
 - A. Each FormView carries an isRendered() flag; form_row/form_widget set it, and form_rest skips already-rendered views
 - B. form_rest re-renders everything and Twig de-duplicates the HTML
 - C. The renderer diffs the output string to remove duplicates
 - D. Fields can only be rendered once per request globally
 
-??? success "Answer Q63"
+??? success "Answer Q67"
     **A**
 
     Rendering operates on the FormView tree. Each view has an isRendered() flag set when form_row/form_widget renders it, so form_rest emits only the leftover (un-rendered) fields — including hidden and CSRF fields. There is no string diffing.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php)
 
-**Q64.** In which order does the renderer try candidate theme blocks?  <small>_(hard · internals)_</small>
+**Q68.** In which order does the renderer try candidate theme blocks?  <small>_(hard · internals)_</small>
 
 - A. Most specific (unique field id) down to least specific (form_widget)
 - B. Least specific to most specific
 - C. Alphabetically
 - D. Randomly per request
 
-??? success "Answer Q64"
+??? success "Answer Q68"
     **A**
 
     The block-prefix hierarchy is walked from the unique per-field name down to the root form_* block; the first existing block wins.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/form_themes.html)
 
-**Q65.** A field with block prefix 'rating' (parent 'integer') ignores your integer_widget override, but rating_widget works. Why?  <small>_(hard · scenario)_</small>
+**Q69.** A field with block prefix 'rating' (parent 'integer') ignores your integer_widget override, but rating_widget works. Why?  <small>_(hard · scenario)_</small>
 
 - A. The renderer tries rating_widget before integer_widget; the more specific block exists and wins, so integer_widget is never reached
 - B. integer_widget is a reserved block that cannot be overridden
 - C. Parent-prefix blocks are ignored unless you set inherit_data
 - D. You must clear the Twig cache for parent blocks to apply
 
-??? success "Answer Q65"
+??? success "Answer Q69"
     **A**
 
     Block-name resolution goes most-specific to least-specific along the block-prefix chain (rating → integer → form). Since rating_widget exists, it wins and the more generic integer_widget is never consulted. Override rating_widget (or remove it to fall through). inherit_data and caching are unrelated.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/form_themes.html)
 
-**Q66.** When a submission arrives with a missing or invalid _token, what does CsrfValidationListener do?  <small>_(hard · internals)_</small>
+**Q70.** When a submission arrives with a missing or invalid _token, what does CsrfValidationListener do?  <small>_(hard · internals)_</small>
 
 - A. It adds a form error (so isValid() returns false) — it does not throw an exception
 - B. It throws an AccessDeniedException immediately
 - C. It returns a 403 response before the controller runs
 - D. It silently regenerates a fresh token and continues
 
-??? success "Answer Q66"
+??? success "Answer Q70"
     **A**
 
     On PRE_SUBMIT the listener pops _token from the raw data and validates it; a missing/invalid token results in a form error, so isValid() is false and you re-render with csrf_message. It does not throw or short-circuit with a 403 — that is the pattern for the manual isCsrfTokenValid() helper in a controller.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Csrf/Type/FormTypeCsrfExtension.php)
 
-**Q67.** For a mapped CollectionType to call the parent's adder/remover methods, set…  <small>_(hard · trap)_</small>
+**Q71.** For a mapped CollectionType to call the parent's adder/remover methods, set…  <small>_(hard · trap)_</small>
 
 - A. by_reference => false
 - B. allow_add => false
 - C. prototype => false
 - D. mapped => false
 
-??? success "Answer Q67"
+??? success "Answer Q71"
     **A**
 
     by_reference => false forces the form to call add/remove methods instead of mutating the returned collection in place, keeping associations in sync.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/forms/types/collection.html)
 
-**Q68.** addModelTransformer() converts between which representations?  <small>_(hard · internals)_</small>
+**Q72.** addModelTransformer() converts between which representations?  <small>_(hard · internals)_</small>
 
 - A. Model and normalized data
 - B. Normalized and view data
 - C. View data and HTML
 - D. Request and response
 
-??? success "Answer Q68"
+??? success "Answer Q72"
     **A**
 
     Model transformers bridge model<->norm; view transformers bridge norm<->view. Pick a model transformer when the underlying type changes.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
 
-**Q69.** On submit, which transformers run first?  <small>_(hard · internals)_</small>
+**Q73.** On submit, which transformers run first?  <small>_(hard · internals)_</small>
 
 - A. View transformers (view->norm), then model transformers (norm->model)
 - B. Model transformers, then view transformers
 - C. Only model transformers run on submit
 - D. Order is undefined
 
-??? success "Answer Q69"
+??? success "Answer Q73"
     **A**
 
     On submission data flows view -> norm -> model, so view transformers' reverseTransform runs before model transformers' reverseTransform.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
 
-**Q70.** An optional text field with a custom transformer reports 'invalid' whenever it is left blank. What is the likely cause?  <small>_(hard · debug)_</small>
+**Q74.** An optional text field with a custom transformer reports 'invalid' whenever it is left blank. What is the likely cause?  <small>_(hard · debug)_</small>
 
 - A. reverseTransform('') runs the parser on an empty string and throws TransformationFailedException; guard for ''/null and return the empty model value first
 - B. The field needs a NotBlank constraint removed
 - C. transform() must return null for empty values
 - D. Model transformers cannot handle optional fields
 
-??? success "Answer Q70"
+??? success "Answer Q74"
     **A**
 
     An empty submission arrives as '' (or null) at reverseTransform(); if you parse it instead of short-circuiting, you raise a spurious TransformationFailedException and the field is marked invalid. Guard the first line for emptiness and return the model's empty value (null/[]/0). This is a format-handling bug, not a validation constraint issue.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
 
-**Q71.** With autoconfiguration enabled, how is a type extension registered?  <small>_(hard · internals)_</small>
+**Q75.** With autoconfiguration enabled, how is a type extension registered?  <small>_(hard · internals)_</small>
 
 - A. Automatically, via the form.type_extension tag on FormTypeExtensionInterface services
 - B. With an #[AsFormTypeExtension] attribute
 - C. By calling addTypeExtension() in a controller
 - D. It cannot be autoconfigured
 
-??? success "Answer Q71"
+??? success "Answer Q75"
     **A**
 
     Symfony auto-tags implementers of FormTypeExtensionInterface with form.type_extension. There is no dedicated attribute for this in core.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
 
-**Q72.** With autoconfiguration disabled, which services.yaml tag correctly registers an extension for FileType?  <small>_(hard · config)_</small>
+**Q76.** With autoconfiguration disabled, which services.yaml tag correctly registers an extension for FileType?  <small>_(hard · config)_</small>
 
 - A. tags: [{ name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }]
 - B. tags: [{ name: form.type_extension }]  # extended_type inferred
 - C. tags: [{ name: form.type, extended_type: FileType }]
 - D. tags: [{ name: form.extension, class: FileType }]
 
-??? success "Answer Q72"
+??? success "Answer Q76"
     **A**
 
     Without autoconfiguration you must both use the form.type_extension tag and supply the extended_type attribute (the FQCN of the extended type) — it is not inferred from getExtendedTypes() in the manual case. form.type is for form types, and form.extension is not a real tag.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
+
+**Q77.** Which of the following statements are true about data transformers? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. transform() converts model data to view data for display; reverseTransform() converts submitted view data back to model data
+- B. Model transformers bridge model↔norm data, while view transformers bridge norm↔view data
+- C. A TransformationFailedException thrown during reverseTransform() marks the field invalid instead of causing a 500 error
+- D. On submission, model transformers run before view transformers
+- E. transform() is the method invoked to process the user's submitted input
+
+??? success "Answer Q77"
+    **A, B, C**
+
+    transform() is the model→view direction and reverseTransform() the view→model direction; model transformers sit between model and norm data while view transformers sit between norm and view data; and a TransformationFailedException surfaces as the field's invalid_message rather than a 500. On submit the order is view→norm→model, so view transformers run first, and submitted input goes through reverseTransform(), not transform().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
+
+**Q78.** Which of the following statements are true about form events? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. The data available in PRE_SUBMIT is the raw view data (array/string), not your model object
+- B. Fields can only be added or removed in the PRE_* events, before submit binds them
+- C. FormEvents defines PRE_VALIDATE and POST_VALIDATE constants for hooking into validation
+- D. The submit sequence is SUBMIT → PRE_SUBMIT → POST_SUBMIT
+- E. POST_SET_DATA fires after the form has been submitted
+
+??? success "Answer Q78"
+    **A, B**
+
+    PRE_SUBMIT exposes the raw submitted array/string before any transformation, and dynamic field changes are only possible in PRE_SET_DATA/PRE_SUBMIT before binding. There are no PRE_VALIDATE/POST_VALIDATE events — validation is itself a POST_SUBMIT listener — the submit order is PRE_SUBMIT → SUBMIT → POST_SUBMIT, and POST_SET_DATA belongs to the data-setting sequence, not submission.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/events.html)
+
+**Q79.** Which of the following statements are true about handling file uploads with Symfony forms? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. form_start() adds enctype="multipart/form-data" automatically, but only when the form contains a file field
+- B. getClientOriginalName() and getClientMimeType() return untrusted, client-supplied values
+- C. An unmapped FileType field is still validated, and you read it via $form->get('x')->getData()
+- D. FileType fields provide the upload as a plain string path to the temporary file
+- E. Setting maxSize on the File constraint raises PHP's upload_max_filesize ini limit
+
+??? success "Answer Q79"
+    **A, B, C**
+
+    Multipart encoding is only set when a file field is present; the client-provided name and MIME type must never be trusted (use guessExtension()/getMimeType() instead); and unmapped fields are validated and fetched with ->get('x')->getData(). FileType yields an UploadedFile object (not a string path), and the File constraint is capped by — it can never override — PHP's upload_max_filesize/post_max_size limits.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/upload_file.html)
 
 ---
 

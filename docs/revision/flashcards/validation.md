@@ -1,6 +1,6 @@
 # Flashcards — Data Validation
 
-74 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+80 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -629,6 +629,48 @@ What does $v->getMessage() return here?
     Assert\Valid cascades into nested objects, and for a traversable/array it validates every element's constraints. Without it, nested objects are not validated at all.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Valid.html)
+
+??? question "75. Which of the following statements are true about built-in validation constraints? (select all that apply)"
+    **✅ NotBlank fails on an empty string, but NotNull lets an empty string pass because it only rejects null ; Email and Url pass on an empty/null value, so they must be stacked with NotBlank when empty must be rejected ; A nested object is only cascaded into when its property carries #[Assert\Valid]**
+
+    NotBlank rejects '', whitespace-only strings, empty arrays and null, while NotNull only rejects null — so '' passes NotNull. Format constraints like Email and Url deliberately pass on empty/null (stack NotBlank to require a value), and nested objects are skipped entirely unless the property has Assert\Valid, even if the nested class defines its own constraints.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/NotBlank.html)
+
+??? question "76. Which statements about validation groups are correct? (select all that apply)"
+    **✅ Constraints declared without an explicit groups option belong to the Default group ; Validating with a custom group excludes the Default group unless Default is listed as well ; For a class without a group sequence, the Default group and the {ClassName} group are equivalent**
+
+    Unnamed constraints all land in Default, and validate($object, null, ['Registration']) runs only that group — Default must be listed explicitly to be included too. Without a group sequence, the short class-name group is just an alias of Default. Group names are case-sensitive strings, so 'default' is not the Default group.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/groups.html)
+
+??? question "77. Which statements about #[Assert\GroupSequence] are true? (select all that apply)"
+    **✅ The sequence stops at the first failing group, but all constraints inside that group still run ; The sequence is triggered when validating the Default group, while validating {ClassName} bypasses it ; Inside the sequence you must reference the short class-name group, never Default itself**
+
+    A group sequence is fail-fast per group: every constraint of the current group runs, and only if the group succeeds does the next group start. It fires when Default is validated, whereas {ClassName} performs a flat run that bypasses it — which is also why the sequence itself must list {ClassName} instead of Default (that would recurse). Halting mid-group or always running every group are both incorrect.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
+
+??? question "78. Which statements about validating objects with ValidatorInterface are correct? (select all that apply)"
+    **✅ validate() returns a ConstraintViolationListInterface and never throws on validation failure ; validatePropertyValue() validates a supplied value against a property's constraints without touching the object**
+
+    validate() always returns a violation list — you check count() to know whether the object is valid; it neither returns a boolean nor throws on failure. validatePropertyValue() tests an arbitrary supplied value against a property's constraints, whereas validateProperty() reads the object's current value, so no explicit value argument is passed to it.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
+
+??? question "79. Which statements about the violation builder and violations are true? (select all that apply)"
+    **✅ buildViolation() records nothing until addViolation() is called on the builder ; getMessage() returns the interpolated message, while getMessageTemplate() keeps the raw placeholders ; atPath() appends to the current property path relative to the validated node**
+
+    The builder is fluent and lazy: setParameter(), atPath(), setCode() etc. configure the violation, and only addViolation() commits it to the context. getMessage() is the interpolated text while getMessageTemplate() preserves the raw {{ placeholders }}, and atPath() is relative — it appends to the current path rather than resetting the root. The result of validation is a ConstraintViolationListInterface object (Countable/iterable), never a plain array.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
+
+??? question "80. Which statements about the #[Assert\Callback] constraint are correct? (select all that apply)"
+    **✅ Callback is a class-level constraint: the method does not receive a property value and reads the object from $this or $context->getObject() ; Errors must be added through the context (e.g. $context->buildViolation()->addViolation()); the callback's return value is ignored ; Callbacks honour the groups option, so a callback in a non-Default group only runs when that group is validated**
+
+    Callback targets the class, so the method inspects the whole object (via $this for instance methods or the first argument for static callbacks) and must report problems by building violations on the ExecutionContext — any returned value is discarded. Callbacks also participate fully in groups and group sequences. Returning false does nothing, and no property value is injected because it is not a property constraint.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Callback.html)
 
 ---
 

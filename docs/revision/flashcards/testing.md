@@ -1,6 +1,6 @@
 # Flashcards — Automated Tests
 
-71 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+78 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -518,6 +518,55 @@
     A baseline records currently-known deprecations to a JSON file that later runs ignore, so only new deprecations fail the build — and you shrink it over time. disabled=1 and weak both remove the safety net for new deprecations, and blanket #[IgnoreDeprecations] hides everything, including regressions.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail)
+
+??? question "72. Which of the following statements are true about the test client returned by static::createClient()? (select all that apply)"
+    **✅ It is a KernelBrowser (extending AbstractBrowser) that calls the kernel in-process, not over the network ; It does not follow redirects by default; you must call followRedirect() or followRedirects() ; request() returns a Crawler; the Response is fetched separately via $client->getResponse()**
+
+    The client is a KernelBrowser hitting the kernel in-process with a cookie jar and history, so no web server or network round-trip is involved. Navigation methods like request() return a Crawler — the Response must be read via getResponse() — and redirects are only followed after calling followRedirect() (once) or followRedirects() (toggle), never automatically.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#making-requests)
+
+??? question "73. Which statements about configuring the test client are correct? (select all that apply)"
+    **✅ Request headers are passed as HTTP_-prefixed server parameters (e.g. HTTP_ACCEPT), while HTTPS, PHP_AUTH_USER and PHP_AUTH_PW stay unprefixed ; loginUser() authenticates a real UserInterface instance without going through the login form ; insulate() runs each request in a separate process, so you lose in-process profiler/container access**
+
+    Headers become HTTP_-prefixed server parameters, with CONTENT_TYPE, HTTPS and PHP_AUTH_* as unprefixed exceptions; loginUser() sets the security token directly from a real UserInterface object, skipping the login form; and insulate() isolates each request in a subprocess at the cost of profiler and container access. createClient() takes ($options, $server), so server parameters are the second argument, and loginUser() requires an actual user object, not just a username.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication)
+
+??? question "74. Which statements about the DomCrawler used in functional tests are true? (select all that apply)"
+    **✅ filter() with CSS selectors requires the css-selector component; filterXPath() works without it ; The Crawler is immutable: filter() returns a new node set instead of mutating the original ; text() and attr() read the first node and throw on an empty set unless a default argument is provided**
+
+    CSS selectors are translated to XPath by the css-selector component, so only filter() needs it — filterXPath() speaks the native language directly. Every filtering call returns a new immutable Crawler instance rather than mutating the original, and text()/attr() operate on the first node, throwing on an empty set unless a default value is passed. Nothing converts XPath to CSS; the conversion goes the other way.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dom_crawler.html)
+
+??? question "75. Which statements about SYMFONY_DEPRECATIONS_HELPER modes are correct? (select all that apply)"
+    **✅ weak keeps collecting and reporting deprecations but never fails the build ; disabled=1 turns the handler off entirely, so nothing is collected or reported ; A committed baseline file makes only NEW deprecations fail, ignoring the known ones it records**
+
+    weak still prints the grouped deprecation report and only removes the failure threshold, whereas disabled=1 stops collection completely, so the two are not equivalent. A baseline records currently-known deprecations so later runs fail only on new ones. max[self]=0 constrains only the self bucket — max[total]=0 is the mode that fails on any bucket.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration)
+
+??? question "76. Which statements about accessing and replacing services in tests are true? (select all that apply)"
+    **✅ self::getContainer() returns the special test container, which exposes private services that are used somewhere ; A service replaced with $container->set() is lost when the kernel reboots between requests, unless you call disableReboot()**
+
+    Only the test container from self::getContainer() exposes private services, and only those actually used somewhere — completely unused private services are still optimised away, and $kernel->getContainer() keeps private services hidden. Because the client reboots the kernel between requests, set() replacements disappear unless disableReboot() is called, and the removed static::$container property must not be used.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#retrieving-services-in-the-test)
+
+??? question "77. Which statements about WebTestCase response assertions are correct? (select all that apply)"
+    **✅ assertResponseIsSuccessful() passes for any 2xx status code, not only 200 ; assertSelectorTextContains() checks a substring, while assertSelectorTextSame() requires an exact match ; assertResponseRedirects() called without arguments only checks that the response is a redirect (3xx)**
+
+    assertResponseIsSuccessful() accepts any 2xx — use assertResponseStatusCodeSame(200) for an exact code. The ...Contains variants match substrings while ...Same demands exact equality, and assertResponseRedirects() with no arguments only verifies a 3xx status (pass a target and/or code to be more specific). Selector assertions use CSS selectors, so they do require the css-selector component.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html)
+
+??? question "78. Which statements about the Symfony PHPUnit bridge are true? (select all that apply)"
+    **✅ Its features are wired by registering Symfony\Bridge\PhpUnit\SymfonyExtension in the PHPUnit configuration ; Clock and DNS mocking are opt-in per test via the time-sensitive and dns-sensitive groups ; SYMFONY_DEPRECATIONS_HELPER is an environment/server variable, not a PHPUnit CLI flag**
+
+    Deprecation collection and clock/DNS mocking only work once the SymfonyExtension is registered in the PHPUnit configuration, and the mocking is opt-in per group (time-sensitive / dns-sensitive) rather than applied globally. Reporting is tuned through the SYMFONY_DEPRECATIONS_HELPER env/server variable; no equivalent PHPUnit CLI flag exists.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html)
 
 ---
 

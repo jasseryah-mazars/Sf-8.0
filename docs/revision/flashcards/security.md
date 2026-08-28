@@ -1,6 +1,6 @@
 # Flashcards — Security
 
-78 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+93 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -567,6 +567,111 @@
     The priority strategy takes the vote of the first (highest-priority) non-abstaining voter as final, letting a high-priority voter short-circuit (e.g. a global "banned user" voter denying before feature voters run). "All must agree" describes unanimous, "majority" describes consensus, and "one grant is enough" describes affirmative.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
+
+??? question "79. Which statements about switch_user impersonation are correct in Symfony 8? (multiple)"
+    **✅ The default required role is ROLE_ALLOWED_TO_SWITCH ; While switched, the original token is preserved inside a SwitchUserToken ; SwitchUserEvent is dispatched on both switch and exit**
+
+    switch_user is enabled per firewall and defaults to requiring ROLE_ALLOWED_TO_SWITCH. The SwitchUserListener stores the original token inside the new SwitchUserToken (getOriginalToken()) and dispatches SwitchUserEvent for both directions. All authorization while switched uses the target user's roles — that is the point of impersonation.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/impersonating_user.html)
+
+??? question "80. How does an impersonating user return to their own account?"
+    **✅ Append ?_switch_user=_exit to any URL on the firewall**
+
+    Exiting uses the same configured parameter (default _switch_user) with the special value _exit. The SwitchUserListener then restores the original token that was preserved inside the SwitchUserToken and redirects with the parameter stripped.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/impersonating_user.html)
+
+??? question "81. To show an 'exit impersonation' banner, a template checks is_granted('ROLE_PREVIOUS_ADMIN'). What is the Symfony 8 verdict?"
+    **✅ Use is_granted('IS_IMPERSONATOR') — ROLE_PREVIOUS_ADMIN is the legacy spelling**
+
+    The modern attribute is IS_IMPERSONATOR, granted only when the active token is a SwitchUserToken. ROLE_PREVIOUS_ADMIN is the legacy pre-5.x style and must not appear in new code. ROLE_ALLOWED_TO_SWITCH only says the user may switch, not that they currently are switched.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/impersonating_user.html)
+
+??? question "82. Which statements describe the DEFAULT login_throttling limiter? (multiple)"
+    **✅ It counts failed attempts per username + IP up to max_attempts per interval ; It also enforces a wider limit of 5 × max_attempts per IP across all usernames ; A successful login resets the counter**
+
+    DefaultLoginRateLimiter combines two limits: username+IP at max_attempts and IP alone at five times that, so attackers cannot bypass the first limit by spraying usernames. A successful login resets the counters; blocking is only for the configured interval and IP/username based, not session based.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
+
+??? question "83. What must a service referenced by login_throttling.limiter implement?"
+    **✅ Symfony\Component\HttpFoundation\RateLimiter\RequestRateLimiterInterface**
+
+    The firewall needs a limiter that maps a Request to rate limiters, which is RequestRateLimiterInterface (HttpFoundation namespace); extending AbstractRequestRateLimiter and returning limiters from getLimiters() is the documented shortcut. Plain LimiterInterface instances or rate_limiter names are not accepted directly.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
+
+??? question "84. True or false: login throttling rejects a throttled attempt only after the password has been verified and found wrong."
+    **✅ False — LoginThrottlingListener runs on CheckPassportEvent with high priority, before credentials are checked**
+
+    The listener consumes the rate limiter on CheckPassportEvent before the CheckCredentialsListener verifies the password, throwing TooManyLoginAttemptsAuthenticationException when the limit is exceeded. It listens to LoginSuccessEvent only to reset the counters.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
+
+??? question "85. role_hierarchy maps ROLE_ADMIN: ROLE_USER. A user stores only [ROLE_ADMIN]. Which check FAILS for them?"
+    **✅ in_array('ROLE_USER', $user->getRoles(), true) — getRoles() never expands the hierarchy**
+
+    The hierarchy is applied only at authorization time by the RoleHierarchyVoter, so isGranted(), Twig is_granted() and access_control all pass. $user->getRoles() returns exactly the stored roles (['ROLE_ADMIN']), so raw in_array checks bypass the hierarchy — the classic exam trap.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
+
+??? question "86. Where IS the configured role hierarchy taken into account? (multiple)"
+    **✅ isGranted()/#[IsGranted] checks via the RoleHierarchyVoter ; access_control rules with roles: ; Explicit calls to RoleHierarchyInterface::getReachableRoleNames()**
+
+    Access checks run through the AccessDecisionManager where the RoleHierarchyVoter expands roles with getReachableRoleNames(), and access_control uses the same path; you can call the RoleHierarchyInterface service yourself for the same expansion. Token and user role getters always return the raw stored roles.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
+
+??? question "87. Which API expands ['ROLE_SUPER_ADMIN'] into every role it implies, transitively?"
+    **✅ RoleHierarchyInterface::getReachableRoleNames(array $roles)**
+
+    RoleHierarchy::getReachableRoleNames() walks the configured map recursively and is the very service the RoleHierarchyVoter uses, so results always match isGranted() behaviour. The other methods do not exist in Symfony 8.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
+
+??? question "88. Votes cast: one GRANTED, one DENIED, one ABSTAIN (default flags; the granting voter has highest priority). Which strategies GRANT access? (multiple)"
+    **✅ affirmative — at least one grant exists ; consensus — the 1–1 tie falls back to allow_if_equal_granted_denied (default true) ; priority — the first non-abstaining voter granted**
+
+    Affirmative grants on any grant; consensus with equal grants and denies uses allow_if_equal_granted_denied, which defaults to true; priority takes the first non-abstain vote, here the grant. Unanimous denies because a single ACCESS_DENIED vetoes regardless of the grant — the abstain is irrelevant to that veto.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
+
+??? question "89. Strategy unanimous: voter A grants, voter B abstains, no voter denies. A colleague claims access is denied because 'not everyone agreed'. Verdict?"
+    **✅ Access is granted — unanimous only forbids denies; abstentions are neutral**
+
+    UnanimousStrategy returns false only if some voter denies; otherwise it grants when at least one voter granted. Abstentions never count as denies, and allow_if_equal_granted_denied is a consensus-only tie breaker. Only the all-abstain case falls back to allow_if_all_abstain.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
+
+??? question "90. Every voter abstains and no access_decision_manager option was changed. What is the decision?"
+    **✅ Denied — allow_if_all_abstain defaults to false for every strategy**
+
+    When no voter casts a real vote, all four strategies fall back to the allow_if_all_abstain flag, which defaults to false, so access is denied. No exception is thrown and the strategy choice does not change this default outcome.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
+
+??? question "91. Which statements about Security::login() (SecurityBundle) are correct? (multiple)"
+    **✅ It dispatches the same authentication events as an interactive login (e.g. LoginSuccessEvent) ; It accepts extra badges, e.g. new RememberMeBadge() ; It returns ?Response — the authenticator's success response, if any**
+
+    login() delegates to the real authenticator pipeline, so badge listeners and events (CheckPassportEvent, LoginSuccessEvent) run exactly as for an interactive login, and the authenticator's onAuthenticationSuccess() response is returned. No credentials are checked — you assert the user is already trusted (e.g. just registered).
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#login-programmatically)
+
+??? question "92. Calling $security->logout() from a controller action that is not the logout form throws a CSRF-related error. Fix?"
+    **✅ Call $security->logout(false) — CSRF validation is on by default and must be skipped for non-form flows**
+
+    logout(bool $validateCsrf = true) validates the logout CSRF token from the request by default; a programmatic call that does not originate from the logout link must pass false. It still dispatches LogoutEvent so the configured logout listeners run.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#logging-out)
+
+??? question "93. When do the optional parameters of Security::login($user, $authenticatorName, $firewallName) become necessary? (multiple)"
+    **✅ $authenticatorName when the firewall registers more than one authenticator ; $firewallName when logging into a firewall other than the one matching the current request**
+
+    With exactly one authenticator on the target firewall both can be omitted. Multiple authenticators make $authenticatorName mandatory (built-ins are named by config key such as 'form_login', custom ones by service id), and $firewallName is needed when the current request's firewall is not the one you want to authenticate against.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#login-programmatically)
 
 ---
 

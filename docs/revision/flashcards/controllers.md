@@ -1,6 +1,6 @@
 # Flashcards — Controllers
 
-94 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+101 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -679,6 +679,55 @@
     #[MapEntity] belongs to DoctrineBundle and is out of scope for the core HttpKernel resolver chain. The core built-ins are Request/Session (120), BackedEnum/Uid/DateTime/RequestAttribute (100), plus the targeted mapping attributes and #[CurrentUser].
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
+
+??? question "95. Which statements about HTTP redirects in Symfony controllers are true? (select all that apply)"
+    **✅ redirectToRoute() returns a RedirectResponse with a 302 status by default ; 307 and 308 redirects preserve the original HTTP method and request body ; 301 and 308 are permanent redirects that browsers may cache**
+
+    redirectToRoute() and redirect() both return a RedirectResponse defaulting to 302; 307/308 keep the method and body intact, and the permanent codes 301 and 308 may be cached by browsers. A redirect is a real 3xx response triggering a brand-new client request (internal sub-requests are what forward() does), and flash messages are session-backed precisely so they survive that redirect in the Post/Redirect/Get pattern.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
+
+??? question "96. Which statements about forward() (internal redirects) are correct? (select all that apply)"
+    **✅ forward() creates a sub-request handled inside the same HTTP request, and the browser URL does not change ; Inside the forwarded controller, $request->isMainRequest() returns false**
+
+    forward() duplicates the request and runs another controller as a SUB_REQUEST within the same HTTP request, returning its Response directly — the client sees no new round-trip and the URL stays the same, which is also why isMainRequest() is false inside the target controller. No 3xx response is involved (that is an external redirect), and the firewall does not run again for the sub-request.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/forwarding.html)
+
+??? question "97. Which statements about sessions in Symfony are true? (select all that apply)"
+    **✅ Sessions are lazy: they are started and the cookie is sent only when the session is first used ; migrate() regenerates the session id while keeping the data, which defends against session fixation**
+
+    Symfony sessions start lazily on first use, so no cookie is sent for visitors that never touch the session, and migrate() issues a new id while preserving data (invalidate() additionally wipes the data). The flash bag lives inside the session itself, explicit start() calls are unnecessary because access triggers the start, and services should inject RequestStack and call getSession() rather than a 'session' service.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
+
+??? question "98. Which statements about AbstractController are correct? (select all that apply)"
+    **✅ Extending AbstractController is optional — any callable can serve as a controller ; Its helpers get their services from a lazy service locator whose entries are listed in getSubscribedServices() ; Its helper methods like render() and redirectToRoute() are protected, usable only from within the controller**
+
+    AbstractController is optional convenience built on the service subscriber pattern: a lazy locator, scoped to the services declared in getSubscribedServices(), backs its protected helper methods. The container it holds is that limited locator, not the full application container, and autowiring works for any controller registered as a service — your own dependencies should be constructor-injected regardless of the base class.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
+
+??? question "99. Which statements about argument value resolvers are correct? (select all that apply)"
+    **✅ ValueResolverInterface::resolve() returns an iterable, and a resolver declines an argument by yielding nothing ; Attribute resolvers like #[MapRequestPayload] and #[CurrentUser] are targeted: they act only when their attribute is present**
+
+    The ArgumentResolver walks the ordered resolver chain and the first resolver that yields a value wins — resolvers opt out by yielding nothing, which replaces the old supports() mechanism removed with ArgumentValueResolverInterface. The targeted resolvers (MapRequestPayload, MapQueryParameter, MapUploadedFile, CurrentUser) activate only when their attribute decorates the argument; results are never merged across resolvers.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
+
+??? question "100. Which statements about controller responses are true? (select all that apply)"
+    **✅ An action must return a Response; any other return value needs a kernel.view listener to convert it ; A StreamedResponse generates its content at send time, making it suitable for large outputs ; Response::HTTP_* constants (e.g. Response::HTTP_NOT_FOUND) are the idiomatic way to set status codes**
+
+    Controllers must produce a Response object — a non-Response return value triggers kernel.view, and without a listener handling it an error occurs, so arrays are not auto-serialized by core. StreamedResponse executes its callback when the response is sent, which is why headers cannot be changed once streaming starts, and Response::HTTP_* constants keep status codes readable and typo-free.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
+
+??? question "101. For an invokable controller (a class with __invoke()), what value does the router store as _controller?"
+    **✅ The class name only, e.g. App\Controller\ShowOrder**
+
+    Symfony recognizes an invokable controller by its bare class name; it never appends "::__invoke" the way it does for a named action method. Writing ClassName::__invoke as the _controller value is a common but incorrect habit carried over from classic controllers.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#invokable-controllers)
 
 ---
 

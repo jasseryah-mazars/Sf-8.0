@@ -1,7 +1,7 @@
 # Chapter Exam — Routing
 
 !!! abstract "How to use"
-    87 questions spanning every subchapter of **Routing**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    93 questions spanning every subchapter of **Routing**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -934,313 +934,401 @@ Full theory: [Routing](../routing/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 
-**Q66.** Which loader reads #[Route] attributes into the RouteCollection in a Symfony 8 app?  <small>_(hard · internals)_</small>
+**Q66.** Which of the following statements are true about route parameter requirements? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. The inline syntax {id<\d+>} is exactly equivalent to requirements: {id: '\d+'}
+- B. A URL that violates a requirement simply fails to match that route (typically ending in a 404), never a 400 from routing
+- C. A placeholder without a requirement matches [^/]+ by default, so it cannot span path segments
+- D. Requirement regexes must be anchored manually with ^ and $ to work
+- E. A failing requirement makes the router return a 400 Bad Request
+
+??? success "Answer Q66"
+    **A, B, C**
+
+    Inline <...> is syntactic sugar for a requirements entry, and because the requirement is compiled into the route regex a violating value just does not match — matching moves on and usually ends in a 404. The default token pattern is [^/]+ (use .+ to cross slashes). Requirements are implicitly anchored, so adding ^/$ is wrong, and routing never produces a 400 for a bad parameter.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
+
+**Q67.** Which of the following statements are true about HTTP method matching in Symfony routing? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. A request whose path matches but whose verb is not allowed gets a 405 Method Not Allowed with an Allow header
+- B. A route declaring methods: ['GET'] also matches HEAD requests automatically
+- C. A scheme mismatch on an https-only route also returns a 405
+- D. A form's _method field overrides the HTTP method for routing by default, with no configuration
+
+??? success "Answer Q67"
+    **A, B**
+
+    When host and path match but the verb does not, the matcher throws MethodNotAllowedException, surfaced as a 405 listing the allowed verbs, and GET routes match HEAD because HttpKernel serves HEAD as a bodyless GET. A scheme mismatch is handled differently — the redirectable matcher redirects to the correct scheme — and the _method override only works after calling Request::enableHttpMethodParameterOverride().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
+
+**Q68.** Which of the following statements are true about localized routes and locale guessing? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. A #[Route] whose path is a locale => path map expands into one route per locale, each carrying the matching _locale default
+- B. Symfony does not guess the locale from the Accept-Language header by default; that behaviour is opt-in
+- C. framework.default_locale takes precedence over a _locale parameter matched in the URL
+- D. generateUrl() always uses the default locale unless you rebuild the router
+
+??? success "Answer Q68"
+    **A, B**
+
+    Localized path arrays are expanded at load time into per-locale routes with a _locale default, and Accept-Language parsing requires opting in via set_locale_from_accept_language (or reading getPreferredLanguage() yourself). The precedence is matched _locale first, then the sticky session locale, then default_locale, and generation reuses the current request's locale unless you pass _locale explicitly.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
+
+**Q69.** Which loader reads #[Route] attributes into the RouteCollection in a Symfony 8 app?  <small>_(hard · internals)_</small>
 
 - A. AttributeRouteControllerLoader (built on AttributeClassLoader)
 - B. YamlFileLoader
 - C. AnnotationClassLoader (removed in Symfony 8)
 - D. XmlFileLoader
 
-??? success "Answer Q66"
+??? success "Answer Q69"
     **A**
 
     Attribute routes are read by AttributeClassLoader, wrapped by the framework's AttributeRouteControllerLoader. YamlFileLoader/XmlFileLoader handle those formats, and AnnotationClassLoader no longer exists in Symfony 8. All loaders implement LoaderInterface and are orchestrated by a DelegatingLoader.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
-**Q67.** Two routes share the path shape /blog/{x}: blog_show has {slug} (default [^/]+) declared first, blog_paged has {page<\\d+>} declared second. Which route matches /blog/42?  <small>_(hard · code)_</small>
+**Q70.** Two routes share the path shape /blog/{x}: blog_show has {slug} (default [^/]+) declared first, blog_paged has {page<\\d+>} declared second. Which route matches /blog/42?  <small>_(hard · code)_</small>
 
 - A. blog_show — the first route matches /42 as a slug, shadowing the numeric route
 - B. blog_paged — the numeric requirement always wins
 - C. Neither — the ambiguity is a 404
 - D. Both — the matcher runs both controllers
 
-??? success "Answer Q67"
+??? success "Answer Q70"
     **A**
 
     Matching is first-match-wins in declaration order. Because blog_show's {slug} defaults to [^/]+, it also matches 42, so it captures /blog/42 before the numeric route is ever tried. Declare the numeric route first to disambiguate.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 
-**Q68.** How does RouteCompiler represent /blog/{page<\d+>} in the CompiledRoute regex?  <small>_(hard · internals)_</small>
+**Q71.** How does RouteCompiler represent /blog/{page<\d+>} in the CompiledRoute regex?  <small>_(hard · internals)_</small>
 
 - A. As a named capture group, e.g. #^/blog/(?P<page>\d+)$#sD
 - B. As an unnamed group #^/blog/(\d+)$#
 - C. As two separate regexes joined at runtime
 - D. It is not compiled; the requirement is checked in the controller
 
-??? success "Answer Q68"
+??? success "Answer Q71"
     **A**
 
     RouteCompiler::compile() extracts each {name} token and substitutes it with a named capture group using its requirement (or [^/]+ by default), producing a single anchored regex. Named groups are how the matcher maps captured values back to parameter names.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
-**Q69.** In the path /{a}/{b}, which placeholder can be made optional?  <small>_(hard · trap)_</small>
+**Q72.** In the path /{a}/{b}, which placeholder can be made optional?  <small>_(hard · trap)_</small>
 
 - A. b only, because it is the trailing placeholder
 - B. a only
 - C. Both, independently
 - D. Neither
 
-??? success "Answer Q69"
+??? success "Answer Q72"
     **A**
 
     Only trailing placeholders can be optional; a gap in the middle cannot be located by the matcher. RouteCompiler emits nested optional groups from the tail, so an optional a with a required b is impossible.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 
-**Q70.** A route declares schemes: ['https'], the current context is http, and you call generateUrl() with the default ABSOLUTE_PATH. What is returned?  <small>_(hard · trap)_</small>
+**Q73.** A route declares schemes: ['https'], the current context is http, and you call generateUrl() with the default ABSOLUTE_PATH. What is returned?  <small>_(hard · trap)_</small>
 
 - A. An absolute https URL — generation is upgraded because a path cannot switch scheme
 - B. A root-relative path /... as requested
 - C. An InvalidParameterException
 - D. An http absolute URL
 
-??? success "Answer Q70"
+??? success "Answer Q73"
     **A**
 
     When the target route's scheme differs from the context, the generator must emit an absolute URL with the correct (https) scheme, overriding the requested ABSOLUTE_PATH — a path-only URL could not change scheme.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
-**Q71.** A POST to /blog when the route is defined as /blog/ yields?  <small>_(hard · trap)_</small>
+**Q74.** A POST to /blog when the route is defined as /blog/ yields?  <small>_(hard · trap)_</small>
 
 - A. 405 Method Not Allowed
 - B. 301 redirect
 - C. 200 OK
 - D. 308 redirect
 
-??? success "Answer Q71"
+??? success "Answer Q74"
     **A**
 
     Redirecting a POST would alter the method, so the matcher returns 405 rather than a trailing-slash redirect. The auto-redirect is GET/HEAD only.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes)
 
-**Q72.** For a RedirectController route, where is the 30x response actually produced?  <small>_(hard · internals)_</small>
+**Q75.** For a RedirectController route, where is the 30x response actually produced?  <small>_(hard · internals)_</small>
 
 - A. In the controller — it returns a RedirectResponse like any normal action
 - B. In the matcher, which emits the redirect before any controller runs
 - C. In RouterListener during kernel.request
 - D. In the HttpKernel before routing
 
-??? success "Answer Q72"
+??? success "Answer Q75"
     **A**
 
     A redirect route is an ordinary route whose _controller is RedirectController; the kernel runs it and it returns a RedirectResponse. The matcher only produces redirects itself in the special trailing-slash / scheme cases.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
 
-**Q73.** Why is permanent: true (301) a poor choice for a temporary or A/B redirect?  <small>_(hard · trap)_</small>
+**Q76.** Why is permanent: true (301) a poor choice for a temporary or A/B redirect?  <small>_(hard · trap)_</small>
 
 - A. Browsers cache 301s aggressively, so you cannot easily change the target later
 - B. 301 is not a valid redirect status
 - C. 301 strips query parameters automatically
 - D. 301 requires HTTPS
 
-??? success "Answer Q73"
+??? success "Answer Q76"
     **A**
 
     A 301 tells clients the move is permanent, so browsers cache it hard and may not re-request the old URL. Use 302 (the default) while a target is still in flux.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
-**Q74.** Which component copies the matcher's output parameters into $request->attributes?  <small>_(hard · internals)_</small>
+**Q77.** Which component copies the matcher's output parameters into $request->attributes?  <small>_(hard · internals)_</small>
 
 - A. RouterListener, on the kernel.request event
 - B. ControllerResolver, when resolving _controller
 - C. The UrlMatcher itself writes directly to the Request
 - D. ArgumentResolver, on kernel.controller
 
-??? success "Answer Q74"
+??? success "Answer Q77"
     **A**
 
     UrlMatcher::match() returns an array (route defaults + captured placeholders + _route/_route_params); RouterListener, a kernel.request subscriber, copies each entry into the request attribute bag. ControllerResolver and ArgumentResolver then consume _controller and the args later.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
 
-**Q75.** During matching, when is the host constraint checked?  <small>_(hard · internals)_</small>
+**Q78.** During matching, when is the host constraint checked?  <small>_(hard · internals)_</small>
 
 - A. Before the path regex
 - B. After the controller runs
 - C. Only during URL generation
 - D. Never; host is informational
 
-??? success "Answer Q75"
+??? success "Answer Q78"
     **A**
 
     matchCollection() tests the compiled host regex against RequestContext::getHost() first; only if it matches does it test the path regex.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
-**Q76.** How is the host constraint stored on a CompiledRoute?  <small>_(hard · internals)_</small>
+**Q79.** How is the host constraint stored on a CompiledRoute?  <small>_(hard · internals)_</small>
 
 - A. As a second, separate regex (getHostRegex) and its own token list
 - B. Merged into the single path regex
 - C. As a plain string compared with ===
 - D. It is not compiled; the host is checked at runtime by DNS
 
-??? success "Answer Q76"
+??? success "Answer Q79"
     **A**
 
     RouteCompiler compiles `host` into its own regex and token list on the CompiledRoute, kept separate from the path regex, so matchCollection() can test host and path independently at negligible cost.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
-**Q77.** Why should host constraints be written in lowercase?  <small>_(hard · trap)_</small>
+**Q80.** Why should host constraints be written in lowercase?  <small>_(hard · trap)_</small>
 
 - A. The context host is normalized to lowercase, so an uppercase regex will not match
 - B. YAML requires lowercase host values
 - C. Uppercase hosts are rejected with a 400
 - D. Host matching is always case-insensitive, so it does not matter
 
-??? success "Answer Q77"
+??? success "Answer Q80"
     **A**
 
     RequestContext lowercases the incoming host. A case-sensitive constraint like Admin.Example.com would then fail against admin.example.com. Write host patterns in lowercase.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
-**Q78.** A route's condition expression evaluates to false. What is the result?  <small>_(hard · trap)_</small>
+**Q81.** A route's condition expression evaluates to false. What is the result?  <small>_(hard · trap)_</small>
 
 - A. 404 — the route is simply not matched
 - B. 403 Forbidden
 - C. 405 Method Not Allowed
 - D. The controller runs anyway
 
-??? success "Answer Q78"
+??? success "Answer Q81"
     **A**
 
     A false condition means the route does not match; matching continues and may end in a 404. It is not authorization, so it never produces a 403.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
-**Q79.** To reference service('x') in a routing condition, service x must…  <small>_(hard · internals)_</small>
+**Q82.** To reference service('x') in a routing condition, service x must…  <small>_(hard · internals)_</small>
 
 - A. Be tagged routing.condition_service (e.g. via #[AsRoutingConditionService])
 - B. Be public
 - C. Implement RouterInterface
 - D. Extend AbstractController
 
-??? success "Answer Q79"
+??? success "Answer Q82"
     **A**
 
     Only services tagged routing.condition_service are exposed to the routing expression language. Visibility/base class are irrelevant.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
-**Q80.** Which condition matches only when the request query string contains a 'preview' key?  <small>_(hard · code)_</small>
+**Q83.** Which condition matches only when the request query string contains a 'preview' key?  <small>_(hard · code)_</small>
 
 - A. condition: "request.query.has('preview')"
 - B. condition: "request.get('preview') == true"
 - C. condition: "query.preview is defined"
 - D. condition: "has('preview')"
 
-??? success "Answer Q80"
+??? success "Answer Q83"
     **A**
 
     Inside a condition, `request` is the HttpFoundation Request, so request.query.has('preview') is the idiomatic check. `query` alone is not a variable, and there is no bare has() function.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
-**Q81.** How are route conditions executed at request time?  <small>_(hard · internals)_</small>
+**Q84.** How are route conditions executed at request time?  <small>_(hard · internals)_</small>
 
 - A. As pre-compiled PHP closures baked into the dumped matcher (not runtime eval)
 - B. Via eval() of the expression string on each request
 - C. By calling a Twig template
 - D. They are evaluated once at boot and cached as booleans
 
-??? success "Answer Q81"
+??? success "Answer Q84"
     **A**
 
     The framework compiles all conditions ahead of time through ExpressionLanguage and the routing ExpressionLanguageProvider, so the dumped matcher contains compiled closures. UrlMatcher::handleRouteRequirements() runs them after host/path match — no per-request eval, and they cannot be reduced to a constant because they depend on the live request.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
-**Q82.** You tag a service #[AsRoutingConditionService(alias: 'feature_checker')]. How do you call its isEnabled() method in a condition?  <small>_(hard · config)_</small>
+**Q85.** You tag a service #[AsRoutingConditionService(alias: 'feature_checker')]. How do you call its isEnabled() method in a condition?  <small>_(hard · config)_</small>
 
 - A. condition: "service('feature_checker').isEnabled(request)"
 - B. condition: "feature_checker.isEnabled(request)"
 - C. condition: "@feature_checker.isEnabled(request)"
 - D. condition: "container.get('feature_checker').isEnabled(request)"
 
-??? success "Answer Q82"
+??? success "Answer Q85"
     **A**
 
     The alias becomes the argument to the service() function; you then call methods on the returned object and can pass request. There is no bare identifier, @ syntax or container variable in routing expressions.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 
-**Q83.** An http request hits a route restricted with schemes: ['https']. What happens?  <small>_(hard · internals)_</small>
+**Q86.** An http request hits a route restricted with schemes: ['https']. What happens?  <small>_(hard · internals)_</small>
 
 - A. It is redirected to the https URL
 - B. 405 Method Not Allowed
 - C. 403 Forbidden
 - D. 404 Not Found
 
-??? success "Answer Q83"
+??? success "Answer Q86"
     **A**
 
     The RedirectableUrlMatcher redirects a scheme mismatch to the correct scheme rather than rejecting it — contrast with a wrong method, which is a 405.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-the-http-scheme)
 
-**Q84.** For a form's _method field to influence which route matches, you must…  <small>_(hard · trap)_</small>
+**Q87.** For a form's _method field to influence which route matches, you must…  <small>_(hard · trap)_</small>
 
 - A. Call Request::enableHttpMethodParameterOverride()
 - B. Add methods: ['_method']
 - C. Do nothing — it is enabled by default
 - D. Set framework.http_method_override: false
 
-??? success "Answer Q84"
+??? success "Answer Q87"
     **A**
 
     Method override is opt-in; once enabled, getMethod() returns the overridden verb that the matcher uses. It is not on by default.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
-**Q85.** Does Symfony guess the user's locale from the Accept-Language header by default?  <small>_(hard · trap)_</small>
+**Q88.** Does Symfony guess the user's locale from the Accept-Language header by default?  <small>_(hard · trap)_</small>
 
 - A. No — you must enable set_locale_from_accept_language or do it manually
 - B. Yes, always
 - C. Only for API routes
 - D. Only in the dev environment
 
-??? success "Answer Q85"
+??? success "Answer Q88"
     **A**
 
     Locale precedence is a matched _locale, then the sticky session locale, then default_locale; Accept-Language is opt-in. To honour it, read Request::getPreferredLanguage($available) or enable the option.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
-**Q86.** Which two listeners cooperate to apply and propagate the request locale?  <small>_(hard · internals)_</small>
+**Q89.** Which two listeners cooperate to apply and propagate the request locale?  <small>_(hard · internals)_</small>
 
 - A. LocaleListener (sets Request locale from _locale) and LocaleAwareListener (propagates it to locale-aware services)
 - B. RouterListener and ControllerListener
 - C. TranslatorListener and SessionListener
 - D. FirewallListener and LocaleListener
 
-??? success "Answer Q86"
+??? success "Answer Q89"
     **A**
 
     LocaleListener reads _locale on kernel.request and calls setLocale(); LocaleAwareListener then propagates the locale to locale-aware services such as the translator. RouterListener only copies matcher output into attributes.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
-**Q87.** router:match /blog/hello reports no match, but the page works for real GET requests. What is the likely cause?  <small>_(hard · debug)_</small>
+**Q90.** router:match /blog/hello reports no match, but the page works for real GET requests. What is the likely cause?  <small>_(hard · debug)_</small>
 
 - A. You omitted --method=GET, so the default context did not reproduce the real request
 - B. The compiled cache is corrupt
 - C. router:match cannot test parameterized paths
 - D. The route is missing from url_generating_routes.php
 
-??? success "Answer Q87"
+??? success "Answer Q90"
     **A**
 
     router:match builds a RequestContext from the options you pass; without --method/--host/--scheme it may not reproduce the real request and can report a no-match (or a method rejection) that does not happen in production. Pass the exact conditions.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
+
+**Q91.** Which of the following statements are true about URL generation? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. The default reference type is ABSOLUTE_PATH, producing a root-relative path like /blog/42
+- B. Parameters that do not correspond to a route placeholder are appended to the generated URL as a query string
+- C. The reference-type constants (ABSOLUTE_URL, NETWORK_PATH, ...) are defined on UrlGeneratorInterface
+- D. The Twig functions path() and url() are interchangeable — both emit absolute URLs
+- E. In a console command, ABSOLUTE_URL automatically picks up the production host without any configuration
+
+??? success "Answer Q91"
+    **A, B, C**
+
+    generateUrl() defaults to ABSOLUTE_PATH, left-over (non-placeholder) parameters become the ?key=value query string, and the constants live on UrlGeneratorInterface. In Twig, path() maps to ABSOLUTE_PATH while url() maps to ABSOLUTE_URL, and in CLI there is no request, so absolute URLs fall back to http://localhost unless framework.router.default_uri is configured.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
+
+**Q92.** Which of the following statements are true about the special underscore routing attributes? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. _route and _route_params are read-only outputs injected by the matcher into the request attributes
+- B. _format sets the request format via Request::setRequestFormat(), influencing the response Content-Type
+- C. _fragment only takes effect during URL generation (appended as #fragment); it plays no role in matching
+- D. Setting _route in a route's defaults changes what $request->attributes->get('_route') returns
+- E. stateless: true hard-blocks all session usage in production
+
+??? success "Answer Q92"
+    **A, B, C**
+
+    The matcher injects _route/_route_params and RouterListener copies them into request attributes for you to read, _format drives content negotiation and the default Content-Type, and _fragment is honoured only by the generator. You never set _route yourself, and stateless: true is an assertion that raises an UnexpectedSessionUsageException warning in debug — not a hard production block.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
+
+**Q93.** Which of the following statements are true about host (domain) matching? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. A host placeholder like {tenant} matches [^.]+ by default — a single label that cannot contain dots
+- B. The host regex is tested before the path regex when matching a route
+- C. Generating a URL for a route on a different host produces an absolute (or network) URL automatically
+- D. Host placeholders cannot have requirements or defaults; only path placeholders support them
+- E. A path-only (relative) URL can switch subdomains as long as the route declares a host
+
+??? success "Answer Q93"
+    **A, B, C**
+
+    Host tokens use the dot as separator, so they default to [^.]+ instead of [^/]+, and matchCollection() checks the compiled host regex before even trying the path. Because a path-only URL cannot change host, the generator upgrades cross-host links to absolute/network URLs. Host placeholders obey the same requirements/defaults rules as path placeholders — that is how a missing subdomain can default to www.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 ---
 

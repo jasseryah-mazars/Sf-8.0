@@ -7,6 +7,7 @@ for the final days. Regenerate: python tools/gen_revision_sheets.py
 """
 from __future__ import annotations
 import os, re, glob
+from generated_blocks import carry_over
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCS = os.path.join(ROOT, "docs")
@@ -44,6 +45,10 @@ for area, label in AREAS.items():
         # including the French files duplicated every chapter's content).
         if os.path.basename(f) not in ("index.md", "index.fr.md")
         and not f.endswith(".fr.md")
+        # A topic's learning-journey files are not chapters. They carry no
+        # 'Key takeaways', so each would land in the sheet as a bare heading
+        # ("## Topic Exam — Abstract Classes") with nothing under it.
+        and not f.endswith(("-exercises.md", "-exam.md", "-flashcards.md"))
     )
     L = [f"# Revision Sheet — {label}", "",
          "Ultra-condensed, print-friendly recap of every subchapter (key takeaways +"
@@ -64,7 +69,9 @@ for area, label in AREAS.items():
             L.append("")
             L.append("**Cheat:** " + " ".join(l.strip("- ").strip() for l in lm.splitlines() if l.strip() and not l.strip().startswith('"')))
         L.append("")
-    open(os.path.join(OUT, f"{area}.md"), "w", encoding="utf-8").write("\n".join(L).rstrip()+"\n")
+    out = os.path.join(OUT, f"{area}.md")
+    text = carry_over(out, "\n".join(L).rstrip()+"\n")
+    open(out, "w", encoding="utf-8").write(text)
     print("sheet:", area)
 
 # index
@@ -77,5 +84,7 @@ idx = ["# Revision Sheets", "",
 for area, label in AREAS.items():
     idx.append(f"- [{label}]({area}.md)")
 idx += ["", "---", "", "<small>Back to [Revision Hub](../index.md)</small>"]
-open(os.path.join(OUT, "index.md"), "w", encoding="utf-8").write("\n".join(idx)+"\n")
+out = os.path.join(OUT, "index.md")
+text = carry_over(out, "\n".join(idx)+"\n")
+open(out, "w", encoding="utf-8").write(text)
 print("done: sheets index +", len(AREAS), "sheets")

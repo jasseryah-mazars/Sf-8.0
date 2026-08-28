@@ -1,7 +1,7 @@
 # Chapter Exam — Console
 
 !!! abstract "How to use"
-    66 questions spanning every subchapter of **Console**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    73 questions spanning every subchapter of **Console**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -808,143 +808,247 @@ Full theory: [Console](../console/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/verbosity.html)
 
-**Q57.** In Symfony 8 `bin/console` ends with `return static function (array $context): Application { ... };`. What consumes this returned closure?  <small>_(hard · code)_</small>
+**Q57.** Which statements about console verbosity are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. -q suppresses normal output, but the command still executes fully and returns its real exit code
+- B. $output->isDebug() returns true only at the -vvv (DEBUG) level
+- C. Verbosity is a property of the input object, read via $input->getVerbosity()
+- D. -q also forces the command into non-interactive mode, exactly like -n
+- E. -v, -vv and -vvv only change the logger's log level, not what the console prints
+
+??? success "Answer Q57"
+    **A, B**
+
+    Quiet mode silences output only — execution and the exit code are untouched — and isDebug() is the guard that matches exactly the -vvv/DEBUG level. Verbosity is a property of the output (OutputInterface constants 16 to 256), not of the input; non-interactivity is controlled separately by -n; and the verbosity flags directly govern what the console output prints.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/verbosity.html)
+
+**Q58.** Which statements about command configuration and the command lifecycle are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. configure() is called from the command's constructor, before any input is available
+- B. Putting the command name in the #[AsCommand] attribute keeps command loading lazy
+- C. interact() runs after execute() so it can ask follow-up questions about the result
+- D. initialize() is only invoked when the command runs in interactive mode
+
+??? success "Answer Q58"
+    **A, B**
+
+    configure() runs in the constructor, which is why it cannot read input, and declaring the name in #[AsCommand] lets the application know the command without instantiating it, enabling lazy loading. The lifecycle order is configure, then initialize, then interact, then execute — interact() runs before execute(), and initialize() runs on every execution regardless of interactivity.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
+
+**Q59.** Which statements about writing custom commands in Symfony 8 are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Invokable commands using __invoke() are the modern default; extending Command still works
+- B. Commands should return Command::SUCCESS (0), Command::FAILURE (1) or Command::INVALID (2)
+- C. With autoconfiguration, command classes are automatically tagged console.command
+- D. Commands must extend ContainerAwareCommand to access services
+- E. execute() may return null and the framework converts it to a success exit code
+
+??? success "Answer Q59"
+    **A, B, C**
+
+    Symfony 8 favors invokable commands built around __invoke() while the classic extends-Command style remains valid, exit statuses use the SUCCESS/FAILURE/INVALID constants (0, 1, 2), and autoconfiguration applies the console.command tag so commands are registered and loaded lazily. ContainerAwareCommand no longer exists — services are injected through the constructor — and execute() must return an int, not null.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
+
+**Q60.** Which statements about the commands available in bin/console are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Running bin/console with no command name executes the default list command
+- B. The make:* commands come from MakerBundle, not from Symfony core
+- C. cache:clear and the debug:* commands are added by FrameworkBundle, not by the standalone Console component
+- D. The completion command must be installed through a separate Composer package
+- E. help can only display documentation for built-in commands, not custom ones
+
+??? success "Answer Q60"
+    **A, B, C**
+
+    list is the default command (so a bare bin/console prints the command list), make:* generators ship with MakerBundle rather than core, and cache:clear, cache:warmup and debug:* come from FrameworkBundle on top of the component. completion is one of the commands present in every Console application without extra packages, and help works with any registered command, including custom ones.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
+
+**Q61.** Which statements about console input and output handling are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. SymfonyStyle wraps the input and output and provides styled helpers such as title(), table() and ask()
+- B. STDERR is reached through ConsoleOutputInterface::getErrorOutput(), keeping pipeable data clean on STDOUT
+- C. Output sections allow parts of the output to be updated independently while the command runs
+- D. $output->writeln() writes to STDERR by default so it never pollutes piped output
+- E. Console sections require re-running the command to refresh their content
+
+??? success "Answer Q61"
+    **A, B, C**
+
+    SymfonyStyle is constructed from the input and output and is the go-to styled UI layer; error/diagnostic text belongs on the dedicated error output obtained via ConsoleOutputInterface::getErrorOutput(); and output sections can be overwritten live and independently during a single run. writeln() targets the normal STDOUT stream, which is exactly why diagnostics should be sent to the error output instead.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/style.html)
+
+**Q62.** In Symfony 8 `bin/console` ends with `return static function (array $context): Application { ... };`. What consumes this returned closure?  <small>_(hard · code)_</small>
 
 - A. The Runtime component (loaded via vendor/autoload_runtime.php), which invokes it with $context and calls run()
 - B. PHP itself auto-executes any returned closure at end of file
 - C. The Kernel's boot() method executes it
 - D. Composer's autoloader executes it during class discovery
 
-??? success "Answer Q57"
+??? success "Answer Q62"
     **A**
 
     `require vendor/autoload_runtime.php` installs the SymfonyRuntime, which captures the closure the file returns, builds a runner, injects $context (from $_SERVER / env), invokes the closure to get the Application, and calls its run() method. PHP does not auto-run returned closures, the Kernel does not, and Composer's autoloader only maps classes to files. This inversion is what lets the same Runtime handle web and console entry points.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/runtime.html)
 
-**Q58.** Which class collects the `console.command` tags and builds the lazy command loader?  <small>_(hard · internals)_</small>
+**Q63.** Which class collects the `console.command` tags and builds the lazy command loader?  <small>_(hard · internals)_</small>
 
 - A. AddConsoleCommandPass, which builds a ContainerCommandLoader (name → service id)
 - B. ContainerBuilder::compile() instantiates each command eagerly
 - C. The Kernel's registerCommands() method scans the filesystem
 - D. CommandCompilerPass, building an ArrayCommandLoader
 
-??? success "Answer Q58"
+??? success "Answer Q63"
     **A**
 
     Symfony\\Component\\Console\\DependencyInjection\\AddConsoleCommandPass gathers every service tagged console.command and constructs a ContainerCommandLoader mapping each command name to its service id, so a command is instantiated only when its name is invoked. There is no CommandCompilerPass, commands are not instantiated eagerly at compile time, and Symfony 8 does not scan the filesystem for commands.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/commands_as_services.html)
 
-**Q59.** Why can't you read an argument value inside configure()?  <small>_(hard · trap)_</small>
+**Q64.** Why can't you read an argument value inside configure()?  <small>_(hard · trap)_</small>
 
 - A. configure() runs in the constructor, before any input is bound
 - B. configure() runs after execute(), so input is already consumed
 - C. Arguments are only available to interact()
 - D. You can — getArgument() works in configure()
 
-??? success "Answer Q59"
+??? success "Answer Q64"
     **A**
 
     configure() is invoked from the Command constructor, long before run() binds the ArgvInput to the definition, so no argument values exist yet — configure() may only declare structure (name, arguments, options, help). Reading input there is a classic mistake; to act on values use initialize()/interact()/execute().
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
 
-**Q60.** In an invokable command, `#[Option] array $tags = []` on the __invoke() parameter produces which InputOption mode?  <small>_(hard · code)_</small>
+**Q65.** In an invokable command, `#[Option] array $tags = []` on the __invoke() parameter produces which InputOption mode?  <small>_(hard · code)_</small>
 
 - A. VALUE_IS_ARRAY (repeatable, e.g. --tags=a --tags=b), optional via the [] default
 - B. VALUE_NONE, because arrays are treated as flags
 - C. VALUE_REQUIRED with a single string value
 - D. It is rejected — arrays are only allowed for arguments
 
-??? success "Answer Q60"
+??? success "Answer Q65"
     **A**
 
     The invokable adapter maps an array-typed #[Option] to VALUE_IS_ARRAY, so the option is repeatable; the [] default makes it optional. A bool would map to VALUE_NONE, a scalar with no default to VALUE_REQUIRED. Arrays are valid for both options and (as the last) arguments.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/input.html)
 
-**Q61.** What role does InputDefinition play during a command run?  <small>_(hard · internals)_</small>
+**Q66.** What role does InputDefinition play during a command run?  <small>_(hard · internals)_</small>
 
 - A. $input->bind(definition) maps raw ArgvInput tokens to args/options; $input->validate() then throws if a REQUIRED value is missing
 - B. It renders help text only and has no effect on parsing
 - C. It executes the command after parsing
 - D. It stores the exit code after execution
 
-??? success "Answer Q61"
+??? success "Answer Q66"
     **A**
 
     InputDefinition is the ordered set of InputArguments plus the map of InputOptions. run() calls $input->bind($definition) to match raw tokens, then $input->validate() throws a Console RuntimeException if a REQUIRED argument or VALUE_REQUIRED option value is absent. It does not execute the command or hold exit codes; help rendering is a separate use of the same definition.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/input.html)
 
-**Q62.** Why can't an invokable command call `$this->getHelper('question')`?  <small>_(hard · trap)_</small>
+**Q67.** Why can't an invokable command call `$this->getHelper('question')`?  <small>_(hard · trap)_</small>
 
 - A. It does not extend Command, so it has no HelperSet accessor — inject services or use SymfonyStyle instead
 - B. getHelper() was removed in Symfony 8
 - C. Helpers only exist for progress bars
 - D. Invokable commands run without an Application
 
-??? success "Answer Q62"
+??? success "Answer Q67"
     **A**
 
     getHelper() is a protected method on the Command base class; an invokable command extends nothing, so it has no HelperSet accessor. The idiomatic solution is to type-hint SymfonyStyle in __invoke() (which wraps QuestionHelper) or inject the collaborators you need. getHelper() still exists for classic commands.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html)
 
-**Q63.** What exit code results from ConsoleCommandEvent::disableCommand()?  <small>_(hard · single)_</small>
+**Q68.** What exit code results from ConsoleCommandEvent::disableCommand()?  <small>_(hard · single)_</small>
 
 - A. 113
 - B. 0
 - C. 1
 - D. 255
 
-??? success "Answer Q63"
+??? success "Answer Q68"
     **A**
 
     Disabling the command in the COMMAND event skips execution and returns ConsoleCommandEvent::RETURN_CODE_DISABLED, which is 113 — neither SUCCESS (0), FAILURE (1), nor 255.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
 
-**Q64.** A command's execute() throws a RuntimeException. What is the event sequence?  <small>_(hard · internals)_</small>
+**Q69.** A command's execute() throws a RuntimeException. What is the event sequence?  <small>_(hard · internals)_</small>
 
 - A. COMMAND → ERROR → TERMINATE (TERMINATE still runs after ERROR)
 - B. COMMAND → TERMINATE only (ERROR is skipped for RuntimeException)
 - C. ERROR → COMMAND → TERMINATE
 - D. ERROR only; the process aborts before TERMINATE
 
-??? success "Answer Q64"
+??? success "Answer Q69"
     **A**
 
     COMMAND fires before execution; the thrown Throwable triggers ERROR (ConsoleErrorEvent, where a listener can change the exit code or swap the exception); TERMINATE always fires last, even after an error. ERROR never runs before COMMAND, and it does not suppress TERMINATE.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
 
-**Q65.** What is the correct signature of handleSignal() in Symfony 8's SignalableCommandInterface?  <small>_(hard · code)_</small>
+**Q70.** What is the correct signature of handleSignal() in Symfony 8's SignalableCommandInterface?  <small>_(hard · code)_</small>
 
 - A. handleSignal(int $signal, int|false $previousExitCode = 0): int|false
 - B. handleSignal(Signal $signal): void
 - C. handleSignal(int $signal): bool
 - D. onSignal(int $signal, OutputInterface $output): int
 
-??? success "Answer Q65"
+??? success "Answer Q70"
     **A**
 
     handleSignal receives the signal number and the previous exit code, returning an int to set the exit code or false to let the process continue running. The method is named handleSignal (not onSignal), takes an int signal (not a Signal object), and returns int|false rather than a plain bool/void.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
 
-**Q66.** A command returns 300 as its exit code. What does the process actually exit with?  <small>_(hard · scenario)_</small>
+**Q71.** A command returns 300 as its exit code. What does the process actually exit with?  <small>_(hard · scenario)_</small>
 
 - A. 44 — exit codes are clamped to 0–255 via % 256 (300 % 256 = 44)
 - B. 300 — Symfony passes it through unchanged
 - C. 255 — anything above 255 becomes 255
 - D. 1 — out-of-range codes fall back to FAILURE
 
-??? success "Answer Q66"
+??? success "Answer Q71"
     **A**
 
     POSIX exit codes are a single byte (0–255), so Symfony normalises out-of-range values with % 256; 300 % 256 = 44. It is not passed through, not capped at 255, and not coerced to FAILURE. By convention a signal-terminated process exits with 128 + signalNumber.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
+
+**Q72.** Which statements about console arguments and options are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. Arguments are positional, while options are named and may define a one-letter shortcut
+- B. An option defined with InputOption::VALUE_NONE acts as a flag: it accepts no value and has no default
+- C. InputOption::VALUE_NEGATABLE makes the option also accept a --no-* variant
+- D. Options are positional and must be passed in the order they were defined
+- E. An InputArgument::IS_ARRAY argument can be followed by additional arguments in the definition
+
+??? success "Answer Q72"
+    **A, B, C**
+
+    Arguments are bound by position while options are named (with optional -x shortcuts) and can appear anywhere on the command line, so options are never positional. VALUE_NONE options are pure presence flags with no value or default, and VALUE_NEGATABLE (16) adds the negated --no-* form. An IS_ARRAY argument swallows all remaining input, so it must be the last argument defined.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/input.html)
+
+**Q73.** Which statements about console events and exit codes are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. The TERMINATE event is dispatched whether the command succeeds or throws
+- B. Calling disableCommand() in a COMMAND event listener skips execution and yields exit code 113
+- C. A ConsoleErrorEvent listener can replace the throwable or set a custom exit code
+- D. The ERROR event is dispatched on every command run, right before TERMINATE
+- E. Exit codes returned by commands can be any integer and are passed to the shell unchanged
+
+??? success "Answer Q73"
+    **A, B, C**
+
+    ConsoleTerminateEvent always runs, after success and after errors alike, and ConsoleErrorEvent listeners may swap the throwable or call setExitCode(). disableCommand() short-circuits execution with ConsoleCommandEvent::RETURN_CODE_DISABLED (113). The ERROR event fires only when a Throwable is thrown, and exit codes are clamped to the 0-255 range before reaching the shell.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
 

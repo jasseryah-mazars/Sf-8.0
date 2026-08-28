@@ -1,6 +1,6 @@
 # Flashcards — Routing
 
-87 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+93 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -630,6 +630,48 @@
     The profiler's Routing panel shows the matched _route and its parameters for the current request, so you do not need dump() calls to find them.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#debugging-routes)
+
+??? question "88. Which of the following statements are true about route parameter requirements? (select all that apply)"
+    **✅ The inline syntax {id<\d+>} is exactly equivalent to requirements: {id: '\d+'} ; A URL that violates a requirement simply fails to match that route (typically ending in a 404), never a 400 from routing ; A placeholder without a requirement matches [^/]+ by default, so it cannot span path segments**
+
+    Inline <...> is syntactic sugar for a requirements entry, and because the requirement is compiled into the route regex a violating value just does not match — matching moves on and usually ends in a 404. The default token pattern is [^/]+ (use .+ to cross slashes). Requirements are implicitly anchored, so adding ^/$ is wrong, and routing never produces a 400 for a bad parameter.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#parameters-validation)
+
+??? question "89. Which of the following statements are true about HTTP method matching in Symfony routing? (select all that apply)"
+    **✅ A request whose path matches but whose verb is not allowed gets a 405 Method Not Allowed with an Allow header ; A route declaring methods: ['GET'] also matches HEAD requests automatically**
+
+    When host and path match but the verb does not, the matcher throws MethodNotAllowedException, surfaced as a 405 listing the allowed verbs, and GET routes match HEAD because HttpKernel serves HEAD as a bodyless GET. A scheme mismatch is handled differently — the redirectable matcher redirects to the correct scheme — and the _method override only works after calling Request::enableHttpMethodParameterOverride().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
+
+??? question "90. Which of the following statements are true about URL generation? (select all that apply)"
+    **✅ The default reference type is ABSOLUTE_PATH, producing a root-relative path like /blog/42 ; Parameters that do not correspond to a route placeholder are appended to the generated URL as a query string ; The reference-type constants (ABSOLUTE_URL, NETWORK_PATH, ...) are defined on UrlGeneratorInterface**
+
+    generateUrl() defaults to ABSOLUTE_PATH, left-over (non-placeholder) parameters become the ?key=value query string, and the constants live on UrlGeneratorInterface. In Twig, path() maps to ABSOLUTE_PATH while url() maps to ABSOLUTE_URL, and in CLI there is no request, so absolute URLs fall back to http://localhost unless framework.router.default_uri is configured.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
+
+??? question "91. Which of the following statements are true about the special underscore routing attributes? (select all that apply)"
+    **✅ _route and _route_params are read-only outputs injected by the matcher into the request attributes ; _format sets the request format via Request::setRequestFormat(), influencing the response Content-Type ; _fragment only takes effect during URL generation (appended as #fragment); it plays no role in matching**
+
+    The matcher injects _route/_route_params and RouterListener copies them into request attributes for you to read, _format drives content negotiation and the default Content-Type, and _fragment is honoured only by the generator. You never set _route yourself, and stateless: true is an assertion that raises an UnexpectedSessionUsageException warning in debug — not a hard production block.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
+
+??? question "92. Which of the following statements are true about localized routes and locale guessing? (select all that apply)"
+    **✅ A #[Route] whose path is a locale => path map expands into one route per locale, each carrying the matching _locale default ; Symfony does not guess the locale from the Accept-Language header by default; that behaviour is opt-in**
+
+    Localized path arrays are expanded at load time into per-locale routes with a _locale default, and Accept-Language parsing requires opting in via set_locale_from_accept_language (or reading getPreferredLanguage() yourself). The precedence is matched _locale first, then the sticky session locale, then default_locale, and generation reuses the current request's locale unless you pass _locale explicitly.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
+
+??? question "93. Which of the following statements are true about host (domain) matching? (select all that apply)"
+    **✅ A host placeholder like {tenant} matches [^.]+ by default — a single label that cannot contain dots ; The host regex is tested before the path regex when matching a route ; Generating a URL for a route on a different host produces an absolute (or network) URL automatically**
+
+    Host tokens use the dot as separator, so they default to [^.]+ instead of [^/]+, and matchCollection() checks the compiled host regex before even trying the path. Because a path-only URL cannot change host, the generator upgrades cross-host links to absolute/network URLs. Host placeholders obey the same requirements/defaults rules as path placeholders — that is how a missing subdomain can default to www.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 
 ---
 

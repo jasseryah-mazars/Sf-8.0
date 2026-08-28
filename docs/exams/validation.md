@@ -1,7 +1,7 @@
 # Chapter Exam — Data Validation
 
 !!! abstract "How to use"
-    74 questions spanning every subchapter of **Data Validation**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    80 questions spanning every subchapter of **Data Validation**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -875,49 +875,94 @@ What does $v->getMessage() return here?
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Valid.html)
 
-**Q57.** You call $validator->validate(null). What happens?  <small>_(hard · trap)_</small>
+**Q57.** Which of the following statements are true about built-in validation constraints? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. NotBlank fails on an empty string, but NotNull lets an empty string pass because it only rejects null
+- B. Email and Url pass on an empty/null value, so they must be stacked with NotBlank when empty must be rejected
+- C. A nested object is only cascaded into when its property carries #[Assert\Valid]
+- D. NotNull also rejects empty strings and empty arrays, exactly like NotBlank
+- E. Email fails on null values, so combining it with NotBlank is redundant
+
+??? success "Answer Q57"
+    **A, B, C**
+
+    NotBlank rejects '', whitespace-only strings, empty arrays and null, while NotNull only rejects null — so '' passes NotNull. Format constraints like Email and Url deliberately pass on empty/null (stack NotBlank to require a value), and nested objects are skipped entirely unless the property has Assert\Valid, even if the nested class defines its own constraints.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/NotBlank.html)
+
+**Q58.** Which statements about validation groups are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Constraints declared without an explicit groups option belong to the Default group
+- B. Validating with a custom group excludes the Default group unless Default is listed as well
+- C. For a class without a group sequence, the Default group and the {ClassName} group are equivalent
+- D. Passing any custom group always runs the Default group constraints in addition
+- E. Group names are case-insensitive, so 'default' and 'Default' refer to the same group
+
+??? success "Answer Q58"
+    **A, B, C**
+
+    Unnamed constraints all land in Default, and validate($object, null, ['Registration']) runs only that group — Default must be listed explicitly to be included too. Without a group sequence, the short class-name group is just an alias of Default. Group names are case-sensitive strings, so 'default' is not the Default group.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/groups.html)
+
+**Q59.** Which statements about validating objects with ValidatorInterface are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. validate() returns a ConstraintViolationListInterface and never throws on validation failure
+- B. validatePropertyValue() validates a supplied value against a property's constraints without touching the object
+- C. validate() returns true when the object is valid and false otherwise
+- D. validate() automatically throws a ValidationFailedException when violations are found
+- E. validateProperty() requires you to pass the value to check as an explicit argument
+
+??? success "Answer Q59"
+    **A, B**
+
+    validate() always returns a violation list — you check count() to know whether the object is valid; it neither returns a boolean nor throws on failure. validatePropertyValue() tests an arbitrary supplied value against a property's constraints, whereas validateProperty() reads the object's current value, so no explicit value argument is passed to it.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
+
+**Q60.** You call $validator->validate(null). What happens?  <small>_(hard · trap)_</small>
 
 - A. You get back an empty ConstraintViolationListInterface — no error, no TypeError
 - B. A TypeError, because null is not an object
 - C. A ValidationFailedException is thrown
 - D. It returns null
 
-??? success "Answer Q57"
+??? success "Answer Q60"
     **A**
 
     Passing null is legal: the value is wrapped in a node, no class metadata is found, and an empty violation list comes back. Validation is values against constraints, and a bare null carries none. The trap is that a null object silently passes when you expected a required value.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
 
-**Q58.** A class has a #[Assert\NotBlank] attribute on $name, and a YAML mapping file adds Length to the same $name. Which constraints apply?  <small>_(hard · internals)_</small>
+**Q61.** A class has a #[Assert\NotBlank] attribute on $name, and a YAML mapping file adds Length to the same $name. Which constraints apply?  <small>_(hard · internals)_</small>
 
 - A. Both — all enabled loaders are merged; attributes do not override YAML, the constraints accumulate
 - B. Only the attribute; attributes take precedence
 - C. Only the YAML; file mapping wins
 - D. A MappingException is thrown for the conflict
 
-??? success "Answer Q58"
+??? success "Answer Q61"
     **A**
 
     LazyLoadingMetadataFactory merges every active loader's constraints for a class, so attribute and YAML constraints add up rather than one silently overriding the other.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
 
-**Q59.** You have an indexed array of email strings and place #[Assert\Collection([...])] on it. Why is that wrong?  <small>_(hard · trap)_</small>
+**Q62.** You have an indexed array of email strings and place #[Assert\Collection([...])] on it. Why is that wrong?  <small>_(hard · trap)_</small>
 
 - A. Collection validates the KEYS of an associative array; to validate every element of an indexed array use All
 - B. Nothing is wrong; Collection validates each element
 - C. Collection only works on objects
 - D. You must also add Valid
 
-??? success "Answer Q59"
+??? success "Answer Q62"
     **A**
 
     Collection maps per-key constraints for associative arrays (with Required/Optional wrappers), whereas All applies constraints to every element of an indexed collection. They are not interchangeable.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/All.html)
 
-**Q60.** Given:
+**Q63.** Given:
 ```php
 #[Assert\When(
     expression: 'this.getType() === "premium"',
@@ -933,112 +978,112 @@ For a non-premium object with $vatNumber = null, what happens?
 - C. A syntax error; When cannot wrap NotBlank
 - D. The expression is ignored for null values
 
-??? success "Answer Q60"
+??? success "Answer Q63"
     **A**
 
     When applies its inner constraints only if the ExpressionLanguage expression evaluates to true. Here getType() is not 'premium', so NotBlank is skipped and null passes.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/When.html)
 
-**Q61.** #[Assert\Choice(choices: ['a','b','c'])] is placed on an array property $roles, and elements outside the list are NOT rejected. Why?  <small>_(hard · trap)_</small>
+**Q64.** #[Assert\Choice(choices: ['a','b','c'])] is placed on an array property $roles, and elements outside the list are NOT rejected. Why?  <small>_(hard · trap)_</small>
 
 - A. Choice validates the whole value as one choice unless multiple: true is set
 - B. Choice never works on arrays
 - C. You must use All instead of Choice
 - D. The choices array is malformed
 
-??? success "Answer Q61"
+??? success "Answer Q64"
     **A**
 
     Without multiple: true, Choice checks that the value itself is one of the allowed choices. Setting multiple: true validates each element of the array (with optional min/max counts).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Choice.html)
 
-**Q62.** You place a property-target-only constraint at class scope. What happens?  <small>_(hard · trap)_</small>
+**Q65.** You place a property-target-only constraint at class scope. What happens?  <small>_(hard · trap)_</small>
 
 - A. A ConstraintDefinitionException is thrown — its getTargets() does not allow CLASS_CONSTRAINT
 - B. It silently validates the first property
 - C. It validates every property
 - D. Nothing happens; it is ignored
 
-??? success "Answer Q62"
+??? success "Answer Q65"
     **A**
 
     A class-scope constraint must target the class (getTargets() returns CLASS_CONSTRAINT). Placing a property-target constraint at class scope raises a ConstraintDefinitionException.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
 
-**Q63.** When a #[Assert\Valid] property is cascaded, which validation group is used for the nested object?  <small>_(hard · internals)_</small>
+**Q66.** When a #[Assert\Valid] property is cascaded, which validation group is used for the nested object?  <small>_(hard · internals)_</small>
 
 - A. The current group being validated is passed down to the nested object
 - B. Always the nested object's own Default group
 - C. All groups defined on the nested object
 - D. No group; cascading disables groups
 
-??? success "Answer Q63"
+??? success "Answer Q66"
     **A**
 
     Cascading passes the current group down. A custom group propagates as-is, so a nested object only validates its custom-group constraints if that group actually reaches it. Valid never changes groups.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/groups.html)
 
-**Q64.** For a class that defines a GroupSequence, validating the 'Default' group will…  <small>_(hard · internals)_</small>
+**Q67.** For a class that defines a GroupSequence, validating the 'Default' group will…  <small>_(hard · internals)_</small>
 
 - A. Trigger the group sequence (stepwise, stop on first failing group)
 - B. Run every constraint flat, ignoring the sequence
 - C. Run no constraints at all
 - D. Throw an exception
 
-??? success "Answer Q64"
+??? success "Answer Q67"
     **A**
 
     On a sequenced class, the special Default group is remapped to the sequence. To run the same constraints flat (bypassing the sequence), validate the {ClassName} group instead.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 
-**Q65.** A parent cascades into a child with #[Assert\Valid] and validate() is called with the Default group. The child has a constraint only in a custom 'strict' group. Does it run?  <small>_(hard · trap)_</small>
+**Q68.** A parent cascades into a child with #[Assert\Valid] and validate() is called with the Default group. The child has a constraint only in a custom 'strict' group. Does it run?  <small>_(hard · trap)_</small>
 
 - A. No — only the Default group reaches the child, so its 'strict'-only constraint is skipped
 - B. Yes — Valid runs all of the child's groups
 - C. Yes — custom groups always run on cascade
 - D. Only if the child defines a group sequence
 
-??? success "Answer Q65"
+??? success "Answer Q68"
     **A**
 
     The cascaded group is the current one (Default). A child's custom-group constraint runs only if that custom group actually propagates to it.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/groups.html)
 
-**Q66.** Inside a class's #[Assert\GroupSequence], how do you reference the class's own basic constraints?  <small>_(hard · trap)_</small>
+**Q69.** Inside a class's #[Assert\GroupSequence], how do you reference the class's own basic constraints?  <small>_(hard · trap)_</small>
 
 - A. Use the short class-name group (e.g. 'User')
 - B. Use 'Default'
 - C. Use 'self'
 - D. Use 'Basic'
 
-??? success "Answer Q66"
+??? success "Answer Q69"
     **A**
 
     Referencing 'Default' inside its own sequence would loop, because Default is remapped to the sequence. Use the {ClassName} group to mean the class's Default-group constraints run flat.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 
-**Q67.** A class defines #[Assert\GroupSequence(['User','Strong'])]. You call validate($user, groups: ['User']). What runs?  <small>_(hard · trap)_</small>
+**Q70.** A class defines #[Assert\GroupSequence(['User','Strong'])]. You call validate($user, groups: ['User']). What runs?  <small>_(hard · trap)_</small>
 
 - A. The class's Default-group constraints flat, WITHOUT the sequence (bypassing stop-on-first-fail)
 - B. The full sequence, stopping on the first failing group
 - C. Nothing, because 'User' is remapped to the sequence
 - D. Only the 'Strong' group
 
-??? success "Answer Q67"
+??? success "Answer Q70"
     **A**
 
     Validating the {ClassName} group ('User') runs the class's Default constraints flat, bypassing the sequence. Only validating 'Default' triggers the sequence.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 
-**Q68.** Given:
+**Q71.** Given:
 ```php
 #[Assert\GroupSequence(['Login', 'Strict'])]
 class Login {
@@ -1056,96 +1101,141 @@ Which violations are returned?
 - C. Only the Email violation
 - D. None; the sequence stops immediately
 
-??? success "Answer Q68"
+??? success "Answer Q71"
     **A**
 
     Step 1 is 'Login' (the class's Default constraints). Both NotBlank checks fail, so the sequence halts before the 'Strict' step and the Email check on $email2 is skipped.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
 
-**Q69.** A #[Assert\Callback(groups: ['checkout'])] never fires during a plain validate($obj). Why, and does it join sequences?  <small>_(hard · internals)_</small>
+**Q72.** A #[Assert\Callback(groups: ['checkout'])] never fires during a plain validate($obj). Why, and does it join sequences?  <small>_(hard · internals)_</small>
 
 - A. It runs only when the 'checkout' group is validated; being class-scoped, it also participates in group sequences like any constraint
 - B. Callbacks ignore groups; the attribute is malformed
 - C. Callbacks can never run inside groups
 - D. It runs only in the Default group regardless of the option
 
-??? success "Answer Q69"
+??? success "Answer Q72"
     **A**
 
     Callback honours its groups option (default Default). A non-Default callback runs only when that group is validated, and it participates in group sequences exactly like any other constraint.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Callback.html)
 
-**Q70.** What does #[HasNamedArguments] do on a custom Constraint constructor?  <small>_(hard · internals)_</small>
+**Q73.** What does #[HasNamedArguments] do on a custom Constraint constructor?  <small>_(hard · internals)_</small>
 
 - A. Passes attribute arguments as named constructor arguments (typed options)
 - B. Marks the constraint as repeatable
 - C. Automatically registers the validator service
 - D. Enables group sequences for the constraint
 
-??? success "Answer Q70"
+??? success "Answer Q73"
     **A**
 
     #[HasNamedArguments] (Symfony\\Component\\Validator\\Attribute) opts into typed, named-argument construction instead of the legacy options-array style; remember to forward $groups and $payload to parent::__construct().
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 
-**Q71.** How is a ConstraintValidator subclass wired so you can inject dependencies (e.g. a repository) into it?  <small>_(hard · internals)_</small>
+**Q74.** How is a ConstraintValidator subclass wired so you can inject dependencies (e.g. a repository) into it?  <small>_(hard · internals)_</small>
 
 - A. It is autoconfigured as a service tagged validator.constraint_validator (via ConstraintValidatorInterface), so normal autowiring applies
 - B. You must register it manually in services.yaml with a factory
 - C. Validators cannot have dependencies
 - D. You register a compiler pass for each validator
 
-??? success "Answer Q71"
+??? success "Answer Q74"
     **A**
 
     Implementing ConstraintValidatorInterface (via ConstraintValidator) triggers autoconfiguration with the validator.constraint_validator tag, so validators are services and can have dependencies autowired.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 
-**Q72.** In a custom Constraint with #[HasNamedArguments], why forward $groups and $payload to parent::__construct()?  <small>_(hard · trap)_</small>
+**Q75.** In a custom Constraint with #[HasNamedArguments], why forward $groups and $payload to parent::__construct()?  <small>_(hard · trap)_</small>
 
 - A. Otherwise the constraint ignores its groups/payload, so group assignment silently stops working
 - B. It is optional decoration with no effect
 - C. It registers the validator service
 - D. It makes the constraint repeatable
 
-??? success "Answer Q72"
+??? success "Answer Q75"
     **A**
 
     The base Constraint stores groups and payload. Forgetting to forward them means the constraint always lands in Default and the payload is lost.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 
-**Q73.** A developer uses $violations[0] (works) but array_map(..., $violations) (fails). Why?  <small>_(hard · trap)_</small>
+**Q76.** A developer uses $violations[0] (works) but array_map(..., $violations) (fails). Why?  <small>_(hard · trap)_</small>
 
 - A. The list is a Countable/IteratorAggregate/ArrayAccess object, not a plain array; use foreach/count() or iterator_to_array()
 - B. The list is null when empty
 - C. array_map only works on associative arrays
 - D. Violations are stored as strings
 
-??? success "Answer Q73"
+??? success "Answer Q76"
     **A**
 
     ConstraintViolationList implements ArrayAccess (so [0] works) but is not an array. Iterate it, call count(), use findByCodes(), or convert via iterator_to_array() for array functions.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
 
-**Q74.** To make a single custom constraint usable on BOTH a property and a class, getTargets() should return…  <small>_(hard · single)_</small>
+**Q77.** To make a single custom constraint usable on BOTH a property and a class, getTargets() should return…  <small>_(hard · single)_</small>
 
 - A. [self::PROPERTY_CONSTRAINT, self::CLASS_CONSTRAINT]
 - B. self::ALL_CONSTRAINTS
 - C. self::PROPERTY_CONSTRAINT only
 - D. an empty array to allow any target
 
-??? success "Answer Q74"
+??? success "Answer Q77"
     **A**
 
     getTargets() may return a single string or an array of them. Returning both PROPERTY_CONSTRAINT and CLASS_CONSTRAINT lets the same constraint be placed on a property and on a class.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
+
+**Q78.** Which statements about #[Assert\GroupSequence] are true? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. The sequence stops at the first failing group, but all constraints inside that group still run
+- B. The sequence is triggered when validating the Default group, while validating {ClassName} bypasses it
+- C. Inside the sequence you must reference the short class-name group, never Default itself
+- D. The sequence stops at the very first failing constraint, skipping the rest of its group
+- E. All groups of the sequence always run, and violations from every group are collected
+
+??? success "Answer Q78"
+    **A, B, C**
+
+    A group sequence is fail-fast per group: every constraint of the current group runs, and only if the group succeeds does the next group start. It fires when Default is validated, whereas {ClassName} performs a flat run that bypasses it — which is also why the sequence itself must list {ClassName} instead of Default (that would recurse). Halting mid-group or always running every group are both incorrect.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/sequence_provider.html)
+
+**Q79.** Which statements about the violation builder and violations are true? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. buildViolation() records nothing until addViolation() is called on the builder
+- B. getMessage() returns the interpolated message, while getMessageTemplate() keeps the raw placeholders
+- C. atPath() appends to the current property path relative to the validated node
+- D. buildViolation() immediately adds the violation; addViolation() is optional
+- E. validate() returns a plain PHP array of violations that you inspect with count()
+
+??? success "Answer Q79"
+    **A, B, C**
+
+    The builder is fluent and lazy: setParameter(), atPath(), setCode() etc. configure the violation, and only addViolation() commits it to the context. getMessage() is the interpolated text while getMessageTemplate() preserves the raw {{ placeholders }}, and atPath() is relative — it appends to the current path rather than resetting the root. The result of validation is a ConstraintViolationListInterface object (Countable/iterable), never a plain array.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
+
+**Q80.** Which statements about the #[Assert\Callback] constraint are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. Callback is a class-level constraint: the method does not receive a property value and reads the object from $this or $context->getObject()
+- B. Errors must be added through the context (e.g. $context->buildViolation()->addViolation()); the callback's return value is ignored
+- C. Callbacks honour the groups option, so a callback in a non-Default group only runs when that group is validated
+- D. Returning false from the callback marks the object as invalid
+- E. The callback receives the value of the property it is declared next to as its first argument
+
+??? success "Answer Q80"
+    **A, B, C**
+
+    Callback targets the class, so the method inspects the whole object (via $this for instance methods or the first argument for static callbacks) and must report problems by building violations on the ExecutionContext — any returned value is discarded. Callbacks also participate fully in groups and group sequences. Returning false does nothing, and no property value is injected because it is not a property constraint.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Callback.html)
 
 ---
 

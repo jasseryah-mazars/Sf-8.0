@@ -1,6 +1,6 @@
 # Flashcards — HTTP
 
-76 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+84 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -564,6 +564,62 @@
     getContent() on an empty body returns '' (not null), but toArray() tries to JSON-decode that '' and throws JsonException. There is no silent null. Guard with a 204/empty check before decoding, e.g. if (204 === $r->getStatusCode() || '' === $r->getContent(false)) return [];.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#processing-responses)
+
+??? question "77. Which of the following statements are true about HTTP methods? (select all that apply)"
+    **✅ PUT and DELETE are idempotent but not safe ; GET and HEAD are the methods that are cacheable by default ; The _method override only applies to POST requests and is disabled by default**
+
+    Safe methods are a subset of idempotent ones: PUT/DELETE change state but repeating them yields the same result, and only GET/HEAD are cacheable by default. The _method override requires http_method_override to be enabled and only fires on POST. POST (like PATCH) is neither safe nor idempotent, and getMethod() is the override-aware effective method — getRealMethod() returns the raw one.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#identifying-a-request)
+
+??? question "78. Which of the following statements are true about HTTP status codes? (select all that apply)"
+    **✅ 307 and 308 redirects preserve the original request method and body ; A 303 See Other redirect always forces the follow-up request to use GET**
+
+    307/308 are the method-preserving redirects (unlike 301/302, which user agents may rewrite to GET), and 303 explicitly forces GET — the classic POST/redirect/GET pattern. 401 means unauthenticated (403 is the not-authorized case), 422 targets well-formed but semantically invalid requests (malformed syntax is 400), and setStatusCode() throws for codes outside 100–599.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#response)
+
+??? question "79. Which of the following statements are true about the Symfony Request object and its parameter bags? (select all that apply)"
+    **✅ Route parameters are stored in the attributes bag, not in query ; query, request and cookies are InputBag instances, while attributes is a ParameterBag ; getPayload() reads the request body regardless of its content type**
+
+    Route/application data lives in attributes (a ParameterBag), while the user-input bags query/request/cookies are scalar-only InputBag instances, and getPayload() is the content-type-agnostic body reader. $request->request maps to the $_POST body (query maps to $_GET), and getContentType() was removed in favour of getContentTypeFormat().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#request)
+
+??? question "80. Which of the following statements are true about the Symfony Response object? (select all that apply)"
+    **✅ prepare() strips the body for HEAD requests and for 204/304 responses ; A freshly created Response gets Cache-Control: no-cache, private by default ; send() delegates to sendHeaders() and then sendContent()**
+
+    prepare() normalises the response against the request — including removing the body for HEAD/204/304 — the conservative default Cache-Control is no-cache, private, and send() is sendHeaders() followed by sendContent(). $response->headers is actually a ResponseHeaderBag that manages cookies and normalises Cache-Control, and makeDisposition() lives on HeaderUtils.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#response)
+
+??? question "81. Which of the following statements are true about cookies in Symfony/HTTP? (select all that apply)"
+    **✅ A cookie with SameSite=None must also be marked Secure, or browsers drop it ; The Symfony Cookie object is immutable — each with*() call returns a new instance ; Omitting both Expires and Max-Age produces a session cookie deleted when the browser closes**
+
+    SameSite=None is only valid together with Secure; the immutable Cookie API means forgetting to reassign a with*() result is a silent no-op; and without Expires/Max-Age the cookie only lives for the browser session. clearCookie() must match the original path/domain or the cookie survives, and Symfony's session cookie defaults are HttpOnly: true with SameSite=Lax, not Strict.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
+
+??? question "82. Which of the following statements are true about HTTP content negotiation? (select all that apply)"
+    **✅ A q=0 quality value in an Accept header means that representation is unacceptable ; getPreferredLanguage($locales) returns the best match within the list you pass, not just the client's top language**
+
+    q=0 explicitly marks a representation as unacceptable rather than merely low priority, and getPreferredLanguage() intersects the client's preferences with the locale list you provide. getPreferredFormat() maps Accept to a Symfony format name (json, html) — raw MIME types come from getAcceptableContentTypes() — negotiated responses must send Vary or shared caches will mis-serve, and gzip is typically handled by the web server/proxy.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#accessing-accept-headers)
+
+??? question "83. Which of the following statements are true about the Symfony HttpClient component? (select all that apply)"
+    **✅ request() is lazy/asynchronous — the transfer only completes when you first read the status, headers or content ; getContent() and toArray() throw on 3xx–5xx responses by default, while getStatusCode() never throws ; MockHttpClient with MockResponse lets you test HTTP interactions without any network access**
+
+    Responses are lazy so firing several requests before reading gives free concurrency; the content readers throw HTTP exceptions by default (pass false / throw: false to read error bodies) while getStatusCode() is always safe; and MockHttpClient keeps tests offline. You should depend on the HttpClientInterface contract, not a concrete transport, and scoped-client options only apply to URLs matching the scope/base URI.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html)
+
+??? question "84. A teammate cites 'RFC 7231' to justify a status-code semantics decision in a Symfony 8 review. What is the accurate correction?"
+    **✅ RFC 7231 was obsoleted by RFC 9110, which now defines HTTP semantics (methods, status codes, headers)**
+
+    In 2022, RFC 9110 (HTTP Semantics) replaced RFC 7231/7232/7233/7235/7538. Wire format became RFC 9112 (HTTP/1.1), and caching became its own document, RFC 9111 — semantics and caching are deliberately separate specs, and neither citation should still point at the 2014 RFCs.
+
+    :material-book-open-variant: [Docs](https://www.rfc-editor.org/rfc/rfc9110.html)
 
 ---
 

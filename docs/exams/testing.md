@@ -1,7 +1,7 @@
 # Chapter Exam — Automated Tests
 
 !!! abstract "How to use"
-    71 questions spanning every subchapter of **Automated Tests**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    78 questions spanning every subchapter of **Automated Tests**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -775,91 +775,151 @@ Full theory: [Automated Tests](../testing/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail)
 
-**Q55.** A test method carries both #[TestWith([1000, 'FR', 1200])] and #[DataProvider('provideRates')], where provideRates() yields two rows. How many times does PHPUnit execute that test method?  <small>_(hard · code)_</small>
+**Q55.** Which of the following statements are true about the test client returned by static::createClient()? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. It is a KernelBrowser (extending AbstractBrowser) that calls the kernel in-process, not over the network
+- B. It does not follow redirects by default; you must call followRedirect() or followRedirects()
+- C. request() returns a Crawler; the Response is fetched separately via $client->getResponse()
+- D. It performs real HTTP requests against a running web server
+- E. request() returns the Response object directly
+
+??? success "Answer Q55"
+    **A, B, C**
+
+    The client is a KernelBrowser hitting the kernel in-process with a cookie jar and history, so no web server or network round-trip is involved. Navigation methods like request() return a Crawler — the Response must be read via getResponse() — and redirects are only followed after calling followRedirect() (once) or followRedirects() (toggle), never automatically.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#making-requests)
+
+**Q56.** Which statements about accessing and replacing services in tests are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. self::getContainer() returns the special test container, which exposes private services that are used somewhere
+- B. A service replaced with $container->set() is lost when the kernel reboots between requests, unless you call disableReboot()
+- C. static::$kernel->getContainer() exposes the same private services as the test container
+- D. The old static::$container property is still the recommended way to get the container
+- E. Completely unused private services remain available in the test container
+
+??? success "Answer Q56"
+    **A, B**
+
+    Only the test container from self::getContainer() exposes private services, and only those actually used somewhere — completely unused private services are still optimised away, and $kernel->getContainer() keeps private services hidden. Because the client reboots the kernel between requests, set() replacements disappear unless disableReboot() is called, and the removed static::$container property must not be used.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#retrieving-services-in-the-test)
+
+**Q57.** Which statements about WebTestCase response assertions are correct? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. assertResponseIsSuccessful() passes for any 2xx status code, not only 200
+- B. assertSelectorTextContains() checks a substring, while assertSelectorTextSame() requires an exact match
+- C. assertResponseRedirects() called without arguments only checks that the response is a redirect (3xx)
+- D. assertResponseIsSuccessful() fails unless the status code is exactly 200
+- E. Selector-based assertions work without the css-selector component installed
+
+??? success "Answer Q57"
+    **A, B, C**
+
+    assertResponseIsSuccessful() accepts any 2xx — use assertResponseStatusCodeSame(200) for an exact code. The ...Contains variants match substrings while ...Same demands exact equality, and assertResponseRedirects() with no arguments only verifies a 3xx status (pass a target and/or code to be more specific). Selector assertions use CSS selectors, so they do require the css-selector component.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html)
+
+**Q58.** Which statements about the Symfony PHPUnit bridge are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Its features are wired by registering Symfony\Bridge\PhpUnit\SymfonyExtension in the PHPUnit configuration
+- B. Clock and DNS mocking are opt-in per test via the time-sensitive and dns-sensitive groups
+- C. SYMFONY_DEPRECATIONS_HELPER is an environment/server variable, not a PHPUnit CLI flag
+- D. Clock mocking is applied automatically to every test once the bridge is installed
+- E. Deprecation reporting is tuned with the phpunit --deprecations-helper command-line option
+
+??? success "Answer Q58"
+    **A, B, C**
+
+    Deprecation collection and clock/DNS mocking only work once the SymfonyExtension is registered in the PHPUnit configuration, and the mocking is opt-in per group (time-sensitive / dns-sensitive) rather than applied globally. Reporting is tuned through the SYMFONY_DEPRECATIONS_HELPER env/server variable; no equivalent PHPUnit CLI flag exists.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html)
+
+**Q59.** A test method carries both #[TestWith([1000, 'FR', 1200])] and #[DataProvider('provideRates')], where provideRates() yields two rows. How many times does PHPUnit execute that test method?  <small>_(hard · code)_</small>
 
 - A. Three times — the #[TestWith] row plus the two provider rows
 - B. Twice — #[TestWith] is ignored when a #[DataProvider] is present
 - C. Once — the attributes conflict and PHPUnit uses only the first
 - D. Two times — #[TestWith] must be the only data attribute or it errors
 
-??? success "Answer Q55"
+??? success "Answer Q59"
     **A**
 
     #[TestWith] inlines one argument row and #[DataProvider] contributes its iterable rows; they are additive, so the method runs once per row across all data attributes (1 + 2 = 3). #[TestWith] is simply a provider that needs no separate method — it does not replace or disable #[DataProvider].
 
     :material-book-open-variant: [Docs](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html#data-providers)
 
-**Q56.** What does static::createClient() do to the kernel before returning the client?  <small>_(hard · internals)_</small>
+**Q60.** What does static::createClient() do to the kernel before returning the client?  <small>_(hard · internals)_</small>
 
 - A. It reboots the kernel so the test starts from fresh container state
 - B. It leaves any previously booted kernel untouched and reuses it
 - C. It compiles the container from scratch on every request rather than at boot
 - D. It permanently disables kernel rebooting for the whole test
 
-??? success "Answer Q56"
+??? success "Answer Q60"
     **A**
 
     createClient() boots (or reboots) the kernel before handing back the KernelBrowser, guaranteeing clean state. The client also reboots the kernel after each request unless you call disableReboot(). It does not reuse a stale kernel, and it does not disable rebooting by default — that is an explicit opt-out.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#application-tests)
 
-**Q57.** A private service is never injected anywhere. In the test environment it is…  <small>_(hard · trap)_</small>
+**Q61.** A private service is never injected anywhere. In the test environment it is…  <small>_(hard · trap)_</small>
 
 - A. Still removed — the test container only keeps services that are actually used
 - B. Always available via getContainer()
 - C. Automatically made public
 - D. Available only after calling bootKernel(['debug' => true])
 
-??? success "Answer Q57"
+??? success "Answer Q61"
     **A**
 
     Unused private services are optimised away even in the test container; only used private/non-shared services remain reachable.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#accessing-the-container)
 
-**Q58.** What builds the TestContainer (id test.service_container) that keeps otherwise-private services reachable?  <small>_(hard · internals)_</small>
+**Q62.** What builds the TestContainer (id test.service_container) that keeps otherwise-private services reachable?  <small>_(hard · internals)_</small>
 
 - A. Compiler passes enabled by framework.test: true (the TestServiceContainer weak/real-ref passes)
 - B. A runtime call to Container::compile() inside KernelTestCase::getContainer()
 - C. Reflection performed by getContainer() each time it is called
 - D. The web profiler bundle registering every service as public
 
-??? success "Answer Q58"
+??? success "Answer Q62"
     **A**
 
     When framework.test: true, dedicated compiler passes (TestServiceContainerWeakRefPass / RealRefPass) build a second container, TestContainer (test.service_container), that retains references to used private/non-shared services. It is a compile-time construct, not runtime reflection, and unused private services are still removed.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#accessing-the-container)
 
-**Q59.** A test does: $client = static::createClient(); then self::getContainer()->set(PaymentGateway::class, $mock); then $client->request('POST', '/checkout'); — but the real gateway still runs. What is the most likely fix?  <small>_(hard · code)_</small>
+**Q63.** A test does: $client = static::createClient(); then self::getContainer()->set(PaymentGateway::class, $mock); then $client->request('POST', '/checkout'); — but the real gateway still runs. What is the most likely fix?  <small>_(hard · code)_</small>
 
 - A. Call $client->disableReboot() before set(), so the replacement survives the reboot that createClient triggers on the next request
 - B. Call set() again after the request
 - C. Make PaymentGateway public in services.yaml
 - D. Replace self::getContainer() with static::$kernel->getContainer()
 
-??? success "Answer Q59"
+??? success "Answer Q63"
     **A**
 
     By default the kernel reboots (rebuilding a fresh container) around requests, discarding any set() replacement. disableReboot() keeps the container — and your mock — alive across the request. Calling set() after the request is too late; the class already has visibility (getContainer exposes it); and $kernel->getContainer() hides private services entirely.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#mocking-services)
 
-**Q60.** How does the KernelBrowser actually perform a request?  <small>_(hard · internals)_</small>
+**Q64.** How does the KernelBrowser actually perform a request?  <small>_(hard · internals)_</small>
 
 - A. It converts the BrowserKit request to an HttpFoundation request and calls HttpKernel::handle() in-process — no real network
 - B. It opens a real TCP socket to a running web server
 - C. It shells out to curl for each request
 - D. It renders templates directly, bypassing routing and controllers
 
-??? success "Answer Q60"
+??? success "Answer Q64"
     **A**
 
     KernelBrowser extends AbstractBrowser; doRequest() builds an HttpFoundation Request and passes it straight to HttpKernel::handle(), so the whole stack (routing, controllers, security) runs in-process with no network. The browser keeps a cookie jar and history from the responses.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#making-requests)
 
-**Q61.** Which Crawler methods return a NEW Crawler (a subset) rather than reading a scalar value? (choose 3)  <small>_(hard · multiple)_</small>
+**Q65.** Which Crawler methods return a NEW Crawler (a subset) rather than reading a scalar value? (choose 3)  <small>_(hard · multiple)_</small>
 
 - A. filter('css')
 - B. filterXPath('//x')
@@ -867,42 +927,42 @@ Full theory: [Automated Tests](../testing/index.md).
 - D. text()
 - E. attr('href')
 
-??? success "Answer Q61"
+??? success "Answer Q65"
     **A, B, C**
 
     The Crawler is immutable: filter(), filterXPath(), first()/last()/eq() all return a new Crawler holding the matched subset. text() and attr() instead read a scalar from the first node (and throw on an empty set without a default), so they are not node-set operations.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dom_crawler.html)
 
-**Q62.** Internally, how does Crawler::filter() evaluate a CSS selector?  <small>_(hard · internals)_</small>
+**Q66.** Internally, how does Crawler::filter() evaluate a CSS selector?  <small>_(hard · internals)_</small>
 
 - A. It converts the CSS to XPath via CssSelectorConverter, then delegates to filterXPath()
 - B. It matches CSS against the DOM directly using a native querySelectorAll binding
 - C. It compiles the CSS to a regular expression over the raw HTML
 - D. It sends the selector to the browser-kit engine for evaluation
 
-??? success "Answer Q62"
+??? success "Answer Q66"
     **A**
 
     filter() uses Symfony\Component\CssSelector\CssSelectorConverter to turn the CSS selector into an XPath expression and then calls filterXPath(); this is why the css-selector component is required for filter() but not for filterXPath(). There is no regex-over-HTML or browser-kit involvement.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dom_crawler.html)
 
-**Q63.** After a POST that returns a 302, a test does assertSelectorTextContains('h1', 'Welcome') and it fails even though the target page has that heading. Why?  <small>_(hard · debug)_</small>
+**Q67.** After a POST that returns a 302, a test does assertSelectorTextContains('h1', 'Welcome') and it fails even though the target page has that heading. Why?  <small>_(hard · debug)_</small>
 
 - A. The current DOM is the redirect (302) page, not the target; you must followRedirect() first
 - B. assertSelectorTextContains cannot be used after a POST request
 - C. h1 selectors require assertPageTitleContains instead
 - D. The response status must be asserted before any selector assertion
 
-??? success "Answer Q63"
+??? success "Answer Q67"
     **A**
 
     Redirects are not followed automatically, so the Crawler still holds the (near-empty) 302 response, not the destination page. Calling followRedirect() before the selector assertion loads the target DOM. The assertion works fine after POST and does not depend on a prior status assertion.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#redirecting)
 
-**Q64.** Which of these are real WebTestCase assertion helpers? (choose 3)  <small>_(hard · multiple)_</small>
+**Q68.** Which of these are real WebTestCase assertion helpers? (choose 3)  <small>_(hard · multiple)_</small>
 
 - A. assertResponseStatusCodeSame(int $code)
 - B. assertRouteSame(string $route)
@@ -910,28 +970,28 @@ Full theory: [Automated Tests](../testing/index.md).
 - D. assertResponseBodyEquals(string $body)
 - E. assertControllerSame(string $fqcn)
 
-??? success "Answer Q64"
+??? success "Answer Q68"
     **A, B, C**
 
     assertResponseStatusCodeSame, assertRouteSame and assertResponseHasCookie all exist in the BrowserKit/WebTest assertion traits. There is no assertResponseBodyEquals (use getResponse()->getContent() with a PHPUnit string assertion) nor assertControllerSame helper.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#the-assertions)
 
-**Q65.** A test does: $client->request('GET', '/'); $client->enableProfiler(); $profile = $client->getProfile(); — what is $profile?  <small>_(hard · code)_</small>
+**Q69.** A test does: $client->request('GET', '/'); $client->enableProfiler(); $profile = $client->getProfile(); — what is $profile?  <small>_(hard · code)_</small>
 
 - A. false — enableProfiler() was called after the request, so nothing was collected
 - B. A populated Profile for the GET / request
 - C. null, because enableProfiler() resets the profile
 - D. A Profile containing only the time collector
 
-??? success "Answer Q65"
+??? success "Answer Q69"
     **A**
 
     enableProfiler() opts in the NEXT request; here it runs after the only request, so that request was never profiled and getProfile() returns false. The call order must be enableProfiler() then request() then getProfile().
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing/profiling.html)
 
-**Q66.** Which server parameters are NOT written with the HTTP_ prefix? (choose 3)  <small>_(hard · multiple)_</small>
+**Q70.** Which server parameters are NOT written with the HTTP_ prefix? (choose 3)  <small>_(hard · multiple)_</small>
 
 - A. CONTENT_TYPE
 - B. PHP_AUTH_USER
@@ -939,56 +999,56 @@ Full theory: [Automated Tests](../testing/index.md).
 - D. HTTP_ACCEPT
 - E. HTTP_X_REQUESTED_WITH
 
-??? success "Answer Q66"
+??? success "Answer Q70"
     **A, B, C**
 
     Following CGI conventions, request headers are exposed as HTTP_<NAME>, but CONTENT_TYPE, HTTPS, PHP_AUTH_USER and PHP_AUTH_PW are special-cased with no prefix. HTTP_ACCEPT and HTTP_X_REQUESTED_WITH are ordinary headers and keep the prefix.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client)
 
-**Q67.** A test writes $client->request('GET', '/admin', ['PHP_AUTH_USER' => 'admin', 'PHP_AUTH_PW' => 'secret']) and authentication fails. What is wrong?  <small>_(hard · debug)_</small>
+**Q71.** A test writes $client->request('GET', '/admin', ['PHP_AUTH_USER' => 'admin', 'PHP_AUTH_PW' => 'secret']) and authentication fails. What is wrong?  <small>_(hard · debug)_</small>
 
 - A. Server params are the 5th argument of request(); the 3rd is $parameters (query/POST). The auth belongs in $server
 - B. PHP_AUTH_USER must be HTTP_PHP_AUTH_USER
 - C. Basic auth cannot be tested with the client at all
 - D. You must call loginUser() instead; server params never carry credentials
 
-??? success "Answer Q67"
+??? success "Answer Q71"
     **A**
 
     request(string $method, string $uri, array $parameters = [], array $files = [], array $server = [], ...): the credentials were passed as $parameters (query/POST data) instead of the 5th $server argument. PHP_AUTH_USER is correctly unprefixed, and Basic auth is testable via server params — the position is the bug.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client)
 
-**Q68.** In phpunit.dist.xml, how is the bridge's extension registered in PHPUnit 11/12?  <small>_(hard · config)_</small>
+**Q72.** In phpunit.dist.xml, how is the bridge's extension registered in PHPUnit 11/12?  <small>_(hard · config)_</small>
 
 - A. <extensions><bootstrap class="Symfony\Bridge\PhpUnit\SymfonyExtension"/></extensions>
 - B. <listeners><listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/></listeners>
 - C. <php><extension name="symfony"/></php>
 - D. It is auto-registered by Composer; no XML entry is needed
 
-??? success "Answer Q68"
+??? success "Answer Q72"
     **A**
 
     PHPUnit 10+ uses the <extensions><bootstrap .../></extensions> mechanism to load the SymfonyExtension. The old <listeners><listener> (SymfonyTestsListener) approach belongs to PHPUnit 9 and earlier; there is no <php><extension> tag, and the extension is not auto-registered.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html)
 
-**Q69.** A service injects Symfony\Component\Clock\ClockInterface. What is the cleanest way to control time in its test?  <small>_(hard · scenario)_</small>
+**Q73.** A service injects Symfony\Component\Clock\ClockInterface. What is the cleanest way to control time in its test?  <small>_(hard · scenario)_</small>
 
 - A. Inject a Symfony\Component\Clock\MockClock and advance it, instead of using ClockMock and the time-sensitive group
 - B. Put the test in the time-sensitive group and rely on ClockMock overriding global time()
 - C. Call sleep() with real durations to advance the clock
 - D. Mock ClockInterface with createMock() and return a fixed DateTime once
 
-??? success "Answer Q69"
+??? success "Answer Q73"
     **A**
 
     For code that injects ClockInterface, swapping a MockClock (which you can advance deterministically) is cleaner and needs no group magic. ClockMock + time-sensitive is the tool for legacy code calling global time()/sleep() directly. Real sleep() is slow, and a one-shot createMock stub cannot model advancing time.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/clock.html#writing-time-sensitive-tests)
 
-**Q70.** Match the deprecation buckets correctly. Which statements are TRUE? (choose 3)  <small>_(hard · multiple)_</small>
+**Q74.** Match the deprecation buckets correctly. Which statements are TRUE? (choose 3)  <small>_(hard · multiple)_</small>
 
 - A. self = triggered by your own code's namespace
 - B. direct = triggered by a dependency you called directly
@@ -996,26 +1056,71 @@ Full theory: [Automated Tests](../testing/index.md).
 - D. indirect = triggered by your own test setup code
 - E. direct = deep inside a dependency's internals
 
-??? success "Answer Q70"
+??? success "Answer Q74"
     **A, B, C**
 
     self is your code, direct is a dependency you call directly, indirect is deep inside a dependency's internals, and legacy (marked tests) is excluded from thresholds. The two false options swap direct/indirect and mislabel indirect as your own setup.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail)
 
-**Q71.** You want to assert that calling a method emits a specific deprecation. Which is correct in Symfony 8?  <small>_(hard · code)_</small>
+**Q75.** You want to assert that calling a method emits a specific deprecation. Which is correct in Symfony 8?  <small>_(hard · code)_</small>
 
 - A. use ExpectUserDeprecationMessageTrait; then $this->expectUserDeprecationMessage('Since app 2.0: ...') before the call
 - B. use ExpectDeprecationTrait; then $this->expectDeprecation('...')
 - C. Annotate the test with @expectedDeprecation '...'
 - D. $this->expectException(DeprecationException::class)
 
-??? success "Answer Q71"
+??? success "Answer Q75"
     **A**
 
     ExpectUserDeprecationMessageTrait::expectUserDeprecationMessage() is the current API for asserting an emitted E_USER_DEPRECATED message. The old ExpectDeprecationTrait::expectDeprecation() and the @expectedDeprecation annotation were removed in Symfony 7.0, and deprecations are not exceptions.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail)
+
+**Q76.** Which statements about configuring the test client are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. Request headers are passed as HTTP_-prefixed server parameters (e.g. HTTP_ACCEPT), while HTTPS, PHP_AUTH_USER and PHP_AUTH_PW stay unprefixed
+- B. loginUser() authenticates a real UserInterface instance without going through the login form
+- C. insulate() runs each request in a separate process, so you lose in-process profiler/container access
+- D. Server parameters are the first argument of createClient(), before the kernel options
+- E. loginUser() only needs the username string; the user object is loaded automatically
+
+??? success "Answer Q76"
+    **A, B, C**
+
+    Headers become HTTP_-prefixed server parameters, with CONTENT_TYPE, HTTPS and PHP_AUTH_* as unprefixed exceptions; loginUser() sets the security token directly from a real UserInterface object, skipping the login form; and insulate() isolates each request in a subprocess at the cost of profiler and container access. createClient() takes ($options, $server), so server parameters are the second argument, and loginUser() requires an actual user object, not just a username.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication)
+
+**Q77.** Which statements about the DomCrawler used in functional tests are true? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. filter() with CSS selectors requires the css-selector component; filterXPath() works without it
+- B. The Crawler is immutable: filter() returns a new node set instead of mutating the original
+- C. text() and attr() read the first node and throw on an empty set unless a default argument is provided
+- D. filterXPath() also requires the css-selector component because XPath is converted to CSS internally
+- E. filter() narrows the current Crawler in place and returns $this
+
+??? success "Answer Q77"
+    **A, B, C**
+
+    CSS selectors are translated to XPath by the css-selector component, so only filter() needs it — filterXPath() speaks the native language directly. Every filtering call returns a new immutable Crawler instance rather than mutating the original, and text()/attr() operate on the first node, throwing on an empty set unless a default value is passed. Nothing converts XPath to CSS; the conversion goes the other way.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dom_crawler.html)
+
+**Q78.** Which statements about SYMFONY_DEPRECATIONS_HELPER modes are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. weak keeps collecting and reporting deprecations but never fails the build
+- B. disabled=1 turns the handler off entirely, so nothing is collected or reported
+- C. A committed baseline file makes only NEW deprecations fail, ignoring the known ones it records
+- D. weak and disabled=1 are equivalent — both hide deprecations completely
+- E. max[self]=0 fails the build on deprecations from any bucket, including indirect ones
+
+??? success "Answer Q78"
+    **A, B, C**
+
+    weak still prints the grouped deprecation report and only removes the failure threshold, whereas disabled=1 stops collection completely, so the two are not equivalent. A baseline records currently-known deprecations so later runs fail only on new ones. max[self]=0 constrains only the self bucket — max[total]=0 is the mode that fails on any bucket.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration)
 
 ---
 

@@ -1,7 +1,7 @@
 # Chapter Exam — PHP & Web Security
 
 !!! abstract "How to use"
-    112 questions spanning every subchapter of **PHP & Web Security**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    123 questions spanning every subchapter of **PHP & Web Security**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
@@ -1218,355 +1218,513 @@ Full theory: [PHP & Web Security](../php-web-security/index.md).
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
-**Q88.** Given `public float $fahrenheit { get => $this->celsius * 9/5 + 32; }` with `$celsius = 100.0`, what is `$obj->fahrenheit`?  <small>_(hard · code)_</small>
+**Q88.** Which of the following statements are true about PHP anonymous functions and closures? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. function () use ($x) {} captures $x by value at definition time; use (&$x) captures by reference
+- B. Arrow functions (fn) auto-capture the enclosing scope by value and cannot capture by reference
+- C. Closure::bind() mutates the closure it receives and returns void
+- D. An arrow function body may contain multiple statements separated by semicolons
+
+??? success "Answer Q88"
+    **A, B**
+
+    A use clause copies the variable when the closure is defined (add & for a live reference), and fn auto-captures by value only — it has no use list and no by-reference form. Closure::bind() is static and returns a new closure, leaving the original untouched, and an arrow function is limited to a single expression.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/functions.anonymous.php)
+
+**Q89.** Which of the following statements are true about PHP traits? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Method precedence is: the class's own method beats a trait method, which beats an inherited parent method
+- B. Two used traits defining the same method cause a fatal error unless resolved with insteadof/as
+- C. A static property declared in a trait is a separate copy for each class that uses the trait
+- D. You can type-hint a parameter against a trait, just like against an interface
+- E. When a trait and the using class define the same method, the trait version wins
+
+??? success "Answer Q89"
+    **A, B, C**
+
+    Precedence is class > trait > parent, unresolved same-name methods from two traits are fatal (fix with insteadof and/or as), and static trait state is bound to each using class independently. Traits are not types — you cannot type-hint or instanceof them — and a trait method never overrides the using class's own method.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.traits.php)
+
+**Q90.** Which of the following statements are true about PHP error and exception handling? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. catch (\Exception $e) does not catch a TypeError; you need \Throwable (or an Error type) to catch engine errors
+- B. finally always executes, and a return inside finally overrides a return or throw from the try block
+- C. set_error_handler() is the mechanism that handles uncaught exceptions
+- D. DivisionByZeroError extends Exception, so catch (\Exception) catches intdiv(1, 0)
+
+??? success "Answer Q90"
+    **A, B**
+
+    Error and Exception are separate branches under Throwable, so an Exception catch block misses TypeError and friends, and finally runs on every exit path — its return silently wins over the try block's outcome. Uncaught exceptions are handled by set_exception_handler() (set_error_handler() intercepts traditional warnings/notices), and DivisionByZeroError extends Error, not Exception.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.exceptions.php)
+
+**Q91.** Which of the following statements are true about web security fundamentals? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. The HttpOnly cookie flag prevents JavaScript from reading the session cookie, mitigating cookie theft via XSS
+- B. Regenerating the session id on login is the primary defence against session fixation
+- C. password_hash() embeds the generated salt in its output, so you must not prepend your own
+- D. HTML-escaping a value is sufficient protection when it is printed inside a <script> block or a URL
+- E. A valid CSRF token proves the user is authenticated
+
+??? success "Answer Q91"
+    **A, B, C**
+
+    HttpOnly blocks script access to cookies, a fresh session id at authentication invalidates any attacker-planted id, and password_hash() stores the salt inside the returned hash. Escaping must match the output context — HTML entities do not neutralise script or URL contexts — and a CSRF token only proves the request originated from your own form/session, not who the user is.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
+
+**Q92.** You put #[LogCall] on a method but nothing in your code ever calls getAttributes() on it. Does LogCall's constructor run?  <small>_(medium · trap)_</small>
+
+- A. No — nothing instantiates it, so the constructor never runs
+- B. Yes, immediately when the file is parsed
+- C. Yes, the first time the method is invoked
+- D. It depends on the attribute's target flags
+
+??? success "Answer Q92"
+    **A**
+
+    An attribute is inert metadata. getAttributes() only returns data (name, arguments, target); newInstance() is the one call that constructs the object and autoloads its class. With nothing reading the attribute at all, LogCall's constructor never executes.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.attributes.php)
+
+**Q93.** Status::from('unknown') is called where 'unknown' matches no case. What happens?  <small>_(medium · trap)_</small>
+
+- A. \ValueError is thrown
+- B. null is returned
+- C. false is returned
+- D. A new anonymous case is created
+
+??? success "Answer Q93"
+    **A**
+
+    from() is strict: an unmatched backing value throws \ValueError. Only tryFrom() returns null on a miss — the two are not interchangeable, and this exact distinction is a frequent exam trap.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.enumerations.backed.php)
+
+**Q94.** Given `public float $fahrenheit { get => $this->celsius * 9/5 + 32; }` with `$celsius = 100.0`, what is `$obj->fahrenheit`?  <small>_(hard · code)_</small>
 
 - A. 212.0 — a virtual property computed by the get hook
 - B. 100.0 — the backing celsius value
 - C. A TypeError, because fahrenheit has no backing store
 - D. null, because no value was assigned
 
-??? success "Answer Q88"
+??? success "Answer Q94"
     **A**
 
     Property hooks (8.4) let a get hook compute a value on read; here it returns 100*9/5+32 = 212.0. There is no backing field for fahrenheit (it is virtual) yet reading it is valid — the hook supplies the value, so neither null nor a TypeError occurs. It returns the computed number, not the raw celsius. Misconception: assuming a hooked property still needs a stored value; a purely virtual property derives it each read.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.property-hooks.php)
 
-**Q89.** What happens at runtime when `Suit::from('Z')` is called and 'Z' is not a valid backing value?  <small>_(hard · code)_</small>
+**Q95.** What happens at runtime when `Suit::from('Z')` is called and 'Z' is not a valid backing value?  <small>_(hard · code)_</small>
 
 - A. It throws \ValueError
 - B. It returns null
 - C. It returns the first case
 - D. It emits a warning and returns false
 
-??? success "Answer Q89"
+??? success "Answer Q95"
     **A**
 
     from() is the strict lookup: an unknown value throws \\ValueError. That is the mirror image of tryFrom(), which returns null. It never falls back to the first case nor warns-and-returns-false. Best practice: wrap from() in try/catch for untrusted input, or use tryFrom(). Misconception: assuming from() degrades gracefully like tryFrom() — it deliberately fails loud.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.enumerations.backed.php)
 
-**Q90.** `class A { static function f() { return new static(); } } class B extends A {}` — what is `B::f() instanceof B`?  <small>_(hard · code)_</small>
+**Q96.** `class A { static function f() { return new static(); } } class B extends A {}` — what is `B::f() instanceof B`?  <small>_(hard · code)_</small>
 
 - A. true — new static() resolves to the called class B
 - B. false — it returns an instance of A
 - C. A fatal error because f() is inherited
 - D. false — static methods cannot be inherited
 
-??? success "Answer Q90"
+??? success "Answer Q96"
     **A**
 
     `new static()` uses late static binding, so calling B::f() constructs a B, making the check true. Had f() used `new self()` it would return an A and the check would be false. Inherited static methods are perfectly legal, so there is no error, and static methods are inherited. Misconception: believing the defining class (A) always wins; the runtime call target drives static::.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.late-static-bindings.php)
 
-**Q91.** A named constructor `Model::create()` uses `return new self();`. Subclass calls `User::create()` but gets a Model, not a User. What is the fix?  <small>_(hard · debug)_</small>
+**Q97.** A named constructor `Model::create()` uses `return new self();`. Subclass calls `User::create()` but gets a Model, not a User. What is the fix?  <small>_(hard · debug)_</small>
 
 - A. Replace `new self()` with `new static()` to honour late static binding
 - B. Declare the method final so subclasses inherit correctly
 - C. Add a return type of self
 - D. Override create() in every subclass
 
-??? success "Answer Q91"
+??? success "Answer Q97"
     **A**
 
     self is bound at compile time to the defining class (Model), so it always builds a Model. new static() resolves to the runtime call target (User), fixing the factory. final only prevents overriding and would not change the instantiated type; a `self` return type would actually worsen it by declaring the wrong type; overriding in every subclass is boilerplate the LSB approach avoids. Misconception: that return types influence which class is instantiated.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.late-static-bindings.php)
 
-**Q92.** Inside `namespace App;` you write `new DateTime()` with no import. What happens?  <small>_(hard · debug)_</small>
+**Q98.** Inside `namespace App;` you write `new DateTime()` with no import. What happens?  <small>_(hard · debug)_</small>
 
 - A. A fatal Error: class App\DateTime not found
 - B. It transparently uses the global \DateTime
 - C. It emits a deprecation but works
 - D. It is a parse error
 
-??? success "Answer Q92"
+??? success "Answer Q98"
     **A**
 
     Unqualified class names resolve only against the current namespace and use imports — there is no global fallback for classes — so PHP looks for App\\DateTime and throws a not-found Error. It does not silently use the global class, there is no deprecation path, and it parses fine (the error is at resolution/runtime). Fix with `new \\DateTime()` or `use DateTime;`. Misconception: expecting the function-style global fallback for classes.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.namespaces.rules.php)
 
-**Q93.** A parent method is `handle(Cat $c)`. Which override signature is legal under contravariance?  <small>_(hard · trap)_</small>
+**Q99.** A parent method is `handle(Cat $c)`. Which override signature is legal under contravariance?  <small>_(hard · trap)_</small>
 
 - A. handle(Animal $c) — widening the parameter is allowed
 - B. handle(Kitten $c) — narrowing the parameter
 - C. handle(string $c) — an unrelated type
 - D. handle() — dropping the parameter
 
-??? success "Answer Q93"
+??? success "Answer Q99"
     **A**
 
     Parameter types are contravariant: a child may accept a wider (more general) type such as Animal, preserving substitutability. Narrowing to Kitten would reject values the parent accepted (illegal), an unrelated type breaks the contract, and dropping a required parameter changes arity. Misconception: applying the covariant (narrowing) rule to parameters — returns narrow, parameters widen.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.variance.php)
 
-**Q94.** A parent declares `serialize(): string`. Is overriding it with `serialize(): never` legal?  <small>_(hard · internals)_</small>
+**Q100.** A parent declares `serialize(): string`. Is overriding it with `serialize(): never` legal?  <small>_(hard · internals)_</small>
 
 - A. Yes — never is the bottom type and is a valid covariant return
 - B. No — never is unrelated to string
 - C. No — never can only be used on void methods
 - D. Only if the parent also returns never
 
-??? success "Answer Q94"
+??? success "Answer Q100"
     **A**
 
     never is the bottom type: a method that always throws or exits satisfies any return contract, so `: never` is a valid covariant narrowing of `: string`. never is not unrelated (it is a subtype of every type), it is not restricted to void methods, and the parent need not also return never. Misconception: thinking never only marks infinite loops/exit; it is a genuine type in the variance lattice.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.types.declarations.php)
 
-**Q95.** An interface declares `const string VERSION`. An implementing class overrides it with `const int VERSION = 8;`. What happens?  <small>_(hard · trap)_</small>
+**Q101.** An interface declares `const string VERSION`. An implementing class overrides it with `const int VERSION = 8;`. What happens?  <small>_(hard · trap)_</small>
 
 - A. A fatal error — the overriding constant must keep a compatible (string) type
 - B. It works; constant types are advisory only
 - C. It works; the int is coerced to a string
 - D. A deprecation notice, then it works
 
-??? success "Answer Q95"
+??? success "Answer Q101"
     **A**
 
     Typed class constants (8.3) enforce the declared type on overrides, so redeclaring a string constant as int is a fatal type error. Types are not advisory, there is no silent coercion of the constant value, and it is a hard error, not a deprecation. Misconception: assuming interface constants can be freely overridden — untyped ones can vary in value, but a typed constant pins the type.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.constants.php)
 
-**Q96.** How do `Closure::bind`, `$c->bindTo` and `$c->call` differ?  <small>_(hard · internals)_</small>
+**Q102.** How do `Closure::bind`, `$c->bindTo` and `$c->call` differ?  <small>_(hard · internals)_</small>
 
 - A. bind (static) and bindTo (instance) return a new bound closure; call binds and invokes in one step
 - B. All three invoke the closure immediately
 - C. All three mutate the original closure in place
 - D. call returns a new closure without invoking it
 
-??? success "Answer Q96"
+??? success "Answer Q102"
     **A**
 
     bind is the static form and bindTo the instance form; both return a fresh bound closure without calling it. call binds a new $this and scope and invokes immediately, returning the result. Only call runs the closure, none mutate the original (closures are immutable in their binding), and call does not return an un-invoked closure. Misconception: expecting bindTo to also execute — it only rebinds.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/closure.call.php)
 
-**Q97.** `$reader = fn () => $this->secret; $bound = Closure::bind($reader, new Box(), Box::class); echo $bound();` where Box has `private $secret='hidden'`. Output?  <small>_(hard · code)_</small>
+**Q103.** `$reader = fn () => $this->secret; $bound = Closure::bind($reader, new Box(), Box::class); echo $bound();` where Box has `private $secret='hidden'`. Output?  <small>_(hard · code)_</small>
 
 - A. hidden
 - B. An Error: cannot access private property
 - C. null
 - D. An empty string
 
-??? success "Answer Q97"
+??? success "Answer Q103"
     **A**
 
     Passing Box::class as the scope grants the rebound closure access to Box's private property, so it prints "hidden". Without the scope argument the private read would fail — but here it is supplied, so no Error, no null, no empty string. Misconception: thinking $this alone grants access; you must also pass the scope to unlock private/protected members.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/closure.bind.php)
 
-**Q98.** In the template method pattern, why is the public skeleton method often marked `final`?  <small>_(hard · internals)_</small>
+**Q104.** In the template method pattern, why is the public skeleton method often marked `final`?  <small>_(hard · internals)_</small>
 
 - A. To stop subclasses overriding the algorithm skeleton, restricting them to the abstract hooks
 - B. To allow subclasses to replace the whole algorithm
 - C. Because abstract methods must be final
 - D. To make the class instantiable
 
-??? success "Answer Q98"
+??? success "Answer Q104"
     **A**
 
     The template method fixes the invariant algorithm and defers only the variable steps to abstract hooks; marking it final protects those invariants from being overridden. It does the opposite of allowing full replacement; abstract methods cannot be final (they must be overridden); and final has nothing to do with instantiability. Misconception: leaving the skeleton overridable, which lets subclasses break the pattern.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.abstract.php)
 
-**Q99.** Which statements about abstract classes are correct? (choose two)  <small>_(hard · multiple)_</small>
+**Q105.** Which statements about abstract classes are correct? (choose two)  <small>_(hard · multiple)_</small>
 
 - A. A single abstract method forces the whole class to be abstract
 - B. An overriding method must obey variance rules (covariant return, contravariant params)
 - C. An abstract class cannot define a constructor
 - D. An abstract class can be instantiated if it has no abstract methods
 
-??? success "Answer Q99"
+??? success "Answer Q105"
     **A, B**
 
     One abstract method makes the class abstract, and implementations of an abstract method must respect variance just like interface/parent overrides. Abstract classes can define constructors (called via parent::__construct in subclasses), and the abstract keyword blocks instantiation regardless of whether abstract methods exist. Misconception: thinking a body-less-method count or constructor presence changes instantiability.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.abstract.php)
 
-**Q100.** A `static` property declared in a trait, used by classes X and Y, is…  <small>_(hard · single)_</small>
+**Q106.** A `static` property declared in a trait, used by classes X and Y, is…  <small>_(hard · single)_</small>
 
 - A. Separate per using class (X and Y have independent copies)
 - B. Shared across X and Y
 - C. Illegal
 - D. Automatically read-only
 
-??? success "Answer Q100"
+??? success "Answer Q106"
     **A**
 
     Traits are copied into each using class at compile time, so a static property becomes a distinct static of X and of Y — not shared across them. Static trait members are legal and not implicitly read-only. Misconception: treating the trait as a single shared owner of the static state; the trait is a template, not a runtime container.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.traits.php)
 
-**Q101.** Traits A and B both define `init()`. You want A's version kept and B's exposed as `initLegacy()`. Which resolution is correct?  <small>_(hard · code)_</small>
+**Q107.** Traits A and B both define `init()`. You want A's version kept and B's exposed as `initLegacy()`. Which resolution is correct?  <small>_(hard · code)_</small>
 
 - A. use A, B { A::init insteadof B; B::init as initLegacy; }
 - B. use A, B { B::init insteadof A; A::init as initLegacy; }
 - C. use A, B { A::init as initLegacy insteadof B; }
 - D. use A, B { init insteadof A, B; }
 
-??? success "Answer Q101"
+??? success "Answer Q107"
     **A**
 
     insteadof selects A::init as the surviving init(), and as aliases the excluded B::init to initLegacy — exactly matching the requirement. The second option keeps B (wrong version). The third has invalid syntax mixing as and insteadof in one clause. The fourth lacks the trait qualifiers insteadof requires. Misconception: believing as alone resolves a collision — you still need insteadof to pick the winner.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.traits.php)
 
-**Q102.** A class defines `save()`, and a trait it uses also defines `save()`. A developer expects the trait's version to run but gets the class's. Why?  <small>_(hard · debug)_</small>
+**Q108.** A class defines `save()`, and a trait it uses also defines `save()`. A developer expects the trait's version to run but gets the class's. Why?  <small>_(hard · debug)_</small>
 
 - A. The class's own method takes precedence over any trait method
 - B. It is undefined behaviour
 - C. The trait method should have won; this is a bug
 - D. A fatal error should have occurred
 
-??? success "Answer Q102"
+??? success "Answer Q108"
     **A**
 
     Trait precedence is class > trait > inherited parent, so the class's own save() always overrides the trait's. This is defined, expected behaviour, not a bug or error. To use the trait's version, alias it with `as` (e.g. `Trait::save as saveViaTrait;`). Misconception: assuming a trait method overrides the host class's own method — it only overrides inherited ones.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.traits.php)
 
-**Q103.** A `return` inside a `finally` block…  <small>_(hard · single)_</small>
+**Q109.** A `return` inside a `finally` block…  <small>_(hard · single)_</small>
 
 - A. Overrides any return or throw from the try block
 - B. Is a syntax error
 - C. Is ignored
 - D. Runs before the try block
 
-??? success "Answer Q103"
+??? success "Answer Q109"
     **A**
 
     finally always runs last, and a return there wins — it overrides both a return and a pending throw from try, which is why it can silently swallow exceptions and is discouraged. It is valid syntax, never ignored, and finally runs after try, not before. Misconception: thinking finally is just cleanup that cannot alter the result — a return in it changes the outcome.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.exceptions.php)
 
-**Q104.** In the Throwable hierarchy, which chain is correct?  <small>_(hard · internals)_</small>
+**Q110.** In the Throwable hierarchy, which chain is correct?  <small>_(hard · internals)_</small>
 
 - A. DivisionByZeroError → ArithmeticError → Error → Throwable
 - B. DivisionByZeroError → RuntimeException → Exception → Throwable
 - C. TypeError → Exception → Throwable
 - D. ValueError → LogicException → Throwable
 
-??? success "Answer Q104"
+??? success "Answer Q110"
     **A**
 
     DivisionByZeroError extends ArithmeticError, which extends Error, which implements Throwable. The engine-fault classes (TypeError, ValueError, ArithmeticError) live under Error, never under Exception — so the other chains, which route them through Exception/RuntimeException/LogicException, are wrong. Misconception: mixing the Error and Exception branches; they share only the Throwable interface.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/class.throwable.php)
 
-**Q105.** What is the classic gotcha with `ctype_digit(123)` (passing an integer)?  <small>_(hard · trap)_</small>
+**Q111.** What is the classic gotcha with `ctype_digit(123)` (passing an integer)?  <small>_(hard · trap)_</small>
 
 - A. Small integers are interpreted as ASCII codes, not their digits, giving surprising results
 - B. It always returns true for any integer
 - C. It throws a TypeError on integers
 - D. It converts the integer to a string first
 
-??? success "Answer Q105"
+??? success "Answer Q111"
     **A**
 
     ctype functions treat an int argument in the range -128..255 as an ASCII character code, so ctype_digit(123) checks character code 123 ('{'), not the digits "123" — a false negative. It does not always return true, does not throw, and does not stringify (that is exactly the assumption that bites you). Pass strings: ctype_digit('123') is true. Misconception: assuming numeric arguments are auto-cast to their textual form.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/function.ctype-digit.php)
 
-**Q106.** You deploy a code change to a server running `opcache.validate_timestamps=0` but forget to reset OPcache. What do requests serve?  <small>_(hard · trap)_</small>
+**Q112.** You deploy a code change to a server running `opcache.validate_timestamps=0` but forget to reset OPcache. What do requests serve?  <small>_(hard · trap)_</small>
 
 - A. The stale, previously-cached bytecode — OPcache never notices the file changed
 - B. PHP automatically detects the mtime change and recompiles anyway
 - C. A fatal error, since validate_timestamps=0 requires a matching file hash
 - D. The new code, but only for the first request after the change
 
-??? success "Answer Q106"
+??? success "Answer Q112"
     **A**
 
     With validate_timestamps=0, OPcache trusts its cached bytecode unconditionally and never stats the source file to check for changes — that stat-per-request is exactly what the setting removes for performance. Forgetting to reset/clear OPcache (or restart PHP-FPM) after a deploy means every request keeps serving the OLD compiled code indefinitely, silently, with no error. This is precisely why the setting is only safe for immutable deploys that reset OPcache as part of the release step (see the Deployment chapter's own question on why the setting exists in the first place).
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/opcache.configuration.php)
 
-**Q107.** Why can you not implement `Traversable` directly, and what does `IteratorAggregate::getIterator()` return?  <small>_(hard · internals)_</small>
+**Q113.** Why can you not implement `Traversable` directly, and what does `IteratorAggregate::getIterator()` return?  <small>_(hard · internals)_</small>
 
 - A. Traversable is an internal marker interface; getIterator() must return a Traversable (e.g. an Iterator or generator)
 - B. Traversable requires five methods; getIterator() returns an array
 - C. Traversable is abstract; getIterator() returns void
 - D. You can implement Traversable; getIterator() returns a Countable
 
-??? success "Answer Q107"
+??? success "Answer Q113"
     **A**
 
     Traversable is an engine-internal marker (the base of Iterator and IteratorAggregate) that userland cannot implement directly — you implement one of its children. getIterator() must return a Traversable, commonly an Iterator or a generator (via yield). It does not return a plain array, void, or a Countable. Misconception: trying to `implements Traversable` directly, which is a fatal error.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/class.traversable.php)
 
-**Q108.** Calling `count($obj)` on a plain object that does not implement Countable results in…  <small>_(hard · trap)_</small>
+**Q114.** Calling `count($obj)` on a plain object that does not implement Countable results in…  <small>_(hard · trap)_</small>
 
 - A. A TypeError — count() requires an array or a Countable
 - B. The number of public properties
 - C. 1, treating the object as a single item
 - D. 0
 
-??? success "Answer Q108"
+??? success "Answer Q114"
     **A**
 
     Since PHP 8.0, count() on a non-countable throws a TypeError; older versions only warned and returned 1. It does not count properties, does not return 1, and does not return 0. Implement Countable (a count() method) to make count() work on your object. Misconception: relying on the legacy "returns 1" behaviour, which is now a hard error.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/class.countable.php)
 
-**Q109.** You want a collection usable in `foreach` without hand-writing five Iterator methods. What is the idiomatic approach?  <small>_(hard · scenario)_</small>
+**Q115.** You want a collection usable in `foreach` without hand-writing five Iterator methods. What is the idiomatic approach?  <small>_(hard · scenario)_</small>
 
 - A. Implement IteratorAggregate and `yield from $this->items;` in getIterator()
 - B. Implement Iterator and all five methods anyway
 - C. Implement ArrayAccess only
 - D. Extend SplStack
 
-??? success "Answer Q109"
+??? success "Answer Q115"
     **A**
 
     IteratorAggregate needs only getIterator(); returning a generator with `yield from` delegates iteration in one line, since a generator is itself an Iterator. Implementing Iterator directly is exactly the five-method chore you want to avoid; ArrayAccess gives bracket access, not foreach; and extending SplStack changes the type/semantics unnecessarily. Misconception: thinking foreach support always requires the full Iterator contract.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/class.iteratoraggregate.php)
 
-**Q110.** Why is HTML auto-escaping insufficient when a value is placed inside a `<script>` block or a URL attribute?  <small>_(hard · trap)_</small>
+**Q116.** Why is HTML auto-escaping insufficient when a value is placed inside a `<script>` block or a URL attribute?  <small>_(hard · trap)_</small>
 
 - A. Each context needs its own encoding (js/url); HTML escaping does not neutralise script or URL payloads
 - B. HTML escaping is always sufficient everywhere
 - C. Because Twig disables escaping inside script tags
 - D. Because URLs cannot contain user data at all
 
-??? success "Answer Q110"
+??? success "Answer Q116"
     **A**
 
     XSS defence must be context-aware: a value safe as HTML text can still break out inside JavaScript or a URL, so you need the js or url escaping strategy there. HTML escaping is not universally sufficient, Twig does not silently disable escaping in script tags, and URLs routinely carry user data (which must be url-encoded). Misconception: treating one escaping strategy as a cure-all across all output contexts.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
-**Q111.** How do the `HttpOnly` and `Secure` cookie flags differ?  <small>_(hard · internals)_</small>
+**Q117.** How do the `HttpOnly` and `Secure` cookie flags differ?  <small>_(hard · internals)_</small>
 
 - A. HttpOnly blocks JavaScript access to the cookie; Secure restricts it to HTTPS connections
 - B. They are synonyms for the same protection
 - C. Secure blocks JS access; HttpOnly forces HTTPS
 - D. Both only affect the cookie's lifetime
 
-??? success "Answer Q111"
+??? success "Answer Q117"
     **A**
 
     HttpOnly hides the cookie from document.cookie (mitigating theft via XSS); Secure ensures the cookie is only sent over TLS (mitigating network sniffing). They solve different problems, are not synonyms, and the third option swaps their meanings. Neither affects lifetime (that is Max-Age/ Expires). Misconception: assuming one flag covers both JS access and transport security.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
-**Q112.** A developer verifies passwords with `if ($hash == $storedHash)`. What is wrong and what is the fix?  <small>_(hard · debug)_</small>
+**Q118.** A developer verifies passwords with `if ($hash == $storedHash)`. What is wrong and what is the fix?  <small>_(hard · debug)_</small>
 
 - A. == is non-constant-time (timing attack) and re-hashes wrongly; use password_verify()/hash_equals()
 - B. Nothing is wrong; == is fine for hashes
 - C. It should use === for a strict comparison and is then secure
 - D. It should md5() both sides first
 
-??? success "Answer Q112"
+??? success "Answer Q118"
     **A**
 
     Comparing hashes with == (or ===) leaks timing information and does not re-derive the hash from the candidate password; you must call password_verify($plain, $storedHash), which is constant-time and handles the embedded salt. hash_equals() is the constant-time primitive for comparing known strings. === does not fix the timing leak, and md5 is broken. Misconception: treating password checking as a plain string comparison.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/function.password-verify.php)
+
+**Q119.** Which of the following statements are true about PHP interfaces and type variance? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. Return types are covariant: an override may narrow the return type (Animal → Cat)
+- B. Parameter types are contravariant: an override may widen a parameter type
+- C. instanceof used on a non-object value returns false instead of throwing
+- D. A class can extend two classes as long as both are abstract
+- E. Intersection types (A&B) may combine interfaces with scalar types like int
+
+??? success "Answer Q119"
+    **A, B, C**
+
+    Variance follows Liskov substitution: overrides may narrow returns and widen parameters (reversing either is a fatal error), and instanceof safely yields false for non-objects. PHP has single class inheritance — only interfaces can be multiply inherited — and intersection types accept only class/interface names, never scalars.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.variance.php)
+
+**Q120.** Which of the following statements are true about the SPL and generators? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. A generator is a lazy, single-use Iterator: once fully consumed it cannot be rewound
+- B. SplObjectStorage keys entries by object identity and can attach data to each object
+- C. Iterator requires five methods (current/key/next/rewind/valid), while IteratorAggregate only requires getIterator()
+- D. SplPriorityQueue guarantees stable FIFO ordering among items with equal priority
+- E. Implementing ArrayAccess is what makes count($obj) work
+
+??? success "Answer Q120"
+    **A, B, C**
+
+    Generators produce values lazily and cannot be rewound after consumption, SplObjectStorage maps data by object identity (something plain arrays cannot do), and IteratorAggregate delegates iteration through a single getIterator() method versus Iterator's five. SplPriorityQueue ordering among equal priorities is not stable, and count($obj) requires Countable — ArrayAccess only enables the $obj[$k] bracket syntax.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/book.spl.php)
+
+**Q121.** Which of the following statements are true about the PHP object model? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. static:: resolves to the called class at runtime (late static binding), while self:: is fixed at compile time to the declaring class
+- B. clone performs a shallow copy: object-typed properties still reference the same objects unless __clone() deep-copies them
+- C. __get() is invoked on every property read, even for accessible public properties
+- D. A constructor parameter typed callable can be promoted to a property like any other type
+
+??? success "Answer Q121"
+    **A, B**
+
+    Late static binding makes new static() subclass-safe where new self() would pin the parent class, and clone copies references shallowly until __clone() duplicates them. __get() fires only for inaccessible or undefined properties (accessible ones are read directly), and callable is not a valid property type, so it cannot be used in constructor promotion.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.late-static-bindings.php)
+
+**Q122.** A team member declares #[\Attribute(\Attribute::TARGET_METHOD)] on a custom Endpoint attribute, then applies it twice to the same method to register two names. What happens?  <small>_(hard · scenario)_</small>
+
+- A. PHP raises a fatal error — the attribute is not marked IS_REPEATABLE
+- B. Both applications silently merge into one instance
+- C. Only the second application is kept
+- D. PHP allows it because TARGET_METHOD permits multiple uses by default
+
+??? success "Answer Q122"
+    **A**
+
+    A target flag alone does not allow repetition. Applying the same non-repeatable attribute class more than once to the same target is rejected outright; \Attribute::IS_REPEATABLE must be added to the flags (as Symfony's own #[Route] does) for that to be legal.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.attributes.reflection.php)
+
+**Q123.** A controller action is typed public function show(Status $status). A request arrives for a {status} route value that matches no Status case. What does the client receive?  <small>_(hard · scenario)_</small>
+
+- A. A 404 Not Found — the resolver catches the ValueError and raises NotFoundHttpException
+- B. A 500 Internal Server Error from an uncaught ValueError
+- C. A 200 response with $status resolved to null
+- D. A 200 response with $status resolved to the first declared case
+
+??? success "Answer Q123"
+    **A**
+
+    BackedEnumValueResolver calls Status::from($value) internally and catches the resulting ValueError/TypeError itself, converting it into a NotFoundHttpException — an invalid enum value in a route is a 404, never an unhandled exception reaching the client as a 500.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 ---
 

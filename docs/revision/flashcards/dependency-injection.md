@@ -1,6 +1,6 @@
 # Flashcards — Dependency Injection
 
-81 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+92 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -330,264 +330,341 @@
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
-??? question "45. Which class validates and defaults a bundle's configuration schema?"
+??? question "45. A new HandlerB is tagged app.handler and its getName() happens to return the same string as an existing HandlerA. Both are consumed via a tagged_locator indexed by that name. What happens at runtime?"
+    **✅ One of them silently wins the index key; the other becomes unreachable through the locator**
+
+    A tagged_locator's index is a plain map: if two tagged services resolve to the same index_by/default_index_method key, the later one silently overwrites the earlier one — there is no compile-time duplicate check and no error. This is the classic "my handler vanished" bug; index keys must be treated as unique, like a primary key.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
+
+??? question "46. Which class validates and defaults a bundle's configuration schema?"
     **✅ Configuration, via a TreeBuilder**
 
     Configuration defines allowed keys, types, defaults and validation; Extension::load() only consumes the processed result.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
-??? question "46. When does prepend() run relative to the extensions' load() calls?"
+??? question "47. When does prepend() run relative to the extensions' load() calls?"
     **✅ Before all load() calls**
 
     Prepend runs first so a bundle can inject default configuration into other bundles before they load.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 
-??? question "47. Which command prints a bundle's configuration reference tree?"
+??? question "48. Which command prints a bundle's configuration reference tree?"
     **✅ config:dump-reference**
 
     config:dump-reference dumps the schema defined by Configuration; debug:config shows the currently resolved values.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
-??? question "48. In a Symfony 8 AbstractBundle, where do the config schema and the service wiring live?"
+??? question "49. In a Symfony 8 AbstractBundle, where do the config schema and the service wiring live?"
     **✅ configure() defines the tree and loadExtension() wires services — both on the bundle class, with no separate Extension file**
 
     AbstractBundle streamlines bundles by folding the schema (configure) and the extension logic (loadExtension) onto the bundle class itself, so a separate Configuration/Extension pair is no longer required. Kernel::build() registers compiler passes, not bundle semantic config.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
-??? question "49. Which command shows the currently resolved configuration values (not the schema) for a bundle?"
+??? question "50. Which command shows the currently resolved configuration values (not the schema) for a bundle?"
     **✅ debug:config**
 
     debug:config prints the merged, resolved values in effect; config:dump-reference prints the schema (allowed keys, types, defaults) defined by Configuration. Confusing the two is a common trap — one shows what is set, the other what is allowed.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
-??? question "50. Your bundle must set a default framework option before FrameworkBundle loads. What do you call, and when does it run?"
+??? question "51. Your bundle must set a default framework option before FrameworkBundle loads. What do you call, and when does it run?"
     **✅ prependExtensionConfig('framework', [...]) inside prepend()/prependExtension(), which runs before all load() calls**
 
     PrependExtensionInterface::prepend() (or prependExtension() on AbstractBundle) runs before every extension's load(), and prependExtensionConfig() injects config into another bundle's namespace. Doing it in load() would be too late, and setParameter() sets a parameter, not another bundle's config.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 
-??? question "51. A bundle named AcmeBlogBundle exposes its configuration under which root key by convention?"
+??? question "52. A bundle named AcmeBlogBundle exposes its configuration under which root key by convention?"
     **✅ acme_blog (snake_case of the bundle name minus 'Bundle')**
 
     The root key is derived from the extension/bundle name: the class name minus the Bundle suffix, converted to snake_case, giving acme_blog. The misconception is using the class name verbatim or keeping the Bundle suffix.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/configuration.html)
 
-??? question "52. For a factory-built service, where are its arguments passed?"
+??? question "53. For a factory-built service, where are its arguments passed?"
     **✅ To the factory method**
 
     With a factory, the container calls the factory and passes the definition's arguments to it, not to a constructor.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
-??? question "53. How do you configure a factory produced value via attributes?"
+??? question "54. How do you configure a factory produced value via attributes?"
     **✅ #[Autowire(factory: [Factory::class, 'create'])]**
 
     There is no dedicated #[Factory] attribute; factories are configured with #[Autowire(factory:)] or in YAML/PHP config.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "54. How is an instance-method factory referenced in YAML?"
+??? question "55. How is an instance-method factory referenced in YAML?"
     **✅ factory: ['@service_id', 'method']**
 
     An array of [reference, method] denotes a method call on a service; a static factory uses the 'Class::method' string form.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
-??? question "55. factory: '@svc::method' throws an error. What is the correct instance-method form?"
+??? question "56. factory: '@svc::method' throws an error. What is the correct instance-method form?"
     **✅ factory: ['@svc', 'method']**
 
     The '@svc::method' string is invalid syntax for an instance-method factory; use the array form ['@svc', 'method']. The 'Class::method' string form is reserved for static factories. The other forms are not recognised.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
-??? question "56. How is an invokable factory service referenced in YAML?"
+??? question "57. How is an invokable factory service referenced in YAML?"
     **✅ factory: '@factory_service' (its __invoke method is called)**
 
     A bare service reference '@service' as the factory means the container calls the service's __invoke() and stores the return value. Explicitly naming __invoke via the '::' string form is invalid; the array form is used for named instance methods, not required for invokables.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
-??? question "57. Ledger has a private constructor and a static open(string $path). How do you register it as a service?"
+??? question "58. Ledger has a private constructor and a static open(string $path). How do you register it as a service?"
     **✅ factory: 'App\Payment\Ledger::open' with the path in arguments passed to open()**
 
     A static factory in the 'Class::method' string form bypasses the private constructor, and arguments are passed to open(), not a constructor. The instance-method array form would require an existing service instance, which the private constructor prevents.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/factories.html)
 
-??? question "58. Which attribute registers a compiler pass? (choose one)"
+??? question "59. Which attribute registers a compiler pass? (choose one)"
     **✅ There is no attribute; register it via addCompilerPass() in Kernel/bundle build()**
 
     Compiler passes are registered programmatically via ContainerBuilder::addCompilerPass(), typically in Kernel::build() or a bundle's build(). There is no core attribute for this.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "59. What is the default phase for a compiler pass registered without one?"
+??? question "60. What is the default phase for a compiler pass registered without one?"
     **✅ TYPE_BEFORE_OPTIMIZATION**
 
     PassConfig runs passes in phase order; unspecified passes run in the before-optimization phase.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "60. What does ContainerBuilder::findTaggedServiceIds('t') return?"
+??? question "61. What does ContainerBuilder::findTaggedServiceIds('t') return?"
     **✅ A map of service id => array of that tag's attribute sets**
 
     It returns definitions' ids each mapped to the attributes of every occurrence of the tag, used to wire collectors at compile time.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
 
-??? question "61. Inside a compiler pass process() method, what should you manipulate?"
+??? question "62. Inside a compiler pass process() method, what should you manipulate?"
     **✅ Definition objects (build-time metadata)**
 
     Compilation deals only with definitions; nothing is instantiated yet, so calling get() inside a pass is wrong.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "62. In which phase should a pass that removes a service run, and why not TYPE_BEFORE_OPTIMIZATION?"
+??? question "63. In which phase should a pass that removes a service run, and why not TYPE_BEFORE_OPTIMIZATION?"
     **✅ TYPE_REMOVE — removing earlier could delete a service that autowiring (the optimization phase) still needs to reference**
 
-    Removal belongs in TYPE_REMOVE. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZATION races with autowiring.
+    Removal belongs in TYPE_REMOVE. Doing it before optimization would delete a service that the autowiring/optimization phase might still reference, breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it into OPTIMIZE races with autowiring.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "63. Two passes are registered in the same phase with priorities 10 and 100. Which runs first?"
+??? question "64. Two passes are registered in the same phase with priorities 10 and 100. Which runs first?"
     **✅ The priority-100 pass — higher priority runs earlier within a phase**
 
     Within a phase, addCompilerPass orders by priority with higher running first. The trap is assuming lower numbers run first (as some other Symfony orderings work); for compiler passes higher priority is earlier.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "64. Inside process(), a pass calls $container->get(SomeService::class) and it fails. Why?"
+??? question "65. Inside process(), a pass calls $container->get(SomeService::class) and it fails. Why?"
     **✅ Compilation deals only with Definitions; nothing is instantiated yet — use findDefinition()/Reference instead**
 
     A compiler pass runs before any service exists, so you manipulate build-time Definition objects (findDefinition, addMethodCall, new Reference), never live instances. Calling get() during compilation is the classic mistake; visibility and spelling are not the cause here.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "65. Which are valid places to register a compiler pass? (choose 2)"
+??? question "66. Which are valid places to register a compiler pass? (choose 2)"
     **✅ Kernel::build(ContainerBuilder $c) via addCompilerPass() ; A bundle's build(ContainerBuilder $c) via addCompilerPass()**
 
     Passes are registered programmatically with addCompilerPass() in the application Kernel::build() or a bundle's build(). There is no #[CompilerPass] attribute and no services.yaml tag that registers a pass — those are common invented answers.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "66. In addCompilerPass(new MyPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, priority: 5), what do the 2nd and 3rd arguments control?"
+??? question "67. In addCompilerPass(new MyPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, priority: 5), what do the 2nd and 3rd arguments control?"
     **✅ The compilation phase and the ordering priority within that phase**
 
     addCompilerPass(pass, phase, priority) takes the phase constant that determines when in PassConfig the pass runs, and a priority that orders passes within that phase (higher first). It has nothing to do with service ids, tags, or environments.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-??? question "67. What can autowiring resolve automatically?"
+??? question "68. What can autowiring resolve automatically?"
     **✅ Object dependencies identified by their type-hint**
 
     Autowiring maps a type-hint to a service; scalars and env vars must be bound explicitly with bind or #[Autowire].
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "68. Two services implement one interface with no default alias. Autowiring by that interface..."
+??? question "69. Two services implement one interface with no default alias. Autowiring by that interface..."
     **✅ Throws an ambiguity error at compile time**
 
     Ambiguity is a hard build error; you disambiguate with a named alias, #[Target], #[Autowire(service:)] or bind.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "69. What does the #[Target('requestLogger')] attribute do?"
+??? question "70. What does the #[Target('requestLogger')] attribute do?"
     **✅ Selects the named autowiring alias explicitly, decoupled from the parameter name**
 
     #[Target] binds to a named autowiring alias by name, so renaming the constructor parameter does not break wiring.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html#fixing-non-autowireable-arguments)
 
-??? question "70. What is the literal id of a named autowiring alias, e.g. for a Monolog channel logger?"
+??? question "71. What is the literal id of a named autowiring alias, e.g. for a Monolog channel logger?"
     **✅ Literally 'Psr\Log\LoggerInterface $requestLogger' — matched by the parameter name**
 
     A named autowiring alias id is the full type followed by the variable name, 'Type $paramName'. Autowiring matches it when your constructor parameter is named identically — which is fragile, so #[Target('requestLogger')] states the intent explicitly and survives parameter renames.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "71. A parameter has #[Autowire('app.foo')] and receives the literal string "app.foo" instead of the service. Why?"
+??? question "72. A parameter has #[Autowire('app.foo')] and receives the literal string "app.foo" instead of the service. Why?"
     **✅ A bare string is a literal value; to inject a service use #[Autowire(service: 'app.foo')]**
 
     In #[Autowire], a bare string is interpreted as a literal value (or a %param% / %env()% expression), not a service reference. Use the named argument service: to pin a service id. Visibility is irrelevant and no @ prefix is used in attributes.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "72. A constructor type-hints an interface that has no implementation and no alias. What does the container build do?"
+??? question "73. A constructor type-hints an interface that has no implementation and no alias. What does the container build do?"
     **✅ Fails with a compile-time 'Cannot autowire ... no such service' error — not a silent null**
 
     Autowiring an unregistered type is a hard build failure. Silent null only happens if you explicitly opt in with a nullable argument and default (?Type $x = null). Autowiring never guesses an arbitrary class or defers to runtime — the misconception is expecting null.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "73. Which techniques resolve autowiring ambiguity when several services implement one interface? (choose 3)"
+??? question "74. Which techniques resolve autowiring ambiguity when several services implement one interface? (choose 3)"
     **✅ #[Target('name')] on the parameter ; #[Autowire(service: 'id')] to pin an exact service ; A named autowiring alias 'Type $paramName'**
 
     Ambiguity is resolved by explicitly choosing an implementation: a named alias, #[Target], #[Autowire(service:)], or bind. Making services public only affects fetchability by id and does nothing to disambiguate autowiring.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/autowiring.html)
 
-??? question "74. How does a ServiceLocator differ from injecting the whole container?"
+??? question "75. How does a ServiceLocator differ from injecting the whole container?"
     **✅ It exposes only an explicitly declared, whitelisted set of services**
 
     A locator's set is explicit and analysable; injecting the whole container hides dependencies and is an anti-pattern.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
-??? question "75. When does a ServiceLocator instantiate the services it holds?"
+??? question "76. When does a ServiceLocator instantiate the services it holds?"
     **✅ Lazily, on get()**
 
     A locator defers construction until a service is actually requested, which is its main advantage over injecting all candidates.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators)
 
-??? question "76. What interface does Symfony's ServiceLocator implement?"
+??? question "77. What interface does Symfony's ServiceLocator implement?"
     **✅ Psr\Container\ContainerInterface (PSR-11)**
 
     ServiceLocator is a PSR-11 container exposing get() and has() over a fixed, compile-time set of services.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators)
 
-??? question "77. What does ServiceSubscriberInterface::getSubscribedServices() declare?"
+??? question "78. What does ServiceSubscriberInterface::getSubscribedServices() declare?"
     **✅ The set of services the subscriber may lazily use, injected as a locator**
 
     It declares a whitelist; the container injects a matching ServiceLocator so services are built only when requested.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
-??? question "78. Which trait should a Symfony 8 service subscriber use with #[SubscribedService] methods?"
+??? question "79. Which trait should a Symfony 8 service subscriber use with #[SubscribedService] methods?"
     **✅ ServiceMethodsSubscriberTrait**
 
     The older ServiceSubscriberTrait was deprecated in 7.1 (symfony/contracts v3.5); Symfony 8 uses ServiceMethodsSubscriberTrait together with #[SubscribedService] methods whose return type names the service. ServiceLocatorTrait builds a locator class, and ContainerAwareTrait is the removed container-injection anti-pattern.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
-??? question "79. With #[AutowireLocator(['stripe' => StripeGateway::class, 'paypal' => PayPalGateway::class])] ContainerInterface $gateways, what happens on $gateways->get('stripe')?"
+??? question "80. With #[AutowireLocator(['stripe' => StripeGateway::class, 'paypal' => PayPalGateway::class])] ContainerInterface $gateways, what happens on $gateways->get('stripe')?"
     **✅ Only StripeGateway is instantiated (lazily); PayPalGateway is never built**
 
     #[AutowireLocator] builds a PSR-11 locator that instantiates a service only when get() requests it, so fetching 'stripe' builds StripeGateway and leaves PayPalGateway cold. Locators do not require member services to be public, and they build instances, not return strings.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
-??? question "80. A locator built for keys 'stripe' and 'paypal' is called with a user-supplied key 'unknown'. What happens?"
+??? question "81. A locator built for keys 'stripe' and 'paypal' is called with a user-supplied key 'unknown'. What happens?"
     **✅ It throws ServiceNotFoundException — validate with has() before get()**
 
     A locator's set is fixed at compile time, so get() on a key outside the whitelist throws; unlike the main container there is no NULL_ON_INVALID mode. Guard untrusted keys with has() first. It never returns null or falls back to another service.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
-??? question "81. You have five heavy payment gateways but use exactly one per request, chosen by name. What is the best tool?"
+??? question "82. You have five heavy payment gateways but use exactly one per request, chosen by name. What is the best tool?"
     **✅ A service locator (e.g. #[AutowireLocator]) so only the chosen gateway is built**
 
     Pick-one-of-many with heavy dependencies is the textbook case for a lazy locator: only the selected gateway is instantiated. A tagged_iterator or constructor-injecting all five would eagerly build every gateway, and injecting the whole container is the anti-pattern the locator replaces.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
+
+??? question "83. In Symfony 8 (PHP 8.4), what does the container inject for a concrete service marked lazy: true?"
+    **✅ A native lazy ghost — an uninitialized instance whose constructor runs in place on first use**
+
+    Symfony 8 runs on PHP 8.4, whose engine provides native lazy objects. For a concrete class the dumped container creates a lazy ghost: the very same instance, handed out uninitialized, with the real constructor run in place on first state access. No external proxy library is involved.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/lazy_services.html)
+
+??? question "84. Which statements about PHP 8.4 native lazy objects as used by Symfony are true? (select all that apply)"
+    **✅ A lazy ghost is initialized in place, so it is === the initialized object ; final classes can be lazy ghosts, since no subclass is generated ; First interaction with the object's state triggers initialization**
+
+    Native ghosts are created from the class itself: identity is preserved, final classes work (unlike old inheritance-based proxies), and the engine runs the initializer on first state access. No external proxy package is needed, and the constructor does run — just later.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.lazy-objects.php)
+
+??? question "85. A service is declared with lazy: 'App\Payment\GatewayInterface'. A test asserts the injected object is === the real gateway instance after first use. What happens?"
+    **✅ The assertion fails — interface laziness creates a proxy that delegates to a distinct real instance**
+
+    Setting lazy to an interface name produces a lazy proxy implementing that interface. Unlike a ghost, a proxy is a separate object that forwards to the real instance it creates on first use, so proxy !== real instance. Identity is only preserved with ghosts (lazy: true on a concrete class).
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/lazy_services.html)
+
+??? question "86. Which are valid ways to make a service lazy in Symfony 8? (select all that apply)"
+    **✅ lazy: true under the service in services.yaml ; #[Autoconfigure(lazy: true)] on the service class ; ->lazy() on the service in a services.php configurator**
+
+    Laziness is a definition flag settable in every config format: the YAML lazy key, the Autoconfigure attribute's lazy argument, or the fluent ->lazy() call in PHP configuration. There is no LazyInterface contract to implement.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/lazy_services.html)
+
+??? question "87. Between two requests in a long-running worker runtime, what does the services_resetter service do?"
+    **✅ Calls the configured reset method on every kernel.reset-tagged service that was instantiated**
+
+    ServicesResetter iterates only the tagged services that were actually initialized during the request and invokes their configured method(s); the container and the instances themselves survive. Never-instantiated services are skipped so laziness is not defeated.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
+
+??? question "88. Which statements about resettable services are true? (select all that apply)"
+    **✅ Implementing Symfony\Contracts\Service\ResetInterface autoconfigures the kernel.reset tag ; Only services already instantiated during the request/message get reset ; The messenger:consume worker resets services between messages unless --no-reset is passed**
+
+    Autoconfiguration tags ResetInterface implementors with kernel.reset; the resetter only touches initialized services; and Messenger workers reset between messages by default (--no-reset opts out). Reset calls a method on the same instance — it does not rebuild it — and visibility is irrelevant since the resetter receives the services internally.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
+
+??? question "89. Under FrankenPHP worker mode, a shared service memoizes the current user's preferences in a private array and users start seeing each other's data. What is the idiomatic fix?"
+    **✅ Implement ResetInterface (or tag kernel.reset with a method) that clears the memoized array between requests**
+
+    In worker runtimes the container — and thus shared service state — survives across requests; the PHP-FPM "everything dies" assumption no longer holds. The reset mechanism exists exactly for this: clear the request-scoped state in reset(). Laziness only defers construction and cache:clear rebuilds compiled artifacts, not in-memory service state.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
+
+??? question "90. After cache warmup, which artifacts does the dumped container leave in var/cache/{env}/? (select all that apply)"
+    **✅ A Container{hash}/ directory with the compiled container class and per-service factory code ; A generated .preload.php file for OPcache preloading**
+
+    PhpDumper writes plain PHP: the container class with its getXxxService() factories (split per service or inlined depending on the dump settings) plus a preload script to reference from opcache.preload. The ContainerBuilder and the YAML files are build-time inputs only — nothing re-parses or unserializes them at runtime.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
+
+??? question "91. debug:container shows a private service, yet the dumped container code contains no factory for it. Why?"
+    **✅ The removing passes inlined or pruned it; debug:container reads a build-time snapshot, not the dumped code**
+
+    During the removing phases a private service with a single consumer is inlined into that consumer's factory (and unreferenced ones are removed), so it has no standalone factory in the dump. debug:container works from the pre-dump ContainerBuilder snapshot where the definition still exists — the asymmetry is expected, not a stale cache.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
+
+??? question "92. You edit a service argument in services.yaml directly on a prod server. Requests keep using the old value. Why?"
+    **✅ Prod executes the dumped PHP container and does not track config resources — the change needs a cache rebuild**
+
+    In prod the container was compiled once and dumped to var/cache/prod as plain PHP; the runtime never re-reads services.yaml. Only rebuilding the cache (cache:clear / cache:warmup) re-runs extension loading, the compiler passes and the PhpDumper dump with the new configuration.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 
 ---
 

@@ -1,6 +1,6 @@
 # Flashcards — Forms
 
-72 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+79 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -525,6 +525,55 @@
     Without autoconfiguration you must both use the form.type_extension tag and supply the extended_type attribute (the FQCN of the extended type) — it is not inferred from getExtendedTypes() in the manual case. form.type is for form types, and form.extension is not a real tag.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
+
+??? question "73. Which of the following statements are true about creating a custom form type? (select all that apply)"
+    **✅ buildForm() receives a FormBuilderInterface — the form does not exist yet, so you cannot read submitted data there ; Without a data_class option, a compound form's getData() returns an array, not an object ; getBlockPrefix() — not getName() — determines the Twig block names used for theming**
+
+    buildForm() works on a FormBuilderInterface before any FormInterface exists; without data_class the data mapper falls back to an array; and getBlockPrefix() drives theming block resolution. configureOptions() configures an OptionsResolver instance rather than returning an array, and getName() was removed long ago in favour of getBlockPrefix().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html)
+
+??? question "74. Which of the following statements are true about form submission handling? (select all that apply)"
+    **✅ Calling isValid() on a form that was never submitted throws a LogicException — guard with isSubmitted() first ; handleRequest() silently ignores a request whose HTTP method does not match the form's method option ; For a PATCH form, clearMissing is false, so fields missing from the submission keep their existing value**
+
+    isValid() on an unsubmitted form throws a LogicException; a method mismatch means the form is simply treated as not submitted; and PATCH implies clearMissing = false for partial updates. Validation actually fires as a POST_SUBMIT listener, not during request parsing, and the redirect after success is your controller's responsibility.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html#processing-forms)
+
+??? question "75. Which of the following statements are true about CSRF protection in Symfony forms? (select all that apply)"
+    **✅ CSRF protection is enabled by default and adds a hidden _token field that is checked on submission ; The CSRF token is validated on PRE_SUBMIT by the CsrfValidationListener, before data transformation**
+
+    CSRF protection is on by default via a hidden _token field, and the token check runs on PRE_SUBMIT via CsrfValidationListener. The default token id is the form's block prefix (not a fixed 'form' string) unless csrf_token_id is set, the default field name is _token, and stateless_token_ids uses SameOriginCsrfTokenManager with no session needed.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/csrf.html)
+
+??? question "76. Which of the following statements are true about data transformers? (select all that apply)"
+    **✅ transform() converts model data to view data for display; reverseTransform() converts submitted view data back to model data ; Model transformers bridge model↔norm data, while view transformers bridge norm↔view data ; A TransformationFailedException thrown during reverseTransform() marks the field invalid instead of causing a 500 error**
+
+    transform() is the model→view direction and reverseTransform() the view→model direction; model transformers sit between model and norm data while view transformers sit between norm and view data; and a TransformationFailedException surfaces as the field's invalid_message rather than a 500. On submit the order is view→norm→model, so view transformers run first, and submitted input goes through reverseTransform(), not transform().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_transformers.html)
+
+??? question "77. Which of the following statements are true about form events? (select all that apply)"
+    **✅ The data available in PRE_SUBMIT is the raw view data (array/string), not your model object ; Fields can only be added or removed in the PRE_* events, before submit binds them**
+
+    PRE_SUBMIT exposes the raw submitted array/string before any transformation, and dynamic field changes are only possible in PRE_SET_DATA/PRE_SUBMIT before binding. There are no PRE_VALIDATE/POST_VALIDATE events — validation is itself a POST_SUBMIT listener — the submit order is PRE_SUBMIT → SUBMIT → POST_SUBMIT, and POST_SET_DATA belongs to the data-setting sequence, not submission.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/events.html)
+
+??? question "78. Which of the following statements are true about rendering forms in Twig? (select all that apply)"
+    **✅ form_end() renders all remaining unrendered fields by default, including the hidden CSRF token ; form_row() renders the label, widget, errors and help text for a field ; form_errors(form) on the root form shows form-level errors; per-field errors require form_errors(form.field)**
+
+    form_end() emits remaining fields (hidden ones and the CSRF _token) unless render_rest is disabled; form_row() bundles label + widget + errors + help; and error display is split between the root form and individual fields. form_widget() outputs only the control itself, and with render_rest: false you must render the CSRF field yourself.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/form_customization.html)
+
+??? question "79. Which of the following statements are true about handling file uploads with Symfony forms? (select all that apply)"
+    **✅ form_start() adds enctype="multipart/form-data" automatically, but only when the form contains a file field ; getClientOriginalName() and getClientMimeType() return untrusted, client-supplied values ; An unmapped FileType field is still validated, and you read it via $form->get('x')->getData()**
+
+    Multipart encoding is only set when a file field is present; the client-provided name and MIME type must never be trusted (use guessExtension()/getMimeType() instead); and unmapped fields are validated and fetched with ->get('x')->getData(). FileType yields an UploadedFile object (not a string path), and the File constraint is capped by — it can never override — PHP's upload_max_filesize/post_max_size limits.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/upload_file.html)
 
 ---
 

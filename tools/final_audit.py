@@ -11,7 +11,10 @@ DOCS = os.path.join(ROOT, "docs")
 MATRIX = os.path.join(ROOT, "specs", "TraceabilityMatrix.md")
 
 CHECKS = {
-    "Deep Dive":        re.compile(r"(?m)^#{2,4}\s+Deep Dive"),
+    # `## How it works internally` is what the four-file journey calls the same
+    # section, so both spellings count — the audit tracks whether a chapter goes
+    # under the hood, not which of two headings it puts that under.
+    "Deep Dive":        re.compile(r"(?m)^#{2,4}\s+(Deep Dive|How it works internally)"),
     "Quick Revision":   re.compile(r"In a nutshell"),
     "Final Revision":   re.compile(r"(?m)^#{2,4}\s+Last-minute revision"),
     "Analogy":          re.compile(r"Real-world analogy"),
@@ -24,6 +27,30 @@ CHECKS = {
     "Connections":      re.compile(r"(?m)^#{2,4}\s+Connections"),
     "Confidence check": re.compile(r"[Cc]onfidence"),
 }
+
+# Two sections no longer live in the lesson once a topic has been split into the
+# four-file learning journey: the questions moved to `<topic>-exam.md` and the
+# practice to `<topic>-exercises.md`. Searching only the lesson would report a
+# false regression — the content did not disappear, it moved one file over — so
+# these markers are resolved against the lesson *and* its journey siblings.
+#
+# The sibling carries the content in its own form, not under the lesson's old
+# heading, so each migrated marker needs its own pattern there: an exam file is
+# made of `??? question` blocks, an exercises file of `## Exercise N` headings.
+MIGRATED = {
+    "Questions": ("-exam.md", re.compile(r"(?m)^\?\?\?\s+question\b")),
+    "Exercises": ("-exercises.md", re.compile(r"(?m)^#{2,4}\s+Exercise\s+\d")),
+}
+
+
+def satisfied_by_sibling(path: str, name: str) -> bool:
+    """True when a migrated section now lives in this chapter's journey sibling."""
+    suffix, pattern = MIGRATED[name]
+    sibling = (path[:-3] if path.endswith(".md") else path) + suffix
+    if not os.path.exists(sibling):
+        return False
+    return bool(pattern.search(open(sibling, encoding="utf-8").read()))
+
 
 def syllabus_chapters():
     rows = []
@@ -50,7 +77,9 @@ def main():
     for item, rel in rows:
         p = os.path.join(DOCS, rel)
         txt = open(p, encoding="utf-8").read() if os.path.exists(p) else ""
-        got = {name: bool(pat.search(txt)) for name, pat in CHECKS.items()}
+        got = {name: bool(pat.search(txt)) or
+                     (name in MIGRATED and satisfied_by_sibling(p, name))
+               for name, pat in CHECKS.items()}
         results[rel] = got
         for name, ok in got.items():
             if ok: per_check[name] += 1

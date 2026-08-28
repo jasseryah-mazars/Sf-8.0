@@ -18,19 +18,19 @@ One exam per topic area — every subchapter mixed together, ordered progressive
 
 ## Exams
 
-- [PHP & Web Security](php-web-security.md) — 112 questions
-- [HTTP](http.md) — 76 questions
+- [PHP & Web Security](php-web-security.md) — 123 questions
+- [HTTP](http.md) — 84 questions
 - [Symfony Architecture](architecture.md) — 122 questions
-- [Controllers](controllers.md) — 94 questions
-- [Routing](routing.md) — 87 questions
+- [Controllers](controllers.md) — 101 questions
+- [Routing](routing.md) — 93 questions
 - [Templating (Twig)](twig.md) — 109 questions
-- [Forms](forms.md) — 72 questions
-- [Data Validation](validation.md) — 74 questions
-- [Dependency Injection](dependency-injection.md) — 81 questions
-- [Security](security.md) — 78 questions
-- [HTTP Caching](http-caching.md) — 52 questions
-- [Console](console.md) — 66 questions
-- [Automated Tests](testing.md) — 71 questions
+- [Forms](forms.md) — 79 questions
+- [Data Validation](validation.md) — 80 questions
+- [Dependency Injection](dependency-injection.md) — 92 questions
+- [Security](security.md) — 93 questions
+- [HTTP Caching](http-caching.md) — 58 questions
+- [Console](console.md) — 73 questions
+- [Automated Tests](testing.md) — 78 questions
 - [Miscellaneous](miscellaneous.md) — 79 questions
 - [Messenger](messenger.md) — 28 questions
 

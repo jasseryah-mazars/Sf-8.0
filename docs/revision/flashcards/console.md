@@ -1,6 +1,6 @@
 # Flashcards — Console
 
-66 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+73 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
@@ -483,6 +483,55 @@
     isDebug() is true only at -vvv (DEBUG=256), the right guard for the most verbose diagnostics. isVerbose() is true from -v upward (too broad here), isInteractive() is about prompting not verbosity, and isQuiet() is the opposite end of the scale.
 
     :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/verbosity.html)
+
+??? question "67. Which statements about console arguments and options are correct? (select all that apply)"
+    **✅ Arguments are positional, while options are named and may define a one-letter shortcut ; An option defined with InputOption::VALUE_NONE acts as a flag: it accepts no value and has no default ; InputOption::VALUE_NEGATABLE makes the option also accept a --no-* variant**
+
+    Arguments are bound by position while options are named (with optional -x shortcuts) and can appear anywhere on the command line, so options are never positional. VALUE_NONE options are pure presence flags with no value or default, and VALUE_NEGATABLE (16) adds the negated --no-* form. An IS_ARRAY argument swallows all remaining input, so it must be the last argument defined.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/input.html)
+
+??? question "68. Which statements about console verbosity are true? (select all that apply)"
+    **✅ -q suppresses normal output, but the command still executes fully and returns its real exit code ; $output->isDebug() returns true only at the -vvv (DEBUG) level**
+
+    Quiet mode silences output only — execution and the exit code are untouched — and isDebug() is the guard that matches exactly the -vvv/DEBUG level. Verbosity is a property of the output (OutputInterface constants 16 to 256), not of the input; non-interactivity is controlled separately by -n; and the verbosity flags directly govern what the console output prints.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/verbosity.html)
+
+??? question "69. Which statements about console events and exit codes are correct? (select all that apply)"
+    **✅ The TERMINATE event is dispatched whether the command succeeds or throws ; Calling disableCommand() in a COMMAND event listener skips execution and yields exit code 113 ; A ConsoleErrorEvent listener can replace the throwable or set a custom exit code**
+
+    ConsoleTerminateEvent always runs, after success and after errors alike, and ConsoleErrorEvent listeners may swap the throwable or call setExitCode(). disableCommand() short-circuits execution with ConsoleCommandEvent::RETURN_CODE_DISABLED (113). The ERROR event fires only when a Throwable is thrown, and exit codes are clamped to the 0-255 range before reaching the shell.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
+
+??? question "70. Which statements about command configuration and the command lifecycle are true? (select all that apply)"
+    **✅ configure() is called from the command's constructor, before any input is available ; Putting the command name in the #[AsCommand] attribute keeps command loading lazy**
+
+    configure() runs in the constructor, which is why it cannot read input, and declaring the name in #[AsCommand] lets the application know the command without instantiating it, enabling lazy loading. The lifecycle order is configure, then initialize, then interact, then execute — interact() runs before execute(), and initialize() runs on every execution regardless of interactivity.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
+
+??? question "71. Which statements about writing custom commands in Symfony 8 are correct? (select all that apply)"
+    **✅ Invokable commands using __invoke() are the modern default; extending Command still works ; Commands should return Command::SUCCESS (0), Command::FAILURE (1) or Command::INVALID (2) ; With autoconfiguration, command classes are automatically tagged console.command**
+
+    Symfony 8 favors invokable commands built around __invoke() while the classic extends-Command style remains valid, exit statuses use the SUCCESS/FAILURE/INVALID constants (0, 1, 2), and autoconfiguration applies the console.command tag so commands are registered and loaded lazily. ContainerAwareCommand no longer exists — services are injected through the constructor — and execute() must return an int, not null.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
+
+??? question "72. Which statements about the commands available in bin/console are true? (select all that apply)"
+    **✅ Running bin/console with no command name executes the default list command ; The make:* commands come from MakerBundle, not from Symfony core ; cache:clear and the debug:* commands are added by FrameworkBundle, not by the standalone Console component**
+
+    list is the default command (so a bare bin/console prints the command list), make:* generators ship with MakerBundle rather than core, and cache:clear, cache:warmup and debug:* come from FrameworkBundle on top of the component. completion is one of the commands present in every Console application without extra packages, and help works with any registered command, including custom ones.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
+
+??? question "73. Which statements about console input and output handling are correct? (select all that apply)"
+    **✅ SymfonyStyle wraps the input and output and provides styled helpers such as title(), table() and ask() ; STDERR is reached through ConsoleOutputInterface::getErrorOutput(), keeping pipeable data clean on STDOUT ; Output sections allow parts of the output to be updated independently while the command runs**
+
+    SymfonyStyle is constructed from the input and output and is the go-to styled UI layer; error/diagnostic text belongs on the dedicated error output obtained via ConsoleOutputInterface::getErrorOutput(); and output sections can be overwritten live and independently during a single run. writeln() targets the normal STDOUT stream, which is exactly why diagnostics should be sent to the error output instead.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/style.html)
 
 ---
 

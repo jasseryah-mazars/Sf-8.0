@@ -9,6 +9,7 @@ Justification: practising 75 Qs under a 90-min clock builds timing + stamina.
 """
 from __future__ import annotations
 import os, glob, random, yaml
+from generated_blocks import carry_over
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "revision", "mock-exam.md")
@@ -130,5 +131,7 @@ if __name__ == "__main__":
     outdir = os.path.join(ROOT, "docs", "revision")
     for label, (seed, fname) in VARIANTS.items():
         picked = build(seed)
-        open(os.path.join(outdir, fname), "w", encoding="utf-8").write(render(picked, label))
+        out = os.path.join(outdir, fname)
+        text = carry_over(out, render(picked, label))
+        open(out, "w", encoding="utf-8").write(text)
         print(f"mock {label}: {len(picked)} questions -> docs/revision/{fname}")
