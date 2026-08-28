@@ -1,0 +1,6 @@
+{
+  "version": "11.17.2",
+  "sha256": "581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8",
+  "source": "tools/node_modules/mermaid/dist/mermaid.min.js",
+  "why": "Vendored so the site renders with the same engine tools/validate_mermaid.py validates against, and so diagrams do not depend on an unpinned CDN range."
+}

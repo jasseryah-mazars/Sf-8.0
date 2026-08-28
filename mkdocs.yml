@@ -162,6 +162,12 @@ extra_css:
   - assets/navigation.css
 
 extra_javascript:
+  # Loaded FIRST and deliberately not lazily. mkdocs-material only fetches
+  # mermaid from unpkg when `mermaid` is undefined, so defining it here means
+  # the site never reaches the CDN and always renders with the exact version
+  # tools/validate_mermaid.py validated against. Kept in sync by
+  # tools/vendor_mermaid.py, which refuses to run on a version mismatch.
+  - assets/mermaid.min.js
   - assets/quiz.js
   - assets/a11y.js
   - assets/progress.js
