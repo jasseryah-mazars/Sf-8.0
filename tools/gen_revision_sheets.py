@@ -26,10 +26,19 @@ def strip_links(text):
     content is relocated into revision/sheets/."""
     return re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
 
-def section(text, header):
-    """Return the body of a '## header' section up to the next '## '."""
-    m = re.search(rf"(?ms)^##\s+{re.escape(header)}\s*$(.*?)(?=^##\s|\Z)", text)
-    return strip_links(m.group(1).strip()) if m else ""
+def section(text, *headers):
+    """Body of the first '## <header>' section found, up to the next '## '.
+
+    Several spellings are accepted because the four-file learning journey renamed
+    some of them (`## Key takeaways` also appears as `## Expert takeaways`).
+    Returns None when none matches, so the caller can fail instead of silently
+    emitting an empty sheet.
+    """
+    for header in headers:
+        m = re.search(rf"(?ms)^##\s+{re.escape(header)}\s*$(.*?)(?=^##\s|\Z)", text)
+        if m:
+            return strip_links(m.group(1).strip())
+    return None
 
 def title(text):
     m = re.search(r"(?m)^#\s+(.+)$", text)
@@ -57,9 +66,19 @@ for area, label in AREAS.items():
     for f in files:
         t = open(f, encoding="utf-8").read()
         name = title(t)
-        kt = section(t, "Key takeaways")
+        kt = section(t, "Key takeaways", "Expert takeaways")
+        if kt is None:
+            # Silence here is what made this generator dangerous: renaming a heading
+            # emptied every sheet with no error at all. Name the file, the headings
+            # looked for, and stop.
+            raise SystemExit(
+                f"gen_revision_sheets: FAIL — {os.path.relpath(f, ROOT)} has neither "
+                f"'## Key takeaways' nor '## Expert takeaways'.\n"
+                f"  The revision sheet for '{area}' would be emitted with that chapter "
+                f"blank. Add one of those headings, or exclude the file deliberately."
+            )
         # Last-minute revision usually wraps a tip admonition; strip admonition markers.
-        lm = section(t, "Last-minute revision")
+        lm = section(t, "Last-minute revision") or ""
         lm = re.sub(r'(?m)^\s*!!!.*tip.*$', '', lm)
         lm = re.sub(r'(?m)^\s{0,4}', '', lm).strip()
         L.append(f"## {name}")

@@ -92,8 +92,15 @@ def evidence(main: str | None) -> dict:
     ev["path_exists"] = os.path.exists(os.path.join(DOCS, main))
     ev["non_empty"] = len(txt.strip()) > 200
     ev["example"] = bool(re.search(r"```(?:php|yaml|console|twig|html\+twig|http)", txt))
-    ev["exercise"] = bool(re.search(r"(?m)^#{2,4}\s+Exercises", txt))
-    ev["solution"] = '"Solutions"' in txt
+    # A topic split into the four-file learning journey keeps neither its exercises
+    # nor its solutions in the lesson — they live in `<topic>-exercises.md`. Looking
+    # only at the lesson would report every migrated topic as `structure` when it is
+    # in fact more complete than before, which is the opposite of what this matrix
+    # is for.
+    journey = _read(main[:-3] + "-exercises.md") if main.endswith(".md") else ""
+    ev["exercise"] = bool(re.search(r"(?m)^#{2,4}\s+Exercises", txt)) or bool(
+        re.search(r"(?m)^#{2,4}\s+Exercise\s+\d", journey))
+    ev["solution"] = '"Solutions"' in txt or '"Show the solution"' in journey
     ev["pitfall"] = "Certification traps" in txt
     # Symfony 8.0 source (blob/8.0, tree/8.0) OR, for Twig-language content,
     # Twig's own version-pinned source (twigphp/Twig/{blob,tree}/3.x) — Twig
