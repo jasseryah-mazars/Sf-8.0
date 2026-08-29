@@ -21,9 +21,17 @@ quoi ouvrir ensuite, sans avoir besoin de comprendre la structure du site.
 
 <div class="sf-paths">
 
+<a class="sf-path-card" href="roadmap/">
+<strong>🚀 From scratch to Expert — le parcours complet</strong>
+<span>Tout le trajet en une seule route : zéro → fondations → advanced →
+Expert → certification. Chaque sujet dans l'ordre des dépendances, et pour
+chacun : lesson → exercises → exam → flashcards.</span>
+</a>
+
 <a class="sf-path-card" href="php-web-security/">
 <strong>🌱 Je débute avec Symfony</strong>
-<span>Partez des fondamentaux PHP, puis suivez l'ordre recommandé complet.</span>
+<span>Commencez à l'étape 1, les fondamentaux PHP — puis continuez sur le
+parcours complet ci-dessus plutôt que de vous arrêter là.</span>
 </a>
 
 <a class="sf-path-card" href="roadmap/">

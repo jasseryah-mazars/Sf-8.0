@@ -1,8 +1,23 @@
 # Learning Roadmap
 
-This is the **optimized study order** — deliberately *not* the syllabus order. It
+**The complete path, from scratch to Expert.** This is the whole journey in one
+route — no prior Symfony assumed at the start, Expert-level internals by the end:
+
+```
+Zero → Foundations → Advanced → Expert → Certification
+```
+
+It is the **optimized study order**, deliberately *not* the syllabus order: it
 teaches the mental model first (how a request becomes a response, how the container
 is built), then layers features on top so no concept is used before it is taught.
+The order is held in `specs/learning_path.yml` and checked in CI, so the navigation
+and every "next topic" link tell the same story as this page.
+
+Each topic is worked the same way, not just read:
+
+```
+Lesson → Exercises → Exam → Flashcards → next topic
+```
 
 !!! abstract "How to read this"
     The 15 topic areas are grouped into **4 phases**. Work phase by phase; inside a
