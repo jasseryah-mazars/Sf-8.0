@@ -1,0 +1,900 @@
+# Learning path — the single source of truth for reading order
+#
+# Five places used to encode this order independently and could drift in silence:
+# mkdocs.yml's nav, each domain index's "## Micro-chapters" list, the
+# "Continue to the next topic" link ending every -flashcards.md, roadmap.md, and
+# the French navigation. tools/check_learning_path.py compares all of them to this
+# file, so the order is edited here and nowhere else.
+#
+# Order is PEDAGOGICAL, not the syllabus order. The syllabus lists topics; it does
+# not claim they teach well in that sequence. Three domains were reordered against
+# real dependencies:
+#   php-web-security  interfaces before attributes (an attribute class implements
+#                     one), abstract-classes next to oop, and the four enrichment
+#                     chapters placed where they belong instead of appended.
+#   http              methods before cookies and caching, which build on them.
+#   security          the syllabus taught Authorization and Configuration before
+#                     Firewalls and Users - deciding access before establishing who
+#                     is being secured. Now: who -> where they come from -> how they
+#                     prove it -> what they carry -> how access is decided -> the
+#                     declarative rules.
+#
+# status:
+#   OFFICIAL      on the Symfony 8 certification syllabus.
+#   ADDITIONAL    genuinely useful for Expert preparation, not on the official list.
+#   OUT_OF_SCOPE  explicitly outside the exam (no topic carries it yet).
+#
+# Coverage statistics must always separate these: counting ADDITIONAL concepts
+# towards syllabus coverage would overstate it.
+#
+# The classification below is SEEDED from specs/TraceabilityMatrix.md's own
+# "additional/depth" rows plus http/client-server, which the project owner named
+# explicitly. It is not a fresh read of certification.symfony.com - that page has no
+# git mirror and is blocked by this environment's egress proxy, so no row here is
+# evidence of what the official syllabus says. Re-verify per domain as each lot is
+# processed.
+#
+# There is deliberately no `next:` field: the next topic is the following entry, and
+# a stored copy could contradict the order it is meant to describe.
+
+domains:
+- name: PHP & Web Security
+  dir: php-web-security
+  topics:
+  - slug: php-api
+    title: PHP API (up to 8.4)
+    status: OFFICIAL
+  - slug: oop
+    title: Object-Oriented Programming
+    status: OFFICIAL
+    requires:
+    - php-api
+  - slug: interfaces
+    title: Interfaces
+    status: OFFICIAL
+    requires:
+    - oop
+  - slug: attributes
+    title: Attributes
+    status: OFFICIAL
+    requires:
+    - interfaces
+  - slug: closures
+    title: Anonymous Functions & Closures
+    status: OFFICIAL
+    requires:
+    - attributes
+  - slug: abstract-classes
+    title: Abstract Classes
+    status: OFFICIAL
+    requires:
+    - closures
+  - slug: exceptions
+    title: Exception & Error Handling
+    status: OFFICIAL
+    requires:
+    - abstract-classes
+  - slug: traits
+    title: Traits
+    status: OFFICIAL
+    requires:
+    - exceptions
+  - slug: enums
+    title: Enums
+    status: OFFICIAL
+    requires:
+    - traits
+  - slug: namespaces
+    title: Namespaces
+    status: ADDITIONAL
+    requires:
+    - enums
+  - slug: extensions
+    title: PHP Extensions
+    status: ADDITIONAL
+    requires:
+    - namespaces
+  - slug: spl
+    title: SPL
+    status: ADDITIONAL
+    requires:
+    - extensions
+  - slug: web-security
+    title: Web Security Fundamentals
+    status: ADDITIONAL
+    requires:
+    - spl
+- name: HTTP
+  dir: http
+  topics:
+  - slug: rfc-9110
+    title: HTTP Specification (RFC 9110)
+    status: OFFICIAL
+  - slug: client-server
+    title: Client / Server Interaction
+    status: ADDITIONAL
+    requires:
+    - rfc-9110
+  - slug: status-codes
+    title: Status Codes
+    status: OFFICIAL
+    requires:
+    - client-server
+  - slug: request
+    title: HTTP Request
+    status: OFFICIAL
+    requires:
+    - status-codes
+  - slug: response
+    title: HTTP Response
+    status: OFFICIAL
+    requires:
+    - request
+  - slug: methods
+    title: HTTP Methods
+    status: OFFICIAL
+    requires:
+    - response
+  - slug: cookies
+    title: Cookies
+    status: OFFICIAL
+    requires:
+    - methods
+  - slug: caching
+    title: Caching Overview
+    status: OFFICIAL
+    requires:
+    - cookies
+  - slug: content-negotiation
+    title: Content Negotiation
+    status: OFFICIAL
+    requires:
+    - caching
+  - slug: language-detection
+    title: Language Detection
+    status: OFFICIAL
+    requires:
+    - content-negotiation
+  - slug: httpclient
+    title: HttpClient Component
+    status: OFFICIAL
+    requires:
+    - language-detection
+- name: Symfony Architecture
+  dir: architecture
+  topics:
+  - slug: flex
+    title: Symfony Flex
+    status: OFFICIAL
+  - slug: license
+    title: License
+    status: OFFICIAL
+    requires:
+    - flex
+  - slug: components
+    title: Components
+    status: OFFICIAL
+    requires:
+    - license
+  - slug: bridges
+    title: Bridges
+    status: OFFICIAL
+    requires:
+    - components
+  - slug: code-organization
+    title: Code Organization
+    status: OFFICIAL
+    requires:
+    - bridges
+  - slug: request-handling
+    title: Request Handling (HttpKernel)
+    status: OFFICIAL
+    requires:
+    - code-organization
+  - slug: exception-handling
+    title: Exception Handling
+    status: OFFICIAL
+    requires:
+    - request-handling
+  - slug: events
+    title: Event Dispatcher & Kernel Events
+    status: OFFICIAL
+    requires:
+    - exception-handling
+  - slug: best-practices
+    title: Official Best Practices
+    status: OFFICIAL
+    requires:
+    - events
+  - slug: release-management
+    title: Release Management
+    status: OFFICIAL
+    requires:
+    - best-practices
+  - slug: bc-promise
+    title: Backward Compatibility Promise
+    status: OFFICIAL
+    requires:
+    - release-management
+  - slug: deprecations
+    title: Deprecations Best Practices
+    status: OFFICIAL
+    requires:
+    - bc-promise
+  - slug: overloading
+    title: Framework Overloading
+    status: OFFICIAL
+    requires:
+    - deprecations
+  - slug: roadmap-schedule
+    title: Roadmap & Schedule
+    status: OFFICIAL
+    requires:
+    - overloading
+  - slug: psr
+    title: Interoperability & PSRs
+    status: OFFICIAL
+    requires:
+    - roadmap-schedule
+  - slug: naming-conventions
+    title: Naming Conventions
+    status: OFFICIAL
+    requires:
+    - psr
+- name: Dependency Injection
+  dir: dependency-injection
+  topics:
+  - slug: container
+    title: Service Container
+    status: OFFICIAL
+  - slug: built-in-services
+    title: Built-in Services
+    status: OFFICIAL
+    requires:
+    - container
+  - slug: parameters
+    title: Configuration Parameters
+    status: OFFICIAL
+    requires:
+    - built-in-services
+  - slug: registration
+    title: Service Registration
+    status: OFFICIAL
+    requires:
+    - parameters
+  - slug: decoration
+    title: Service Decoration
+    status: OFFICIAL
+    requires:
+    - registration
+  - slug: tags
+    title: Tags
+    status: OFFICIAL
+    requires:
+    - decoration
+  - slug: semantic-config
+    title: Semantic Configuration
+    status: OFFICIAL
+    requires:
+    - tags
+  - slug: factories
+    title: Factories
+    status: OFFICIAL
+    requires:
+    - semantic-config
+  - slug: compiler-passes
+    title: Compiler Passes
+    status: OFFICIAL
+    requires:
+    - factories
+  - slug: autowiring
+    title: Autowiring
+    status: OFFICIAL
+    requires:
+    - compiler-passes
+  - slug: service-locators
+    title: Service Locators
+    status: OFFICIAL
+    requires:
+    - autowiring
+  - slug: lazy-services
+    title: Lazy Services & Native Lazy Objects
+    status: OFFICIAL
+    requires:
+    - service-locators
+  - slug: service-reset
+    title: Resettable Services (Services Resetter)
+    status: OFFICIAL
+    requires:
+    - lazy-services
+  - slug: container-dump
+    title: Inside the Compiled Container
+    status: OFFICIAL
+    requires:
+    - service-reset
+- name: Controllers
+  dir: controllers
+  topics:
+  - slug: naming-conventions
+    title: Naming Conventions
+    status: OFFICIAL
+  - slug: abstract-controller
+    title: AbstractController
+    status: OFFICIAL
+    requires:
+    - naming-conventions
+  - slug: request
+    title: The Request
+    status: OFFICIAL
+    requires:
+    - abstract-controller
+  - slug: response
+    title: The Response
+    status: OFFICIAL
+    requires:
+    - request
+  - slug: cookies
+    title: Cookies
+    status: OFFICIAL
+    requires:
+    - response
+  - slug: session
+    title: The Session
+    status: OFFICIAL
+    requires:
+    - cookies
+  - slug: flash-messages
+    title: Flash Messages
+    status: OFFICIAL
+    requires:
+    - session
+  - slug: http-redirects
+    title: HTTP Redirects
+    status: OFFICIAL
+    requires:
+    - flash-messages
+  - slug: internal-redirects
+    title: Internal Redirects (Forwarding)
+    status: OFFICIAL
+    requires:
+    - http-redirects
+  - slug: error-pages
+    title: 404 & Error Pages
+    status: OFFICIAL
+    requires:
+    - internal-redirects
+  - slug: file-upload
+    title: File Upload
+    status: OFFICIAL
+    requires:
+    - error-pages
+  - slug: built-in-controllers
+    title: Built-in Internal Controllers
+    status: OFFICIAL
+    requires:
+    - file-upload
+  - slug: value-resolvers
+    title: Argument Value Resolvers
+    status: OFFICIAL
+    requires:
+    - built-in-controllers
+- name: Routing
+  dir: routing
+  topics:
+  - slug: configuration
+    title: Configuration (YAML & Attributes)
+    status: OFFICIAL
+  - slug: requirements
+    title: Restrict URL Parameters
+    status: OFFICIAL
+    requires:
+    - configuration
+  - slug: defaults
+    title: Default Values
+    status: OFFICIAL
+    requires:
+    - requirements
+  - slug: url-generation
+    title: Generate URLs
+    status: OFFICIAL
+    requires:
+    - defaults
+  - slug: redirects
+    title: Trigger Redirects
+    status: OFFICIAL
+    requires:
+    - url-generation
+  - slug: special-attributes
+    title: Special Internal Attributes
+    status: OFFICIAL
+    requires:
+    - redirects
+  - slug: host-matching
+    title: Domain Name Matching
+    status: OFFICIAL
+    requires:
+    - special-attributes
+  - slug: conditions
+    title: Conditional Matching
+    status: OFFICIAL
+    requires:
+    - host-matching
+  - slug: methods
+    title: HTTP Methods Matching
+    status: OFFICIAL
+    requires:
+    - conditions
+  - slug: locale
+    title: Locale Guessing
+    status: OFFICIAL
+    requires:
+    - methods
+  - slug: debugging
+    title: Router Debugging
+    status: OFFICIAL
+    requires:
+    - locale
+- name: Templating (Twig)
+  dir: twig
+  topics:
+  - slug: syntax
+    title: Twig Syntax
+    status: OFFICIAL
+  - slug: auto-escaping
+    title: Auto-Escaping
+    status: OFFICIAL
+    requires:
+    - syntax
+  - slug: inheritance
+    title: Template Inheritance
+    status: OFFICIAL
+    requires:
+    - auto-escaping
+  - slug: globals
+    title: Global Variables
+    status: OFFICIAL
+    requires:
+    - inheritance
+  - slug: filters-functions
+    title: Filters & Functions
+    status: OFFICIAL
+    requires:
+    - globals
+  - slug: includes
+    title: Template Includes
+    status: OFFICIAL
+    requires:
+    - filters-functions
+  - slug: loops-conditions
+    title: Loops & Conditions
+    status: OFFICIAL
+    requires:
+    - includes
+  - slug: urls
+    title: URL Generation
+    status: OFFICIAL
+    requires:
+    - loops-conditions
+  - slug: controller-rendering
+    title: Controller Rendering
+    status: OFFICIAL
+    requires:
+    - urls
+  - slug: translations
+    title: Translations & Pluralization
+    status: OFFICIAL
+    requires:
+    - controller-rendering
+  - slug: interpolation
+    title: String Interpolation
+    status: OFFICIAL
+    requires:
+    - translations
+  - slug: assets
+    title: Assets Management
+    status: OFFICIAL
+    requires:
+    - interpolation
+  - slug: debugging
+    title: Debugging Variables
+    status: OFFICIAL
+    requires:
+    - assets
+- name: Data Validation
+  dir: validation
+  topics:
+  - slug: object-validation
+    title: PHP Object Validation
+    status: OFFICIAL
+  - slug: built-in-constraints
+    title: Built-in Constraints
+    status: OFFICIAL
+    requires:
+    - object-validation
+  - slug: scopes
+    title: Validation Scopes
+    status: OFFICIAL
+    requires:
+    - built-in-constraints
+  - slug: groups
+    title: Validation Groups
+    status: OFFICIAL
+    requires:
+    - scopes
+  - slug: group-sequence
+    title: Group Sequence
+    status: OFFICIAL
+    requires:
+    - groups
+  - slug: callbacks
+    title: Custom Callback Validators
+    status: OFFICIAL
+    requires:
+    - group-sequence
+  - slug: custom-constraints
+    title: Custom Constraints
+    status: OFFICIAL
+    requires:
+    - callbacks
+  - slug: violations-builder
+    title: Violations Builder
+    status: OFFICIAL
+    requires:
+    - custom-constraints
+- name: Forms
+  dir: forms
+  topics:
+  - slug: creation
+    title: Form Creation
+    status: OFFICIAL
+  - slug: handling
+    title: Form Handling
+    status: OFFICIAL
+    requires:
+    - creation
+  - slug: types
+    title: Form Types
+    status: OFFICIAL
+    requires:
+    - handling
+  - slug: rendering
+    title: Rendering with Twig
+    status: OFFICIAL
+    requires:
+    - types
+  - slug: theming
+    title: Form Theming
+    status: OFFICIAL
+    requires:
+    - rendering
+  - slug: csrf
+    title: CSRF Protection
+    status: OFFICIAL
+    requires:
+    - theming
+  - slug: file-upload
+    title: File Upload Handling
+    status: OFFICIAL
+    requires:
+    - csrf
+  - slug: built-in-types
+    title: Built-in Form Types
+    status: OFFICIAL
+    requires:
+    - file-upload
+  - slug: data-transformers
+    title: Data Transformers
+    status: OFFICIAL
+    requires:
+    - built-in-types
+  - slug: events
+    title: Form Events
+    status: OFFICIAL
+    requires:
+    - data-transformers
+  - slug: type-extensions
+    title: Form Type Extensions
+    status: OFFICIAL
+    requires:
+    - events
+- name: Security
+  dir: security
+  topics:
+  - slug: configuration
+    title: Configuration
+    status: OFFICIAL
+  - slug: users
+    title: Users
+    status: OFFICIAL
+    requires:
+    - configuration
+  - slug: providers
+    title: Providers
+    status: OFFICIAL
+    requires:
+    - users
+  - slug: password-hashers
+    title: Password Hashers
+    status: OFFICIAL
+    requires:
+    - providers
+  - slug: firewalls
+    title: Firewalls
+    status: OFFICIAL
+    requires:
+    - password-hashers
+  - slug: authentication
+    title: Authentication
+    status: OFFICIAL
+    requires:
+    - firewalls
+  - slug: authenticators
+    title: Authenticators, Passports & Badges
+    status: OFFICIAL
+    requires:
+    - authentication
+  - slug: programmatic-login
+    title: Programmatic Login & Logout
+    status: OFFICIAL
+    requires:
+    - authenticators
+  - slug: roles
+    title: Roles
+    status: OFFICIAL
+    requires:
+    - programmatic-login
+  - slug: role-hierarchy
+    title: Role Hierarchy
+    status: OFFICIAL
+    requires:
+    - roles
+  - slug: authorization
+    title: Authorization
+    status: OFFICIAL
+    requires:
+    - role-hierarchy
+  - slug: voters
+    title: Voters & Voting Strategies
+    status: OFFICIAL
+    requires:
+    - authorization
+  - slug: access-decision-strategies
+    title: Access Decision Strategies
+    status: OFFICIAL
+    requires:
+    - voters
+  - slug: access-control
+    title: Access Control Rules
+    status: OFFICIAL
+    requires:
+    - access-decision-strategies
+  - slug: impersonation
+    title: Impersonation (switch_user)
+    status: OFFICIAL
+    requires:
+    - access-control
+  - slug: login-throttling
+    title: Login Throttling
+    status: OFFICIAL
+    requires:
+    - impersonation
+- name: HTTP Caching
+  dir: http-caching
+  topics:
+  - slug: cache-types
+    title: Cache Types
+    status: OFFICIAL
+  - slug: expiration
+    title: Expiration (Expires, Cache-Control)
+    status: OFFICIAL
+    requires:
+    - cache-types
+  - slug: validation
+    title: Validation (ETag, Last-Modified)
+    status: OFFICIAL
+    requires:
+    - expiration
+  - slug: client-side
+    title: Client-Side Caching
+    status: OFFICIAL
+    requires:
+    - validation
+  - slug: server-side
+    title: Server-Side Caching
+    status: OFFICIAL
+    requires:
+    - client-side
+- name: Console
+  dir: console
+  topics:
+  - slug: built-in-commands
+    title: Built-in Commands
+    status: OFFICIAL
+  - slug: custom-commands
+    title: Custom Commands
+    status: OFFICIAL
+    requires:
+    - built-in-commands
+  - slug: configuration
+    title: Configuration
+    status: OFFICIAL
+    requires:
+    - custom-commands
+  - slug: options-arguments
+    title: Options & Arguments
+    status: OFFICIAL
+    requires:
+    - configuration
+  - slug: input-output
+    title: Input & Output Objects
+    status: OFFICIAL
+    requires:
+    - options-arguments
+  - slug: helpers
+    title: Built-in Helpers
+    status: OFFICIAL
+    requires:
+    - input-output
+  - slug: events
+    title: Console Events
+    status: OFFICIAL
+    requires:
+    - helpers
+  - slug: verbosity
+    title: Verbosity Levels
+    status: OFFICIAL
+    requires:
+    - events
+- name: Messenger
+  dir: messenger
+  topics:
+  - slug: component
+    title: Messenger Component
+    status: OFFICIAL
+  - slug: messages-handlers
+    title: Messages & Handlers
+    status: OFFICIAL
+    requires:
+    - component
+  - slug: middleware
+    title: Middleware
+    status: OFFICIAL
+    requires:
+    - messages-handlers
+  - slug: transports
+    title: Transports
+    status: OFFICIAL
+    requires:
+    - middleware
+  - slug: workers
+    title: Workers
+    status: OFFICIAL
+    requires:
+    - transports
+  - slug: retries-failures
+    title: Retries & Failures
+    status: OFFICIAL
+    requires:
+    - workers
+  - slug: events
+    title: Events
+    status: OFFICIAL
+    requires:
+    - retries-failures
+- name: Automated Tests
+  dir: testing
+  topics:
+  - slug: unit-tests
+    title: Unit Tests with PHPUnit
+    status: OFFICIAL
+  - slug: functional-tests
+    title: Functional Tests
+    status: OFFICIAL
+    requires:
+    - unit-tests
+  - slug: client
+    title: The Client Object
+    status: OFFICIAL
+    requires:
+    - functional-tests
+  - slug: crawler
+    title: The Crawler Object
+    status: OFFICIAL
+    requires:
+    - client
+  - slug: profiler
+    title: The Profiler Object
+    status: OFFICIAL
+    requires:
+    - crawler
+  - slug: framework-objects
+    title: Framework Objects Access
+    status: OFFICIAL
+    requires:
+    - profiler
+  - slug: client-configuration
+    title: Client Configuration
+    status: OFFICIAL
+    requires:
+    - framework-objects
+  - slug: introspection
+    title: Request/Response Introspection
+    status: OFFICIAL
+    requires:
+    - client-configuration
+  - slug: deprecations
+    title: Handling Deprecated Code
+    status: OFFICIAL
+    requires:
+    - introspection
+- name: Miscellaneous
+  dir: miscellaneous
+  topics:
+  - slug: configuration
+    title: Configuration (Config, DotEnv, ExpressionLanguage)
+    status: OFFICIAL
+  - slug: error-handling
+    title: Error Handling
+    status: OFFICIAL
+    requires:
+    - configuration
+  - slug: debugging
+    title: Code Debugging
+    status: OFFICIAL
+    requires:
+    - error-handling
+  - slug: deployment
+    title: Deployment Best Practices
+    status: OFFICIAL
+    requires:
+    - debugging
+  - slug: cache
+    title: Cache Component
+    status: OFFICIAL
+    requires:
+    - deployment
+  - slug: process
+    title: Process Component
+    status: OFFICIAL
+    requires:
+    - cache
+  - slug: serializer
+    title: Serializer Component
+    status: OFFICIAL
+    requires:
+    - process
+  - slug: property-access
+    title: PropertyAccess Component
+    status: OFFICIAL
+    requires:
+    - serializer
+  - slug: mailer
+    title: Mime & Mailer Components
+    status: OFFICIAL
+    requires:
+    - property-access
+  - slug: filesystem-finder
+    title: Filesystem & Finder Components
+    status: OFFICIAL
+    requires:
+    - mailer
+  - slug: profiler
+    title: Web Profiler & Data Collectors
+    status: OFFICIAL
+    requires:
+    - filesystem-finder
+  - slug: intl
+    title: Internationalization and localization
+    status: OFFICIAL
+    requires:
+    - profiler
+  - slug: runtime
+    title: Runtime Component
+    status: OFFICIAL
+    requires:
+    - intl
+  - slug: clock
+    title: Clock Component
+    status: OFFICIAL
+    requires:
+    - runtime

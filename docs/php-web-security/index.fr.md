@@ -37,19 +37,19 @@ devient de la lecture plutôt que de la découverte.
   new-in-initializer, **property hooks & visibilité asymétrique (8.4)**, types DNF.
 - [Object-Oriented Programming](oop.md) — classes, visibilité, `static`, late
   static binding, promotion de constructeur, `clone`, méthodes magiques.
-- [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, alias, règles de
-  résolution des noms.
 - [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
   `instanceof`, types union/intersection/DNF.
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, syntaxe first-class callable.
 - [Abstract Classes](abstract-classes.md) — classe abstraite vs interface, le
   pattern template method.
-- [Traits](traits.md) — résolution de conflits (`insteadof`/`as`), membres
-  abstraits/statiques, précédence.
 - [Exception & Error Handling](exceptions.md) — la hiérarchie `Throwable`,
   `try`/`catch`/`finally`, exceptions personnalisées, niveaux d'erreur,
   `set_error_handler`.
+- [Traits](traits.md) — résolution de conflits (`insteadof`/`as`), membres
+  abstraits/statiques, précédence.
+- [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, alias, règles de
+  résolution des noms.
 - [PHP Extensions](extensions.md) — `mbstring`, `intl`, `ctype`, `iconv`,
   `pdo`, `opcache` et comment les détecter/exiger.
 - [SPL](spl.md) — `ArrayAccess`, `Iterator`/`IteratorAggregate`, `Countable`,

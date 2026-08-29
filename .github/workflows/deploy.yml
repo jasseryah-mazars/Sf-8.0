@@ -98,6 +98,12 @@ jobs:
       - name: Report freshness check (informational only)
         run: python tools/check_report_freshness.py
 
+      - name: Reading order agrees with specs/learning_path.yml (blocking)
+        # nav, each domain index, and every "next topic" link used to encode the
+        # order independently and could drift in silence, putting a chapter before
+        # the one it depends on.
+        run: python tools/check_learning_path.py
+
       - name: Cited documentation URLs resolve at their source (blocking)
         # A citation is verified by resolving the file the rendered page is built
         # from. Without this, an invented or moved URL ships green and the reader

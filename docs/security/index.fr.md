@@ -54,31 +54,31 @@ et marquer des points.
 
 ## Chapters
 
-- [Authentication](authentication.md) — le flux firewall/authenticator : comment
-  une request devient un token authentifié, stateless vs stateful, les entry
-  points.
-- [Authorization](authorization.md) — les rôles, les décisions d'accès,
-  `isGranted()`, `denyAccessUnlessGranted()`, `#[IsGranted]`, attributs vs rôles.
 - [Configuration](configuration.md) — l'anatomie de `security.yaml` : providers,
   firewalls, `access_control`, `password_hashers`, `role_hierarchy`.
+- [Users](users.md) — `UserInterface`, `PasswordAuthenticatedUserInterface`,
+  `getUserIdentifier()`, `EquatableInterface`, le cycle de vie de l'utilisateur.
 - [Providers](providers.md) — les user providers : memory, un
   `UserProviderInterface` personnalisé, le chain provider, `refreshUser()`
   (entity est hors programme).
-- [Firewalls](firewalls.md) — le matching, le firewall `dev`, `security: false`,
-  l'ordre first-match, les firewalls lazy, le partage de contexte.
-- [Users](users.md) — `UserInterface`, `PasswordAuthenticatedUserInterface`,
-  `getUserIdentifier()`, `EquatableInterface`, le cycle de vie de l'utilisateur.
 - [Password Hashers](password-hashers.md) — `auto`/`bcrypt`/`sodium`, la
   migration et le rehash (`needsRehash`), `PasswordHasherFactory`, le plaintext
   réservé aux tests.
-- [Roles](roles.md) — les conventions `ROLE_`, la hiérarchie de rôles, les
-  attributs spéciaux `IS_AUTHENTICATED_*`, `PUBLIC_ACCESS`.
-- [Access Control Rules](access-control.md) — le matching de `access_control`,
-  les expressions `allow_if`, `requires_channel`, la sémantique first-match.
+- [Firewalls](firewalls.md) — le matching, le firewall `dev`, `security: false`,
+  l'ordre first-match, les firewalls lazy, le partage de contexte.
+- [Authentication](authentication.md) — le flux firewall/authenticator : comment
+  une request devient un token authentifié, stateless vs stateful, les entry
+  points.
 - [Authenticators, Passports & Badges](authenticators.md) — les authenticators
   personnalisés, le modèle Passport + badges, le login form/JSON/access-token.
+- [Roles](roles.md) — les conventions `ROLE_`, la hiérarchie de rôles, les
+  attributs spéciaux `IS_AUTHENTICATED_*`, `PUBLIC_ACCESS`.
+- [Authorization](authorization.md) — les rôles, les décisions d'accès,
+  `isGranted()`, `denyAccessUnlessGranted()`, `#[IsGranted]`, attributs vs rôles.
 - [Voters & Voting Strategies](voters.md) — la classe de base `Voter`,
   grant/deny/abstain, les stratégies affirmative/consensus/unanimous/priority.
+- [Access Control Rules](access-control.md) — le matching de `access_control`,
+  les expressions `allow_if`, `requires_channel`, la sémantique first-match.
 
 ## Suggested reading order
 

@@ -75,6 +75,12 @@ Work through them in order:
   named aliases, `#[Target]`, binding, ambiguity errors.
 - [ ] [Service Locators](service-locators.md) — `ServiceLocator`,
   `#[AutowireLocator]`, service subscribers, lazy on-demand access.
+- [ ] [Lazy Services](lazy-services.md) — `lazy: true`, virtual proxies,
+  when deferring instantiation actually pays.
+- [ ] [Service Reset](service-reset.md) — `ResetInterface`, `kernel.reset`,
+  why long-running workers need stateful services cleared between messages.
+- [ ] [Container Dump](container-dump.md) — the compiled container class,
+  `debug:container`, reading the dumped PHP to see what really got wired.
 
 ## How to study it
 

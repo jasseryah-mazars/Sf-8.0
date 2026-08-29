@@ -53,13 +53,13 @@ comprehension rather than discovery.
 - [Object-Oriented Programming](oop.md) — classes, visibility, `static`, late
   static binding, constructor promotion, `clone`, magic methods.
   Full journey: [exercises](oop-exercises.md) · [exam](oop-exam.md) · [flashcards](oop-flashcards.md).
-- [Attributes](attributes.md) — declaring `#[\Attribute]` classes, `TARGET_*`
-  flags, `IS_REPEATABLE`, and reading them back via Reflection.
-  Full journey: [exercises](attributes-exercises.md) · [exam](attributes-exam.md) · [flashcards](attributes-flashcards.md).
 - [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
   `instanceof`, union/intersection/DNF types, interface properties (8.4).
   Full journey: [exercises](interfaces-exercises.md) ·
   [exam](interfaces-exam.md) · [flashcards](interfaces-flashcards.md).
+- [Attributes](attributes.md) — declaring `#[\Attribute]` classes, `TARGET_*`
+  flags, `IS_REPEATABLE`, and reading them back via Reflection.
+  Full journey: [exercises](attributes-exercises.md) · [exam](attributes-exam.md) · [flashcards](attributes-flashcards.md).
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, first-class callable syntax.
   Full journey: [exercises](closures-exercises.md) · [exam](closures-exam.md) ·
@@ -81,10 +81,6 @@ comprehension rather than discovery.
   `from()`/`tryFrom()`, and how routing/Forms consume them.
   Full journey: [exercises](enums-exercises.md) · [exam](enums-exam.md) ·
   [flashcards](enums-flashcards.md).
-
-**Additional / depth chapters** (not on the official syllabus list, kept as
-enrichment — see the repository's `specs/TraceabilityMatrix.md`):
-
 - [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, aliasing, name
   resolution rules.
   Full journey: [exercises](namespaces-exercises.md) · [exam](namespaces-exam.md) ·
@@ -103,6 +99,13 @@ enrichment — see the repository's `specs/TraceabilityMatrix.md`):
 - [Web Security Fundamentals](web-security.md) — XSS, CSRF, SQL injection,
   session hijacking/fixation, clickjacking, HTTPS/HSTS, security headers,
   password storage — framed as what Symfony protects against.
+
+!!! note "Reading order"
+    Chapters are listed in the order they teach best, not in syllabus order — see
+    `specs/learning_path.yml`. Four of them (**Namespaces**, **PHP Extensions**,
+    **SPL**, **Web Security Fundamentals**) are enrichment rather than official
+    syllabus items; that status is tracked in the path file and in
+    `specs/TraceabilityMatrix.md`, not by pushing them to the end of the list.
 
 ## How to study this stage
 

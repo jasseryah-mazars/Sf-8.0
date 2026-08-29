@@ -50,28 +50,44 @@ guessing and scoring.
 
 ## Chapters
 
-- [Authentication](authentication.md) — the firewall/authenticator flow: how a
-  request becomes an authenticated token, stateless vs stateful, entry points.
-- [Authorization](authorization.md) — roles, access decisions, `isGranted()`,
-  `denyAccessUnlessGranted()`, `#[IsGranted]`, attributes vs roles.
 - [Configuration](configuration.md) — `security.yaml` anatomy: providers,
   firewalls, `access_control`, `password_hashers`, `role_hierarchy`.
-- [Providers](providers.md) — user providers: memory, custom
-  `UserProviderInterface`, chain provider, `refreshUser()` (entity is out of scope).
-- [Firewalls](firewalls.md) — matching, the `dev` firewall, `security: false`,
-  first-match order, lazy firewalls, context sharing.
 - [Users](users.md) — `UserInterface`, `PasswordAuthenticatedUserInterface`,
   `getUserIdentifier()`, `EquatableInterface`, the user lifecycle.
+- [Providers](providers.md) — user providers: memory, custom
+  `UserProviderInterface`, chain provider, `refreshUser()` (entity is out of scope).
 - [Password Hashers](password-hashers.md) — `auto`/`bcrypt`/`sodium`, migration
   and rehash (`needsRehash`), `PasswordHasherFactory`, plaintext for tests only.
-- [Roles](roles.md) — `ROLE_` conventions, role hierarchy, the
-  `IS_AUTHENTICATED_*` special attributes, `PUBLIC_ACCESS`.
-- [Access Control Rules](access-control.md) — `access_control` matching,
-  `allow_if` expressions, `requires_channel`, first-match semantics.
+- [Firewalls](firewalls.md) — matching, the `dev` firewall, `security: false`,
+  first-match order, lazy firewalls, context sharing.
+- [Authentication](authentication.md) — the firewall/authenticator flow: how a
+  request becomes an authenticated token, stateless vs stateful, entry points.
 - [Authenticators, Passports & Badges](authenticators.md) — custom
   authenticators, the Passport + badges model, form/JSON/access-token login.
+- [Programmatic Login & Logout](programmatic-login.md) — `Security::login()`,
+  `logout()`, logging a user in after registration, `onLogoutEvent`.
+- [Roles](roles.md) — `ROLE_` conventions, role hierarchy, the
+  `IS_AUTHENTICATED_*` special attributes, `PUBLIC_ACCESS`.
+- [Role Hierarchy](role-hierarchy.md) — `role_hierarchy`, transitive inheritance,
+  and why a hierarchy is resolved at check time, not at login.
+- [Authorization](authorization.md) — roles, access decisions, `isGranted()`,
+  `denyAccessUnlessGranted()`, `#[IsGranted]`, attributes vs roles.
 - [Voters & Voting Strategies](voters.md) — the `Voter` base class,
   grant/deny/abstain, affirmative/consensus/unanimous/priority strategies.
+- [Access Decision Strategies](access-decision-strategies.md) — affirmative,
+  consensus, unanimous, priority, and `allow_if_all_abstain`.
+- [Access Control Rules](access-control.md) — `access_control` matching,
+  `allow_if` expressions, `requires_channel`, first-match semantics.
+- [Impersonation (switch_user)](impersonation.md) — `ROLE_ALLOWED_TO_SWITCH`,
+  `_switch_user`, exiting impersonation, `IS_IMPERSONATOR`.
+- [Login Throttling](login-throttling.md) — `login_throttling`, per-IP vs
+  per-username limiters, and what it does not protect.
+
+!!! note "Reading order"
+    Chapters are listed in the order they teach best, not in syllabus order — see
+    `specs/learning_path.yml`. The syllabus lists Authorization before Firewalls
+    and Users; that order asks you to decide access before establishing who is
+    being secured.
 
 ## Suggested reading order
 
