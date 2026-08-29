@@ -160,9 +160,9 @@ carries its pre-lot depth. It is an honest half-step, not a synonym for done.
 | 5 | `closures` | done | done | done | done | done | green | see log |
 | 6 | `abstract-classes` | done | done | done | done | done | green | see log |
 | 7 | `exceptions` | done | done | done | done | done | green | see log |
-| 8 | `traits` | migrated | done | done | done | done | green | see log |
-| 9 | `enums` | migrated | done | done | done | done | green | see log |
-| 10 | `namespaces` | migrated | done | done | done | done | green | see log |
+| 8 | `traits` | done | done | done | done | done | green | see log |
+| 9 | `enums` | done | done | done | done | done | green | see log |
+| 10 | `namespaces` | done | done | done | done | done | green | see log |
 | 11 | `extensions` | pending | pending | pending | pending | pending | pending | — |
 | 12 | `spl` | pending | pending | pending | pending | pending | pending | — |
 | 13 | `web-security` | pending | pending | pending | pending | pending | pending | — |

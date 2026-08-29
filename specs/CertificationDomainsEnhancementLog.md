@@ -274,11 +274,17 @@ miss, which interface only backed enums implement, an invalid enum in a route ar
 a case cannot have · the global fallback for unqualified calls, what `use` actually does,
 PSR-4 mapping, referencing global `\DateTime`.
 
-**Lesson phase completed by hand**, as for topics 2–4: the three lessons were still at their
-original line counts (346 / 407 / 311), so the questions and exercises were migrated out and
-the journey links written in. Recorded as `migrated`, not `done` — the four-file contract
-holds and the checks are green, but these three lessons still carry their pre-lot depth. The
-tracking table says so rather than rounding up.
+**Lesson phase completed after the activity files**, in two steps. First the questions and
+exercises were migrated out and the journey links written in, which left the three lessons at
+their original depth (346 / 407 / 311 lines) — recorded at that point as `migrated`, not
+`done`, because the four-file contract held but the lessons did not yet earn the Expert
+label. The enrichment pass then followed, taking them to **932 / 965 / 878 lines** with the
+full 27-section structure, `## 🧠 Pour les nuls`, and contextual references. Only then were
+they promoted to `done` in the tracking table.
+
+The two-step record is kept deliberately rather than collapsed into a single "done": it is
+the difference between a topic that merely satisfies the file contract and one a reader can
+actually learn from, and the distinction is worth being able to see in the history.
 
 **One real defect found by `lint_php`**: `namespaces-exam.md` Question 13 shows a file that
 declares `class MyClass` after `use another\thing as MyClass`. The snippet is *supposed* to

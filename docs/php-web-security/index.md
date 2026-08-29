@@ -72,8 +72,9 @@ comprehension rather than discovery.
   `try`/`catch`/`finally`, custom exceptions, error levels, `set_error_handler`.
   Full journey: [exercises](exceptions-exercises.md) · [exam](exceptions-exam.md) ·
   [flashcards](exceptions-flashcards.md).
-- [Traits](traits.md) — conflict resolution (`insteadof`/`as`), abstract/static
-  members, precedence.
+- [Traits](traits.md) — precedence (class > trait > parent), conflict resolution
+  (`insteadof`/`as`), abstract & static members, trait properties and constants
+  (8.2), `as final` (8.3), and `__CLASS__` vs `__METHOD__` inside a trait.
   Full journey: [exercises](traits-exercises.md) · [exam](traits-exam.md) ·
   [flashcards](traits-flashcards.md).
 - [Enums](enums.md) — pure vs. backed enums, `UnitEnum`/`BackedEnum`,

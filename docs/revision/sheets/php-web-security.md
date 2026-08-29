@@ -66,15 +66,21 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 **Cheat:** `use ($x)` = copy at definition · `use (&$x)` = live reference · `fn` = copy, always. `fn (&$x)` is a by-reference **parameter**, not a capture. `fn` has no `use` list. Return type goes **after** the `use` clause. Forbidden in `use`: superglobals, `$this`, a name shared with a parameter. `bindTo`/`bind` → new closure or `null`. `call($obj, …)` → binds, sets scope, invokes. `newScope` default is `"static"` = keep the current scope. `static` closure: no `$this` ever; `bindTo($obj)` → `null`. `new Closure()`, `serialize($closure)`, `new Foo(...)`, `$o?->m(...)` — all rejected. `callable` on a property = fatal; use `\Closure`. Symfony: `!service_closure '@id'` / `'@>id'` / `#[AutowireServiceClosure]`, invoked as `($this->prop)()`.
 
 ## Enums
-- Pure enums implement `UnitEnum`; backed enums additionally implement
-  `BackedEnum` and add `->value`/`from()`/`tryFrom()`.
-- `from()` throws `\ValueError` on a miss; `tryFrom()` returns `null` — not
-  interchangeable.
-- Cases are singletons: `===` identity comparison is always safe.
-- Symfony's `BackedEnumValueResolver` turns a bad route value into a 404;
-  `EnumType` binds a backed enum to a form field via `::cases()`.
+- Pure enums implement `UnitEnum` (`name`, `cases()`); backed enums additionally implement
+  `BackedEnum` (`value`, `from()`, `tryFrom()`).
+- `from()` throws `\ValueError` on a miss and `\TypeError` on a wrong type under strict mode;
+  `tryFrom()` returns `null` on a miss only.
+- Cases are singletons of a final class, so `===` is exact and survives `from()`, `cases()` and
+  serialization.
+- An enum may have methods, static methods, constants, interfaces, traits and attributes — never
+  properties, inheritance, `new` or `clone`.
+- The backing type is `int` or `string`, values are explicit and unique, and `cases()` preserves
+  declaration order.
+- Symfony turns an invalid backed-enum value into a **404** in routing and in
+  `#[MapQueryParameter]`; `EnumType` builds a form from `::cases()`; Doctrine maps it with
+  `enumType`; the Serializer normalizes it to its scalar.
 
-**Cheat:** `enum X { case A; }` — pure. `enum X: string { case A = 'a'; }` — backed. `UnitEnum`: `->name`, `cases()`. `BackedEnum` (backed only): `->value`, `from()` (throws), `tryFrom()` (null). Route argument, backed enum, bad value → **404** via `BackedEnumValueResolver`. `EnumType::class` form option: `class` (required) → `choices` from `::cases()`.
+**Cheat:** `enum X { case A; }` — pure. `enum X: string { case A = 'a'; }` — backed. `int`/`string` only, values explicit and unique. `UnitEnum`: `->name`, `cases()` (declaration order). `BackedEnum` (backed only): `->value`, `from()` (**throws `\ValueError`**), `tryFrom()` (**`null`**). Strict types: wrong scalar type → `\TypeError` before any lookup. Allowed: methods, static methods, constants (may alias a case), interfaces, traits without properties, attributes, `__call`/`__callStatic`/`__invoke`. Forbidden: properties, `__construct`, inheritance, `final enum`, `clone`, `new`, redeclaring `cases()`/`from()`/`tryFrom()`. `===` yes; `==` against the scalar is `false`; `<`/`>` always `false`. `serialize()` → `E:11:"Suit:Hearts";` and identity survives. `json_encode()` → scalar for backed, **failure** for pure. Symfony: `BackedEnumValueResolver` (priority 100) → 404; `EnumRequirement` → 404 at routing; `#[MapQueryParameter]` → 404 by default; `EnumType` needs `class`; Doctrine needs `enumType` and a backed enum.
 
 ## Exception & Error Handling
 - `Throwable` is an interface; `Error` and `Exception` are **siblings** implementing it, so
@@ -109,12 +115,19 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 **Cheat:** Covariant return, contravariant param — reverse = fatal error at class load. `A&B` class types only; `(A&B)|null` = DNF (8.2); `never` return-only (8.1). Interface: constants (typed 8.3, overridable 8.1), **properties 8.4**, multiple `extends`. `instanceof` never throws on non-objects. `readonly` satisfies `{ get; }` but never `{ set; }`.
 
 ## Namespaces & Autoloading
-- Functions/constants fall back to global; **classes do not**.
-- `use` is a compile-time alias, not a file load.
-- PSR-4 maps prefix → base dir; strip prefix, `\`→`/`, add `.php`.
-- `composer dump-autoload --optimize` for production.
+- Names are resolved by shape: unqualified, qualified, fully qualified, relative. Qualified
+  is still relative — only a leading `\` is absolute.
+- Unqualified **functions and constants** fall back to the global namespace; **class names
+  never do**.
+- PHP keeps **three** import tables — classes, functions, constants — and they never leak
+  into each other.
+- `use` is a compile-time alias: no I/O, no autoload, no effect on dynamic names.
+- PSR-4 strips the prefix, converts `\` to `/`, appends `.php`, and resolves against the
+  base directory; the prefix never appears in the path.
+- In Symfony, the FQCN is simultaneously the file path (via PSR-4), the service id, and the
+  autowiring key.
 
-**Cheat:** `namespace` + `declare` first; nothing before them. `\Foo` = fully qualified; `Foo` = current ns (class) or global (function). Grouped: `use App\{A, B, C};` · function: `use function`; const: `use const`. PSR-4: `App\ → src/`, case-sensitive on Linux.
+**Cheat:** `declare` may precede `namespace`; nothing else may, not even whitespace. `\Foo` absolute · `Sub\Foo` relative · `Foo` unqualified · `namespace\Foo` relative to the current namespace. Verbs fall back, nouns do not: functions and constants reach global; classes fatal. Three tables: `use` · `use function` · `use const`. Group: `use App\{A, B as C};`. `use` = compile-time nickname. Autoload fires on first *use*, not on the import. Dynamic class names: no alias, always fully qualified, double the `\` in strings. PSR-4: strip prefix → `\` becomes `/` → add `.php`. Prefix ends with `\`. Production: `composer dump-autoload --no-dev --classmap-authoritative`. Symfony: `App\` → `src/`; service id = FQCN; autowiring matches the id exactly.
 
 ## Object-Oriented Programming
 - `static::` = late static binding, resolved to the **called** class; `self::` = compile-time,
@@ -153,12 +166,18 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 **Cheat:** `foreach` needs `Traversable` (Iterator or IteratorAggregate). `count($o)` needs `Countable`; `$o[$k]` needs `ArrayAccess`. `yield` → Generator (Iterator); `yield from` delegates. Stack=LIFO, Queue=FIFO, Heap=ordered, PriorityQueue=value+priority (unstable).
 
 ## Traits
-- Traits = compile-time horizontal reuse; not types.
-- Precedence: class > trait > parent.
-- Resolve trait clashes with `insteadof` (pick one) and `as` (alias/visibility).
-- Static trait members are per-using-class, not shared.
+- Traits are **compile-time horizontal reuse**: members are copied into the class, leaving no
+  runtime trace — and are therefore **not types**.
+- Precedence is **class > trait > inherited parent**, and it is evaluated *before* collisions.
+- Two traits offering one name is a **fatal error**; `insteadof` picks the survivor (listing every
+  competitor) and `as` re-admits or re-scopes.
+- `as` is additive: only `m as protected;` without a new name changes visibility in place.
+- Static trait properties are **per using class**; within a hierarchy they are distinct only since
+  8.3, and only if the child repeats `use`.
+- Version pins: abstract private + signature compatibility (8.0), static-on-trait deprecation
+  (8.1), constants (8.2), static scoping and `as final` (8.3).
 
-**Cheat:** `use A, B { A::m insteadof B; B::m as bMethod; }`. `as protected` / `as public` changes visibility. Cannot type-hint a trait; pair it with an interface. Abstract trait methods force the using class to implement them.
+**Cheat:** Precedence: **class > trait > parent** — evaluated *before* collision detection. `use A, B { A::m insteadof B, D; B::m as protected mLegacy; }`. `m as protected;` → re-scopes in place. `m as protected x;` → adds `x`, original intact. `m as final;` (8.3) → blocks **children**, not the using class. Static trait property = per using class; a child needs its own `use` for a distinct copy (8.3). Constants in traits since **8.2**; property/constant redeclaration must be *identical*. `__CLASS__` = using class · `__TRAIT__` / `__METHOD__` = the trait. `instanceof Trait` → `false`, silently. No type-hint, no `new`, no `implements`. `class_uses()` = this class's own `use` statements only.
 
 ## Web Security Fundamentals
 - Each threat maps to one Symfony defence — learn the pairing.
