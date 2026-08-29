@@ -98,12 +98,27 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 **Cheat:** `Throwable` → `Error` | `Exception`. Siblings. `catch (\Exception)` misses `Error`. `Error` arm: `TypeError` → `ArgumentCountError`, `ValueError`, `ArithmeticError` → `DivisionByZeroError`, `CompileError` → `ParseError`, `UnhandledMatchError`, `AssertionError`, `FiberError`. `Exception` arm: `ErrorException`, `LogicException` (`Domain`, `InvalidArgument`, `Length`, `OutOfRange`, `BadFunctionCall` → `BadMethodCall`), `RuntimeException` (`OutOfBounds`, `Overflow`, `Range`, `Underflow`, `UnexpectedValue`). `finally` always runs. `return` in `finally` wins. `throw` in `finally` wins, and the `try` exception becomes its `previous`. `A|B` = 7.1.0 · variable-less `catch` = 8.0.0 · `throw` expression = 8.0.0 · `Throwable extends Stringable` = 8.0.0. `set_error_handler` ≠ `set_exception_handler` ≠ `register_shutdown_function`. Cannot `implements \Throwable` on a class. Cannot `clone` a throwable. `E_ALL` = 30719 in 8.4. `intdiv(\PHP_INT_MIN, -1)` = `ArithmeticError`. Symfony: `HttpExceptionInterface::getStatusCode()`, else 500.
 
 ## PHP Extensions
-- Symfony needs `ctype`, `iconv`, `mbstring`, `intl` (declared as `ext-*`).
-- `extension_loaded()` is the runtime check; `ext-*` is the install-time gate.
-- `strlen`=bytes, `mb_strlen`=characters — matters for UTF-8.
-- `opcache` = bytecode cache; the top production speedup.
+- PHP's core is small; capability lives in **extensions**, classified by the manual as
+  core, bundled, external or PECL.
+- `extension_loaded()` is the runtime check and is case-insensitive; `phpversion($ext)`
+  gives presence plus version; `function_exists()` cannot tell native from polyfilled.
+- OPcache registers as **`Zend OPcache`**, loads with `zend_extension=`, and caches
+  **bytecode only**.
+- `strlen` = bytes, `mb_strlen` = code points, `grapheme_strlen` = grapheme clusters —
+  the same three levels Symfony exposes as `ByteString`, `CodePointString`,
+  `UnicodeString`.
+- `ctype_digit('')` is `false`; `ctype_digit(123)` is `false`; `ctype_digit(1234)` is
+  `true`; non-string arguments are deprecated since PHP 8.1.
+- `iconv` binds the host's conversion facility (`//TRANSLIT`, `//IGNORE`, host-dependent);
+  `mbstring` ships its own tables and behaves identically everywhere.
+- `pdo` is an interface; each database needs its own driver extension, loaded after PDO.
+- `ext-*` in `composer.json` gates resolution, not reality; only
+  `composer check-platform-reqs` inspects the real host.
+- Symfony's documented requirements are Ctype, iconv, PCRE, Session, SimpleXML and
+  Tokenizer — mbstring and intl are covered by polyfills, and the ICU polyfill is limited
+  to the `en` locale.
 
-**Cheat:** `php -m` lists modules; `php --ri ext` shows config. Require: `"ext-mbstring": "*"` etc. in composer.json. `mb_*` for text; `ctype_*` beware integer-as-ASCII gotcha. Prefer native ext over Symfony polyfill.
+**Cheat:** `php -m` lists modules (two sections); `php --ri "Zend OPcache"` shows one config. `extension_loaded('Zend OPcache')` — **not** `'opcache'`. Case-insensitive. `phpversion($ext)` → version string or `false`. `get_loaded_extensions(true)` → Zend only. `strlen('café')` = 5 · `mb_strlen('café','UTF-8')` = 4 · `grapheme_strlen` counts what you see. `mb_convert_encoding($str, $to, $from)` vs `iconv($from, $to, $str)` — mirrored. `//TRANSLIT` approximates · `//IGNORE` drops · neither → `E_NOTICE` + `false`. `ctype_digit('')` = false · `(123)` = false · `(1234)` = true · non-string deprecated since 8.1. `mb_*` invalid encoding → `ValueError` since PHP 8.0. Composer: `"ext-intl": "*"` gates · `show -p` lists · `check-platform-reqs` verifies the real host. Polyfills: `provide` satisfies `ext-*`; `polyfill-intl-icu` is **`en` only**. Symfony requires: Ctype, iconv, PCRE, Session, SimpleXML, Tokenizer. Monorepo declares only `ext-xml`. OPcache defaults: `enable=1`, `enable_cli=0`, `memory=128`, `interned=8`, `max_files=10000`, `validate_timestamps=1`, `revalidate_freq=2`, `jit=disable` (8.4). Symfony recommends: `memory=256`, `max_files=32531`, `interned=32`, `validate_timestamps=0` + reset. Preload: functions/classes/interfaces/traits, **not constants**; no Windows; restart to clear.
 
 ## Interfaces & Type Declarations
 - Returns covariant (narrow), parameters contravariant (widen); violations are fatal at load.
@@ -158,12 +173,22 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 **Cheat:** 8.0 `match`, attributes, promotion, `?->`, named args, union · 8.1 enums, `readonly`, `f(...)`, `never`, intersection, `new` in init · 8.2 `readonly class`, DNF, standalone `true`/`false`/`null` · 8.3 typed constants, `#[\Override]`, `json_validate()` · 8.4 hooks, `private(set)`, lazy objects, `new X()->y()`. Backed ⇔ a hook writes `$this->prop`. Virtual ⇔ it does not ⇔ no storage. `readonly` since 8.4 = `protected(set)`; hooks + `readonly` = fatal. `private(set)`: typed only, non-static, never wider than read, implicitly `final`. `match` strict + throws; two `default` arms = fatal. `array_all([])` is `true`; `array_any([])` is `false`; `array_find()` misses = `null`. `#[\Deprecated]` → function/method/class constant → `E_USER_DEPRECATED`. `T $x = null` deprecated in 8.4 → write `?T`.
 
 ## SPL — Standard PHP Library
-- `Iterator` = 5 methods; `IteratorAggregate` = delegate via `getIterator()`.
-- Generators are lazy, single-use iterators — great for memory.
-- `SplObjectStorage` keys by object identity; arrays cannot.
-- Pick the SPL structure by discipline: LIFO/FIFO/heap/priority.
+- `foreach` needs `Traversable`; the only two ways in are `Iterator` (five methods, you drive)
+  and `IteratorAggregate` (one method, you delegate), and no class may have both.
+- `count($o)` needs `Countable`; `$o[$k]` needs `ArrayAccess`; `"$o"` needs `__toString()`
+  (`Stringable`); `json_encode($o)` is customised by `JsonSerializable`.
+- `isset()` and `??` on an `ArrayAccess` object call `offsetExists()` first, and reach
+  `offsetGet()` only when it returned `true`.
+- A generator is a lazy, forward-only, **single-use** `Iterator`; calling the function runs
+  nothing until the first advance.
+- `yield from` preserves inner keys and `iterator_to_array()` preserves keys by default —
+  together they are the classic silent data-loss trap.
+- Pick the structure by discipline: `SplStack` LIFO, `SplQueue` FIFO, `SplHeap` ordered,
+  `SplPriorityQueue` value + priority (unstable on ties), `SplObjectStorage` keyed by object
+  identity.
+- Iterating a heap consumes it; iterating a linked list or an object storage does not.
 
-**Cheat:** `foreach` needs `Traversable` (Iterator or IteratorAggregate). `count($o)` needs `Countable`; `$o[$k]` needs `ArrayAccess`. `yield` → Generator (Iterator); `yield from` delegates. Stack=LIFO, Queue=FIFO, Heap=ordered, PriorityQueue=value+priority (unstable).
+**Cheat:** `foreach` order: `rewind`, `valid`, `current`, `key`, body, `next`, `valid`, … `Iterator` = 5 methods · `IteratorAggregate` = `getIterator(): Traversable` · never both. `iterable` = `array|Traversable`. Generator: lazy, forward-only, single-use; second traversal **throws**. `yield from` keeps inner keys · `iterator_to_array()` keeps keys by default. `getReturn()` only after completion · `send()` needs no priming and returns the next yielded value. `isset($o[$k])` → `offsetExists` · `empty($o[$k])` → `offsetExists` then maybe `offsetGet` · `$o[] = $v` → `offsetSet(null, $v)`. Stack = LIFO, Queue = FIFO (same base class), Heap = ordered and **consumed by `foreach`**, PriorityQueue = max heap, unstable on ties, `EXTR_DATA` by default. `SplObjectStorage` = object → data map or object set, keyed by identity. `SplFixedArray` = integer keys, fixed size, less memory, `OutOfBoundsException` on 8.4. Decorators: `IteratorIterator` converts, `LimitIterator(offset, limit)` slices, `CallbackFilterIterator($current, $key, $iterator)` selects, `RecursiveIteratorIterator` flattens (`LEAVES_ONLY` by default), `AppendIterator` concatenates without renumbering.
 
 ## Traits
 - Traits are **compile-time horizontal reuse**: members are copied into the class, leaving no
@@ -180,9 +205,19 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 **Cheat:** Precedence: **class > trait > parent** — evaluated *before* collision detection. `use A, B { A::m insteadof B, D; B::m as protected mLegacy; }`. `m as protected;` → re-scopes in place. `m as protected x;` → adds `x`, original intact. `m as final;` (8.3) → blocks **children**, not the using class. Static trait property = per using class; a child needs its own `use` for a distinct copy (8.3). Constants in traits since **8.2**; property/constant redeclaration must be *identical*. `__CLASS__` = using class · `__TRAIT__` / `__METHOD__` = the trait. `instanceof Trait` → `false`, silently. No type-hint, no `new`, no `implements`. `class_uses()` = this class's own `use` statements only.
 
 ## Web Security Fundamentals
-- Each threat maps to one Symfony defence — learn the pairing.
-- Escape output **in context**; bind SQL parameters; regenerate sessions on login.
-- Cookies: `Secure` + `HttpOnly` + `SameSite`; add HSTS + CSP + `nosniff`.
-- Store passwords with `password_hash` (bcrypt/argon2id), verify constant-time.
+- Every threat is one boundary crossing where data is read as instructions; every defence
+  makes that boundary explicit.
+- Escape at **output**, in the **destination's** context. Twig picks the strategy per
+  template from the file name, at compile time.
+- `|raw` disables escaping and sanitises nothing.
+- Bind every value in SQL and DQL; allow-list identifiers, which cannot be bound.
+- CSRF tokens prove the request came from your page. `SameSite=Lax` narrows the window but
+  still allows cross-site top-level `GET`.
+- Session id migration on login defeats fixation; `HttpOnly` + `Secure` + HTTPS defeat
+  hijacking.
+- Store passwords with `password_hash()` or a Symfony hasher; verify with a verify function,
+  never with `===`.
+- Symfony ships escaping, CSRF, bound parameters and session migration on by default — and
+  no security headers, no HTTPS enforcement, no redirect validation.
 
-**Cheat:** XSS→Twig escaping · CSRF→token+SameSite · SQLi→prepared statements. Fixation→session migrate on login · Hijack→Secure/HttpOnly/HTTPS. Clickjacking→`X-Frame-Options`/CSP `frame-ancestors`. Passwords→`PASSWORD_ARGON2ID`/`BCRYPT`; verify with `password_verify`.
+**Cheat:** XSS→contextual escaping · CSRF→token + `SameSite` · SQLi→bound parameters. Fixation→`migrate(true)` on login · Hijack→`HttpOnly` + `Secure` + HTTPS. Clickjacking→CSP `frame-ancestors` (preferred) or `X-Frame-Options`. Twig strategy from the file name, at compile time: `js`/`json`→`js`, `css`→`css`, `txt`→**none**, else `html`. Defaults: `session_fixation_strategy: MIGRATE`, `cookie_httponly: true`, `cookie_samesite: lax`, `cookie_secure` **none**, `use_strict_mode: 1`, `allow_extra_fields: false`. Passwords: `'auto'` = bcrypt today, cost 13; bcrypt truncates at 72 bytes; PHP 8.4 default cost 12; salt embedded and an explicit one ignored. Rehash on successful login → `PasswordUpgraderInterface::upgradePassword()`. `hash_equals($known, $userSupplied)` — secret first. Symfony sends **no** security headers. That is always your listener.
