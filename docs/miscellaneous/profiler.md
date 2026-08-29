@@ -27,6 +27,29 @@
     **Est. time:** 35 min ·
     **Prerequisites:** [Request Handling](../architecture/request-handling.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le profiler stocke un instantané par requête (timing, requêtes SQL, logs) — c'est un outil de développement uniquement, désactivé en production.
+
+### Imagine dans la vraie vie
+Le profiler est l'enregistreur de vol d'un avion. Tout au long de chaque vol (requête), des capteurs (les data collectors) notent les temps, la consommation, les requêtes et événements, et l'enregistreur écrit un instantané par vol à un moment fixe proche de l'atterrissage.
+
+### Dans Symfony
+La barre de débogage tout en bas de chaque page en environnement `dev` (nombre de requêtes SQL, temps de rendu Twig) est directement alimentée par le profiler — invisible et absente en production.
+
+### Exemple simple
+```console
+$ php bin/console debug:container --show-hidden # complète l'inspection via le profiler
+```
+
+### Comment le mémoriser 🧠
+La collecte se fait sur `kernel.response` — et tout ce que stocke un collecteur (`$this->data`) doit être **sérialisable**, jamais un objet vivant comme une connexion PDO ouverte.
+
 ---
 
 ## Theory
@@ -253,13 +276,15 @@ data. For prod observability use proper metrics/tracing.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. When does the profiler collect data for a request?"
     - [x] A. On `kernel.response` (late collectors at terminate) ✅
     - [ ] B. On `kernel.request`
     - [ ] C. Only in the CLI
 
     **Why:** `Profiler::collect()` runs on the response event; late collection at
-    terminate. **Ref:** [Profiler](https://symfony.com/doc/current/profiler.html).
+    terminate. **Ref:** [Profiler](https://symfony.com/doc/8.0/profiler.html).
 
 ??? question "Q2. Which tag registers a custom data collector?"
     - [x] A. `data_collector` ✅
@@ -267,7 +292,7 @@ data. For prod observability use proper metrics/tracing.
     - [ ] C. `profiler.panel`
 
     **Why:** The `data_collector` tag (with a `template`) wires the collector +
-    panel. **Ref:** [Creating a data collector](https://symfony.com/doc/current/profiler/data_collector.html).
+    panel. **Ref:** [Creating a data collector](https://symfony.com/doc/8.0/profiler.html).
 
 ??? question "Q3. Should the profiler run in production?"
     - [ ] A. Yes, for monitoring
@@ -275,7 +300,7 @@ data. For prod observability use proper metrics/tracing.
     - [ ] C. Only for admins
 
     **Why:** It adds overhead and exposes internals; keep it off in prod.
-    **Ref:** [Profiler](https://symfony.com/doc/current/profiler.html).
+    **Ref:** [Profiler](https://symfony.com/doc/8.0/profiler.html).
 
 ## Key takeaways
 
@@ -299,8 +324,8 @@ data. For prod observability use proper metrics/tracing.
 - **Confused with:** production observability — the profiler is a dev-only tool, not a metrics backend.
 
 ## Official References
-- [Official docs — Profiler](https://symfony.com/doc/current/profiler.html)
-- [Official docs — Custom data collector](https://symfony.com/doc/current/profiler/data_collector.html)
+- [Official docs — Profiler](https://symfony.com/doc/8.0/profiler.html)
+- [Official docs — Custom data collector](https://symfony.com/doc/8.0/profiler.html)
 - [Symfony source — DataCollectorInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DataCollector/DataCollectorInterface.php)
 
 ## Video references
@@ -312,7 +337,7 @@ data. For prod observability use proper metrics/tracing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/profiler.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/profiler.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

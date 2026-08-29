@@ -27,6 +27,35 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Built-in commands](built-in-commands.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une commande custom se déclare avec `#[AsCommand]` et renvoie toujours l'une des trois constantes de statut — jamais un simple entier écrit à la main.
+
+### Imagine dans la vraie vie
+Une commande custom est un appareil de cuisine mono-fonction : un grille-pain fait un seul travail, et tu le démarres en appuyant sur le seul levier (`__invoke()`) plutôt qu'en assemblant une machine à partir de pièces détachées.
+
+### Dans Symfony
+Une commande `app:nettoyer-cache` type `#[AsCommand(name: 'app:nettoyer-cache')]` avec une méthode `__invoke()` n'a besoin d'aucune classe parente à étendre — c'est le style moderne recommandé.
+
+### Exemple simple
+```php
+#[AsCommand(name: 'app:bonjour')]
+class BonjourCommand {
+    public function __invoke(SymfonyStyle $io): int {
+        $io->success('Bonjour !');
+        return Command::SUCCESS; // jamais juste "0"
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+Retourne toujours `Command::SUCCESS` (0), `Command::FAILURE` (1) ou `Command::INVALID` (2) — jamais un entier brut, même si les valeurs numériques coïncident.
+
 ---
 
 ## Theory
@@ -371,6 +400,8 @@ call from HTTP.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What integer value does `Command::INVALID` represent?"
     - [ ] A. 0
     - [ ] B. 1
@@ -378,7 +409,7 @@ call from HTTP.
     - [ ] D. 255
 
     **Why:** `SUCCESS=0`, `FAILURE=1`, `INVALID=2`. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. In Symfony 8, an invokable command class must…"
     - [ ] A. Extend `Command`
@@ -387,7 +418,7 @@ call from HTTP.
     - [ ] D. Be registered manually in `services.yaml`
 
     **Why:** invokable commands need only the attribute and an `__invoke()` method.
-    **Ref:** [Console](https://symfony.com/doc/current/console.html).
+    **Ref:** [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q3. How is a command normally registered in the service container?"
     - [x] A. Autoconfiguration tags `#[AsCommand]`/`Command` with `console.command` ✅
@@ -396,7 +427,7 @@ call from HTTP.
     - [ ] D. It is discovered by filename convention only
 
     **Why:** autoconfiguration applies the tag; a compiler pass builds the loader.
-    **Ref:** [Commands as Services](https://symfony.com/doc/current/console/commands_as_services.html).
+    **Ref:** [Commands as Services](https://symfony.com/doc/8.0/console/commands_as_services.html).
 
 ??? question "Q4. What must `execute()` (or `__invoke()`) return?"
     - [x] A. An `int` exit code ✅
@@ -405,7 +436,7 @@ call from HTTP.
     - [ ] D. A `bool`
 
     **Why:** the return value becomes the process exit code. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -433,8 +464,8 @@ call from HTTP.
   framework; here you write your own.
 
 ## Official References
-- [Official Symfony docs — Console commands](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Commands as services](https://symfony.com/doc/current/console/commands_as_services.html)
+- [Official Symfony docs — Console commands](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Commands as services](https://symfony.com/doc/8.0/console/commands_as_services.html)
 - [Symfony source — Command](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Command/Command.php)
 
 ## Video references
@@ -446,7 +477,7 @@ call from HTTP.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -60,7 +60,7 @@ categories:
         explanation: >-
           getScheme() returns http/https; getProtocolVersion() returns the version
           string from SERVER_PROTOCOL.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "HTTP-CLIENTSERVER-04"
         question: "In a Symfony 8 app, HTTP/2 server push is the recommended way to preload sub-resources and 103 Early Hints should be avoided. True or false?"
         type: "true-false"
@@ -100,7 +100,7 @@ categories:
           $_POST, $_SERVER, $_COOKIE and $_FILES once into the typed bags. Request::create()
           builds a synthetic request from explicit arguments (used in tests/sub-requests),
           and there is no createFromRequest() factory for this purpose.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "HTTP-CLIENTSERVER-06"
         question: "An app sits behind a TLS-terminating reverse proxy that forwards X-Forwarded-Proto: https, yet $request->isSecure() returns false. What is the most likely cause? (choose one)"
         type: "trap"
@@ -122,7 +122,7 @@ categories:
           proxies registered via Request::setTrustedProxies() (or framework.trusted_proxies).
           Until then isSecure() reflects the direct connection (plain HTTP from the proxy)
           and returns false. PHP never terminates TLS; the edge does.
-        documentation: "https://symfony.com/doc/current/deployment/proxies.html"
+        documentation: "https://symfony.com/doc/8.0/deployment/proxies.html"
       - id: "HTTP-CLIENTSERVER-07"
         question: "On a keep-alive connection, why is the first request typically slower than the ones that follow it? (choose one)"
         type: "scenario"
@@ -355,7 +355,7 @@ categories:
         explanation: >-
           The attributes bag (ParameterBag) holds framework/route data such as
           _route, _controller and path parameters — not the query string.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "HTTP-REQUEST-02"
         question: "Which class backs $request->query, $request->request and $request->cookies? (choose one)"
         type: "single"
@@ -395,7 +395,7 @@ categories:
         explanation: >-
           getPayload() returns an InputBag from the parsed body (decoding JSON or
           reading form data); getContent() returns the raw unparsed body string.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#accessing-request-data"
       - id: "HTTP-REQUEST-04"
         question: "Which method reports the request format derived from the body's Content-Type header in Symfony 8? (choose one)"
         type: "trap"
@@ -458,7 +458,7 @@ categories:
           the Router — not in $request->query, which mirrors $_GET (the URL query
           string). Reading {id} via query returns null; use
           $request->attributes->get('id').
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "HTTP-REQUEST-07"
         question: "A request handler crashes with a TypeError only when the X-Trace-Id header is absent, on the line strtoupper($request->headers->get('X-Trace-Id')). What is the cause and fix? (choose one)"
         type: "debug"
@@ -504,7 +504,7 @@ categories:
         explanation: >-
           BinaryFileResponse streams a file without buffering it in memory and
           supports Range requests and X-Sendfile.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#serving-files"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#serving-files"
       - id: "HTTP-RESPONSE-02"
         question: "What does Response::prepare() do? (choose one)"
         type: "single"
@@ -588,7 +588,7 @@ categories:
           ResponseHeaderBag::makeDisposition() was removed. For file responses you can
           also use BinaryFileResponse::setContentDisposition(), which delegates to the
           same logic — but the static helper itself is on HeaderUtils.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#serving-files"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#serving-files"
       - id: "HTTP-RESPONSE-06"
         question: "You must serve a 2 GB file for download without exhausting memory. Which approach is correct? (choose one)"
         type: "scenario"
@@ -610,7 +610,7 @@ categories:
           exhaust it. BinaryFileResponse streams a file already on disk (and adds Range
           and X-Sendfile support), while StreamedResponse streams generated output. Both
           keep memory flat regardless of size.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#serving-files"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#serving-files"
       - id: "HTTP-RESPONSE-07"
         question: "Response::prepare() transmits the status line, headers and body to the client. True or false?"
         type: "true-false"
@@ -671,7 +671,7 @@ categories:
         explanation: >-
           You must enable framework.http_method_override (or call
           Request::enableHttpMethodParameterOverride()); it applies to POST only.
-        documentation: "https://symfony.com/doc/current/routing.html"
+        documentation: "https://symfony.com/doc/8.0/routing.html"
       - id: "HTTP-METHODS-03"
         question: "Which method is both safe and idempotent? (choose one)"
         type: "single"
@@ -754,7 +754,7 @@ categories:
           The key is framework.http_method_override (default false). It makes Symfony
           honour a _method field (or X-HTTP-Method-Override header) on POST requests,
           rewriting the method to PUT/PATCH/DELETE. The other keys do not exist.
-        documentation: "https://symfony.com/doc/current/reference/configuration/framework.html#http-method-override"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/framework.html#http-method-override"
       - id: "HTTP-METHODS-07"
         question: "Which HTTP methods are considered safe? (choose 3)"
         type: "multiple"
@@ -924,7 +924,7 @@ categories:
           cookie_* keys: cookie_samesite (strict|lax|none), cookie_httponly, and
           cookie_secure (often 'auto'). Symfony's defaults are already HttpOnly: true
           and SameSite: lax. The other key shapes do not exist.
-        documentation: "https://symfony.com/doc/current/reference/configuration/framework.html#cookie-samesite"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/framework.html#cookie-samesite"
       - id: "HTTP-COOKIES-07"
         question: "What does the __Host- cookie name prefix force the browser to require? (choose one)"
         type: "internals"
@@ -964,7 +964,7 @@ categories:
           cannot read the session id) and SameSite is lax (mitigating most CSRF via
           cookies while still allowing top-level GET navigations). cookie_secure
           typically defaults to 'auto' (Secure when the request is HTTPS).
-        documentation: "https://symfony.com/doc/current/reference/configuration/framework.html#cookie-httponly"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/framework.html#cookie-httponly"
 
   - name: "HTTP — Caching Overview"
     questions:
@@ -987,7 +987,7 @@ categories:
         explanation: >-
           While a copy is fresh (within max-age), the cache serves it with no
           request; validation always sends a conditional request.
-        documentation: "https://symfony.com/doc/current/http_cache.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache.html"
       - id: "HTTP-CACHING-02"
         question: "The s-maxage directive applies to: (choose one)"
         type: "single"
@@ -1006,7 +1006,7 @@ categories:
             correct: false
         explanation: >-
           s-maxage is honoured only by shared caches and overrides max-age there.
-        documentation: "https://symfony.com/doc/current/http_cache/expiration.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache/expiration.html"
       - id: "HTTP-CACHING-03"
         question: "What does Response::isNotModified($request) do on a validator match? (choose one)"
         type: "single"
@@ -1048,7 +1048,7 @@ categories:
           cache answers with zero round-trips. Validation uses ETag/If-None-Match and
           Last-Modified/If-Modified-Since — it always asks, but the server can reply 304
           Not Modified with no body. The models are complementary, not interchangeable.
-        documentation: "https://symfony.com/doc/current/http_cache/validation.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache/validation.html"
       - id: "HTTP-CACHING-05"
         question: "Which attribute declaratively marks a controller's response public and cacheable for one hour in shared and private caches? (choose one)"
         type: "config"
@@ -1070,7 +1070,7 @@ categories:
           smaxage, expires, etag and lastModified. #[Cache(public: true, maxage: 3600,
           smaxage: 3600)] sets Cache-Control: public, max-age=3600, s-maxage=3600. The
           other attributes do not exist.
-        documentation: "https://symfony.com/doc/current/http_cache.html#introducing-http-caching"
+        documentation: "https://symfony.com/doc/8.0/http_cache.html#introducing-http-caching"
       - id: "HTTP-CACHING-06"
         question: "To cache a public page in a CDN for 10 minutes without letting the browser cache it long-term, which setter do you use? (choose one)"
         type: "internals"
@@ -1091,7 +1091,7 @@ categories:
           setSharedMaxAge() writes s-maxage, obeyed only by shared caches (CDN/proxy)
           and it implies public. setMaxAge() targets any cache including the browser, so
           it is the wrong tool here. setPrivate() would forbid shared caching entirely.
-        documentation: "https://symfony.com/doc/current/http_cache/expiration.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache/expiration.html"
       - id: "HTTP-CACHING-07"
         question: "A default Symfony Response is storable by a shared cache (CDN/proxy) out of the box. True or false?"
         type: "true-false"
@@ -1109,7 +1109,7 @@ categories:
           will not store it. You must opt in with setPublic()/setSharedMaxAge() (or
           #[Cache(public: true)]). Marking user-specific responses public would leak data
           across users.
-        documentation: "https://symfony.com/doc/current/http_cache.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache.html"
 
   - name: "HTTP — Content Negotiation"
     questions:
@@ -1132,7 +1132,7 @@ categories:
         explanation: >-
           With a whitelist it intersects the client's ordered languages with your
           supported list and returns the best match.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "HTTP-CONTENTNEG-02"
         question: "What does getAcceptableContentTypes() return? (choose one)"
         type: "single"
@@ -1280,7 +1280,7 @@ categories:
           _format request attribute (set e.g. by a /path.{_format} route), while
           getPreferredFormat() computes the best format from the client's Accept header.
           Mixing the two is a common mistake.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
 
   - name: "HTTP — Language Detection"
     questions:
@@ -1303,7 +1303,7 @@ categories:
         explanation: >-
           The whitelist form guarantees a supported locale; the others may return
           one you do not support.
-        documentation: "https://symfony.com/doc/current/translation.html#the-locale-used-in-translations"
+        documentation: "https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations"
       - id: "HTTP-LANG-02"
         question: "What sets the request locale when a route defines {_locale}? (choose one)"
         type: "single"
@@ -1343,7 +1343,7 @@ categories:
         explanation: >-
           enabled_locales restricts valid locales (routing _locale, translation
           compilation); default_locale sets the fallback.
-        documentation: "https://symfony.com/doc/current/translation.html"
+        documentation: "https://symfony.com/doc/8.0/translation.html"
       - id: "HTTP-LANG-04"
         question: "Which configuration makes Symfony guess the request locale from Accept-Language automatically, bounded to en and fr, with no custom listener? (choose one)"
         type: "config"
@@ -1364,7 +1364,7 @@ categories:
           set_locale_from_accept_language: true tells Symfony to set the request locale
           from Accept-Language when no _locale is present, constrained to enabled_locales.
           No custom kernel.request listener is needed. The other keys do not exist.
-        documentation: "https://symfony.com/doc/current/reference/configuration/framework.html#set-locale-from-accept-language"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/framework.html#set-locale-from-accept-language"
       - id: "HTTP-LANG-05"
         question: "The browser sends Accept-Language: es, en;q=0.8 and the app supports only ['en','fr']. What does getPreferredLanguage(['en','fr']) return? (choose one)"
         type: "scenario"
@@ -1386,7 +1386,7 @@ categories:
           whitelist. es is not supported, so it is skipped; en (q=0.8) is the best
           remaining acceptable option and is returned. With a whitelist it never returns
           an unsupported locale, and it falls back to the first list entry only if none match.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "HTTP-LANG-06"
         question: "After the request locale is set, how does it reach services like the Translator? (choose one)"
         type: "internals"
@@ -1430,7 +1430,7 @@ categories:
           highest-ranked language regardless of what your app supports, so you may get an
           unsupported locale and break translations/routing. Always pass your supported
           list so the result is bounded.
-        documentation: "https://symfony.com/doc/current/translation.html#the-locale-used-in-translations"
+        documentation: "https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations"
 
   - name: "HTTP — HttpClient Component"
     questions:
@@ -1453,7 +1453,7 @@ categories:
         explanation: >-
           request() returns a lazy ResponseInterface; the transfer completes on
           first access, which enables free concurrency.
-        documentation: "https://symfony.com/doc/current/http_client.html"
+        documentation: "https://symfony.com/doc/8.0/http_client.html"
       - id: "HTTP-HTTPCLIENT-02"
         question: "What does ResponseInterface::getContent() do on a 500 response by default? (choose one)"
         type: "single"
@@ -1473,7 +1473,7 @@ categories:
         explanation: >-
           By default getContent()/toArray() throw on 3xx/4xx/5xx; pass false (or the
           throw option) to read the body without throwing. getStatusCode() never throws.
-        documentation: "https://symfony.com/doc/current/http_client.html#handling-exceptions"
+        documentation: "https://symfony.com/doc/8.0/http_client.html#handling-exceptions"
       - id: "HTTP-HTTPCLIENT-03"
         question: "Which type should you type-hint to autowire an HTTP client? (choose one)"
         type: "single"
@@ -1493,7 +1493,7 @@ categories:
         explanation: >-
           Depend on the HttpClientInterface contract; the framework selects the
           concrete transport (curl or native).
-        documentation: "https://symfony.com/doc/current/http_client.html"
+        documentation: "https://symfony.com/doc/8.0/http_client.html"
       - id: "HTTP-HTTPCLIENT-04"
         question: "Which class lets you test API integration code without any network traffic? (choose one)"
         type: "single"
@@ -1513,7 +1513,7 @@ categories:
         explanation: >-
           MockHttpClient returns canned MockResponse objects (or a callback) with no
           real HTTP requests.
-        documentation: "https://symfony.com/doc/current/http_client.html#testing"
+        documentation: "https://symfony.com/doc/8.0/http_client.html#testing"
       - id: "HTTP-HTTPCLIENT-05"
         question: "What does this test assert? $client = new MockHttpClient(new MockResponse('{\"id\":42}')); $data = $client->request('GET', 'https://api.test/x')->toArray(); (choose one)"
         type: "code"
@@ -1534,7 +1534,7 @@ categories:
           MockHttpClient serves the supplied MockResponse without any network; toArray()
           JSON-decodes the body to ['id' => 42]. MockResponse defaults to HTTP 200, so no
           exception is thrown, and toArray() returns an array, not the raw string.
-        documentation: "https://symfony.com/doc/current/http_client.html#testing"
+        documentation: "https://symfony.com/doc/8.0/http_client.html#testing"
       - id: "HTTP-HTTPCLIENT-06"
         question: "Which framework configuration defines a scoped client that prefixes a base URI and bearer token for one API? (choose one)"
         type: "config"
@@ -1556,7 +1556,7 @@ categories:
           named entry (e.g. github.client) applies its base_uri, headers and auth only to
           matching URLs. The framework registers a service you autowire by variable name
           ($githubClient). The other shapes are invalid.
-        documentation: "https://symfony.com/doc/current/http_client.html#scoping-client"
+        documentation: "https://symfony.com/doc/8.0/http_client.html#scoping-client"
       - id: "HTTP-HTTPCLIENT-07"
         question: "Reading each response's getContent() inside the loop that fires the requests makes the batch slow. Why? (choose one)"
         type: "debug"
@@ -1578,7 +1578,7 @@ categories:
           calling getContent() on a response forces that transfer to finish before the
           next request() runs, serialising the batch. Fire all requests first, then read
           (or iterate $client->stream($responses)) to keep concurrency.
-        documentation: "https://symfony.com/doc/current/http_client.html#concurrent-requests"
+        documentation: "https://symfony.com/doc/8.0/http_client.html#concurrent-requests"
       - id: "HTTP-HTTPCLIENT-08"
         question: "You call toArray() on a 204 No Content response (empty body). What happens? (choose one)"
         type: "trap"
@@ -1600,7 +1600,7 @@ categories:
           JSON-decode that '' and throws JsonException. There is no silent null. Guard
           with a 204/empty check before decoding, e.g. if (204 === $r->getStatusCode()
           || '' === $r->getContent(false)) return [];.
-        documentation: "https://symfony.com/doc/current/http_client.html#processing-responses"
+        documentation: "https://symfony.com/doc/8.0/http_client.html#processing-responses"
   - name: "HTTP — Multiple Choice Drills"
     questions:
       - id: "HTTP-MC-01"
@@ -1627,7 +1627,7 @@ categories:
           requires http_method_override to be enabled and only fires on POST. POST (like PATCH) is
           neither safe nor idempotent, and getMethod() is the override-aware effective method —
           getRealMethod() returns the raw one.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#identifying-a-request"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#identifying-a-request"
       - id: "HTTP-MC-02"
         type: "multiple"
         difficulty: "medium"
@@ -1652,7 +1652,7 @@ categories:
           401 means unauthenticated (403 is the not-authorized case), 422 targets well-formed but
           semantically invalid requests (malformed syntax is 400), and setStatusCode() throws for
           codes outside 100–599.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#response"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#response"
       - id: "HTTP-MC-03"
         type: "multiple"
         difficulty: "hard"
@@ -1676,7 +1676,7 @@ categories:
           query/request/cookies are scalar-only InputBag instances, and getPayload() is the
           content-type-agnostic body reader. $request->request maps to the $_POST body (query maps
           to $_GET), and getContentType() was removed in favour of getContentTypeFormat().
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#request"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#request"
       - id: "HTTP-MC-04"
         type: "multiple"
         difficulty: "hard"
@@ -1701,7 +1701,7 @@ categories:
           is sendHeaders() followed by sendContent(). $response->headers is actually a
           ResponseHeaderBag that manages cookies and normalises Cache-Control, and
           makeDisposition() lives on HeaderUtils.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#response"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#response"
       - id: "HTTP-MC-05"
         type: "multiple"
         difficulty: "medium"
@@ -1726,7 +1726,7 @@ categories:
           the cookie only lives for the browser session. clearCookie() must match the original
           path/domain or the cookie survives, and Symfony's session cookie defaults are
           HttpOnly: true with SameSite=Lax, not Strict.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#setting-cookies"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies"
       - id: "HTTP-MC-06"
         type: "multiple"
         difficulty: "hard"
@@ -1751,7 +1751,7 @@ categories:
           provide. getPreferredFormat() maps Accept to a Symfony format name (json, html) — raw
           MIME types come from getAcceptableContentTypes() — negotiated responses must send Vary
           or shared caches will mis-serve, and gzip is typically handled by the web server/proxy.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#accessing-accept-headers"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#accessing-accept-headers"
       - id: "HTTP-MC-07"
         type: "multiple"
         difficulty: "hard"
@@ -1776,7 +1776,7 @@ categories:
           error bodies) while getStatusCode() is always safe; and MockHttpClient keeps tests
           offline. You should depend on the HttpClientInterface contract, not a concrete
           transport, and scoped-client options only apply to URLs matching the scope/base URI.
-        documentation: "https://symfony.com/doc/current/http_client.html"
+        documentation: "https://symfony.com/doc/8.0/http_client.html"
       - id: "HTTP-RFC9110-01"
         type: "trap"
         difficulty: "hard"

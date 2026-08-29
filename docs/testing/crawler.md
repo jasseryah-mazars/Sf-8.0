@@ -26,7 +26,32 @@
     **Syllabus:** `Automated Tests → The Crawler` ·
     **Level:** Advanced ·
     **Est. time:** 25 min ·
+
     **Prerequisites:** [The Client](client.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le `Crawler` te permet d'interroger le HTML d'une réponse comme avec un sélecteur CSS — sans jamais toucher la réponse originale.
+
+### Imagine dans la vraie vie
+Poser un pochoir sur une page de journal imprimée. Chaque filtrage découpe un nouveau pochoir qui n'expose que les parties correspondantes — la page originale n'est jamais altérée, et chaque découpe te rend un pochoir tout neuf, plus étroit (le Crawler est immuable).
+
+### Dans Symfony
+```php
+$crawler->filter('h1.titre')->text(); // récupère le texte du premier titre trouvé
+```
+
+### Exemple simple
+```php
+$lien = $crawler->selectLink('Voir plus')->link();
+$client->click($lien);
+```
+
+### Comment le mémoriser 🧠
+`text()` **lève une exception** sur un match vide, sauf si tu lui passes explicitement une valeur par défaut — "pas de pochoir découpé ici, rien à lire" nécessite que tu prévois ce cas.
 
 ---
 
@@ -334,6 +359,8 @@ express the query (axes, text predicates).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `$crawler->filter('div.item')` requires which component?"
     - [x] A. `symfony/css-selector` ✅
     - [ ] B. `symfony/dom-crawler` only
@@ -341,7 +368,7 @@ express the query (axes, text predicates).
     - [ ] D. None — CSS is built into DomCrawler
 
     **Why:** `filter()` converts CSS to XPath via CssSelectorConverter; the
-    css-selector component is required. **Ref:** [DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html).
+    css-selector component is required. **Ref:** [DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html).
 
 ??? question "Q2. Calling `text()` on a Crawler that matched nothing…"
     - [x] A. Throws unless you pass a default value ✅
@@ -350,7 +377,7 @@ express the query (axes, text predicates).
     - [ ] D. Returns the whole document text
 
     **Why:** node-reading methods operate on the first node and throw on an empty
-    set unless given a default. **Ref:** [DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html#node-values).
+    set unless given a default. **Ref:** [DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html#node-values).
 
 ??? question "Q3. `$crawler->selectButton('Save')->form(['title' => 'x'])` returns…"
     - [x] A. A `Form` pre-filled with page values, with `title` overridden ✅
@@ -359,7 +386,7 @@ express the query (axes, text predicates).
     - [ ] D. A new Crawler
 
     **Why:** `form()` builds a `DomCrawler\Form` seeded from the DOM; the argument
-    overrides fields. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#forms).
+    overrides fields. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#forms).
 
 ??? question "Q4. To follow an anchor you first obtain…"
     - [x] A. A `Link` via `$crawler->selectLink('Text')->link()` ✅
@@ -368,7 +395,7 @@ express the query (axes, text predicates).
     - [ ] D. A `Response`
 
     **Why:** `link()` builds a `DomCrawler\Link` for `$client->click()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#clicking-links).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#clicking-links).
 
 ## Key takeaways
 
@@ -392,8 +419,8 @@ express the query (axes, text predicates).
 - **Confused with:** [Introspection](introspection.md) — the Crawler *finds* nodes; the `assertSelector*` helpers *check* them.
 
 ## Official References
-- [Official Symfony docs — DomCrawler](https://symfony.com/doc/current/components/dom_crawler.html)
-- [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/current/testing.html#the-crawler)
+- [Official Symfony docs — DomCrawler](https://symfony.com/doc/8.0/components/dom_crawler.html)
+- [Official Symfony docs — Testing (crawler)](https://symfony.com/doc/8.0/testing.html#the-crawler)
 - [Symfony source — Crawler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DomCrawler/Crawler.php)
 
 ## Video references
@@ -405,7 +432,7 @@ express the query (axes, text predicates).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/dom_crawler.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/dom_crawler.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

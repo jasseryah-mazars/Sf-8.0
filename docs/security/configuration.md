@@ -26,6 +26,31 @@
     **Level:** Advanced → Expert ·
     **Est. time:** 30 min ·
     **Prerequisites:** [Authentication](authentication.md) ·
+
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`security.yaml` est le plan directeur unique qui décrit toute la sécurité de l'application — d'où viennent les utilisateurs, comment ils se connectent, ce qu'ils peuvent faire.
+
+### Imagine dans la vraie vie
+`security.yaml` est le plan directeur du bâtiment. Un seul document raccorde le bureau des dossiers (`providers`), chaque poste de sécurité (`firewalls`), les règles affichées sur les portes (`access_control`), la broyeuse (`password_hashers`) et les niveaux d'habilitation (`role_hierarchy`).
+
+### Dans Symfony
+Toute la config de sécurité d'une application — quels utilisateurs existent, comment ils se connectent, quelles URL sont protégées — vit dans ce **seul** fichier, jamais éparpillée ailleurs.
+
+### Exemple simple
+```yaml
+security:
+    providers: { app_user_provider: { entity: { class: App\Entity\User } } }
+    firewalls: { main: { lazy: true, provider: app_user_provider } }
+```
+
+### Comment le mémoriser 🧠
+Symfony 8 a **définitivement supprimé** `enable_authenticator_manager` — le système authenticator est désormais le seul et unique système, il n'y a plus de choix à faire.
     [Dependency Injection](../dependency-injection/index.md)
 
 ---
@@ -254,6 +279,8 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In Symfony 8, `enable_authenticator_manager` is…"
     - [ ] A. Required and set to `true`
     - [ ] B. Optional, default `false`
@@ -261,7 +288,7 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
     - [ ] D. Renamed to `authenticator: true`
 
     **Why:** The key existed (and was deprecated) in 7.x; 8.0 removed it.
-    **Ref:** [Security config](https://symfony.com/doc/current/security.html).
+    **Ref:** [Security config](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q2. The `password_hashers` map is keyed by…"
     - [ ] A. Firewall name
@@ -271,7 +298,7 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
 
     **Why:** You map a user class (commonly `PasswordAuthenticatedUserInterface`)
     to an algorithm like `auto`.
-    **Ref:** [Password hashing](https://symfony.com/doc/current/security/passwords.html).
+    **Ref:** [Password hashing](https://symfony.com/doc/8.0/security/passwords.html).
 
 ??? question "Q3. Two providers are defined; a firewall omits `provider:`. Result?"
     - [ ] A. It uses the first provider
@@ -281,7 +308,7 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
 
     **Why:** With multiple providers there is no implicit default; each firewall
     must name one.
-    **Ref:** [User providers](https://symfony.com/doc/current/security/user_providers.html).
+    **Ref:** [User providers](https://symfony.com/doc/8.0/security/user_providers.html).
 
 ## Key takeaways
 
@@ -311,8 +338,8 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
   configure *authentication*; `access_control` configures *authorization*.
 
 ## Official References
-- [Symfony docs — Security configuration](https://symfony.com/doc/current/security.html)
-- [Symfony docs — SecurityBundle config reference](https://symfony.com/doc/current/reference/configuration/security.html)
+- [Symfony docs — Security configuration](https://symfony.com/doc/8.0/security.html)
+- [Symfony docs — SecurityBundle config reference](https://symfony.com/doc/8.0/reference/configuration/security.html)
 - [Symfony source — SecurityExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/DependencyInjection/SecurityExtension.php)
 
 ## Video references
@@ -324,7 +351,7 @@ builders. Environment-specific overrides live in `config/packages/<env>/`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

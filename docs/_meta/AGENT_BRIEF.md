@@ -21,7 +21,7 @@ Expert Certification Prep platform. Read this fully before writing.
 - Every chapter ends with: best-practices table, when-not-to-use, **certification
   traps**, common mistakes, **exercises + hidden solutions**, inline
   **certification questions** (collapsible), key takeaways, **last-minute
-  revision** cheat sheet, and **references** (official docs `doc/current` + Symfony
+  revision** cheat sheet, and **references** (official docs `doc/8.0` + Symfony
   source `blob/8.0` where internals are discussed).
 - Cross-link related chapters with **relative** links (`../area/file.md`).
 - **Out of scope — never teach:** Symfony UX, Symfony AI, Doctrine, Monolog,

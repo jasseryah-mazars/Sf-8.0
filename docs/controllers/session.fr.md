@@ -28,6 +28,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La session est un casier privé par visiteur, qui ne se loue (n'ouvre un cookie) que le jour où tu y déposes vraiment quelque chose.
+
+### Imagine dans la vraie vie
+Le vestiaire de l'accueil : un casier privé par visiteur, identifié par un ticket de réclamation (le cookie de session). Rien n'est loué tant que le visiteur n'a rien déposé — c'est ça, la paresse : un visiteur qui ne dépose rien ne reçoit aucun ticket (`Set-Cookie`). Régénérer le ticket après qu'il devienne VIP (`migrate()` après connexion) empêche quiconque de réutiliser un ancien talon glissé plus tôt — la fixation de session.
+
+### Dans Symfony
+Appeler `RequestStack::getSession()` dans un service évite de casser le cache HTTP des pages qui n'utilisent jamais la session — injecter la session directement forcerait Symfony à la démarrer systématiquement.
+
+### Exemple simple
+```php
+$session = $requestStack->getSession();
+$session->set('panier', $items);
+```
+
+### Comment le mémoriser 🧠
+"Pas de casier ouvert tant que rien n'est déposé" — la session Symfony est **paresseuse** : aucun cookie n'est envoyé si tu ne l'as jamais touchée.
+
+
 ## Theory
 
 Une **session** est un état côté serveur, propre à chaque visiteur, identifié par un
@@ -307,7 +328,7 @@ code accessible depuis la CLI.
     - [ ] D. Autowire `Session` and store it as a property.
 
     **Why:** la session est liée au scope de la request ; `RequestStack` est le point
-    d'entrée stable. **Ref:** [sessions](https://symfony.com/doc/current/session.html).
+    d'entrée stable. **Ref:** [sessions](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q2. When does a lazy Symfony session actually start?"
     - [ ] A. On every request automatically.
@@ -316,7 +337,7 @@ code accessible depuis la CLI.
     - [ ] D. When `RequestStack` is injected.
 
     **Why:** les sessions lazy évitent un `Set-Cookie` pour les requests qui ne les utilisent jamais.
-    **Ref:** [sessions](https://symfony.com/doc/current/session.html).
+    **Ref:** [sessions](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q3. Which call prevents session fixation after login?"
     - [x] A. `migrate()` (regenerate the id) ✅
@@ -325,7 +346,7 @@ code accessible depuis la CLI.
     - [ ] D. `save()`
 
     **Why:** régénérer l'id invalide tout id pré-login qu'un attaquant aurait planté.
-    **Ref:** [session security](https://symfony.com/doc/current/session.html).
+    **Ref:** [session security](https://symfony.com/doc/8.0/session.html).
 
 ??? question "Q4. What is a side effect of touching the session on a public page?"
     - [x] A. A `Set-Cookie` header makes it uncacheable by shared proxies. ✅
@@ -334,7 +355,7 @@ code accessible depuis la CLI.
     - [ ] D. It disables Twig caching.
 
     **Why:** les caches partagés ne doivent pas stocker des responses `Set-Cookie` propres à un utilisateur.
-    **Ref:** [http cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [http cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ## Key takeaways
 
@@ -358,7 +379,7 @@ code accessible depuis la CLI.
 - **À ne pas confondre avec :** [Cookies](cookies.md) — la session garde l'état côté serveur ; seul son id voyage dans un cookie.
 
 ## Official References
-- [Official Symfony docs — Sessions](https://symfony.com/doc/current/session.html)
+- [Official Symfony docs — Sessions](https://symfony.com/doc/8.0/session.html)
 - [Symfony source — Session](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Session.php)
 
 ## Video references
@@ -370,7 +391,7 @@ code accessible depuis la CLI.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/session.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/session.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

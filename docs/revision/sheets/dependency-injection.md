@@ -2,6 +2,20 @@
 
 Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-minute cheat). For the final days. Full detail: [Dependency Injection](../../dependency-injection/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche imprimable, tenant sur une page**, qui résume chaque sous-chapitre de Dependency Injection en quelques puces "à retenir" suivies d'une ligne "Cheat" très dense.
+
+**Pourquoi ça existe ?** Dans les derniers jours avant l'examen, on veut un support papier ou PDF unique par domaine — pas 10 onglets de navigateur ouverts. Cette fiche condense un domaine entier sur une seule page imprimable.
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de révision recto-verso** qu'un étudiant prépare avant un examen universitaire : tout le cours du semestre réduit à une page, à relire dans le métro le matin de l'épreuve.
+
+**Symfony dans la vraie vie :** Chaque puce "à retenir" → une règle déjà apprise en détail dans le chapitre / La ligne "Cheat:" → la version ultra-compacte, presque un aide-mémoire de syntaxe / Lien "Full detail" → retour au chapitre complet si un point ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Imprimer cette fiche *avant* d'avoir étudié Dependency Injection en détail, en espérant apprendre directement dessus — le format est trop dense pour un premier apprentissage, il ne fonctionne qu'en rappel.
+
+**🧠 Comment le mémoriser :** *« Une page, un domaine, la veille de l'examen »* — cette fiche est le tout dernier support à consulter, pas le premier.
+
 ## Autowiring
 - Autowiring injects objects by type-hint at compile time.
 - Disambiguate with named aliases, `#[Target]`, `#[Autowire(service:)]`, or `bind`.
@@ -25,6 +39,19 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Prefer tagged arguments/autoconfigure; use a pass for real transformation logic.
 
 **Cheat:** `CompilerPassInterface::process(ContainerBuilder $c)`. Register: `Kernel::build()` / `Bundle::build()` → `addCompilerPass($pass, phase, priority)`. `PassConfig::TYPE_*`; default = `TYPE_BEFORE_OPTIMIZATION`. `findTaggedServiceIds()`, `findDefinition()`, `new Reference($id)`.
+
+## Inside the Compiled Container
+- The container you run is **generated PHP** in `var/cache/{env}/`, written by
+  `PhpDumper` after the five `PassConfig` phases.
+- Private services get inlined/removed in the removing phases —
+  `debug:container` still shows them (snapshot ≠ dump).
+- `.preload.php` is auto-generated for `opcache.preload`;
+  `.container.dumper.inline_factories`/`inline_class_loader` tune the dump at
+  build time.
+- Runtime container = frozen: read-only parameters, `set()` only for
+  synthetic/test cases, config edits need a cache rebuild.
+
+**Cheat:** Flow: extensions `load()` → passes (before-opt → opt → before-removing → removing → after-removing) → `PhpDumper::dump()`. `var/cache/{env}/`: `Container{hash}/` factories, entry class, `.preload.php`, XML snapshot (debug) for `debug:container`. Inlined private service = visible in `debug:container`, no own factory in the dump. Frozen runtime: `FrozenParameterBag`, no replacing initialized services via `set()`. Prod config change → `cache:clear`/`cache:warmup`, always.
 
 ## The Service Container
 - A service is a container-managed object; value objects are not services.
@@ -51,6 +78,17 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - No `#[Factory]` attribute — use `#[Autowire(factory:)]` or config.
 
 **Cheat:** Static: `factory: 'Class::method'`. Instance: `['@svc', 'method']`. Invokable: `factory: '@svc'`. Args → factory method, not constructor. Attribute: `#[Autowire(factory: [F::class, 'create'])]`.
+
+## Lazy Services & Native Lazy Objects
+- `lazy: true` / `#[Autoconfigure(lazy: true)]` / `->lazy()` defer the
+  constructor to first use — injection stays immediate.
+- PHP 8.4 native lazy objects power Symfony 8: **ghosts** for concrete classes
+  (in-place init, identity preserved), **proxies** for interface laziness.
+- No proxy-manager, no `LazyGhostTrait` generation anymore; `final` classes
+  are fine with ghosts.
+- Laziness fixes expensive *constructors*, not expensive *methods*.
+
+**Cheat:** YAML: `lazy: true` · attribute: `#[Autoconfigure(lazy: true)]` · PHP: `->lazy()`. Interface proxy: `lazy: 'Some\Interface'`. Ghost = same instance (`===`), init in place; proxy = separate delegate (`!==`). Trigger: first state access. Shared semantics unchanged. PHP 8.4 restrictions: `readonly` classes / most internal classes — check the manual.
 
 ## Configuration Parameters
 - Parameters (`%x%`) are frozen at compile time; env vars resolve at runtime.
@@ -84,6 +122,18 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Use for pick-one-of-many or heavy, rarely-used deps.
 
 **Cheat:** `#[AutowireLocator([...])]` → PSR-11 `ContainerInterface`. `!service_locator` in YAML. Subscriber: `ServiceSubscriberInterface` + `ServiceMethodsSubscriberTrait` + `#[SubscribedService]`. Lazy, whitelisted, not the whole container.
+
+## Resettable Services & the Services Resetter
+- Worker runtimes reuse the container → request-scoped state in shared
+  services leaks unless reset.
+- `ResetInterface` + autoconfiguration, or `kernel.reset` with `method:`, make
+  a service resettable; `services_resetter` runs the methods between
+  requests/messages.
+- Only **initialized** services are reset; the instance itself survives.
+- Reset ≠ restart: use Messenger's `--limit`/`--memory-limit` (process
+  recycling) against leaks that `reset()` can't reach.
+
+**Cheat:** Interface: `Symfony\Contracts\Service\ResetInterface::reset()`. Tag: `{ name: 'kernel.reset', method: 'myMethod' }` (`?method` = only if it exists). Service: `services_resetter` (`Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter`). Resets initialized services only, between requests/messages. Messenger: reset per message by default, `--no-reset` to disable, `--limit`/`--time-limit`/`--memory-limit` to recycle the process.
 
 ## Tags
 - Tags are build-time labels; a collector must consume them.

@@ -31,6 +31,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un enum est une liste fermée de valeurs nommées et fixes — comme les jours de la semaine, on ne peut jamais en "inventer" un huitième par erreur.
+
+### Imagine dans la vraie vie
+Pense aux boutons d'un ascenseur : RDC, 1, 2, 3. Impossible d'appuyer sur "4.5" — seuls les boutons qui existent physiquement sont utilisables. Un enum, c'est exactement ça : un jeu de valeurs prédéfinies, et rien d'autre n'est possible.
+
+### Dans Symfony
+Symfony s'appuie sur les enums pour des états fermés : le statut d'une commande (brouillon/publié), un rôle, une méthode HTTP. Dès qu'un contrôleur ou un formulaire attend un enum, Symfony refuse automatiquement toute valeur qui n'existe pas dans la liste — sans code de validation supplémentaire à écrire.
+
+### Exemple simple
+```php
+enum Statut: string {
+    case Brouillon = 'brouillon';
+    case Publie = 'publie';
+}
+
+$s = Statut::from('publie'); // Statut::Publie
+```
+
+### Comment le mémoriser 🧠
+`from()` = **f**âché : il explose (throw) si la valeur n'existe pas. `tryFrom()` = il **try** gentiment et répond juste "non" (`null`) sans drame.
+
+
 ## Théorie
 
 Un **enum** (`enum Nom { ... }`, PHP 8.1+) est un type dont les instances —
@@ -142,7 +167,7 @@ public function byStatus(Status $status): Response
 !!! note "Référence source"
     `Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver`
     et `Symfony\Component\Form\Extension\Core\Type\EnumType` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
 
 ### Comportement en cas d'absence
 
@@ -320,7 +345,7 @@ pas porter.
 
     **Pourquoi :** le resolver appelle `from()` et intercepte lui-même
     `\ValueError`/`TypeError`, levant `NotFoundHttpException`.
-    **Réf :** [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
+    **Réf :** [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
 
 ??? question "Q4. Qu'une case d'enum ne peut-elle PAS avoir ?"
     - [ ] A. Des méthodes
@@ -369,7 +394,7 @@ pas porter.
 ## Références officielles
 - [Manuel PHP — Enumerations](https://www.php.net/manual/en/language.enumerations.php)
 - [Manuel PHP — Enums backés](https://www.php.net/manual/en/language.enumerations.backed.php)
-- [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
+- [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
 - [Source Symfony — EnumType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Core/Type/EnumType.php)
 
 ## Références vidéo

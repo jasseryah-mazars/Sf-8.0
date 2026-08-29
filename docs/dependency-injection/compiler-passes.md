@@ -28,6 +28,31 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Tags](tags.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un compiler pass réécrit les définitions de services **pendant** la compilation, avant que quoi que ce soit ne soit réellement instancié.
+
+### Imagine dans la vraie vie
+Un compiler pass est un manager de cuisine qui fait la mise en place *avant* le service : il parcourt les fiches de poste (les définitions) et — disons — rassemble toutes les recettes de "sauce" étiquetées sur le tableau et les agrafe dans la checklist du poste principal. Il réorganise sur papier ; aucun plat n'est encore cuisiné.
+
+### Dans Symfony
+L'autowiring et la collecte des services tagués de Symfony **sont eux-mêmes** des compiler passes — ce ne sont pas des mécanismes magiques séparés, juste des passes exécutées avant les tiennes.
+
+### Exemple simple
+```php
+class MonPass implements CompilerPassInterface {
+    public function process(ContainerBuilder $container): void { /* réécrit des définitions */ }
+}
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **pas** d'attribut `#[CompilerPass]` — l'enregistrement se fait toujours dans `Kernel::build()` ou le `build()` d'un bundle. Et une priorité plus haute s'exécute **plus tôt** dans sa phase.
+
 ---
 
 ## Theory
@@ -302,6 +327,8 @@ expresses.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. How do you register a custom compiler pass?"
     - [ ] A. Add `#[CompilerPass]` to the class
     - [x] B. Call `addCompilerPass()` in `Kernel::build()` or a bundle's `build()` ✅
@@ -309,7 +336,7 @@ expresses.
     - [ ] D. Put it in `services.yaml`
 
     **Why:** There is no compiler-pass attribute; registration is programmatic.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ??? question "Q2. What is the default compilation phase for a pass?"
     - [x] A. `TYPE_BEFORE_OPTIMIZATION` ✅
@@ -318,7 +345,7 @@ expresses.
     - [ ] D. `TYPE_AFTER_REMOVING`
 
     **Why:** Passes registered without a phase run before optimization.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ??? question "Q3. `findTaggedServiceIds('t')` returns…"
     - [x] A. A map of service id → array of tag attribute sets ✅
@@ -327,7 +354,7 @@ expresses.
     - [ ] D. Only the first tagged id
 
     **Why:** It returns definitions' ids with each tag occurrence's attributes.
-    **Ref:** [Tags & passes](https://symfony.com/doc/current/service_container/tags.html).
+    **Ref:** [Tags & passes](https://symfony.com/doc/8.0/service_container/tags.html).
 
 ??? question "Q4. Inside `process()` you should manipulate…"
     - [x] A. `Definition` objects (build-time metadata) ✅
@@ -336,7 +363,7 @@ expresses.
     - [ ] D. The event dispatcher at runtime
 
     **Why:** Compilation deals only with definitions; nothing is instantiated yet.
-    **Ref:** [Compiler passes](https://symfony.com/doc/current/service_container/compiler_passes.html).
+    **Ref:** [Compiler passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html).
 
 ## Key takeaways
 
@@ -364,8 +391,8 @@ expresses.
   the label (when a `tagged_iterator` won't do).
 
 ## Official References
-- [Official Symfony docs — Compiler Passes](https://symfony.com/doc/current/service_container/compiler_passes.html)
-- [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/current/service_container/tags.html)
+- [Official Symfony docs — Compiler Passes](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
+- [Official Symfony docs — How to Work with Tags](https://symfony.com/doc/8.0/service_container/tags.html)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)
 
 ## Video references
@@ -377,7 +404,7 @@ expresses.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/compiler_passes.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/compiler_passes.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

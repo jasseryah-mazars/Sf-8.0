@@ -27,6 +27,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Twig neutralise automatiquement tout ce qu'un visiteur pourrait injecter dans une page — pas besoin d'y penser toi-même, à chaque `{{ }}`.
+
+### Imagine dans la vraie vie
+L'auto-escaping est un filet de sécurité tendu sous un trapèze. Quoi qu'un visiteur jette dans ta page — `<script>`, guillemets, chevrons — tombe dans le filet et est neutralisé en texte inoffensif avant que le public ne le voie. Tu ne décroches le filet (`|raw`) que pour des artistes que tu as personnellement vérifiés.
+
+### Dans Symfony
+`{{ commentaire_utilisateur }}` affiche en toute sécurité même si le visiteur a écrit `<script>alert(1)</script>` — le texte apparaît littéralement à l'écran, il ne s'exécute jamais.
+
+### Exemple simple
+```twig
+{{ commentaire }}          {# échappé automatiquement, toujours sûr #}
+{{ commentaire|raw }}      {# ⚠️ dangereux : jamais sur du contenu utilisateur non vérifié #}
+```
+
+### Comment le mémoriser 🧠
+`.txt.twig` n'échappe **rien** (ce n'est pas du HTML, il n'y a rien à échapper) — seule une extension comme `.html.twig` déclenche la protection XSS.
+
+
 ## Theory
 
 L'auto-escaping est la défense intégrée de Twig contre les **XSS** : chaque
@@ -271,7 +292,7 @@ affichez avec `|raw` — ne faites jamais confiance à du markup utilisateur bru
 
     **Why:** Le TwigBundle définit `autoescape: name`, en utilisant
     `FileExtensionEscapingStrategy::guess()`. **Ref:**
-    [Twig autoescape](https://symfony.com/doc/current/templates.html#output-escaping).
+    [Twig autoescape](https://symfony.com/doc/8.0/templates.html#output-escaping).
 
 ??? question "Q2. A value goes inside `<script>const x = \"…\";</script>`. Which filter?"
     - [ ] A. `|e('html')`
@@ -314,7 +335,7 @@ affichez avec `|raw` — ne faites jamais confiance à du markup utilisateur bru
 - **Confused with:** [Twig Syntax](syntax.md) — l'échappement se produit à l'**affichage** (`{{ }}`), pas au `{% set %}` ; afficher et échapper ne font qu'un.
 
 ## Official References
-- [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
+- [Official — Output escaping](https://symfony.com/doc/8.0/templates.html#output-escaping)
 - [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
 - [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
 
@@ -328,7 +349,7 @@ affichez avec `|raw` — ne faites jamais confiance à du markup utilisateur bru
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

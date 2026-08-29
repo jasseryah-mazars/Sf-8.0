@@ -24,7 +24,31 @@
     **Level:** Expert ·
     **Est. time:** 35 min ·
     **Prerequisites:** [Event Dispatcher](../architecture/events.md) ·
+
+    **Examen Symfony 8 :** OUI
     [HTTP Cookies & Sessions](../http/cookies.md)
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+L'authentification répond à une seule question : "qui fait cette requête ?" — elle ne décide jamais ce que cette personne a le droit de faire.
+
+### Imagine dans la vraie vie
+S'authentifier, c'est montrer sa carte d'identité au poste de garde. Tu tends un justificatif — le **Passport** de badges — le garde le vérifie contre les registres, et s'il tient la route, tu reçois un bracelet (le **token**) qui prouve qui tu es pour le reste de ta visite.
+
+### Dans Symfony
+Une fois le token créé après un login réussi, chaque requête suivante sur la même session le retrouve automatiquement — tu n'as pas besoin de re-présenter tes identifiants à chaque page.
+
+### Exemple simple
+```php
+$token = $tokenStorage->getToken();
+$token?->getUser()?->getUserIdentifier(); // qui est connecté maintenant
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **plus** de flag `enable_authenticator_manager` en Symfony 8 — le système authenticator **est** le seul système de sécurité, pas une option parmi d'autres.
 
 ---
 
@@ -350,6 +374,8 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Where are passport badges validated?"
     - [ ] A. Inside the authenticator's `authenticate()` method
     - [x] B. By listeners on `CheckPassportEvent` ✅
@@ -358,7 +384,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
     **Why:** `authenticate()` only builds the Passport; badge resolution and
     credential checks happen on `CheckPassportEvent`.
-    **Ref:** [Passport docs](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Passport docs](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ??? question "Q2. What does a stateless firewall NOT do?"
     - [x] A. Persist the token in the session ✅
@@ -368,7 +394,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
     **Why:** Stateless firewalls skip the `ContextListener`, so nothing is stored
     or restored between requests.
-    **Ref:** [Stateless firewalls](https://symfony.com/doc/current/security.html).
+    **Ref:** [Stateless firewalls](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. `supports()` returns `null`. What happens?"
     - [ ] A. The request is rejected
@@ -410,8 +436,8 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
   authorization is *what you may do*.
 
 ## Official References
-- [Symfony docs — Security](https://symfony.com/doc/current/security.html)
-- [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
+- [Symfony docs — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony docs — Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 - [Symfony source — AuthenticatorManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)
 
 ## Video references
@@ -423,7 +449,7 @@ use `form_login` (stateful, session-backed); machine-to-machine APIs use
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/custom_authenticator.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/custom_authenticator.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

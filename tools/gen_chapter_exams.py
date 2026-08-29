@@ -7,6 +7,7 @@ explanations. Regenerate: python tools/gen_chapter_exams.py
 """
 from __future__ import annotations
 import os, glob, yaml
+from generated_blocks import carry_over
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "exams")
@@ -69,7 +70,9 @@ counts = {}
 for area, label in AREAS.items():
     qs = questions(area)
     counts[area] = len(qs)
-    open(os.path.join(OUT, f"{area}.md"), "w", encoding="utf-8").write(render(area, label, qs))
+    out = os.path.join(OUT, f"{area}.md")
+    text = carry_over(out, render(area, label, qs))
+    open(out, "w", encoding="utf-8").write(text)
 
 idx = ["# Chapter Exams", "",
        "One exam per topic area — every subchapter mixed together, ordered "
@@ -80,5 +83,7 @@ for area, label in AREAS.items():
     idx.append(f"- [{label}]({area}.md) — {counts[area]} questions")
 idx += ["", "---", "", "<small>Related: [Revision Hub](../revision/index.md) · "
         "[Mock Exams](../revision/mock-exam.md)</small>"]
-open(os.path.join(OUT, "index.md"), "w", encoding="utf-8").write("\n".join(idx)+"\n")
+out = os.path.join(OUT, "index.md")
+text = carry_over(out, "\n".join(idx)+"\n")
+open(out, "w", encoding="utf-8").write(text)
 print("chapter exams:", sum(counts.values()), "questions across", len(AREAS), "areas")

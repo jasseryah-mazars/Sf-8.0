@@ -26,15 +26,38 @@
 
     **Syllabus:** `Automated Tests → Handling deprecated code` ·
     **Level:** Expert ·
+
     **Est. time:** 25 min ·
-    **Prerequisites:** [PHPUnit Bridge](phpunit-bridge.md)
+    **Prerequisites:** [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le PHPUnit bridge classe chaque dépréciation déclenchée selon qui en est responsable — ton propre code, une dépendance directe, ou une dépendance de dépendance.
+
+### Imagine dans la vraie vie
+Un inspecteur du bâtiment relève des infractions au code, chacune étiquetée selon le responsable. Certaines, c'est *toi* qui les as mal construites (**self**) ; certaines viennent d'un entrepreneur *que tu as engagé directement* (**direct**) ; certaines sont enterrées profondément dans le travail d'un sous-traitant (**indirect**).
+
+### Dans Symfony
+Configurer `max[self]=0` fait échouer le build seulement si **ton propre code** déclenche une dépréciation — les dépréciations venant de bibliothèques tierces (que tu ne contrôles pas) sont tolérées jusqu'à ce que tu puisses les mettre à jour.
+
+### Exemple simple
+```php
+#[IgnoreDeprecations]
+public function testAncienneApi(): void { /* teste volontairement du code déprécié */ }
+```
+
+### Comment le mémoriser 🧠
+`#[IgnoreDeprecations]` remplace l'ancien `@group legacy` **supprimé** — ne cherche jamais cette annotation dans du code Symfony 8, elle n'existe plus.
 
 ---
 
 ## Theory
 
 Symfony signals API removals ahead of time by triggering `E_USER_DEPRECATED` via
-`trigger_deprecation()`. In tests, the [PHPUnit bridge](phpunit-bridge.md)
+`trigger_deprecation()`. In tests, the [PHPUnit bridge](../appendices/out-of-syllabus/phpunit-bridge.md)
 **collects** these and can **fail the build** so upgrades never surprise you. The
 skill is telling *your* deprecations (which you must fix) from *third-party* ones
 (which you tolerate until they release a fix), and quieting the ones you
@@ -292,6 +315,8 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. A deprecation triggered inside a vendor library's own internals is bucketed as…"
     - [ ] A. self
     - [ ] B. direct
@@ -299,7 +324,7 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
     - [ ] D. legacy
 
     **Why:** `indirect` = triggered deep inside a dependency, not by your direct
-    call. **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail).
+    call. **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail).
 
 ??? question "Q2. Which value reports deprecations but never fails the build?"
     - [x] A. `weak` ✅
@@ -308,7 +333,7 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
     - [ ] D. `strict`
 
     **Why:** `weak` collects and prints without enforcing thresholds; `disabled`
-    stops collection. **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html#configuration).
+    stops collection. **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration).
 
 ??? question "Q3. The modern way to silence a single test's expected deprecations is…"
     - [x] A. `#[IgnoreDeprecations]` ✅
@@ -317,7 +342,7 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
     - [ ] D. `SYMFONY_DEPRECATIONS_HELPER=disabled`
 
     **Why:** the `IgnoreDeprecations` attribute is the current replacement for the
-    legacy group. **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html).
+    legacy group. **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html).
 
 ??? question "Q4. `max[self]=0` fails the build when…"
     - [x] A. Your own code triggers any deprecation ✅
@@ -326,7 +351,7 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
     - [ ] D. A test is marked legacy
 
     **Why:** `self` counts only deprecations originating in your code.
-    **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail).
+    **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail).
 
 ## Key takeaways
 
@@ -348,12 +373,12 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
 
 ## Connections
 
-- **Depends on:** [PHPUnit Bridge](phpunit-bridge.md) — the bridge's `DeprecationErrorHandler` does the bucketing and gating.
+- **Depends on:** [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — the bridge's `DeprecationErrorHandler` does the bucketing and gating.
 - **Reused in:** [Architecture — Deprecations](../architecture/deprecations.md) — the framework's own rules for *authoring* deprecations.
 - **Confused with:** [Unit Tests](unit-tests.md) — asserting a deprecation message differs from asserting a return value.
 
 ## Official References
-- [Official Symfony docs — PHPUnit bridge deprecations](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail)
+- [Official Symfony docs — PHPUnit bridge deprecations](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail)
 - [Symfony source — DeprecationErrorHandler Configuration](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/DeprecationErrorHandler/Configuration.php)
 - [Architecture — Deprecations Best Practices](../architecture/deprecations.md)
 
@@ -366,7 +391,7 @@ visibility without a red build; never ship `disabled=1` as the permanent state.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -380,4 +405,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [PHPUnit Bridge](phpunit-bridge.md) · [Architecture — Deprecations](../architecture/deprecations.md) · [Unit Tests](unit-tests.md)</small>
+<small>Related: [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) · [Architecture — Deprecations](../architecture/deprecations.md) · [Unit Tests](unit-tests.md)</small>

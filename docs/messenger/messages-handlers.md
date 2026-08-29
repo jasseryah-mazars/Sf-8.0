@@ -27,7 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Messenger Component](component.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Il existe trois "styles" de bus par convention : commande (un seul handler, pas de réponse), requête (un seul handler, réponse lue à part), événement (zéro à plusieurs handlers).
+
+### Imagine dans la vraie vie
+Trois bacs de bureau différents. Un bac **commande** contient une tâche pour exactement un employé — aucune réponse attendue. Un bac **requête** contient une demande dont la réponse de l'employé est agrafée au dossier pour que tu la lises plus tard. Un bac **événement** est un panneau d'affichage public — zéro, un, ou plusieurs collègues peuvent y jeter un œil et agir.
+
+### Dans Symfony
+Un `GetInvoiceTotal` (requête) sur un query bus renvoie son résultat via `$envelope->last(HandledStamp::class)?->getResult()` — jamais directement depuis `dispatch()`, même si un seul handler existe.
+
+### Exemple simple
+```php
+$envelope = $queryBus->dispatch(new GetInvoiceTotal(orderId: 7));
+$total = $envelope->last(HandledStamp::class)?->getResult();
+```
+
+### Comment le mémoriser 🧠
+Ce découpage commande/requête/événement est une **convention de nommage**, pas une règle imposée par le composant lui-même — Messenger ne connaît pas ces trois catégories en interne.
 
 ## Theory
 
@@ -239,6 +261,8 @@ differ per kind.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which statements about Messenger buses are correct? (choose 2)"
     - [x] A. Each bus is an independent `MessageBus` with its own middleware list ✅
     - [x] B. The command/query/event split is a convention, not enforced by the component ✅
@@ -248,7 +272,7 @@ differ per kind.
     **Why:** buses are configured independently (own middleware), and
     Messenger does not hard-code command/query/event semantics — you name
     and configure buses however you like.
-    **Ref:** [Messenger — Multiple buses](https://symfony.com/doc/current/messenger.html#messenger-multiple-buses).
+    **Ref:** [Messenger — Multiple buses](https://symfony.com/doc/8.0/messenger.html#messenger-multiple-buses).
 
 ??? question "Q2. How do you retrieve a synchronous handler's return value after `dispatch()`?"
     - [x] A. `$envelope->last(HandledStamp::class)?->getResult()` ✅
@@ -258,7 +282,7 @@ differ per kind.
 
     **Why:** the result is wrapped in a `HandledStamp` inside the returned
     `Envelope`, not returned directly.
-    **Ref:** [Messenger — Handling messages synchronously](https://symfony.com/doc/current/messenger.html#getting-results-from-the-handled-message).
+    **Ref:** [Messenger — Handling messages synchronously](https://symfony.com/doc/8.0/messenger.html#getting-results-from-the-handled-message).
 
 ??? question "Q3. A dispatched message throws `NoHandlerForMessageException`. What is the most likely cause?"
     - [x] A. The handler service is missing `#[AsMessageHandler]` (or its `use` import) ✅
@@ -268,7 +292,7 @@ differ per kind.
 
     **Why:** without the attribute (or explicit tagging), autoconfiguration
     never registers the service as a handler for that message type.
-    **Ref:** [Messenger — Creating a handler](https://symfony.com/doc/current/messenger.html#creating-a-message-handler).
+    **Ref:** [Messenger — Creating a handler](https://symfony.com/doc/8.0/messenger.html#creating-a-message-handler).
 
 ## Key takeaways
 
@@ -300,8 +324,8 @@ differ per kind.
 
 ## Official References
 
-- [Official docs — Messenger: multiple buses](https://symfony.com/doc/current/messenger.html#messenger-multiple-buses)
-- [Official docs — Getting results from a handled message](https://symfony.com/doc/current/messenger.html#getting-results-from-the-handled-message)
+- [Official docs — Messenger: multiple buses](https://symfony.com/doc/8.0/messenger.html#messenger-multiple-buses)
+- [Official docs — Getting results from a handled message](https://symfony.com/doc/8.0/messenger.html#getting-results-from-the-handled-message)
 - [Symfony source — DispatchAfterCurrentBusStamp](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Stamp/DispatchAfterCurrentBusStamp.php)
 
 ## Video references
@@ -313,7 +337,7 @@ differ per kind.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#messenger-multiple-buses) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#messenger-multiple-buses) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -26,7 +26,30 @@
     **Syllabus:** `Security → Login Throttling` ·
     **Level:** Expert ·
     **Est. time:** 20 min ·
+
     **Prerequisites:** [Authentication](authentication.md) · [Firewalls](firewalls.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`login_throttling` bloque automatiquement les tentatives de connexion en force brute — après un nombre d'essais ratés, le compte est temporairement gelé.
+
+### Imagine dans la vraie vie
+La porte du coffre d'une banque : après cinq codes PIN erronés pour *un* compte, le clavier bloque l'accès à ce compte pendant un moment. Mais la porte surveille aussi la *personne* : quelqu'un qui essaie plein de numéros de compte différents est totalement bloqué après 25 essais, même si aucun compte individuel n'a atteint sa propre limite.
+
+### Dans Symfony
+Sans cette protection, un attaquant pourrait essayer des milliers de mots de passe par seconde contre un seul compte — `login_throttling` ralentit ça automatiquement, sans code supplémentaire à écrire.
+
+### Exemple simple
+```yaml
+main:
+    login_throttling: { max_attempts: 5, interval: '15 minutes' }
+```
+
+### Comment le mémoriser 🧠
+Deux limites cumulées : par **username+IP** (spécifique) ET une limite plus large par **IP seule, à 5× max_attempts** — pour arrêter aussi un attaquant qui change de nom d'utilisateur à chaque essai.
 
 ---
 
@@ -295,6 +318,8 @@ has nothing to throttle.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does the default login throttling limiter count?"
     - [ ] A. Failures per username only
     - [ ] B. Failures per IP only
@@ -303,7 +328,7 @@ has nothing to throttle.
 
     **Why:** The dual counters stop both password brute-force on one account
     and username spraying from one IP.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ??? question "Q2. Which event does the throttling listener use to block an attempt?"
     - [ ] A. `LoginFailureEvent`
@@ -324,7 +349,7 @@ has nothing to throttle.
 
     **Why:** The feature is built on the RateLimiter component; without it the
     firewall option cannot be configured.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ??? question "Q4. What must a custom `limiter` service implement?"
     - [ ] A. `LimiterInterface` from the RateLimiter component
@@ -334,7 +359,7 @@ has nothing to throttle.
 
     **Why:** The firewall needs a limiter that understands *requests*;
     `AbstractRequestRateLimiter` is the convenient base class.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ## Key takeaways
 
@@ -370,8 +395,8 @@ has nothing to throttle.
   each guess; throttling limits *how many* guesses run at all.
 
 ## Official References
-- [Symfony docs — Limiting login attempts](https://symfony.com/doc/current/security.html#limiting-login-attempts)
-- [Symfony docs — Rate Limiter component](https://symfony.com/doc/current/rate_limiter.html)
+- [Symfony docs — Limiting login attempts](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
+- [Symfony docs — Rate Limiter component](https://symfony.com/doc/8.0/rate_limiter.html)
 - [Symfony source — LoginThrottlingListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/EventListener/LoginThrottlingListener.php)
 
 ## Video references
@@ -383,7 +408,7 @@ has nothing to throttle.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#limiting-login-attempts) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#limiting-login-attempts) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

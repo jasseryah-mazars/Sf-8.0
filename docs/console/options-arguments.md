@@ -26,7 +26,32 @@
     **Syllabus:** `Console → Arguments & Options` ·
     **Level:** Advanced ·
     **Est. time:** 30 min ·
+
     **Prerequisites:** [Custom commands](custom-commands.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les arguments sont dans un ordre fixe et obligatoire par position ; les options sont nommées et peuvent venir dans n'importe quel ordre.
+
+### Imagine dans la vraie vie
+Commander à un comptoir à café montre la différence. Tu énonces l'essentiel dans un ordre fixe — "grand, latte" — et si tu inverses, le barista est perdu, exactement comme les arguments positionnels où l'ordre compte. Les extras, eux, sont nommés et peuvent venir dans n'importe quel ordre : "avec lait d'avoine", "sans sucre".
+
+### Dans Symfony
+```console
+$ php bin/console app:export csv --limite=100  # 'csv' = argument, '--limite' = option
+```
+
+### Exemple simple
+```php
+#[Argument] string $format,
+#[Option] int $limite = 50,
+```
+
+### Comment le mémoriser 🧠
+Les modes se mémorisent en puissances de 2 : arguments REQUIRED=**1**/OPTIONAL=**2**/IS_ARRAY=**4** ; options VALUE_NONE=**1**/REQUIRED=**2**/OPTIONAL=**4**/IS_ARRAY=**8**/NEGATABLE=**16**.
 
 ---
 
@@ -299,6 +324,8 @@ are self-documenting and order-free. Interactive prompting (see
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which mode makes an option a valueless boolean flag?"
     - [x] A. `InputOption::VALUE_NONE` ✅
     - [ ] B. `InputOption::VALUE_OPTIONAL`
@@ -306,7 +333,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. `InputOption::VALUE_REQUIRED`
 
     **Why:** `VALUE_NONE` accepts no value; presence means `true`. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q2. What is the integer value of `InputOption::VALUE_IS_ARRAY`?"
     - [ ] A. 4
@@ -315,7 +342,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. 2
 
     **Why:** the option-mode bitmask is 1,2,4,8,16. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q3. Which is true about an `IS_ARRAY` argument?"
     - [x] A. There can be only one and it must be declared last ✅
@@ -324,7 +351,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. It cannot be combined with `REQUIRED`
 
     **Why:** the array argument greedily consumes the remaining tokens. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ??? question "Q4. Which mode produces a `--no-foo` counterpart to `--foo`?"
     - [ ] A. `VALUE_OPTIONAL`
@@ -333,7 +360,7 @@ are self-documenting and order-free. Interactive prompting (see
     - [ ] D. `VALUE_IS_ARRAY`
 
     **Why:** negatable options add the `--no-` twin. **Ref:**
-    [Console input](https://symfony.com/doc/current/console/input.html).
+    [Console input](https://symfony.com/doc/8.0/console/input.html).
 
 ## Key takeaways
 
@@ -361,7 +388,7 @@ are self-documenting and order-free. Interactive prompting (see
   options; the `InputDefinition` is what *binds and validates* them.
 
 ## Official References
-- [Official Symfony docs — Console input](https://symfony.com/doc/current/console/input.html)
+- [Official Symfony docs — Console input](https://symfony.com/doc/8.0/console/input.html)
 - [Symfony source — InputOption](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputOption.php)
 - [Symfony source — InputArgument](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Input/InputArgument.php)
 
@@ -374,7 +401,7 @@ are self-documenting and order-free. Interactive prompting (see
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/input.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/input.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

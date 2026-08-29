@@ -14,6 +14,20 @@ tags:
     **Theory:** [Messenger](../messenger/index.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Construire un message Messenger complet — l'objet, son handler, et un middleware personnalisé qui journalise chaque passage — pour comprendre comment ces trois pièces s'assemblent.
+
+**Pourquoi ça existe ?** Lire la théorie du bus/middleware/handler reste abstrait tant qu'on n'a pas soi-même câblé les trois pièces ensemble et vu un message les traverser réellement.
+
+**🏠 Analogie de la vraie vie :** Construire soi-même une petite chaîne postale miniature — la lettre (message), le bureau de tri (middleware), et le destinataire (handler) — pour comprendre comment une vraie poste fonctionne à plus grande échelle.
+
+**Symfony dans la vraie vie :** Ton middleware personnalisé s'exécute pour **chaque** message envoyé sur le bus, avant et après le reste du pipeline — exactement comme `SendMessageMiddleware` le fait déjà pour le routage vers un transport.
+
+**⚠️ Erreur fréquente :** oublier d'appeler `$stack->next()->handle(...)` dans le middleware — ça bloque silencieusement le message, qui n'atteint jamais son handler.
+
+**🧠 Comment le mémoriser :** "Un middleware qui n'appelle pas `next()` est un barrage — le message ne passe jamais."
+
 ## Objective
 
 After this lab you can, from scratch and without the framework kernel:

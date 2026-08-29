@@ -30,6 +30,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le cache mémorise le résultat d'un calcul coûteux — la prochaine fois qu'on le demande, on relit la note au lieu de refaire le calcul.
+
+### Imagine dans la vraie vie
+Un cache est un **bloc-notes que tu consultes avant de faire un travail coûteux**. Avant de recalculer une valeur chère, tu jettes un œil au bloc (`get()`) : si la réponse y est déjà (un hit) tu la lis ; sinon (un miss) tu fais le travail **une fois**, tu la notes, et tu la rends.
+
+### Dans Symfony
+Mettre en cache le résultat d'un appel API externe coûteux (météo, taux de change) évite de re-solliciter ce service à chaque requête — la première requête calcule, toutes les suivantes lisent juste le cache.
+
+### Exemple simple
+```php
+$valeur = $cache->get('taux_change', function (ItemInterface $item) {
+    $item->expiresAfter(3600);
+    return $this->api->recupererTaux(); // appelé UNE seule fois par heure
+});
+```
+
+### Comment le mémoriser 🧠
+Seul **PSR-6** (via `TagAwareAdapter`) supporte les tags — **PSR-16 ne les supporte pas du tout**. Choisis PSR-6 dès que tu as besoin d'invalider un groupe entier d'entrées d'un coup.
+
+---
+
+
 ## Theory
 
 Symfony Cache propose trois API qui se recouvrent :
@@ -369,7 +394,7 @@ qu'ils restent déterministes.
     - [ ] C. never — you must call save()
 
     **Why:** Le callback calcule la valeur en cas de miss ; le résultat est stocké
-    et retourné. **Ref:** [Cache contracts](https://symfony.com/doc/current/cache.html#cache-contracts).
+    et retourné. **Ref:** [Cache contracts](https://symfony.com/doc/8.0/cache.html#cache-contracts).
 
 ??? question "Q2. Which API supports cache tags?"
     - [ ] A. PSR-16 SimpleCache
@@ -377,7 +402,7 @@ qu'ils restent déterministes.
     - [ ] C. Neither
 
     **Why:** Les tags nécessitent un `TagAwareAdapter` ; PSR-16 n'a aucune prise en charge des tags.
-    **Ref:** [Cache tags](https://symfony.com/doc/current/cache.html#using-cache-tags).
+    **Ref:** [Cache tags](https://symfony.com/doc/8.0/cache.html#using-cache-tags).
 
 ??? question "Q3. Stampede protection is implemented by…"
     - [x] A. probabilistic early expiration controlled by `$beta` ✅
@@ -385,7 +410,7 @@ qu'ils restent déterministes.
     - [ ] C. disabling TTLs
 
     **Why:** Le recalcul anticipé est choisi de manière probabiliste à l'approche de l'expiration.
-    **Ref:** [Stampede prevention](https://symfony.com/doc/current/cache.html#stampede-prevention).
+    **Ref:** [Stampede prevention](https://symfony.com/doc/8.0/cache.html#stampede-prevention).
 
 ## Key takeaways
 
@@ -406,11 +431,11 @@ qu'ils restent déterministes.
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — les pools sont configurés comme services et autowirés par nom de pool.
 - **Reused in:** [Deployment](deployment.md) — les cache warmers préconstruisent les pools/métadonnées ; [HTTP Caching](../http-caching/index.md) met en cache des responses entières plutôt que des valeurs.
-- **Confused with:** [Lock](lock.md) — les deux touchent à la concurrence, mais le Lock impose une exclusion mutuelle tandis que la stampede protection ne fait que *réduire* les recalculs en double.
+- **Confused with:** [Lock](../appendices/out-of-syllabus/lock.md) — les deux touchent à la concurrence, mais le Lock impose une exclusion mutuelle tandis que la stampede protection ne fait que *réduire* les recalculs en double.
 
 ## Official References
-- [Official docs — Cache](https://symfony.com/doc/current/cache.html)
-- [Official docs — Cache contracts](https://symfony.com/doc/current/components/cache.html)
+- [Official docs — Cache](https://symfony.com/doc/8.0/cache.html)
+- [Official docs — Cache contracts](https://symfony.com/doc/8.0/cache.html)
 - [Symfony source — CacheInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/Cache/CacheInterface.php)
 
 ## Video references
@@ -423,7 +448,7 @@ qu'ils restent déterministes.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/cache.html#cache-contracts) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/cache.html#cache-contracts) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -437,4 +462,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [HTTP Caching](../http-caching/index.md) · [Lock](lock.md) · [Deployment](deployment.md)</small>
+<small>Related: [HTTP Caching](../http-caching/index.md) · [Lock](../appendices/out-of-syllabus/lock.md) · [Deployment](deployment.md)</small>

@@ -26,9 +26,28 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [Defaults](defaults.md), [Special attributes](special-attributes.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony ne devine **jamais** ta langue à partir du navigateur par défaut — il faut soit une route localisée, soit activer explicitement la détection.
+
+### Imagine dans la vraie vie
+Un musée où le même exposant a deux entrées signalées dans des langues différentes : "/about" et "/a-propos" mènent à la même salle, mais la porte par laquelle tu es entré fixe la langue de toutes les étiquettes, de l'audioguide et du reçu de la boutique pour le reste de ta visite. L'accueil ne devine *jamais* ta langue depuis ton passeport — sauf si tu demandes explicitement au personnel de lire ta préférence.
+
+### Dans Symfony
+Une route déclarée avec `path: { fr: '/a-propos', en: '/about' }` fixe automatiquement `_locale` selon la porte d'entrée choisie par le visiteur — sans jamais consulter l'en-tête `Accept-Language`, sauf activation explicite.
+
+### Exemple simple
+```php
+#[Route(path: ['fr' => '/a-propos', 'en' => '/about'], name: 'a_propos')]
+```
+
+### Comment le mémoriser 🧠
+"La porte choisie fixe la langue" — pas le passeport dans ta poche. `Accept-Language` reste **opt-in**, jamais activé par défaut.
 
 Internationalized apps often expose the **same action under different paths per
 language**: `/about` (en) and `/a-propos` (fr). Symfony supports this natively:
@@ -280,6 +299,8 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Does Symfony guess the locale from `Accept-Language` by default?"
     - [ ] A. Yes, always
     - [x] B. No — it must be enabled or done manually ✅
@@ -287,7 +308,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     - [ ] D. Only in debug mode
 
     **Why:** you opt in via `set_locale_from_accept_language` or set it yourself.
-    **Ref:** [Localization](https://symfony.com/doc/current/routing.html#localized-routes-i18n).
+    **Ref:** [Localization](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n).
 
 ??? question "Q2. A `#[Route(path: ['en' => '/about', 'fr' => '/a-propos'])]` produces?"
     - [x] A. One route per locale, each with a `_locale` default ✅
@@ -296,7 +317,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     - [ ] D. An error — arrays are not allowed
 
     **Why:** localized paths expand into per-locale routes at load time.
-    **Ref:** [Routing i18n](https://symfony.com/doc/current/routing.html#localized-routes-i18n).
+    **Ref:** [Routing i18n](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n).
 
 ??? question "Q3. Matching a `_locale` route parameter causes what?"
     - [x] A. `Request::setLocale()` is called (via LocaleListener) ✅
@@ -305,7 +326,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     - [ ] D. Nothing until you read it
 
     **Why:** `_locale` is a special parameter applied by the LocaleListener.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q4. How do you generate the French URL of `app_about`?"
     - [x] A. `generateUrl('app_about', ['_locale' => 'fr'])` ✅
@@ -314,7 +335,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
     - [ ] D. It is not possible
 
     **Why:** pass the `_locale` special parameter to select the localized variant.
-    **Ref:** [Routing i18n](https://symfony.com/doc/current/routing.html#localized-routes-i18n).
+    **Ref:** [Routing i18n](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n).
 
 ## Key takeaways
 
@@ -338,7 +359,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
 - **Confused with:** [Host matching](host-matching.md) — host-based vs path-prefix locale strategies.
 
 ## Official References
-- [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+- [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
 ## Video references
@@ -350,7 +371,7 @@ broader [Intl chapter](../miscellaneous/intl.md) for formatting and translation.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#localized-routes-i18n) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

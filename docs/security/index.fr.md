@@ -26,6 +26,21 @@ les anciens authentication providers ont disparu, et
       badges du passport et les attributs `IS_AUTHENTICATED_*` sont des pièges de
       premier ordre.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** La sécurité Symfony répond à deux questions séparées : "qui es-tu ?" (authentification) et "as-tu le droit de faire ça ?" (autorisation).
+
+**Pourquoi ça existe ?** Sans ce découpage, chaque contrôleur devrait réinventer sa propre logique de connexion et de permissions. Symfony centralise les deux dans un système cohérent et testé.
+
+**🏠 Analogie de la vraie vie :** Un immeuble de bureaux sécurisé. Le poste de garde à l'entrée vérifie ton identité avec un badge (authentification) ; une fois entré, chaque porte verrouillée vérifie séparément si TON badge précis ouvre CETTE porte précise (autorisation).
+
+**Symfony dans la vraie vie :** Un `authenticator` construit un `Passport` de badges pour vérifier qui tu es (authentification) ; `#[IsGranted('ROLE_ADMIN')]` vérifie ensuite si tu as le droit d'accéder à une page précise (autorisation).
+
+**⚠️ Erreur fréquente :** croire qu'être connecté (authentifié) suffit à tout autoriser — un utilisateur authentifié peut très bien se voir refuser l'accès à une ressource précise par un voter.
+
+**🧠 Comment le mémoriser :** "Authentification = qui es-tu ? Autorisation = as-tu le droit ? — deux questions, deux systèmes."
+
+
 ## Why this stage is Critical
 
 La sécurité concentre les questions d'examen les plus subtiles, car énormément
@@ -39,31 +54,31 @@ et marquer des points.
 
 ## Chapters
 
-- [Authentication](authentication.md) — le flux firewall/authenticator : comment
-  une request devient un token authentifié, stateless vs stateful, les entry
-  points.
-- [Authorization](authorization.md) — les rôles, les décisions d'accès,
-  `isGranted()`, `denyAccessUnlessGranted()`, `#[IsGranted]`, attributs vs rôles.
 - [Configuration](configuration.md) — l'anatomie de `security.yaml` : providers,
   firewalls, `access_control`, `password_hashers`, `role_hierarchy`.
+- [Users](users.md) — `UserInterface`, `PasswordAuthenticatedUserInterface`,
+  `getUserIdentifier()`, `EquatableInterface`, le cycle de vie de l'utilisateur.
 - [Providers](providers.md) — les user providers : memory, un
   `UserProviderInterface` personnalisé, le chain provider, `refreshUser()`
   (entity est hors programme).
-- [Firewalls](firewalls.md) — le matching, le firewall `dev`, `security: false`,
-  l'ordre first-match, les firewalls lazy, le partage de contexte.
-- [Users](users.md) — `UserInterface`, `PasswordAuthenticatedUserInterface`,
-  `getUserIdentifier()`, `EquatableInterface`, le cycle de vie de l'utilisateur.
 - [Password Hashers](password-hashers.md) — `auto`/`bcrypt`/`sodium`, la
   migration et le rehash (`needsRehash`), `PasswordHasherFactory`, le plaintext
   réservé aux tests.
-- [Roles](roles.md) — les conventions `ROLE_`, la hiérarchie de rôles, les
-  attributs spéciaux `IS_AUTHENTICATED_*`, `PUBLIC_ACCESS`.
-- [Access Control Rules](access-control.md) — le matching de `access_control`,
-  les expressions `allow_if`, `requires_channel`, la sémantique first-match.
+- [Firewalls](firewalls.md) — le matching, le firewall `dev`, `security: false`,
+  l'ordre first-match, les firewalls lazy, le partage de contexte.
+- [Authentication](authentication.md) — le flux firewall/authenticator : comment
+  une request devient un token authentifié, stateless vs stateful, les entry
+  points.
 - [Authenticators, Passports & Badges](authenticators.md) — les authenticators
   personnalisés, le modèle Passport + badges, le login form/JSON/access-token.
+- [Roles](roles.md) — les conventions `ROLE_`, la hiérarchie de rôles, les
+  attributs spéciaux `IS_AUTHENTICATED_*`, `PUBLIC_ACCESS`.
+- [Authorization](authorization.md) — les rôles, les décisions d'accès,
+  `isGranted()`, `denyAccessUnlessGranted()`, `#[IsGranted]`, attributs vs rôles.
 - [Voters & Voting Strategies](voters.md) — la classe de base `Voter`,
   grant/deny/abstain, les stratégies affirmative/consensus/unanimous/priority.
+- [Access Control Rules](access-control.md) — le matching de `access_control`,
+  les expressions `allow_if`, `requires_channel`, la sémantique first-match.
 
 ## Suggested reading order
 
@@ -79,6 +94,6 @@ Lisez d'abord [Authentication](authentication.md) et
 
 ## Official References
 
-- [Symfony documentation — Security](https://symfony.com/doc/current/security.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

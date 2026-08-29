@@ -29,6 +29,64 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque champ de formulaire est un "type", et les types héritent les uns des autres jusqu'au type racine `FormType` — comme des modèles de formulaires qui héritent d'un modèle maître.
+
+### Imagine dans la vraie vie
+Les types sont des **modèles de formulaires standardisés qui héritent de modèles maîtres**. Un formulaire spécialisé (un champ numéro de TVA) part d'un modèle générique de champ texte et y ajoute quelques règles supplémentaires ; ce modèle s'appuie à son tour sur la mise en page de base commune à tout le bureau (`FormType`).
+
+### Dans Symfony
+`EmailType extends TextType` : un champ email hérite de tout le comportement d'un champ texte, plus une validation de format email en prime — sans dupliquer aucun code.
+
+### Exemple simple
+```php
+public function getParent(): string { return TextType::class; } // FQCN, jamais un nom raccourci
+```
+
+### Comment le mémoriser 🧠
+`getParent()` retourne toujours une **chaîne de classe complète (FQCN)** — il n'existe **pas** de `getName()` en Symfony 8 ; l'identifiant du type, c'est son FQCN lui-même.
+
+Every field *is* a form, and every form is an instance of some **type**. Types
+form an inheritance chain: your custom type declares a **parent**, which declares
+its parent, up to the root `FormType`. Behaviour and options accumulate down the
+chain.
+
+- **Built-in types** live in
+  `Symfony\Component\Form\Extension\Core\Type\*` (e.g. `TextType`, `ChoiceType`).
+- **Custom types** extend `AbstractType` and usually set `getParent()`.
+
+The common root is `Symfony\Component\Form\Extension\Core\Type\FormType`, and the
+common *field* base is `TextType` for scalar inputs.
+
+```php
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType; // built-in
+use Symfony\Component\Form\Extension\Core\Type\FormType;   // common root
+use Symfony\Component\Form\Extension\Core\Type\TextType;   // scalar field base
+
+// A custom type extends AbstractType and inherits behaviour via getParent()
+final class VatNumberType extends AbstractType
+{
+    public function getParent(): string
+    {
+        return TextType::class; // an FQCN string, never an instance
+    }
+}
+```
+
+!!! question "Predict first"
+    Your custom type's `getParent()` returns `TextType::class`. In what order do the
+    parent's and child's `configureOptions`/`buildForm` run — and what does
+    `getParent()` actually return?
+
+??? note "Reveal"
+    **Parent first, then child.** The `ResolvedFormType` walks the chain top-down, so
+    the child sees the parent's defaults already set and writes only the delta.
+    `getParent()` returns a **class string** (FQCN), never an instance.
+
+
 ## Theory
 
 Chaque champ *est* un form, et chaque form est une instance d'un certain
@@ -315,7 +373,7 @@ configurez simplement les options au moment du `->add()`.
 
     **Why:** `getParent()` retourne une chaîne de classe (par défaut
     `FormType::class`) ; le registre la résout en chaîne de parents.
-    **Ref:** [Creating a custom type](https://symfony.com/doc/current/form/create_custom_field_type.html).
+    **Ref:** [Creating a custom type](https://symfony.com/doc/8.0/form/create_custom_field_type.html).
 
 ??? question "Q2. Which object bundles a type with its parents and extensions?"
     - [ ] A. `FormBuilder`
@@ -335,7 +393,7 @@ configurez simplement les options au moment du `->add()`.
 
     **Why:** Le type résolu parcourt la chaîne du haut vers le bas, si bien qu'un
     enfant peut surcharger les valeurs par défaut posées par son parent.
-    **Ref:** [Form types docs](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form types docs](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -363,8 +421,8 @@ configurez simplement les options au moment du `->add()`.
 - **Confused with:** [Built-in types](built-in-types.md) — ce sont les types de champs concrets ; ce chapitre couvre la hiérarchie et le mécanisme `ResolvedFormType` qui les sous-tend.
 
 ## Official References
-- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
-- [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
+- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/8.0/form/create_custom_field_type.html)
+- [Official Symfony docs — Form type options](https://symfony.com/doc/8.0/reference/forms/types.html)
 - [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)
 
 ## Video references
@@ -376,7 +434,7 @@ configurez simplement les options au moment du `->add()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_custom_field_type.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_custom_field_type.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

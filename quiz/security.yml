@@ -21,7 +21,7 @@ categories:
           authenticate() only builds the Passport. Badge resolution and
           credential verification happen on CheckPassportEvent
           (UserProviderListener, CheckCredentialsListener, CsrfProtectionListener…).
-        documentation: "https://symfony.com/doc/current/security/custom_authenticator.html"
+        documentation: "https://symfony.com/doc/8.0/security/custom_authenticator.html"
       - id: "SEC-AUTHN-02"
         question: "What is the status of enable_authenticator_manager in Symfony 8?"
         type: "trap"
@@ -41,7 +41,7 @@ categories:
         explanation: >-
           The key existed and was deprecated in 7.x; Symfony 8 removed it entirely
           because the legacy authentication system is gone.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-AUTHN-03"
         question: "A stateless firewall (stateless: true) does NOT do which of these?"
         type: "internals"
@@ -61,7 +61,7 @@ categories:
         explanation: >-
           Stateless firewalls skip the ContextListener, so nothing is stored or
           restored between requests; each request re-authenticates.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-AUTHN-04"
         question: "An authenticator's supports() returns null. What does that mean?"
         type: "trap"
@@ -123,7 +123,7 @@ categories:
           denyAccessUnlessGranted() so $user is guaranteed non-null past that point.
           getUserIdentifier() is very much part of the 8.0 interface, and getUser()
           never throws for guests — it simply returns null.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-AUTHN-07"
         question: "True or False: a firewall with stateless: true restores the authenticated token from the session on the next request."
         type: "true-false"
@@ -139,7 +139,7 @@ categories:
           token is written to or restored from the session. Each request starts with
           empty token storage and must re-authenticate (e.g. re-read the bearer token).
           Session-backed restore is a property of stateful firewalls only.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
 
   - name: "Security — Authorization"
     questions:
@@ -162,7 +162,7 @@ categories:
         explanation: >-
           Only the isGranted()/#[IsGranted]/denyAccessUnlessGranted() path carries
           a subject. access_control is URL-based and cannot pass a subject.
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
       - id: "SEC-AUTHZ-02"
         question: "A #[IsGranted] check fails for an unauthenticated user. What happens?"
         type: "internals"
@@ -182,7 +182,7 @@ categories:
         explanation: >-
           An AccessDeniedException for an unauthenticated user is converted to the
           entry point response; an authenticated-but-unauthorized user gets a 403.
-        documentation: "https://symfony.com/doc/current/security.html#access-control"
+        documentation: "https://symfony.com/doc/8.0/security.html#access-control"
       - id: "SEC-AUTHZ-03"
         question: "isGranted() ultimately delegates the decision to which interface?"
         type: "single"
@@ -242,7 +242,7 @@ categories:
           voter's voteOnAttribute() receives the actual Post instance and can apply
           per-object rules (ownership, state). It is not a voter name, a route
           requirement, or a role suffix.
-        documentation: "https://symfony.com/doc/current/security.html#access-controllers"
+        documentation: "https://symfony.com/doc/8.0/security.html#access-controllers"
       - id: "SEC-AUTHZ-06"
         question: "Which statement about access_control vs isGranted() is correct?"
         type: "trap"
@@ -261,7 +261,7 @@ categories:
           subject, because it matches on the URL, not on a domain object. Per-object
           decisions ("can edit THIS post?") must use #[IsGranted]/denyAccessUnlessGranted()
           with a subject. Both do reach voters, so the "neither" option is wrong.
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
       - id: "SEC-AUTHZ-07"
         question: "Which of these funnel through AuthorizationCheckerInterface::isGranted()? (choose 3)"
         type: "multiple"
@@ -280,7 +280,7 @@ categories:
           the AccessDecisionManager and voters. loadUserByIdentifier() belongs to the
           authentication/provider layer (loading users), not authorization, so it does
           not go through isGranted().
-        documentation: "https://symfony.com/doc/current/security.html#access-control-authorization"
+        documentation: "https://symfony.com/doc/8.0/security.html#access-control-authorization"
 
   - name: "Security — Configuration"
     questions:
@@ -303,7 +303,7 @@ categories:
         explanation: >-
           You map a user class (commonly PasswordAuthenticatedUserInterface) to an
           algorithm such as 'auto'.
-        documentation: "https://symfony.com/doc/current/security/passwords.html"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html"
       - id: "SEC-CONFIG-02"
         question: "Two providers are defined and a firewall omits the provider key. Result?"
         type: "trap"
@@ -323,7 +323,7 @@ categories:
         explanation: >-
           With multiple providers there is no implicit default; each firewall must
           name its provider explicitly.
-        documentation: "https://symfony.com/doc/current/security/user_providers.html"
+        documentation: "https://symfony.com/doc/8.0/security/user_providers.html"
       - id: "SEC-CONFIG-03"
         question: "Why must the dev firewall (security: false) be listed first?"
         type: "internals"
@@ -343,7 +343,7 @@ categories:
         explanation: >-
           Firewall matching is top-to-bottom, first match wins. Listing the dev
           firewall first stops the profiler/assets being intercepted by login.
-        documentation: "https://symfony.com/doc/current/security.html#the-firewall"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-firewall"
       - id: "SEC-CONFIG-04"
         question: "For each firewall, what does SecurityExtension compile at container build time?"
         type: "internals"
@@ -382,7 +382,7 @@ categories:
           the stateless firewall. Move the specific ^/api firewall above main.
           enable_authenticator_manager no longer exists in Symfony 8, stateless does
           not affect matching, and multiple providers do not skip a firewall.
-        documentation: "https://symfony.com/doc/current/security.html#the-firewall"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-firewall"
       - id: "SEC-CONFIG-06"
         question: "Which of these are valid top-level keys under security: in Symfony 8? (choose 4)"
         type: "multiple"
@@ -401,7 +401,7 @@ categories:
           the core keys of security.yaml. enable_authenticator_manager was removed in
           Symfony 8 — the authenticator system is the only one — so it is not a valid
           key anymore.
-        documentation: "https://symfony.com/doc/current/reference/configuration/security.html"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/security.html"
       - id: "SEC-CONFIG-07"
         question: "How do you configure eraseCredentials behaviour in security.yaml in Symfony 8?"
         type: "trap"
@@ -444,7 +444,7 @@ categories:
         explanation: >-
           loadUserByUsername() was removed; the UserProviderInterface loader is
           loadUserByIdentifier().
-        documentation: "https://symfony.com/doc/current/security/user_providers.html"
+        documentation: "https://symfony.com/doc/8.0/security/user_providers.html"
       - id: "SEC-PROVIDER-02"
         question: "When is refreshUser() called?"
         type: "internals"
@@ -484,7 +484,7 @@ categories:
         explanation: >-
           Providers only load and refresh users. CheckCredentialsListener verifies
           the PasswordCredentials badge.
-        documentation: "https://symfony.com/doc/current/security/custom_authenticator.html"
+        documentation: "https://symfony.com/doc/8.0/security/custom_authenticator.html"
       - id: "SEC-PROVIDER-04"
         question: "A custom provider does `return $repo->find($id);` in loadUserByIdentifier() and sometimes throws a TypeError. What is the fix?"
         type: "debug"
@@ -504,7 +504,7 @@ categories:
           Symfony normalises to a generic BadCredentialsException so an attacker cannot
           distinguish "unknown user" from "wrong password". You never return null or
           false, and the method returns a single UserInterface, not an array.
-        documentation: "https://symfony.com/doc/current/security/user_providers.html"
+        documentation: "https://symfony.com/doc/8.0/security/user_providers.html"
       - id: "SEC-PROVIDER-05"
         question: "An admin deletes a user's account while that user is browsing under a stateful firewall. What happens on the user's next request?"
         type: "scenario"
@@ -543,7 +543,7 @@ categories:
           It does not merge users, require presence in all providers, or choose randomly.
           Correct supportsClass()/UnsupportedUserException handling in each sub-provider
           is what lets the chain fall through cleanly.
-        documentation: "https://symfony.com/doc/current/security/user_providers.html#chaining-user-providers"
+        documentation: "https://symfony.com/doc/8.0/security/user_providers.html#chaining-user-providers"
       - id: "SEC-PROVIDER-07"
         question: "True or False: a firewall with stateless: true still calls refreshUser() on every request."
         type: "true-false"
@@ -559,7 +559,7 @@ categories:
           stateful firewalls. A stateless firewall stores no token in the session, so
           there is nothing to refresh — the user is re-loaded from scratch by the
           authenticator on each request instead.
-        documentation: "https://symfony.com/doc/current/security/user_providers.html"
+        documentation: "https://symfony.com/doc/8.0/security/user_providers.html"
 
   - name: "Security — Firewalls"
     questions:
@@ -582,7 +582,7 @@ categories:
         explanation: >-
           The FirewallMap returns the first matching FirewallContext; matching
           stops there.
-        documentation: "https://symfony.com/doc/current/security.html#the-firewall"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-firewall"
       - id: "SEC-FIREWALL-02"
         question: "What does security: false on a firewall do?"
         type: "internals"
@@ -603,7 +603,7 @@ categories:
           It turns off all security listeners for matching requests (used for the
           profiler and dev assets) and, being first-match, prevents later firewalls
           from matching.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-FIREWALL-03"
         question: "Two firewalls should share a logged-in session. What do you configure?"
         type: "single"
@@ -623,7 +623,7 @@ categories:
         explanation: >-
           Token sharing between firewalls requires an explicit matching context
           key; otherwise each firewall keeps its own token.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-FIREWALL-04"
         question: "What does lazy: true achieve on a firewall?"
         type: "internals"
@@ -643,7 +643,7 @@ categories:
         explanation: >-
           A lazy firewall only authenticates when the token is accessed (e.g.
           is_granted/getUser), so fully public pages skip auth and session loading.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-FIREWALL-05"
         question: "A firewall configured with `pattern: /api` unexpectedly also intercepts /my-api-docs. Why?"
         type: "debug"
@@ -662,7 +662,7 @@ categories:
           (^/api) fixes it to the start of the path. Patterns are regexes (anchorable),
           the doc route is unrelated to physical location, and methods: narrows HTTP
           verbs, not path matching.
-        documentation: "https://symfony.com/doc/current/security.html#the-firewall"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-firewall"
       - id: "SEC-FIREWALL-06"
         question: "Given firewalls declared as main (no pattern) then api (pattern: ^/api), what happens to /api requests?"
         type: "trap"
@@ -681,7 +681,7 @@ categories:
           the api firewall is considered. The fix is ordering: specific firewalls
           (^/api) before the catch-all. Symfony does not run multiple firewalls per
           request, nor does it error on overlap.
-        documentation: "https://symfony.com/doc/current/security.html#the-firewall"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-firewall"
       - id: "SEC-FIREWALL-07"
         question: "When does the Firewall listener run in the kernel lifecycle?"
         type: "internals"
@@ -804,7 +804,7 @@ categories:
           The CheckCredentialsListener treats a null hash as non-verifiable. The method
           name and return type are fixed by the interface, and eraseCredentials() no
           longer exists.
-        documentation: "https://symfony.com/doc/current/security.html#the-user"
+        documentation: "https://symfony.com/doc/8.0/security.html#the-user"
       - id: "SEC-USER-06"
         question: "You need a user's role change to immediately end their existing sessions. What do you implement?"
         type: "scenario"
@@ -863,7 +863,7 @@ categories:
         explanation: >-
           'auto' selects the best available algorithm (currently bcrypt) and can
           adapt over time; it also enables automatic rehash on cost changes.
-        documentation: "https://symfony.com/doc/current/security/passwords.html"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html"
       - id: "SEC-HASHER-02"
         question: "Transparent password rehash on login requires…"
         type: "internals"
@@ -884,7 +884,7 @@ categories:
           migrate_from lets needsRehash() detect the old hash; the
           PasswordUpgradeBadge triggers PasswordMigratingListener, which persists
           the new hash via upgradePassword().
-        documentation: "https://symfony.com/doc/current/security/passwords.html#password-migration"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html#password-migration"
       - id: "SEC-HASHER-03"
         question: "Where is a login password actually verified?"
         type: "internals"
@@ -904,7 +904,7 @@ categories:
         explanation: >-
           The authenticator adds a PasswordCredentials badge; the listener verifies
           it against the hash using the configured hasher.
-        documentation: "https://symfony.com/doc/current/security/custom_authenticator.html"
+        documentation: "https://symfony.com/doc/8.0/security/custom_authenticator.html"
       - id: "SEC-HASHER-04"
         question: "Which statement about the plaintext hasher is correct?"
         type: "trap"
@@ -924,7 +924,7 @@ categories:
         explanation: >-
           plaintext stores passwords unhashed; it exists to speed up test fixtures
           and is a production anti-pattern.
-        documentation: "https://symfony.com/doc/current/security/passwords.html"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html"
       - id: "SEC-HASHER-05"
         question: "A hasher entry is `algorithm: sodium, migrate_from: ['bcrypt']`. What does it mean?"
         type: "config"
@@ -943,7 +943,7 @@ categories:
           valid login against an old bcrypt hash, needsRehash() returns true and the
           PasswordUpgradeBadge flow rehashes with sodium and persists it — transparent,
           no reset. It does not reject bcrypt, swap hashing/verifying roles, or double-hash.
-        documentation: "https://symfony.com/doc/current/security/passwords.html#password-migration"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html#password-migration"
       - id: "SEC-HASHER-06"
         question: "A user with a very long passphrase can change the trailing characters and still log in. Which hasher is in use and why?"
         type: "trap"
@@ -962,7 +962,7 @@ categories:
           Very long passphrases therefore lose entropy under bcrypt. sodium (Argon2id)
           has no such truncation, which is one reason to prefer it for long secrets.
           The other options invent behaviour that does not exist.
-        documentation: "https://symfony.com/doc/current/security/passwords.html"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html"
       - id: "SEC-HASHER-07"
         question: "You set migrate_from and needsRehash() returns true, yet stored hashes are never upgraded. What is missing?"
         type: "debug"
@@ -982,7 +982,7 @@ categories:
           PasswordMigratingListener). Without it, the rehash is computed and discarded
           every login. migrate_from is not plaintext-only, you must not hash manually,
           and needsRehash() is fully supported.
-        documentation: "https://symfony.com/doc/current/security/passwords.html#password-migration"
+        documentation: "https://symfony.com/doc/8.0/security/passwords.html#password-migration"
 
   - name: "Security — Roles"
     questions:
@@ -1005,7 +1005,7 @@ categories:
         explanation: >-
           Fully-authenticated users satisfy IS_AUTHENTICATED_REMEMBERED, but
           remember-me users do NOT satisfy IS_AUTHENTICATED_FULLY.
-        documentation: "https://symfony.com/doc/current/security.html#security-authorization-access-decision"
+        documentation: "https://symfony.com/doc/8.0/security.html#security-authorization-access-decision"
       - id: "SEC-ROLE-02"
         question: "In Symfony 8, how do you allow everyone (including not-logged-in) on a path?"
         type: "trap"
@@ -1025,7 +1025,7 @@ categories:
         explanation: >-
           Anonymous tokens were removed; PUBLIC_ACCESS is the attribute that opts a
           path out of authentication.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-ROLE-03"
         question: "An attribute 'EDITOR' (no ROLE_ prefix) is checked. How does RoleVoter treat it?"
         type: "single"
@@ -1045,7 +1045,7 @@ categories:
         explanation: >-
           RoleVoter supports only ROLE_* attributes; unprefixed strings abstain
           there (a custom voter could still handle them).
-        documentation: "https://symfony.com/doc/current/security.html#roles"
+        documentation: "https://symfony.com/doc/8.0/security.html#roles"
       - id: "SEC-ROLE-04"
         question: "Given role_hierarchy ROLE_ADMIN: [ROLE_USER], a user with ROLE_ADMIN…"
         type: "internals"
@@ -1065,7 +1065,7 @@ categories:
         explanation: >-
           RoleHierarchyVoter expands reachable roles, so ROLE_ADMIN transitively
           includes ROLE_USER. Hierarchy flows downward.
-        documentation: "https://symfony.com/doc/current/security.html#hierarchical-roles"
+        documentation: "https://symfony.com/doc/8.0/security.html#hierarchical-roles"
       - id: "SEC-ROLE-05"
         question: "With role_hierarchy ROLE_ADMIN: [ROLE_USER] and ROLE_SUPER_ADMIN: [ROLE_ADMIN], which roles does a ROLE_SUPER_ADMIN user satisfy?"
         type: "config"
@@ -1103,7 +1103,7 @@ categories:
           cookie satisfies IS_AUTHENTICATED_REMEMBERED and IS_AUTHENTICATED, so those
           would wrongly permit a sensitive identity change; PUBLIC_ACCESS allows
           everyone. Use _FULLY to force a fresh login for payments/identity changes.
-        documentation: "https://symfony.com/doc/current/security.html#security-authorization-access-decision"
+        documentation: "https://symfony.com/doc/8.0/security.html#security-authorization-access-decision"
       - id: "SEC-ROLE-07"
         question: "True or False: IS_AUTHENTICATED_ANONYMOUSLY is still a valid access attribute in Symfony 8."
         type: "true-false"
@@ -1118,7 +1118,7 @@ categories:
           False. Symfony 8 has no anonymous tokens, so IS_AUTHENTICATED_ANONYMOUSLY no
           longer exists. To open a path to everyone (including not-logged-in visitors)
           use PUBLIC_ACCESS instead.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
 
   - name: "Security — Access Control Rules"
     questions:
@@ -1141,7 +1141,7 @@ categories:
         explanation: >-
           AccessMap returns the first match and evaluation stops. Order rules from
           specific to general.
-        documentation: "https://symfony.com/doc/current/security.html#securing-url-patterns-access-control"
+        documentation: "https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control"
       - id: "SEC-ACCESS-02"
         question: "A rule has roles: [ROLE_A, ROLE_B]. Access is granted when the user has…"
         type: "single"
@@ -1160,7 +1160,7 @@ categories:
             correct: false
         explanation: >-
           Multiple roles within a single access_control rule are OR-combined.
-        documentation: "https://symfony.com/doc/current/security.html#securing-url-patterns-access-control"
+        documentation: "https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control"
       - id: "SEC-ACCESS-03"
         question: "No access_control rule matches the request. What happens?"
         type: "trap"
@@ -1180,7 +1180,7 @@ categories:
         explanation: >-
           access_control only restricts on a matching rule; with no match there is
           no URL-level restriction.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-ACCESS-04"
         question: "What does requires_channel: https do, and when?"
         type: "internals"
@@ -1200,7 +1200,7 @@ categories:
         explanation: >-
           The ChannelListener enforces requires_channel before authentication, so
           even the login page is redirected to HTTPS.
-        documentation: "https://symfony.com/doc/current/security.html"
+        documentation: "https://symfony.com/doc/8.0/security.html"
       - id: "SEC-ACCESS-05"
         question: "After adding { path: ^/, roles: PUBLIC_ACCESS } at the top of access_control, the ^/admin rule below stops protecting admin. Why?"
         type: "debug"
@@ -1219,7 +1219,7 @@ categories:
           rule underneath is never evaluated — admin becomes public. Order specific
           rules before the ^/ catch-all. PUBLIC_ACCESS is a normal attribute (it does
           not disable other rules), and the roles syntax/requires_channel are unrelated.
-        documentation: "https://symfony.com/doc/current/security.html#securing-url-patterns-access-control"
+        documentation: "https://symfony.com/doc/8.0/security.html#securing-url-patterns-access-control"
       - id: "SEC-ACCESS-06"
         question: "Can an access_control rule pass the matched entity to a voter as the subject?"
         type: "trap"
@@ -1238,7 +1238,7 @@ categories:
           with the rule's roles/expression and no subject. There is no subject: key and
           path parameters are not passed as subjects. Per-object decisions require
           #[IsGranted]/denyAccessUnlessGranted() with an explicit subject.
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
       - id: "SEC-ACCESS-07"
         question: "A rule sets both roles: ROLE_USER and an allow_if expression. When is access granted?"
         type: "config"
@@ -1256,7 +1256,7 @@ categories:
           are both present they must BOTH pass — it is an AND. (allow_if runs the
           expression through the ExpressionVoter.) Neither key is ignored, and combining
           them does not turn the rule into an OR.
-        documentation: "https://symfony.com/doc/current/security/expressions.html"
+        documentation: "https://symfony.com/doc/8.0/security/expressions.html"
 
   - name: "Security — Authenticators, Passports & Badges"
     questions:
@@ -1279,7 +1279,7 @@ categories:
         explanation: >-
           authenticate() builds a Passport of badges; the token is produced later
           by createToken() after CheckPassportEvent resolves the badges.
-        documentation: "https://symfony.com/doc/current/security/custom_authenticator.html"
+        documentation: "https://symfony.com/doc/8.0/security/custom_authenticator.html"
       - id: "SEC-PASSPORT-02"
         question: "Which passport type suits a valid-API-token flow with no password to verify?"
         type: "scenario"
@@ -1299,7 +1299,7 @@ categories:
         explanation: >-
           When the credential itself proves identity, use SelfValidatingPassport,
           which carries only a UserBadge — there is nothing further to check.
-        documentation: "https://symfony.com/doc/current/security/custom_authenticator.html#the-passport"
+        documentation: "https://symfony.com/doc/8.0/security/custom_authenticator.html#the-passport"
       - id: "SEC-PASSPORT-03"
         question: "In which namespace does PasswordCredentials live?"
         type: "trap"
@@ -1340,7 +1340,7 @@ categories:
         explanation: >-
           The access_token authenticator delegates to an AccessTokenHandlerInterface
           whose getUserBadgeFrom() validates the bearer token and returns a UserBadge.
-        documentation: "https://symfony.com/doc/current/security/access_token.html"
+        documentation: "https://symfony.com/doc/8.0/security/access_token.html"
       - id: "SEC-PASSPORT-05"
         question: "An authenticator adds a badge that no CheckPassportEvent listener resolves. What happens?"
         type: "internals"
@@ -1425,7 +1425,7 @@ categories:
         explanation: >-
           Affirmative is the default: access is granted if at least one voter
           returns ACCESS_GRANTED.
-        documentation: "https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy"
       - id: "SEC-VOTER-02"
         question: "The base Voter's supports() returns false. What is the resulting vote?"
         type: "internals"
@@ -1465,7 +1465,7 @@ categories:
         explanation: >-
           allow_if_all_abstain defaults to false, so if every voter abstains and no
           one grants, access is denied.
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
       - id: "SEC-VOTER-04"
         question: "What are the integer values of the voter constants?"
         type: "internals"
@@ -1505,7 +1505,7 @@ categories:
         explanation: >-
           unanimous requires that no voter denies. A single ACCESS_DENIED blocks
           access regardless of grants (unlike affirmative).
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
       - id: "SEC-VOTER-06"
         question: "In a Voter, voteOnAttribute() starts with `if (!$user instanceof AppUser) { return false; }`. Why return false rather than abstain?"
         type: "code"
@@ -1525,7 +1525,7 @@ categories:
           user of the wrong class), so there is nobody to authorize — deny (return
           false). Abstaining would contradict supports(); getUser() genuinely can be
           null; and voters signal decisions via return values, not by throwing.
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
       - id: "SEC-VOTER-07"
         question: "Under the unanimous strategy, a voter returns false from voteOnAttribute() for an attribute it does not actually care about. Effect?"
         type: "trap"
@@ -1564,7 +1564,7 @@ categories:
           (e.g. a global "banned user" voter denying before feature voters run).
           "All must agree" describes unanimous, "majority" describes consensus, and
           "one grant is enough" describes affirmative.
-        documentation: "https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy"
   - name: "Security — Expert Depth"
     questions:
       - id: "SEC-IMP-01"
@@ -1586,7 +1586,7 @@ categories:
           inside the new SwitchUserToken (getOriginalToken()) and dispatches
           SwitchUserEvent for both directions. All authorization while switched
           uses the target user's roles — that is the point of impersonation.
-        documentation: "https://symfony.com/doc/current/security/impersonating_user.html"
+        documentation: "https://symfony.com/doc/8.0/security/impersonating_user.html"
       - id: "SEC-IMP-02"
         question: "How does an impersonating user return to their own account?"
         type: "single"
@@ -1604,7 +1604,7 @@ categories:
           special value _exit. The SwitchUserListener then restores the original
           token that was preserved inside the SwitchUserToken and redirects with the
           parameter stripped.
-        documentation: "https://symfony.com/doc/current/security/impersonating_user.html"
+        documentation: "https://symfony.com/doc/8.0/security/impersonating_user.html"
       - id: "SEC-IMP-03"
         question: "To show an 'exit impersonation' banner, a template checks is_granted('ROLE_PREVIOUS_ADMIN'). What is the Symfony 8 verdict?"
         type: "trap"
@@ -1622,7 +1622,7 @@ categories:
           is a SwitchUserToken. ROLE_PREVIOUS_ADMIN is the legacy pre-5.x style and
           must not appear in new code. ROLE_ALLOWED_TO_SWITCH only says the user
           may switch, not that they currently are switched.
-        documentation: "https://symfony.com/doc/current/security/impersonating_user.html"
+        documentation: "https://symfony.com/doc/8.0/security/impersonating_user.html"
       - id: "SEC-THROT-01"
         question: "Which statements describe the DEFAULT login_throttling limiter? (multiple)"
         type: "multiple"
@@ -1642,7 +1642,7 @@ categories:
           limit by spraying usernames. A successful login resets the counters;
           blocking is only for the configured interval and IP/username based, not
           session based.
-        documentation: "https://symfony.com/doc/current/security.html#limiting-login-attempts"
+        documentation: "https://symfony.com/doc/8.0/security.html#limiting-login-attempts"
       - id: "SEC-THROT-02"
         question: "What must a service referenced by login_throttling.limiter implement?"
         type: "single"
@@ -1661,7 +1661,7 @@ categories:
           AbstractRequestRateLimiter and returning limiters from getLimiters() is the
           documented shortcut. Plain LimiterInterface instances or rate_limiter names
           are not accepted directly.
-        documentation: "https://symfony.com/doc/current/security.html#limiting-login-attempts"
+        documentation: "https://symfony.com/doc/8.0/security.html#limiting-login-attempts"
       - id: "SEC-THROT-03"
         question: "True or false: login throttling rejects a throttled attempt only after the password has been verified and found wrong."
         type: "true-false"
@@ -1677,7 +1677,7 @@ categories:
           CheckCredentialsListener verifies the password, throwing
           TooManyLoginAttemptsAuthenticationException when the limit is exceeded.
           It listens to LoginSuccessEvent only to reset the counters.
-        documentation: "https://symfony.com/doc/current/security.html#limiting-login-attempts"
+        documentation: "https://symfony.com/doc/8.0/security.html#limiting-login-attempts"
       - id: "SEC-RH-01"
         question: "role_hierarchy maps ROLE_ADMIN: ROLE_USER. A user stores only [ROLE_ADMIN]. Which check FAILS for them?"
         type: "trap"
@@ -1696,7 +1696,7 @@ categories:
           all pass. $user->getRoles() returns exactly the stored roles
           (['ROLE_ADMIN']), so raw in_array checks bypass the hierarchy — the
           classic exam trap.
-        documentation: "https://symfony.com/doc/current/security.html#hierarchical-roles"
+        documentation: "https://symfony.com/doc/8.0/security.html#hierarchical-roles"
       - id: "SEC-RH-02"
         question: "Where IS the configured role hierarchy taken into account? (multiple)"
         type: "multiple"
@@ -1716,7 +1716,7 @@ categories:
           access_control uses the same path; you can call the RoleHierarchyInterface
           service yourself for the same expansion. Token and user role getters
           always return the raw stored roles.
-        documentation: "https://symfony.com/doc/current/security.html#hierarchical-roles"
+        documentation: "https://symfony.com/doc/8.0/security.html#hierarchical-roles"
       - id: "SEC-RH-03"
         question: "Which API expands ['ROLE_SUPER_ADMIN'] into every role it implies, transitively?"
         type: "single"
@@ -1734,7 +1734,7 @@ categories:
           recursively and is the very service the RoleHierarchyVoter uses, so
           results always match isGranted() behaviour. The other methods do not
           exist in Symfony 8.
-        documentation: "https://symfony.com/doc/current/security.html#hierarchical-roles"
+        documentation: "https://symfony.com/doc/8.0/security.html#hierarchical-roles"
       - id: "SEC-ADS-01"
         question: "Votes cast: one GRANTED, one DENIED, one ABSTAIN (default flags; the granting voter has highest priority). Which strategies GRANT access? (multiple)"
         type: "multiple"
@@ -1753,7 +1753,7 @@ categories:
           the first non-abstain vote, here the grant. Unanimous denies because a
           single ACCESS_DENIED vetoes regardless of the grant — the abstain is
           irrelevant to that veto.
-        documentation: "https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy"
       - id: "SEC-ADS-02"
         question: "Strategy unanimous: voter A grants, voter B abstains, no voter denies. A colleague claims access is denied because 'not everyone agreed'. Verdict?"
         type: "trap"
@@ -1771,7 +1771,7 @@ categories:
           grants when at least one voter granted. Abstentions never count as denies,
           and allow_if_equal_granted_denied is a consensus-only tie breaker. Only
           the all-abstain case falls back to allow_if_all_abstain.
-        documentation: "https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy"
       - id: "SEC-ADS-03"
         question: "Every voter abstains and no access_decision_manager option was changed. What is the decision?"
         type: "single"
@@ -1789,7 +1789,7 @@ categories:
           allow_if_all_abstain flag, which defaults to false, so access is denied.
           No exception is thrown and the strategy choice does not change this
           default outcome.
-        documentation: "https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy"
       - id: "SEC-PLOG-01"
         question: "Which statements about Security::login() (SecurityBundle) are correct? (multiple)"
         type: "multiple"
@@ -1809,7 +1809,7 @@ categories:
           interactive login, and the authenticator's onAuthenticationSuccess()
           response is returned. No credentials are checked — you assert the user is
           already trusted (e.g. just registered).
-        documentation: "https://symfony.com/doc/current/security.html#login-programmatically"
+        documentation: "https://symfony.com/doc/8.0/security.html#login-programmatically"
       - id: "SEC-PLOG-02"
         question: "Calling $security->logout() from a controller action that is not the logout form throws a CSRF-related error. Fix?"
         type: "single"
@@ -1827,7 +1827,7 @@ categories:
           request by default; a programmatic call that does not originate from the
           logout link must pass false. It still dispatches LogoutEvent so the
           configured logout listeners run.
-        documentation: "https://symfony.com/doc/current/security.html#logging-out"
+        documentation: "https://symfony.com/doc/8.0/security.html#logging-out"
       - id: "SEC-PLOG-03"
         question: "When do the optional parameters of Security::login($user, $authenticatorName, $firewallName) become necessary? (multiple)"
         type: "multiple"
@@ -1846,4 +1846,4 @@ categories:
           named by config key such as 'form_login', custom ones by service id), and
           $firewallName is needed when the current request's firewall is not the one
           you want to authenticate against.
-        documentation: "https://symfony.com/doc/current/security.html#login-programmatically"
+        documentation: "https://symfony.com/doc/8.0/security.html#login-programmatically"

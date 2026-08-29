@@ -224,6 +224,30 @@
       wrap.appendChild(strip);
     }
 
+    // Direct "test this topic" deep link: an area page or the dashboard's
+    // quick-actions strip (docs/assets/progress.js) can link here with
+    // ?area=<exact area name> to skip the config screen entirely and start
+    // practicing that one area immediately — matching this mission's
+    // "actions directes, un minimum de décisions" goal. Consumed at most
+    // once per page load (flag on `self`) so returning to this config
+    // screen after finishing that session doesn't re-trigger it, and the
+    // param is stripped from the URL so a reload/back doesn't either.
+    if (!self._autoStartChecked) {
+      self._autoStartChecked = true;
+      var urlArea = null;
+      try { urlArea = new URLSearchParams(location.search).get("area"); } catch (e) {}
+      if (urlArea && d.areas.indexOf(urlArea) !== -1) {
+        try {
+          var url = new URL(location.href);
+          url.searchParams.delete("area");
+          history.replaceState(null, "", url);
+        } catch (e2) {}
+        self.mode = "practice";
+        self.start({ areas: [urlArea], diff: "", type: "", count: 20 });
+        return;
+      }
+    }
+
     this.root.appendChild(wrap);
   };
 

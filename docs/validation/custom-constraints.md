@@ -24,9 +24,28 @@
     **Est. time:** 28 min ·
     **Prerequisites:** [Callbacks](callbacks.md), [Violations Builder](violations-builder.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une contrainte réutilisable, c'est deux classes séparées : une qui décrit la règle (`Constraint`), une qui l'applique (`ConstraintValidator`).
+
+### Imagine dans la vraie vie
+Quand les scanners standards ne détectent pas ta contrebande spécifique, l'aéroport commande un **scanner sur mesure** : la machine qui déclare ce qu'elle cherche (la `Constraint`) plus l'opérateur formé qui la lit et rédige le rapport (le `ConstraintValidator`). L'une décrit la règle, l'autre l'applique.
+
+### Dans Symfony
+Une contrainte `#[NumeroSirenValide]` réutilisable dans toute l'application (client, fournisseur, partenaire) évite de dupliquer la même logique de validation SIREN dans trois callbacks différents.
+
+### Exemple simple
+```php
+class NumeroSirenValide extends Constraint { public string $message = 'SIREN invalide.'; }
+```
+
+### Comment le mémoriser 🧠
+Par défaut, le nom du validateur est le nom de la contrainte **+ "Validator"** — et une règle au niveau classe doit surcharger `getTargets()` pour renvoyer `CLASS_CONSTRAINT`.
 
 When a rule is **reusable** across classes, promote it from a callback to a
 **custom constraint**. A constraint is *two* classes:
@@ -392,6 +411,8 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. By default, which validator is used for constraint `App\Validator\Foo`?"
     - [ ] A. `FooConstraintValidator`
     - [x] B. `App\Validator\FooValidator` (name + `Validator`) ✅
@@ -400,7 +421,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 
     **Why:** `Constraint::validatedBy()` returns `static::class.'Validator'` by
     convention; override only to change it.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q2. To make a constraint apply at class scope you must…"
     - [ ] A. Set `#[\Attribute(\Attribute::TARGET_CLASS)]` only
@@ -410,7 +431,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 
     **Why:** The PHP attribute target and the validator's `getTargets()` are
     separate; the validator uses the latter to decide placement.
-    **Ref:** [Class constraint validator](https://symfony.com/doc/current/validation/custom_constraint.html#class-constraint-validator).
+    **Ref:** [Class constraint validator](https://symfony.com/doc/8.0/validation/custom_constraint.html#class-constraint-validator).
 
 ??? question "Q3. In a `ConstraintValidator::validate()`, the first thing you should do is…"
     - [x] A. Check `$constraint instanceof YourConstraint` and throw otherwise ✅
@@ -420,7 +441,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 
     **Why:** Guarding the constraint type with `UnexpectedTypeException` is the
     documented first step.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q4. What does `#[HasNamedArguments]` do?"
     - [x] A. Passes attribute arguments as named constructor arguments ✅
@@ -430,7 +451,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 
     **Why:** It opts into typed, named-argument construction instead of the legacy
     options-array style.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ## Key takeaways
 
@@ -457,7 +478,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 - **Confused with:** [Callbacks](callbacks.md) — a callback is the one-off alternative; promote to a constraint only when the rule is reusable.
 
 ## Official References
-- [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/current/validation/custom_constraint.html)
+- [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 - [Symfony source — Constraint](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 
 ## Video references
@@ -469,7 +490,7 @@ lighter. For a pure expression over fields, `#[Assert\Expression]` suffices.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/custom_constraint.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/custom_constraint.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

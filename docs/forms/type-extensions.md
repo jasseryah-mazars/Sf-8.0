@@ -25,9 +25,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Form types](types.md) · [Form events](events.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une extension de type ajoute un comportement à un type de formulaire que tu ne possèdes pas — sans jamais le sous-classer.
+
+### Imagine dans la vraie vie
+Une extension de type est comme une coque de téléphone qui ajoute un emplacement de carte et une meilleure prise en main à un téléphone que tu n'as ni conçu ni fabriqué. Tu ne démontes jamais l'appareil pour le reconstruire (pas de sous-classe) ; tu glisses juste la coque, et elle indique clairement quels modèles elle recouvre (`getExtendedTypes()`).
+
+### Dans Symfony
+Ajouter automatiquement un attribut `help` à **tous** les champs de type `TextType` du projet, sans modifier un seul `FormType` existant, est le cas d'usage classique d'une extension de type.
+
+### Exemple simple
+```php
+public static function getExtendedTypes(): iterable { return [TextType::class]; }
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **pas** d'attribut `#[AsFormTypeExtension]` — l'enregistrement se fait uniquement via la méthode statique `getExtendedTypes()`, jamais par attribut PHP.
 
 A **type extension** injects options and behaviour into form types you do **not**
 own — without subclassing them. One extension can target many types at once. The
@@ -300,6 +319,8 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which method declares the types an extension applies to?"
     - [x] A. `public static function getExtendedTypes(): iterable` ✅
     - [ ] B. `public function getExtendedType(): string`
@@ -308,7 +329,7 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
 
     **Why:** `getExtendedTypes()` (static, iterable) replaced the old singular
     `getExtendedType()`.
-    **Ref:** [Form type extensions](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ??? question "Q2. How is a type extension registered with autoconfiguration on?"
     - [x] A. Automatically, via the `form.type_extension` tag on `FormTypeExtensionInterface` services ✅
@@ -317,7 +338,7 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
     - [ ] D. It cannot be autoconfigured
 
     **Why:** Symfony auto-tags implementers; no attribute exists for this.
-    **Ref:** [Form type extensions docs](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ??? question "Q3. What does returning `FormType::class` from `getExtendedTypes()` do?"
     - [x] A. Applies the extension to every form type ✅
@@ -327,7 +348,7 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
 
     **Why:** All types descend from `FormType`, so the extension attaches to all
     of them.
-    **Ref:** [Form type extensions docs](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ## Key takeaways
 
@@ -355,7 +376,7 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
 - **Confused with:** [Data transformers](data-transformers.md) — extensions augment options/behaviour, not value conversion.
 
 ## Official References
-- [Official Symfony docs — Create a form type extension](https://symfony.com/doc/current/form/create_form_type_extension.html)
+- [Official Symfony docs — Create a form type extension](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
 - [Symfony source — AbstractTypeExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/AbstractTypeExtension.php)
 
 ## Video references
@@ -367,7 +388,7 @@ data conversion — that is a [data transformer](data-transformers.md)'s job.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_form_type_extension.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_form_type_extension.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

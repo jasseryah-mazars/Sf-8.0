@@ -2,6 +2,20 @@
 
 Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-minute cheat). For the final days. Full detail: [HTTP Caching](../../http-caching/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche imprimable, tenant sur une page**, qui résume chaque sous-chapitre de HTTP Caching en quelques puces "à retenir" suivies d'une ligne "Cheat" très dense.
+
+**Pourquoi ça existe ?** Dans les derniers jours avant l'examen, on veut un support papier ou PDF unique par domaine — pas 10 onglets de navigateur ouverts. Cette fiche condense un domaine entier sur une seule page imprimable.
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de révision recto-verso** qu'un étudiant prépare avant un examen universitaire : tout le cours du semestre réduit à une page, à relire dans le métro le matin de l'épreuve.
+
+**Symfony dans la vraie vie :** Chaque puce "à retenir" → une règle déjà apprise en détail dans le chapitre / La ligne "Cheat:" → la version ultra-compacte, presque un aide-mémoire de syntaxe / Lien "Full detail" → retour au chapitre complet si un point ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Imprimer cette fiche *avant* d'avoir étudié HTTP Caching en détail, en espérant apprendre directement dessus — le format est trop dense pour un premier apprentissage, il ne fonctionne qu'en rappel.
+
+**🧠 Comment le mémoriser :** *« Une page, un domaine, la veille de l'examen »* — cette fiche est le tout dernier support à consulter, pas le premier.
+
 ## Cache Types
 - Three cache types: **private** (browser), **shared** (network), **reverse
   proxy** (yours).
@@ -22,17 +36,6 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Only safe methods are cached; version asset URLs to bust the cache.
 
 **Cheat:** Browser cache = private: `max-age`/`Expires`/`ETag`; ignores `s-maxage`. Reload → `max-age=0` (304 possible). Hard reload → `no-cache` (refetch). Fingerprinted asset → `public, max-age=31536000, immutable`. Cache busting = new URL, not "clearing" the browser cache.
-
-## Edge Side Includes (ESI)
-- ESI declares **holes** the surrogate fills as independent sub-requests, each
-  with its own TTL — mixed freshness on one page.
-- Enable `framework.esi: true` and embed with `render_esi(controller(...))`;
-  without a surrogate it renders inline.
-- Processing happens in the reverse proxy (`HttpCache`/Varnish) via the `Esi`
-  surrogate; fragment URIs are signed.
-- SSI (`render_ssi`) is the equivalent for SSI-capable servers.
-
-**Cheat:** Enable: `framework.esi: true` (+ `http_cache: true`). SSI: `framework.ssi`. Twig: `render_esi(controller('Ctrl::method'))`; fragment sets own `#[Cache]`. No surrogate → `render_esi` falls back to **inline** rendering. Classes: `HttpCache\Esi` (SurrogateInterface), `Fragment\EsiFragmentRenderer`. Without ESI, the shortest embedded TTL caps the whole page.
 
 ## Expiration (Expires, Cache-Control)
 - Freshness lets a cache answer without hitting the origin; precedence is

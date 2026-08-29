@@ -27,6 +27,30 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Input & output](input-output.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les helpers sont des widgets d'interface réutilisables (prompts, barres de progression, tableaux) accessibles via le `HelperSet` de la commande.
+
+### Imagine dans la vraie vie
+Les helpers sont l'armoire à outils partagée d'un atelier : le mètre ruban, l'étiqueteuse et le tableau perforé sont des outils réutilisables que tout le monde va chercher, en le demandant par nom (`$this->getHelper('question')`) depuis l'armoire (le `HelperSet`).
+
+### Dans Symfony
+Une invite de confirmation avant une opération destructive (`$io->confirm('Supprimer tout ?', false)`) utilise en coulisses `QuestionHelper`, mais `SymfonyStyle` te l'offre déjà tout enveloppé — tu n'as presque jamais besoin d'aller chercher le helper toi-même.
+
+### Exemple simple
+```php
+$progress = $io->createProgressBar(100);
+$progress->advance();
+```
+
+### Comment le mémoriser 🧠
+`SymfonyStyle` est le "couteau suisse" qui enveloppe déjà la plupart des helpers courants — tu n'as besoin de `getHelper()` explicitement que pour un besoin vraiment sur mesure.
+
 ---
 
 ## Theory
@@ -129,7 +153,7 @@ flowchart LR
 
 !!! note "Source reference"
     `HelperSet`, `QuestionHelper`, `ProgressBar`, `Table` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Console/Helper).
 
 ## Configuration & code
 
@@ -279,6 +303,8 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. How does a classic command obtain the QuestionHelper?"
     - [x] A. `$this->getHelper('question')` ✅
     - [ ] B. `new QuestionHelper($input)`
@@ -286,7 +312,7 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     - [ ] D. `SymfonyStyle::helper()`
 
     **Why:** helpers are fetched by name from the `HelperSet`. **Ref:**
-    [QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html).
+    [QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html).
 
 ??? question "Q2. Which question type offers a fixed list of answers?"
     - [ ] A. `Question`
@@ -295,7 +321,7 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     - [ ] D. `HiddenQuestion`
 
     **Why:** `ChoiceQuestion` presents selectable options. **Ref:**
-    [QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html).
+    [QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html).
 
 ??? question "Q3. What does `ProgressBar::setRedrawFrequency(100)` change?"
     - [x] A. It only redraws every 100 steps, reducing I/O ✅
@@ -304,7 +330,7 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     - [ ] D. It sleeps 100 ms per step
 
     **Why:** redraw throttling avoids terminal I/O on every tiny step. **Ref:**
-    [ProgressBar](https://symfony.com/doc/current/components/console/helpers/progressbar.html).
+    [ProgressBar](https://symfony.com/doc/8.0/components/console/helpers/progressbar.html).
 
 ??? question "Q4. Which helper hides/moves the terminal cursor?"
     - [ ] A. `FormatterHelper`
@@ -313,7 +339,7 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
     - [ ] D. `ProgressBar`
 
     **Why:** `Symfony\Component\Console\Cursor` issues cursor ANSI codes. **Ref:**
-    [Console helpers](https://symfony.com/doc/current/components/console/helpers/index.html).
+    [Console helpers](https://symfony.com/doc/8.0/components/console/helpers/index.html).
 
 ## Key takeaways
 
@@ -341,9 +367,9 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
   facade over these helpers, so you rarely fetch them by hand.
 
 ## Official References
-- [Official Symfony docs — Console helpers](https://symfony.com/doc/current/components/console/helpers/index.html)
-- [Official Symfony docs — QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html)
-- [Symfony source — Console helpers](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper)
+- [Official Symfony docs — Console helpers](https://symfony.com/doc/8.0/components/console/helpers/index.html)
+- [Official Symfony docs — QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html)
+- [Symfony source — Console helpers](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Console/Helper)
 
 ## Video references
 
@@ -354,7 +380,7 @@ use it only when `SymfonyStyle`/sections cannot express the effect.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/console/helpers/questionhelper.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

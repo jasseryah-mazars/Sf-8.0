@@ -69,7 +69,7 @@ Parcourez-les dans l'ordre :
   les directives `Cache-Control` de **request**.
 - [ ] [Server-Side Caching](server-side.md) — le reverse proxy Symfony (le
   kernel `HttpCache`), `Store`, son activation, comparaison avec Varnish.
-- [ ] [Edge Side Includes (ESI)](esi.md) — `<esi:include>`, `render_esi`, quand
+- [ ] [Edge Side Includes (ESI)](../appendices/out-of-syllabus/esi.md) — `<esi:include>`, `render_esi`, quand
   le cache de fragments l'emporte sur le cache de page entière, l'alternative
   SSI. **Exclu de la certification Symfony 8.**
 
@@ -81,7 +81,7 @@ Parcourez-les dans l'ordre :
    [Validation](validation.md) — et la façon dont ils se **combinent**.
 3. Voyez les deux **côtés** du fil : [Client-Side](client-side.md) et
    [Server-Side](server-side.md).
-4. Terminez par [ESI](esi.md) pour les pages à fraîcheur mixte.
+4. Terminez par [ESI](../appendices/out-of-syllabus/esi.md) pour les pages à fraîcheur mixte.
 
 ---
 
@@ -90,8 +90,23 @@ Parcourez-les dans l'ordre :
 [Controllers](../controllers/index.md) ·
 [Controller Rendering (Twig)](../twig/controller-rendering.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le cache HTTP permet de réutiliser une réponse déjà calculée au lieu de tout refaire à chaque visite — sans jamais toucher à la logique métier de l'application.
+
+**Pourquoi ça existe ?** Recalculer la même page pour chaque visiteur gaspille du temps serveur. Le cache HTTP répond directement depuis une copie stockée quand c'est possible.
+
+**🏠 Analogie de la vraie vie :** Un plat déjà préparé au frigo avec une date de péremption. Tant que la date n'est pas dépassée, tu le sers directement (fraîcheur). Une fois périmé, tu demandes d'abord "c'est toujours bon ?" avant de tout refaire (validation).
+
+**Symfony dans la vraie vie :** `$response->setMaxAge(3600)` active la fraîcheur (aucune requête au serveur pendant une heure) ; `$response->setEtag($hash)` active la validation (une requête légère qui répond parfois "rien n'a changé", en 304).
+
+**⚠️ Erreur fréquente :** confondre "fraîcheur" et "validation" — la fraîcheur ne pose aucune question au serveur, la validation en pose une, mais très bon marché (pas de corps de réponse renvoyé si rien n'a changé).
+
+**🧠 Comment le mémoriser :** "Fraîcheur = pas de question du tout. Validation = question posée, réponse parfois vide (304)."
+
+
 ## Official References
 
-- [Symfony documentation — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — HTTP Cache](https://symfony.com/doc/8.0/http_cache.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

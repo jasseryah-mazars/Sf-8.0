@@ -28,6 +28,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Pour renvoyer une erreur HTTP, on **lance** une exception — on ne construit jamais soi-même une `Response` d'erreur.
+
+### Imagine dans la vraie vie
+Quand un visiteur demande quelqu'un qui n'est pas dans le bâtiment, le réceptionniste n'invente pas de réponse — il lève un drapeau (`throw`) et le bureau des erreurs du bâtiment (le kernel) émet l'avis officiel "introuvable" sur papier à en-tête (la page d'erreur avec le bon statut). Ton travail est de lever le bon drapeau ; rédiger l'avis formel, c'est le travail de quelqu'un d'autre.
+
+### Dans Symfony
+`createNotFoundException()` **construit** l'exception mais ne fait rien tant que tu ne la lances pas avec `throw` — l'oublier laisse simplement l'exécution continuer normalement, sans aucune erreur 404.
+
+### Exemple simple
+```php
+if (!$produit) {
+    throw $this->createNotFoundException('Produit introuvable.'); // le throw est obligatoire
+}
+```
+
+### Comment le mémoriser 🧠
+"Create ne lance rien" : `createNotFoundException()` **retourne** l'exception, il ne la lance jamais tout seul — c'est le piège favori de l'examen sur ce chapitre.
+
+
 ## Theory
 
 Pour produire une erreur HTTP, vous **lancez une exception** ; vous ne construisez
@@ -295,7 +317,7 @@ plus loin, au lieu d'un 404 propre.
     - [ ] D. `abort(404);`
 
     **Why:** lancer une `NotFoundHttpException` laisse le kernel rendre la page d'erreur.
-    **Ref:** [errors](https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages).
+    **Ref:** [errors](https://symfony.com/doc/8.0/controller.html#managing-errors-and-404-pages).
 
 ??? question "Q2. A controller throws a plain `\RuntimeException`. Status code?"
     - [ ] A. 400
@@ -304,7 +326,7 @@ plus loin, au lieu d'un 404 propre.
     - [ ] D. 200
 
     **Why:** seule `HttpExceptionInterface` définit un statut ; les autres donnent un 500.
-    **Ref:** [error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q3. Where do you put a custom prod 404 page?"
     - [x] A. `templates/bundles/TwigBundle/Exception/error404.html.twig` ✅
@@ -313,7 +335,7 @@ plus loin, au lieu d'un 404 propre.
     - [ ] D. `config/errors.yaml`
 
     **Why:** l'error renderer Twig recherche les templates par statut à cet endroit.
-    **Ref:** [customize error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [customize error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q4. Which event lets you convert an exception into a Response?"
     - [x] A. `kernel.exception` (`ExceptionEvent`) ✅
@@ -321,7 +343,7 @@ plus loin, au lieu d'un 404 propre.
     - [ ] C. `kernel.terminate`
     - [ ] D. `kernel.controller`
 
-    **Why:** les listeners de `ExceptionEvent` peuvent appeler `setResponse()`. **Ref:** [kernel events](https://symfony.com/doc/current/reference/events.html#kernel-exception).
+    **Why:** les listeners de `ExceptionEvent` peuvent appeler `setResponse()`. **Ref:** [kernel events](https://symfony.com/doc/8.0/reference/events.html#kernel-exception).
 
 ## Key takeaways
 
@@ -345,7 +367,7 @@ plus loin, au lieu d'un 404 propre.
 - **Confused with:** [AbstractController](abstract-controller.md) — `createNotFoundException()` retourne une exception ; elle n'interrompt rien par elle-même.
 
 ## Official References
-- [Official Symfony docs — Errors & 404 pages](https://symfony.com/doc/current/controller/error_pages.html)
+- [Official Symfony docs — Errors & 404 pages](https://symfony.com/doc/8.0/controller/error_pages.html)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 
 ## Video references
@@ -357,7 +379,7 @@ plus loin, au lieu d'un 404 propre.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#managing-errors-and-404-pages) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

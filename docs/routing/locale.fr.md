@@ -29,6 +29,55 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony ne devine **jamais** ta langue à partir du navigateur par défaut — il faut soit une route localisée, soit activer explicitement la détection.
+
+### Imagine dans la vraie vie
+Un musée où le même exposant a deux entrées signalées dans des langues différentes : "/about" et "/a-propos" mènent à la même salle, mais la porte par laquelle tu es entré fixe la langue de toutes les étiquettes, de l'audioguide et du reçu de la boutique pour le reste de ta visite. L'accueil ne devine *jamais* ta langue depuis ton passeport — sauf si tu demandes explicitement au personnel de lire ta préférence.
+
+### Dans Symfony
+Une route déclarée avec `path: { fr: '/a-propos', en: '/about' }` fixe automatiquement `_locale` selon la porte d'entrée choisie par le visiteur — sans jamais consulter l'en-tête `Accept-Language`, sauf activation explicite.
+
+### Exemple simple
+```php
+#[Route(path: ['fr' => '/a-propos', 'en' => '/about'], name: 'a_propos')]
+```
+
+### Comment le mémoriser 🧠
+"La porte choisie fixe la langue" — pas le passeport dans ta poche. `Accept-Language` reste **opt-in**, jamais activé par défaut.
+
+Internationalized apps often expose the **same action under different paths per
+language**: `/about` (en) and `/a-propos` (fr). Symfony supports this natively:
+declare a route whose `path` is a **map of locale → path**, and it expands into one
+route per locale, each carrying the matching `_locale` default. The matched
+`_locale` then drives translations and formatting for the whole request.
+
+```php
+// 'path' as a locale => path map: one action, one URL per language
+#[Route(path: ['en' => '/about', 'fr' => '/a-propos'], name: 'app_about')]
+public function about(): Response
+{
+    // the matched _locale ('en' or 'fr') drives translations from here on
+    return $this->render('about.html.twig');
+}
+```
+
+Locale can also come from a **path prefix** (`/{_locale}/blog`) or be **guessed**
+from the request. Whatever the source, the framework stores it on the request and
+remembers it for the session so links stay in the user's language.
+
+!!! question "Predict first"
+    You set only `framework.default_locale: en`. A browser sends
+    `Accept-Language: fr`. Does Symfony serve French automatically?
+
+??? note "Reveal"
+    No. Symfony does **not** parse `Accept-Language` by default — opt in with
+    `set_locale_from_accept_language`, or read `Request::getPreferredLanguage()`
+    yourself. Precedence: matched `_locale` → sticky session → `default_locale`.
+
+
 ## Theory
 
 Les apps internationalisées exposent souvent la **même action sous des chemins différents par
@@ -288,7 +337,7 @@ chapitre [Intl](../miscellaneous/intl.md), plus large, pour le formatage et la t
     - [ ] D. Only in debug mode
 
     **Why:** l'opt-in se fait via `set_locale_from_accept_language`, ou vous la définissez vous-même.
-    **Ref:** [Localization](https://symfony.com/doc/current/routing.html#localized-routes-i18n).
+    **Ref:** [Localization](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n).
 
 ??? question "Q2. A `#[Route(path: ['en' => '/about', 'fr' => '/a-propos'])]` produces?"
     - [x] A. One route per locale, each with a `_locale` default ✅
@@ -297,7 +346,7 @@ chapitre [Intl](../miscellaneous/intl.md), plus large, pour le formatage et la t
     - [ ] D. An error — arrays are not allowed
 
     **Why:** les chemins localisés s'étendent en routes par locale au chargement.
-    **Ref:** [Routing i18n](https://symfony.com/doc/current/routing.html#localized-routes-i18n).
+    **Ref:** [Routing i18n](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n).
 
 ??? question "Q3. Matching a `_locale` route parameter causes what?"
     - [x] A. `Request::setLocale()` is called (via LocaleListener) ✅
@@ -306,7 +355,7 @@ chapitre [Intl](../miscellaneous/intl.md), plus large, pour le formatage et la t
     - [ ] D. Nothing until you read it
 
     **Why:** `_locale` est un paramètre spécial appliqué par le LocaleListener.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q4. How do you generate the French URL of `app_about`?"
     - [x] A. `generateUrl('app_about', ['_locale' => 'fr'])` ✅
@@ -315,7 +364,7 @@ chapitre [Intl](../miscellaneous/intl.md), plus large, pour le formatage et la t
     - [ ] D. It is not possible
 
     **Why:** passez le paramètre spécial `_locale` pour sélectionner la variante localisée.
-    **Ref:** [Routing i18n](https://symfony.com/doc/current/routing.html#localized-routes-i18n).
+    **Ref:** [Routing i18n](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n).
 
 ## Key takeaways
 
@@ -339,7 +388,7 @@ chapitre [Intl](../miscellaneous/intl.md), plus large, pour le formatage et la t
 - **Confused with:** [Host matching](host-matching.md) — stratégies de locale par host vs par préfixe de chemin.
 
 ## Official References
-- [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/current/routing.html#localized-routes-i18n)
+- [Official Symfony docs — Localized routes (i18n)](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
 ## Video references
@@ -351,7 +400,7 @@ chapitre [Intl](../miscellaneous/intl.md), plus large, pour le formatage et la t
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences & keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#localized-routes-i18n) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

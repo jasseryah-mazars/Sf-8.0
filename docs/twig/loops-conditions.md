@@ -23,7 +23,32 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`{% for %}` parcourt une liste et te donne gratuitement des infos utiles (index, premier, dernier) via la variable spéciale `loop`.
+
+### Imagine dans la vraie vie
+`{% for %}` est un guide de musée qui fait visiter chaque exposition à un groupe : la variable `loop` est le presse-papier du guide qui indique à quel arrêt on en est (`index`), si c'est le premier ou le dernier (`first`/`last`), et combien il en reste. `for … else` est le panneau "galerie fermée" affiché quand il n'y a rien à visiter.
+
+### Dans Symfony
+`{% for produit in produits %}...{% else %}<p>Aucun produit.</p>{% endfor %}` affiche automatiquement un message de repli sans jamais avoir à écrire un `{% if produits is empty %}` séparé.
+
+### Exemple simple
+```twig
+{% for p in produits %}
+    {{ loop.index }}. {{ p.nom }}{% if loop.last %} (dernier){% endif %}
+{% else %}
+    Aucun produit.
+{% endfor %}
+```
+
+### Comment le mémoriser 🧠
+Twig n'a **pas** de `break`/`continue` — pour filtrer, écris `for x in items if condition` directement dans la boucle, pas un `if` imbriqué avec un `continue` imaginaire.
 
 ## Theory
 
@@ -272,6 +297,8 @@ collections, paginate rather than looping thousands of rows in Twig.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is `loop.index` on the first iteration?"
     - [ ] A. `0`
     - [x] B. `1` ✅
@@ -321,7 +348,7 @@ collections, paginate rather than looping thousands of rows in Twig.
 - **Confused with:** [Twig Syntax](syntax.md) — `is empty` (true for `0`/`''`/`[]`/`null`) is broader than `is null`.
 
 ## Official References
-- [Official — Loops in templates](https://symfony.com/doc/current/templates.html)
+- [Official — Loops in templates](https://symfony.com/doc/8.0/templates.html)
 - [Twig — for / if tags](https://twig.symfony.com/doc/3.x/tags/for.html)
 - [Twig source — ForNode](https://github.com/twigphp/Twig/blob/3.x/src/Node/ForNode.php)
 
@@ -334,7 +361,7 @@ collections, paginate rather than looping thousands of rows in Twig.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

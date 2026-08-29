@@ -26,6 +26,30 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Authentication](authentication.md) · [Roles](roles.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+L'autorisation répond à "ce badge a-t-il le droit d'ouvrir cette porte ?" — une fois qu'on sait déjà qui tu es (authentification), reste à savoir ce que tu peux faire.
+
+### Imagine dans la vraie vie
+L'autorisation, ce sont les portes que ton badge ouvre. Le portail sait déjà *qui* tu es (le token) ; chaque porte verrouillée demande ensuite "ce badge peut-il passer ?". `isGranted()` est le moment où tu poses ton badge sur le lecteur — les **voters** derrière décident si le voyant passe au vert.
+
+### Dans Symfony
+`#[IsGranted('EDIT', subject: 'produit')]` peut vérifier non seulement le rôle de l'utilisateur, mais aussi si *cet* utilisateur précis peut éditer *ce* produit précis — une vérification bien plus fine qu'un simple `access_control` basé sur l'URL.
+
+### Exemple simple
+```php
+#[IsGranted('ROLE_ADMIN')]
+public function admin(): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Seul le chemin `isGranted()`/`#[IsGranted]` peut passer un **sujet** (un objet précis à vérifier) — `access_control` dans `security.yaml` ne connaît que l'URL, jamais l'objet métier concerné.
+
 ---
 
 ## Theory
@@ -269,6 +293,8 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which check can pass a subject to voters?"
     - [x] A. `isGranted('EDIT', $post)` ✅
     - [ ] B. An `access_control` rule
@@ -277,7 +303,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
     **Why:** Only the `isGranted()`/`#[IsGranted]`/`denyAccessUnlessGranted()`
     path carries a subject; `access_control` is URL-based.
-    **Ref:** [Voters](https://symfony.com/doc/current/security/voters.html).
+    **Ref:** [Voters](https://symfony.com/doc/8.0/security/voters.html).
 
 ??? question "Q2. `#[IsGranted]` fails for an anonymous user. What happens?"
     - [ ] A. Immediate 403 always
@@ -287,7 +313,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
     **Why:** An unauthenticated `AccessDeniedException` is converted to an entry
     point response; an authenticated one yields 403.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html#access-control).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html#access-control).
 
 ??? question "Q3. Which interface does `isGranted()` ultimately delegate to?"
     - [ ] A. `AuthenticatorInterface`
@@ -326,8 +352,8 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
   `isGranted()` path can pass a subject; `access_control` is URL-only.
 
 ## Official References
-- [Symfony docs — Authorization](https://symfony.com/doc/current/security.html#access-control-authorization)
-- [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
+- [Symfony docs — Authorization](https://symfony.com/doc/8.0/security.html#access-control-authorization)
+- [Symfony docs — Voters](https://symfony.com/doc/8.0/security/voters.html)
 - [Symfony source — AuthorizationChecker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AuthorizationChecker.php)
 
 ## Video references
@@ -339,7 +365,7 @@ runtime state. For declarative controller guards prefer `#[IsGranted]`; use
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

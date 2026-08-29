@@ -8,6 +8,20 @@
 
 Full theory: [Templating (Twig)](../twig/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Cette page est une **banque de 109 questions type QCM** sur Templating (Twig), avec correction dépliable sous chaque question. Ce n'est pas un cours : c'est un entraînement, à faire après avoir lu le chapitre.
+
+**Pourquoi ça existe ?** Lire un chapitre donne l'impression d'avoir compris, mais répondre à une question sous forme d'examen (sans relire ses notes) révèle les vraies lacunes — c'est ce que fera l'examen officiel.
+
+**🏠 Analogie de la vraie vie :** C'est le **permis de conduire**. Le code de la route (le cours) explique les règles ; les séries de questions du permis blanc (cette page) vérifient que tu sais les appliquer sous forme de question piège, sans l'aide du livre.
+
+**Symfony dans la vraie vie :** Cours du chapitre → code de la route appris / Question du QCM → question du permis blanc / Réponse dépliable → correction avec explication / Score obtenu → indicateur "prêt à passer l'examen ou pas".
+
+**⚠️ Erreur fréquente :** Déplier la réponse avant d'avoir vraiment tranché son choix. Le cerveau retient beaucoup mieux une explication lue *après* s'être trompé (ou avoir hésité) que lue en passant, sans effort de rappel préalable.
+
+**🧠 Comment le mémoriser :** *« Je réponds d'abord, je vérifie ensuite »* — jamais l'inverse. Note les questions ratées : ce sont exactement les pièges que l'examinateur pose aussi.
+
 ---
 
 **Q1.** Which Twig delimiter executes a statement without printing anything?  <small>_(easy · single)_</small>
@@ -104,7 +118,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Auto-escaping (html strategy for .html.twig) converts the angle brackets to entities, so the literal markup is displayed as text rather than rendered as bold. To output real markup you would need |raw (only for trusted content).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#output-escaping)
 
 **Q8.** True or false: in Symfony, Twig output escaping is enabled by default.  <small>_(easy · true-false)_</small>
 
@@ -116,7 +130,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Auto-escaping is on by default (autoescape: name) as a baseline XSS defence; every {{ }} is escaped for its context unless the value is marked safe or passed through |raw. You opt out per value, not opt in.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#output-escaping)
 
 **Q9.** How many templates can a single template extend in Twig?  <small>_(easy · single)_</small>
 
@@ -172,7 +186,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     app.environment is the kernel environment (dev/prod/test); app.debug is the boolean debug flag. They are unrelated to OS env vars.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q13.** Which snippet safely greets an authenticated user and falls back to 'Guest'?  <small>_(easy · code)_</small>
 
@@ -186,7 +200,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Because app.user is null for anonymous requests, you must guard it before dereferencing. The ternary checks app.user first. Reading app.user.userIdentifier directly throws under strict_variables (and is the classic anonymous-page crash); Guest is a bareword not a string in the third option; app.userIdentifier is not a member.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q14.** Which attribute registers a custom Twig filter in Twig up to 3.22?  <small>_(easy · single)_</small>
 
@@ -200,7 +214,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Twig 3.x provides Twig\Attribute\AsTwigFilter and AsTwigFunction as an attribute-based alternative to returning TwigFilter/TwigFunction from an AbstractExtension.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension)
 
 **Q15.** What does the `default` filter replace?  <small>_(easy · single)_</small>
 
@@ -324,7 +338,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Both use UrlGeneratorInterface via RoutingExtension; path() uses ABSOLUTE_PATH (relative) and url() uses ABSOLUTE_URL (scheme + host).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-pages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#linking-to-pages)
 
 **Q24.** A translation key has no entry for the current locale and no fallback. What is rendered?  <small>_(easy · single)_</small>
 
@@ -338,7 +352,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The translator returns the untranslated message id when no translation is found.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html)
 
 **Q25.** Where does #{...} string interpolation work in Twig?  <small>_(easy · single)_</small>
 
@@ -394,7 +408,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     asset() resolves a path relative to public/ through the Symfony\Component\Asset\Packages service, applying base path and versioning.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets)
 
 **Q29.** What is the purpose of asset versioning?  <small>_(easy · single)_</small>
 
@@ -408,7 +422,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Versioning changes the URL when a file changes (static version or a JSON manifest of content hashes) so clients do not serve a stale cached copy.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/frontend.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/frontend.html)
 
 **Q30.** Which build tools are OUT of scope when only using asset()?  <small>_(easy · trap)_</small>
 
@@ -422,7 +436,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     asset() only resolves the final public path/version. Bundling and hashing are done by AssetMapper or Webpack Encore, which are not covered here.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/asset.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/asset.html)
 
 **Q31.** What does {{ dump() }} with no arguments do?  <small>_(easy · single)_</small>
 
@@ -436,7 +450,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Called with no arguments, dump() outputs the entire render context (all passed variables plus globals).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities)
 
 **Q32.** What is the result of {{ "a" ~ 1 + 1 }}?  <small>_(medium · code)_</small>
 
@@ -506,7 +520,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     TwigBundle configures autoescape to 'name', using FileExtensionEscapingStrategy::guess() so .html.twig escapes as html, .js.twig as js, .txt.twig not at all.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#output-escaping)
 
 **Q37.** How much of a .txt.twig template's {{ }} output is auto-escaped by Symfony's default strategy?  <small>_(medium · trap)_</small>
 
@@ -520,7 +534,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     FileExtensionEscapingStrategy::guess() maps .txt.twig to false (no escaping), which is correct because plain-text output has no HTML context. The trap is assuming escaping is always html — it is chosen per extension, and .txt.twig escapes nothing.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#output-escaping)
 
 **Q38.** A template renders user-submitted comment HTML with {{ comment|raw }}. What is the risk?  <small>_(medium · trap)_</small>
 
@@ -534,7 +548,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     |raw marks the value safe and skips auto-escaping, so any <script> in a user comment executes — a classic stored XSS hole. Only use |raw on HTML you generated or ran through the HtmlSanitizer component; never on raw user input.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/html_sanitizer.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/html_sanitizer.html)
 
 **Q39.** What is the difference between {{ parent() }} and {{ block('sidebar') }}?  <small>_(medium · trap)_</small>
 
@@ -590,7 +604,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     AppVariable::getUser() reads the token from the token storage and returns its user, or null when there is no authenticated user.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q43.** Which class backs the Twig `app` global in Symfony?  <small>_(medium · internals)_</small>
 
@@ -618,7 +632,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     app exposes user, request, session, flashes, environment, debug, token, locale, current_route and current_route_parameters. There is no app.controller.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q45.** How do you register a static global string in Twig?  <small>_(medium · config)_</small>
 
@@ -632,7 +646,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Declare globals under twig.globals in twig.yaml, or return them from an extension implementing Twig\Extension\GlobalsInterface::getGlobals().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#global-variables)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#global-variables)
 
 **Q46.** In Symfony 8, which expression prints the current user's identifier?  <small>_(medium · trap)_</small>
 
@@ -646,7 +660,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     UserInterface exposes getUserIdentifier(), so the Twig accessor is app.user.userIdentifier. The legacy getUsername()/username idiom is gone in modern Symfony. Remember to guard app.user first — it is null for anonymous requests.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#the-user)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#the-user)
 
 **Q47.** A custom filter returns '<b>x</b>' but the page shows escaped text. Why?  <small>_(medium · debug)_</small>
 
@@ -688,7 +702,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Twig\Attribute\AsTwigFunction('vat') on a method registers the function; Symfony autoconfiguration wires the class. There is no #[TwigFunction] or #[AsFunction] attribute, and functions are not auto-detected by method name without an attribute or getFunctions() registration.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension)
 
 **Q50.** Why put a filter's heavy-dependency logic in a runtime class rather than the extension itself?  <small>_(medium · internals)_</small>
 
@@ -800,7 +814,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Parameters not consumed by the route pattern are appended as the query string.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q58.** Which Twig extension provides path() and url()?  <small>_(medium · internals)_</small>
 
@@ -828,7 +842,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     When a link leaves the page (emails, RSS, canonical tags, redirects consumed elsewhere) it must be absolute, so use url(). A relative path() link has no host and breaks once opened in a mail client. asset() is for static files, not routes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-pages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#linking-to-pages)
 
 **Q60.** path('article_show') is called but the route requires a {slug}. What happens at render time?  <small>_(medium · debug)_</small>
 
@@ -842,7 +856,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The generator throws MissingMandatoryParametersException when a required route parameter is not supplied. (An unknown route name instead throws RouteNotFoundException.) Both surface at render time, not silently.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#generating-urls)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 
 **Q61.** How does render(controller('C::m')) execute the controller?  <small>_(medium · single)_</small>
 
@@ -856,7 +870,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The InlineFragmentRenderer issues a real HttpKernel sub-request, so the kernel events run again for the fragment.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#embedding-controllers)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#embedding-controllers)
 
 **Q62.** A sidebar just needs variables the parent already has. include or render(controller())?  <small>_(medium · scenario)_</small>
 
@@ -870,7 +884,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Each inline embed is a real sub-request with its own overhead. If the fragment only needs data you already have, a plain include is far cheaper. Reserve render(controller()) for fragments that need their own services/data/cache.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#embedding-controllers)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#embedding-controllers)
 
 **Q63.** What does render_hinclude() do differently from inline rendering?  <small>_(medium · single)_</small>
 
@@ -884,7 +898,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     HIncludeFragmentRenderer outputs a placeholder tag resolved by the browser with JavaScript, so the main page renders immediately and the fragment loads asynchronously afterwards. Inline instead blocks on a synchronous sub-request.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q64.** What is the argument order of the `trans` filter?  <small>_(medium · single)_</small>
 
@@ -898,7 +912,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The signature is message|trans(parameters = {}, domain = 'messages', locale = null).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html#translations-in-templates)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html#translations-in-templates)
 
 **Q65.** How do you pluralize a message in Symfony 8 templates?  <small>_(medium · trap)_</small>
 
@@ -912,7 +926,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     transchoice was removed; pluralization uses ICU MessageFormat, which is applied to catalogues whose domain ends with +intl-icu.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 **Q66.** What replaced the removed transchoice() for count-based messages?  <small>_(medium · trap)_</small>
 
@@ -926,7 +940,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Both transchoice() and the |transchoice filter were removed. Pluralization is now expressed with ICU MessageFormat ({count, plural, one{...} other{...}}) in a +intl-icu domain. trans has no separate count argument — you pass count as an ICU parameter.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 **Q67.** After {% trans_default_domain 'admin' %}, what does {{ 'dashboard.title'|trans }} use?  <small>_(medium · code)_</small>
 
@@ -940,7 +954,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     {% trans_default_domain 'admin' %} changes the default domain for the remainder of the template, so a trans call without an explicit domain uses 'admin'. Domains are never inferred from the key's dotted prefix.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html#translations-in-templates)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html#translations-in-templates)
 
 **Q68.** What is the result of {{ 1 + 2 ~ 3 }}?  <small>_(medium · code)_</small>
 
@@ -1010,7 +1024,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     framework.assets.packages lets you declare a named package (e.g. cdn with base_urls). asset('img/x.png', 'cdn') uses that package while the default package still serves CSS locally. There is no framework.assets.cdn flag.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/asset.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/asset.html)
 
 **Q73.** True or false: you should use asset() to generate a link to a route-controlled page.  <small>_(medium · trap)_</small>
 
@@ -1022,7 +1036,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     asset() only resolves a public file path (with base path + version); it does not know about routes. Route-controlled URLs come from path()/url() via the RoutingExtension. Swapping the two is a common confusion.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets)
 
 **Q74.** Why does dump() error in the prod environment?  <small>_(medium · debug)_</small>
 
@@ -1036,7 +1050,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The dump function/tag come from the debug-only DumpExtension (backed by VarDumper); in prod the function is undefined, so leftover dumps throw.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/var_dumper.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/var_dumper.html)
 
 **Q75.** What is the difference between {{ dump(x) }} and {% dump x %}?  <small>_(medium · single)_</small>
 
@@ -1050,7 +1064,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The dump() function outputs where called; the {% dump %} tag routes the data to the profiler/toolbar without adding markup to the page.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities)
 
 **Q76.** You add {% dump items %} but see nothing in the page HTML. Why?  <small>_(medium · trap)_</small>
 
@@ -1064,7 +1078,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Unlike the dump() function, the {% dump %} tag does not print inline — by design it routes the data to the dump destination (profiler/toolbar) so it does not pollute the page. Look in the web debug toolbar, not the page source.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-dump-twig-utilities)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-dump-twig-utilities)
 
 **Q77.** A deploy fails with 'Unknown "dump" function' on a page. What is the cause and fix?  <small>_(medium · debug)_</small>
 
@@ -1078,7 +1092,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     dump tooling is registered only in debug mode, so a leftover dump() in a committed template throws 'Unknown "dump" function' in prod. The fix is to remove debug dumps before deploy (use logging/profiler in non-prod envs) — not to enable the extension in production.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/var_dumper.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/var_dumper.html)
 
 **Q78.** Which of the following statements are true about Twig syntax? (select all that apply)  <small>_(medium · multiple)_</small>
 
@@ -1093,7 +1107,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The three delimiters split cleanly into print/do/comment: only {{ }} produces (escaped) output while {% %} never prints. // is floor division (7 // 2 gives 3, unlike / which yields a float), and filters have higher precedence than arithmetic operators, so 1 + 2|abs applies abs to 2 first. The standalone {% spaceless %} tag no longer exists — the modern form is {% apply spaceless %}.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#twig-templating-language)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#twig-templating-language)
 
 **Q79.** Which statements about Twig template inheritance are true? (select all that apply)  <small>_(medium · multiple)_</small>
 
@@ -1108,7 +1122,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Inheritance is single and vertical: one parent per template, with blocks as the overridable holes, and any child markup outside blocks is invalid. parent() extends rather than replaces a block by rendering the parent's version. {% use %} is horizontal reuse — it imports blocks only and does not set a parent, and {% extends %} accepts a single parent, never several to combine.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#template-inheritance-and-layouts)
 
 **Q80.** Which statements about {{ include() }} in Twig are correct? (select all that apply)  <small>_(medium · multiple)_</small>
 
@@ -1123,7 +1137,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     By default the full parent context is merged into the include; only isolates the local variables while globals such as app remain accessible. ignore missing only prevents the error for a template that does not exist — exceptions thrown inside the included template still propagate. Overriding blocks is the job of {% embed %}, not include, and a template list renders only the first template that exists.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#including-templates)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#including-templates)
 
 **Q81.** Which statements about generating URLs in Twig are correct? (select all that apply)  <small>_(medium · multiple)_</small>
 
@@ -1138,7 +1152,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     path() and url() both take a route name (plus parameters): path() yields a relative URL, url() an absolute one, and any parameter the route does not declare ends up in the query string rather than being dropped. An unknown route name fails at render time with RouteNotFoundException. Email bodies, canonical links and feeds leave the page context, so they need url() — relative links from path() break in mail clients.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#linking-to-pages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#linking-to-pages)
 
 **Q82.** For {{ user.name }}, in which order does Twig try to resolve the attribute?  <small>_(hard · internals)_</small>
 
@@ -1236,7 +1250,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Accessing app.session may start the session (which can defeat HTTP caching), and reading app.flashes consumes the messages so they are cleared after display — both have side effects. app.environment and app.debug are plain reads with no side effect.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q89.** You need a global whose value is computed from an injected service. Which approach fits best?  <small>_(hard · internals)_</small>
 
@@ -1250,7 +1264,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     GlobalsInterface::getGlobals() lets an extension inject a service and return computed values, resolved lazily when the extension is instantiated. A static YAML twig.globals entry (even '@service') is fine for simple references, but computed/lazy values belong in a GlobalsInterface extension. There is no #[AsGlobal] attribute.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#global-variables)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#global-variables)
 
 **Q90.** A controller passes a variable named `app` to the template. What happens?  <small>_(hard · trap)_</small>
 
@@ -1264,7 +1278,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Globals are merged into the render context, so a local variable of the same name shadows the global. Passing your own `app` variable breaks app.user/app.request access inside that template — avoid reusing reserved global names.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#global-variables)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#global-variables)
 
 **Q91.** A TwigFilter is declared with needs_environment: true. What changes about the callable?  <small>_(hard · internals)_</small>
 
@@ -1362,7 +1376,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     app.current_route and app.current_route_parameters expose the active route and its params; merging a new page value onto them and passing to path() rebuilds the current URL with one changed parameter. app.route/app.params are not real members, and + does not merge hashes (~ /merge do).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q98.** Which service selects the fragment renderer for render()/render_esi()?  <small>_(hard · internals)_</small>
 
@@ -1390,7 +1404,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Inline rendering calls HttpKernel::handle(..., SUB_REQUEST), so the whole listener chain (request, controller, response) runs independently for the fragment. The sub-request has its own Request object; parent attributes are not automatically shared.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html#handling-requests)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html#handling-requests)
 
 **Q100.** By default, can a browser hit an embedded controller's fragment URL directly?  <small>_(hard · trap)_</small>
 
@@ -1404,7 +1418,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     Inline embedding uses internal sub-requests, not public URLs. Direct fragment access requires enabling framework.fragments, and Symfony signs the fragment URL (URI signer) so attackers cannot forge arbitrary controller calls. Assuming embeds are publicly routable is a security trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/esi.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/esi.html)
 
 **Q101.** Which catalogue file name enables ICU MessageFormat parsing for English?  <small>_(hard · config)_</small>
 
@@ -1418,7 +1432,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     A domain suffixed +intl-icu (e.g. messages+intl-icu.en.yaml) is parsed with the IntlFormatter, unlocking plural/select and locale-aware formatting. Putting ICU syntax in a plain messages.en.yaml file makes the braces render literally.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 **Q102.** For the ICU message '{count, plural, =0 {none} one {# item} other {# items}}', what does count=1 render?  <small>_(hard · code)_</small>
 
@@ -1432,7 +1446,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     count=1 matches the CLDR 'one' category in English, and # inside the branch is replaced by the number, giving '1 item'. # prints the value (not a literal hash), 'one' is a category label not output, and =0 only matches the exact value 0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 **Q103.** Which service does the Twig trans filter ultimately call?  <small>_(hard · internals)_</small>
 
@@ -1474,7 +1488,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     JsonManifestVersionStrategy maps the logical name to its hashed filename from manifest.json, so asset('app.css') returns the resolved hashed path. Expecting the literal path with a ?v query (that is StaticVersionStrategy) is the trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/asset.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/asset.html)
 
 **Q106.** What gives Symfony's dump() its rich, collapsible HTML output rather than plain var_dump?  <small>_(hard · internals)_</small>
 
@@ -1503,7 +1517,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The auto-escaping context is derived from the file extension (html, js, css, url, html_attr are available), which is why a .txt.twig template gets no escaping at all — it is not a fixed html default. Escaping happens at print time via the escaper, and |raw / {% autoescape false %} switch the protection off entirely, making them XSS holes for untrusted data. The html_attr strategy is a stricter encoder than html, not an alias.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#output-escaping)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#output-escaping)
 
 **Q108.** Which statements about the app global variable are true? (select all that apply)  <small>_(hard · multiple)_</small>
 
@@ -1518,7 +1532,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     app is an AppVariable instance: app.user is null when nobody is authenticated, app.flashes consumes messages when read, and app.session starts the session on access (which can defeat HTTP caching). The distractors are wrong because app.environment is the kernel environment (dev/prod), not OS variables, and defining a local variable named app shadows the global.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
 
 **Q109.** Which statements about translations in Twig are correct? (select all that apply)  <small>_(hard · multiple)_</small>
 
@@ -1533,7 +1547,7 @@ Full theory: [Templating (Twig)](../twig/index.md).
 
     The trans filter signature is message|trans(parameters, domain, locale) — passing the domain first is a classic mistake. Missing keys fall back to returning the key itself instead of erroring, and ICU {n, plural, ...} syntax is only interpreted for domains suffixed with +intl-icu. The transchoice filter was removed; ICU MessageFormat is the modern way to pluralize.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html)
 
 ---
 

@@ -24,7 +24,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Users](users.md) · [Configuration](configuration.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un mot de passe n'est jamais stocké en clair — seulement une empreinte lente et salée, comparée sans jamais être inversée.
+
+### Imagine dans la vraie vie
+Un hacheur de mot de passe est une broyeuse à sens unique. Tu ne gardes jamais le papier original — seulement son motif broyé unique. Quand quelqu'un prétend connaître le mot de passe, tu broies sa tentative de la même façon et compares les motifs (`verify()`).
+
+### Dans Symfony
+`auto` (actuellement bcrypt) choisit toujours le meilleur algorithme disponible — tu n'as jamais besoin de choisir manuellement entre bcrypt et sodium sauf besoin spécifique.
+
+### Exemple simple
+```php
+$hash = $hasher->hashPassword($utilisateur, $motDePasseClair);
+```
+
+### Comment le mémoriser 🧠
+Le rehash transparent nécessite **les deux** : `migrate_from` **et** un `PasswordUpgraderInterface` — l'un sans l'autre ne fait rien.
 
 ## Theory
 
@@ -81,7 +102,7 @@ flowchart LR
 !!! note "Source reference"
     `Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory` and
     `UserPasswordHasher` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php).
 
 ### Verification during login
 
@@ -256,6 +277,8 @@ verification usually lives in a `token_handler`, not the password hasher.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which algorithm is the recommended default?"
     - [x] A. `auto` ✅
     - [ ] B. `plaintext`
@@ -263,7 +286,7 @@ verification usually lives in a `token_handler`, not the password hasher.
     - [ ] D. `pbkdf2`
 
     **Why:** `auto` selects the best available algorithm and adapts over time.
-    **Ref:** [Passwords](https://symfony.com/doc/current/security/passwords.html).
+    **Ref:** [Passwords](https://symfony.com/doc/8.0/security/passwords.html).
 
 ??? question "Q2. Transparent rehash on login requires…"
     - [ ] A. Only `migrate_from`
@@ -273,7 +296,7 @@ verification usually lives in a `token_handler`, not the password hasher.
 
     **Why:** `migrate_from` detects the old hash; the upgrader persists the new
     one via the `PasswordUpgradeBadge` flow.
-    **Ref:** [Password migration](https://symfony.com/doc/current/security/passwords.html#password-migration).
+    **Ref:** [Password migration](https://symfony.com/doc/8.0/security/passwords.html#password-migration).
 
 ??? question "Q3. Where is a login password actually verified?"
     - [ ] A. In `getPassword()`
@@ -283,7 +306,7 @@ verification usually lives in a `token_handler`, not the password hasher.
 
     **Why:** The `PasswordCredentials` badge is checked by the listener using the
     hasher's `verify()`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -313,9 +336,9 @@ verification usually lives in a `token_handler`, not the password hasher.
   keyed by user class, not by provider or firewall name.
 
 ## Official References
-- [Symfony docs — Passwords](https://symfony.com/doc/current/security/passwords.html)
-- [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
-- [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
+- [Symfony docs — Passwords](https://symfony.com/doc/8.0/security/passwords.html)
+- [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
+- [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
 
 ## Video references
 
@@ -326,7 +349,7 @@ verification usually lives in a `token_handler`, not the password hasher.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/passwords.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/passwords.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

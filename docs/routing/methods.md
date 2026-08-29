@@ -27,7 +27,29 @@
     **Est. time:** 18 min ·
     **Prerequisites:** [Configuration](configuration.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`methods` restreint une route à certains verbes HTTP — une bonne URL, mauvaise méthode, donne un 405, pas un 404.
+
+### Imagine dans la vraie vie
+Un chemin avec `methods` est comme un guichet de banque qui existe bel et bien mais ne traite que certaines opérations. Va au guichet "Dépôts" (le bon chemin) et demande à ouvrir un crédit immobilier (le mauvais verbe) : le guichetier ne fait pas semblant que le guichet n'existe pas (404) — il te dit "ce guichet ne fait que dépôts et retraits" (405 avec une liste `Allow`).
+
+### Dans Symfony
+`#[Route('/articles', methods: ['POST'])]` renvoie automatiquement un 405 (pas un 404) si quelqu'un appelle cette même URL en GET — la route "existe" mais refuse la méthode.
+
+### Exemple simple
+```php
+#[Route('/articles/{id}', methods: ['DELETE'])]
+public function supprimer(int $id): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Une route acceptant `GET` accepte automatiquement `HEAD` aussi — c'est la même demande "montre-moi ça", juste sans le corps de la réponse.
 
 ## Theory
 
@@ -252,6 +274,8 @@ alternative when the rule is broad. Do not use `methods` as authorization.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. A route allows only `GET`. A `POST` to that path returns?"
     - [ ] A. 404 Not Found
     - [x] B. 405 Method Not Allowed ✅
@@ -259,7 +283,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. 301 redirect
 
     **Why:** path matches but method doesn't, yielding 405 with an `Allow` header.
-    **Ref:** [HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods).
+    **Ref:** [HTTP methods](https://symfony.com/doc/8.0/routing.html#matching-http-methods).
 
 ??? question "Q2. `methods: ['GET']` also matches which verb?"
     - [x] A. HEAD ✅
@@ -268,7 +292,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. PUT
 
     **Why:** HttpKernel treats HEAD as a bodyless GET, so GET routes match HEAD.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-http-methods).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-http-methods).
 
 ??? question "Q3. An `http` request to an `https`-only route results in?"
     - [x] A. A redirect to the `https` URL ✅
@@ -277,7 +301,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. 404 Not Found
 
     **Why:** the redirectable matcher redirects scheme mismatches.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-the-http-scheme).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-the-http-scheme).
 
 ??? question "Q4. For a form's `_method` field to change routing, you must…"
     - [x] A. Call `Request::enableHttpMethodParameterOverride()` ✅
@@ -286,7 +310,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
     - [ ] D. Set `framework.http_method_override: false`
 
     **Why:** method override is opt-in via `enableHttpMethodParameterOverride()`.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ## Key takeaways
 
@@ -309,7 +333,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
 - **Confused with:** [Controllers → The Request](../controllers/request.md) — the matcher tests `Request::getMethod()` (with any override).
 
 ## Official References
-- [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/current/routing.html#matching-http-methods)
+- [Official Symfony docs — Matching HTTP methods](https://symfony.com/doc/8.0/routing.html#matching-http-methods)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -321,7 +345,7 @@ alternative when the rule is broad. Do not use `methods` as authorization.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#matching-http-methods) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#matching-http-methods) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

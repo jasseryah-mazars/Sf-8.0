@@ -33,6 +33,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`switch_user` permet à un administrateur de "devenir" temporairement un autre utilisateur pour voir l'application exactement comme lui — sans connaître son mot de passe.
+
+### Imagine dans la vraie vie
+Un superviseur du support avec un badge maître peut temporairement "pointer" en tant que n'importe quel employé pour voir le bâtiment exactement comme cet employé le voit. Le garde garde le propre badge du superviseur au comptoir (le token original) et le lui rend quand il signe le registre de sortie.
+
+### Dans Symfony
+Un support client peut se connecter en tant qu'un client qui signale un bug (`?_switch_user=client@exemple.com`) pour reproduire exactement ce qu'il voit — sans jamais avoir eu accès à son mot de passe.
+
+### Exemple simple
+```
+https://monapp.com/admin?_switch_user=jean@exemple.com   # devenir Jean
+https://monapp.com/admin?_switch_user=_exit               # revenir à soi-même
+```
+
+### Comment le mémoriser 🧠
+Vérifie l'impersonation avec l'attribut **`IS_IMPERSONATOR`** — l'ancien style `ROLE_PREVIOUS_ADMIN` est obsolète, ne l'utilise plus.
+
+---
+
+
 ## Theory
 
 L'**impersonation** permet à un utilisateur authentifié et privilégié d'agir en
@@ -155,7 +178,7 @@ switch **et** à chaque sortie. Usages typiques :
   aux admins de switcher par autre chose (par exemple l'e-mail alors que les
   identifiants sont des UUID), un listener peut rechercher l'utilisateur
   lui-même et remplacer l'utilisateur cible sur l'event — consultez le
-  [guide officiel](https://symfony.com/doc/current/security/impersonating_user.html)
+  [guide officiel](https://symfony.com/doc/8.0/security/impersonating_user.html)
   pour le pattern supporté dans votre version exacte.
 - **Restrictions supplémentaires :** lever une exception depuis le listener
   pour interdire un switch (par exemple interdire d'impersonner d'autres
@@ -322,7 +345,7 @@ session.
 
     **Why:** Le même paramètre configuré, avec la valeur spéciale `_exit`,
     restaure le token d'origine.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q2. Which attribute detects that the current user is impersonating someone?"
     - [ ] A. `ROLE_PREVIOUS_ADMIN`
@@ -332,7 +355,7 @@ session.
 
     **Why:** `IS_IMPERSONATOR` n'est accordé que lorsque le token actif est un
     `SwitchUserToken` ; `ROLE_PREVIOUS_ADMIN` est l'écriture legacy.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q3. Where does Symfony keep the admin's authentication during a switch?"
     - [ ] A. In a dedicated session key `_security_previous`
@@ -352,7 +375,7 @@ session.
 
     **Why:** `switch_user: true` exige par défaut `ROLE_ALLOWED_TO_SWITCH` ;
     remplacez-le avec l'option `role`.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ## Key takeaways
 
@@ -389,7 +412,7 @@ session.
   réversible par conception.
 
 ## Official References
-- [Symfony docs — Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html)
+- [Symfony docs — Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html)
 - [Symfony source — SwitchUserListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/SwitchUserListener.php)
 - [Symfony source — SwitchUserEvent](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Event/SwitchUserEvent.php)
 
@@ -403,7 +426,7 @@ session.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/impersonating_user.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/impersonating_user.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

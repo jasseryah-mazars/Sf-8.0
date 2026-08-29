@@ -18,6 +18,20 @@ IteratorAggregate + Countable + ArrayAccess.
     **Theory:** [SPL](../php-web-security/spl.md) · [OOP](../php-web-security/oop.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Fabriquer une collection PHP maison qui se comporte comme un tableau natif (`foreach`, `count()`, `$set[$i]`) tout en restant immuable et typée.
+
+**Pourquoi ça existe ?** Comprendre comment `foreach` fonctionne "sous le capot" via `IteratorAggregate` démystifie tout un pan du langage utilisé partout dans Symfony (le composant Finder, par exemple).
+
+**🏠 Analogie de la vraie vie :** Fabriquer soi-même une prise électrique aux normes — une fois que tu sais exactement ce qu'exige la norme (les interfaces SPL), n'importe quel appareil standard (`foreach`, `count()`) s'y branche sans surprise.
+
+**Symfony dans la vraie vie :** Une fois `IteratorAggregate` implémentée, ta classe fonctionne directement dans un `{% for %}` Twig ou un `foreach` PHP classique — exactement comme un vrai tableau, sans code supplémentaire.
+
+**⚠️ Erreur fréquente :** rendre la collection mutable (permettre de modifier ses éléments après création) alors que l'objectif est justement l'immuabilité — vérifie qu'aucune méthode ne permet de changer l'état interne après construction.
+
+**🧠 Comment le mémoriser :** "Implémenter les bonnes interfaces, c'est obtenir le comportement natif gratuitement — sans réécrire `foreach` toi-même."
+
 ## Objective
 
 After this lab you can hand-build a domain collection that PHP treats as a

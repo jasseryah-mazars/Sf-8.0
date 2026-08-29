@@ -37,6 +37,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Dans un runtime longue durée (worker Messenger, FrankenPHP), le container survit entre les requêtes — donc l'état mémorisé d'un service peut "fuir" vers la requête suivante si on ne le réinitialise pas.
+
+### Imagine dans la vraie vie
+Un runtime worker est une chambre d'hôtel louée à l'heure plutôt que reconstruite pour chaque client : les murs et meubles (le container et ses services) restent, mais le ménage doit changer les draps entre deux clients. Le `services_resetter` est la checklist du ménage.
+
+### Dans Symfony
+Un service qui accumule un cache interne (`private array $cacheLocal = []`) dans un worker Messenger doit être réinitialisé entre chaque message — sinon le cache grossit indéfiniment et peut mélanger les données de deux messages différents.
+
+### Exemple simple
+```php
+#[AsTaggedItem('kernel.reset', method: 'reinitialiser')]
+class ServiceAvecEtat implements ResetInterface {
+    public function reset(): void { $this->cacheLocal = []; }
+}
+```
+
+### Comment le mémoriser 🧠
+Seuls les services **déjà instanciés** sont réinitialisés — un service jamais utilisé pendant le cycle n'a rien à nettoyer, donc `services_resetter` ne le touche même pas.
+
+---
+
+
 ## Theory
 
 Le PHP-FPM classique vous offre un superpouvoir gratuit : **le processus meurt
@@ -312,7 +337,7 @@ service non shared quand une instance fraîche par injection est acceptable.
 
     **Why:** Il itère uniquement sur les services tagués instanciés et invoque
     leur(s) méthode(s) de reset ; le container et les instances survivent.
-    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset).
+    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset).
 
 ??? question "Q2. How does a service become resettable with zero configuration?"
     - [x] A. Implement `Symfony\Contracts\Service\ResetInterface` — autoconfiguration adds the `kernel.reset` tag ✅
@@ -322,7 +347,7 @@ service non shared quand une instance fraîche par injection est acceptable.
 
     **Why:** Le framework autoconfigure les implémenteurs de `ResetInterface`
     avec le tag `kernel.reset` (méthode `reset`).
-    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset).
+    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset).
 
 ??? question "Q3. In `messenger:consume`, what is the role of `--limit=100` relative to service resetting?"
     - [x] A. It stops the worker after 100 messages so a supervisor restarts a fresh process — a backstop for leaks reset cannot fix ✅
@@ -333,7 +358,7 @@ service non shared quand une instance fraîche par injection est acceptable.
     **Why:** Le reset gère l'état par message ; le recyclage du processus
     (`--limit`/`--time-limit`/`--memory-limit`) gère la croissance mémoire et
     l'état non réinitialisable.
-    **Ref:** [Messenger](https://symfony.com/doc/current/messenger.html).
+    **Ref:** [Messenger](https://symfony.com/doc/8.0/messenger.html).
 
 ??? question "Q4. A service tagged `kernel.reset` was never instantiated during the request. What happens at reset time?"
     - [x] A. Nothing — the resetter only touches initialized services ✅
@@ -344,7 +369,7 @@ service non shared quand une instance fraîche par injection est acceptable.
     **Why:** Forcer l'instanciation juste pour réinitialiser ruinerait la
     laziness ; l'itérateur du resetter ne produit que les services qui
     existent.
-    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset).
+    **Ref:** [dic tags — kernel.reset](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset).
 
 ## Key takeaways
 
@@ -386,8 +411,8 @@ service non shared quand une instance fraîche par injection est acceptable.
 
 ## Official References
 
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
-- [Official Symfony docs — Built-in Symfony Service Tags (`kernel.reset`)](https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
+- [Official Symfony docs — Built-in Symfony Service Tags (`kernel.reset`)](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
 - [Symfony source — ServicesResetter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DependencyInjection/ServicesResetter.php)
 
 ## Video references
@@ -400,7 +425,7 @@ service non shared quand une instance fraîche par injection est acceptable.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -32,6 +32,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit des centaines de services tout prêts — tu les réclames par leur **type** (une interface), jamais par un identifiant brut à mémoriser.
+
+### Imagine dans la vraie vie
+Les services intégrés du framework sont le garde-manger de la maison — des centaines de produits déjà en stock (`router`, `logger`, `serializer`). Tu ne les cherches pas par numéro d'étagère (id brut) ; tu demandes par *type d'ingrédient* (l'interface autowirée) et la cuisine sait quel bocal prendre.
+
+### Dans Symfony
+Injecter `LoggerInterface` fonctionne sans jamais connaître le nom exact du service de log configuré — Symfony résout automatiquement quelle implémentation concrète fournir.
+
+### Exemple simple
+```console
+$ php bin/console debug:autowiring logger
+```
+
+### Comment le mémoriser 🧠
+Injecte toujours `RequestStack` (puis `getCurrentRequest()`) dans un service — **jamais** un `Request` brut, qui n'existe pas encore au moment où le container construit tes services.
+
+---
+
+
 ## Theory
 
 FrameworkBundle (et les autres bundles) enregistrent des centaines de services
@@ -264,7 +286,7 @@ l'atteignez en injectant le service qui le possède, pas par id.
     - [ ] D. Use `$container->get('request')`
 
     **Why:** La request est propre à chaque cycle et peut changer ; `RequestStack`
-    fournit un accès sûr. **Ref:** [RequestStack](https://symfony.com/doc/current/service_container/request.html).
+    fournit un accès sûr. **Ref:** [RequestStack](https://symfony.com/doc/8.0/service_container/request.html).
 
 ??? question "Q2. Which command shows private services too?"
     - [ ] A. `debug:autowiring`
@@ -274,7 +296,7 @@ l'atteignez en injectant le service qui le possède, pas par id.
 
     **Why:** Par défaut, `debug:container` ne liste que les services publics et
     les alias.
-    **Ref:** [Debugging services](https://symfony.com/doc/current/service_container/debug.html).
+    **Ref:** [Debugging services](https://symfony.com/doc/8.0/service_container/debug.html).
 
 ??? question "Q3. `parameter_bag` is…"
     - [x] A. A service exposing container parameters via `ParameterBagInterface` ✅
@@ -283,7 +305,7 @@ l'atteignez en injectant le service qui le possède, pas par id.
     - [ ] D. A compiler pass
 
     **Why:** Il permet aux services de lire les parameters à l'exécution via une
-    interface injectée. **Ref:** [Parameters](https://symfony.com/doc/current/configuration.html#configuration-parameters).
+    interface injectée. **Ref:** [Parameters](https://symfony.com/doc/8.0/configuration.html#configuration-parameters).
 
 ## Key takeaways
 
@@ -312,8 +334,8 @@ l'atteignez en injectant le service qui le possède, pas par id.
   intégrés en autowirant une interface, pas via l'id brut.
 
 ## Official References
-- [Official Symfony docs — Debugging services](https://symfony.com/doc/current/service_container/debug.html)
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
+- [Official Symfony docs — Debugging services](https://symfony.com/doc/8.0/service_container/debug.html)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
 - [Symfony source — FrameworkExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/FrameworkExtension.php)
 
 ## Video references
@@ -326,7 +348,7 @@ l'atteignez en injectant le service qui le possède, pas par id.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/request.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/request.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

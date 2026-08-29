@@ -30,6 +30,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit une bibliothèque de champs prêts à l'emploi — pas besoin de fabriquer un champ "liste déroulante" ou "case à cocher" à la main.
+
+### Imagine dans la vraie vie
+Les types intégrés sont le mur des attaches d'un magasin de bricolage — vis, boulons déjà calibrés, donc tu prends la bonne pièce plutôt que d'en usiner une toi-même. Commander au restaurant montre comment `ChoiceType` choisit son widget : peux-tu prendre plusieurs plats (`multiple`) ? les options sont-elles affichées ouvertement ou cachées derrière un menu (`expanded`) ?
+
+### Dans Symfony
+`ChoiceType` avec `expanded: true, multiple: true` devient automatiquement une liste de cases à cocher ; avec les deux à `false`, c'est un simple menu déroulant.
+
+### Exemple simple
+```php
+$builder->add('couleurs', ChoiceType::class, [
+    'choices' => ['Rouge' => 'r', 'Bleu' => 'b'], 'expanded' => true, 'multiple' => true,
+]);
+```
+
+### Comment le mémoriser 🧠
+`expanded` × `multiple` = 4 combinaisons, 4 widgets : menu déroulant, boutons radio, cases à cocher, ou menu multi-sélection.
+
+
 ## Theory
 
 Symfony fournit un catalogue de types de champs sous
@@ -329,7 +351,7 @@ personnalisé que lorsqu'une forme de champ revient régulièrement.
 
     **Why:** Déplié + multiple ⇒ checkboxes ; déplié + simple ⇒ radios ; replié ⇒
     `<select>`.
-    **Ref:** [ChoiceType](https://symfony.com/doc/current/reference/forms/types/choice.html).
+    **Ref:** [ChoiceType](https://symfony.com/doc/8.0/reference/forms/types/choice.html).
 
 ??? question "Q2. What does `MoneyType`'s `divisor` do?"
     - [x] A. Scales the model value (e.g. `100` stores/reads cents) ✅
@@ -339,7 +361,7 @@ personnalisé que lorsqu'une forme de champ revient régulièrement.
 
     **Why:** Le montant affiché est divisé par `divisor` pour produire la valeur
     du modèle, donc `100` vous permet de stocker des centimes entiers.
-    **Ref:** [MoneyType](https://symfony.com/doc/current/reference/forms/types/money.html).
+    **Ref:** [MoneyType](https://symfony.com/doc/8.0/reference/forms/types/money.html).
 
 ??? question "Q3. For a mapped `CollectionType` to call adder/remover methods you set…"
     - [x] A. `by_reference => false` ✅
@@ -349,7 +371,7 @@ personnalisé que lorsqu'une forme de champ revient régulièrement.
 
     **Why:** `by_reference => false` force le form à utiliser les méthodes
     add/remove du parent au lieu de muter la collection retournée en place.
-    **Ref:** [CollectionType](https://symfony.com/doc/current/reference/forms/types/collection.html).
+    **Ref:** [CollectionType](https://symfony.com/doc/8.0/reference/forms/types/collection.html).
 
 ## Key takeaways
 
@@ -377,8 +399,8 @@ personnalisé que lorsqu'une forme de champ revient régulièrement.
 - **Confused with:** [File uploads](file-upload.md) — `FileType` semble scalaire mais produit un `UploadedFile`, pas une chaîne.
 
 ## Official References
-- [Official Symfony docs — Form types reference](https://symfony.com/doc/current/reference/forms/types.html)
-- [Official Symfony docs — CollectionType](https://symfony.com/doc/current/reference/forms/types/collection.html)
+- [Official Symfony docs — Form types reference](https://symfony.com/doc/8.0/reference/forms/types.html)
+- [Official Symfony docs — CollectionType](https://symfony.com/doc/8.0/reference/forms/types/collection.html)
 - [Symfony source — Core form types](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Form/Extension/Core/Type)
 
 ## Video references
@@ -390,7 +412,7 @@ personnalisé que lorsqu'une forme de champ revient régulièrement.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/forms/types/choice.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/forms/types/choice.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

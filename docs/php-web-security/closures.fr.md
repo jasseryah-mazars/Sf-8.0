@@ -29,6 +29,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`use ($x)` prend une photo de `$x` au moment où la fonction est écrite ; `use (&$x)` branche une caméra en direct sur `$x`.
+
+### Imagine dans la vraie vie
+Tu prends en photo le tableau des scores à la mi-temps : la photo ne changera plus jamais, même si le score évolue ensuite — c'est `use ($x)`. Une caméra de retransmission en direct, elle, montre le score qui change en temps réel — c'est `use (&$x)`, avec le `&` comme antenne de la caméra.
+
+### Dans Symfony
+Les closures sont partout dans le code applicatif Symfony : callbacks de validation, filtres de collection, gestionnaires d'événements passés en argument. Se tromper entre capture par valeur et par référence est une source classique de bugs silencieux ("pourquoi ma variable ne change jamais dans la closure ?").
+
+### Exemple simple
+```php
+$total = 0;
+$ajouter = function (int $n) use (&$total) { $total += $n; }; // référence : $total change réellement
+$ajouter(5);
+echo $total; // 5
+```
+
+### Comment le mémoriser 🧠
+Pas de `&` = photo figée pour toujours. `&` = **&**caméra branchée en direct sur l'original.
+
+
 ## Theory
 
 Une **fonction anonyme** est une fonction sans nom, représentée à l'exécution
@@ -295,7 +318,7 @@ flowchart LR
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/index.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/index.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

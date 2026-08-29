@@ -24,7 +24,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Controllers](../controllers/index.md) · [DI](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un type de formulaire est un modèle de papier réutilisable — tu le décris une fois dans une classe, et Symfony construit le formulaire réel à partir de ce modèle.
+
+### Imagine dans la vraie vie
+Un type de formulaire est un **formulaire papier vierge** ; `createForm()` te remet une copie neuve avec un **employé** attaché. Quand tu soumets, l'employé lit chaque champ et classe les réponses dans ton **dossier** — `data_class` nomme quel dossier (une classe `InscriptionData`). Sans `data_class`, l'employé garde juste une pile de notes libres (un tableau associatif).
+
+### Dans Symfony
+`ProduitType` (une classe de type de formulaire) peut être réutilisée pour créer le formulaire d'ajout **et** le formulaire d'édition d'un produit — même code, deux contextes différents.
+
+### Exemple simple
+```php
+$form = $this->createForm(ProduitType::class, $produit); // $produit = data_class
+```
+
+### Comment le mémoriser 🧠
+Sans `data_class`, les données soumises restent un simple **tableau** — pas un objet. C'est le piège classique : oublier `data_class` et se demander pourquoi `$data->getNom()` plante.
 
 ## Theory
 
@@ -356,6 +377,8 @@ CSRF for you).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which two methods do you override on `AbstractType`?"
     - [ ] A. `build()` and `getOptions()`
     - [x] B. `buildForm()` and `configureOptions()` ✅
@@ -365,7 +388,7 @@ CSRF for you).
     **Why:** `buildForm(FormBuilderInterface, array)` adds fields;
     `configureOptions(OptionsResolver)` declares options. `getName` was removed;
     `buildView` exists but is not the primary pair.
-    **Ref:** [Creating forms](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Creating forms](https://symfony.com/doc/8.0/forms.html).
 
 ??? question "Q2. What does a compound form return from `getData()` when `data_class` is unset?"
     - [ ] A. `null` always
@@ -375,7 +398,7 @@ CSRF for you).
 
     **Why:** With no `data_class`, the data mapper maps children into/out of an
     array. Set `data_class` to bind to an object.
-    **Ref:** [Form types](https://symfony.com/doc/current/form/data_class.html).
+    **Ref:** [Form types](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -402,8 +425,8 @@ CSRF for you).
 - **Confused with:** [Form types](types.md) — a *type class* describes fields; the *resolved type* is what the factory actually builds.
 
 ## Official References
-- [Official Symfony docs — Forms](https://symfony.com/doc/current/forms.html)
-- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/current/form/data_class.html)
+- [Official Symfony docs — Forms](https://symfony.com/doc/8.0/forms.html)
+- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/8.0/forms.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
 
 ## Video references
@@ -415,7 +438,7 @@ CSRF for you).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/forms.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/forms.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

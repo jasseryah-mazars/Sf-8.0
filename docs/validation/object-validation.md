@@ -24,9 +24,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Le validateur ne dit jamais juste "oui/non" — il te rend une liste détaillée de tout ce qui cloche, même vide.
+
+### Imagine dans la vraie vie
+Le contrôle des bagages à l'aéroport. Toi (la compagnie) ne fouilles jamais les bagages toi-même — tu envoies chacun sur le tapis de contrôle (le `ValidatorInterface`) et reçois un rapport détaillé de tout ce qui a été signalé (la `ConstraintViolationList`). Le tapis ne crie jamais "refusé" — il te tend une liste, même vide.
+
+### Dans Symfony
+`$violations = $validator->validate($produit);` renvoie toujours une liste (jamais un booléen, jamais une exception) — c'est `count($violations)` qui te dit si c'est valide.
+
+### Exemple simple
+```php
+$violations = $validator->validate($produit);
+if (count($violations) > 0) { /* traiter les erreurs */ }
+```
+
+### Comment le mémoriser 🧠
+Le validateur ne **lance jamais** d'exception sur un échec de validation — il rend toujours une liste, même vide. Confondre ça avec un booléen est le piège numéro un.
 
 Symfony validates **values against constraints**. The usual value is an object
 whose *constraints* are declared with PHP attributes. You do not validate by
@@ -349,6 +369,8 @@ automatically.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `ValidatorInterface::validate()` return when the object is invalid?"
     - [ ] A. `false`
     - [ ] B. It throws a `ValidationFailedException`
@@ -357,7 +379,7 @@ automatically.
 
     **Why:** `validate()` always returns a violation list; you inspect it with
     `count()`. It never throws or returns a bool.
-    **Ref:** [Validation](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q2. Which method checks a value *without* modifying the object?"
     - [ ] A. `validate()`
@@ -367,7 +389,7 @@ automatically.
 
     **Why:** `validatePropertyValue($objectOrClass, $property, $value)` validates a
     hypothetical value; the object's state is untouched.
-    **Ref:** [ValidatorInterface](https://symfony.com/doc/current/validation.html).
+    **Ref:** [ValidatorInterface](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q3. How is `#[Assert\...]` attribute metadata turned into constraints?"
     - [ ] A. Parsed on every `validate()` call by reflection
@@ -377,7 +399,7 @@ automatically.
 
     **Why:** The `LazyLoadingMetadataFactory` uses `AttributeLoader` to build
     `ClassMetadata`, cached in a PSR-6 pool so reflection runs once per class.
-    **Ref:** [Validator internals](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validator internals](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -403,7 +425,7 @@ automatically.
 - **Confused with:** [Scopes](scopes.md) — *where* constraints attach vs *how* you run the validator here.
 
 ## Official References
-- [Official Symfony docs — Validation](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveValidator.php)
 
 ## Video references
@@ -415,7 +437,7 @@ automatically.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

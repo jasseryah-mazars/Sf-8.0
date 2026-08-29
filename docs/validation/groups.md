@@ -24,9 +24,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Object Validation](object-validation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Les groupes permettent de valider seulement un sous-ensemble de règles selon le contexte — pas les mêmes règles à l'inscription et à l'édition du profil.
+
+### Imagine dans la vraie vie
+Les groupes sont les **différentes files de contrôle** à l'aéroport. Un membre d'équipage, un passager national et un passager international passent par des jeux de scanners différents alors que c'est le même point de contrôle. Valider un groupe, c'est choisir la file.
+
+### Dans Symfony
+Un formulaire d'inscription peut exiger un mot de passe (`groups: ['inscription']`), tandis qu'un formulaire d'édition de profil valide le même objet **sans** ce groupe — même entité, règles différentes selon le contexte.
+
+### Exemple simple
+```php
+$validator->validate($utilisateur, null, ['inscription']);
+```
+
+### Comment le mémoriser 🧠
+Le groupe `Default` (celui utilisé quand tu n'en précises aucun) se comporte différemment sur une classe avec une `GroupSequence` — c'est la nuance la plus testée de ce chapitre.
 
 Sometimes only *some* constraints apply — a `User` at *registration* needs a
 password, but at *profile edit* it does not. **Groups** let you tag constraints
@@ -241,6 +260,8 @@ context** is often clearer than many groups. In forms, set the group via the
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. You call `validate($obj, groups: ['edit'])`. Which constraints run?"
     - [ ] A. `Default` + `edit`
     - [x] B. Only constraints in the `edit` group ✅
@@ -248,7 +269,7 @@ context** is often clearer than many groups. In forms, set the group via the
     - [ ] D. Only `Default`
 
     **Why:** Only the requested groups run; `Default` is not implied.
-    **Ref:** [Validation groups](https://symfony.com/doc/current/validation/groups.html).
+    **Ref:** [Validation groups](https://symfony.com/doc/8.0/validation/groups.html).
 
 ??? question "Q2. For a class with a `GroupSequence`, validating the `Default` group:"
     - [x] A. Triggers the group sequence ✅
@@ -258,7 +279,7 @@ context** is often clearer than many groups. In forms, set the group via the
 
     **Why:** On a sequenced class, `Default` maps to the sequence; use the
     `{ClassName}` group for the flat run.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q3. For class `App\Entity\User` with no sequence, the `{ClassName}` group is:"
     - [ ] A. `App\Entity\User`
@@ -268,7 +289,7 @@ context** is often clearer than many groups. In forms, set the group via the
 
     **Why:** The `{ClassName}` group uses the short class name and equals `Default`
     unless a sequence is defined.
-    **Ref:** [Validation groups](https://symfony.com/doc/current/validation/groups.html).
+    **Ref:** [Validation groups](https://symfony.com/doc/8.0/validation/groups.html).
 
 ## Key takeaways
 
@@ -292,7 +313,7 @@ context** is often clearer than many groups. In forms, set the group via the
 - **Confused with:** [Form Handling](../forms/handling.md) — in forms you set groups via the `validation_groups` option, not the `validate()` argument.
 
 ## Official References
-- [Official Symfony docs — Validation groups](https://symfony.com/doc/current/validation/groups.html)
+- [Official Symfony docs — Validation groups](https://symfony.com/doc/8.0/validation/groups.html)
 - [Symfony source — Constraint::DEFAULT_GROUP](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 
 ## Video references
@@ -304,7 +325,7 @@ context** is often clearer than many groups. In forms, set the group via the
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/groups.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/groups.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

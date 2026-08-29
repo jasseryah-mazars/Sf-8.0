@@ -27,7 +27,28 @@
     **Est. time:** 10 min ·
     **Prerequisites:** [Components](components.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le code de Symfony est gratuit à utiliser, modifier et même revendre — la seule règle est de garder la petite mention de copyright ; le nom "Symfony" lui-même est protégé séparément.
+
+### Imagine dans la vraie vie
+Une recette de cuisine publiée gratuitement dans un livre communautaire : n'importe qui peut la cuisiner, l'adapter, et même la vendre dans son propre restaurant fermé au public — la seule règle est de garder la petite mention "recette de…". Le nom et le logo du restaurant original, eux, restent protégés : tu peux dire "fait à partir de la recette de Mamie", mais tu ne peux pas ouvrir un restaurant appelé "Chez Mamie" sans autorisation.
+
+### Dans Symfony
+Tu peux construire une application commerciale et fermée avec Symfony sans jamais publier ton propre code — mais tu ne peux pas appeler ton produit "SymfonyCloud" ou utiliser son logo comme si c'était officiel.
+
+### Exemple simple
+```json
+{ "license": "MIT" }
+```
+
+### Comment le mémoriser 🧠
+**Licence = le CODE** (utilisable librement). **Marque déposée = le NOM/logo** (protégé séparément). Deux papiers différents, deux règles différentes.
 
 ## Theory
 
@@ -108,6 +129,34 @@ the trademark. That mirrors correct trademark hygiene.
     }
     ```
 
+=== "Worked example: checking a dependency's license"
+
+    ```php
+    <?php
+    declare(strict_types=1);
+
+    // A minimal worked example: read composer.lock and flag any dependency
+    // whose license is NOT MIT-compatible before deploying to a closed-source app.
+    $lock = json_decode(file_get_contents(__DIR__.'/composer.lock'), true);
+
+    $permissive = ['MIT', 'BSD-2-Clause', 'BSD-3-Clause', 'Apache-2.0'];
+
+    foreach ($lock['packages'] as $package) {
+        $licenses = $package['license'] ?? [];
+        $risky = array_diff($licenses, $permissive);
+
+        if ($risky !== []) {
+            // e.g. a GPL-licensed package would land here — worth a manual review
+            // before bundling it into a closed-source product.
+            printf("Review needed: %s (%s)\n", $package['name'], implode(', ', $licenses));
+        }
+    }
+    ```
+
+    Symfony's own packages are always MIT, so they never trigger this check —
+    it is third-party dependencies (not covered by Symfony's own license) that
+    need this kind of review.
+
 ## Best practices & anti-patterns
 
 | ✅ Do | ❌ Avoid |
@@ -147,6 +196,8 @@ trademark when marketing.
     SAS's trademark policy, not the MIT license.
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Under which license is Symfony released?"
     - [x] A. MIT ✅
@@ -192,7 +243,7 @@ trademark when marketing.
 - **Confused with:** [BC Promise](bc-promise.md) — a *legal* guarantee about the code licence, not a *technical* guarantee about API stability.
 
 ## Official References
-- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/current/contributing/code/bc.html)
+- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/8.0/contributing/code/bc.html)
 - [Symfony source — LICENSE (MIT)](https://github.com/symfony/symfony/blob/8.0/LICENSE)
 - [MIT License text](https://opensource.org/license/mit)
 - [Symfony trademark policy](https://symfony.com/trademark)
@@ -206,7 +257,7 @@ trademark when marketing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

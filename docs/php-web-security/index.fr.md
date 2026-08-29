@@ -37,19 +37,19 @@ devient de la lecture plutôt que de la découverte.
   new-in-initializer, **property hooks & visibilité asymétrique (8.4)**, types DNF.
 - [Object-Oriented Programming](oop.md) — classes, visibilité, `static`, late
   static binding, promotion de constructeur, `clone`, méthodes magiques.
-- [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, alias, règles de
-  résolution des noms.
 - [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
   `instanceof`, types union/intersection/DNF.
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, syntaxe first-class callable.
 - [Abstract Classes](abstract-classes.md) — classe abstraite vs interface, le
   pattern template method.
-- [Traits](traits.md) — résolution de conflits (`insteadof`/`as`), membres
-  abstraits/statiques, précédence.
 - [Exception & Error Handling](exceptions.md) — la hiérarchie `Throwable`,
   `try`/`catch`/`finally`, exceptions personnalisées, niveaux d'erreur,
   `set_error_handler`.
+- [Traits](traits.md) — résolution de conflits (`insteadof`/`as`), membres
+  abstraits/statiques, précédence.
+- [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, alias, règles de
+  résolution des noms.
 - [PHP Extensions](extensions.md) — `mbstring`, `intl`, `ctype`, `iconv`,
   `pdo`, `opcache` et comment les détecter/exiger.
 - [SPL](spl.md) — `ArrayAccess`, `Iterator`/`IteratorAggregate`, `Countable`,
@@ -76,8 +76,23 @@ devient de la lecture plutôt que de la découverte.
 
 <small>Next stage: [HTTP](../http/index.md) · Related: [Security](../security/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le socle de langage PHP moderne (enums, closures, attributs...) plus le vocabulaire des attaques web courantes (XSS, CSRF...) — les deux bases sur lesquelles tout le reste de Symfony est construit.
+
+**Pourquoi ça existe ?** Symfony est du PHP moderne idiomatique : sans maîtriser les enums, les closures ou la promotion de constructeur, une bonne partie du code Symfony reste illisible. Et sans connaître les attaques qu'il défend, les fonctionnalités de sécurité paraissent arbitraires.
+
+**🏠 Analogie de la vraie vie :** Apprendre l'alphabet et la grammaire avant de lire un roman. Tu ne peux pas comprendre une phrase complexe (un service Symfony) si tu ne reconnais pas encore les mots de base (enums, interfaces, closures) qui la composent.
+
+**Symfony dans la vraie vie :** Le service container utilise massivement les interfaces et l'injection par constructeur — deux concepts purement PHP enseignés ici, avant même de parler de Symfony.
+
+**⚠️ Erreur fréquente :** vouloir sauter cette étape parce qu'elle "n'est que du PHP" — plusieurs pièges de l'examen portent précisément sur des subtilités PHP (ex. `NotBlank` vs `NotNull`, `===` sur les enums) que Symfony réutilise partout ensuite.
+
+**🧠 Comment le mémoriser :** "Maîtrise la langue avant de lire le livre — chaque chapitre Symfony suivant suppose que celui-ci est déjà acquis."
+
+
 ## Official References
 
 - [Symfony documentation — PHP Manual](https://www.php.net/manual/en/)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

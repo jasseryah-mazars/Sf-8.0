@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony, c'est une boîte à outils d'appareils indépendants (les composants) plus une cuisine tout équipée qui les branche ensemble pour toi (le framework).
+
+### Imagine dans la vraie vie
+Une bouilloire, un grille-pain et un mixeur fonctionnent très bien chacun de leur côté, débranchés de tout le reste — ce sont les composants. Les "contrats" sont la prise électrique standard sur laquelle chacun se branche, permettant d'échanger une marque contre une autre sans tout recâbler. Le framework, lui, est la cuisine entièrement équipée qui fixe chaque appareil à sa place et fait tout le câblage pour toi.
+
+### Dans Symfony
+Tu peux utiliser `symfony/finder` ou `symfony/console` dans un projet PHP qui n'a rien à voir avec le framework Symfony complet — Laravel et Drupal font exactement ça avec plusieurs composants.
+
+### Exemple simple
+```console
+$ composer require symfony/finder --no-install-recommends
+```
+Aucune installation du framework complet n'est nécessaire pour utiliser ce seul composant.
+
+### Comment le mémoriser 🧠
+**Composant** = appareil autonome. **Contrat** = prise standard entre appareils. **Framework** = cuisine qui branche tout. **Bundle** = meuble qui range un appareil dans la cuisine.
+
+
 ## Theory
 
 Symfony est **deux choses à la fois** : un ensemble de bibliothèques PHP autonomes
@@ -265,7 +286,7 @@ pas en les instanciant.
     - [ ] C. A bundle that only runs inside the framework
 
     **Why:** Les components sont des bibliothèques découplées, utilisables sans le framework.
-    **Ref:** [The Components](https://symfony.com/doc/current/components/index.html).
+    **Ref:** [The Components](https://symfony.com/doc/8.0/components/index.html).
 
 ??? question "Q2. What do `symfony/*-contracts` packages contain?"
     - [x] A. Stable interfaces/traits to depend on ✅
@@ -281,7 +302,7 @@ pas en les instanciant.
     - [ ] C. Only in dev
 
     **Why:** Les components sont découplés et installables indépendamment. **Ref:**
-    [Routing component](https://symfony.com/doc/current/components/routing.html).
+    [Routing component](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -303,7 +324,7 @@ pas en les instanciant.
 - **Confused with:** [Interoperability & PSRs](psr.md) — les contracts sont des packages d'interfaces propres à Symfony ; les PSR sont des standards inter-éditeurs.
 
 ## Official References
-- [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
+- [Official docs — The Components](https://symfony.com/doc/8.0/components/index.html)
 - [Symfony Contracts](https://github.com/symfony/contracts)
 - [Symfony source — components](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component)
 
@@ -316,7 +337,7 @@ pas en les instanciant.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/index.html) — certaines pages de la documentation Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/index.html) — certaines pages de la documentation Symfony intègrent un screencast.
 
 ## Confidence check
 

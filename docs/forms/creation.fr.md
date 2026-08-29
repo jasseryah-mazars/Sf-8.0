@@ -26,6 +26,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un type de formulaire est un modèle de papier réutilisable — tu le décris une fois dans une classe, et Symfony construit le formulaire réel à partir de ce modèle.
+
+### Imagine dans la vraie vie
+Un type de formulaire est un **formulaire papier vierge** ; `createForm()` te remet une copie neuve avec un **employé** attaché. Quand tu soumets, l'employé lit chaque champ et classe les réponses dans ton **dossier** — `data_class` nomme quel dossier (une classe `InscriptionData`). Sans `data_class`, l'employé garde juste une pile de notes libres (un tableau associatif).
+
+### Dans Symfony
+`ProduitType` (une classe de type de formulaire) peut être réutilisée pour créer le formulaire d'ajout **et** le formulaire d'édition d'un produit — même code, deux contextes différents.
+
+### Exemple simple
+```php
+$form = $this->createForm(ProduitType::class, $produit); // $produit = data_class
+```
+
+### Comment le mémoriser 🧠
+Sans `data_class`, les données soumises restent un simple **tableau** — pas un objet. C'est le piège classique : oublier `data_class` et se demander pourquoi `$data->getNom()` plante.
+
+
 ## Theory
 
 Un form Symfony est un graphe d'objets d'instances de `Symfony\Component\Form\FormInterface`
@@ -370,7 +390,7 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
     **Why:** `buildForm(FormBuilderInterface, array)` ajoute les champs ;
     `configureOptions(OptionsResolver)` déclare les options. `getName` a été
     supprimée ; `buildView` existe mais n'est pas la paire principale.
-    **Ref:** [Creating forms](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Creating forms](https://symfony.com/doc/8.0/forms.html).
 
 ??? question "Q2. What does a compound form return from `getData()` when `data_class` is unset?"
     - [ ] A. `null` always
@@ -380,7 +400,7 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
 
     **Why:** Sans `data_class`, le data mapper mappe les enfants vers/depuis un
     array. Définissez `data_class` pour lier à un objet.
-    **Ref:** [Form types](https://symfony.com/doc/current/form/data_class.html).
+    **Ref:** [Form types](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -407,8 +427,8 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
 - **Confused with:** [Form types](types.md) — une *classe de type* décrit les champs ; le *resolved type* est ce que la factory construit réellement.
 
 ## Official References
-- [Official Symfony docs — Forms](https://symfony.com/doc/current/forms.html)
-- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/current/form/data_class.html)
+- [Official Symfony docs — Forms](https://symfony.com/doc/8.0/forms.html)
+- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/8.0/forms.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
 
 ## Video references
@@ -420,7 +440,7 @@ composant Form gère quand même pour vous les soumissions partielles et le CSRF
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/forms.html) — certaines pages de la doc Symfony embarquent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/forms.html) — certaines pages de la doc Symfony embarquent un screencast.
 
 ## Confidence check
 

@@ -15,6 +15,20 @@ tags:
     [Form types](../forms/types.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Faire qu'un simple champ texte du navigateur (`"48.85,2.35"`) devienne automatiquement un vrai objet PHP typé (`GeoPoint`) côté serveur, et inversement à l'affichage.
+
+**Pourquoi ça existe ?** Sans transformateur, il faudrait convertir manuellement cette chaîne en objet à chaque soumission de formulaire, et reconvertir l'objet en chaîne à chaque affichage — le transformateur automatise ces deux sens.
+
+**🏠 Analogie de la vraie vie :** Un bureau de change à une frontière : `transform()` convertit ta monnaie locale (l'objet PHP) en devise étrangère pour l'affichage (la vue) ; `reverseTransform()` fait l'inverse quand la monnaie étrangère revient.
+
+**Symfony dans la vraie vie :** Le visiteur voit et remplit `"48.85,2.35"` dans un simple champ texte, mais ton contrôleur reçoit directement un objet `GeoPoint` déjà validé et typé, prêt à l'emploi.
+
+**⚠️ Erreur fréquente :** confondre `addModelTransformer` et `addViewTransformer` — l'un transforme entre modèle et normalisé, l'autre entre normalisé et vue ; les inverser casse la conversion.
+
+**🧠 Comment le mémoriser :** "`transform` va vers l'écran (vue) ; `reverseTransform` revient vers l'objet (modèle)."
+
 ## Objective
 
 After this lab you can turn a plain text field into a *typed* field: the browser

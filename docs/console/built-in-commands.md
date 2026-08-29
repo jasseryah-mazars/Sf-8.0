@@ -27,6 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Toute application Symfony vient déjà avec des commandes que tu n'as jamais écrites — `list`, `help`, `about`, et toute la famille `debug:*`.
+
+### Imagine dans la vraie vie
+Un smartphone tout neuf fait déjà tourner des applications que tu n'as jamais installées : le composeur, l'appareil photo et les réglages sont livrés avec le système d'exploitation lui-même, tout comme `list`, `help`, `about` existent dans chaque `Application` Console.
+
+### Dans Symfony
+`php bin/console` sans aucun argument affiche automatiquement la liste de toutes les commandes disponibles — c'est la commande `list`, exécutée par défaut, pas `help`.
+
+### Exemple simple
+```console
+$ php bin/console about   # infos sur l'environnement, sans écrire de code
+```
+
+### Comment le mémoriser 🧠
+`make:*` vient du **MakerBundle optionnel** — pas du cœur de Symfony. Ne jamais présumer qu'une commande `make:*` existe sur un projet sans ce bundle installé.
+
 ---
 
 ## Theory
@@ -254,6 +277,8 @@ request — it is a CLI/deploy step.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which command runs when you type `php bin/console` with no arguments?"
     - [ ] A. `help`
     - [x] B. `list` ✅
@@ -261,7 +286,7 @@ request — it is a CLI/deploy step.
     - [ ] D. `debug:container`
 
     **Why:** `list` is the Application's default command. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q2. Which of these is NOT part of Symfony core / FrameworkBundle?"
     - [ ] A. `cache:clear`
@@ -270,7 +295,7 @@ request — it is a CLI/deploy step.
     - [ ] D. `about`
 
     **Why:** `make:*` commands come from the optional MakerBundle. **Ref:**
-    [MakerBundle](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html).
+    [MakerBundle](https://symfony.com/doc/8.0/bundles.html).
 
 ??? question "Q3. How does `bin/console` obtain the `Application` in Symfony 8?"
     - [ ] A. It calls `Application::create()` statically
@@ -279,7 +304,7 @@ request — it is a CLI/deploy step.
     - [ ] D. The web front controller instantiates it
 
     **Why:** the Runtime component runs the closure returned by `bin/console`.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html).
 
 ??? question "Q4. What does `php bin/console ca:cl` do when unambiguous?"
     - [x] A. Runs `cache:clear` via name abbreviation ✅
@@ -288,7 +313,7 @@ request — it is a CLI/deploy step.
     - [ ] D. Clears only the `cl` namespace
 
     **Why:** `find()` resolves unambiguous abbreviations. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -315,8 +340,8 @@ request — it is a CLI/deploy step.
   vs. declaring your own metadata.
 
 ## Official References
-- [Official Symfony docs — Console](https://symfony.com/doc/current/console.html)
-- [Official Symfony docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
+- [Official Symfony docs — Console](https://symfony.com/doc/8.0/console.html)
+- [Official Symfony docs — Runtime](https://symfony.com/doc/8.0/components/runtime.html)
 - [Symfony source — Application](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Application.php)
 
 ## Video references
@@ -328,7 +353,7 @@ request — it is a CLI/deploy step.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

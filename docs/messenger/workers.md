@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Transports](transports.md), [Console](../console/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un worker est un processus de longue durée qui tourne en boucle — et il ne recharge **jamais** automatiquement ton code après un déploiement, il faut le redémarrer explicitement.
+
+### Imagine dans la vraie vie
+Un worker est un coursier qui fait sa tournée : ramasser une lettre à la salle de tri (receive), tenter la livraison (dispatch via le bus), puis soit la marquer livrée (ack) soit la remettre pour un autre essai (reject). Livré à lui-même, le coursier continue sa tournée pour toujours.
+
+### Dans Symfony
+Après un déploiement, un worker `messenger:consume` déjà lancé continue de tourner avec l'**ancien** code chargé en mémoire jusqu'à ce qu'il soit explicitement recyclé — c'est une source classique de bugs "pourquoi mon correctif n'est pas pris en compte ?".
+
+### Exemple simple
+```console
+$ php bin/console messenger:consume async --time-limit=3600
+$ php bin/console messenger:stop-workers  # arrêt propre, entre deux messages
+```
+
+### Comment le mémoriser 🧠
+`messenger:stop-workers` est un arrêt **propre** — il ne tue jamais un message en cours de traitement, il pose juste un drapeau vérifié entre deux messages.
 
 ## Theory
 
@@ -182,6 +204,8 @@ unrouted), no worker is needed at all.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. After a deploy, long-running workers keep executing the old code. Which command addresses this?"
     - [x] A. `messenger:stop-workers` ✅
     - [ ] B. `messenger:consume --reload`
@@ -190,7 +214,7 @@ unrouted), no worker is needed at all.
 
     **Why:** workers are long-running PHP processes with old code loaded in
     memory; `stop-workers` gracefully recycles them so a fresh process picks
-    up the new deploy. **Ref:** [Messenger — Deploying](https://symfony.com/doc/current/messenger.html#deploying-to-production).
+    up the new deploy. **Ref:** [Messenger — Deploying](https://symfony.com/doc/8.0/messenger.html#deploying-to-production).
 
 ??? question "Q2. Which options let `messenger:consume` stop a worker gracefully for zero-downtime deploys?"
     - [x] A. `--limit`, `--time-limit`, `--memory-limit` ✅
@@ -200,7 +224,7 @@ unrouted), no worker is needed at all.
 
     **Why:** all three are independent, graceful recycling mechanisms that
     let the current message finish first.
-    **Ref:** [Messenger — Consuming messages](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker).
+    **Ref:** [Messenger — Consuming messages](https://symfony.com/doc/8.0/messenger.html#consuming-messages-running-the-worker).
 
 ??? question "Q3. Which stamp does the worker add before pushing a received envelope back through the bus?"
     - [x] A. `ReceivedStamp` ✅
@@ -241,8 +265,8 @@ unrouted), no worker is needed at all.
 
 ## Official References
 
-- [Official docs — Consuming messages](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker)
-- [Official docs — Deploying to production](https://symfony.com/doc/current/messenger.html#deploying-to-production)
+- [Official docs — Consuming messages](https://symfony.com/doc/8.0/messenger.html#consuming-messages-running-the-worker)
+- [Official docs — Deploying to production](https://symfony.com/doc/8.0/messenger.html#deploying-to-production)
 - [Symfony source — Worker](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Worker.php)
 
 ## Video references
@@ -254,7 +278,7 @@ unrouted), no worker is needed at all.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#consuming-messages-running-the-worker) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#consuming-messages-running-the-worker) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

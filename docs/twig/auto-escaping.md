@@ -23,7 +23,29 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Web Security Fundamentals](../php-web-security/web-security.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Twig neutralise automatiquement tout ce qu'un visiteur pourrait injecter dans une page — pas besoin d'y penser toi-même, à chaque `{{ }}`.
+
+### Imagine dans la vraie vie
+L'auto-escaping est un filet de sécurité tendu sous un trapèze. Quoi qu'un visiteur jette dans ta page — `<script>`, guillemets, chevrons — tombe dans le filet et est neutralisé en texte inoffensif avant que le public ne le voie. Tu ne décroches le filet (`|raw`) que pour des artistes que tu as personnellement vérifiés.
+
+### Dans Symfony
+`{{ commentaire_utilisateur }}` affiche en toute sécurité même si le visiteur a écrit `<script>alert(1)</script>` — le texte apparaît littéralement à l'écran, il ne s'exécute jamais.
+
+### Exemple simple
+```twig
+{{ commentaire }}          {# échappé automatiquement, toujours sûr #}
+{{ commentaire|raw }}      {# ⚠️ dangereux : jamais sur du contenu utilisateur non vérifié #}
+```
+
+### Comment le mémoriser 🧠
+`.txt.twig` n'échappe **rien** (ce n'est pas du HTML, il n'y a rien à échapper) — seule une extension comme `.html.twig` déclenche la protection XSS.
 
 ## Theory
 
@@ -254,6 +276,8 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In Symfony, how is the default escaping strategy chosen?"
     - [ ] A. Always `html`
     - [x] B. Guessed from the template file extension ✅
@@ -262,7 +286,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 
     **Why:** TwigBundle sets `autoescape: name`, using
     `FileExtensionEscapingStrategy::guess()`. **Ref:**
-    [Twig autoescape](https://symfony.com/doc/current/templates.html#output-escaping).
+    [Twig autoescape](https://symfony.com/doc/8.0/templates.html#output-escaping).
 
 ??? question "Q2. A value goes inside `<script>const x = \"…\";</script>`. Which filter?"
     - [ ] A. `|e('html')`
@@ -304,7 +328,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 - **Confused with:** [Twig Syntax](syntax.md) — escaping happens at **print** (`{{ }}`), not at `{% set %}`; printing and escaping are one step.
 
 ## Official References
-- [Official — Output escaping](https://symfony.com/doc/current/templates.html#output-escaping)
+- [Official — Output escaping](https://symfony.com/doc/8.0/templates.html#output-escaping)
 - [Twig — escape filter](https://twig.symfony.com/doc/3.x/filters/escape.html)
 - [Twig source — EscaperExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/EscaperExtension.php)
 
@@ -317,7 +341,7 @@ HtmlSanitizer component, then print with `|raw` — never trust raw user markup.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#output-escaping) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#output-escaping) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

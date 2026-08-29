@@ -26,7 +26,32 @@
     **Syllabus:** `Console → Input & Output` ·
     **Level:** Advanced ·
     **Est. time:** 30 min ·
+
     **Prerequisites:** [Arguments & options](options-arguments.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`InputInterface` lit, `OutputInterface` écrit — mais `SymfonyStyle` est le wrapper stylé que tu devrais utiliser par défaut plutôt que ces deux interfaces brutes.
+
+### Imagine dans la vraie vie
+Un drive de fast-food a deux canaux clairement séparés. Tu dis ta commande dans le micro (l'entrée, lue via `InputInterface`) et reçois ta nourriture à la fenêtre (la sortie, écrite via `OutputInterface`) ; le sac de nourriture (STDOUT) sort par une fenêtre tandis qu'une réclamation ("plus de frites") passe par un haut-parleur séparé (STDERR).
+
+### Dans Symfony
+```php
+$io = new SymfonyStyle($input, $output);
+$io->title('Export'); $io->progressStart(100); // remplace des dizaines de lignes manuelles
+```
+
+### Exemple simple
+```php
+$output->getErrorOutput()->writeln('Erreur !'); // STDERR, jamais mélangé au flux piped
+```
+
+### Comment le mémoriser 🧠
+`getErrorOutput()` n'existe **que** sur `ConsoleOutputInterface` — garde toujours les données destinées à être piped (`| grep ...`) sur STDOUT, jamais sur STDERR.
 
 ---
 
@@ -290,6 +315,8 @@ messages.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which method returns the STDERR stream in a CLI command?"
     - [ ] A. `OutputInterface::getErrorOutput()`
     - [x] B. `ConsoleOutputInterface::getErrorOutput()` ✅
@@ -297,7 +324,7 @@ messages.
     - [ ] D. `InputInterface::getError()`
 
     **Why:** the split-stream method lives on `ConsoleOutputInterface`. **Ref:**
-    [Console verbosity](https://symfony.com/doc/current/console/verbosity.html).
+    [Console verbosity](https://symfony.com/doc/8.0/console/verbosity.html).
 
 ??? question "Q2. `SymfonyStyle` requires which two constructor arguments?"
     - [x] A. `InputInterface` and `OutputInterface` ✅
@@ -306,7 +333,7 @@ messages.
     - [ ] D. Only `OutputInterface`
 
     **Why:** it wraps both input (for prompts) and output. **Ref:**
-    [Console style](https://symfony.com/doc/current/console/style.html).
+    [Console style](https://symfony.com/doc/8.0/console/style.html).
 
 ??? question "Q3. What does `$output->section()` return?"
     - [x] A. A `ConsoleSectionOutput` you can `overwrite()`/`clear()` ✅
@@ -315,7 +342,7 @@ messages.
     - [ ] D. A boolean
 
     **Why:** sections are independently re-writable regions. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ??? question "Q4. Difference between `write()` and `writeln()`?"
     - [x] A. `writeln()` appends a newline; `write()` does not ✅
@@ -324,7 +351,7 @@ messages.
     - [ ] D. They are identical
 
     **Why:** `writeln()` = `write()` + line break. **Ref:**
-    [Console](https://symfony.com/doc/current/console.html).
+    [Console](https://symfony.com/doc/8.0/console.html).
 
 ## Key takeaways
 
@@ -351,8 +378,8 @@ messages.
   `OutputInterface` is for byte-exact, unstyled output.
 
 ## Official References
-- [Official Symfony docs — Console style](https://symfony.com/doc/current/console/style.html)
-- [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/current/console/verbosity.html)
+- [Official Symfony docs — Console style](https://symfony.com/doc/8.0/console/style.html)
+- [Official Symfony docs — Verbosity & STDERR](https://symfony.com/doc/8.0/console/verbosity.html)
 - [Symfony source — SymfonyStyle](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Style/SymfonyStyle.php)
 
 ## Video references
@@ -364,7 +391,7 @@ messages.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/console/verbosity.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/console/verbosity.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

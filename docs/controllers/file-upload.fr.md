@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Ne jamais faire confiance à ce qu'un fichier envoyé *dit* être — toujours vérifier ce qu'il *est réellement*.
+
+### Imagine dans la vraie vie
+La douane d'un aéroport inspectant un colis. L'étiquette d'expédition peut prétendre "livres" (le nom et le MIME envoyés par le client), mais l'agent se fie à la radiographie du contenu réel (`getMimeType()`), pas à l'autocollant. Une fois seulement le contrôle passé, le colis est réétiqueté avec une nouvelle référence et déplacé dans un entrepôt sécurisé en arrière-boutique — jamais laissé dans le hall d'arrivée public où n'importe qui pourrait l'ouvrir.
+
+### Dans Symfony
+`UploadedFile::getClientOriginalName()` renvoie un nom **totalement contrôlé par le visiteur** — l'utiliser tel quel pour nommer le fichier stocké est une faille de sécurité classique (path traversal, écrasement de fichier).
+
+### Exemple simple
+```php
+$nouveauNom = uniqid().'.'.$fichier->guessExtension(); // jamais le nom original du client
+$fichier->move($this->getParameter('uploads_dir'), $nouveauNom);
+```
+
+### Comment le mémoriser 🧠
+"L'étiquette ment, la radiographie ne ment pas" : vérifie toujours `getMimeType()` (détecté par le contenu réel), jamais le nom ou le type MIME envoyé par le client.
+
+
 ## Theory
 
 Un fichier uploadé arrive dans le bag `files` sous forme de
@@ -268,7 +289,7 @@ Pour les uploads pilotés par un form, utilisez le champ `FileType` — voir
     - [ ] D. the form field name
 
     **Why:** les valeurs fournies par le client sont falsifiables ; le guesser inspecte le contenu.
-    **Ref:** [file uploads](https://symfony.com/doc/current/controller/upload_file.html).
+    **Ref:** [file uploads](https://symfony.com/doc/8.0/controller/upload_file.html).
 
 ??? question "Q2. What does `UploadedFile::move()` do on failure?"
     - [ ] A. Returns false.
@@ -285,7 +306,7 @@ Pour les uploads pilotés par un form, utilisez le champ `FileType` — voir
     - [ ] D. is ignored in prod
 
     **Why:** le value resolver valide et interrompt avec une erreur HTTP en cas d'échec.
-    **Ref:** [value resolvers](https://symfony.com/doc/current/controller/value_resolver.html).
+    **Ref:** [value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ## Key takeaways
 
@@ -309,8 +330,8 @@ Pour les uploads pilotés par un form, utilisez le champ `FileType` — voir
 - **Confused with:** [Forms → File Upload](../forms/file-upload.md) — le champ `FileType` enveloppe ce mécanisme avec CSRF, binding et rendu des erreurs.
 
 ## Official References
-- [Official Symfony docs — Uploading Files](https://symfony.com/doc/current/controller/upload_file.html)
-- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
+- [Official Symfony docs — Uploading Files](https://symfony.com/doc/8.0/controller/upload_file.html)
+- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
 
 ## Video references
@@ -322,7 +343,7 @@ Pour les uploads pilotés par un form, utilisez le champ `FileType` — voir
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/upload_file.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/upload_file.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

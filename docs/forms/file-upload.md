@@ -26,7 +26,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Handling submissions](handling.md) · [Validation](../validation/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un champ `FileType` te donne un fichier téléversé — le plus souvent, tu le gères "à côté" du formulaire plutôt que directement lié à ton entité.
+
+### Imagine dans la vraie vie
+Une candidature avec un CV agrafé. Le formulaire vérifie quand même la pièce jointe — elle doit être un PDF sous une certaine taille (le champ est non-mappé mais quand même validé) — mais le formulaire papier lui-même ne classe jamais ton CV directement dans ton dossier permanent. Un employé le détache, lui donne une nouvelle référence, et le classe séparément.
+
+### Dans Symfony
+`mapped: false` empêche Symfony de chercher un setter `setCv()` inexistant sur ton entité — tu récupères le fichier via `$form->get('cv')->getData()` et tu le gères toi-même.
+
+### Exemple simple
+```php
+$fichier = $form->get('cv')->getData(); // UploadedFile, pas lié à l'entité
+$fichier->move($this->getParameter('uploads_dir'), uniqid().'.pdf');
+```
+
+### Comment le mémoriser 🧠
+Ne fais **jamais confiance** au nom ou au type MIME envoyé par le client — renomme toujours le fichier et valide avec la contrainte `File`/`Image`.
 
 ## Theory
 
@@ -281,6 +303,8 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Where do you read an unmapped `FileType` value?"
     - [ ] A. From the bound model object
     - [x] B. `$form->get('field')->getData()` ✅
@@ -289,7 +313,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
     **Why:** `mapped => false` excludes the field from the data mapper; you fetch
     it directly from the child form.
-    **Ref:** [File uploads](https://symfony.com/doc/current/controller/upload_file.html).
+    **Ref:** [File uploads](https://symfony.com/doc/8.0/controller/upload_file.html).
 
 ??? question "Q2. Which value is safe to trust for validation?"
     - [ ] A. `getClientOriginalName()`
@@ -309,7 +333,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
     **Why:** The form's `multipart` view var is set when a child requires it (e.g.
     `FileType`), and `form_start` renders the enctype accordingly.
-    **Ref:** [File type](https://symfony.com/doc/current/reference/forms/types/file.html).
+    **Ref:** [File type](https://symfony.com/doc/8.0/reference/forms/types/file.html).
 
 ## Key takeaways
 
@@ -334,8 +358,8 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 - **Confused with:** [Validation](../validation/index.md) — the `File`/`Image` constraints enforce size/MIME, even on an unmapped field.
 
 ## Official References
-- [Official Symfony docs — Uploading files](https://symfony.com/doc/current/controller/upload_file.html)
-- [Official Symfony docs — File field type](https://symfony.com/doc/current/reference/forms/types/file.html)
+- [Official Symfony docs — Uploading files](https://symfony.com/doc/8.0/controller/upload_file.html)
+- [Official Symfony docs — File field type](https://symfony.com/doc/8.0/reference/forms/types/file.html)
 - [Symfony source — UploadedFile](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php)
 
 ## Video references
@@ -347,7 +371,7 @@ uploads (chunked, S3 pre-signed) the Form component is not involved — handle t
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/upload_file.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/upload_file.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

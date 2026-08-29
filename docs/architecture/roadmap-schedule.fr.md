@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le calendrier de sortie de Symfony est public et fixé des années à l'avance — pas de surprise, pas de date annoncée à la dernière minute.
+
+### Imagine dans la vraie vie
+Un calendrier scolaire publié des années en avance : tout le monde sait déjà que les rentrées ont lieu à dates fixes (les mineures de mai et novembre), et qu'une nouvelle promotion "longue durée" arrive tous les deux ans (la LTS `X.4` avec la nouvelle version majeure). Comme les dates sont fixées si loin à l'avance, chacun peut planifier son inscription sans être pris de court.
+
+### Dans Symfony
+Une équipe technique peut planifier sa migration Symfony 9 dès aujourd'hui, car la date de sortie (novembre 2027, avec la LTS 8.4) est connue publiquement des années à l'avance.
+
+### Exemple simple
+```console
+$ php bin/console about
+# Affiche la version Symfony actuelle et sa date de fin de vie
+```
+
+### Comment le mémoriser 🧠
+Le calendrier ne change jamais de rythme : **mai + novembre** pour les mineures, **tous les deux ans** pour les majeures — retiens-le comme une horloge qui ne s'arrête jamais.
+
+
 ## Theory
 
 La roadmap de Symfony est **pilotée par le calendrier et publique** : vous
@@ -176,7 +197,7 @@ branche suivre : la dernière standard (fonctionnalités en avance) ou la LTS
     - [ ] C. After 9.0
 
     **Why:** `X.4` et `(X+1).0` sortent ensemble. **Ref:**
-    [Release process](https://symfony.com/doc/current/contributing/community/releases.html).
+    [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How often is a new major/LTS released?"
     - [x] A. Every 2 years ✅
@@ -207,7 +228,7 @@ branche suivre : la dernière standard (fonctionnalités en avance) ou la LTS
 
 ## Official References
 - [Symfony releases & schedule](https://symfony.com/releases)
-- [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
+- [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -219,7 +240,7 @@ branche suivre : la dernière standard (fonctionnalités en avance) ou la LTS
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/community/releases.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

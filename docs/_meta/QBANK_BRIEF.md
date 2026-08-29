@@ -44,7 +44,7 @@ Write like the real Symfony 8 exam — reward **reasoning, not recall of trivia*
 Each `explanation` must state: **why the correct answer is correct**, **why the
 wrong ones are wrong** (when applicable), the **Symfony-internal behaviour** that
 justifies it, and the **common misconception**. Keep `documentation` as a real
-`symfony.com/doc/current/...` (or php.net for pure-PHP) link.
+`symfony.com/doc/8.0/...` (or php.net for pure-PHP) link.
 
 ## Hard rules
 

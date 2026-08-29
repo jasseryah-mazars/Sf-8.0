@@ -19,6 +19,20 @@ sub-topic below, not just one or two.
     | **Revision priority** | **Critical** |
     | **Est. time** | 4–5 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Messenger permet d'envoyer un "message" (un simple objet PHP) qui sera traité soit tout de suite, soit plus tard en arrière-plan par un worker — sans faire attendre le visiteur.
+
+**Pourquoi ça existe ?** Certaines tâches (envoyer un email, générer un rapport) sont lentes. Sans Messenger, le visiteur attendrait que tout se termine avant de voir sa page s'afficher.
+
+**🏠 Analogie de la vraie vie :** Un bureau de poste. Tu déposes une lettre (`dispatch()`) et reçois un reçu (l'`Envelope`) — pas une réponse immédiate. La lettre attend dans la salle de tri (le transport) jusqu'à ce qu'un facteur (le worker) la distribue enfin au destinataire (le handler).
+
+**Symfony dans la vraie vie :** `$bus->dispatch(new EnvoyerEmailBienvenue($id))` répond instantanément à la requête HTTP ; l'email part réellement quelques secondes plus tard, traité par un worker en arrière-plan.
+
+**⚠️ Erreur fréquente :** s'attendre à ce que `dispatch()` renvoie le résultat du traitement — il renvoie toujours une `Envelope` (un reçu), jamais la valeur calculée directement.
+
+**🧠 Comment le mémoriser :** "Dispatch, c'est déposer une lettre — pas attendre la réponse au guichet."
+
 ## Why this stage matters
 
 Messenger decouples *what* needs to happen from *when* and *where* it
@@ -72,6 +86,6 @@ Work through them in order:
 
 ## Official References
 
-- [Symfony documentation — Messenger](https://symfony.com/doc/current/messenger.html)
+- [Symfony documentation — Messenger](https://symfony.com/doc/8.0/messenger.html)
 - [Symfony source — Messenger component](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

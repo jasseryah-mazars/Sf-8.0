@@ -1,0 +1,116 @@
+/* Guided-navigation UI (learner-experience mission, this run):
+   the dashboard's CTA/journey/path-card blocks, the resume widget, and
+   the universal per-chapter quick-actions strip injected by
+   docs/assets/progress.js. Kept in its own file, separate from
+   quiz.css/code.css, since it is a distinct concern (site-wide layout,
+   not the quiz widget or code-block rendering). */
+
+/* Primary "start here" call to action on the dashboard. */
+.sf-cta-primary {
+  display: inline-block;
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 0.3rem;
+  background: var(--md-primary-fg-color, #000);
+  color: var(--md-primary-bg-color, #fff) !important;
+  font-weight: 700;
+  text-decoration: none !important;
+  font-size: 1.05rem;
+}
+.sf-cta-primary:hover {
+  filter: brightness(1.15);
+  text-decoration: none !important;
+}
+
+/* Journey/path picker cards ("Je débute…", "Je prépare Advanced…", etc.) */
+.sf-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+.sf-path-card {
+  display: block;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest, #ddd);
+  border-radius: 0.4rem;
+  text-decoration: none !important;
+  color: var(--md-typeset-color) !important;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.sf-path-card:hover {
+  border-color: var(--md-primary-fg-color, #000);
+  transform: translateY(-1px);
+}
+.sf-path-card strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 1.02rem;
+}
+.sf-path-card span {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Numbered step-by-step path. */
+.sf-steps {
+  counter-reset: sf-step;
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+}
+.sf-steps > li {
+  counter-increment: sf-step;
+  position: relative;
+  padding: 0.5rem 0 0.5rem 2.5rem;
+  border-left: 2px solid var(--md-default-fg-color--lightest, #ddd);
+  margin-left: 0.9rem;
+}
+.sf-steps > li:last-child { border-left-color: transparent; }
+.sf-steps > li::before {
+  content: counter(sf-step);
+  position: absolute;
+  left: -0.95rem;
+  top: 0.4rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: var(--md-primary-fg-color, #000);
+  color: var(--md-primary-bg-color, #fff);
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* "Continue where you left off" + weak-area widget on the dashboard. */
+#sf-resume {
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.4rem;
+  background: var(--md-default-fg-color--lightest, #f5f5f5);
+}
+.sf-resume__line { margin: 0.25rem 0; }
+.sf-resume__cta { font-weight: 700; }
+.sf-resume__weak { opacity: 0.9; }
+
+/* Universal per-chapter quick-actions strip (injected by progress.js). */
+.sf-quickactions {
+  margin: 0.25rem 0 1rem;
+  font-size: 0.9rem;
+}
+.sf-quickactions a {
+  text-decoration: none;
+}
+.sf-quickactions a:hover {
+  text-decoration: underline;
+}
+
+/* Quick-domain-access cards on the dashboard (Étudier / Se tester). */
+.sf-domain-actions a {
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}

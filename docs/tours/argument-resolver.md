@@ -3,7 +3,7 @@
 **Source anchors:**
 [`Controller/ControllerResolver.php` (8.0)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ControllerResolver.php)
 and
-[`Controller/ArgumentResolver.php` (8.0)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
+[`Controller/ArgumentResolver.php` (8.0)](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 — open both side-by-side. This tour covers Stops 3 and 5 of the
 [HttpKernel::handle() tour](httpkernel-handle.md) under a microscope.
 
@@ -15,6 +15,20 @@ and
       and what happens when zero resolvers yield, or one yields two values?
     - Which HTTP status results from a failed `#[MapRequestPayload]` vs a failed
       `#[MapQueryParameter]` vs a missing route attribute?
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce tour ?** Comment Symfony transforme le nom d'un contrôleur (une simple chaîne comme `"App\Controller\Foo::bar"`) en un vrai appel PHP, puis comment chaque argument de ta méthode reçoit sa valeur.
+
+**Pourquoi ça existe ?** Ce mécanisme est totalement invisible en usage normal — tu écris juste `public function show(int $id)` et ça marche — mais l'examen teste ce qui se passe derrière ce "ça marche".
+
+**🏠 Analogie de la vraie vie :** Une chaîne de traducteurs spécialisés en file. Chaque traducteur regarde l'étiquette d'un argument et soit le traduit (résout sa valeur), soit hausse les épaules et passe au traducteur suivant — jusqu'à ce qu'un le résolve, ou que la chaîne entière échoue.
+
+**Symfony dans la vraie vie :** Un contrôleur `public function show(Produit $produit)` reçoit directement l'entité déjà chargée depuis la base — un résolveur dédié a déjà fait `$produit = $repo->find($id)` à ta place, avant même que ta méthode ne s'exécute.
+
+**⚠️ Erreur fréquente :** supposer qu'un seul résolveur gère tous les types d'arguments — en réalité, une **chaîne** de résolveurs est essayée dans l'ordre de priorité jusqu'à ce que l'un d'eux accepte.
+
+**🧠 Comment le mémoriser :** "Refuser un argument, c'est hausser les épaules et le passer au suivant — jamais planter tout de suite."
 
 ## The map
 
@@ -238,9 +252,9 @@ owns the argument** — that is precisely why the exam asks it.
 ## Official References
 
 - [ControllerResolver.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ControllerResolver.php)
-- [ArgumentResolver.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
-- [Extending Action Argument Resolving](https://symfony.com/doc/current/controller/value_resolver.html)
-- [Mapping Request Data to Typed Objects](https://symfony.com/doc/current/controller.html#mapping-request-data-to-typed-objects)
+- [ArgumentResolver.php (8.0 source)](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
+- [Extending Action Argument Resolving](https://symfony.com/doc/8.0/controller/value_resolver.html)
+- [Mapping Request Data to Typed Objects](https://symfony.com/doc/8.0/controller.html#mapping-request-data-to-typed-objects)
 
 ---
 <small>Related: [Value Resolvers](../controllers/value-resolvers.md) ·

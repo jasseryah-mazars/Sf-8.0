@@ -28,6 +28,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un voter répond OUI / NON / je-ne-sais-pas pour un droit précis — c'est le moyen d'exprimer des règles par objet que les rôles seuls ne peuvent pas capturer.
+
+### Imagine dans la vraie vie
+Un voter est un juge dans un jury. Interrogé "cette personne peut-elle faire X à Y ?", chaque juge lève une carte pour **accorder** ou **refuser**, ou s'abstient. Une **stratégie** compte les cartes pour rendre le verdict final.
+
+### Dans Symfony
+Un `ArticleVoter` peut décider "cet utilisateur peut éditer *cet* article précis" (parce qu'il en est l'auteur) — une règle qu'aucun simple `ROLE_` ne peut exprimer.
+
+### Exemple simple
+```php
+protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+{
+    return $attribute === 'EDIT' && $subject->getAuteur() === $token->getUser();
+}
+```
+
+### Comment le mémoriser 🧠
+La stratégie par défaut est **affirmative** (un seul "accordé" suffit) — et **s'abstenir n'est PAS refuser** : un voter qui s'abstient n'influence jamais le résultat.
+
+
 ## Theory
 
 Un **voter** décide si un token peut exercer un **attribut** sur un **subject**
@@ -335,7 +358,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
 
     **Why:** Affirmative est la stratégie par défaut — un seul voter qui accorde
     suffit.
-    **Ref:** [Access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q2. `Voter::supports()` returns `false`. The vote is…"
     - [ ] A. `ACCESS_DENIED`
@@ -355,7 +378,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
 
     **Why:** Sans grant explicite et avec le `false` par défaut, l'abstention
     générale signifie un refus.
-    **Ref:** [Access decision](https://symfony.com/doc/current/security/voters.html).
+    **Ref:** [Access decision](https://symfony.com/doc/8.0/security/voters.html).
 
 ??? question "Q4. Which values do the vote constants hold?"
     - [x] A. GRANTED 1, ABSTAIN 0, DENIED -1 ✅
@@ -394,7 +417,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
   subject ; les voters sont la couche par objet.
 
 ## Official References
-- [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
+- [Symfony docs — Voters](https://symfony.com/doc/8.0/security/voters.html)
 - [Symfony source — Voter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/Voter.php)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
 
@@ -408,7 +431,7 @@ par espace d'URL, utilisez [`access_control`](access-control.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

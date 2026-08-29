@@ -31,7 +31,7 @@ Reviewer records pass/fail per item.
 - [ ] Tables ≤4 columns; paragraphs short.
 - [ ] Cross-links and doc links resolve (checked by `--strict` build + spot check).
 - [ ] Mandatory `## Official References` section present with official Symfony
-      (`doc/current`) and/or php.net links appropriate to the topic.
+      (`doc/8.0`) and/or php.net links appropriate to the topic.
 
 ## Scope
 

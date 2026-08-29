@@ -29,6 +29,48 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Certains paramètres de route commençant par `_` sont réservés à Symfony — tu en écris certains (`_locale`), et Symfony t'en donne d'autres en lecture seule (`_route`).
+
+### Imagine dans la vraie vie
+Une étiquette d'expédition avec des cases réservées que le système du transporteur comprend. Certaines cases, tu les remplis toi-même — "fragile", "documents en français" — et elles changent le traitement du colis. D'autres cases sont tamponnées par le centre de tri au moment du scan — le numéro de suivi et l'itinéraire emprunté — que tu peux lire sur l'étiquette mais jamais écrire toi-même.
+
+### Dans Symfony
+`{_locale}` dans une route peut être utilisé pour construire des URL multilingues (`/fr/accueil`, `/en/home`) qui définissent automatiquement la langue de toute la requête.
+
+### Exemple simple
+```php
+#[Route('/{_locale}/accueil', name: 'accueil', requirements: ['_locale' => 'fr|en'])]
+```
+
+### Comment le mémoriser 🧠
+Tu **écris** `_controller`/`_format`/`_locale`/`_fragment` ; Symfony te **rend** `_route`/`_route_params` en lecture seule — jamais l'inverse.
+
+Some parameters that appear in a route's `defaults`/placeholders are **reserved**:
+Symfony reads them to configure the request rather than passing them as ordinary
+controller arguments. They are conventionally prefixed with an underscore.
+
+| Attribute | Purpose |
+|---|---|
+| `_controller` | The controller callable to run |
+| `_format` | Request format → `Content-Type` (e.g. `json`) |
+| `_locale` | The request locale |
+| `_fragment` | The URL fragment (`#...`) when generating |
+| `_route` | Name of the matched route (read-only) |
+| `_route_params` | The matched route's parameters (read-only) |
+
+!!! question "Predict first"
+    Can you set `_route` in a route's `defaults` to change what
+    `$request->attributes->get('_route')` returns?
+
+??? note "Reveal"
+    No. `_route` and `_route_params` are **read-only outputs** injected by the
+    matcher — you read them, never set them. The inputs you *do* set are
+    `_controller`, `_format`, `_locale` and `_fragment`.
+
+
 ## Theory
 
 Certains paramètres qui apparaissent dans les `defaults`/placeholders d'une route sont
@@ -281,7 +323,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. `_name`
 
     **Why:** le matcher injecte `_route` avec le nom de la route matchée.
-    **Ref:** [Special parameters](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Special parameters](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q2. What does `_format` do when matched?"
     - [x] A. Sets the request format (affects `Content-Type`) ✅
@@ -290,7 +332,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. Sets the HTTP method
 
     **Why:** le `RouterListener`/`Request::setRequestFormat()` l'utilise pour la
-    négociation de contenu. **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    négociation de contenu. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ??? question "Q3. `stateless: true` primarily does what?"
     - [x] A. Asserts the route must not use the session (warns in debug) ✅
@@ -299,7 +341,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. Makes the route match any method
 
     **Why:** il signale toute utilisation accidentelle de la session pendant le développement.
-    **Ref:** [Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes).
+    **Ref:** [Stateless routes](https://symfony.com/doc/8.0/routing.html#stateless-routes).
 
 ??? question "Q4. Where does `_fragment` take effect?"
     - [ ] A. During matching
@@ -308,7 +350,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
     - [ ] D. In the session
 
     **Why:** le generator l'ajoute comme fragment de l'URL ; le matcher l'ignore.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#special-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#special-parameters).
 
 ## Key takeaways
 
@@ -333,8 +375,8 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
 - **Confused with:** [URL generation](url-generation.md) — `_fragment` n'agit qu'à la génération, jamais au matching.
 
 ## Official References
-- [Official Symfony docs — Special parameters](https://symfony.com/doc/current/routing.html#special-parameters)
-- [Official Symfony docs — Stateless routes](https://symfony.com/doc/current/routing.html#stateless-routes)
+- [Official Symfony docs — Special parameters](https://symfony.com/doc/8.0/routing.html#special-parameters)
+- [Official Symfony docs — Stateless routes](https://symfony.com/doc/8.0/routing.html#stateless-routes)
 - [Symfony source — RouterListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
 
 ## Video references
@@ -346,7 +388,7 @@ ancres internes dans les templates, vous pouvez simplement ajouter `#anchor` dan
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#special-parameters) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#special-parameters) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

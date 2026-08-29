@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Flex transforme `composer require` en une fonctionnalité déjà configurée, au lieu de te laisser tout brancher toi-même à la main.
+
+### Imagine dans la vraie vie
+C'est la notice de montage illustrée d'un meuble en kit : le colis livré (le paquet Composer) contient les planches, mais la notice (la recette Flex) te dit exactement où va chaque vis — créer les fichiers de config, enregistrer le bundle, ajouter les variables `.env`. `symfony.lock` est le reçu qui note quelle version de notice tu as suivie.
+
+### Dans Symfony
+Un simple `composer require orm` déclenche Flex, qui télécharge la bibliothèque **et** applique automatiquement sa configuration — sans ça, il faudrait créer chaque fichier de config à la main.
+
+### Exemple simple
+```console
+$ composer require orm
+# Flex ajoute automatiquement config/packages/doctrine.yaml, met à jour .env, etc.
+```
+
+### Comment le mémoriser 🧠
+Flex agit **seulement au moment de `composer require`** — jamais pendant qu'une requête HTTP est traitée. C'est un ouvrier de chantier, pas un employé du magasin ouvert au public.
+
+
 ## Theory
 
 **Symfony Flex** est un **plugin Composer** qui automatise les tâches fastidieuses
@@ -295,7 +316,7 @@ Composer seul suffit.
     - [ ] C. A templating engine
 
     **Why:** Flex automatise la configuration des packages au moment de Composer. **Ref:**
-    [Symfony Flex](https://symfony.com/doc/current/setup.html#symfony-flex).
+    [Symfony Flex](https://symfony.com/doc/8.0/setup.html#symfony-flex).
 
 ??? question "Q2. What does `symfony.lock` track?"
     - [x] A. Which recipes are installed and their versions ✅
@@ -303,7 +324,7 @@ Composer seul suffit.
     - [ ] C. HTTP sessions
 
     **Why:** Il enregistre l'application des recipes, indépendamment de `composer.lock`. **Ref:**
-    [Using Symfony Flex](https://symfony.com/doc/current/setup.html).
+    [Using Symfony Flex](https://symfony.com/doc/8.0/setup.html).
 
 ??? question "Q3. How are bundles auto-registered by a recipe?"
     - [x] A. Entries are written to `config/bundles.php` ✅
@@ -311,7 +332,7 @@ Composer seul suffit.
     - [ ] C. In `services.yaml`
 
     **Why:** Le configurator `bundles` modifie `config/bundles.php`. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ## Key takeaways
 
@@ -335,7 +356,7 @@ Composer seul suffit.
 - **Confused with:** [Components](components.md) — Flex est une automatisation au moment de Composer, pas un component de runtime.
 
 ## Official References
-- [Official docs — Setup & Flex](https://symfony.com/doc/current/setup.html)
+- [Official docs — Setup & Flex](https://symfony.com/doc/8.0/setup.html)
 - [Symfony Flex source](https://github.com/symfony/flex)
 - [Symfony recipes](https://github.com/symfony/recipes)
 
@@ -349,7 +370,7 @@ Composer seul suffit.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/setup.html#symfony-flex) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/setup.html#symfony-flex) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

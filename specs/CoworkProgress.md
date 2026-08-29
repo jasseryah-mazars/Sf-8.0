@@ -231,7 +231,7 @@ do NOT re-run these unless the underlying files change:
 - `tools/check_links.py --offline` → 670 unique external URLs catalogued (not yet network-checked this session — no network check run; see "Next task").
 
 **Design decisions confirmed intentional (do NOT "fix"):**
-- Doc links use `symfony.com/doc/current/...` on purpose (tracks latest stable; documented in
+- Doc links use `symfony.com/doc/8.0/...` on purpose (tracks latest stable; documented in
   specs/Architecture.md, FutureMaintenance.md, MigrationPlan.md, Requirements.md FR-12). Source
   links correctly pin `github.com/symfony/symfony/blob/8.0/...` — verified the `8.0` branch is
   real and has releases through 8.0.16 (current actual stable is 8.1.5, per GitHub as of
@@ -376,11 +376,87 @@ Validation after this lot: `validate_quiz.py` (1292 q, 0 errors, 157/157 subchap
 `lint_php.py` (382 snippets, 0 failures), `check_section_order.py` (176/176 compliant),
 `mkdocs build --strict` (clean, both `en`/`fr`).
 
+## Lot 6 — Pedagogical reorg + Learning Dashboard
+
+**Mission:** rebuild navigation/order around a *real* dependency graph (not the syllabus order),
+create a mandatory homepage "Learning Dashboard", keep chapter-template restructuring
+conditional (not a blanket rewrite of all 176 chapters — too large/risky to apply blind).
+
+**Real dependency graph, built from evidence already in the repo** (each area's own `index.md`
+`Prerequisites:`/`Dependencies:` metadata — not guessed): extracted, tabulated, and found two
+genuine defects where `mkdocs.yml`'s top-level nav had drifted out of sync with what the
+chapters themselves declare:
+
+- `Dependency Injection` sat *after* Controllers/Twig/Forms/Validation in the nav, even though
+  Controllers/Routing/Twig's own `index.md` files list DI as a prerequisite. `docs/roadmap.md`'s
+  own stage table already had this right (DI = stage 4, before Controllers = stage 5) — only the
+  site nav had drifted.
+- `Forms` sat *before* `Data Validation`, even though `forms/index.md` lists Validation as a
+  prerequisite (Forms composes Twig + Validation).
+- `Messenger` (split into its own area in Lot 3) was never re-sequenced: its real prereqs (DI,
+  Console, Events) are met right after Console, but nav/roadmap still had it lumped at the very
+  end via the old pre-split "Miscellaneous (Messenger up-weighted)" line.
+
+Fixed all three in `mkdocs.yml` (pure nav reorder — no file moves, no URL/anchor changes; only
+sidebar order and the Material `navigation.footer` Previous/Next links change) and in
+`docs/roadmap.md`+`.fr.md` (renumbered 14→15 stages, gave Messenger its own stage 13, updated the
+Mermaid dependency graph with real prereq arrows and an explanatory note, fixed stale counts:
+"14 topic areas"→15, "1,284-question bank / 154 sub-topics"→1,292/157 matching
+`validate_quiz.py`'s live output, "~55–75h"→"~57–78h" for the added Messenger stage).
+
+**Learning Dashboard:** rebuilt `docs/index.md`+`.fr.md` (root URL preserved) around a big table,
+grouped into the mandated five buckets (Fondations / Cœur Symfony / Composants applicatifs /
+Révision Certification / Hors programme), one row per official topic area (15 + the
+Traceability-Matrix-tracked "Internationalization and localization" sub-topic, honestly shown
+with empty cells rather than fabricated links since it has no dedicated lab/flashcard/exam file).
+Columns: # (from the graph), Status (live PASS/TO-VERIFY counts from
+`specs/TraceabilityMatrix.md`), Prerequisites, then links to Cours (chapter index — exercises
+live inside chapters, no separate exercises-only page exists per area, noted explicitly),
+TP (`labs/<area>.md`), Quiz (`exam-simulator.md`, same interactive tool for every row, filterable
+client-side), Flashcards, Exams, Révision (`revision/sheets/<area>.md`). Kept all pre-existing
+"What this is / Who it's for / How to use / Exam facts / Scope" content, folded the old "Scope"
+in/out lists into cross-references to the new Dashboard sections instead of duplicating them.
+
+**Self-caught regression, fixed before commit:** trimming the PHPUnit-bridge tangent out of
+`docs/architecture/deprecations.md` in Lot 5 (P0-06 audit) had removed the chapter's *only*
+Symfony-8.0-pinned source-reference link (the PHPUnit bridge one) without replacing it, dropping
+`architecture/deprecations.md` from PASS to TO VERIFY in `tools/audit.py`'s automated evidence
+count (170→169). Fixed by citing `Definition::setDeprecated()` — a class the chapter's own
+compile-time code example already uses — pinned to `symfony/symfony` `8.0`, in both EN/FR.
+Restored to 170/175 PASS after regenerating `specs/TraceabilityMatrix.md` (single-file, always-
+regenerate-in-full generator — not an echo file, so no historical-drift risk from running it).
+
+**Also fixed while sweeping for consistency:** stale "14 areas/topics" wording in
+`exam-guide/index.md`+`.fr.md`, `exam-guide/format.md`+`.fr.md`, `revision/cheat-sheet.md`+`.fr.md`
+→ 15. `revision/cheat-sheet.md`'s own numbered sections were still 1–14 with Messenger's facts
+folded as a bullet inside the Miscellaneous section (pre-split leftover) — split it into its own
+`## 13. Messenger` section (renumbering Automated Tests→14, Miscellaneous→15) in both languages.
+
+**Left alone, flagged rather than silently patched:** `revision/edge-cases.fr.md` (and its EN
+twin) says its 79-question drill deck covers "14 syllabus areas" — checked, and this is true: the
+deck has zero Messenger questions (predates the Lot 3 split). Bumping the number to 15 without
+adding Messenger content would overclaim coverage that doesn't exist; left as an honest, named
+gap for a future content-authoring lot rather than "fixed" cosmetically.
+
+**Explicitly out of scope for this lot (too large/risky to blanket-apply):** rewriting all 176
+chapters into the newly-specified 17-section template. `check_section_order.py` already enforces
+a consistent section order across 100% of chapters under the *existing* template; migrating to a
+different template repo-wide is a large, separate content-authoring undertaking that needs
+per-chapter review, not a mechanical nav/metadata change — flagged for the user rather than
+attempted blind.
+
+Validation: `check_section_order.py` (176/176), `validate_quiz.py` (1292 q, 0 errors, 157/157),
+`lint_php.py` (382/0), `tools/audit.py` (170/175 PASS, 5 TO VERIFY, 0 missing — restored, see
+regression note above), `mkdocs build --strict` (clean, en+fr, including the two broken-anchor
+warnings on the new Dashboard page that were caught and fixed — emoji headings strip to no
+leading hyphen in the generated slug).
+
 ## Next task
 
 Pick up with: open `miscellaneous/runtime.md` (still on the task's explicit sources-of-vérité
 list, not yet read this session), verify against `symfony/symfony` `8.0` branch source, fix any
 confirmed errors the same way (source file + every generated echo, hand-patched, never a full
 `gen_*.py` rerun). Then continue down the priority list per-lot: next bad-quiz-answer sweep on
-another area's `quiz/*.yml`, a real (non-`--offline`) `check_links.py` run, and the
-`docs/testing/deprecations.md` scope question flagged above.
+another area's `quiz/*.yml`, a real (non-`--offline`) `check_links.py` run, the
+`docs/testing/deprecations.md` scope question flagged in Lot 5, and the `revision/edge-cases.md`
+Messenger-drill-questions gap flagged in Lot 6.

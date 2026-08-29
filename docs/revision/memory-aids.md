@@ -8,6 +8,20 @@ expects you to recall cold. Facts in isolation decay; a hook makes them stick.
     hooks to lock the *order* and *set membership* in memory. Verify against the
     [Master Cheat Sheet](cheat-sheet.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une collection de **mnémoniques** — des phrases ou acronymes faciles à retenir — pour graver dans la mémoire les ordres et listes que l'examen exige de connaître par cœur (ordre des événements, classes de statuts HTTP…).
+
+**Pourquoi ça existe ?** Le cerveau retient mal une liste brute ("request, controller, controller_arguments, view, response…") mais retient très bien une phrase qui a du sens ("Really Cool Apps Validate Responses"). Un mnémonique transforme une liste arbitraire en une chose mémorisable.
+
+**🏠 Analogie de la vraie vie :** C'est la technique qu'on utilise pour retenir l'ordre des **planètes du système solaire** ("Mon Vieux Tu M'as Jeté Sur Une Nouvelle Planète") : la phrase n'a aucun rapport avec l'astronomie, mais son ordre de mots colle exactement à l'ordre à retenir.
+
+**Symfony dans la vraie vie :** Séquence Symfony brute (ex. les 7 événements du kernel) → phrase mnémonique associée (ex. "R-C-A-V-R-F-T") → au moment de l'examen, on se récite la phrase et on retrouve l'ordre exact.
+
+**⚠️ Erreur fréquente :** Retenir la phrase mnémonique sans avoir compris ce que chaque lettre représente. Le mnémonique est un raccourci vers une compréhension déjà acquise, pas un substitut à cette compréhension — sinon, à l'examen, la phrase ne "débloque" plus rien.
+
+**🧠 Comment le mémoriser :** *« Le mnémonique vient après la compréhension, jamais avant »* — apprends d'abord le mécanisme dans le chapitre, puis viens chercher ici l'accroche qui le fige en mémoire.
+
 ## Kernel event order
 
 `kernel.request` → `kernel.controller` → `kernel.controller_arguments` →
@@ -142,4 +156,4 @@ PasswordUpgradeBadge · PreAuthenticatedUserBadge`.
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

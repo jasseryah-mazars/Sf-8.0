@@ -18,3 +18,5 @@ __pycache__/
 
 # Node (only if quiz tooling is added locally)
 /node_modules/
+tools/node_modules/
+tools/.doc_refs_cache.json

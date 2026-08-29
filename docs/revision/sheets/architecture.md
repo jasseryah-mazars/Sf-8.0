@@ -2,6 +2,20 @@
 
 Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-minute cheat). For the final days. Full detail: [Symfony Architecture](../../architecture/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche imprimable, tenant sur une page**, qui résume chaque sous-chapitre de Symfony Architecture en quelques puces "à retenir" suivies d'une ligne "Cheat" très dense.
+
+**Pourquoi ça existe ?** Dans les derniers jours avant l'examen, on veut un support papier ou PDF unique par domaine — pas 10 onglets de navigateur ouverts. Cette fiche condense un domaine entier sur une seule page imprimable.
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de révision recto-verso** qu'un étudiant prépare avant un examen universitaire : tout le cours du semestre réduit à une page, à relire dans le métro le matin de l'épreuve.
+
+**Symfony dans la vraie vie :** Chaque puce "à retenir" → une règle déjà apprise en détail dans le chapitre / La ligne "Cheat:" → la version ultra-compacte, presque un aide-mémoire de syntaxe / Lien "Full detail" → retour au chapitre complet si un point ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Imprimer cette fiche *avant* d'avoir étudié Symfony Architecture en détail, en espérant apprendre directement dessus — le format est trop dense pour un premier apprentissage, il ne fonctionne qu'en rappel.
+
+**🧠 Comment le mémoriser :** *« Une page, un domaine, la veille de l'examen »* — cette fiche est le tout dernier support à consulter, pas le premier.
+
 ## Backward Compatibility Promise
 - Public, non-`@internal`, non-experimental API is stable within a major.
 - BC breaks only in majors, only after deprecation.
@@ -43,10 +57,9 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 ## Deprecations Best Practices
 - Use `trigger_deprecation(package, version, message, ...args)` from the contracts package.
 - Deprecations are `E_USER_DEPRECATED` notices, removed only in the next major.
-- Detect via profiler, logs, and the PHPUnit bridge.
-- Gate CI with `SYMFONY_DEPRECATIONS_HELPER` to keep the codebase upgrade-ready.
+- Detect via the profiler and the `deprecation` log channel.
 
-**Cheat:** `trigger_deprecation('pkg', 'X.Y', 'msg %s', $arg)` — package, version, msg, args. Level: `E_USER_DEPRECATED`. Removed: next major. Detect: toolbar/profiler, `deprecation` log channel, phpunit-bridge. DI: `deprecated:` key / `Definition::setDeprecated()`.
+**Cheat:** `trigger_deprecation('pkg', 'X.Y', 'msg %s', $arg)` — package, version, msg, args. Level: `E_USER_DEPRECATED`. Removed: next major. Detect: toolbar/profiler, `deprecation` log channel. DI: `deprecated:` key / `Definition::setDeprecated()`.
 
 ## Event Dispatcher & Kernel Events
 - Dispatcher sorts by priority (desc), memoises, and invokes lazily-built listeners.

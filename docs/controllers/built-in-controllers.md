@@ -26,7 +26,31 @@
     **Est. time:** 11 min ·
     **Prerequisites:** [Naming](naming-conventions.md), [HTTP Redirects](http-redirects.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`TemplateController` et `RedirectController` te permettent de créer une route sans écrire la moindre classe PHP — juste de la configuration.
+
+### Imagine dans la vraie vie
+Un réceptionniste gère les deux demandes les plus triviales sans jamais appeler un responsable. Pour "montrez-moi les conditions", elle remet une brochure préimprimée (`TemplateController`) ; pour "où est passé l'ancien bureau ?", elle lit une carte plastifiée collée sur son bureau et t'indique le couloir (`RedirectController`).
+
+### Dans Symfony
+Une page statique de type "À propos" n'a besoin d'aucun contrôleur PHP : `TemplateController` suffit, directement configuré dans les routes.
+
+### Exemple simple
+```yaml
+a_propos:
+    path: /a-propos
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults: { template: 'pages/a_propos.html.twig' }
+```
+
+### Comment le mémoriser 🧠
+`permanent: true` transforme un redirect en 301/308 (permanent) ; une cible vide renvoie un 410 Gone ("cette ressource n'existe plus", différent d'un 404 "introuvable").
 
 ## Theory
 
@@ -250,13 +274,15 @@ flowchart LR
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which controller renders a template purely from route config?"
     - [x] A. `TemplateController` ✅
     - [ ] B. `RenderController`
     - [ ] C. `ViewController`
     - [ ] D. `TwigController`
 
-    **Why:** `TemplateController` renders the `template` default. **Ref:** [render a template directly](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route).
+    **Why:** `TemplateController` renders the `template` default. **Ref:** [render a template directly](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route).
 
 ??? question "Q2. `RedirectController` with `permanent: true` returns…"
     - [ ] A. 302
@@ -264,7 +290,7 @@ flowchart LR
     - [ ] C. 307
     - [ ] D. 410
 
-    **Why:** `permanent` selects the permanent status code. **Ref:** [redirect from route](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route).
+    **Why:** `permanent` selects the permanent status code. **Ref:** [redirect from route](https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route).
 
 ??? question "Q3. An empty `path` in `urlRedirectAction` produces…"
     - [ ] A. 404 Not Found
@@ -298,8 +324,8 @@ flowchart LR
 - **Confused with:** [Internal Redirects](internal-redirects.md) — `RedirectController` sends a real 3xx, not an internal forward.
 
 ## Official References
-- [Official Symfony docs — Render a template from a route](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
-- [Official Symfony docs — Redirect directly from a route](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
+- [Official Symfony docs — Render a template from a route](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route)
+- [Official Symfony docs — Redirect directly from a route](https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
 
 ## Video references
@@ -311,7 +337,7 @@ flowchart LR
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

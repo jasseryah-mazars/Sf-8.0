@@ -28,6 +28,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Twig n'a que trois façons d'écrire quelque chose : afficher (`{{ }}`), agir (`{% %}`), commenter (`{# #}`) — trois portes, jamais confondues.
+
+### Imagine dans la vraie vie
+Lire un template Twig, c'est jouer une pièce depuis un script. `{{ … }}` sont les répliques que tu dis **à voix haute** (affichées au public), `{% … %}` sont les didascalies qui façonnent la scène mais ne sont **jamais prononcées**, et `{# … #}` sont les notes du metteur en scène en marge — pour toi seul, jamais jouées.
+
+### Dans Symfony
+`{{ produit.nom }}` affiche le nom à l'écran ; `{% if produit.enStock %}` décide *si* quelque chose s'affiche, sans jamais rien afficher lui-même.
+
+### Exemple simple
+```twig
+{% if produit.enStock %}
+    {{ produit.nom }} {# commentaire invisible au public #}
+{% endif %}
+```
+
+### Comment le mémoriser 🧠
+"Accolades doubles = ce qui sort à l'écran" (`{{ }}`). "Pourcentage = ce qui se passe en coulisses" (`{% %}`). "Dièse = notes personnelles invisibles" (`{# #}`).
+
+
 ## Theory
 
 Twig possède exactement **trois délimiteurs** :
@@ -355,7 +377,7 @@ optionnelle manquante s'affiche vide plutôt que de provoquer une erreur.
 
 ## Official References
 - [Official — Twig for template designers](https://twig.symfony.com/doc/3.x/templates.html)
-- [Official — Creating templates (Symfony)](https://symfony.com/doc/current/templates.html)
+- [Official — Creating templates (Symfony)](https://symfony.com/doc/8.0/templates.html)
 - [Twig source — Environment/Compiler](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php)
 
 ## Video references
@@ -368,7 +390,7 @@ optionnelle manquante s'affiche vide plutôt que de provoquer une erreur.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

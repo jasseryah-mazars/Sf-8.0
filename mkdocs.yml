@@ -9,7 +9,7 @@ site_author: Community
 site_url: https://jasseryah-mazars.github.io/Sf-8.0/
 repo_url: https://github.com/jasseryah-mazars/Sf-8.0
 repo_name: Sf-8.0
-edit_uri: edit/main/docs/
+edit_uri: edit/master/docs/
 copyright: >-
   Content licensed under MIT. Symfony is a trademark of Symfony SAS.
   This is an independent community project and is not affiliated with Symfony SAS.
@@ -83,6 +83,26 @@ plugins:
             couverture est validée via la matrice de traçabilité et des
             contrôles automatisés. Deep dives, diagrammes, exercices, pièges
             de certification et révision de dernière minute.
+          # Partial nav translation (learner-navigation mission): only the
+          # top-level structural labels this pass introduced/renamed are
+          # translated. Chapter/area titles, tool names (Roadmap, Revision
+          # Hub, Exam Simulator, Source Tours...) are deliberately left
+          # untranslated — every existing French page in this site already
+          # uses those same English proper nouns in its own prose (verified
+          # by grep, not assumed), so translating only the nav label would
+          # create a NEW mismatch, not fix one. Untranslated entries fall
+          # back to their English label automatically (mkdocs-static-i18n's
+          # own behavior) — an explicit, bounded partial translation, not a
+          # claim of full nav parity. See specs/NavigationExperienceAudit.md
+          # Finding 5.
+          nav_translations:
+            Home: Accueil
+            Getting Started: Commencer
+            Certification Domains: Domaines de certification
+            Practice & Exams: Tests et simulateur
+            Resources: Ressources
+            Recommended Resources: Ressources recommandées
+            Out-of-Syllabus Appendices: Annexes hors syllabus
   - git-revision-date-localized:
       enable_creation_date: false
       fallback_to_build_date: true
@@ -139,264 +159,247 @@ extra:
 extra_css:
   - assets/quiz.css
   - assets/code.css
+  - assets/navigation.css
 
 extra_javascript:
+  # Loaded FIRST and deliberately not lazily. mkdocs-material only fetches
+  # mermaid from unpkg when `mermaid` is undefined, so defining it here means
+  # the site never reaches the CDN and always renders with the exact version
+  # tools/validate_mermaid.py validated against. Kept in sync by
+  # tools/vendor_mermaid.py, which refuses to run on a version mismatch.
+  - assets/mermaid.min.js
   - assets/quiz.js
+  - assets/a11y.js
+  - assets/progress.js
 
 nav:
   - Home: index.md
-  - Exam Guide:
+  - Getting Started:
       - exam-guide/index.md
       - How to Use This Platform: exam-guide/how-to-use.md
       - Exam Format & Scoring: exam-guide/format.md
       - Advanced vs Expert: exam-guide/levels.md
       - Exam-Day Strategy: exam-guide/strategy.md
   - Roadmap: roadmap.md
-  - Exam Simulator: exam-simulator.md
-  - Glossary: glossary.md
-  - Resources: resources.md
-  - Tags: tags.md
-  - PHP & Web Security:
-      - php-web-security/index.md
-      - PHP API (up to 8.4): php-web-security/php-api.md
-      - Object-Oriented Programming: php-web-security/oop.md
-      - Attributes: php-web-security/attributes.md
-      - Interfaces: php-web-security/interfaces.md
-      - Anonymous Functions & Closures: php-web-security/closures.md
-      - Abstract Classes: php-web-security/abstract-classes.md
-      - Exception & Error Handling: php-web-security/exceptions.md
-      - Traits: php-web-security/traits.md
-      - Enums: php-web-security/enums.md
-      - "Additional — Namespaces": php-web-security/namespaces.md
-      - "Additional — PHP Extensions": php-web-security/extensions.md
-      - "Additional — SPL": php-web-security/spl.md
-      - "Additional — Web Security Fundamentals": php-web-security/web-security.md
-  - HTTP:
-      - http/index.md
-      - HTTP Specification (RFC 9110): http/rfc-9110.md
-      - Client / Server Interaction: http/client-server.md
-      - Status Codes: http/status-codes.md
-      - HTTP Request: http/request.md
-      - HTTP Response: http/response.md
-      - HTTP Methods: http/methods.md
-      - Cookies: http/cookies.md
-      - Caching Overview: http/caching.md
-      - Content Negotiation: http/content-negotiation.md
-      - Language Detection: http/language-detection.md
-      - HttpClient Component: http/httpclient.md
-  - Symfony Architecture:
-      - architecture/index.md
-      - Symfony Flex: architecture/flex.md
-      - License: architecture/license.md
-      - Components: architecture/components.md
-      - Bridges: architecture/bridges.md
-      - Code Organization: architecture/code-organization.md
-      - Request Handling (HttpKernel): architecture/request-handling.md
-      - Exception Handling: architecture/exception-handling.md
-      - Event Dispatcher & Kernel Events: architecture/events.md
-      - Official Best Practices: architecture/best-practices.md
-      - Release Management: architecture/release-management.md
-      - Backward Compatibility Promise: architecture/bc-promise.md
-      - Deprecations Best Practices: architecture/deprecations.md
-      - Framework Overloading: architecture/overloading.md
-      - Roadmap & Schedule: architecture/roadmap-schedule.md
-      - Interoperability & PSRs: architecture/psr.md
-      - Naming Conventions: architecture/naming-conventions.md
-  - Controllers:
-      - controllers/index.md
-      - Naming Conventions: controllers/naming-conventions.md
-      - AbstractController: controllers/abstract-controller.md
-      - The Request: controllers/request.md
-      - The Response: controllers/response.md
-      - Cookies: controllers/cookies.md
-      - The Session: controllers/session.md
-      - Flash Messages: controllers/flash-messages.md
-      - HTTP Redirects: controllers/http-redirects.md
-      - Internal Redirects (Forwarding): controllers/internal-redirects.md
-      - 404 & Error Pages: controllers/error-pages.md
-      - File Upload: controllers/file-upload.md
-      - Built-in Internal Controllers: controllers/built-in-controllers.md
-      - Argument Value Resolvers: controllers/value-resolvers.md
-  - Routing:
-      - routing/index.md
-      - Configuration (YAML & Attributes): routing/configuration.md
-      - Restrict URL Parameters: routing/requirements.md
-      - Default Values: routing/defaults.md
-      - Generate URLs: routing/url-generation.md
-      - Trigger Redirects: routing/redirects.md
-      - Special Internal Attributes: routing/special-attributes.md
-      - Domain Name Matching: routing/host-matching.md
-      - Conditional Matching: routing/conditions.md
-      - HTTP Methods Matching: routing/methods.md
-      - Locale Guessing: routing/locale.md
-      - Router Debugging: routing/debugging.md
-  - Templating (Twig):
-      - twig/index.md
-      - Twig Syntax: twig/syntax.md
-      - Auto-Escaping: twig/auto-escaping.md
-      - Template Inheritance: twig/inheritance.md
-      - Global Variables: twig/globals.md
-      - Filters & Functions: twig/filters-functions.md
-      - Template Includes: twig/includes.md
-      - Loops & Conditions: twig/loops-conditions.md
-      - URL Generation: twig/urls.md
-      - Controller Rendering: twig/controller-rendering.md
-      - Translations & Pluralization: twig/translations.md
-      - String Interpolation: twig/interpolation.md
-      - Assets Management: twig/assets.md
-      - Debugging Variables: twig/debugging.md
-  - Forms:
-      - forms/index.md
-      - Form Creation: forms/creation.md
-      - Form Handling: forms/handling.md
-      - Form Types: forms/types.md
-      - Rendering with Twig: forms/rendering.md
-      - Form Theming: forms/theming.md
-      - CSRF Protection: forms/csrf.md
-      - File Upload Handling: forms/file-upload.md
-      - Built-in Form Types: forms/built-in-types.md
-      - Data Transformers: forms/data-transformers.md
-      - Form Events: forms/events.md
-      - Form Type Extensions: forms/type-extensions.md
-  - Data Validation:
-      - validation/index.md
-      - PHP Object Validation: validation/object-validation.md
-      - Built-in Constraints: validation/built-in-constraints.md
-      - Validation Scopes: validation/scopes.md
-      - Validation Groups: validation/groups.md
-      - Group Sequence: validation/group-sequence.md
-      - Custom Callback Validators: validation/callbacks.md
-      - Custom Constraints: validation/custom-constraints.md
-      - Violations Builder: validation/violations-builder.md
-  - Dependency Injection:
-      - dependency-injection/index.md
-      - Service Container: dependency-injection/container.md
-      - Built-in Services: dependency-injection/built-in-services.md
-      - Configuration Parameters: dependency-injection/parameters.md
-      - Service Registration: dependency-injection/registration.md
-      - Service Decoration: dependency-injection/decoration.md
-      - Tags: dependency-injection/tags.md
-      - Semantic Configuration: dependency-injection/semantic-config.md
-      - Factories: dependency-injection/factories.md
-      - Compiler Passes: dependency-injection/compiler-passes.md
-      - Autowiring: dependency-injection/autowiring.md
-      - Service Locators: dependency-injection/service-locators.md
-      - Lazy Services & Native Lazy Objects: dependency-injection/lazy-services.md
-      - Resettable Services (Services Resetter): dependency-injection/service-reset.md
-      - Inside the Compiled Container: dependency-injection/container-dump.md
-  - Security:
-      - security/index.md
-      - Authentication: security/authentication.md
-      - Authorization: security/authorization.md
-      - Configuration: security/configuration.md
-      - Providers: security/providers.md
-      - Firewalls: security/firewalls.md
-      - Users: security/users.md
-      - Password Hashers: security/password-hashers.md
-      - Roles: security/roles.md
-      - Access Control Rules: security/access-control.md
-      - Authenticators, Passports & Badges: security/authenticators.md
-      - Voters & Voting Strategies: security/voters.md
-      - Role Hierarchy: security/role-hierarchy.md
-      - Access Decision Strategies: security/access-decision-strategies.md
-      - Impersonation (switch_user): security/impersonation.md
-      - Login Throttling: security/login-throttling.md
-      - Programmatic Login & Logout: security/programmatic-login.md
-  - HTTP Caching:
-      - http-caching/index.md
-      - Cache Types: http-caching/cache-types.md
-      - Expiration (Expires, Cache-Control): http-caching/expiration.md
-      - Validation (ETag, Last-Modified): http-caching/validation.md
-      - Client-Side Caching: http-caching/client-side.md
-      - Server-Side Caching: http-caching/server-side.md
-      - Edge Side Includes (ESI): http-caching/esi.md
-  - Console:
-      - console/index.md
-      - Built-in Commands: console/built-in-commands.md
-      - Custom Commands: console/custom-commands.md
-      - Configuration: console/configuration.md
-      - Options & Arguments: console/options-arguments.md
-      - Input & Output Objects: console/input-output.md
-      - Built-in Helpers: console/helpers.md
-      - Console Events: console/events.md
-      - Verbosity Levels: console/verbosity.md
-  - Automated Tests:
-      - testing/index.md
-      - Unit Tests with PHPUnit: testing/unit-tests.md
-      - Functional Tests: testing/functional-tests.md
-      - The Client Object: testing/client.md
-      - The Crawler Object: testing/crawler.md
-      - The Profiler Object: testing/profiler.md
-      - Framework Objects Access: testing/framework-objects.md
-      - Client Configuration: testing/client-configuration.md
-      - Request/Response Introspection: testing/introspection.md
-      - PHPUnit Bridge: testing/phpunit-bridge.md
-      - Handling Deprecated Code: testing/deprecations.md
-  - Miscellaneous:
-      - miscellaneous/index.md
-      - Configuration (Config, DotEnv, ExpressionLanguage): miscellaneous/configuration.md
-      - Error Handling: miscellaneous/error-handling.md
-      - Code Debugging: miscellaneous/debugging.md
-      - Deployment Best Practices: miscellaneous/deployment.md
-      - Cache Component: miscellaneous/cache.md
-      - Process Component: miscellaneous/process.md
-      - Serializer Component: miscellaneous/serializer.md
-      - PropertyAccess Component: miscellaneous/property-access.md
-      - Mime & Mailer Components: miscellaneous/mailer.md
-      - Filesystem & Finder Components: miscellaneous/filesystem-finder.md
-      - Lock Component: miscellaneous/lock.md
-      - Web Profiler & Data Collectors: miscellaneous/profiler.md
-      - Internationalization and localization: miscellaneous/intl.md
-      - Runtime Component: miscellaneous/runtime.md
-      - Clock Component: miscellaneous/clock.md
-  - Messenger:
-      - messenger/index.md
-      - Messenger Component: messenger/component.md
-      - Messages & Handlers: messenger/messages-handlers.md
-      - Middleware: messenger/middleware.md
-      - Transports: messenger/transports.md
-      - Workers: messenger/workers.md
-      - Retries & Failures: messenger/retries-failures.md
-      - Events: messenger/events.md
-  - Labs:
-      - labs/index.md
-      - PHP & Web Security — SPL Collection: labs/php-web-security.md
-      - HTTP — API Client (MockHttpClient): labs/http.md
-      - Architecture — Event Subscriber: labs/architecture.md
-      - Controllers — Value Resolver: labs/controllers.md
-      - Routing — Match & Debug: labs/routing.md
-      - Twig — Custom Extension: labs/twig.md
-      - Forms — Data Transformer: labs/forms.md
-      - Validation — Custom Constraint: labs/validation.md
-      - Dependency Injection — Compiler Pass Registry: labs/dependency-injection.md
-      - Security — Voter: labs/security.md
-      - HTTP Caching — Cache Headers: labs/http-caching.md
-      - Console — CommandTester: labs/console.md
-      - Automated Tests — Kernel/Web Tests: labs/testing.md
-      - Miscellaneous — Messenger Middleware: labs/miscellaneous.md
-  - Source Tours:
-      - tours/index.md
-      - HttpKernel::handle(): tours/httpkernel-handle.md
-      - ControllerResolver & ArgumentResolver: tours/argument-resolver.md
-      - A Form's Life: tours/form-lifecycle.md
-      - Crossing the Firewall: tours/firewall-request-cycle.md
-  - Chapter Exams:
-      - exams/index.md
-      - PHP & Web Security: exams/php-web-security.md
-      - HTTP: exams/http.md
-      - Symfony Architecture: exams/architecture.md
-      - Controllers: exams/controllers.md
-      - Routing: exams/routing.md
-      - Templating (Twig): exams/twig.md
-      - Forms: exams/forms.md
-      - Data Validation: exams/validation.md
-      - Dependency Injection: exams/dependency-injection.md
-      - Security: exams/security.md
-      - HTTP Caching: exams/http-caching.md
-      - Console: exams/console.md
-      - Automated Tests: exams/testing.md
-      - Miscellaneous: exams/miscellaneous.md
-      - Messenger: exams/messenger.md
+  - Certification Domains:
+      - PHP & Web Security:
+          - php-web-security/index.md
+          - PHP API (up to 8.4): php-web-security/php-api.md
+          - Object-Oriented Programming: php-web-security/oop.md
+          - Interfaces: php-web-security/interfaces.md
+          - Attributes: php-web-security/attributes.md
+          - Anonymous Functions & Closures: php-web-security/closures.md
+          - Abstract Classes: php-web-security/abstract-classes.md
+          - Exception & Error Handling: php-web-security/exceptions.md
+          - Traits: php-web-security/traits.md
+          - Enums: php-web-security/enums.md
+          - "Additional — Namespaces": php-web-security/namespaces.md
+          - "Additional — PHP Extensions": php-web-security/extensions.md
+          - "Additional — SPL": php-web-security/spl.md
+          - "Additional — Web Security Fundamentals": php-web-security/web-security.md
+      - HTTP:
+          - http/index.md
+          - HTTP Specification (RFC 9110): http/rfc-9110.md
+          - Client / Server Interaction: http/client-server.md
+          - Status Codes: http/status-codes.md
+          - HTTP Request: http/request.md
+          - HTTP Response: http/response.md
+          - HTTP Methods: http/methods.md
+          - Cookies: http/cookies.md
+          - Caching Overview: http/caching.md
+          - Content Negotiation: http/content-negotiation.md
+          - Language Detection: http/language-detection.md
+          - HttpClient Component: http/httpclient.md
+      - Symfony Architecture:
+          - architecture/index.md
+          - Symfony Flex: architecture/flex.md
+          - License: architecture/license.md
+          - Components: architecture/components.md
+          - Bridges: architecture/bridges.md
+          - Code Organization: architecture/code-organization.md
+          - Request Handling (HttpKernel): architecture/request-handling.md
+          - Exception Handling: architecture/exception-handling.md
+          - Event Dispatcher & Kernel Events: architecture/events.md
+          - Official Best Practices: architecture/best-practices.md
+          - Release Management: architecture/release-management.md
+          - Backward Compatibility Promise: architecture/bc-promise.md
+          - Deprecations Best Practices: architecture/deprecations.md
+          - Framework Overloading: architecture/overloading.md
+          - Roadmap & Schedule: architecture/roadmap-schedule.md
+          - Interoperability & PSRs: architecture/psr.md
+          - Naming Conventions: architecture/naming-conventions.md
+      - Dependency Injection:
+          - dependency-injection/index.md
+          - Service Container: dependency-injection/container.md
+          - Built-in Services: dependency-injection/built-in-services.md
+          - Configuration Parameters: dependency-injection/parameters.md
+          - Service Registration: dependency-injection/registration.md
+          - Service Decoration: dependency-injection/decoration.md
+          - Tags: dependency-injection/tags.md
+          - Semantic Configuration: dependency-injection/semantic-config.md
+          - Factories: dependency-injection/factories.md
+          - Compiler Passes: dependency-injection/compiler-passes.md
+          - Autowiring: dependency-injection/autowiring.md
+          - Service Locators: dependency-injection/service-locators.md
+          - Lazy Services & Native Lazy Objects: dependency-injection/lazy-services.md
+          - Resettable Services (Services Resetter): dependency-injection/service-reset.md
+          - Inside the Compiled Container: dependency-injection/container-dump.md
+      - Controllers:
+          - controllers/index.md
+          - Naming Conventions: controllers/naming-conventions.md
+          - AbstractController: controllers/abstract-controller.md
+          - The Request: controllers/request.md
+          - The Response: controllers/response.md
+          - Cookies: controllers/cookies.md
+          - The Session: controllers/session.md
+          - Flash Messages: controllers/flash-messages.md
+          - HTTP Redirects: controllers/http-redirects.md
+          - Internal Redirects (Forwarding): controllers/internal-redirects.md
+          - 404 & Error Pages: controllers/error-pages.md
+          - File Upload: controllers/file-upload.md
+          - Built-in Internal Controllers: controllers/built-in-controllers.md
+          - Argument Value Resolvers: controllers/value-resolvers.md
+      - Routing:
+          - routing/index.md
+          - Configuration (YAML & Attributes): routing/configuration.md
+          - Restrict URL Parameters: routing/requirements.md
+          - Default Values: routing/defaults.md
+          - Generate URLs: routing/url-generation.md
+          - Trigger Redirects: routing/redirects.md
+          - Special Internal Attributes: routing/special-attributes.md
+          - Domain Name Matching: routing/host-matching.md
+          - Conditional Matching: routing/conditions.md
+          - HTTP Methods Matching: routing/methods.md
+          - Locale Guessing: routing/locale.md
+          - Router Debugging: routing/debugging.md
+      - Templating (Twig):
+          - twig/index.md
+          - Twig Syntax: twig/syntax.md
+          - Auto-Escaping: twig/auto-escaping.md
+          - Template Inheritance: twig/inheritance.md
+          - Global Variables: twig/globals.md
+          - Filters & Functions: twig/filters-functions.md
+          - Template Includes: twig/includes.md
+          - Loops & Conditions: twig/loops-conditions.md
+          - URL Generation: twig/urls.md
+          - Controller Rendering: twig/controller-rendering.md
+          - Translations & Pluralization: twig/translations.md
+          - String Interpolation: twig/interpolation.md
+          - Assets Management: twig/assets.md
+          - Debugging Variables: twig/debugging.md
+      - Data Validation:
+          - validation/index.md
+          - PHP Object Validation: validation/object-validation.md
+          - Built-in Constraints: validation/built-in-constraints.md
+          - Validation Scopes: validation/scopes.md
+          - Validation Groups: validation/groups.md
+          - Group Sequence: validation/group-sequence.md
+          - Custom Callback Validators: validation/callbacks.md
+          - Custom Constraints: validation/custom-constraints.md
+          - Violations Builder: validation/violations-builder.md
+      - Forms:
+          - forms/index.md
+          - Form Creation: forms/creation.md
+          - Form Handling: forms/handling.md
+          - Form Types: forms/types.md
+          - Rendering with Twig: forms/rendering.md
+          - Form Theming: forms/theming.md
+          - CSRF Protection: forms/csrf.md
+          - File Upload Handling: forms/file-upload.md
+          - Built-in Form Types: forms/built-in-types.md
+          - Data Transformers: forms/data-transformers.md
+          - Form Events: forms/events.md
+          - Form Type Extensions: forms/type-extensions.md
+      - Security:
+          - security/index.md
+          - Configuration: security/configuration.md
+          - Users: security/users.md
+          - Providers: security/providers.md
+          - Password Hashers: security/password-hashers.md
+          - Firewalls: security/firewalls.md
+          - Authentication: security/authentication.md
+          - Authenticators, Passports & Badges: security/authenticators.md
+          - Programmatic Login & Logout: security/programmatic-login.md
+          - Roles: security/roles.md
+          - Role Hierarchy: security/role-hierarchy.md
+          - Authorization: security/authorization.md
+          - Voters & Voting Strategies: security/voters.md
+          - Access Decision Strategies: security/access-decision-strategies.md
+          - Access Control Rules: security/access-control.md
+          - Impersonation (switch_user): security/impersonation.md
+          - Login Throttling: security/login-throttling.md
+      - HTTP Caching:
+          - http-caching/index.md
+          - Cache Types: http-caching/cache-types.md
+          - Expiration (Expires, Cache-Control): http-caching/expiration.md
+          - Validation (ETag, Last-Modified): http-caching/validation.md
+          - Client-Side Caching: http-caching/client-side.md
+          - Server-Side Caching: http-caching/server-side.md
+      - Console:
+          - console/index.md
+          - Built-in Commands: console/built-in-commands.md
+          - Custom Commands: console/custom-commands.md
+          - Configuration: console/configuration.md
+          - Options & Arguments: console/options-arguments.md
+          - Input & Output Objects: console/input-output.md
+          - Built-in Helpers: console/helpers.md
+          - Console Events: console/events.md
+          - Verbosity Levels: console/verbosity.md
+      - Messenger:
+          - messenger/index.md
+          - Messenger Component: messenger/component.md
+          - Messages & Handlers: messenger/messages-handlers.md
+          - Middleware: messenger/middleware.md
+          - Transports: messenger/transports.md
+          - Workers: messenger/workers.md
+          - Retries & Failures: messenger/retries-failures.md
+          - Events: messenger/events.md
+      - Automated Tests:
+          - testing/index.md
+          - Unit Tests with PHPUnit: testing/unit-tests.md
+          - Functional Tests: testing/functional-tests.md
+          - The Client Object: testing/client.md
+          - The Crawler Object: testing/crawler.md
+          - The Profiler Object: testing/profiler.md
+          - Framework Objects Access: testing/framework-objects.md
+          - Client Configuration: testing/client-configuration.md
+          - Request/Response Introspection: testing/introspection.md
+          - Handling Deprecated Code: testing/deprecations.md
+      - Miscellaneous:
+          - miscellaneous/index.md
+          - Configuration (Config, DotEnv, ExpressionLanguage): miscellaneous/configuration.md
+          - Error Handling: miscellaneous/error-handling.md
+          - Code Debugging: miscellaneous/debugging.md
+          - Deployment Best Practices: miscellaneous/deployment.md
+          - Cache Component: miscellaneous/cache.md
+          - Process Component: miscellaneous/process.md
+          - Serializer Component: miscellaneous/serializer.md
+          - PropertyAccess Component: miscellaneous/property-access.md
+          - Mime & Mailer Components: miscellaneous/mailer.md
+          - Filesystem & Finder Components: miscellaneous/filesystem-finder.md
+          - Web Profiler & Data Collectors: miscellaneous/profiler.md
+          - Internationalization and localization: miscellaneous/intl.md
+          - Runtime Component: miscellaneous/runtime.md
+          - Clock Component: miscellaneous/clock.md
+  - Practice & Exams:
+      - Exam Simulator: exam-simulator.md
+      - Chapter Exams:
+          - exams/index.md
+          - PHP & Web Security: exams/php-web-security.md
+          - HTTP: exams/http.md
+          - Symfony Architecture: exams/architecture.md
+          - Controllers: exams/controllers.md
+          - Routing: exams/routing.md
+          - Templating (Twig): exams/twig.md
+          - Forms: exams/forms.md
+          - Data Validation: exams/validation.md
+          - Dependency Injection: exams/dependency-injection.md
+          - Security: exams/security.md
+          - HTTP Caching: exams/http-caching.md
+          - Console: exams/console.md
+          - Automated Tests: exams/testing.md
+          - Miscellaneous: exams/miscellaneous.md
+          - Messenger: exams/messenger.md
   - Revision Hub:
       - revision/index.md
       - Revision Modes: revision/modes.md
@@ -445,3 +448,34 @@ nav:
       - Mock Exam B: revision/mock-exam-b.md
       - Mock Exam C: revision/mock-exam-c.md
       - Practice Quiz Bank: revision/quiz.md
+  - Resources:
+      - Recommended Resources: resources.md
+      - Glossary: glossary.md
+      - Tags: tags.md
+      - Labs:
+          - labs/index.md
+          - PHP & Web Security — SPL Collection: labs/php-web-security.md
+          - HTTP — API Client (MockHttpClient): labs/http.md
+          - Architecture — Event Subscriber: labs/architecture.md
+          - Controllers — Value Resolver: labs/controllers.md
+          - Routing — Match & Debug: labs/routing.md
+          - Twig — Custom Extension: labs/twig.md
+          - Forms — Data Transformer: labs/forms.md
+          - Validation — Custom Constraint: labs/validation.md
+          - Dependency Injection — Compiler Pass Registry: labs/dependency-injection.md
+          - Security — Voter: labs/security.md
+          - HTTP Caching — Cache Headers: labs/http-caching.md
+          - Console — CommandTester: labs/console.md
+          - Automated Tests — Kernel/Web Tests: labs/testing.md
+          - Miscellaneous — Messenger Middleware: labs/miscellaneous.md
+      - Source Tours:
+          - tours/index.md
+          - HttpKernel::handle(): tours/httpkernel-handle.md
+          - ControllerResolver & ArgumentResolver: tours/argument-resolver.md
+          - A Form's Life: tours/form-lifecycle.md
+          - Crossing the Firewall: tours/firewall-request-cycle.md
+  - Out-of-Syllabus Appendices:
+      - appendices/out-of-syllabus/index.md
+      - Edge Side Includes (ESI): appendices/out-of-syllabus/esi.md
+      - PHPUnit Bridge: appendices/out-of-syllabus/phpunit-bridge.md
+      - Lock Component: appendices/out-of-syllabus/lock.md

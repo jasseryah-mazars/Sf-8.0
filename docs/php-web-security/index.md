@@ -20,6 +20,20 @@ stages assume you already know.
     | **Revision priority** | **High** |
     | **Est. time** | 4–6 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le socle de langage PHP moderne (enums, closures, attributs...) plus le vocabulaire des attaques web courantes (XSS, CSRF...) — les deux bases sur lesquelles tout le reste de Symfony est construit.
+
+**Pourquoi ça existe ?** Symfony est du PHP moderne idiomatique : sans maîtriser les enums, les closures ou la promotion de constructeur, une bonne partie du code Symfony reste illisible. Et sans connaître les attaques qu'il défend, les fonctionnalités de sécurité paraissent arbitraires.
+
+**🏠 Analogie de la vraie vie :** Apprendre l'alphabet et la grammaire avant de lire un roman. Tu ne peux pas comprendre une phrase complexe (un service Symfony) si tu ne reconnais pas encore les mots de base (enums, interfaces, closures) qui la composent.
+
+**Symfony dans la vraie vie :** Le service container utilise massivement les interfaces et l'injection par constructeur — deux concepts purement PHP enseignés ici, avant même de parler de Symfony.
+
+**⚠️ Erreur fréquente :** vouloir sauter cette étape parce qu'elle "n'est que du PHP" — plusieurs pièges de l'examen portent précisément sur des subtilités PHP (ex. `NotBlank` vs `NotNull`, `===` sur les enums) que Symfony réutilise partout ensuite.
+
+**🧠 Comment le mémoriser :** "Maîtrise la langue avant de lire le livre — chaque chapitre Symfony suivant suppose que celui-ci est déjà acquis."
+
 ## Why this stage is first
 
 Symfony is *idiomatic modern PHP*. You cannot reason about the service
@@ -35,35 +49,63 @@ comprehension rather than discovery.
   enums, readonly classes, first-class callables, named args, `match`,
   nullsafe, typed constants, `#[\Override]`, `json_validate()`,
   new-in-initializer, **property hooks & asymmetric visibility (8.4)**, DNF types.
+  Full journey: [exercises](php-api-exercises.md) · [exam](php-api-exam.md) · [flashcards](php-api-flashcards.md).
 - [Object-Oriented Programming](oop.md) — classes, visibility, `static`, late
   static binding, constructor promotion, `clone`, magic methods.
+  Full journey: [exercises](oop-exercises.md) · [exam](oop-exam.md) · [flashcards](oop-flashcards.md).
+- [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
+  `instanceof`, union/intersection/DNF types, interface properties (8.4).
+  Full journey: [exercises](interfaces-exercises.md) ·
+  [exam](interfaces-exam.md) · [flashcards](interfaces-flashcards.md).
 - [Attributes](attributes.md) — declaring `#[\Attribute]` classes, `TARGET_*`
   flags, `IS_REPEATABLE`, and reading them back via Reflection.
-- [Interfaces & Type Declarations](interfaces.md) — covariance/contravariance,
-  `instanceof`, union/intersection/DNF types.
+  Full journey: [exercises](attributes-exercises.md) · [exam](attributes-exam.md) · [flashcards](attributes-flashcards.md).
 - [Anonymous Functions & Closures](closures.md) — arrow functions, `bindTo`,
   `Closure::fromCallable`, first-class callable syntax.
+  Full journey: [exercises](closures-exercises.md) · [exam](closures-exam.md) ·
+  [flashcards](closures-flashcards.md).
 - [Abstract Classes](abstract-classes.md) — abstract vs interface, the template
   method pattern.
+  Full journey: [exercises](abstract-classes-exercises.md) ·
+  [exam](abstract-classes-exam.md) · [flashcards](abstract-classes-flashcards.md).
 - [Exception & Error Handling](exceptions.md) — the `Throwable` hierarchy,
   `try`/`catch`/`finally`, custom exceptions, error levels, `set_error_handler`.
-- [Traits](traits.md) — conflict resolution (`insteadof`/`as`), abstract/static
-  members, precedence.
+  Full journey: [exercises](exceptions-exercises.md) · [exam](exceptions-exam.md) ·
+  [flashcards](exceptions-flashcards.md).
+- [Traits](traits.md) — precedence (class > trait > parent), conflict resolution
+  (`insteadof`/`as`), abstract & static members, trait properties and constants
+  (8.2), `as final` (8.3), and `__CLASS__` vs `__METHOD__` inside a trait.
+  Full journey: [exercises](traits-exercises.md) · [exam](traits-exam.md) ·
+  [flashcards](traits-flashcards.md).
 - [Enums](enums.md) — pure vs. backed enums, `UnitEnum`/`BackedEnum`,
   `from()`/`tryFrom()`, and how routing/Forms consume them.
-
-**Additional / depth chapters** (not on the official syllabus list, kept as
-enrichment — see the repository's `specs/TraceabilityMatrix.md`):
-
+  Full journey: [exercises](enums-exercises.md) · [exam](enums-exam.md) ·
+  [flashcards](enums-flashcards.md).
 - [Namespaces & Autoloading](namespaces.md) — PSR-4, `use`, aliasing, name
   resolution rules.
+  Full journey: [exercises](namespaces-exercises.md) · [exam](namespaces-exam.md) ·
+  [flashcards](namespaces-flashcards.md).
 - [PHP Extensions](extensions.md) — `mbstring`, `intl`, `ctype`, `iconv`,
-  `pdo`, `opcache` and how to detect/require them.
+  `pdo`, `opcache`, how to detect and require them, and what
+  `symfony/polyfill-*` does and does not replace.
+  Full journey: [exercises](extensions-exercises.md) · [exam](extensions-exam.md) ·
+  [flashcards](extensions-flashcards.md).
 - [SPL](spl.md) — `ArrayAccess`, `Iterator`/`IteratorAggregate`, `Countable`,
-  `SplStack`/`Queue`/`Heap`/`PriorityQueue`, `SplObjectStorage`, generators.
+  `SplStack`/`Queue`/`Heap`/`PriorityQueue`, `SplObjectStorage`, the iterator
+  decorators (`LimitIterator`, `CallbackFilterIterator`,
+  `RecursiveIteratorIterator`) and generators (`yield`, `yield from`, `send()`).
+  Full journey: [exercises](spl-exercises.md) · [exam](spl-exam.md) ·
+  [flashcards](spl-flashcards.md).
 - [Web Security Fundamentals](web-security.md) — XSS, CSRF, SQL injection,
   session hijacking/fixation, clickjacking, HTTPS/HSTS, security headers,
   password storage — framed as what Symfony protects against.
+
+!!! note "Reading order"
+    Chapters are listed in the order they teach best, not in syllabus order — see
+    `specs/learning_path.yml`. Four of them (**Namespaces**, **PHP Extensions**,
+    **SPL**, **Web Security Fundamentals**) are enrichment rather than official
+    syllabus items; that status is tracked in the path file and in
+    `specs/TraceabilityMatrix.md`, not by pushing them to the end of the list.
 
 ## How to study this stage
 
@@ -82,5 +124,5 @@ enrichment — see the repository's `specs/TraceabilityMatrix.md`):
 ## Official References
 
 - [Symfony documentation — PHP Manual](https://www.php.net/manual/en/)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

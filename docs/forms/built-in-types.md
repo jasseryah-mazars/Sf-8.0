@@ -26,7 +26,30 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Form types](types.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit une bibliothèque de champs prêts à l'emploi — pas besoin de fabriquer un champ "liste déroulante" ou "case à cocher" à la main.
+
+### Imagine dans la vraie vie
+Les types intégrés sont le mur des attaches d'un magasin de bricolage — vis, boulons déjà calibrés, donc tu prends la bonne pièce plutôt que d'en usiner une toi-même. Commander au restaurant montre comment `ChoiceType` choisit son widget : peux-tu prendre plusieurs plats (`multiple`) ? les options sont-elles affichées ouvertement ou cachées derrière un menu (`expanded`) ?
+
+### Dans Symfony
+`ChoiceType` avec `expanded: true, multiple: true` devient automatiquement une liste de cases à cocher ; avec les deux à `false`, c'est un simple menu déroulant.
+
+### Exemple simple
+```php
+$builder->add('couleurs', ChoiceType::class, [
+    'choices' => ['Rouge' => 'r', 'Bleu' => 'b'], 'expanded' => true, 'multiple' => true,
+]);
+```
+
+### Comment le mémoriser 🧠
+`expanded` × `multiple` = 4 combinaisons, 4 widgets : menu déroulant, boutons radio, cases à cocher, ou menu multi-sélection.
 
 ## Theory
 
@@ -311,6 +334,8 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which options make `ChoiceType` render checkboxes?"
     - [x] A. `expanded => true, multiple => true` ✅
     - [ ] B. `expanded => false, multiple => true`
@@ -319,7 +344,7 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 
     **Why:** Expanded + multiple ⇒ checkboxes; expanded + single ⇒ radios;
     collapsed ⇒ `<select>`.
-    **Ref:** [ChoiceType](https://symfony.com/doc/current/reference/forms/types/choice.html).
+    **Ref:** [ChoiceType](https://symfony.com/doc/8.0/reference/forms/types/choice.html).
 
 ??? question "Q2. What does `MoneyType`'s `divisor` do?"
     - [x] A. Scales the model value (e.g. `100` stores/reads cents) ✅
@@ -329,7 +354,7 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 
     **Why:** The displayed amount is divided by `divisor` to produce the model
     value, so `100` lets you store integer cents.
-    **Ref:** [MoneyType](https://symfony.com/doc/current/reference/forms/types/money.html).
+    **Ref:** [MoneyType](https://symfony.com/doc/8.0/reference/forms/types/money.html).
 
 ??? question "Q3. For a mapped `CollectionType` to call adder/remover methods you set…"
     - [x] A. `by_reference => false` ✅
@@ -339,7 +364,7 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 
     **Why:** `by_reference => false` forces the form to use the parent's
     add/remove methods instead of mutating the returned collection in place.
-    **Ref:** [CollectionType](https://symfony.com/doc/current/reference/forms/types/collection.html).
+    **Ref:** [CollectionType](https://symfony.com/doc/8.0/reference/forms/types/collection.html).
 
 ## Key takeaways
 
@@ -366,8 +391,8 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 - **Confused with:** [File uploads](file-upload.md) — `FileType` looks scalar but yields an `UploadedFile`, not a string.
 
 ## Official References
-- [Official Symfony docs — Form types reference](https://symfony.com/doc/current/reference/forms/types.html)
-- [Official Symfony docs — CollectionType](https://symfony.com/doc/current/reference/forms/types/collection.html)
+- [Official Symfony docs — Form types reference](https://symfony.com/doc/8.0/reference/forms/types.html)
+- [Official Symfony docs — CollectionType](https://symfony.com/doc/8.0/reference/forms/types/collection.html)
 - [Symfony source — Core form types](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Form/Extension/Core/Type)
 
 ## Video references
@@ -379,7 +404,7 @@ options use `ChoiceType`; only reach for a custom type when a field shape recurs
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/forms/types/choice.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/forms/types/choice.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

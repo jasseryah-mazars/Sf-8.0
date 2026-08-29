@@ -27,7 +27,29 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [The Request](request.md), [DI](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un résolveur d'arguments transforme la requête brute en objets typés que ton action attend — un `Uuid`, une entité, un DTO validé — automatiquement.
+
+### Imagine dans la vraie vie
+Une file de traducteurs spécialisés : chacun lit les métadonnées de l'argument, et soit le traduit, soit hausse les épaules et fait passer le bordereau au traducteur suivant. Ce haussement d'épaules — refuser en ne produisant rien — est comment la chaîne trouve le seul traducteur qui parle la langue de l'argument.
+
+### Dans Symfony
+`public function show(Article $article)` reçoit automatiquement l'entité `Article` déjà chargée depuis la base, sans que tu écrives toi-même `$em->find($id)` — un résolveur dédié fait ce travail à ta place.
+
+### Exemple simple
+```php
+#[Route('/commandes/{status}')]
+public function parStatut(Status $status): Response { /* Status déjà résolu depuis l'enum */ }
+```
+
+### Comment le mémoriser 🧠
+Les résolveurs sont classés par **priorité** (`Request`/`Session` à 120, en tête de chaîne) — le premier qui accepte de traduire gagne ; les autres n'ont jamais leur mot à dire sur cet argument.
 
 ## Theory
 
@@ -140,7 +162,7 @@ public function show(
 
 !!! note "Source reference"
     `ValueResolverInterface`, `ArgumentResolver`, and the built-in resolvers —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver).
 
 ### RequestPayload internals
 
@@ -345,6 +367,8 @@ returned nothing.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which interface does a custom value resolver implement in Symfony 8?"
     - [ ] A. `ArgumentValueResolverInterface`
     - [x] B. `ValueResolverInterface` (`resolve(): iterable`) ✅
@@ -352,7 +376,7 @@ returned nothing.
     - [ ] D. `ControllerResolverInterface`
 
     **Why:** the split `supports()`/`resolve()` interface was removed; `resolve()`
-    now returns an `iterable`. **Ref:** [value resolvers](https://symfony.com/doc/current/controller/value_resolver.html).
+    now returns an `iterable`. **Ref:** [value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ??? question "Q2. How does a resolver indicate it does not handle an argument?"
     - [x] A. Yield nothing (return an empty iterable). ✅
@@ -361,7 +385,7 @@ returned nothing.
     - [ ] D. Return `null`.
 
     **Why:** yielding nothing passes the argument to the next resolver.
-    **Ref:** [value resolvers](https://symfony.com/doc/current/controller/value_resolver.html).
+    **Ref:** [value resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ??? question "Q3. Which resolver has the highest default priority?"
     - [x] A. `RequestValueResolver` / `SessionValueResolver` (120) ✅
@@ -379,7 +403,7 @@ returned nothing.
     - [ ] D. 200 with null
 
     **Why:** the serializer/validator flow throws `UnprocessableEntityHttpException`
-    (422) for validation errors. **Ref:** [mapping request payload](https://symfony.com/doc/current/controller/value_resolver.html#mapping-the-whole-request-payload).
+    (422) for validation errors. **Ref:** [mapping request payload](https://symfony.com/doc/8.0/controller/value_resolver.html#mapping-the-whole-request-payload).
 
 ??? question "Q5. `#[MapQueryParameter]` vs `#[MapQueryString]` — the difference?"
     - [x] A. `MapQueryParameter` binds one typed param; `MapQueryString` maps the whole query into a DTO. ✅
@@ -388,7 +412,7 @@ returned nothing.
     - [ ] D. Both require Doctrine.
 
     **Why:** one is a single scalar, the other deserializes+validates a DTO.
-    **Ref:** [value resolver](https://symfony.com/doc/current/controller/value_resolver.html).
+    **Ref:** [value resolver](https://symfony.com/doc/8.0/controller/value_resolver.html).
 
 ## Key takeaways
 
@@ -416,8 +440,8 @@ returned nothing.
 - **Confused with:** [The Request](request.md) — `RequestValueResolver` fills the `Request` arg; the map-attributes build DTOs.
 
 ## Official References
-- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/current/controller/value_resolver.html)
-- [Symfony source — ArgumentResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
+- [Official Symfony docs — Value Resolvers](https://symfony.com/doc/8.0/controller/value_resolver.html)
+- [Symfony source — ArgumentResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 - [Symfony source — value resolver services (web.php)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Resources/config/web.php)
 
 ## Video references
@@ -429,7 +453,7 @@ returned nothing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/value_resolver.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/value_resolver.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

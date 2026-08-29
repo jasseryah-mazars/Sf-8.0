@@ -34,6 +34,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque version de PHP ajoute de nouveaux outils au langage — savoir "dans quelle version" un outil est apparu, c'est comme reconnaître l'année d'un modèle de voiture.
+
+### Imagine dans la vraie vie
+Un mécanicien expérimenté regarde une voiture et sait tout de suite : "vitres électriques, ça, c'est arrivé telle année ; l'aide au stationnement, plus tard." Il ne devine pas au hasard, il reconnaît des indices précis. Pour PHP, c'est pareil : voir `match` ou des attributs `#[...]` te dit "au moins PHP 8.0" ; voir `public private(set)` te dit "PHP 8.4".
+
+### Dans Symfony
+Symfony 8 exige PHP 8.4+, donc l'examen suppose que tu reconnaisses ces nouveautés sur simple lecture de code — pas besoin de les avoir mémorisées par cœur, juste de les reconnaître à l'écran.
+
+### Exemple simple
+```php
+class Compte {
+    public private(set) float $solde = 0; // PHP 8.4 : lisible partout, modifiable seulement ici
+}
+```
+
+### Comment le mémoriser 🧠
+Range les nouveautés sur une frise chronologique mentale : 8.0 = `match`/attributs, 8.1 = enums/readonly, 8.2 = classes `readonly`, 8.3 = constantes typées, 8.4 = property hooks/asymmetric visibility. La dernière case de la frise (8.4) est toujours la plus testée, car la plus "neuve".
+
+
 ## Theory
 
 Symfony 8 exige **PHP 8.4+**. La certification vérifie que vous reconnaissez la
@@ -507,7 +529,7 @@ flowchart TD
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/index.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/index.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -32,6 +32,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le profiler stocke un instantané par requête (timing, requêtes SQL, logs) — c'est un outil de développement uniquement, désactivé en production.
+
+### Imagine dans la vraie vie
+Le profiler est l'enregistreur de vol d'un avion. Tout au long de chaque vol (requête), des capteurs (les data collectors) notent les temps, la consommation, les requêtes et événements, et l'enregistreur écrit un instantané par vol à un moment fixe proche de l'atterrissage.
+
+### Dans Symfony
+La barre de débogage tout en bas de chaque page en environnement `dev` (nombre de requêtes SQL, temps de rendu Twig) est directement alimentée par le profiler — invisible et absente en production.
+
+### Exemple simple
+```console
+$ php bin/console debug:container --show-hidden # complète l'inspection via le profiler
+```
+
+### Comment le mémoriser 🧠
+La collecte se fait sur `kernel.response` — et tout ce que stocke un collecteur (`$this->data`) doit être **sérialisable**, jamais un objet vivant comme une connexion PDO ouverte.
+
+---
+
+
 ## Theory
 
 Le **Web Profiler** stocke un **profil** par request — temps, requêtes DB, logs,
@@ -267,7 +289,7 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
     - [ ] C. Only in the CLI
 
     **Why:** `Profiler::collect()` s'exécute sur l'event de response ; la collecte
-    tardive à terminate. **Ref:** [Profiler](https://symfony.com/doc/current/profiler.html).
+    tardive à terminate. **Ref:** [Profiler](https://symfony.com/doc/8.0/profiler.html).
 
 ??? question "Q2. Which tag registers a custom data collector?"
     - [x] A. `data_collector` ✅
@@ -275,7 +297,7 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
     - [ ] C. `profiler.panel`
 
     **Why:** Le tag `data_collector` (avec un `template`) câble le collector +
-    le panneau. **Ref:** [Creating a data collector](https://symfony.com/doc/current/profiler/data_collector.html).
+    le panneau. **Ref:** [Creating a data collector](https://symfony.com/doc/8.0/profiler.html).
 
 ??? question "Q3. Should the profiler run in production?"
     - [ ] A. Yes, for monitoring
@@ -283,7 +305,7 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
     - [ ] C. Only for admins
 
     **Why:** Il ajoute un surcoût et expose les rouages internes ; gardez-le
-    désactivé en prod. **Ref:** [Profiler](https://symfony.com/doc/current/profiler.html).
+    désactivé en prod. **Ref:** [Profiler](https://symfony.com/doc/8.0/profiler.html).
 
 ## Key takeaways
 
@@ -307,8 +329,8 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
 - **Confused with:** l'observabilité en production — le profiler est un outil réservé au dev, pas un backend de métriques.
 
 ## Official References
-- [Official docs — Profiler](https://symfony.com/doc/current/profiler.html)
-- [Official docs — Custom data collector](https://symfony.com/doc/current/profiler/data_collector.html)
+- [Official docs — Profiler](https://symfony.com/doc/8.0/profiler.html)
+- [Official docs — Custom data collector](https://symfony.com/doc/8.0/profiler.html)
 - [Symfony source — DataCollectorInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DataCollector/DataCollectorInterface.php)
 
 ## Video references
@@ -320,7 +342,7 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/profiler.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/profiler.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

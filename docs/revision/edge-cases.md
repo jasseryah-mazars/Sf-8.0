@@ -2,7 +2,7 @@
 
 Expert exams live in the edge cases: the situations where the framework does
 something *other* than what the naive answer predicts. This page is a drill deck —
-79 "What happens if…?" questions across all 14 syllabus areas, each hiding a
+84 "What happens if…?" questions across all 15 syllabus areas, each hiding a
 precise, verifiable behaviour.
 
 !!! tip "How to drill"
@@ -10,6 +10,20 @@ precise, verifiable behaviour.
     an answer before you peek — then click to reveal. If your answer missed the
     key word (the status code, the exception class, the default), open the linked
     chapter and re-read it. Wrong-then-corrected beats vaguely-right every time.
+
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une série de questions **« Que se passe-t-il si… ? »** portant sur des situations limites — des cas où le comportement réel de Symfony/PHP surprend celui qui répondrait "logiquement" sans connaître l'implémentation.
+
+**Pourquoi ça existe ?** Les questions de niveau Expert ne demandent pas "qu'est-ce que X" mais "que se passe-t-il quand X et Y se combinent d'une façon inhabituelle". Cette page entraîne spécifiquement ce réflexe.
+
+**🏠 Analogie de la vraie vie :** C'est l'entraînement d'un **pilote d'avion en simulateur de panne** : on ne répète pas le vol normal, on répète des scénarios rares et précis (un moteur qui tombe en panne à tel moment) pour que la bonne réaction devienne un réflexe.
+
+**Symfony dans la vraie vie :** Chaque question → un scénario limite précis (ex. deux `return` dans `try`/`finally`) / La réponse dépliable → le comportement réel de PHP/Symfony, avec le mécanisme qui l'explique, pas juste le résultat.
+
+**⚠️ Erreur fréquente :** Répondre "au feeling" sans avoir formulé sa réponse à voix haute avant de cliquer. Le format encourage explicitement à s'engager sur une réponse d'abord — sauter cette étape réduit l'efficacité de l'entraînement à presque zéro.
+
+**🧠 Comment le mémoriser :** *« Je réponds avant de cliquer, jamais après »* — un cas limite mal deviné puis corrigé se retient bien mieux qu'un cas limite lu passivement.
 
 ## PHP & Web Security
 
@@ -257,7 +271,7 @@ precise, verifiable behaviour.
     It throws an **`AlreadySubmittedException`** — a form can be submitted only
     once. The same applies to mutating a submitted form, e.g. `add()`ing a child
     after submission.
-    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/current/form/direct_submit.html)
+    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/forms.html)
 
 ??? question "What happens if you render fields manually and forget `form_rest()` (so no `_token` is printed)?"
     The next submission fails CSRF validation — a guaranteed **"invalid token"**
@@ -340,7 +354,7 @@ precise, verifiable behaviour.
     cycles cannot be instantiated. Break the cycle by making one side `lazy` (a
     proxy defers instantiation), injecting a service locator, or switching one
     edge to setter injection.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html)
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html)
 
 ??? question "What happens if you tag a service with a custom tag and nothing else?"
     **Nothing** — a tag is inert metadata until a consumer (a `tagged_iterator`/
@@ -528,14 +542,48 @@ precise, verifiable behaviour.
     pass `true` to block. Locks also carry a TTL (default 300 s), so long jobs
     must `refresh()`, and `FlockStore`/`SemaphoreStore` protect a single machine
     only.
-    **Ref:** [Lock](../miscellaneous/lock.md)
+    **Ref:** [Lock](../appendices/out-of-syllabus/lock.md)
+
+## Messenger
+
+??? question "What happens if a message class has no routing entry in `framework.messenger.transports`?"
+    It is **not an error** — it is handled **synchronously, in-process**,
+    exactly as if it had been routed to `sync://` explicitly. The full
+    middleware pipeline still runs; only the transport hop is skipped.
+    **Ref:** [Transports](../messenger/transports.md)
+
+??? question "What happens to the computed retry delay when `retry_strategy.jitter` is left at its default?"
+    It is **randomized by up to ±10%** (the framework default is `jitter: 0.1`)
+    on top of the `delay × multiplier^attempt` exponential backoff — only
+    `jitter: 0` makes a `1000/2000/4000 ms` progression exact.
+    **Ref:** [Retries & failures](../messenger/retries-failures.md)
+
+??? question "What happens when a handler throws `UnrecoverableMessageHandlingException`?"
+    Retries are **skipped entirely** — the envelope goes straight to the
+    **failure transport**, regardless of how many retries remain. Use it only
+    for structural errors that will fail identically every time, never for
+    transient ones.
+    **Ref:** [Retries & failures](../messenger/retries-failures.md)
+
+??? question "What happens if you read `$envelope->last(RedeliveryStamp::class)?->getRetryCount()` on a message that has never failed?"
+    It evaluates to **`null`**, not `0` — a message with no prior failure
+    carries no `RedeliveryStamp` at all, so its absence itself means "first
+    attempt," never "zero retries logged."
+    **Ref:** [Retries & failures](../messenger/retries-failures.md)
+
+??? question "What happens if the same message is delivered to a handler twice because a slow worker's visibility window expired mid-processing?"
+    That is **allowed by design** — Messenger's delivery contract is
+    **at-least-once**, never exactly-once. Nothing in the framework prevents
+    a redelivery; only an **idempotent** handler prevents a duplicated
+    side effect.
+    **Ref:** [Retries & failures](../messenger/retries-failures.md)
 
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
-- [Routing](https://symfony.com/doc/current/routing.html) · [Controllers](https://symfony.com/doc/current/controller.html) · [Forms](https://symfony.com/doc/current/forms.html) · [Validation](https://symfony.com/doc/current/validation.html)
-- [Service container](https://symfony.com/doc/current/service_container.html) · [Security](https://symfony.com/doc/current/security.html) · [HTTP cache](https://symfony.com/doc/current/http_cache.html)
-- [Console](https://symfony.com/doc/current/console.html) · [Testing](https://symfony.com/doc/current/testing.html) · [Twig](https://twig.symfony.com/doc/3.x/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
+- [Routing](https://symfony.com/doc/8.0/routing.html) · [Controllers](https://symfony.com/doc/8.0/controller.html) · [Forms](https://symfony.com/doc/8.0/forms.html) · [Validation](https://symfony.com/doc/8.0/validation.html)
+- [Service container](https://symfony.com/doc/8.0/service_container.html) · [Security](https://symfony.com/doc/8.0/security.html) · [HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
+- [Console](https://symfony.com/doc/8.0/console.html) · [Testing](https://symfony.com/doc/8.0/testing.html) · [Twig](https://twig.symfony.com/doc/3.x/)
 - [PHP manual](https://www.php.net/manual/en/) · [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
 
 ---

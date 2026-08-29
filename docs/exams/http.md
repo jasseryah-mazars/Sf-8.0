@@ -1,12 +1,26 @@
 # Chapter Exam — HTTP
 
 !!! abstract "How to use"
-    76 questions spanning every subchapter of **HTTP**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    84 questions spanning every subchapter of **HTTP**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
 
 Full theory: [HTTP](../http/index.md).
+
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Cette page est une **banque de 76 questions type QCM** sur HTTP, avec correction dépliable sous chaque question. Ce n'est pas un cours : c'est un entraînement, à faire après avoir lu le chapitre.
+
+**Pourquoi ça existe ?** Lire un chapitre donne l'impression d'avoir compris, mais répondre à une question sous forme d'examen (sans relire ses notes) révèle les vraies lacunes — c'est ce que fera l'examen officiel.
+
+**🏠 Analogie de la vraie vie :** C'est le **permis de conduire**. Le code de la route (le cours) explique les règles ; les séries de questions du permis blanc (cette page) vérifient que tu sais les appliquer sous forme de question piège, sans l'aide du livre.
+
+**Symfony dans la vraie vie :** Cours du chapitre → code de la route appris / Question du QCM → question du permis blanc / Réponse dépliable → correction avec explication / Score obtenu → indicateur "prêt à passer l'examen ou pas".
+
+**⚠️ Erreur fréquente :** Déplier la réponse avant d'avoir vraiment tranché son choix. Le cerveau retient beaucoup mieux une explication lue *après* s'être trompé (ou avoir hésité) que lue en passant, sans effort de rappel préalable.
+
+**🧠 Comment le mémoriser :** *« Je réponds d'abord, je vérifie ensuite »* — jamais l'inverse. Note les questions ratées : ce sont exactement les pièges que l'examinateur pose aussi.
 
 ---
 
@@ -36,7 +50,7 @@ Full theory: [HTTP](../http/index.md).
 
     getScheme() returns http/https; getProtocolVersion() returns the version string from SERVER_PROTOCOL.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q3.** At the front controller, which call builds the Request object from PHP's superglobals? (choose one)  <small>_(easy · internals)_</small>
 
@@ -50,7 +64,7 @@ Full theory: [HTTP](../http/index.md).
 
     public/index.php calls Request::createFromGlobals(), which reads $_GET, $_POST, $_SERVER, $_COOKIE and $_FILES once into the typed bags. Request::create() builds a synthetic request from explicit arguments (used in tests/sub-requests), and there is no createFromRequest() factory for this purpose.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q4.** The user is authenticated but lacks permission for a resource. Which status? (choose one)  <small>_(easy · single)_</small>
 
@@ -104,7 +118,7 @@ Full theory: [HTTP](../http/index.md).
 
     The attributes bag (ParameterBag) holds framework/route data such as _route, _controller and path parameters — not the query string.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q8.** Route parameters such as {id} are read from $request->query. True or false?  <small>_(easy · true-false)_</small>
 
@@ -116,7 +130,7 @@ Full theory: [HTTP](../http/index.md).
 
     Route parameters live in $request->attributes (a ParameterBag), written by the Router — not in $request->query, which mirrors $_GET (the URL query string). Reading {id} via query returns null; use $request->attributes->get('id').
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q9.** $response->headers is an instance of which class? (choose one)  <small>_(easy · single)_</small>
 
@@ -238,7 +252,7 @@ Full theory: [HTTP](../http/index.md).
 
     Symfony ships secure session-cookie defaults: HttpOnly is true (JavaScript cannot read the session id) and SameSite is lax (mitigating most CSRF via cookies while still allowing top-level GET navigations). cookie_secure typically defaults to 'auto' (Secure when the request is HTTPS).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/configuration/framework.html#cookie-httponly)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/configuration/framework.html#cookie-httponly)
 
 **Q18.** Which caching model can avoid contacting the server entirely? (choose one)  <small>_(easy · single)_</small>
 
@@ -252,7 +266,7 @@ Full theory: [HTTP](../http/index.md).
 
     While a copy is fresh (within max-age), the cache serves it with no request; validation always sends a conditional request.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q19.** In an Accept header, what does q=0 mean for an option? (choose one)  <small>_(easy · single)_</small>
 
@@ -294,7 +308,7 @@ Full theory: [HTTP](../http/index.md).
 
     enabled_locales restricts valid locales (routing _locale, translation compilation); default_locale sets the fallback.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html)
 
 **Q22.** Which type should you type-hint to autowire an HTTP client? (choose one)  <small>_(easy · single)_</small>
 
@@ -308,7 +322,7 @@ Full theory: [HTTP](../http/index.md).
 
     Depend on the HttpClientInterface contract; the framework selects the concrete transport (curl or native).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html)
 
 **Q23.** Which class lets you test API integration code without any network traffic? (choose one)  <small>_(easy · single)_</small>
 
@@ -322,7 +336,7 @@ Full theory: [HTTP](../http/index.md).
 
     MockHttpClient returns canned MockResponse objects (or a callback) with no real HTTP requests.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html#testing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#testing)
 
 **Q24.** Which component decides whether a request is served over HTTP/2? (choose one)  <small>_(medium · single)_</small>
 
@@ -446,7 +460,7 @@ Full theory: [HTTP](../http/index.md).
 
     getPayload() returns an InputBag from the parsed body (decoding JSON or reading form data); getContent() returns the raw unparsed body string.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#accessing-request-data)
 
 **Q33.** Which method reports the request format derived from the body's Content-Type header in Symfony 8? (choose one)  <small>_(medium · trap)_</small>
 
@@ -474,7 +488,7 @@ Full theory: [HTTP](../http/index.md).
 
     BinaryFileResponse streams a file without buffering it in memory and supports Range requests and X-Sendfile.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#serving-files)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files)
 
 **Q35.** What does Response::prepare() do? (choose one)  <small>_(medium · single)_</small>
 
@@ -502,7 +516,7 @@ Full theory: [HTTP](../http/index.md).
 
     makeDisposition() now lives on HeaderUtils; the old ResponseHeaderBag::makeDisposition() was removed. For file responses you can also use BinaryFileResponse::setContentDisposition(), which delegates to the same logic — but the static helper itself is on HeaderUtils.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#serving-files)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files)
 
 **Q37.** You must serve a 2 GB file for download without exhausting memory. Which approach is correct? (choose one)  <small>_(medium · scenario)_</small>
 
@@ -516,7 +530,7 @@ Full theory: [HTTP](../http/index.md).
 
     new Response(file_get_contents(...)) loads the whole file into memory and will exhaust it. BinaryFileResponse streams a file already on disk (and adds Range and X-Sendfile support), while StreamedResponse streams generated output. Both keep memory flat regardless of size.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#serving-files)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files)
 
 **Q38.** By default in Symfony 8, is the _method parameter honoured? (choose one)  <small>_(medium · single)_</small>
 
@@ -530,7 +544,7 @@ Full theory: [HTTP](../http/index.md).
 
     You must enable framework.http_method_override (or call Request::enableHttpMethodParameterOverride()); it applies to POST only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q39.** After a successful method override, what does getRealMethod() return for a POST+_method=PUT request? (choose one)  <small>_(medium · single)_</small>
 
@@ -564,7 +578,7 @@ Full theory: [HTTP](../http/index.md).
 
     The key is framework.http_method_override (default false). It makes Symfony honour a _method field (or X-HTTP-Method-Override header) on POST requests, rewriting the method to PUT/PATCH/DELETE. The other keys do not exist.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/configuration/framework.html#http-method-override)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/configuration/framework.html#http-method-override)
 
 **Q41.** The Symfony Cookie object is immutable. What does Cookie::create('a')->withValue('b') require? (choose one)  <small>_(medium · trap)_</small>
 
@@ -603,7 +617,7 @@ Full theory: [HTTP](../http/index.md).
 
     Session cookie behaviour is configured under framework.session with the cookie_* keys: cookie_samesite (strict|lax|none), cookie_httponly, and cookie_secure (often 'auto'). Symfony's defaults are already HttpOnly: true and SameSite: lax. The other key shapes do not exist.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/configuration/framework.html#cookie-samesite)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/configuration/framework.html#cookie-samesite)
 
 **Q43.** The s-maxage directive applies to: (choose one)  <small>_(medium · single)_</small>
 
@@ -617,7 +631,7 @@ Full theory: [HTTP](../http/index.md).
 
     s-maxage is honoured only by shared caches and overrides max-age there.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/expiration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/expiration.html)
 
 **Q44.** What does Response::isNotModified($request) do on a validator match? (choose one)  <small>_(medium · single)_</small>
 
@@ -645,7 +659,7 @@ Full theory: [HTTP](../http/index.md).
 
     Freshness uses Cache-Control: max-age/s-maxage (and Expires); while fresh the cache answers with zero round-trips. Validation uses ETag/If-None-Match and Last-Modified/If-Modified-Since — it always asks, but the server can reply 304 Not Modified with no body. The models are complementary, not interchangeable.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/validation.html)
 
 **Q46.** Which attribute declaratively marks a controller's response public and cacheable for one hour in shared and private caches? (choose one)  <small>_(medium · config)_</small>
 
@@ -659,7 +673,7 @@ Full theory: [HTTP](../http/index.md).
 
     Symfony\\Component\\HttpKernel\\Attribute\\Cache exposes public, maxage, smaxage, expires, etag and lastModified. #[Cache(public: true, maxage: 3600, smaxage: 3600)] sets Cache-Control: public, max-age=3600, s-maxage=3600. The other attributes do not exist.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html#introducing-http-caching)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html#introducing-http-caching)
 
 **Q47.** A default Symfony Response is storable by a shared cache (CDN/proxy) out of the box. True or false?  <small>_(medium · true-false)_</small>
 
@@ -671,7 +685,7 @@ Full theory: [HTTP](../http/index.md).
 
     A default response carries Cache-Control: no-cache, private, so shared caches will not store it. You must opt in with setPublic()/setSharedMaxAge() (or #[Cache(public: true)]). Marking user-specific responses public would leak data across users.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
 **Q48.** getPreferredLanguage(['en','de']) returns: (choose one)  <small>_(medium · single)_</small>
 
@@ -685,7 +699,7 @@ Full theory: [HTTP](../http/index.md).
 
     With a whitelist it intersects the client's ordered languages with your supported list and returns the best match.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q49.** What does getAcceptableContentTypes() return? (choose one)  <small>_(medium · single)_</small>
 
@@ -727,7 +741,7 @@ Full theory: [HTTP](../http/index.md).
 
     The whitelist form guarantees a supported locale; the others may return one you do not support.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations)
 
 **Q52.** What sets the request locale when a route defines {_locale}? (choose one)  <small>_(medium · single)_</small>
 
@@ -762,7 +776,7 @@ Full theory: [HTTP](../http/index.md).
 
     set_locale_from_accept_language: true tells Symfony to set the request locale from Accept-Language when no _locale is present, constrained to enabled_locales. No custom kernel.request listener is needed. The other keys do not exist.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/configuration/framework.html#set-locale-from-accept-language)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/configuration/framework.html#set-locale-from-accept-language)
 
 **Q54.** The browser sends Accept-Language: es, en;q=0.8 and the app supports only ['en','fr']. What does getPreferredLanguage(['en','fr']) return? (choose one)  <small>_(medium · scenario)_</small>
 
@@ -776,7 +790,7 @@ Full theory: [HTTP](../http/index.md).
 
     getPreferredLanguage intersects the client's ordered languages with your whitelist. es is not supported, so it is skipped; en (q=0.8) is the best remaining acceptable option and is returned. With a whitelist it never returns an unsupported locale, and it falls back to the first list entry only if none match.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q55.** Why is calling getPreferredLanguage() with no argument risky for locale detection? (choose one)  <small>_(medium · trap)_</small>
 
@@ -790,7 +804,7 @@ Full theory: [HTTP](../http/index.md).
 
     Without a whitelist, getPreferredLanguage() returns the client's single highest-ranked language regardless of what your app supports, so you may get an unsupported locale and break translations/routing. Always pass your supported list so the result is bounded.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations)
 
 **Q56.** When is an HttpClient request actually performed? (choose one)  <small>_(medium · single)_</small>
 
@@ -804,7 +818,7 @@ Full theory: [HTTP](../http/index.md).
 
     request() returns a lazy ResponseInterface; the transfer completes on first access, which enables free concurrency.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html)
 
 **Q57.** What does ResponseInterface::getContent() do on a 500 response by default? (choose one)  <small>_(medium · single)_</small>
 
@@ -818,7 +832,7 @@ Full theory: [HTTP](../http/index.md).
 
     By default getContent()/toArray() throw on 3xx/4xx/5xx; pass false (or the throw option) to read the body without throwing. getStatusCode() never throws.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html#handling-exceptions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#handling-exceptions)
 
 **Q58.** What does this test assert? $client = new MockHttpClient(new MockResponse('{"id":42}')); $data = $client->request('GET', 'https://api.test/x')->toArray(); (choose one)  <small>_(medium · code)_</small>
 
@@ -832,7 +846,7 @@ Full theory: [HTTP](../http/index.md).
 
     MockHttpClient serves the supplied MockResponse without any network; toArray() JSON-decodes the body to ['id' => 42]. MockResponse defaults to HTTP 200, so no exception is thrown, and toArray() returns an array, not the raw string.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html#testing)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#testing)
 
 **Q59.** Which framework configuration defines a scoped client that prefixes a base URI and bearer token for one API? (choose one)  <small>_(medium · config)_</small>
 
@@ -859,245 +873,364 @@ Full theory: [HTTP](../http/index.md).
 
     Scoped clients are declared under framework.http_client.scoped_clients; each named entry (e.g. github.client) applies its base_uri, headers and auth only to matching URLs. The framework registers a service you autowire by variable name ($githubClient). The other shapes are invalid.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html#scoping-client)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#scoping-client)
 
-**Q60.** An app sits behind a TLS-terminating reverse proxy that forwards X-Forwarded-Proto: https, yet $request->isSecure() returns false. What is the most likely cause? (choose one)  <small>_(hard · trap)_</small>
+**Q60.** Which of the following statements are true about HTTP methods? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. PUT and DELETE are idempotent but not safe
+- B. GET and HEAD are the methods that are cacheable by default
+- C. The _method override only applies to POST requests and is disabled by default
+- D. POST is idempotent, so repeating it is always harmless
+- E. Request::getMethod() returns the raw method and ignores any method override
+
+??? success "Answer Q60"
+    **A, B, C**
+
+    Safe methods are a subset of idempotent ones: PUT/DELETE change state but repeating them yields the same result, and only GET/HEAD are cacheable by default. The _method override requires http_method_override to be enabled and only fires on POST. POST (like PATCH) is neither safe nor idempotent, and getMethod() is the override-aware effective method — getRealMethod() returns the raw one.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#identifying-a-request)
+
+**Q61.** Which of the following statements are true about HTTP status codes? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. 307 and 308 redirects preserve the original request method and body
+- B. A 303 See Other redirect always forces the follow-up request to use GET
+- C. 401 means the user is authenticated but lacks permission for the resource
+- D. 422 Unprocessable Entity is meant for syntactically malformed requests
+- E. Response::setStatusCode() accepts any integer, including 999
+
+??? success "Answer Q61"
+    **A, B**
+
+    307/308 are the method-preserving redirects (unlike 301/302, which user agents may rewrite to GET), and 303 explicitly forces GET — the classic POST/redirect/GET pattern. 401 means unauthenticated (403 is the not-authorized case), 422 targets well-formed but semantically invalid requests (malformed syntax is 400), and setStatusCode() throws for codes outside 100–599.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#response)
+
+**Q62.** Which of the following statements are true about cookies in Symfony/HTTP? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. A cookie with SameSite=None must also be marked Secure, or browsers drop it
+- B. The Symfony Cookie object is immutable — each with*() call returns a new instance
+- C. Omitting both Expires and Max-Age produces a session cookie deleted when the browser closes
+- D. clearCookie() deletes the cookie no matter which path/domain it was set with
+- E. Symfony session cookies default to SameSite=Strict
+
+??? success "Answer Q62"
+    **A, B, C**
+
+    SameSite=None is only valid together with Secure; the immutable Cookie API means forgetting to reassign a with*() result is a silent no-op; and without Expires/Max-Age the cookie only lives for the browser session. clearCookie() must match the original path/domain or the cookie survives, and Symfony's session cookie defaults are HttpOnly: true with SameSite=Lax, not Strict.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
+
+**Q63.** An app sits behind a TLS-terminating reverse proxy that forwards X-Forwarded-Proto: https, yet $request->isSecure() returns false. What is the most likely cause? (choose one)  <small>_(hard · trap)_</small>
 
 - A. Trusted proxies were not declared, so Symfony ignores X-Forwarded-* headers
 - B. isSecure() only reads getScheme(), which is always http
 - C. isSecure() requires HTTP/2 to return true
 - D. PHP terminated TLS but did not tell Symfony
 
-??? success "Answer Q60"
+??? success "Answer Q63"
     **A**
 
     For security, Symfony trusts X-Forwarded-* (including -Proto) only from proxies registered via Request::setTrustedProxies() (or framework.trusted_proxies). Until then isSecure() reflects the direct connection (plain HTTP from the proxy) and returns false. PHP never terminates TLS; the edge does.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/deployment/proxies.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/deployment/proxies.html)
 
-**Q61.** You call new Response('', Response::HTTP_CREATED) without a reason phrase. How does Symfony fill the reason phrase? (choose one)  <small>_(hard · internals)_</small>
+**Q64.** You call new Response('', Response::HTTP_CREATED) without a reason phrase. How does Symfony fill the reason phrase? (choose one)  <small>_(hard · internals)_</small>
 
 - A. setStatusCode() looks the code up in the public static Response::$statusTexts map
 - B. It queries the web server for the canonical phrase
 - C. It always leaves the reason phrase empty
 - D. It reads the phrase from the HTTP_* constant name
 
-??? success "Answer Q61"
+??? success "Answer Q64"
     **A**
 
     Response::$statusTexts is a public static array mapping each known code to its reason phrase; setStatusCode() consults it when no explicit text is supplied. An unknown code simply yields an empty phrase (still valid). The HTTP_* constants are plain integers and carry no text themselves.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
-**Q62.** What happens when you call $response->setStatusCode(600)? (choose one)  <small>_(hard · code)_</small>
+**Q65.** What happens when you call $response->setStatusCode(600)? (choose one)  <small>_(hard · code)_</small>
 
 - A. It throws \InvalidArgumentException because the code is outside 100–599
 - B. It silently clamps the value to 599
 - C. It stores 600 with an empty reason phrase
 - D. It returns false
 
-??? success "Answer Q62"
+??? success "Answer Q65"
     **A**
 
     setStatusCode() validates that the code is within the HTTP range 100–599 and throws \\InvalidArgumentException otherwise — a common gotcha when a code is computed dynamically. It neither clamps nor stores out-of-range values.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
-**Q63.** Why does InputBag (query/request/cookies) reject reading an array where a scalar is expected? (choose one)  <small>_(hard · internals)_</small>
+**Q66.** Why does InputBag (query/request/cookies) reject reading an array where a scalar is expected? (choose one)  <small>_(hard · internals)_</small>
 
 - A. InputBag restricts values to scalars/arrays-of-scalars/null and throws BadRequestException on a type mismatch, hardening against malicious nested input
 - B. PHP forbids arrays in $_GET
 - C. ParameterBag also throws in the same case
 - D. It silently casts the array to its first element
 
-??? success "Answer Q63"
+??? success "Answer Q66"
     **A**
 
     InputBag extends ParameterBag but narrows the contract to user-supplied data: get() accepts only scalars/null and raises a BadRequestException (HTTP 400) when handed an unexpected array, blocking parameter-pollution style attacks. A plain ParameterBag (used by attributes) imposes no such restriction. Use all('key') to intentionally read array values.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
 
-**Q64.** A request handler crashes with a TypeError only when the X-Trace-Id header is absent, on the line strtoupper($request->headers->get('X-Trace-Id')). What is the cause and fix? (choose one)  <small>_(hard · debug)_</small>
+**Q67.** A request handler crashes with a TypeError only when the X-Trace-Id header is absent, on the line strtoupper($request->headers->get('X-Trace-Id')). What is the cause and fix? (choose one)  <small>_(hard · debug)_</small>
 
 - A. HeaderBag::get() returns null for a missing key; guard with ?? or supply a default before calling a string function
 - B. get() throws when the header is missing; wrap it in try/catch
 - C. Headers are only readable via $_SERVER; the bag is empty
 - D. get() returns an empty array, breaking strtoupper()
 
-??? success "Answer Q64"
+??? success "Answer Q67"
     **A**
 
     HeaderBag::get(string $key, mixed $default = null) returns null when the key is absent — a normal lookup miss, not an error. Passing null to strtoupper() triggers the TypeError. Guard with $request->headers->get('X-Trace-Id') ?? '' or pass a default. Typed InputBag getters (getString etc.) coalesce to a zero value, but HeaderBag::get() is nullable.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/HeaderBag.php)
 
-**Q65.** You create new Response('hi') and set no cache headers. What Cache-Control does ResponseHeaderBag emit by default? (choose one)  <small>_(hard · internals)_</small>
+**Q68.** You create new Response('hi') and set no cache headers. What Cache-Control does ResponseHeaderBag emit by default? (choose one)  <small>_(hard · internals)_</small>
 
 - A. no-cache, private
 - B. public, max-age=0
 - C. no-store
 - D. no header is sent at all
 
-??? success "Answer Q65"
+??? success "Answer Q68"
     **A**
 
     When you set no cache directives, ResponseHeaderBag computes a sensible default of 'no-cache, private', so a bare response is never stored by shared caches. Calling setPublic()/setMaxAge()/setSharedMaxAge() changes this. It is not 'no-store', and a Cache-Control header is always present.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
 
-**Q66.** A candidate claims PATCH is always idempotent like PUT. Why is this wrong? (choose one)  <small>_(hard · trap)_</small>
+**Q69.** A candidate claims PATCH is always idempotent like PUT. Why is this wrong? (choose one)  <small>_(hard · trap)_</small>
 
 - A. PATCH applies a partial change that may differ when repeated (e.g. an increment delta), so it is generally not idempotent
 - B. PATCH is safe, so idempotency is irrelevant
 - C. PATCH is never allowed to have a body
 - D. PATCH and PUT are identical in every respect
 
-??? success "Answer Q66"
+??? success "Answer Q69"
     **A**
 
     PUT replaces a resource wholesale, so sending the same body twice leaves the same state (idempotent). PATCH describes a partial modification; a delta such as 'add 1' applied twice yields a different result, so PATCH is generally not idempotent. Neither PATCH nor PUT is safe — both change state.
 
     :material-book-open-variant: [Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/PATCH)
 
-**Q67.** What are the exact conditions under which Symfony applies the method override? (choose one)  <small>_(hard · internals)_</small>
+**Q70.** What are the exact conditions under which Symfony applies the method override? (choose one)  <small>_(hard · internals)_</small>
 
 - A. Only on a POST request, only when enabled, and only to the values PUT, PATCH or DELETE
 - B. On any request whenever a _method field is present
 - C. On GET and POST, to any value including GET
 - D. Automatically for all JSON requests
 
-??? success "Answer Q67"
+??? success "Answer Q70"
     **A**
 
     The override fires only when http_method_override is enabled, only on a POST transport request, and rewrites the method solely to PUT/PATCH/DELETE. Other transports are never rewritten, which is why getRealMethod() still reports POST.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 
-**Q68.** A cookie set with Path=/app and Domain=.example.com is not deleted by $response->headers->clearCookie('session'). Why? (choose one)  <small>_(hard · debug)_</small>
+**Q71.** A cookie set with Path=/app and Domain=.example.com is not deleted by $response->headers->clearCookie('session'). Why? (choose one)  <small>_(hard · debug)_</small>
 
 - A. clearCookie() defaults to path '/' and no domain, so the expiry targets a different scope and the original survives
 - B. clearCookie() cannot delete HttpOnly cookies
 - C. Cookies can only be deleted client-side via JavaScript
 - D. You must call setCookie() with an empty value instead
 
-??? success "Answer Q68"
+??? success "Answer Q71"
     **A**
 
     A browser keys cookies by name plus path plus domain. clearCookie() emits a past-dated Set-Cookie, but with its default path '/' and no domain it does not match the original (Path=/app, Domain=.example.com), so the browser expires a non-existent cookie and keeps the real one. Fix: clearCookie('session', '/app', '.example.com').
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
 
-**Q69.** What does the __Host- cookie name prefix force the browser to require? (choose one)  <small>_(hard · internals)_</small>
+**Q72.** What does the __Host- cookie name prefix force the browser to require? (choose one)  <small>_(hard · internals)_</small>
 
 - A. Secure, no Domain attribute, and Path=/ — the strictest scoping the browser enforces
 - B. HttpOnly and SameSite=Strict only
 - C. A matching Domain attribute and Max-Age
 - D. Nothing; the prefix is purely cosmetic
 
-??? success "Answer Q69"
+??? success "Answer Q72"
     **A**
 
     A cookie named __Host-... is accepted only if it is Secure, has no Domain attribute (so it is locked to the exact host), and uses Path=/. This is the strongest same-origin scoping the browser guarantees, preventing subdomain injection. The related __Secure- prefix only requires the Secure flag.
 
     :material-book-open-variant: [Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#cookie_prefixes)
 
-**Q70.** To cache a public page in a CDN for 10 minutes without letting the browser cache it long-term, which setter do you use? (choose one)  <small>_(hard · internals)_</small>
+**Q73.** To cache a public page in a CDN for 10 minutes without letting the browser cache it long-term, which setter do you use? (choose one)  <small>_(hard · internals)_</small>
 
 - A. setSharedMaxAge(600) (plus setPublic()), which emits s-maxage honoured only by shared caches
 - B. setMaxAge(600), which targets shared caches only
 - C. setPrivate(), which enables CDN caching
 - D. setExpires(), which only affects the browser
 
-??? success "Answer Q70"
+??? success "Answer Q73"
     **A**
 
     setSharedMaxAge() writes s-maxage, obeyed only by shared caches (CDN/proxy) and it implies public. setMaxAge() targets any cache including the browser, so it is the wrong tool here. setPrivate() would forbid shared caching entirely.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/expiration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache/expiration.html)
 
-**Q71.** What is the key difference between getPreferredFormat() and getAcceptableContentTypes()? (choose one)  <small>_(hard · trap)_</small>
+**Q74.** What is the key difference between getPreferredFormat() and getAcceptableContentTypes()? (choose one)  <small>_(hard · trap)_</small>
 
 - A. getPreferredFormat() returns a Symfony format name (e.g. 'json'); getAcceptableContentTypes() returns raw MIME types
 - B. They are aliases returning the same value
 - C. getPreferredFormat() returns MIME types; getAcceptableContentTypes() returns formats
 - D. getPreferredFormat() reads Accept-Language, not Accept
 
-??? success "Answer Q71"
+??? success "Answer Q74"
     **A**
 
     getPreferredFormat() maps the client's Accept header to a short Symfony format (html, json, xml, csv...), best for a match expression. getAcceptableContentTypes() returns the raw MIME strings ordered by preference. Confusing format names with MIME types is a classic trap.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 
-**Q72.** Given AcceptHeader::fromString('text/html;q=0.9, application/json;q=1.0'), what does $accept->first()?->getQuality() return? (choose one)  <small>_(hard · code)_</small>
+**Q75.** Given AcceptHeader::fromString('text/html;q=0.9, application/json;q=1.0'), what does $accept->first()?->getQuality() return? (choose one)  <small>_(hard · code)_</small>
 
 - A. 1.0 — first() returns the highest-quality item (application/json)
 - B. 0.9 — items are returned in string order
 - C. null — first() only works on a single-value header
 - D. true — first() returns a boolean like has()
 
-??? success "Answer Q72"
+??? success "Answer Q75"
     **A**
 
     AcceptHeader parses and sorts items by quality (descending), so first() returns the AcceptHeaderItem for application/json (q=1.0) and getQuality() gives 1.0. The nullsafe operator guards the empty-header case where first() would return null.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/AcceptHeader.php)
 
-**Q73.** How does getRequestFormat() differ from getPreferredFormat()? (choose one)  <small>_(hard · internals)_</small>
+**Q76.** How does getRequestFormat() differ from getPreferredFormat()? (choose one)  <small>_(hard · internals)_</small>
 
 - A. getRequestFormat() returns the format from the _format attribute (e.g. a route suffix); getPreferredFormat() negotiates from the client's Accept header
 - B. They both read the Accept header
 - C. getRequestFormat() reads Accept; getPreferredFormat() reads _format
 - D. getRequestFormat() returns a MIME type, getPreferredFormat() a locale
 
-??? success "Answer Q73"
+??? success "Answer Q76"
     **A**
 
     getRequestFormat(?string $default = 'html') returns the format stored in the _format request attribute (set e.g. by a /path.{_format} route), while getPreferredFormat() computes the best format from the client's Accept header. Mixing the two is a common mistake.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
-**Q74.** After the request locale is set, how does it reach services like the Translator? (choose one)  <small>_(hard · internals)_</small>
+**Q77.** After the request locale is set, how does it reach services like the Translator? (choose one)  <small>_(hard · internals)_</small>
 
 - A. LocaleAwareListener pushes it into every service implementing LocaleAwareInterface
 - B. Each service reads $_SERVER['HTTP_ACCEPT_LANGUAGE'] itself
 - C. Twig broadcasts it during template rendering
 - D. The Router injects it into the container parameters
 
-??? success "Answer Q74"
+??? success "Answer Q77"
     **A**
 
     LocaleListener sets the request locale; LocaleAwareListener then calls setLocale() on every service tagged/implementing Symfony\\Contracts\\Translation\\LocaleAwareInterface (e.g. the Translator). For a scoped switch you use LocaleSwitcher. Services do not read superglobals.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleAwareListener.php)
 
-**Q75.** Reading each response's getContent() inside the loop that fires the requests makes the batch slow. Why? (choose one)  <small>_(hard · debug)_</small>
+**Q78.** Reading each response's getContent() inside the loop that fires the requests makes the batch slow. Why? (choose one)  <small>_(hard · debug)_</small>
 
 - A. Reading the body blocks until that transfer completes, so requests run sequentially instead of concurrently
 - B. getContent() opens a second connection per call
 - C. request() is synchronous, so the loop cannot help
 - D. toArray() must be used to enable concurrency
 
-??? success "Answer Q75"
+??? success "Answer Q78"
     **A**
 
     request() is lazy/async: firing them all first lets transfers overlap. But calling getContent() on a response forces that transfer to finish before the next request() runs, serialising the batch. Fire all requests first, then read (or iterate $client->stream($responses)) to keep concurrency.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html#concurrent-requests)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#concurrent-requests)
 
-**Q76.** You call toArray() on a 204 No Content response (empty body). What happens? (choose one)  <small>_(hard · trap)_</small>
+**Q79.** You call toArray() on a 204 No Content response (empty body). What happens? (choose one)  <small>_(hard · trap)_</small>
 
 - A. It throws a JsonException because an empty string is not valid JSON — guard by checking the status/empty body first
 - B. It returns null for the empty body
 - C. It returns an empty array []
 - D. It returns the empty string ''
 
-??? success "Answer Q76"
+??? success "Answer Q79"
     **A**
 
     getContent() on an empty body returns '' (not null), but toArray() tries to JSON-decode that '' and throws JsonException. There is no silent null. Guard with a 204/empty check before decoding, e.g. if (204 === $r->getStatusCode() || '' === $r->getContent(false)) return [];.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_client.html#processing-responses)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html#processing-responses)
+
+**Q80.** Which of the following statements are true about the Symfony Request object and its parameter bags? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. Route parameters are stored in the attributes bag, not in query
+- B. query, request and cookies are InputBag instances, while attributes is a ParameterBag
+- C. getPayload() reads the request body regardless of its content type
+- D. $request->request contains the $_GET query-string parameters
+- E. getContentType() is the current method for reading the request's format
+
+??? success "Answer Q80"
+    **A, B, C**
+
+    Route/application data lives in attributes (a ParameterBag), while the user-input bags query/request/cookies are scalar-only InputBag instances, and getPayload() is the content-type-agnostic body reader. $request->request maps to the $_POST body (query maps to $_GET), and getContentType() was removed in favour of getContentTypeFormat().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#request)
+
+**Q81.** Which of the following statements are true about the Symfony Response object? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. prepare() strips the body for HEAD requests and for 204/304 responses
+- B. A freshly created Response gets Cache-Control: no-cache, private by default
+- C. send() delegates to sendHeaders() and then sendContent()
+- D. $response->headers is a plain HeaderBag with no special cookie handling
+- E. makeDisposition() is a method on ResponseHeaderBag
+
+??? success "Answer Q81"
+    **A, B, C**
+
+    prepare() normalises the response against the request — including removing the body for HEAD/204/304 — the conservative default Cache-Control is no-cache, private, and send() is sendHeaders() followed by sendContent(). $response->headers is actually a ResponseHeaderBag that manages cookies and normalises Cache-Control, and makeDisposition() lives on HeaderUtils.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#response)
+
+**Q82.** Which of the following statements are true about HTTP content negotiation? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. A q=0 quality value in an Accept header means that representation is unacceptable
+- B. getPreferredLanguage($locales) returns the best match within the list you pass, not just the client's top language
+- C. getPreferredFormat() returns a raw MIME type string such as application/json
+- D. Shared caches parse the Accept header themselves, so a Vary header is unnecessary on negotiated responses
+- E. Response gzip compression should normally be implemented inside your PHP controllers
+
+??? success "Answer Q82"
+    **A, B**
+
+    q=0 explicitly marks a representation as unacceptable rather than merely low priority, and getPreferredLanguage() intersects the client's preferences with the locale list you provide. getPreferredFormat() maps Accept to a Symfony format name (json, html) — raw MIME types come from getAcceptableContentTypes() — negotiated responses must send Vary or shared caches will mis-serve, and gzip is typically handled by the web server/proxy.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#accessing-accept-headers)
+
+**Q83.** Which of the following statements are true about the Symfony HttpClient component? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. request() is lazy/asynchronous — the transfer only completes when you first read the status, headers or content
+- B. getContent() and toArray() throw on 3xx–5xx responses by default, while getStatusCode() never throws
+- C. MockHttpClient with MockResponse lets you test HTTP interactions without any network access
+- D. You should type-hint the concrete CurlHttpClient class in your services for best performance
+- E. Options defined on a scoped client apply to every request the client makes, whatever the URL
+
+??? success "Answer Q83"
+    **A, B, C**
+
+    Responses are lazy so firing several requests before reading gives free concurrency; the content readers throw HTTP exceptions by default (pass false / throw: false to read error bodies) while getStatusCode() is always safe; and MockHttpClient keeps tests offline. You should depend on the HttpClientInterface contract, not a concrete transport, and scoped-client options only apply to URLs matching the scope/base URI.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html)
+
+**Q84.** A teammate cites 'RFC 7231' to justify a status-code semantics decision in a Symfony 8 review. What is the accurate correction?  <small>_(hard · trap)_</small>
+
+- A. RFC 7231 was obsoleted by RFC 9110, which now defines HTTP semantics (methods, status codes, headers)
+- B. RFC 7231 is still current; RFC 9110 only covers HTTP/2
+- C. RFC 7231 was replaced by RFC 9111, which covers all of HTTP semantics
+- D. RFC 7231 was merged into RFC 9112, the wire-format spec
+
+??? success "Answer Q84"
+    **A**
+
+    In 2022, RFC 9110 (HTTP Semantics) replaced RFC 7231/7232/7233/7235/7538. Wire format became RFC 9112 (HTTP/1.1), and caching became its own document, RFC 9111 — semantics and caching are deliberately separate specs, and neither citation should still point at the 2014 RFCs.
+
+    :material-book-open-variant: [Docs](https://www.rfc-editor.org/rfc/rfc9110.html)
 
 ---
 

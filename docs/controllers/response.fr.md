@@ -30,6 +30,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrôleur doit rendre une enveloppe scellée (`Response`) — repartir les mains vides fait planter l'application.
+
+### Imagine dans la vraie vie
+Le réceptionniste (le contrôleur) doit toujours rendre une enveloppe scellée au visiteur — jamais le laisser repartir les mains vides. Le type d'enveloppe dépend du contenu : une simple lettre (`Response`, HTML), un mémo structuré (`JsonResponse`), un colis entier (`BinaryFileResponse`), ou une dictée en direct page par page (`StreamedResponse`).
+
+### Dans Symfony
+Oublier de retourner une `Response` dans une action déclenche une `LogicException` — sauf si un listener `kernel.view` sait construire une réponse à partir de ce que tu as retourné (par exemple un tableau, avec un bundle dédié).
+
+### Exemple simple
+```php
+public function api(): JsonResponse { return $this->json(['statut' => 'ok']); }
+```
+
+### Comment le mémoriser 🧠
+Choisis le sous-type par la nature du contenu : JSON → `JsonResponse`, fichier téléchargeable → `BinaryFileResponse`, flux progressif → `StreamedResponse`.
+
+
 ## Theory
 
 Tout controller doit retourner une `Symfony\Component\HttpFoundation\Response`. Les
@@ -264,7 +284,7 @@ $file->setAutoLastModified();
     - [ ] D. `void`; Symfony renders the matching template.
 
     **Why:** le kernel exige une `Response` ; toute valeur qui n'en est pas une déclenche `kernel.view`.
-    **Ref:** [controller](https://symfony.com/doc/current/controller.html).
+    **Ref:** [controller](https://symfony.com/doc/8.0/controller.html).
 
 ??? question "Q2. When does a `StreamedResponse` produce its body?"
     - [ ] A. When constructed.
@@ -273,7 +293,7 @@ $file->setAutoLastModified();
     - [ ] D. When the profiler collects data.
 
     **Why:** le callback s'exécute au moment de l'envoi, en streamant la sortie morceau par morceau.
-    **Ref:** [streaming response](https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response).
+    **Ref:** [streaming response](https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response).
 
 ??? question "Q3. Which class best serves a resumable file download?"
     - [ ] A. `Response`
@@ -282,7 +302,7 @@ $file->setAutoLastModified();
     - [ ] D. `JsonResponse`
 
     **Why:** elle prend en charge les range requests HTTP et le délestage X-Sendfile.
-    **Ref:** [serving files](https://symfony.com/doc/current/components/http_foundation.html#serving-files).
+    **Ref:** [serving files](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files).
 
 ## Key takeaways
 
@@ -306,7 +326,7 @@ $file->setAutoLastModified();
 - **À ne pas confondre avec :** [Error Pages](error-pages.md) — les erreurs se produisent en *levant une exception*, pas en construisant une `Response` d'erreur.
 
 ## Official References
-- [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html)
+- [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
 ## Video references
@@ -318,7 +338,7 @@ $file->setAutoLastModified();
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

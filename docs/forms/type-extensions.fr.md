@@ -30,6 +30,59 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une extension de type ajoute un comportement à un type de formulaire que tu ne possèdes pas — sans jamais le sous-classer.
+
+### Imagine dans la vraie vie
+Une extension de type est comme une coque de téléphone qui ajoute un emplacement de carte et une meilleure prise en main à un téléphone que tu n'as ni conçu ni fabriqué. Tu ne démontes jamais l'appareil pour le reconstruire (pas de sous-classe) ; tu glisses juste la coque, et elle indique clairement quels modèles elle recouvre (`getExtendedTypes()`).
+
+### Dans Symfony
+Ajouter automatiquement un attribut `help` à **tous** les champs de type `TextType` du projet, sans modifier un seul `FormType` existant, est le cas d'usage classique d'une extension de type.
+
+### Exemple simple
+```php
+public static function getExtendedTypes(): iterable { return [TextType::class]; }
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **pas** d'attribut `#[AsFormTypeExtension]` — l'enregistrement se fait uniquement via la méthode statique `getExtendedTypes()`, jamais par attribut PHP.
+
+A **type extension** injects options and behaviour into form types you do **not**
+own — without subclassing them. One extension can target many types at once. The
+canonical example: add an `help_inline` option, or a file-upload helper, to every
+`FileType` in the app.
+
+```php
+// One extension adds a help_inline option to every FileType in the app
+final class FileHelpExtension extends AbstractTypeExtension
+{
+    public static function getExtendedTypes(): iterable
+    {
+        return [FileType::class];   // the types to augment — no subclassing
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['help_inline' => null]);   // the new option
+    }
+}
+```
+
+Create a custom type when you need a *new field identity*; use a type extension
+when you want to *augment existing types* uniformly.
+
+!!! question "Predict first"
+    A teammate reaches for `#[AsFormTypeExtension]` to register an extension on
+    `FileType`. Does that attribute exist?
+
+??? note "Reveal"
+    No. Type extensions have **no dedicated attribute**. Autoconfiguration tags any
+    `FormTypeExtensionInterface` service with `form.type_extension`; the static
+    `getExtendedTypes(): iterable` names the target types.
+
+
 ## Theory
 
 Une **type extension** injecte des options et du comportement dans des form types
@@ -319,7 +372,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     **Why:** `getExtendedTypes()` (statique, iterable) a remplacé l'ancienne
     méthode au singulier `getExtendedType()`.
-    **Ref:** [Form type extensions](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ??? question "Q2. How is a type extension registered with autoconfiguration on?"
     - [x] A. Automatically, via the `form.type_extension` tag on `FormTypeExtensionInterface` services ✅
@@ -329,7 +382,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     **Why:** Symfony tague automatiquement les implémentations ; aucun attribut
     n'existe pour cela.
-    **Ref:** [Form type extensions docs](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ??? question "Q3. What does returning `FormType::class` from `getExtendedTypes()` do?"
     - [x] A. Applies the extension to every form type ✅
@@ -339,7 +392,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     **Why:** Tous les types descendent de `FormType`, donc l'extension s'attache
     à tous.
-    **Ref:** [Form type extensions docs](https://symfony.com/doc/current/form/create_form_type_extension.html).
+    **Ref:** [Form type extensions docs](https://symfony.com/doc/8.0/form/create_form_type_extension.html).
 
 ## Key takeaways
 
@@ -369,7 +422,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 - **Confused with:** [Data transformers](data-transformers.md) — les extensions augmentent options/comportement, pas la conversion des valeurs.
 
 ## Official References
-- [Official Symfony docs — Create a form type extension](https://symfony.com/doc/current/form/create_form_type_extension.html)
+- [Official Symfony docs — Create a form type extension](https://symfony.com/doc/8.0/form/create_form_type_extension.html)
 - [Symfony source — AbstractTypeExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/AbstractTypeExtension.php)
 
 ## Video references
@@ -382,7 +435,7 @@ données — c'est le travail d'un [data transformer](data-transformers.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_form_type_extension.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_form_type_extension.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

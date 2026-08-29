@@ -41,7 +41,7 @@ surprise le jour J.
 
 ## What is tested
 
-Les questions sont tirées des **14 domaines officiels**. Deux évolutions de
+Les questions sont tirées des **15 domaines officiels**. Deux évolutions de
 pondération propres à Symfony 8 à garder en tête :
 
 - **Messenger est davantage pondéré** — attendez-vous à plus de questions sur les
@@ -94,6 +94,21 @@ filet de sécurité. La façon de se positionner pour chaque niveau est couverte
 ---
 
 <small>Related: [Advanced vs Expert](levels.md) · [Exam-Day Strategy](strategy.md) · [How to Use This Platform](how-to-use.md)</small>
+
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Le détail concret de ce que tu vas voir à l'écran le jour de l'examen : combien de questions, combien de temps, et quels types de questions.
+
+**Pourquoi ça existe ?** Sans ces détails précis, tu ne peux pas planifier ton temps — 90 minutes pour 75 questions n'est pas la même stratégie que 40 minutes pour 20 questions.
+
+**🏠 Analogie de la vraie vie :** Une course à pied : savoir qu'il y a 10 km à parcourir en 60 minutes change complètement ton rythme de départ, comparé à ne pas savoir la distance du tout.
+
+**Symfony dans la vraie vie :** Savoir qu'un **QCM à choix multiples** exige de cocher **toutes** les bonnes réponses (pas juste une) change ta façon de lire chaque question — tu dois évaluer chaque option séparément, pas chercher "la" bonne réponse.
+
+**⚠️ Erreur fréquente :** traiter une question à choix multiples comme une question à choix unique — cocher une seule bonne réponse parmi plusieurs attendues donne un score de zéro sur cette question.
+
+**🧠 Comment le mémoriser :** "Choix multiple = toutes les bonnes cases, pas juste une."
+
 
 ## Official References
 

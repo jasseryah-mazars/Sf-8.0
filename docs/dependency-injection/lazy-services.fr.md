@@ -39,6 +39,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un service paresseux est livré comme une "coquille vide" — le vrai travail de construction (connexion base de données, lecture de fichier) n'a lieu qu'à la première utilisation réelle.
+
+### Imagine dans la vraie vie
+Un service paresseux est une station sous-vide en veille dans un restaurant : le ticket (l'objet) est déjà sur le pass et tout le monde peut le pointer du doigt, mais la cuisson coûteuse (le constructeur) ne démarre que lorsqu'un serveur récupère réellement l'assiette (premier accès).
+
+### Dans Symfony
+Un service de connexion à une API tierce marqué `lazy: true` ne se connecte réellement que si le code appelle une de ses méthodes — s'il n'est jamais utilisé sur une requête donnée, aucune connexion n'est ouverte pour rien.
+
+### Exemple simple
+```php
+#[Autoconfigure(lazy: true)]
+class ConnexionExterne { public function __construct() { /* coûteux */ } }
+```
+
+### Comment le mémoriser 🧠
+Pour une classe concrète, PHP 8.4 crée un **ghost** (même instance, initialisée sur place) ; pour une interface, un **proxy** (objet séparé qui délègue) — deux mécanismes différents selon ce que tu déclares paresseux.
+
+---
+
+
 ## Theory
 
 Par défaut, le container instancie un service — et tout son graphe de
@@ -296,7 +319,7 @@ lui-même instancié.
     **Why:** Symfony 8 cible PHP 8.4 et utilise les lazy objects natifs du
     moteur ; les classes concrètes deviennent des lazy ghosts initialisés sur
     place.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html).
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html).
 
 ??? question "Q2. `lazy: 'App\PaymentInterface'` on a service definition means…"
     - [x] A. The container builds a lazy proxy implementing that interface, delegating to the real instance ✅
@@ -306,7 +329,7 @@ lui-même instancié.
 
     **Why:** Donner à `lazy` un nom d'interface demande un lazy proxy typé sur
     l'interface au lieu d'un ghost de la classe concrète.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html).
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html).
 
 ??? question "Q3. Which statement about identity is correct?"
     - [x] A. Ghost: `===` the initialized object; interface proxy: `!==` the wrapped real instance ✅
@@ -367,7 +390,7 @@ lui-même instancié.
 
 ## Official References
 
-- [Official Symfony docs — Lazy Services](https://symfony.com/doc/current/service_container/lazy_services.html)
+- [Official Symfony docs — Lazy Services](https://symfony.com/doc/8.0/service_container/lazy_services.html)
 - [PHP manual — Lazy objects](https://www.php.net/manual/en/language.oop5.lazy-objects.php)
 - [Symfony source — PhpDumper](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php)
 
@@ -381,7 +404,7 @@ lui-même instancié.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/lazy_services.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/lazy_services.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

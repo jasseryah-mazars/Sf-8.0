@@ -30,6 +30,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un cookie fonctionne de façon asymétrique : on le lit depuis la requête, mais on l'écrit sur la réponse — jamais l'inverse.
+
+### Imagine dans la vraie vie
+Un ticket de vestiaire : quand tu déposes ton manteau, le préposé écrit un talon et te le remet (`Set-Cookie` sur la réponse) ; à ta prochaine visite, tu présentes ce même talon et il le lit (le navigateur le renvoie dans la requête suivante). C'est ça, l'asymétrie : tu n'écris jamais sur un talon que tu es en train de rendre.
+
+### Dans Symfony
+`$request->cookies->get('theme')` lit ; `$response->headers->setCookie(Cookie::create('theme', 'sombre'))` écrit — deux objets différents, deux moments différents du cycle de requête.
+
+### Exemple simple
+```php
+$response->headers->setCookie(Cookie::create('theme')->withValue('sombre')->withSecure(true));
+```
+
+### Comment le mémoriser 🧠
+Un vestiaire sérieux refuse un talon sans marquage de sécurité — de même, le navigateur refuse un cookie `SameSite=None` qui n'est pas aussi `Secure`.
+
+
 ## Theory
 
 Les cookies sont asymétriques : vous les **lisez** depuis la request et vous les
@@ -237,7 +257,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
     - [ ] C. `$request->query`
     - [ ] D. `$_SESSION`
 
-    **Why:** le `ParameterBag` `cookies` encapsule `$_COOKIE`. **Ref:** [http_foundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Why:** le `ParameterBag` `cookies` encapsule `$_COOKIE`. **Ref:** [http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. A cookie with `SameSite=None` also requires…"
     - [ ] A. `HttpOnly=false`
@@ -246,7 +266,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
     - [ ] D. a max-age of 0
 
     **Why:** les navigateurs rejettent les cookies `SameSite=None` qui ne sont pas `Secure`.
-    **Ref:** [cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies).
+    **Ref:** [cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies).
 
 ??? question "Q3. Why might `clearCookie('token')` fail to remove the cookie?"
     - [x] A. The path/domain don't match the original cookie. ✅
@@ -255,7 +275,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
     - [ ] D. It requires the value to match too.
 
     **Why:** la suppression envoie un cookie expiré délimité par path/domain ; une
-    non-correspondance vise un autre cookie. **Ref:** [http_foundation](https://symfony.com/doc/current/components/http_foundation.html).
+    non-correspondance vise un autre cookie. **Ref:** [http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ## Key takeaways
 
@@ -280,7 +300,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
 - **Confused with:** [HTTP → Cookies](../http/cookies.md) — ici la lecture/écriture côté controller ; le chapitre HTTP couvre le protocole.
 
 ## Official References
-- [Official Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+- [Official Symfony docs — Setting cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
 
 ## Video references
@@ -292,7 +312,7 @@ utilisez la [session](session.md) pour l'état côté serveur.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

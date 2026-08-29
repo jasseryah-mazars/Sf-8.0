@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La méthode HTTP dit ce que tu comptes faire — regarder (GET), remplacer entièrement (PUT), ajouter du neuf (POST) — et chacune a ses propres règles de "sécurité" et de répétabilité.
+
+### Imagine dans la vraie vie
+Choisir une méthode HTTP, c'est choisir un type d'envoi postal. `GET` = demander une copie d'un document (rien ne change). `PUT`/`DELETE` = une instruction enregistrée qui laisse le même résultat final peu importe le nombre de doublons envoyés (idempotent). `POST` = déposer un *nouveau* bon de commande à chaque envoi — envoie-le deux fois, tu obtiens deux commandes.
+
+### Dans Symfony
+`#[Route('/articles', methods: ['POST'])]` restreint la route à une seule méthode — appeler cette URL en GET renvoie une erreur 405 (Method Not Allowed), pas 404.
+
+### Exemple simple
+```php
+#[Route('/articles/{id}', methods: ['DELETE'])]
+public function supprimer(int $id): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+"GET regarde, ne touche à rien" (sûre). "PUT/DELETE répètent sans dégât" (idempotentes mais pas sûres). "POST double à chaque appel" (ni sûre, ni idempotente).
+
+
 ## Theory
 
 La **méthode** (verbe) exprime l'intention du client. Les méthodes principales :
@@ -272,7 +293,7 @@ besoin.
     **Why:** Vous devez activer `framework.http_method_override` (ou appeler
     `Request::enableHttpMethodParameterOverride()`) ; cela ne s'applique qu'au
     POST.
-    **Ref:** [Method override](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Method override](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. Which method is safe AND idempotent?"
     - [ ] A. POST
@@ -310,7 +331,7 @@ besoin.
 
 ## Official References
 - [MDN — HTTP request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-- [Symfony docs — Routing (method matching)](https://symfony.com/doc/current/routing.html)
+- [Symfony docs — Routing (method matching)](https://symfony.com/doc/8.0/routing.html)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 
 ## Video references
@@ -323,7 +344,7 @@ besoin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

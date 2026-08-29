@@ -31,7 +31,31 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Workers](workers.md), [Architecture → Events](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le worker déclenche six événements tout au long de sa boucle — et un septième événement bien distinct se déclenche côté envoi, avant même qu'un worker n'entre en jeu.
+
+### Imagine dans la vraie vie
+Les événements du worker sont des points de contrôle le long de la tournée du coursier : pointer à l'arrivée, ramasser un colis, une livraison réussie ou ratée, chaque tour de la tournée, et pointer à la sortie. `SendMessageToTransportsEvent` est différent : ça se passe au **bureau de tri**, juste avant qu'une lettre ne soit même mise sur un camion — aucun coursier impliqué encore.
+
+### Dans Symfony
+Ajouter un `DelayStamp` à chaque message sortant selon sa priorité doit se faire sur `SendMessageToTransportsEvent` — écouter un événement `Worker*` serait bien trop tard, le message est déjà envoyé.
+
+### Exemple simple
+```php
+#[AsEventListener]
+public function __invoke(SendMessageToTransportsEvent $event): void {
+    $event->setEnvelope($event->getEnvelope()->with(new DelayStamp(5000)));
+}
+```
+
+### Comment le mémoriser 🧠
+Tous les événements `Worker*` se déclenchent **uniquement** à l'intérieur d'un processus `messenger:consume` — ils ne se déclenchent **jamais** pour un message traité de façon synchrone.
 
 ## Theory
 
@@ -254,6 +278,8 @@ listener.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which event fires on the dispatching side, before any transport is involved?"
     - [x] A. `SendMessageToTransportsEvent` ✅
     - [ ] B. `WorkerMessageReceivedEvent`
@@ -318,7 +344,7 @@ listener.
 
 ## Official References
 
-- [Official docs — Messenger events](https://symfony.com/doc/current/messenger.html#messenger-events)
+- [Official docs — Messenger events](https://symfony.com/doc/8.0/messenger.html#messenger-events)
 - [Symfony source — Messenger events](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger/Event)
 - [Symfony source — SendMessageToTransportsEvent](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Messenger/Event/SendMessageToTransportsEvent.php)
 
@@ -331,7 +357,7 @@ listener.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html#messenger-events) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html#messenger-events) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

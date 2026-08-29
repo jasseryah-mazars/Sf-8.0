@@ -27,6 +27,29 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [PHP](../php-web-security/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Filesystem lève une exception dès qu'une opération échoue (au lieu de renvoyer `false` silencieusement) ; Finder cherche des fichiers avec une syntaxe fluide et lisible.
+
+### Imagine dans la vraie vie
+Filesystem est un déménageur prudent qui crie dès que quelque chose ne va pas plutôt que de laisser tomber silencieusement un carton. Son `dumpFile()` est comme un chef qui dresse un plat entièrement sur une assiette de réserve puis seulement ensuite l'échange sur la table.
+
+### Dans Symfony
+`$finder->files()->in('src')->name('*.php')->date('since yesterday')` trouve tous les fichiers PHP modifiés depuis hier — bien plus lisible que du code `scandir()`/`filemtime()` fait à la main.
+
+### Exemple simple
+```php
+$fs->dumpFile('config/genere.yaml', $contenu); // écriture atomique, jamais de fichier à moitié écrit
+```
+
+### Comment le mémoriser 🧠
+`dumpFile()` écrit dans un **fichier temporaire puis renomme** — cette atomicité garantit qu'un processus concurrent ne verra jamais un fichier à moitié écrit, seulement l'ancienne ou la nouvelle version complète.
+
 ---
 
 ## Theory
@@ -237,13 +260,15 @@ file — it needs directories via `in()`.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What makes `dumpFile()` safe against partial reads?"
     - [x] A. It writes to a temp file then atomically renames ✅
     - [ ] B. It locks the file with flock
     - [ ] C. It compresses the content
 
     **Why:** The temp-write + rename means readers see either old or complete new content.
-    **Ref:** [Filesystem](https://symfony.com/doc/current/components/filesystem.html).
+    **Ref:** [Filesystem](https://symfony.com/doc/8.0/components/filesystem.html).
 
 ??? question "Q2. `Finder` requires which call to define where to search?"
     - [x] A. `in($dirs)` ✅
@@ -251,14 +276,14 @@ file — it needs directories via `in()`.
     - [ ] C. `search($dirs)`
 
     **Why:** `in()` sets the search directories; without it Finder throws.
-    **Ref:** [Finder](https://symfony.com/doc/current/components/finder.html).
+    **Ref:** [Finder](https://symfony.com/doc/8.0/components/finder.html).
 
 ??? question "Q3. On failure, `Filesystem::copy()`…"
     - [x] A. throws an `IOExceptionInterface` ✅
     - [ ] B. returns `false`
     - [ ] C. returns `null`
 
-    **Why:** Filesystem methods signal errors via exceptions. **Ref:** [Filesystem](https://symfony.com/doc/current/components/filesystem.html#error-handling).
+    **Why:** Filesystem methods signal errors via exceptions. **Ref:** [Filesystem](https://symfony.com/doc/8.0/components/filesystem.html#error-handling).
 
 ## Key takeaways
 
@@ -281,8 +306,8 @@ file — it needs directories via `in()`.
 - **Confused with:** raw `glob()`/`scandir()` — Finder adds fluent filters and yields `SplFileInfo`.
 
 ## Official References
-- [Official docs — Filesystem](https://symfony.com/doc/current/components/filesystem.html)
-- [Official docs — Finder](https://symfony.com/doc/current/components/finder.html)
+- [Official docs — Filesystem](https://symfony.com/doc/8.0/components/filesystem.html)
+- [Official docs — Finder](https://symfony.com/doc/8.0/components/finder.html)
 - [Symfony source — Finder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Finder/Finder.php)
 
 ## Video references
@@ -294,7 +319,7 @@ file — it needs directories via `in()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/filesystem.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/filesystem.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -308,4 +333,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Process](process.md) · [Lock](lock.md) · [Deployment](deployment.md)</small>
+<small>Related: [Process](process.md) · [Lock](../appendices/out-of-syllabus/lock.md) · [Deployment](deployment.md)</small>

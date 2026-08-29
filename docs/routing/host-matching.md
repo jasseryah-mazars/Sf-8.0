@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Configuration](configuration.md), [Requirements](requirements.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+L'option `host` restreint une route à un domaine précis — et peut même capturer un sous-domaine comme un paramètre de route classique.
+
+### Imagine dans la vraie vie
+Un grand campus de bureaux où plusieurs bâtiments partagent les mêmes numéros de salle. L'accueil vérifie d'abord *quel bâtiment* tu cherches avant même de regarder le numéro de salle — donc "Salle 101" dans le bâtiment Admin et "Salle 101" dans le bâtiment Ventes mènent à des personnes différentes.
+
+### Dans Symfony
+Une application multi-tenant peut router `{tenant}.monapp.com` vers le même contrôleur, avec `{tenant}` injecté automatiquement comme paramètre — une seule route sert tous les clients.
+
+### Exemple simple
+```php
+#[Route('/', host: '{tenant}.monapp.com')]
+public function accueil(string $tenant): Response { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+Le **host est vérifié avant le chemin** — deux routes avec le même chemin mais des hosts différents ne se marchent jamais dessus, exactement comme deux bâtiments partageant les mêmes numéros de salle.
 
 ## Theory
 
@@ -232,6 +254,8 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is the default regex for a host placeholder?"
     - [ ] A. `[^/]+`
     - [x] B. `[^.]+` ✅
@@ -239,7 +263,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     - [ ] D. `\w+`
 
     **Why:** hosts are separated by dots, so a token matches any non-dot label.
-    **Ref:** [Sub-domain routing](https://symfony.com/doc/current/routing.html#sub-domain-routing).
+    **Ref:** [Sub-domain routing](https://symfony.com/doc/8.0/routing.html#sub-domain-routing).
 
 ??? question "Q2. During matching, when is the host checked?"
     - [x] A. Before the path regex ✅
@@ -248,7 +272,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     - [ ] D. Never; host is informational
 
     **Why:** `matchCollection()` tests the host regex first, then the path.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#sub-domain-routing).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#sub-domain-routing).
 
 ??? question "Q3. Generating a URL for a route on a different host produces?"
     - [x] A. An absolute (or network) URL ✅
@@ -257,7 +281,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     - [ ] D. The current host's URL
 
     **Why:** a path-only URL cannot change host, so the generator upgrades it.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#generating-urls).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q4. How do you apply one host to a whole imported controller dir?"
     - [x] A. Set `host:` on the YAML `resource` import ✅
@@ -266,7 +290,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
     - [ ] D. Use `_host` in defaults
 
     **Why:** import options like `host`, `prefix`, `name_prefix` cascade to imported
-    routes. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    routes. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -290,7 +314,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
 - **Confused with:** [Locale](locale.md) — host-based locale (`fr.example.com`) vs a prefixed-path locale.
 
 ## Official References
-- [Official Symfony docs — Sub-domain routing](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+- [Official Symfony docs — Sub-domain routing](https://symfony.com/doc/8.0/routing.html#sub-domain-routing)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -302,7 +326,7 @@ locale (`fr.example.com`) unless SEO demands it — prefixed locale paths (see
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#sub-domain-routing) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#sub-domain-routing) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

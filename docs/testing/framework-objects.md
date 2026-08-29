@@ -26,8 +26,31 @@
 
     **Syllabus:** `Automated Tests → Accessing framework services` ·
     **Level:** Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [Functional Tests](functional-tests.md), [Dependency Injection](../dependency-injection/index.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+En environnement de test, tu as accès à **tous** les services — y compris les privés — via `self::getContainer()`, ce qui est impossible en production.
+
+### Imagine dans la vraie vie
+Un pass backstage dans un théâtre. Pendant la vraie représentation (prod), l'équipe, les accessoires et les doublures restent cachés derrière le rideau — le public ne peut pas les atteindre (services privés). Mais en répétition (l'environnement de test), on te délivre un pass tout accès.
+
+### Dans Symfony
+Remplacer temporairement un service de paiement réel par un double dans un test avec `$container->set('app.paiement', $double)` fonctionne — mais ce remplacement disparaît au prochain redémarrage du kernel.
+
+### Exemple simple
+```php
+$container = static::getContainer();
+$container->set(PaiementInterface::class, $doublePaiement);
+```
+
+### Comment le mémoriser 🧠
+Un remplacement `set()` est **jeté** au prochain redémarrage du kernel — associe-le systématiquement à `disableReboot()` si tu as besoin qu'il survive à plusieurs requêtes dans le même test.
 
 ---
 
@@ -99,7 +122,7 @@ flowchart TD
 !!! note "Source reference"
     `self::getContainer()` returns `test.service_container`, a `TestContainer`
     exposing non-public services
-    ([symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)).
+    ([symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/TestContainer.php)).
 
 ### `getContainer()` vs `$kernel->getContainer()`
 
@@ -286,6 +309,8 @@ and swapping a `MockClock` over global clock mocking.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which container exposes private services in tests?"
     - [x] A. `self::getContainer()` (the test container) ✅
     - [ ] B. `static::$kernel->getContainer()`
@@ -293,7 +318,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. Any container in prod
 
     **Why:** the `test` env compiles a `TestContainer` that keeps private/non-shared
-    services reachable. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    services reachable. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q2. A private service you never inject anywhere will…"
     - [x] A. Still be removed — the test container only keeps *used* services ✅
@@ -302,7 +327,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. Throw at compile time
 
     **Why:** unused private services are optimised out even in test.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q3. `getContainer()->set($id, $mock)` survives across requests only if…"
     - [x] A. You called `$client->disableReboot()` ✅
@@ -311,7 +336,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. You enable the profiler
 
     **Why:** the default reboot rebuilds the container and discards replacements.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. The correct way to boot without debug is…"
     - [x] A. `self::bootKernel(['debug' => false])` ✅
@@ -320,7 +345,7 @@ and swapping a `MockClock` over global clock mocking.
     - [ ] D. Setting `APP_DEBUG` at runtime only
 
     **Why:** `bootKernel()` accepts an options array with `environment`/`debug`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ## Key takeaways
 
@@ -344,9 +369,9 @@ and swapping a `MockClock` over global clock mocking.
 - **Confused with:** [The Client](client.md) — `disableReboot()` lives on the client but is what makes a `set()` replacement persist.
 
 ## Official References
-- [Official Symfony docs — Accessing the container](https://symfony.com/doc/current/testing.html#accessing-the-container)
-- [Official Symfony docs — Mocking services](https://symfony.com/doc/current/testing.html#mocking-services)
-- [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)
+- [Official Symfony docs — Accessing the container](https://symfony.com/doc/8.0/testing.html#accessing-the-container)
+- [Official Symfony docs — Mocking services](https://symfony.com/doc/8.0/testing.html#mocking-services)
+- [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/TestContainer.php)
 
 ## Video references
 
@@ -357,7 +382,7 @@ and swapping a `MockClock` over global clock mocking.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#accessing-the-container) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#accessing-the-container) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

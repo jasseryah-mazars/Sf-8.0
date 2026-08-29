@@ -24,9 +24,32 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [Custom Constraints](custom-constraints.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Le constructeur de violations n'enregistre **rien** tant que tu n'appelles pas explicitement `addViolation()` à la fin.
+
+### Imagine dans la vraie vie
+Le constructeur de violations est le **formulaire de déclaration d'incident**. L'agent remplit les champs — quel objet, la valeur fautive, un code de référence — mais rien n'est enregistré tant qu'il n'appuie pas sur "soumettre" (`addViolation()`).
+
+### Dans Symfony
+```php
+$context->buildViolation('Le %champ% ne peut pas être négatif.')
+    ->setParameter('%champ%', 'stock')
+    ->addViolation(); // RIEN n'est enregistré avant cet appel
+```
+
+### Exemple simple
+```php
+$context->buildViolation('Erreur.')->atPath('email')->addViolation();
+```
+
+### Comment le mémoriser 🧠
+Oublier `->addViolation()` à la fin de la chaîne fait échouer silencieusement ta validation personnalisée — le builder reste "en brouillon" sans jamais être soumis.
 
 Validation produces **violations**. Inside a validator or callback you create
 them through the `Symfony\Component\Validator\Context\ExecutionContextInterface`;
@@ -277,6 +300,8 @@ only when you render errors yourself.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. When is a built violation actually recorded?"
     - [ ] A. Immediately on `buildViolation()`
     - [x] B. Only when `addViolation()` is called ✅
@@ -284,7 +309,7 @@ only when you render errors yourself.
     - [ ] D. On `setParameter()`
 
     **Why:** The builder is fluent; `addViolation()` commits it to the list.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q2. Which returns the message with placeholders still unresolved?"
     - [ ] A. `getMessage()`
@@ -294,7 +319,7 @@ only when you render errors yourself.
 
     **Why:** `getMessage()` is interpolated; `getMessageTemplate()` keeps `{{ x }}`
     placeholders.
-    **Ref:** [ConstraintViolationInterface](https://symfony.com/doc/current/validation.html).
+    **Ref:** [ConstraintViolationInterface](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q3. `validate()` returns a value that is…"
     - [ ] A. A plain PHP array of strings
@@ -303,7 +328,7 @@ only when you render errors yourself.
     - [ ] D. A boolean
 
     **Why:** It is always a violation list object; iterate it or call `count()`.
-    **Ref:** [Validation](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q4. To attach an error to a different property you call…"
     - [ ] A. `setPropertyPath()`
@@ -313,7 +338,7 @@ only when you render errors yourself.
 
     **Why:** `atPath()` relocates the violation to the given path relative to the
     current node.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ## Key takeaways
 
@@ -337,7 +362,7 @@ only when you render errors yourself.
 - **Confused with:** [Callbacks](callbacks.md) — same `ExecutionContext` API, different entry point.
 
 ## Official References
-- [Official Symfony docs — Custom constraint (violations)](https://symfony.com/doc/current/validation/custom_constraint.html)
+- [Official Symfony docs — Custom constraint (violations)](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 - [Symfony source — ConstraintViolationBuilderInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Violation/ConstraintViolationBuilderInterface.php)
 
 ## Video references
@@ -349,7 +374,7 @@ only when you render errors yourself.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/custom_constraint.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/custom_constraint.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

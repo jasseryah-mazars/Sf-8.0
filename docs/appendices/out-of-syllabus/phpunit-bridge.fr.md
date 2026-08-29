@@ -1,11 +1,12 @@
 # The PHPUnit Bridge
 
-**Exclu de la certification Symfony 8.** Le PHPUnit Bridge ne figure pas au
-programme officiel de la certification Symfony 8. Ce chapitre est conservé
-comme contenu additionnel / d'approfondissement — voir
-`specs/TraceabilityMatrix.md` pour la séparation officiel/additionnel — et
-n'est pas testé dans les examens générés ni compté dans la couverture
-officielle du syllabus.
+!!! danger "Hors syllabus officiel Symfony 8.0"
+    Le PHPUnit Bridge ne figure pas au programme officiel de la certification
+    Symfony 8. Ce chapitre est conservé dans les [Appendices](index.md) comme
+    contenu additionnel / d'approfondissement — voir la section « Out-of-scope /
+    Additional Learning » de `specs/TraceabilityMatrix.md` pour la séparation
+    officiel/additionnel — et n'est pas testé dans les examens générés ni
+    compté dans la couverture officielle du syllabus.
 
 !!! tip "In a nutshell"
     `symfony/phpunit-bridge` augmente PHPUnit avec la collecte des dépréciations
@@ -38,9 +39,24 @@ officielle du syllabus.
     **Syllabus:** `Automated Tests → PHPUnit bridge` ·
     **Level:** Expert ·
     **Est. time:** 25 min ·
-    **Prerequisites:** [Unit Tests](unit-tests.md)
+    **Prerequisites:** [Unit Tests](../../testing/unit-tests.md)
 
 ---
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** Le PHPUnit Bridge ajoute à PHPUnit la capacité de compter les dépréciations rencontrées pendant les tests, plus des outils pour figer l'heure ou simuler le réseau dans un test.
+
+**Pourquoi ça existe ?** Sans lui, une dépréciation silencieuse pourrait passer inaperçue jusqu'à ce qu'une future version majeure supprime la fonctionnalité concernée — le bridge la fait remonter dès maintenant, pendant les tests.
+
+**🏠 Analogie de la vraie vie :** Un scripte de plateau de cinéma qui note chaque réplique obsolète prononcée pendant le tournage, pour faire le bilan à la fin — plus une horloge de studio réglable qui permet de sauter des heures instantanément pour une scène.
+
+**Symfony dans la vraie vie :** Activer `SymfonyExtension` dans `phpunit.dist.xml` fait échouer la suite de tests si trop de dépréciations sont détectées — un signal précoce avant une montée de version majeure.
+
+**⚠️ Erreur fréquente :** croire que le PHPUnit Bridge est testé à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus Automated Tests.
+
+**🧠 Comment le mémoriser :** "Le bridge est le scripte de plateau qui note chaque réplique dépassée — pas testé à l'examen, mais indispensable en vrai projet."
+
 
 ## Theory
 
@@ -156,7 +172,7 @@ règle le gestionnaire :
 
 `self`, `direct`, `indirect` classifient le code *de qui* a déclenché la
 dépréciation (le vôtre, une dépendance appelée directement, ou au fond d'une
-dépendance) — voir le [chapitre sur les dépréciations](deprecations.md).
+dépendance) — voir le [chapitre sur les dépréciations](../../testing/deprecations.md).
 
 ```console
 # self: your own code triggers the deprecation
@@ -320,7 +336,7 @@ directement `time()`/`sleep()` globaux.
 
     **Why:** l'extension PHPUnit câble le gestionnaire de dépréciations et les
     mocks horloge/DNS.
-    **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html).
+    **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html).
 
 ??? question "Q2. To mock `time()`/`sleep()` in a test you…"
     - [x] A. Put the test in the `time-sensitive` group ✅
@@ -329,7 +345,7 @@ directement `time()`/`sleep()` globaux.
     - [ ] D. Extend `ClockTestCase`
 
     **Why:** `ClockMock` s'active pour le groupe `time-sensitive`.
-    **Ref:** [PHPUnit bridge — time-sensitive](https://symfony.com/doc/current/components/phpunit_bridge.html#time-sensitive-tests).
+    **Ref:** [PHPUnit bridge — time-sensitive](https://symfony.com/doc/8.0/components/phpunit_bridge.html#time-sensitive-tests).
 
 ??? question "Q3. `SYMFONY_DEPRECATIONS_HELPER=weak` means…"
     - [x] A. Deprecations are reported but never fail the build ✅
@@ -339,7 +355,7 @@ directement `time()`/`sleep()` globaux.
 
     **Why:** `weak` collecte et affiche mais n'applique pas les seuils ;
     `disabled` coupe la collecte.
-    **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html#configuration).
+    **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration).
 
 ??? question "Q4. `SYMFONY_DEPRECATIONS_HELPER` is set as…"
     - [x] A. An environment/server variable (e.g. in phpunit XML `<php>`) ✅
@@ -349,7 +365,7 @@ directement `time()`/`sleep()` globaux.
 
     **Why:** elle est lue depuis l'environnement ; placez-la dans
     `<php><server .../></php>`.
-    **Ref:** [PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html#configuration).
+    **Ref:** [PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration).
 
 ## Key takeaways
 
@@ -372,12 +388,12 @@ directement `time()`/`sleep()` globaux.
 
 ## Connections
 
-- **Depends on:** [Unit Tests](unit-tests.md) — le bridge augmente les exécutions de `TestCase` PHPUnit pur.
-- **Reused in:** [Handling Deprecated Code](deprecations.md) — le gestionnaire du bridge classe et filtre les dépréciations.
-- **Confused with:** [Clock Component](../miscellaneous/clock.md) — injectez `MockClock` pour le code en DI ; réservez `ClockMock` aux `time()`/`sleep()` globaux.
+- **Depends on:** [Unit Tests](../../testing/unit-tests.md) — le bridge augmente les exécutions de `TestCase` PHPUnit pur.
+- **Reused in:** [Handling Deprecated Code](../../testing/deprecations.md) — le gestionnaire du bridge classe et filtre les dépréciations.
+- **Confused with:** [Clock Component](../../miscellaneous/clock.md) — injectez `MockClock` pour le code en DI ; réservez `ClockMock` aux `time()`/`sleep()` globaux.
 
 ## Official References
-- [Official Symfony docs — PHPUnit bridge](https://symfony.com/doc/current/components/phpunit_bridge.html)
+- [Official Symfony docs — PHPUnit bridge](https://symfony.com/doc/8.0/components/phpunit_bridge.html)
 - [Symfony source — DeprecationErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/DeprecationErrorHandler.php)
 - [Symfony source — ClockMock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/PhpUnit/ClockMock.php)
 
@@ -391,7 +407,7 @@ directement `time()`/`sleep()` globaux.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/phpunit_bridge.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/phpunit_bridge.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -405,4 +421,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Handling Deprecated Code](deprecations.md) · [Unit Tests](unit-tests.md) · [Clock Component](../miscellaneous/clock.md)</small>
+<small>Related: [Handling Deprecated Code](../../testing/deprecations.md) · [Unit Tests](../../testing/unit-tests.md) · [Clock Component](../../miscellaneous/clock.md)</small>

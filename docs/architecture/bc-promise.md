@@ -28,7 +28,31 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Release Management](release-management.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La promesse BC dit : "si tu utilises l'API publique stable, ton code continuera de fonctionner à travers toutes les mineures et patchs — jusqu'à la prochaine version majeure."
+
+### Imagine dans la vraie vie
+Un bail de location garantit que l'appartement que tu as signé — la porte d'entrée, la cuisine, les équipements convenus — reste identique pendant toute la durée du bail. Le propriétaire ne peut abattre un mur porteur qu'au renouvellement du bail (une version majeure), et seulement après t'avoir prévenu formellement à l'avance (une dépréciation).
+
+### Dans Symfony
+Une classe marquée `@internal` peut changer de signature d'une mineure à l'autre sans préavis — car elle n'a jamais fait partie de la promesse BC, même si tu l'utilises depuis longtemps sans problème.
+
+### Exemple simple
+```php
+/**
+ * @internal
+ */
+class DetailImplementation {} // peut changer sans préavis, même en version mineure
+```
+
+### Comment le mémoriser 🧠
+Les pièces "réservées au personnel" (`@internal`) ou "encore en travaux" (`@experimental`) ne faisaient jamais partie du bail — elles peuvent changer n'importe quand, contrairement au reste de l'appartement.
 
 ## Theory
 
@@ -212,13 +236,15 @@ inheritance of framework classes.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. When can Symfony break backward compatibility?"
     - [x] A. Only in a major release, after prior deprecation ✅
     - [ ] B. In any minor release
     - [ ] C. In patch releases
 
     **Why:** BC breaks are reserved for majors and require a deprecation path.
-    **Ref:** [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    **Ref:** [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q2. What does `@internal` mean for BC?"
     - [x] A. The element is excluded from the BC promise ✅
@@ -226,7 +252,7 @@ inheritance of framework classes.
     - [ ] C. It is deprecated
 
     **Why:** `@internal` marks implementation details not covered by BC. **Ref:**
-    [Coding standards / @internal](https://symfony.com/doc/current/contributing/code/bc.html).
+    [Coding standards / @internal](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How should you customise a `final` Symfony class?"
     - [x] A. Decorate/compose it ✅
@@ -234,7 +260,7 @@ inheritance of framework classes.
     - [ ] C. Edit it in vendor
 
     **Why:** `final` forbids inheritance; use decoration. **Ref:**
-    [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -258,9 +284,9 @@ inheritance of framework classes.
 - **Confused with:** [Framework Overloading](overloading.md) — overriding a bundle's resources is app-level customisation, not a statement about API stability.
 
 ## Official References
-- [Backward Compatibility promise](https://symfony.com/doc/current/contributing/code/bc.html)
-- [Conventions — @internal / @final](https://symfony.com/doc/current/contributing/code/conventions.html)
-- [Experimental features](https://symfony.com/doc/current/contributing/code/experimental.html)
+- [Backward Compatibility promise](https://symfony.com/doc/8.0/contributing/code/bc.html)
+- [Conventions — @internal / @final](https://symfony.com/doc/8.0/contributing/code/conventions.html)
+- [Experimental features](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -271,7 +297,7 @@ inheritance of framework classes.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -30,7 +30,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [OOP](../php-web-security/oop.md), [Serializer component](serializer.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`PropertyAccessor` lit et écrit des propriétés via un simple chemin en texte (`'user.address.city'`) — sans jamais avoir à écrire de getters à la main.
+
+### Imagine dans la vraie vie
+Un chemin de propriété est une étiquette d'expédition avec une chaîne d'adresses de réexpédition : `entrepot.etagere[3].casier`. Le coursier (`PropertyAccessor`) ne sait ni ne se soucie de savoir si "etagere" est un champ public, une méthode `getEtagere()`, ou un flag `isEtagere()` — il essaie les formats standards dans un ordre fixe.
+
+### Dans Symfony
+C'est exactement ce mécanisme qui permet à un `ChoiceType` de formulaire de lire `$produit->getCategorie()->getNom()` juste en configurant `'choice_label' => 'categorie.nom'` — sans jamais écrire ce code manuellement.
+
+### Exemple simple
+```php
+$nom = $propertyAccessor->getValue($produit, 'categorie.nom'); // appelle getCategorie()->getNom()
+```
+
+### Comment le mémoriser 🧠
+L'ordre des getters essayés est fixe : **`get`, `is`, `has`, `can`** — et les méthodes magiques (`__call`) ne sont **pas** activées par défaut, il faut explicitement appeler `enableMagicCall()`.
 
 ## Theory
 
@@ -252,6 +273,8 @@ overhead.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In which order does PropertyAccessor try getter method prefixes?"
     - [x] A. `get`, `is`, `has`, `can` ✅
     - [ ] B. `is`, `get`, `has`, `can`
@@ -259,7 +282,7 @@ overhead.
     - [ ] D. Only `get`, nothing else
 
     **Why:** `ReflectionExtractor::$defaultAccessorPrefixes` fixes this exact
-    order. **Ref:** [PropertyAccess](https://symfony.com/doc/current/components/property_access.html).
+    order. **Ref:** [PropertyAccess](https://symfony.com/doc/8.0/components/property_access.html).
 
 ??? question "Q2. Which magic method is disabled by default in PropertyAccessorBuilder?"
     - [ ] A. `__get`
@@ -269,7 +292,7 @@ overhead.
 
     **Why:** the default flags are `MAGIC_GET | MAGIC_SET`; `__call` requires
     `enableMagicCall()` explicitly.
-    **Ref:** [PropertyAccess — magic methods](https://symfony.com/doc/current/components/property_access.html#magic-getters-and-setters).
+    **Ref:** [PropertyAccess — magic methods](https://symfony.com/doc/8.0/components/property_access.html#magic-getters-and-setters).
 
 ??? question "Q3. `getValue()` on a property that does not exist on the target…"
     - [x] A. Throws `NoSuchPropertyException` ✅
@@ -288,7 +311,7 @@ overhead.
     - [ ] D. Emits a warning and returns `true`
 
     **Why:** `isReadable()`/`isWritable()` are the safe probes, always
-    returning a plain boolean. **Ref:** [PropertyAccess](https://symfony.com/doc/current/components/property_access.html).
+    returning a plain boolean. **Ref:** [PropertyAccess](https://symfony.com/doc/8.0/components/property_access.html).
 
 ## Key takeaways
 
@@ -322,7 +345,7 @@ overhead.
   reads/writes a single path once you already have the target object/array.
 
 ## Official References
-- [Official Symfony docs — PropertyAccess](https://symfony.com/doc/current/components/property_access.html)
+- [Official Symfony docs — PropertyAccess](https://symfony.com/doc/8.0/components/property_access.html)
 - [Symfony source — PropertyAccessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/PropertyAccessor.php)
 - [Symfony source — PropertyAccessorBuilder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PropertyAccess/PropertyAccessorBuilder.php)
 
@@ -335,7 +358,7 @@ overhead.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/property_access.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/property_access.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

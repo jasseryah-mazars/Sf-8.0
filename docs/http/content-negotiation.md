@@ -29,7 +29,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [HTTP Request](request.md) · [HTTP Response](response.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La négociation de contenu, c'est le client qui dit "réponds-moi en français si possible, sinon en anglais" — et le serveur choisit la meilleure option qu'il sait produire.
+
+### Imagine dans la vraie vie
+Une lettre précise : "réponds en français si tu peux, sinon en anglais ; une page imprimée de préférence, un PDF fera l'affaire." Les en-têtes `Accept*` sont exactement ces préférences classées (les valeurs `q`), et le bureau choisit la meilleure représentation possible, puis tamponne sa réponse (`Content-Type`, `Content-Language`) avec une note `Vary` pour que le service de tri classe chaque variante séparément.
+
+### Dans Symfony
+`$request->getPreferredFormat()` lit les préférences du client et te renvoie un *format* Symfony (`json`, `html`...), pas un type MIME brut — c'est ce format que tu utilises ensuite pour choisir quel template ou sérialiseur employer.
+
+### Exemple simple
+```php
+$format = $request->getPreferredFormat(); // 'json' si Accept: application/json
+```
+
+### Comment le mémoriser 🧠
+Sans `Vary: Accept`, un cache partagé peut servir la version JSON à quelqu'un qui voulait du HTML — pense à `Vary` comme l'étiquette "attention, plusieurs versions existent" collée sur le carton de stockage du cache.
 
 ## Theory
 
@@ -311,6 +332,8 @@ multiple clients transparently.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `getPreferredLanguage(['en','de'])` returns…"
     - [ ] A. the client's overall top language
     - [x] B. the best of `en`/`de` for this client ✅
@@ -319,7 +342,7 @@ multiple clients transparently.
 
     **Why:** With a whitelist it intersects the client's ordered languages with
     your list and returns the best match.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. `getAcceptableContentTypes()` returns…"
     - [x] A. MIME types ordered by preference ✅
@@ -375,7 +398,7 @@ multiple clients transparently.
 
 ## Official References
 - [MDN — Content negotiation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Content_negotiation)
-- [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
+- [Symfony docs — HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — AcceptHeader](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/AcceptHeader.php)
 
 ## Video references
@@ -387,7 +410,7 @@ multiple clients transparently.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

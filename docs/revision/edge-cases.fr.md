@@ -2,7 +2,7 @@
 
 Les examens de niveau Expert vivent dans les cas limites : les situations où le
 framework fait *autre chose* que ce que prédit la réponse naïve. Cette page est un
-jeu de drills — 79 questions « What happens if…? » couvrant les 14 domaines du
+jeu de drills — 84 questions « What happens if…? » couvrant les 15 domaines du
 syllabus, chacune cachant un comportement précis et vérifiable.
 
 !!! tip "How to drill"
@@ -11,6 +11,21 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     votre réponse a manqué le mot clé (le code de statut, la classe d'exception, le
     défaut), ouvrez le chapitre lié et relisez-le. Se tromper puis se corriger bat
     à tous les coups l'à-peu-près correct.
+
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une série de questions **« Que se passe-t-il si… ? »** portant sur des situations limites — des cas où le comportement réel de Symfony/PHP surprend celui qui répondrait "logiquement" sans connaître l'implémentation.
+
+**Pourquoi ça existe ?** Les questions de niveau Expert ne demandent pas "qu'est-ce que X" mais "que se passe-t-il quand X et Y se combinent d'une façon inhabituelle". Cette page entraîne spécifiquement ce réflexe.
+
+**🏠 Analogie de la vraie vie :** C'est l'entraînement d'un **pilote d'avion en simulateur de panne** : on ne répète pas le vol normal, on répète des scénarios rares et précis (un moteur qui tombe en panne à tel moment) pour que la bonne réaction devienne un réflexe.
+
+**Symfony dans la vraie vie :** Chaque question → un scénario limite précis (ex. deux `return` dans `try`/`finally`) / La réponse dépliable → le comportement réel de PHP/Symfony, avec le mécanisme qui l'explique, pas juste le résultat.
+
+**⚠️ Erreur fréquente :** Répondre "au feeling" sans avoir formulé sa réponse à voix haute avant de cliquer. Le format encourage explicitement à s'engager sur une réponse d'abord — sauter cette étape réduit l'efficacité de l'entraînement à presque zéro.
+
+**🧠 Comment le mémoriser :** *« Je réponds avant de cliquer, jamais après »* — un cas limite mal deviné puis corrigé se retient bien mieux qu'un cas limite lu passivement.
+
 
 ## PHP & Web Security
 
@@ -276,7 +291,7 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     Il lève une **`AlreadySubmittedException`** — un form ne peut être soumis
     qu'une seule fois. Il en va de même pour la mutation d'un form soumis, p. ex.
     faire `add()` d'un enfant après la soumission.
-    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/current/form/direct_submit.html)
+    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/forms.html)
 
 ??? question "What happens if you render fields manually and forget `form_rest()` (so no `_token` is printed)?"
     La soumission suivante échoue à la validation CSRF — une erreur **"invalid
@@ -362,7 +377,7 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     constructeur ne peuvent pas être instanciés. Cassez le cycle en rendant un côté
     `lazy` (un proxy diffère l'instanciation), en injectant un service locator, ou
     en passant une arête en injection par setter.
-    **Ref:** [Lazy services](https://symfony.com/doc/current/service_container/lazy_services.html)
+    **Ref:** [Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html)
 
 ??? question "What happens if you tag a service with a custom tag and nothing else?"
     **Rien** — un tag est une métadonnée inerte tant qu'un consommateur (un
@@ -563,14 +578,50 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     défaut ; passez `true` pour bloquer. Les locks portent aussi un TTL (300 s par
     défaut), donc les longs jobs doivent `refresh()`, et
     `FlockStore`/`SemaphoreStore` ne protègent qu'une seule machine.
-    **Ref:** [Lock](../miscellaneous/lock.md)
+    **Ref:** [Lock](../appendices/out-of-syllabus/lock.md)
+
+## Messenger
+
+??? question "Que se passe-t-il si une classe de message n'a aucune entrée de routage dans `framework.messenger.transports` ?"
+    Ce n'est **pas une erreur** — le message est traité **synchroniquement,
+    en place**, exactement comme s'il était routé vers `sync://`
+    explicitement. Le pipeline de middleware complet s'exécute quand même ;
+    seul le saut vers un transport est sauté.
+    **Réf. :** [Transports](../messenger/transports.md)
+
+??? question "Que se passe-t-il avec le délai de retry calculé quand `retry_strategy.jitter` reste à sa valeur par défaut ?"
+    Il est **randomisé de ±10 % environ** (la valeur par défaut du framework
+    est `jitter: 0.1`), en plus du backoff exponentiel
+    `delay × multiplier^tentative` — seul `jitter: 0` rend une progression
+    `1000/2000/4000 ms` exacte.
+    **Réf. :** [Retries & failures](../messenger/retries-failures.md)
+
+??? question "Que se passe-t-il quand un handler lance `UnrecoverableMessageHandlingException` ?"
+    Les retries sont **entièrement sautés** — l'enveloppe part directement
+    vers le **transport d'échec**, quel que soit le nombre de tentatives
+    restantes. À réserver aux erreurs structurelles qui échoueront toujours
+    de la même façon, jamais aux erreurs transitoires.
+    **Réf. :** [Retries & failures](../messenger/retries-failures.md)
+
+??? question "Que se passe-t-il si on lit `$envelope->last(RedeliveryStamp::class)?->getRetryCount()` sur un message qui n'a jamais échoué ?"
+    Cela vaut **`null`**, pas `0` — un message sans échec préalable ne porte
+    aucun `RedeliveryStamp` du tout, donc son absence signifie elle-même
+    « première tentative », jamais « zéro retry enregistré ».
+    **Réf. :** [Retries & failures](../messenger/retries-failures.md)
+
+??? question "Que se passe-t-il si le même message est délivré deux fois à un handler parce que la fenêtre de visibilité d'un worker lent a expiré en cours de traitement ?"
+    C'est **prévu par conception** — le contrat de livraison de Messenger est
+    **au moins une fois**, jamais exactement une fois. Rien dans le framework
+    n'empêche une redélivrance ; seul un handler **idempotent** empêche un
+    effet de bord dupliqué.
+    **Réf. :** [Retries & failures](../messenger/retries-failures.md)
 
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
-- [Routing](https://symfony.com/doc/current/routing.html) · [Controllers](https://symfony.com/doc/current/controller.html) · [Forms](https://symfony.com/doc/current/forms.html) · [Validation](https://symfony.com/doc/current/validation.html)
-- [Service container](https://symfony.com/doc/current/service_container.html) · [Security](https://symfony.com/doc/current/security.html) · [HTTP cache](https://symfony.com/doc/current/http_cache.html)
-- [Console](https://symfony.com/doc/current/console.html) · [Testing](https://symfony.com/doc/current/testing.html) · [Twig](https://twig.symfony.com/doc/3.x/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
+- [Routing](https://symfony.com/doc/8.0/routing.html) · [Controllers](https://symfony.com/doc/8.0/controller.html) · [Forms](https://symfony.com/doc/8.0/forms.html) · [Validation](https://symfony.com/doc/8.0/validation.html)
+- [Service container](https://symfony.com/doc/8.0/service_container.html) · [Security](https://symfony.com/doc/8.0/security.html) · [HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
+- [Console](https://symfony.com/doc/8.0/console.html) · [Testing](https://symfony.com/doc/8.0/testing.html) · [Twig](https://twig.symfony.com/doc/3.x/)
 - [PHP manual](https://www.php.net/manual/en/) · [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
 
 ---

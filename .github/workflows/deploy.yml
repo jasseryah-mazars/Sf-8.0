@@ -2,10 +2,16 @@ name: Build & Deploy Docs
 
 on:
   push:
+    # master is the project's sole development/integration/publication
+    # branch as of this workflow revision (main kept as a defensive
+    # fallback in case the repo's default branch is ever renamed to it —
+    # ci runs there too, but only master ever deploys, see the `deploy`
+    # job below). The old per-session `claude/...` feature branches are
+    # intentionally no longer triggers: they merge into master, which is
+    # what builds and deploys from here on.
     branches:
       - main
       - master
-      - claude/symfony8-cert-platform-mgkdkr
   pull_request:
     branches:
       - main
@@ -44,8 +50,17 @@ jobs:
       - name: Completeness & references audit
         run: python tools/audit.py
 
+      - name: Exclusions consistency check (blocking)
+        run: python tools/check_exclusions.py
+
+      - name: Doc/source version-pin check (blocking — Symfony 8.0 exclusively)
+        run: python tools/check_doc_version_refs.py
+
       - name: Validate quiz bank
         run: python tools/validate_quiz.py
+
+      - name: Quiz near-duplicate scan (report only, non-blocking)
+        run: python tools/check_quiz_duplicates.py
 
       - name: Regenerate interactive quiz dataset
         run: python tools/gen_quiz_json.py
@@ -65,18 +80,107 @@ jobs:
       - name: Lint PHP snippets
         run: python tools/lint_php.py
 
+      - name: Lint YAML snippets
+        run: python tools/lint_yaml.py
+
+      - name: Lint Twig snippets (block-tag pairing)
+        run: python tools/lint_twig.py
+
+      - name: Lint XML snippets
+        run: python tools/lint_xml.py
+
+      - name: Structural checks (Official References, placeholders, internal links)
+        run: python tools/check_placeholders.py
+
+      - name: Editorial structure checks (nav/docs consistency, code fences, empty sections)
+        run: python tools/check_editorial_structure.py
+
+      - name: Report freshness check (informational only)
+        run: python tools/check_report_freshness.py
+
+      - name: Reading order agrees with specs/learning_path.yml (blocking)
+        # nav, each domain index, and every "next topic" link used to encode the
+        # order independently and could drift in silence, putting a chapter before
+        # the one it depends on.
+        run: python tools/check_learning_path.py
+
+      - name: Cited documentation URLs resolve at their source (blocking)
+        # A citation is verified by resolving the file the rendered page is built
+        # from. Without this, an invented or moved URL ships green and the reader
+        # is the one who finds the 404.
+        run: python tools/check_doc_refs_resolve.py
+
+      - name: Generated artefacts are not stale (blocking)
+        # Exams, flashcard decks, revision sheets and the traceability matrix are
+        # generated but committed, so they drift silently when a lesson changes.
+        # This regenerates in a temp copy and fails if the committed files differ.
+        run: python tools/gen_all.py --check
+
+      - name: Per-topic learning-journey checks (blocking)
+        # Four files per migrated topic, no Certification questions left in a
+        # lesson, every answer/hint/solution collapsed, a reference after each
+        # explanation, journey links resolving both ways.
+        run: python tools/check_topic_journey.py
+
+      - name: Set up Node (for the Mermaid engine)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+
+      - name: Install Mermaid + install Chromium
+        # The validator parses and renders each diagram with the real engine, so
+        # it needs the pinned mermaid build and a browser to run it in.
+        run: |
+          npm ci --prefix tools
+          npx --prefix tools playwright install --with-deps chromium
+
+      - name: Vendored Mermaid matches the pin (blocking)
+        # Guarantees the version the site ships is the version the next step
+        # validates against. Without this the validator's guarantee is hollow.
+        run: python tools/vendor_mermaid.py --check
+
+      - name: Mermaid diagrams parse and render (blocking)
+        # `mkdocs build --strict` cannot catch a broken diagram: MkDocs only copies
+        # the fenced text and Mermaid renders in the visitor's browser, so a syntax
+        # error would otherwise ship green and show "Syntax error in text" to the
+        # reader. This must run BEFORE the build, per the mission brief.
+        env:
+          NODE_PATH: ${{ github.workspace }}/tools/node_modules
+        run: python tools/validate_mermaid.py
+
       - name: Build site (strict)
         run: mkdocs build --strict
 
+      - name: Mermaid renders in a real browser on the built site (blocking)
+        # validate_mermaid proves the diagrams parse; this proves the published
+        # page actually shows an <svg> at desktop and mobile widths, with no
+        # "Syntax error in text" and no external mermaid fetch - which is what
+        # proves the vendored copy is the one in use.
+        env:
+          NODE_PATH: ${{ github.workspace }}/tools/node_modules
+        run: python tools/check_mermaid_render.py
+
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr'
+        # master only — see the `deploy` job's own comment for why.
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
-    # Deploy from main/master (canonical branches) or the current working branch.
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/claude/symfony8-cert-platform-mgkdkr'
+    # master is this project's sole publication branch (see Objective 2 of
+    # the master-consolidation mission this comment was added under). Not
+    # main: this repo's actual default/working branch is master, and the
+    # github-pages environment's deployment-branch policy is scoped to it
+    # accordingly — deploying from anything else would need that policy
+    # widened, which is explicitly against project policy (never open Pages
+    # deployment to arbitrary branches). If the repo's default branch is
+    # ever genuinely renamed to main, update this condition and the Pages
+    # environment's branch policy together, deliberately, not by widening
+    # this check on its own.
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     environment:

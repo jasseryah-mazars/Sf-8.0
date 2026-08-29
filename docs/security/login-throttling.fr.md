@@ -32,6 +32,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`login_throttling` bloque automatiquement les tentatives de connexion en force brute — après un nombre d'essais ratés, le compte est temporairement gelé.
+
+### Imagine dans la vraie vie
+La porte du coffre d'une banque : après cinq codes PIN erronés pour *un* compte, le clavier bloque l'accès à ce compte pendant un moment. Mais la porte surveille aussi la *personne* : quelqu'un qui essaie plein de numéros de compte différents est totalement bloqué après 25 essais, même si aucun compte individuel n'a atteint sa propre limite.
+
+### Dans Symfony
+Sans cette protection, un attaquant pourrait essayer des milliers de mots de passe par seconde contre un seul compte — `login_throttling` ralentit ça automatiquement, sans code supplémentaire à écrire.
+
+### Exemple simple
+```yaml
+main:
+    login_throttling: { max_attempts: 5, interval: '15 minutes' }
+```
+
+### Comment le mémoriser 🧠
+Deux limites cumulées : par **username+IP** (spécifique) ET une limite plus large par **IP seule, à 5× max_attempts** — pour arrêter aussi un attaquant qui change de nom d'utilisateur à chaque essai.
+
+---
+
+
 ## Theory
 
 La protection contre la force brute est intégrée au système d'authenticators
@@ -315,7 +338,7 @@ tokens (sans endpoint de connexion), il n'a rien à limiter.
 
     **Why:** Les deux compteurs stoppent à la fois la force brute sur un seul
     compte et le « username spraying » depuis une même IP.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ??? question "Q2. Which event does the throttling listener use to block an attempt?"
     - [ ] A. `LoginFailureEvent`
@@ -336,7 +359,7 @@ tokens (sans endpoint de connexion), il n'a rien à limiter.
 
     **Why:** La fonctionnalité repose sur le composant RateLimiter ; sans lui,
     l'option de firewall ne peut pas être configurée.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ??? question "Q4. What must a custom `limiter` service implement?"
     - [ ] A. `LimiterInterface` from the RateLimiter component
@@ -346,7 +369,7 @@ tokens (sans endpoint de connexion), il n'a rien à limiter.
 
     **Why:** Le firewall a besoin d'un limiter qui comprend les *requests* ;
     `AbstractRequestRateLimiter` est la classe de base pratique.
-    **Ref:** [Login throttling](https://symfony.com/doc/current/security.html#limiting-login-attempts).
+    **Ref:** [Login throttling](https://symfony.com/doc/8.0/security.html#limiting-login-attempts).
 
 ## Key takeaways
 
@@ -385,8 +408,8 @@ tokens (sans endpoint de connexion), il n'a rien à limiter.
   tout court.
 
 ## Official References
-- [Symfony docs — Limiting login attempts](https://symfony.com/doc/current/security.html#limiting-login-attempts)
-- [Symfony docs — Rate Limiter component](https://symfony.com/doc/current/rate_limiter.html)
+- [Symfony docs — Limiting login attempts](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
+- [Symfony docs — Rate Limiter component](https://symfony.com/doc/8.0/rate_limiter.html)
 - [Symfony source — LoginThrottlingListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/EventListener/LoginThrottlingListener.php)
 
 ## Video references
@@ -399,7 +422,7 @@ tokens (sans endpoint de connexion), il n'a rien à limiter.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#limiting-login-attempts) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#limiting-login-attempts) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

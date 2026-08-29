@@ -2,6 +2,20 @@
 
 Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-minute cheat). For the final days. Full detail: [HTTP](../../http/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche imprimable, tenant sur une page**, qui résume chaque sous-chapitre de HTTP en quelques puces "à retenir" suivies d'une ligne "Cheat" très dense.
+
+**Pourquoi ça existe ?** Dans les derniers jours avant l'examen, on veut un support papier ou PDF unique par domaine — pas 10 onglets de navigateur ouverts. Cette fiche condense un domaine entier sur une seule page imprimable.
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de révision recto-verso** qu'un étudiant prépare avant un examen universitaire : tout le cours du semestre réduit à une page, à relire dans le métro le matin de l'épreuve.
+
+**Symfony dans la vraie vie :** Chaque puce "à retenir" → une règle déjà apprise en détail dans le chapitre / La ligne "Cheat:" → la version ultra-compacte, presque un aide-mémoire de syntaxe / Lien "Full detail" → retour au chapitre complet si un point ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Imprimer cette fiche *avant* d'avoir étudié HTTP en détail, en espérant apprendre directement dessus — le format est trop dense pour un premier apprentissage, il ne fonctionne qu'en rappel.
+
+**🧠 Comment le mémoriser :** *« Une page, un domaine, la veille de l'examen »* — cette fiche est le tout dernier support à consulter, pas le premier.
+
 ## Caching Overview
 - Two models: expiration (freshness) and validation.
 - Freshness = `Cache-Control`/`Expires`; validation = `ETag`/`Last-Modified`.
@@ -79,6 +93,17 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Stream large output; never buffer huge files into memory.
 
 **Cheat:** `new Response($body, $status, $headers)`; default `Cache-Control: no-cache, private`. `JsonResponse::fromJsonString()`, `RedirectResponse(url, 302)`. `BinaryFileResponse` = files on disk (range/X-Sendfile); `StreamedResponse` = generated output. Disposition via `HeaderUtils::makeDisposition()`.
+
+## HTTP Specification (RFC 9110)
+- RFC 9110 defines HTTP **semantics** (methods, status codes, headers,
+  negotiation, conditional/range requests), independent of HTTP version.
+- RFC 9112/9113/9114 define the **wire format** per HTTP version; RFC 9111
+  defines **caching** — both separate from RFC 9110.
+- Symfony's `Request`/`Response` model the RFC 9110 layer, which is why they
+  don't change shape across HTTP/1.1, /2, /3.
+- An absent header and an empty header value are distinct under RFC 9110.
+
+**Cheat:** **9110** = Semantics (methods, status, headers, negotiation, conditional/range). **9111** = Caching. **9112** = HTTP/1.1. **9113** = HTTP/2. **9114** = HTTP/3. 9110 replaced 7231/7232/7233/7235/7538 — **not** 7230 (→9112) or 7234 (→9111). Safe / idempotent / cacheable = per-method RFC 9110 properties, not framework rules.
 
 ## Status Codes
 - 1xx info, 2xx success, 3xx redirect, 4xx client error, 5xx server error.

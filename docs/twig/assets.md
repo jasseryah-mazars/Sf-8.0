@@ -26,7 +26,28 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`asset()` transforme un nom de fichier simple et stable en une URL publique, avec un numéro de version qui change dès que le fichier change — pour casser le cache automatiquement.
+
+### Imagine dans la vraie vie
+`asset()` est le comptoir du vestiaire. Tu donnes un nom simple et stable — "le manteau gris", `css/app.css` — et il te rend le ticket exact de l'objet actuel, avec le numéro du jour. Quand tu remplaces le manteau par un nouveau, le numéro change, donc personne ne peut repartir avec l'ancien manteau en réutilisant un vieux ticket.
+
+### Dans Symfony
+`{{ asset('css/app.css') }}` génère `/css/app.abc123.css` — quand tu modifies le CSS et redéploies, le hash change automatiquement, forçant le navigateur du visiteur à retélécharger la nouvelle version au lieu de garder l'ancienne en cache.
+
+### Exemple simple
+```twig
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+```
+
+### Comment le mémoriser 🧠
+`asset()` sert les **fichiers statiques** (CSS, JS, images) ; `path()`/`url()` servent les **routes**. Ne les confonds jamais — un fichier statique n'est pas une route Symfony.
 
 !!! info "Scope"
     This chapter covers the **`asset()` function and versioning only**. The build
@@ -203,6 +224,8 @@ here**; `asset()` merely resolves the final public path/version.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `asset('css/app.css')` return?"
     - [x] A. A public URL/path (with base path + version) to the file ✅
     - [ ] B. A route URL
@@ -210,7 +233,7 @@ here**; `asset()` merely resolves the final public path/version.
     - [ ] D. An absolute filesystem path
 
     **Why:** `asset()` resolves a path relative to `public/` via `Packages`.
-    **Ref:** [Linking to assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets).
+    **Ref:** [Linking to assets](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets).
 
 ??? question "Q2. What is asset versioning for?"
     - [x] A. Cache busting when files change ✅
@@ -219,7 +242,7 @@ here**; `asset()` merely resolves the final public path/version.
     - [ ] D. Route matching
 
     **Why:** Versions force clients to refetch changed assets. **Ref:**
-    [Asset versioning](https://symfony.com/doc/current/frontend.html).
+    [Asset versioning](https://symfony.com/doc/8.0/frontend.html).
 
 ??? question "Q3. Which service does `asset()` delegate to?"
     - [x] A. `Symfony\Component\Asset\Packages` ✅
@@ -251,8 +274,8 @@ here**; `asset()` merely resolves the final public path/version.
 - **Confused with:** [URL Generation](urls.md) — `asset()` is for static files under `public/`; `path()`/`url()` are for routes.
 
 ## Official References
-- [Official — Linking to CSS/JS assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
-- [Official — Asset component](https://symfony.com/doc/current/components/asset.html)
+- [Official — Linking to CSS/JS assets](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets)
+- [Official — Asset component](https://symfony.com/doc/8.0/components/asset.html)
 - [Symfony source — Packages](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Asset/Packages.php)
 
 ## Video references
@@ -264,7 +287,7 @@ here**; `asset()` merely resolves the final public path/version.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -78,8 +78,23 @@ performance, l'échappement et le débogage.
 
 <small>Previous stage: [Routing](../routing/index.md) · Next stage: [Forms](../forms/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Twig est le langage qui transforme des données PHP en pages HTML lisibles par un navigateur — sans jamais mélanger la logique métier avec l'affichage.
+
+**Pourquoi ça existe ?** Écrire du HTML directement dans du PHP est illisible et dangereux (failles XSS). Twig sépare "ce qu'on affiche" de "comment on le calcule", et protège automatiquement contre les injections.
+
+**🏠 Analogie de la vraie vie :** Un modèle de lettre type avec des champs à remplir ("Cher [NOM], votre commande [NUMÉRO] est prête"). Le modèle (le template Twig) reste toujours le même ; seules les données injectées changent à chaque envoi.
+
+**Symfony dans la vraie vie :** Un contrôleur calcule les données (`$produits = ...`) et les passe au template (`return $this->render('produits.html.twig', ['produits' => $produits])`) — Twig ne fait que les afficher, jamais les calculer.
+
+**⚠️ Erreur fréquente :** utiliser `|raw` sur du contenu saisi par un visiteur — ça désactive la protection automatique contre les scripts malveillants (XSS).
+
+**🧠 Comment le mémoriser :** "PHP calcule, Twig affiche — jamais l'inverse."
+
+
 ## Official References
 
-- [Symfony documentation — Creating and Using Templates (Twig)](https://symfony.com/doc/current/templates.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Creating and Using Templates (Twig)](https://symfony.com/doc/8.0/templates.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

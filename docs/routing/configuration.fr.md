@@ -29,6 +29,66 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une route associe un chemin d'URL à un contrôleur sous un nom unique — et la première règle qui correspond gagne, jamais "la plus précise".
+
+### Imagine dans la vraie vie
+Le carnet de règles d'une salle de tri postal : chaque règle associe un motif d'adresse (le chemin) à un bureau de destination (le contrôleur) sous une étiquette unique (le nom). Le trieur lit les règles strictement de haut en bas et remet la lettre au *premier* bureau dont le motif correspond — jamais "le plus précis" — c'est pourquoi les règles étroites doivent être placées au-dessus des règles larges attrape-tout.
+
+### Dans Symfony
+Si `/produits/nouveau` est déclarée *après* `/produits/{id}`, la route générique capture "nouveau" comme un `{id}` avant même que la route spécifique n'ait sa chance — l'ordre de déclaration compte vraiment.
+
+### Exemple simple
+```php
+#[Route('/produits/nouveau', name: 'produit_nouveau')] // doit venir AVANT
+#[Route('/produits/{id}', name: 'produit_show')]
+```
+
+### Comment le mémoriser 🧠
+"Premier arrivé, premier servi" — pas "le plus précis gagne". Range toujours tes routes spécifiques avant les routes génériques.
+
+A **route** binds a URL *path* to a *controller*, under a unique *name*. Symfony 8
+offers two first-class ways to declare routes (the syllabus covers only these):
+
+- **PHP attributes** — `#[Route]` on the controller class and/or method. This is
+  the recommended default: the route lives next to the code it triggers.
+- **YAML** — declarative files under `config/routes/`, useful for third-party or
+  prefix-only definitions where you cannot edit the controller.
+
+```php
+// #[Route] attribute — the route sits next to the code it triggers
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Route('/blog/{slug}', name: 'blog_show', methods: ['GET'])]
+public function show(string $slug): Response { /* ... */ }
+
+// The YAML equivalent lives in a file under config/routes/ (see below)
+```
+
+The three mandatory pieces of a route are its **name** (a string key, used for URL
+generation), its **path** (the URL pattern with `{placeholders}`), and its
+**controller** (the callable to run). Everything else — methods, host,
+requirements, defaults — is an optional refinement.
+
+```yaml
+# config/routes/blog.yaml — the three mandatory pieces of a route
+blog_show:                                            # name (unique key)
+    path: /blog/{slug}                                # path with a {placeholder}
+    controller: App\Controller\BlogController::show   # controller to run
+```
+
+!!! question "Predict first"
+    Two routes both match `/blog/latest` — one is declared before the other. Which
+    controller runs, and does the *more specific* route win the tie?
+
+??? note "Reveal"
+    The route declared **first** wins. Matching is first-match-wins over the ordered
+    `RouteCollection`; specificity is irrelevant — that is why you must put specific
+    routes before catch-all ones.
+
+
 ## Theory
 
 Une **route** lie un *path* d'URL à un *controller*, sous un *nom* unique. Symfony 8
@@ -300,7 +360,7 @@ l'exécution.
     - [ ] D. `Symfony\Component\HttpKernel\Attribute\Route`
 
     **Why:** la classe a déménagé dans le namespace `Attribute` ; l'alias `Annotation`
-    est supprimé dans Symfony 8. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    est supprimé dans Symfony 8. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q2. Two routes match the same path. Which wins?"
     - [x] A. The one declared first in the `RouteCollection` ✅
@@ -309,7 +369,7 @@ l'exécution.
     - [ ] D. The last one declared
 
     **Why:** le matcher itère dans l'ordre d'insertion et retourne le premier match.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. What does a class-level `#[Route('/blog', name: 'app_blog_')]` contribute?"
     - [x] A. A path prefix and a name prefix for every method route ✅
@@ -318,7 +378,7 @@ l'exécution.
     - [ ] D. Nothing without `methods`
 
     **Why:** les données de route au niveau de la classe sont fusionnées comme préfixes dans la route de chaque action.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#creating-routes-as-attributes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#creating-routes-as-attributes).
 
 ??? question "Q4. Which `type` imports `#[Route]` attributes in a YAML resource?"
     - [ ] A. `type: annotation`
@@ -327,7 +387,7 @@ l'exécution.
     - [ ] D. `type: directory`
 
     **Why:** le chargement des attributs utilise `type: attribute` dans Symfony 8.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -351,7 +411,7 @@ l'exécution.
 - **Confused with:** [Requirements](requirements.md) — l'*ordre* de déclaration et la *spécificité* des regex décident de choses différentes.
 
 ## Official References
-- [Official Symfony docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official Symfony docs — Routing](https://symfony.com/doc/8.0/routing.html)
 - [Symfony source — Router](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Router.php)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
@@ -364,7 +424,7 @@ l'exécution.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

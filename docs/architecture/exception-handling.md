@@ -27,7 +27,29 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Request Handling](request-handling.md), [Events](events.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une exception non attrapée déclenche une alarme incendie interne (`kernel.exception`) que Symfony écoute pour la transformer en page d'erreur propre, au lieu de laisser planter l'application.
+
+### Imagine dans la vraie vie
+Une alarme incendie retentit dans un bâtiment. Le kernel capte la fumée et diffuse l'alerte à tous les secouristes (les listeners). Tes propres secouristes interviennent en premier ; les pompiers par défaut du bâtiment (`ErrorListener`, priorité -128) n'agissent que si personne d'autre ne l'a fait.
+
+### Dans Symfony
+Une `NotFoundHttpException` lancée dans un contrôleur devient automatiquement une page 404 stylée — sans que tu aies écrit le moindre code pour la transformer en réponse HTTP.
+
+### Exemple simple
+```php
+throw new NotFoundHttpException('Produit introuvable.');
+// → devient automatiquement une réponse 404, grâce à HttpExceptionInterface
+```
+
+### Comment le mémoriser 🧠
+Seule une exception qui implémente `HttpExceptionInterface` porte un code de statut précis — toutes les autres deviennent une **500** par défaut. Retiens : "pas d'étiquette HTTP = urgence générique."
 
 ## Theory
 
@@ -343,13 +365,15 @@ control flow.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which event turns an exception into a response?"
     - [x] A. `kernel.exception` ✅
     - [ ] B. `kernel.view`
     - [ ] C. `kernel.terminate`
 
     **Why:** `ExceptionEvent` listeners set the response. **Ref:**
-    [kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception).
+    [kernel.exception](https://symfony.com/doc/8.0/reference/events.html#kernel-exception).
 
 ??? question "Q2. What status code does a bare `\LogicException` produce?"
     - [ ] A. 404
@@ -357,7 +381,7 @@ control flow.
     - [ ] C. 400
 
     **Why:** Only `HttpExceptionInterface` exceptions carry a status; others → 500.
-    **Ref:** [Error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q3. Where do you override the 404 template?"
     - [x] A. `templates/bundles/TwigBundle/Exception/error404.html.twig` ✅
@@ -365,7 +389,7 @@ control flow.
     - [ ] C. In `vendor/`
 
     **Why:** TwigBundle resolves overrides under `templates/bundles/<Bundle>/`.
-    **Ref:** [Customizing error pages](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Customizing error pages](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ## Key takeaways
 
@@ -389,8 +413,8 @@ control flow.
 - **Confused with:** [HTTP Response](../http/response.md) — throwing an `HttpException` sets a *status*, but a listener still must turn it into a real `Response`.
 
 ## Official References
-- [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
-- [Official docs — kernel.exception](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+- [Official docs — Error pages](https://symfony.com/doc/8.0/controller/error_pages.html)
+- [Official docs — kernel.exception](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 - [Symfony source — ErrorListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 
 ## Video references
@@ -402,7 +426,7 @@ control flow.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/events.html#kernel-exception) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/events.html#kernel-exception) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

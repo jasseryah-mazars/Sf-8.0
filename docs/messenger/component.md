@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [DI & Tags](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Messenger envoie des objets PHP tout simples à travers un "bus" jusqu'à un handler — le travail lent peut ainsi s'exécuter plus tard, en arrière-plan, au lieu de bloquer la requête.
+
+### Imagine dans la vraie vie
+Messenger est un **bureau de poste**. `dispatch()` dépose une lettre dans la boîte — tu reçois un reçu (l'`Envelope`), pas une réponse. Le **transport** est la salle de tri où les lettres attendent ; le **worker** est le facteur qui les distribue plus tard ; le **handler** est le destinataire qui agit enfin sur la lettre.
+
+### Dans Symfony
+Envoyer un email de bienvenue après une inscription peut se faire via Messenger : la requête HTTP répond immédiatement à l'utilisateur, pendant qu'un worker en arrière-plan envoie réellement l'email quelques secondes plus tard.
+
+### Exemple simple
+```php
+$bus->dispatch(new EnvoyerEmailBienvenue($utilisateur->getId()));
+// la requête HTTP répond tout de suite, l'email part plus tard
+```
+
+### Comment le mémoriser 🧠
+`dispatch()` ne renvoie **jamais** la valeur du handler directement — toujours un `Envelope`, comme un reçu postal ne contient jamais la réponse du destinataire, seulement la preuve du dépôt.
 
 ## Theory
 
@@ -221,6 +243,8 @@ service directly is simpler and has no dispatch overhead.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `MessageBusInterface::dispatch()` return?"
     - [ ] A. The handler's return value
     - [x] B. An `Envelope` ✅
@@ -229,7 +253,7 @@ service directly is simpler and has no dispatch overhead.
 
     **Why:** `dispatch()` always returns the (possibly stamped) `Envelope`;
     a handler's result lives in a `HandledStamp` inside it.
-    **Ref:** [Messenger](https://symfony.com/doc/current/messenger.html).
+    **Ref:** [Messenger](https://symfony.com/doc/8.0/messenger.html).
 
 ??? question "Q2. What must a Messenger message class implement?"
     - [x] A. Nothing — any plain, serializable PHP object works ✅
@@ -238,7 +262,7 @@ service directly is simpler and has no dispatch overhead.
     - [ ] D. `Stringable`
 
     **Why:** Messenger deliberately has no message marker interface; a plain
-    DTO is enough. **Ref:** [Messenger — Creating a Message Handler](https://symfony.com/doc/current/messenger.html#creating-a-message-handler).
+    DTO is enough. **Ref:** [Messenger — Creating a Message Handler](https://symfony.com/doc/8.0/messenger.html#creating-a-message-handler).
 
 ??? question "Q3. Which attribute marks a service as a message handler in Symfony 8?"
     - [x] A. `#[AsMessageHandler]` ✅
@@ -247,7 +271,7 @@ service directly is simpler and has no dispatch overhead.
     - [ ] D. `#[Handles]`
 
     **Why:** `#[AsMessageHandler]` is what autoconfiguration looks for to
-    tag and wire a handler. **Ref:** [Messenger](https://symfony.com/doc/current/messenger.html#creating-a-message-handler).
+    tag and wire a handler. **Ref:** [Messenger](https://symfony.com/doc/8.0/messenger.html#creating-a-message-handler).
 
 ## Key takeaways
 
@@ -278,7 +302,7 @@ service directly is simpler and has no dispatch overhead.
 
 ## Official References
 
-- [Official docs — Messenger](https://symfony.com/doc/current/messenger.html)
+- [Official docs — Messenger](https://symfony.com/doc/8.0/messenger.html)
 - [Symfony source — Messenger component](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Messenger)
 
 ## Video references
@@ -290,7 +314,7 @@ service directly is simpler and has no dispatch overhead.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/messenger.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/messenger.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

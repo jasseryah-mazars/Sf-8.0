@@ -27,7 +27,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Handling submissions](handling.md) · [Data transformers](data-transformers.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les événements de formulaire sont des points de contrôle pendant qu'un formulaire se construit et se soumet — l'occasion d'ajouter des champs dynamiquement ou de nettoyer les données brutes.
+
+### Imagine dans la vraie vie
+Ce sont des **postes de contrôle pendant qu'un formulaire se remplit et se soumet**. Pendant la préparation du formulaire vierge, tu passes par `PRE_SET_DATA`/`POST_SET_DATA` — le moment d'ajouter des champs selon qui le remplit. Quand tu le rends, tu passes par `PRE_SUBMIT`, puis `SUBMIT`, puis `POST_SUBMIT`.
+
+### Dans Symfony
+Un formulaire de commande affichant des champs différents selon un produit déjà choisi utilise typiquement `PRE_SET_DATA` pour ajouter dynamiquement les bons champs avant l'affichage.
+
+### Exemple simple
+```php
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) { /* ... */ });
+```
+
+### Comment le mémoriser 🧠
+On ne peut **ajouter des champs** qu'aux points de contrôle précoces (`PRE_SET_DATA`, `PRE_SUBMIT`) — jamais après que le formulaire est déjà lié.
 
 ## Theory
 
@@ -346,6 +367,8 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is the correct submit event order?"
     - [x] A. PRE_SUBMIT → SUBMIT → POST_SUBMIT ✅
     - [ ] B. SUBMIT → PRE_SUBMIT → POST_SUBMIT
@@ -354,7 +377,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** Submission dispatches PRE_SUBMIT (raw), SUBMIT (norm), POST_SUBMIT
     (model), in that order.
-    **Ref:** [Form events](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q2. On PRE_SUBMIT, `$event->getData()` returns…"
     - [x] A. The raw submitted view data (array/string) ✅
@@ -364,7 +387,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** PRE_SUBMIT fires before transformation, so data is the raw request
     values.
-    **Ref:** [Form events docs](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events docs](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q3. To add a field based on the submitted value, listen on…"
     - [x] A. PRE_SUBMIT ✅
@@ -374,7 +397,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** Fields must be added before binding; PRE_SUBMIT gives you the raw
     value while the form is still mutable.
-    **Ref:** [Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html).
+    **Ref:** [Dynamic form modification](https://symfony.com/doc/8.0/form/dynamic_form_modification.html).
 
 ??? question "Q4. Which event does the validator extension hook to run validation?"
     - [x] A. POST_SUBMIT ✅
@@ -384,7 +407,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     **Why:** Validation runs after data is bound to the model, via a POST_SUBMIT
     listener. There is no dedicated validate event.
-    **Ref:** [Form events docs](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events docs](https://symfony.com/doc/8.0/form/events.html).
 
 ## Key takeaways
 
@@ -410,8 +433,8 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 - **Confused with:** [EventDispatcher](../architecture/events.md) — form events use the same dispatcher but a distinct `FormEvents` set, not kernel events.
 
 ## Official References
-- [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
-- [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html)
+- [Official Symfony docs — Form events](https://symfony.com/doc/8.0/form/events.html)
+- [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/8.0/form/dynamic_form_modification.html)
 - [Symfony source — FormEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php)
 
 ## Video references
@@ -423,7 +446,7 @@ instead. For business validation, use the Validator, not a POST_SUBMIT hook.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/events.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/events.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

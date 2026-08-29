@@ -36,7 +36,7 @@ inapplicable, with an HTML comment saying why.
 | 11 | Certification questions | `## Certification questions` (`??? question`) | Inline self-test, collapsible, with Why + ref |
 | 12 | Key takeaways | `## Key takeaways` | 3–6 bullets |
 | 13 | Last-minute revision | `!!! tip "Cheat sheet"` | Glanceable condensed facts |
-| 14 | References | `## References` | `doc/current` + `blob/8.0` links |
+| 14 | References | `## References` | `doc/8.0` + `blob/8.0` links |
 | 15 | Related | `<small>Related: …</small>` | 2–4 relative cross-links |
 
 ## 3. Anatomy of an area index
@@ -66,7 +66,7 @@ order. It uses `!!! abstract` for the metadata block and benefits from Material'
   enforced by `mkdocs build --strict`.
 - Link to a **file**, not a directory (`../http/index.md`, not `../http/`).
 - Every chapter ends with a `Related:` line of **2–4** cross-links.
-- Every major concept links out to **official docs** (`doc/current`); internals get
+- Every major concept links out to **official docs** (`doc/8.0`); internals get
   a `!!! note "Source reference"` with a `blob/8.0` source link.
 - **Cross-reference instead of duplicating.** If a concept is taught elsewhere,
   link it rather than re-explaining (keeps files small and single-sourced).

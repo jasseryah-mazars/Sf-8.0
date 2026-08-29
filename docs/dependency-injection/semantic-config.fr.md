@@ -32,6 +32,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La configuration sémantique est le formulaire de commande d'un bundle, avec un employé qui valide chaque champ avant de le transformer en services réels.
+
+### Imagine dans la vraie vie
+La configuration sémantique est le formulaire de commande imprimé d'un bundle, avec un employé qui valide. L'arbre `Configuration` est le formulaire — quels champs existent, leurs types, leurs valeurs par défaut — et il rejette le non-sens avant qu'il n'atteigne la cuisine.
+
+### Dans Symfony
+Écrire `framework:` dans `config/packages/framework.yaml` déclenche la validation de l'arbre `Configuration` de FrameworkBundle — une clé mal orthographiée est immédiatement rejetée avec une erreur claire, avant même que le container ne compile.
+
+### Exemple simple
+```yaml
+mon_bundle:
+    activer: true  # validé contre l'arbre Configuration du bundle
+```
+
+### Comment le mémoriser 🧠
+`prepend()` s'exécute **avant** tous les appels `load()` — c'est ce qui permet à un bundle de fixer des valeurs par défaut sensées sur la configuration d'un *autre* bundle avant que quiconque ne la remplisse.
+---
+
+
 ## Theory
 
 La **configuration sémantique** est la config typée et validée qu'un bundle expose
@@ -328,7 +350,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
     - [ ] D. `ContainerBuilder`
 
     **Why:** L'arbre définit les clés autorisées, les types, les défauts et la
-    validation ; `load()` ne fait que consommer le résultat traité. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    validation ; `load()` ne fait que consommer le résultat traité. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ??? question "Q2. When does `prepend()` run relative to `load()`?"
     - [x] A. Before all `load()` calls ✅
@@ -338,7 +360,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
 
     **Why:** Le prepend permet à un bundle d'influencer la config des autres avant
     qu'ils ne se chargent.
-    **Ref:** [Prepending config](https://symfony.com/doc/current/bundles/prepend_extension.html).
+    **Ref:** [Prepending config](https://symfony.com/doc/8.0/bundles/prepend_extension.html).
 
 ??? question "Q3. Which command prints a bundle's config reference tree?"
     - [x] A. `config:dump-reference <bundle>` ✅
@@ -347,7 +369,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
     - [ ] D. `debug:router`
 
     **Why:** Elle dumpe le schéma défini par `Configuration` ; `debug:config`
-    montre les valeurs actuelles. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    montre les valeurs actuelles. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ## Key takeaways
 
@@ -377,8 +399,8 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
   des parameters/services.
 
 ## Official References
-- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/current/bundles/configuration.html)
-- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/current/bundles/prepend_extension.html)
+- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/8.0/bundles/configuration.html)
+- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 - [Symfony source — Extension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php)
 
 ## Video references
@@ -391,7 +413,7 @@ défaut saines pour un autre bundle, pas pour écraser l'intention de l'utilisat
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/configuration.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/configuration.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

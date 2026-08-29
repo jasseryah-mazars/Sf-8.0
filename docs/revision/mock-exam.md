@@ -12,1035 +12,1067 @@
 !!! tip "Timing"
     90 min / 75 Q ≈ **72 seconds per question.** Flag hard ones, keep moving, and come back. Aim to finish with 10 minutes to review flags.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Un **examen blanc complet** : 75 questions, 90 minutes, sans notes — les conditions exactes de l'examen officiel Symfony 8, sur un échantillon pondéré du même sujet que l'examen réel. Le Mock A est l'une de trois versions indépendantes (A, B, C) tirées de la même banque.
+
+**Pourquoi ça existe ?** Connaître chaque notion séparément ne garantit pas de réussir un examen chronométré de 90 minutes qui mélange tout. Le mock exam entraîne spécifiquement la gestion du temps et l'endurance mentale, en plus des connaissances.
+
+**🏠 Analogie de la vraie vie :** C'est le **concours blanc** que passent les lycéens avant le bac : mêmes conditions, même durée, une note à la fin — pour savoir vraiment où on en est, pas pour apprendre du nouveau contenu.
+
+**Symfony dans la vraie vie :** 75 questions pondérées → même répartition que l'examen réel (Architecture/DI/Sécurité/Messenger plus présents) / 90 minutes chronométrées → même contrainte de temps que le jour J / Score final → indicateur direct de préparation, pas une note scolaire.
+
+**⚠️ Erreur fréquente :** Consulter la réponse dès qu'une question semble difficile, au lieu de la flaguer et d'avancer. Cela fausse complètement le chronométrage et masque le vrai niveau de préparation.
+
+**🧠 Comment le mémoriser :** *« Chronomètre en marche, pas de pause, pas de triche »* — un mock exam fait à moitié (avec pauses ou aide) ne prédit rien sur l'examen réel.
+
 ??? info "How this exam was built"
     75 questions sampled from the practice bank, weighted to mirror exam emphasis (Architecture, DI, Security, Messenger heavier; HTTP Caching lighter). Regenerate a fresh set with `python tools/mock_exam.py`.
 
 ---
 
-**Q1.** Which response header ensures a shared cache stores one entry per representation? (choose one)  <small>_(HTTP)_</small>
+**Q1.** Why can you not implement `Traversable` directly, and what does `IteratorAggregate::getIterator()` return?  <small>_(PHP & Web Security)_</small>
 
-- A. Vary
-- B. Content-Type
-- C. Cache-Control: private
-- D. Accept
+- A. Traversable is an internal marker interface; getIterator() must return a Traversable (e.g. an Iterator or generator)
+- B. Traversable requires five methods; getIterator() returns an array
+- C. Traversable is abstract; getIterator() returns void
+- D. You can implement Traversable; getIterator() returns a Countable
 
 ??? success "Answer Q1"
     **A**
 
-    Vary lists the request headers that change the response, so caches key each variant separately.
+    Traversable is an engine-internal marker (the base of Iterator and IteratorAggregate) that userland cannot implement directly — you implement one of its children. getIterator() must return a Traversable, commonly an Iterator or a generator (via yield). It does not return a plain array, void, or a Countable. Misconception: trying to `implements Traversable` directly, which is a fatal error.
 
-    :material-book-open-variant: [Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Vary)
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/class.traversable.php)
 
-**Q2.** Consider: $response->setEtag(sha1($post->getContent())); if ($response->isNotModified($request)) { return $response; } return $this->render('post.html.twig', ['post' => $post], $response); — what is the benefit when If-None-Match matches?  <small>_(HTTP Caching)_</small>
+**Q2.** Which of the following statements are true about handling file uploads with Symfony forms? (select all that apply)  <small>_(Forms)_</small>
 
-- A. A bodyless 304 is returned and the template is never rendered
-- B. The template is rendered, then discarded, and a 304 is sent
-- C. A 200 with the full body is always returned
-- D. The response is sent twice
+- A. form_start() adds enctype="multipart/form-data" automatically, but only when the form contains a file field
+- B. getClientOriginalName() and getClientMimeType() return untrusted, client-supplied values
+- C. An unmapped FileType field is still validated, and you read it via $form->get('x')->getData()
+- D. FileType fields provide the upload as a plain string path to the temporary file
+- E. Setting maxSize on the File constraint raises PHP's upload_max_filesize ini limit
 
 ??? success "Answer Q2"
-    **A**
+    **A, B, C**
 
-    isNotModified() sets 304 and strips the body when the ETag matches, and the early return short-circuits before render() runs — so no template work happens at all. If you called render() first you would lose that saving. It never sends twice; you return the response once.
+    Multipart encoding is only set when a file field is present; the client-provided name and MIME type must never be trusted (use guessExtension()/getMimeType() instead); and unmapped fields are validated and fetched with ->get('x')->getData(). FileType yields an UploadedFile object (not a string path), and the File constraint is capped by — it can never override — PHP's upload_max_filesize/post_max_size limits.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/upload_file.html)
 
-**Q3.** Which methods does UserInterface declare in Symfony 8?  <small>_(Security)_</small>
+**Q3.** What does the special _format parameter do when matched?  <small>_(Routing)_</small>
 
-- A. getRoles() and getUserIdentifier()
-- B. getUsername() and getRoles()
-- C. getRoles(), getUserIdentifier() and eraseCredentials()
-- D. getId() and getPassword()
+- A. Sets the request format, influencing the response Content-Type
+- B. Only appears in the URL with no effect
+- C. Selects which controller runs
+- D. Sets the HTTP method
 
 ??? success "Answer Q3"
     **A**
 
-    Symfony 8 trimmed UserInterface to two methods; eraseCredentials() and getUsername() were removed.
+    RouterListener applies _format via Request::setRequestFormat(), driving content negotiation.
 
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/UserInterface.php)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#special-parameters)
 
-**Q4.** Which of these are valid top-level keys under security: in Symfony 8? (choose 4)  <small>_(Security)_</small>
+**Q4.** What does the expression `trim(...)` produce?  <small>_(PHP & Web Security)_</small>
 
-- A. providers
-- B. firewalls
-- C. access_control
-- D. role_hierarchy
-- E. enable_authenticator_manager
+- A. A Closure wrapping the trim function
+- B. The string 'trim'
+- C. The trimmed result
+- D. A parse error in PHP 8.4
 
 ??? success "Answer Q4"
-    **A, B, C, D**
+    **A**
 
-    providers, firewalls, access_control, password_hashers and role_hierarchy are the core keys of security.yaml. enable_authenticator_manager was removed in Symfony 8 — the authenticator system is the only one — so it is not a valid key anymore.
+    First-class callable syntax (8.1+) turns any callable into a Closure, so trim(...) yields a Closure object. It is not the string 'trim', it does not call trim (no argument is passed), and it is valid syntax in 8.4. It is the type-safe modern replacement for 'trim' or Closure::fromCallable('trim'). Misconception: reading `(...)` as an immediate call.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/configuration/security.html)
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/functions.first_class_callable_syntax.php)
 
-**Q5.** On submit, which transformers run first?  <small>_(Forms)_</small>
+**Q5.** In Symfony 8 (PHP 8.4), what does the container inject for a concrete service marked lazy: true?  <small>_(Dependency Injection)_</small>
 
-- A. View transformers (view->norm), then model transformers (norm->model)
-- B. Model transformers, then view transformers
-- C. Only model transformers run on submit
-- D. Order is undefined
+- A. A native lazy ghost — an uninitialized instance whose constructor runs in place on first use
+- B. A subclass generated by friendsofphp/proxy-manager
+- C. null, replaced by the real instance on first get()
+- D. A ServiceLocator wrapping the service
 
 ??? success "Answer Q5"
     **A**
 
-    On submission data flows view -> norm -> model, so view transformers' reverseTransform runs before model transformers' reverseTransform.
+    Symfony 8 runs on PHP 8.4, whose engine provides native lazy objects. For a concrete class the dumped container creates a lazy ghost: the very same instance, handed out uninitialized, with the real constructor run in place on first state access. No external proxy library is involved.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/form/data_transformers.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/lazy_services.html)
 
-**Q6.** Your CacheInterface::get() callback returns null on the first call. What happens on the next call before expiry?  <small>_(Miscellaneous)_</small>
+**Q6.** Which server parameters are NOT written with the HTTP_ prefix? (choose 3)  <small>_(Testing)_</small>
 
-- A. null is returned as a cache hit; the callback is NOT run again
-- B. The callback runs again because null means a miss
-- C. A CacheException is thrown for storing null
-- D. The item is deleted automatically
+- A. CONTENT_TYPE
+- B. PHP_AUTH_USER
+- C. HTTPS
+- D. HTTP_ACCEPT
+- E. HTTP_X_REQUESTED_WITH
 
 ??? success "Answer Q6"
-    **A**
+    **A, B, C**
 
-    null is a valid cached value: the contracts API stores whatever the callback returns and treats it as a hit until it expires. get() never uses null to mean 'miss' — that is exactly the PSR-6 footgun (getItem()->get() returning null for both absent and stored-null) that the callback API avoids. Caching 'no result' as null is fine, but it counts as a hit.
+    Following CGI conventions, request headers are exposed as HTTP_<NAME>, but CONTENT_TYPE, HTTPS, PHP_AUTH_USER and PHP_AUTH_PW are special-cased with no prefix. HTTP_ACCEPT and HTTP_X_REQUESTED_WITH are ordinary headers and keep the prefix.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/cache.html#cache-contracts)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client)
 
-**Q7.** For the router, which statement about id, class and autowiring alias is correct?  <small>_(Dependency Injection)_</small>
+**Q7.** 401 Unauthorized means the user is authenticated but lacks permission. True or false?  <small>_(HTTP)_</small>
 
-- A. The id is 'router', the class is a concrete Router, and an Alias maps RouterInterface to the id
-- B. The id, class and alias are all the string 'router'
-- C. The autowiring alias is the class FQCN pointing at the interface
-- D. There is no alias; autowiring matches the id string directly
+- A. False
+- B. True
 
 ??? success "Answer Q7"
     **A**
 
-    These are three distinct keys. FrameworkExtension registers the service under the id 'router' with a concrete class, then adds an autowiring alias from the interface FQCN (RouterInterface) to that id so type-hints resolve. debug:autowiring lists those aliases; debug:container inspects the id.
+    401 actually means *not authenticated* — credentials are missing or invalid, and the server must send a WWW-Authenticate header. The 'authenticated but not allowed' case is 403 Forbidden, where re-authenticating will not help. The name 'Unauthorized' is a long-standing misnomer.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/debug.html)
+    :material-book-open-variant: [Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401)
 
-**Q8.** An admin deletes a user's account while that user is browsing under a stateful firewall. What happens on the user's next request?  <small>_(Security)_</small>
+**Q8.** Which of the following statements are true about the Symfony HttpClient component? (select all that apply)  <small>_(HTTP)_</small>
 
-- A. refreshUser() can no longer load them and throws; the ContextListener discards the token, effectively logging them out
-- B. Nothing changes until the PHP session cookie expires
-- C. A fatal 500 error is returned on every request
-- D. The user keeps full access until they click logout
+- A. request() is lazy/asynchronous — the transfer only completes when you first read the status, headers or content
+- B. getContent() and toArray() throw on 3xx–5xx responses by default, while getStatusCode() never throws
+- C. MockHttpClient with MockResponse lets you test HTTP interactions without any network access
+- D. You should type-hint the concrete CurlHttpClient class in your services for best performance
+- E. Options defined on a scoped client apply to every request the client makes, whatever the URL
 
 ??? success "Answer Q8"
-    **A**
+    **A, B, C**
 
-    On each stateful request the ContextListener calls refreshUser() to re-sync the session user. A now-missing account makes refreshUser() throw (UserNotFoundException / UnsupportedUserException), so the ContextListener treats the user as unloadable, discards the token and clears storage — an immediate, clean logout. It is not a fatal error, and access does not persist until the cookie expires precisely because the user is re-checked every request.
+    Responses are lazy so firing several requests before reading gives free concurrency; the content readers throw HTTP exceptions by default (pass false / throw: false to read error bodies) while getStatusCode() is always safe; and MockHttpClient keeps tests offline. You should depend on the HttpClientInterface contract, not a concrete transport, and scoped-client options only apply to URLs matching the scope/base URI.
 
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/ContextListener.php)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_client.html)
 
-**Q9.** How does AbstractController obtain its helper services?  <small>_(Controllers)_</small>
+**Q9.** Which kernel event lets a listener turn an exception into a Response?  <small>_(Controllers)_</small>
 
-- A. Via a lazy service locator injected through setContainer(), driven by getSubscribedServices()
-- B. Through constructor injection of each service
-- C. The full application container is injected
+- A. kernel.exception (ExceptionEvent)
+- B. kernel.view
+- C. kernel.terminate
 
 ??? success "Answer Q9"
     **A**
 
-    AbstractController implements ServiceSubscriberInterface; the compiler builds a per-controller locator containing only the subscribed services.
+    ExceptionEvent listeners can call setResponse(); otherwise the error controller renders the page.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 
-**Q10.** Which Finder method defines the directories to search?  <small>_(Miscellaneous)_</small>
+**Q10.** How are route conditions executed at request time?  <small>_(Routing)_</small>
 
-- A. in()
-- B. from()
-- C. search()
-- D. path()
+- A. As pre-compiled PHP closures baked into the dumped matcher (not runtime eval)
+- B. Via eval() of the expression string on each request
+- C. By calling a Twig template
+- D. They are evaluated once at boot and cached as booleans
 
 ??? success "Answer Q10"
     **A**
 
-    Finder::in() sets the search directories; without it the Finder throws. It yields Symfony SplFileInfo objects with helpers like getRelativePathname().
+    The framework compiles all conditions ahead of time through ExpressionLanguage and the routing ExpressionLanguageProvider, so the dumped matcher contains compiled closures. UrlMatcher::handleRouteRequirements() runs them after host/path match — no per-request eval, and they cannot be reduced to a constant because they depend on the live request.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/finder.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
-**Q11.** With {% include '_card.html.twig' with { title: t } only %}, is the app global still available inside the partial?  <small>_(Twig)_</small>
+**Q11.** A class defines `save()`, and a trait it uses also defines `save()`. A developer expects the trait's version to run but gets the class's. Why?  <small>_(PHP & Web Security)_</small>
 
-- A. Yes — only isolates the parent's local variables but globals like app remain available
-- B. No — only removes everything including globals
-- C. Only if you also pass app in the with hash
-- D. Globals are never available inside an include
+- A. The class's own method takes precedence over any trait method
+- B. It is undefined behaviour
+- C. The trait method should have won; this is a bug
+- D. A fatal error should have occurred
 
 ??? success "Answer Q11"
     **A**
 
-    only restricts the include to just the with variables from the caller's local scope, but Twig globals (such as app) are merged into every template's context independently, so app.user etc. still work. Assuming only strips globals is a common misconception.
+    Trait precedence is class > trait > inherited parent, so the class's own save() always overrides the trait's. This is defined, expected behaviour, not a bug or error. To use the trait's version, alias it with `as` (e.g. `Trait::save as saveViaTrait;`). Misconception: assuming a trait method overrides the host class's own method — it only overrides inherited ones.
 
-    :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tags/include.html)
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.traits.php)
 
-**Q12.** What does the `only` keyword do on an include?  <small>_(Twig)_</small>
+**Q12.** With #[Cache(lastModified: 'post.getUpdatedAt()')], when can a 304 be returned?  <small>_(HTTP Caching)_</small>
 
-- A. Restricts the included template's scope to just the `with` variables
-- B. Includes the template only once
-- C. Makes the variables read-only
-- D. Ignores a missing template
+- A. Before the controller body runs, during kernel.controller_arguments
+- B. Only after the controller has fully rendered the response
+- C. Only inside a kernel.terminate listener
+- D. Never — expressions cannot short-circuit
 
 ??? success "Answer Q12"
     **A**
 
-    By default an include inherits the parent context; adding `only` isolates it so it sees only the variables passed via `with` (plus the app global).
+    CacheAttributeListener evaluates the expression on CONTROLLER_ARGUMENTS (priority 10) and, if the request is up to date, replaces the controller so a 304 is returned without running the body. That is precisely the CPU/render saving the model exists for; it does not wait for RESPONSE or terminate.
 
-    :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tags/include.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php)
 
-**Q13.** A command's execute() throws a RuntimeException. What is the event sequence?  <small>_(Console)_</small>
+**Q13.** Which class collects the `console.command` tags and builds the lazy command loader?  <small>_(Console)_</small>
 
-- A. COMMAND → ERROR → TERMINATE (TERMINATE still runs after ERROR)
-- B. COMMAND → TERMINATE only (ERROR is skipped for RuntimeException)
-- C. ERROR → COMMAND → TERMINATE
-- D. ERROR only; the process aborts before TERMINATE
+- A. AddConsoleCommandPass, which builds a ContainerCommandLoader (name → service id)
+- B. ContainerBuilder::compile() instantiates each command eagerly
+- C. The Kernel's registerCommands() method scans the filesystem
+- D. CommandCompilerPass, building an ArrayCommandLoader
 
 ??? success "Answer Q13"
     **A**
 
-    COMMAND fires before execution; the thrown Throwable triggers ERROR (ConsoleErrorEvent, where a listener can change the exit code or swap the exception); TERMINATE always fires last, even after an error. ERROR never runs before COMMAND, and it does not suppress TERMINATE.
+    Symfony\\Component\\Console\\DependencyInjection\\AddConsoleCommandPass gathers every service tagged console.command and constructs a ContainerCommandLoader mapping each command name to its service id, so a command is instantiated only when its name is invoked. There is no CommandCompilerPass, commands are not instantiated eagerly at compile time, and Symfony 8 does not scan the filesystem for commands.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/console/events.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console/commands_as_services.html)
 
-**Q14.** For a form's _method field to influence which route matches, you must…  <small>_(Routing)_</small>
-
-- A. Call Request::enableHttpMethodParameterOverride()
-- B. Add methods: ['_method']
-- C. Do nothing — it is enabled by default
-- D. Set framework.http_method_override: false
-
-??? success "Answer Q14"
-    **A**
-
-    Method override is opt-in; once enabled, getMethod() returns the overridden verb that the matcher uses. It is not on by default.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
-
-**Q15.** A command returns 300 as its exit code. What does the process actually exit with?  <small>_(Console)_</small>
-
-- A. 44 — exit codes are clamped to 0–255 via % 256 (300 % 256 = 44)
-- B. 300 — Symfony passes it through unchanged
-- C. 255 — anything above 255 becomes 255
-- D. 1 — out-of-range codes fall back to FAILURE
-
-??? success "Answer Q15"
-    **A**
-
-    POSIX exit codes are a single byte (0–255), so Symfony normalises out-of-range values with % 256; 300 % 256 = 44. It is not passed through, not capped at 255, and not coerced to FAILURE. By convention a signal-terminated process exits with 128 + signalNumber.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/console/events.html)
-
-**Q16.** Which snippet builds a 'next page' link for the current route, incrementing page?  <small>_(Twig)_</small>
-
-- A. path(app.current_route, app.current_route_parameters|merge({ page: page + 1 }))
-- B. path(app.request.uri, { page: page + 1 })
-- C. url(app.route, { page: page + 1 })
-- D. path('current', app.params + { page: page + 1 })
-
-??? success "Answer Q16"
-    **A**
-
-    app.current_route and app.current_route_parameters expose the active route and its params; merging a new page value onto them and passing to path() rebuilds the current URL with one changed parameter. app.route/app.params are not real members, and + does not merge hashes (~ /merge do).
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#the-app-global-variable)
-
-**Q17.** What does autoconfigure: true do (as opposed to autowire)?  <small>_(Dependency Injection)_</small>
-
-- A. Applies tags/flags based on implemented interfaces and attributes
-- B. Fills constructor arguments by type
-- C. Makes all services public
-- D. Clears the compiled cache
-
-??? success "Answer Q17"
-    **A**
-
-    Autoconfigure adds tags automatically (e.g. event subscriber); autowire is the separate flag that fills arguments by type.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html#the-autoconfigure-option)
-
-**Q18.** A kernel.exception listener inspects getThrowable() and builds a JsonResponse, but the custom page never appears. What is the most likely bug?  <small>_(Architecture)_</small>
-
-- A. The listener forgot to call $event->setResponse() on its branch, so the event's response stays null and the default handler wins
-- B. The listener has priority -128, which is impossible to register
-- C. kernel.exception cannot produce JSON responses, only HTML
-
-??? success "Answer Q18"
-    **A**
-
-    ExceptionEvent::getResponse() returns null until some listener calls setResponse(). Reading getThrowable() and constructing a response is not enough — you must actually set it on the event. If a branch forgets setResponse(), the response stays null, ErrorListener's default page (or a 500) is used instead, and your custom page never shows.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-exception)
-
-**Q19.** What happens at runtime when `Suit::from('Z')` is called and 'Z' is not a valid backing value?  <small>_(PHP & Web Security)_</small>
-
-- A. It throws \ValueError
-- B. It returns null
-- C. It returns the first case
-- D. It emits a warning and returns false
-
-??? success "Answer Q19"
-    **A**
-
-    from() is the strict lookup: an unknown value throws \\ValueError. That is the mirror image of tryFrom(), which returns null. It never falls back to the first case nor warns-and-returns-false. Best practice: wrap from() in try/catch for untrusted input, or use tryFrom(). Misconception: assuming from() degrades gracefully like tryFrom() — it deliberately fails loud.
-
-    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.enumerations.backed.php)
-
-**Q20.** When does the Firewall listener run in the kernel lifecycle?  <small>_(Security)_</small>
-
-- A. On kernel.request at priority 8 (after routing), it asks the FirewallMap for the first matching FirewallContext
-- B. On kernel.controller, just before the controller is resolved
-- C. On kernel.response, after the action has run
-- D. On kernel.terminate, asynchronously after the response
-- E. On kernel.request but before routing, at the highest priority
-
-??? success "Answer Q20"
-    **A**
-
-    The Firewall listener subscribes to kernel.request at priority 8, which runs after the RouterListener (routing), then queries the FirewallMap for the matching FirewallContext and runs its listeners. It is a request-phase concern, not controller/response/terminate, and it deliberately runs after routing so route attributes are available.
-
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)
-
-**Q21.** Which type is out of scope here because it belongs to the Doctrine bridge?  <small>_(Forms)_</small>
-
-- A. EntityType
-- B. ChoiceType
-- C. MoneyType
-- D. CollectionType
-
-??? success "Answer Q21"
-    **A**
-
-    EntityType lives in the Doctrine bridge and is out of scope. Use ChoiceType with explicit choices for the non-Doctrine equivalent.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/forms/types/choice.html)
-
-**Q22.** When is %env(DATABASE_URL)% resolved?  <small>_(Dependency Injection)_</small>
-
-- A. At runtime, via an env-var processor
-- B. At compilation, frozen into the cache
-- C. When .env is parsed at deploy time only
-- D. Never; it is a literal string
-
-??? success "Answer Q22"
-    **A**
-
-    Env placeholders resolve at runtime so a single compiled container works across environments; parameters (%x%) are frozen at compile time.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables)
-
-**Q23.** Two passes are registered in the same phase with priorities 10 and 100. Which runs first?  <small>_(Dependency Injection)_</small>
+**Q14.** Two passes are registered in the same phase with priorities 10 and 100. Which runs first?  <small>_(Dependency Injection)_</small>
 
 - A. The priority-100 pass — higher priority runs earlier within a phase
 - B. The priority-10 pass runs first
 - C. The order is undefined
 - D. They run simultaneously
 
-??? success "Answer Q23"
+??? success "Answer Q14"
     **A**
 
     Within a phase, addCompilerPass orders by priority with higher running first. The trap is assuming lower numbers run first (as some other Symfony orderings work); for compiler passes higher priority is earlier.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
 
-**Q24.** During matching, when is the host constraint checked?  <small>_(Routing)_</small>
+**Q15.** What is the key difference between getPreferredFormat() and getAcceptableContentTypes()? (choose one)  <small>_(HTTP)_</small>
 
-- A. Before the path regex
-- B. After the controller runs
-- C. Only during URL generation
-- D. Never; host is informational
+- A. getPreferredFormat() returns a Symfony format name (e.g. 'json'); getAcceptableContentTypes() returns raw MIME types
+- B. They are aliases returning the same value
+- C. getPreferredFormat() returns MIME types; getAcceptableContentTypes() returns formats
+- D. getPreferredFormat() reads Accept-Language, not Accept
 
-??? success "Answer Q24"
+??? success "Answer Q15"
     **A**
 
-    matchCollection() tests the compiled host regex against RequestContext::getHost() first; only if it matches does it test the path regex.
+    getPreferredFormat() maps the client's Accept header to a short Symfony format (html, json, xml, csv...), best for a match expression. getAcceptableContentTypes() returns the raw MIME strings ordered by preference. Confusing format names with MIME types is a classic trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#sub-domain-routing)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 
-**Q25.** Which command rebuilds the compiled router after editing routes in prod?  <small>_(Routing)_</small>
+**Q16.** Which statements describe the DEFAULT login_throttling limiter? (multiple)  <small>_(Security)_</small>
 
-- A. php bin/console cache:clear --env=prod
-- B. php bin/console router:reload --env=prod
-- C. php bin/console debug:router --refresh
-- D. php bin/console routes:compile
+- A. It counts failed attempts per username + IP up to max_attempts per interval
+- B. It also enforces a wider limit of 5 × max_attempts per IP across all usernames
+- C. A successful login resets the counter
+- D. It counts per session ID so proxies are irrelevant
+- E. It blocks the IP permanently after the first breach
 
-??? success "Answer Q25"
-    **A**
-
-    cache:clear (or cache:warmup) in the prod env runs the RouterCacheWarmer and regenerates url_matching_routes.php / url_generating_routes.php. The other commands do not exist.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#debugging-routes)
-
-**Q26.** How is an included template handled by Twig internally?  <small>_(Twig)_</small>
-
-- A. It is a separate compiled class, loaded via the loader and invoked at runtime — not textually inlined
-- B. Its source is pasted into the parent before compilation
-- C. It is re-parsed from disk on every render with no caching
-- D. It is merged into the parent's single block table
-
-??? success "Answer Q26"
-    **A**
-
-    The include tag compiles to a call to Twig\Template::display()/render() on the sub-template, which the FilesystemLoader resolves and which is compiled and cached like any other template. Includes are separate compiled classes invoked at runtime, not inlined text.
-
-    :material-book-open-variant: [Docs](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
-
-**Q27.** Given AcceptHeader::fromString('text/html;q=0.9, application/json;q=1.0'), what does $accept->first()?->getQuality() return? (choose one)  <small>_(HTTP)_</small>
-
-- A. 1.0 — first() returns the highest-quality item (application/json)
-- B. 0.9 — items are returned in string order
-- C. null — first() only works on a single-value header
-- D. true — first() returns a boolean like has()
-
-??? success "Answer Q27"
-    **A**
-
-    AcceptHeader parses and sorts items by quality (descending), so first() returns the AcceptHeaderItem for application/json (q=1.0) and getQuality() gives 1.0. The nullsafe operator guards the empty-header case where first() would return null.
-
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/AcceptHeader.php)
-
-**Q28.** A user uploads a file larger than `post_max_size` and the action crashes on a null `$request->files->get('avatar')`. What is the underlying cause?  <small>_(Controllers)_</small>
-
-- A. Exceeding post_max_size can yield an empty files bag (no exception), so the get() returns null — always null-check
-- B. move() threw a FileException that was swallowed
-- C. getMimeType() returns null for large files
-- D. Symfony automatically rejects the request with a 413
-
-??? success "Answer Q28"
-    **A**
-
-    When post_max_size is exceeded, PHP may discard the POST data, leaving an empty files bag rather than raising an exception. Guard the result with an instanceof UploadedFile / isValid() check before using it.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/upload_file.html)
-
-**Q29.** What is the literal id of a named autowiring alias, e.g. for a Monolog channel logger?  <small>_(Dependency Injection)_</small>
-
-- A. Literally 'Psr\Log\LoggerInterface $requestLogger' — matched by the parameter name
-- B. requestLogger
-- C. logger.requestLogger
-- D. @requestLogger
-
-??? success "Answer Q29"
-    **A**
-
-    A named autowiring alias id is the full type followed by the variable name, 'Type $paramName'. Autowiring matches it when your constructor parameter is named identically — which is fragile, so #[Target('requestLogger')] states the intent explicitly and survives parameter renames.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/autowiring.html)
-
-**Q30.** A legacy suite emits hundreds of known deprecations, but you want CI to fail only on NEW ones. What do you do?  <small>_(Testing)_</small>
-
-- A. Generate a baseline (baselineFile=...&generateBaseline=true), commit it, then run with baselineFile=... so only new deprecations fail
-- B. Set disabled=1 permanently so nothing is reported
-- C. Add #[IgnoreDeprecations] to every test in the suite
-- D. Set weak so the build never turns red
-
-??? success "Answer Q30"
-    **A**
-
-    A baseline records currently-known deprecations to a JSON file that later runs ignore, so only new deprecations fail the build — and you shrink it over time. disabled=1 and weak both remove the safety net for new deprecations, and blanket #[IgnoreDeprecations] hides everything, including regressions.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail)
-
-**Q31.** Which of these are real WebTestCase assertion helpers? (choose 3)  <small>_(Testing)_</small>
-
-- A. assertResponseStatusCodeSame(int $code)
-- B. assertRouteSame(string $route)
-- C. assertResponseHasCookie(string $name)
-- D. assertResponseBodyEquals(string $body)
-- E. assertControllerSame(string $fqcn)
-
-??? success "Answer Q31"
+??? success "Answer Q16"
     **A, B, C**
 
-    assertResponseStatusCodeSame, assertRouteSame and assertResponseHasCookie all exist in the BrowserKit/WebTest assertion traits. There is no assertResponseBodyEquals (use getResponse()->getContent() with a PHPUnit string assertion) nor assertControllerSame helper.
+    DefaultLoginRateLimiter combines two limits: username+IP at max_attempts and IP alone at five times that, so attackers cannot bypass the first limit by spraying usernames. A successful login resets the counters; blocking is only for the configured interval and IP/username based, not session based.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#the-assertions)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#limiting-login-attempts)
 
-**Q32.** In configureOptions(), which OptionsResolver call derives one option's value from the values of others?  <small>_(Forms)_</small>
+**Q17.** Transparent password rehash on login requires…  <small>_(Security)_</small>
 
-- A. setNormalizer('opt', fn (Options $o, $value) => ...)
-- B. setAllowedTypes('opt', 'string')
-- C. setRequired('opt')
-- D. setDefault('opt', fn () => ...) only
+- A. Both migrate_from and a provider implementing PasswordUpgraderInterface
+- B. Only migrate_from in security.yaml
+- C. Only a PasswordUpgraderInterface provider
+- D. Calling password_hash() manually in the controller
 
-??? success "Answer Q32"
+??? success "Answer Q17"
     **A**
 
-    setNormalizer() receives the resolved Options plus the raw value, letting one option depend on others (e.g. force expanded when multiple is false). setAllowedTypes validates a type, setRequired marks an option mandatory, and a default closure cannot read sibling options the way a normalizer can.
+    migrate_from lets needsRehash() detect the old hash; the PasswordUpgradeBadge triggers PasswordMigratingListener, which persists the new hash via upgradePassword().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/options_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html#password-migration)
 
-**Q33.** When must $client->enableProfiler() be called?  <small>_(Testing)_</small>
+**Q18.** Why redirect after a successful POST (POST-redirect-GET)?  <small>_(Forms)_</small>
 
-- A. Before the request whose profile you want to read
-- B. After the request, before getProfile()
-- C. Only inside setUp()
-- D. Never — profiling is always on in the test environment
+- A. So a browser refresh re-fetches a GET instead of re-submitting the form
+- B. Because forms cannot render on a POST response
+- C. To trigger CSRF validation
+- D. It is required for isValid() to return true
 
-??? success "Answer Q33"
+??? success "Answer Q18"
     **A**
 
-    enableProfiler() opts the next request into profiling; calling it after the request collects nothing and getProfile() returns false.
+    Without the redirect, refreshing re-POSTs the data and duplicates side effects. Redirecting lands the browser on a safe GET.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing/profiling.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html)
 
-**Q34.** How does RouteCompiler represent /blog/{page<\d+>} in the CompiledRoute regex?  <small>_(Routing)_</small>
+**Q19.** A controller passes a variable named `app` to the template. What happens?  <small>_(Twig)_</small>
 
-- A. As a named capture group, e.g. #^/blog/(?P<page>\d+)$#sD
-- B. As an unnamed group #^/blog/(\d+)$#
-- C. As two separate regexes joined at runtime
-- D. It is not compiled; the requirement is checked in the controller
+- A. The local variable shadows the global, so app.user etc. refer to the passed value
+- B. Symfony throws because 'app' is reserved
+- C. The global always wins and the local value is ignored
+- D. Both are merged into a single object
 
-??? success "Answer Q34"
+??? success "Answer Q19"
     **A**
 
-    RouteCompiler::compile() extracts each {name} token and substitutes it with a named capture group using its requirement (or [^/]+ by default), producing a single anchored regex. Named groups are how the matcher maps captured values back to parameter names.
+    Globals are merged into the render context, so a local variable of the same name shadows the global. Passing your own `app` variable breaks app.user/app.request access inside that template — avoid reusing reserved global names.
 
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#global-variables)
 
-**Q35.** How does the argument `array $context` in the index.php closure get populated?  <small>_(Miscellaneous)_</small>
+**Q20.** Which API expands ['ROLE_SUPER_ADMIN'] into every role it implies, transitively?  <small>_(Security)_</small>
 
-- A. The runtime's resolver autowires it from $_SERVER (env vars like APP_ENV/APP_DEBUG)
-- B. You must call getenv() yourself inside the closure
-- C. Symfony injects it from services.yaml parameters
-- D. It is always an empty array in Symfony 8
+- A. RoleHierarchyInterface::getReachableRoleNames(array $roles)
+- B. UserInterface::getRoles(true)
+- C. TokenInterface::getExpandedRoles()
+- D. SecurityBundle's RoleExpander service
 
-??? success "Answer Q35"
+??? success "Answer Q20"
     **A**
 
-    RuntimeInterface::getResolver() builds a resolver that inspects the callable's typed arguments and supplies them — array $context comes from $_SERVER (env), and it can also inject Request, InputInterface, etc. You therefore never read $_SERVER manually in the entry point.
+    RoleHierarchy::getReachableRoleNames() walks the configured map recursively and is the very service the RoleHierarchyVoter uses, so results always match isGranted() behaviour. The other methods do not exist in Symfony 8.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/runtime.html#using-the-runtime)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
 
-**Q36.** What is the default phase for a compiler pass registered without one?  <small>_(Dependency Injection)_</small>
+**Q21.** For a property holding a collection of Address OBJECTS, how do you validate each element's own constraints?  <small>_(Validation)_</small>
 
-- A. TYPE_BEFORE_OPTIMIZATION
-- B. TYPE_OPTIMIZE
-- C. TYPE_REMOVE
-- D. TYPE_AFTER_REMOVING
+- A. Put #[Assert\Valid] on the property; it cascades into every element
+- B. Use #[Assert\All([new Assert\Valid()])]
+- C. Use #[Assert\Collection]
+- D. Nothing is needed; object collections cascade automatically
 
-??? success "Answer Q36"
+??? success "Answer Q21"
     **A**
 
-    PassConfig runs passes in phase order; unspecified passes run in the before-optimization phase.
+    For a collection of objects, a single #[Assert\\Valid] on the property cascades into each element. All([new Valid()]) is a redundant anti-pattern; All is for applying scalar constraints to elements.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/compiler_passes.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/constraints/Valid.html)
 
-**Q37.** Which default group name does an unqualified constraint belong to?  <small>_(Validation)_</small>
+**Q22.** Which statements about SYMFONY_DEPRECATIONS_HELPER modes are correct? (select all that apply)  <small>_(Testing)_</small>
 
-- A. Default (capital D)
-- B. default (lowercase)
-- C. the fully qualified class name
-- D. Base
+- A. weak keeps collecting and reporting deprecations but never fails the build
+- B. disabled=1 turns the handler off entirely, so nothing is collected or reported
+- C. A committed baseline file makes only NEW deprecations fail, ignoring the known ones it records
+- D. weak and disabled=1 are equivalent — both hide deprecations completely
+- E. max[self]=0 fails the build on deprecations from any bucket, including indirect ones
 
-??? success "Answer Q37"
-    **A**
+??? success "Answer Q22"
+    **A, B, C**
 
-    The implicit group is 'Default' with a capital D; group names are case-sensitive, so 'default' would be a different (empty) group.
+    weak still prints the grouped deprecation report and only removes the failure threshold, whereas disabled=1 stops collection completely, so the two are not equivalent. A baseline records currently-known deprecations so later runs fail only on new ones. max[self]=0 constrains only the self bucket — max[total]=0 is the mode that fails on any bucket.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/groups.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration)
 
-**Q38.** During a successful login, in which order does the AuthenticatorManager dispatch these events?  <small>_(Security)_</small>
-
-- A. CheckPassportEvent → AuthenticationTokenCreatedEvent → LoginSuccessEvent
-- B. LoginSuccessEvent → CheckPassportEvent → AuthenticationTokenCreatedEvent
-- C. AuthenticationTokenCreatedEvent → CheckPassportEvent → LoginSuccessEvent
-- D. CheckPassportEvent → LoginSuccessEvent → AuthenticationTokenCreatedEvent
-
-??? success "Answer Q38"
-    **A**
-
-    authenticate() builds the Passport; CheckPassportEvent listeners then resolve the badges; createToken() runs; AuthenticationTokenCreatedEvent is the last chance to swap/decorate the token; the token is stored; finally LoginSuccessEvent fires (invoking onAuthenticationSuccess()). On error a LoginFailureEvent is dispatched instead. Any ordering that runs LoginSuccessEvent before the passport is checked, or creates the token before CheckPassportEvent, contradicts the manager's pipeline.
-
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)
-
-**Q39.** Where are bundles enabled in a modern Symfony app?  <small>_(Architecture)_</small>
-
-- A. config/bundles.php
-- B. config/services.yaml
-- C. Manually in src/Kernel.php
-
-??? success "Answer Q39"
-    **A**
-
-    config/bundles.php maps each bundle class to the environments where it is enabled; the kernel reads it via MicroKernelTrait.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles.html)
-
-**Q40.** Which PSRs does Symfony IMPLEMENT (i.e. Symfony objects ARE valid PSR objects)? (choose all that apply)  <small>_(Architecture)_</small>
-
-- A. PSR-6 (Cache pool)
-- B. PSR-11 (Container)
-- C. PSR-14 (Event Dispatcher)
-- D. PSR-20 (Clock)
-- E. PSR-3 (Logger)
-
-??? success "Answer Q40"
-    **A, B, C, D**
-
-    Symfony implements PSR-6 (Cache pool), PSR-11 (Container), PSR-14 (EventDispatcher), PSR-16 (Simple Cache adapter) and PSR-20 (Clock) — its objects can be handed to any library expecting those interfaces. PSR-3 (Logger) is CONSUMED: Symfony type-hints LoggerInterface so you inject any implementation, but it does not ship the logger itself.
-
-    :material-book-open-variant: [Docs](https://www.php-fig.org/psr/)
-
-**Q41.** For each firewall, what does SecurityExtension compile at container build time?  <small>_(Security)_</small>
-
-- A. A FirewallContext bundling its listeners, the authenticator list, an AuthenticatorManager, and (unless stateless) a ContextListener — all indexed in a FirewallMap
-- B. A single global Firewall service shared unchanged by every firewall
-- C. One controller per firewall generated from the config
-- D. Nothing at build time — firewalls are assembled lazily on the first request
-
-??? success "Answer Q41"
-    **A**
-
-    SecurityExtension reads the security.yaml tree and, per firewall, compiles a dedicated FirewallContext (its listeners, the list of authenticators, an AuthenticatorManager, an exception listener, and a ContextListener unless the firewall is stateless). All contexts are registered in the FirewallMap; at runtime the single Firewall listener asks the map which context matches. The work happens at compile time, not lazily per request.
-
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/DependencyInjection/SecurityExtension.php)
-
-**Q42.** What is the difference between PSR-6 and PSR-16 in Symfony's Cache?  <small>_(Architecture)_</small>
-
-- A. PSR-6 is the pool/CacheItem model (CacheItemPoolInterface); PSR-16 is the simpler get/set SimpleCache API (Psr16Cache adapter)
-- B. PSR-6 is for HTTP caching and PSR-16 is for the container
-- C. They are the same interface at different versions
-
-??? success "Answer Q42"
-    **A**
-
-    PSR-6 models caching as a pool of CacheItem objects (CacheItemPoolInterface::getItem()/save()); PSR-16 (Simple Cache) is a lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter. Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16) is a common trap.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/cache.html)
-
-**Q43.** You add the alias App\Report\ReporterInterface: '@App\Report\Missing' but the target service does not exist. What happens?  <small>_(Dependency Injection)_</small>
-
-- A. A compile-time error — an alias to a non-existent target breaks the build; it is not a silent null
-- B. The interface silently resolves to null at runtime
-- C. The alias is quietly ignored
-- D. A ServiceLocator is injected in its place
-
-??? success "Answer Q43"
-    **A**
-
-    An alias must point at an existing service id; a dangling alias fails the container build. Optional dependencies use nullable constructor args or NULL_ON_INVALID_REFERENCE, not a broken alias. The misconception is expecting a missing target to become null.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/alias_private.html)
-
-**Q44.** What does #[AutowireIterator('app.handler')] on an iterable $handlers argument inject?  <small>_(Dependency Injection)_</small>
-
-- A. An iterable of all app.handler-tagged services, ordered by descending priority
-- B. A ServiceLocator keyed by name
-- C. Only the single highest-priority handler
-- D. An array of the tag's attribute sets
-
-??? success "Answer Q44"
-    **A**
-
-    #[AutowireIterator] is the attribute form of tagged_iterator: it injects an iterable of the instantiated tagged services, ordered by descending priority. #[AutowireLocator] would give the lazy keyed locator; the attribute does not filter down to one service.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/tags.html)
-
-**Q45.** During a forwarded sub-request, what does Request::isMainRequest() return?  <small>_(Controllers)_</small>
-
-- A. false
-- B. true
-- C. null
-
-??? success "Answer Q45"
-    **A**
-
-    The sub-request is dispatched with HttpKernelInterface::SUB_REQUEST, so isMainRequest() is false and some listeners (e.g. the firewall) skip.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
-
-**Q46.** Which adapter keeps entries only for the current process (ideal for tests)?  <small>_(Miscellaneous)_</small>
-
-- A. ArrayAdapter
-- B. FilesystemAdapter
-- C. RedisAdapter
-- D. ApcuAdapter
-
-??? success "Answer Q46"
-    **A**
-
-    ArrayAdapter stores items in memory for the current request/process only, so nothing persists across requests — useful for deterministic tests.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html)
-
-**Q47.** For a mapped CollectionType to call the parent's adder/remover methods, set…  <small>_(Forms)_</small>
-
-- A. by_reference => false
-- B. allow_add => false
-- C. prototype => false
-- D. mapped => false
-
-??? success "Answer Q47"
-    **A**
-
-    by_reference => false forces the form to call add/remove methods instead of mutating the returned collection in place, keeping associations in sync.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/forms/types/collection.html)
-
-**Q48.** What does the __Host- cookie name prefix force the browser to require? (choose one)  <small>_(HTTP)_</small>
-
-- A. Secure, no Domain attribute, and Path=/ — the strictest scoping the browser enforces
-- B. HttpOnly and SameSite=Strict only
-- C. A matching Domain attribute and Max-Age
-- D. Nothing; the prefix is purely cosmetic
-
-??? success "Answer Q48"
-    **A**
-
-    A cookie named __Host-... is accepted only if it is Secure, has no Domain attribute (so it is locked to the exact host), and uses Path=/. This is the strongest same-origin scoping the browser guarantees, preventing subdomain injection. The related __Secure- prefix only requires the Secure flag.
-
-    :material-book-open-variant: [Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#cookie_prefixes)
-
-**Q49.** $envelope->last(HandledStamp::class) returns null. Which situation explains this best?  <small>_(Miscellaneous)_</small>
-
-- A. The message was routed to an async transport, so it has not been handled in this process yet
-- B. The handler returned null, so no HandledStamp was created
-- C. dispatch() failed and returned null instead of an Envelope
-- D. HandledStamp only exists on the query bus
-
-??? success "Answer Q49"
-    **A**
-
-    A handler that returns null still produces a HandledStamp (its result is null) — so last() returning null means no such stamp exists, i.e. the message was sent async and not handled here. dispatch() always returns an Envelope (never null), and HandledStamp is not query-bus-specific. This is why the nullsafe ?-> guards 'not handled here', distinct from 'handled, returned null'.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/messenger.html#messenger-getting-handler-results)
-
-**Q50.** What unit does StopwatchEvent::getDuration() use, and when is the debug.stopwatch service available?  <small>_(Miscellaneous)_</small>
-
-- A. Milliseconds; the service exists only when debug/the profiler is enabled
-- B. Seconds; always available in every environment
-- C. Microseconds; only in prod
-- D. Nanoseconds; only in tests
-
-??? success "Answer Q50"
-    **A**
-
-    getDuration() returns milliseconds, and the autowirable debug.stopwatch service is only registered in debug (dev/test). Injecting Stopwatch in prod therefore causes a wiring error.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/stopwatch.html)
-
-**Q51.** Why does InputBag (query/request/cookies) reject reading an array where a scalar is expected? (choose one)  <small>_(HTTP)_</small>
-
-- A. InputBag restricts values to scalars/arrays-of-scalars/null and throws BadRequestException on a type mismatch, hardening against malicious nested input
-- B. PHP forbids arrays in $_GET
-- C. ParameterBag also throws in the same case
-- D. It silently casts the array to its first element
-
-??? success "Answer Q51"
-    **A**
-
-    InputBag extends ParameterBag but narrows the contract to user-supplied data: get() accepts only scalars/null and raises a BadRequestException (HTTP 400) when handed an unexpected array, blocking parameter-pollution style attacks. A plain ParameterBag (used by attributes) imposes no such restriction. Use all('key') to intentionally read array values.
-
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
-
-**Q52.** What does MoneyType's divisor option do?  <small>_(Forms)_</small>
-
-- A. Scales the model value (e.g. 100 lets you store integer cents)
-- B. Sets the currency symbol
-- C. Rounds to N decimals
-- D. Limits the maximum amount
-
-??? success "Answer Q52"
-    **A**
-
-    The displayed amount is divided by divisor to form the model value, so 100 lets you store amounts in cents.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/forms/types/money.html)
-
-**Q53.** How is #[Assert\...] attribute metadata turned into constraints at runtime?  <small>_(Validation)_</small>
-
-- A. AttributeLoader builds ClassMetadata once, cached in a PSR-6 pool
-- B. It is re-parsed by reflection on every validate() call
-- C. It is compiled into the DI container and never changes
-- D. It is read from a database mapping table
-
-??? success "Answer Q53"
-    **A**
-
-    LazyLoadingMetadataFactory uses AttributeLoader to reflect over the class and build ClassMetadata, which is cached (validator.mapping.cache) so the reflection cost is paid once per class.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation.html)
-
-**Q54.** A route allows only GET. A POST to that same path returns?  <small>_(Routing)_</small>
-
-- A. 405 Method Not Allowed (with an Allow header)
-- B. 404 Not Found
-- C. 200 OK
-- D. 301 redirect
-
-??? success "Answer Q54"
-    **A**
-
-    When the path matches but the method is not allowed, the matcher throws MethodNotAllowedException, producing a 405 with an Allow header. It is not a 404 — the path did match.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#matching-http-methods)
-
-**Q55.** By default, what is the Serializer's circular reference limit before it throws?  <small>_(Miscellaneous)_</small>
-
-- A. 1 (unless a circular reference handler or #[MaxDepth] is set)
-- B. 0 — it never throws
-- C. Unlimited
-- D. 10
-
-??? success "Answer Q55"
-    **A**
-
-    The default circular reference limit is 1; beyond it a CircularReferenceException is thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
-
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/serializer.html#handling-circular-references)
-
-**Q56.** What does the default ErrorListener actually do when it handles a kernel.exception?  <small>_(Architecture)_</small>
+**Q23.** What does the default ErrorListener actually do when it handles a kernel.exception?  <small>_(Architecture)_</small>
 
 - A. It logs the exception, forwards to the error controller as a sub-request, and sets the resulting Response on the event
 - B. It immediately calls exit() with the HTTP status code
 - C. It re-throws the exception so PHP's default handler renders it
 
-??? success "Answer Q56"
+??? success "Answer Q23"
     **A**
 
     ErrorListener (priority -128) logs the throwable, forwards to the error_controller (ErrorController) as a sub-request whose response carries the status/headers from HttpExceptionInterface, and sets that response on the ExceptionEvent. Because it runs last, any higher-priority listener that already set a response wins and ErrorListener does nothing.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/ErrorListener.php)
 
-**Q57.** Which statements about Messenger buses are correct? (choose 2)  <small>_(Miscellaneous)_</small>
+**Q24.** To reference service('x') in a routing condition, service x must…  <small>_(Routing)_</small>
 
-- A. The default bus service is messenger.bus.default
-- B. You can define multiple buses, each with its own ordered middleware list
-- C. All buses in an app must share a single global middleware list
-- D. The command/query/event bus split is enforced by the component
+- A. Be tagged routing.condition_service (e.g. via #[AsRoutingConditionService])
+- B. Be public
+- C. Implement RouterInterface
+- D. Extend AbstractController
 
-??? success "Answer Q57"
+??? success "Answer Q24"
+    **A**
+
+    Only services tagged routing.condition_service are exposed to the routing expression language. Visibility/base class are irrelevant.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#matching-expressions)
+
+**Q25.** A developer uses $violations[0] (works) but array_map(..., $violations) (fails). Why?  <small>_(Validation)_</small>
+
+- A. The list is a Countable/IteratorAggregate/ArrayAccess object, not a plain array; use foreach/count() or iterator_to_array()
+- B. The list is null when empty
+- C. array_map only works on associative arrays
+- D. Violations are stored as strings
+
+??? success "Answer Q25"
+    **A**
+
+    ConstraintViolationList implements ArrayAccess (so [0] works) but is not an array. Iterate it, call count(), use findByCodes(), or convert via iterator_to_array() for array functions.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation.html)
+
+**Q26.** Which construct includes a template AND lets you override its blocks?  <small>_(Twig)_</small>
+
+- A. {% embed %}
+- B. {% include %}
+- C. {% use %}
+- D. {% extends %}
+
+??? success "Answer Q26"
+    **A**
+
+    embed combines include with extends-style block overriding, ideal for configurable components with slots.
+
+    :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/tags/embed.html)
+
+**Q27.** Which of the following statements are true about the test client returned by static::createClient()? (select all that apply)  <small>_(Testing)_</small>
+
+- A. It is a KernelBrowser (extending AbstractBrowser) that calls the kernel in-process, not over the network
+- B. It does not follow redirects by default; you must call followRedirect() or followRedirects()
+- C. request() returns a Crawler; the Response is fetched separately via $client->getResponse()
+- D. It performs real HTTP requests against a running web server
+- E. request() returns the Response object directly
+
+??? success "Answer Q27"
+    **A, B, C**
+
+    The client is a KernelBrowser hitting the kernel in-process with a cookie jar and history, so no web server or network round-trip is involved. Navigation methods like request() return a Crawler — the Response must be read via getResponse() — and redirects are only followed after calling followRedirect() (once) or followRedirects() (toggle), never automatically.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/testing.html#making-requests)
+
+**Q28.** True or False: leaving APP_DEBUG=1 in production is acceptable as long as the profiler is disabled.  <small>_(Miscellaneous)_</small>
+
+- A. True
+- B. False
+
+??? success "Answer Q28"
+    **B**
+
+    False. APP_DEBUG=1 enables verbose error pages that leak stack traces and internals, re-enables freshness checks and other overhead, and generally exposes the app. Production must run APP_DEBUG=0.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/deployment.html)
+
+**Q29.** Which are valid ways to override parts of Symfony or a third-party bundle in an application? (select all that apply)  <small>_(Architecture)_</small>
+
+- A. Override a bundle template by placing a file with the same path under templates/bundles/<BundleName>/
+- B. Override a service by decorating it or replacing its definition, e.g. via a compiler pass
+- C. Override translations by defining the same key in the application's translations/ directory, which wins over the bundle's
+- D. Create a child bundle and point getParent() at the bundle you want to override
+- E. Copy the entire bundle into src/ so your copy shadows the vendor code
+
+??? success "Answer Q29"
+    **A, B, C**
+
+    Per-resource overriding is the supported model: templates placed under templates/bundles/<BundleName>/ shadow the bundle's own, application translations take precedence over bundle translations, and services can be redefined, decorated or altered through a compiler pass. Bundle inheritance via getParent() has been removed, and copying whole bundles into src/ is not an override mechanism at all.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/override.html)
+
+**Q30.** Which statements about PHP 8.4 native lazy objects as used by Symfony are true? (select all that apply)  <small>_(Dependency Injection)_</small>
+
+- A. A lazy ghost is initialized in place, so it is === the initialized object
+- B. final classes can be lazy ghosts, since no subclass is generated
+- C. First interaction with the object's state triggers initialization
+- D. Laziness requires installing friendsofphp/proxy-manager
+- E. A lazy service's constructor never runs, even when used
+
+??? success "Answer Q30"
+    **A, B, C**
+
+    Native ghosts are created from the class itself: identity is preserved, final classes work (unlike old inheritance-based proxies), and the engine runs the initializer on first state access. No external proxy package is needed, and the constructor does run — just later.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.lazy-objects.php)
+
+**Q31.** A command's execute() throws a RuntimeException. What is the event sequence?  <small>_(Console)_</small>
+
+- A. COMMAND → ERROR → TERMINATE (TERMINATE still runs after ERROR)
+- B. COMMAND → TERMINATE only (ERROR is skipped for RuntimeException)
+- C. ERROR → COMMAND → TERMINATE
+- D. ERROR only; the process aborts before TERMINATE
+
+??? success "Answer Q31"
+    **A**
+
+    COMMAND fires before execution; the thrown Throwable triggers ERROR (ConsoleErrorEvent, where a listener can change the exit code or swap the exception); TERMINATE always fires last, even after an error. ERROR never runs before COMMAND, and it does not suppress TERMINATE.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/console/events.html)
+
+**Q32.** You extend AbstractController and override getSubscribedServices() to add a `ReportGenerator`. Which body keeps `render()`, `getUser()`, etc. working?  <small>_(Controllers)_</small>
+
+- A. return [...parent::getSubscribedServices(), ReportGenerator::class];
+- B. return [ReportGenerator::class];
+- C. return array_merge([ReportGenerator::class]); // no parent call
+- D. parent::getSubscribedServices(); return [ReportGenerator::class];
+
+??? success "Answer Q32"
+    **A**
+
+    The subscription list fully replaces the inherited one, so you must spread `parent::getSubscribedServices()` alongside your own entry. Returning only your service drops router/twig/security and breaks every helper.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
+
+**Q33.** A controller does its work but has no return statement (returns null) and no kernel.view listener handles it. What happens?  <small>_(Architecture)_</small>
+
+- A. The kernel dispatches kernel.view; since no response is set, it throws ControllerDoesNotReturnResponseException
+- B. The kernel silently sends an empty 200 response
+- C. A fatal PHP TypeError is raised before any event fires
+
+??? success "Answer Q33"
+    **A**
+
+    After the controller runs, handleRaw() checks whether the return value is a Response; if not, it dispatches kernel.view carrying the value. If no listener calls setResponse(), the kernel throws ControllerDoesNotReturnResponseException (a LogicException) with the familiar \"The controller must return a Response object but it returned null\" message. The fix is to return a real Response or register a view listener.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
+
+**Q34.** A #[IsGranted] check fails for an unauthenticated user. What happens?  <small>_(Security)_</small>
+
+- A. The entry point starts authentication (e.g. login redirect)
+- B. An immediate 403 is always returned
+- C. A 404 is returned
+- D. The request continues unrestricted
+
+??? success "Answer Q34"
+    **A**
+
+    An AccessDeniedException for an unauthenticated user is converted to the entry point response; an authenticated-but-unauthorized user gets a 403.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html#access-control)
+
+**Q35.** A constraint declared without any explicit 'groups' option belongs to which validation group?  <small>_(Validation)_</small>
+
+- A. The special 'Default' group
+- B. No group at all, so it is never validated
+- C. A group named after the property
+- D. The 'Strict' group
+
+??? success "Answer Q35"
+    **A**
+
+    Every constraint with no explicit groups is placed in the Default group, which is the group used when you call validate() without specifying groups.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/groups.html)
+
+**Q36.** What does #[AutowireIterator('app.handler')] on an iterable $handlers argument inject?  <small>_(Dependency Injection)_</small>
+
+- A. An iterable of all app.handler-tagged services, ordered by descending priority
+- B. A ServiceLocator keyed by name
+- C. Only the single highest-priority handler
+- D. An array of the tag's attribute sets
+
+??? success "Answer Q36"
+    **A**
+
+    #[AutowireIterator] is the attribute form of tagged_iterator: it injects an iterable of the instantiated tagged services, ordered by descending priority. #[AutowireLocator] would give the lazy keyed locator; the attribute does not filter down to one service.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html)
+
+**Q37.** Which statements about AbstractController are correct? (select all that apply)  <small>_(Controllers)_</small>
+
+- A. Extending AbstractController is optional — any callable can serve as a controller
+- B. Its helpers get their services from a lazy service locator whose entries are listed in getSubscribedServices()
+- C. Its helper methods like render() and redirectToRoute() are protected, usable only from within the controller
+- D. It injects the full service container, so $this->container->get() can fetch any service in the app
+- E. Extending it is required for constructor autowiring to work in a controller
+
+??? success "Answer Q37"
+    **A, B, C**
+
+    AbstractController is optional convenience built on the service subscriber pattern: a lazy locator, scoped to the services declared in getSubscribedServices(), backs its protected helper methods. The container it holds is that limited locator, not the full application container, and autowiring works for any controller registered as a service — your own dependencies should be constructor-injected regardless of the base class.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
+
+**Q38.** How are application service IDs written in modern Symfony?  <small>_(Architecture)_</small>
+
+- A. As the fully-qualified class name (FQCN)
+- B. As lowercase dotted strings only
+- C. As random UUIDs
+
+??? success "Answer Q38"
+    **A**
+
+    The service id is the FQCN; autowiring matches type-hints to these ids.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
+
+**Q39.** What is the default phase for a compiler pass registered without one?  <small>_(Dependency Injection)_</small>
+
+- A. TYPE_BEFORE_OPTIMIZATION
+- B. TYPE_OPTIMIZE
+- C. TYPE_REMOVE
+- D. TYPE_AFTER_REMOVING
+
+??? success "Answer Q39"
+    **A**
+
+    PassConfig runs passes in phase order; unspecified passes run in the before-optimization phase.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/compiler_passes.html)
+
+**Q40.** A TwigFilter is declared with needs_environment: true. What changes about the callable?  <small>_(Twig)_</small>
+
+- A. Twig passes the Environment as the first argument, shifting the user arguments right
+- B. Nothing changes; it is only documentation metadata
+- C. The filter can only be used inside {% apply %} blocks
+- D. The callable must return a Twig\Environment
+
+??? success "Answer Q40"
+    **A**
+
+    needs_environment injects Twig\Environment as the first callable argument (and needs_context injects the render context array), so your declared parameters come after it. Forgetting this argument shift is a common cause of TypeErrors when writing extensions.
+
+    :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping)
+
+**Q41.** Which component copies the matcher's output parameters into $request->attributes?  <small>_(Routing)_</small>
+
+- A. RouterListener, on the kernel.request event
+- B. ControllerResolver, when resolving _controller
+- C. The UrlMatcher itself writes directly to the Request
+- D. ArgumentResolver, on kernel.controller
+
+??? success "Answer Q41"
+    **A**
+
+    UrlMatcher::match() returns an array (route defaults + captured placeholders + _route/_route_params); RouterListener, a kernel.request subscriber, copies each entry into the request attribute bag. ControllerResolver and ArgumentResolver then consume _controller and the args later.
+
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/RouterListener.php)
+
+**Q42.** True or False: PHPUnit creates a fresh instance of the test class for every test method, so state set in one test does not leak into another.  <small>_(Testing)_</small>
+
+- A. True
+- B. False
+
+??? success "Answer Q42"
+    **A**
+
+    PHPUnit reflects over the TestCase subclass and, for each test method, builds a new instance, runs setUp(), the test, then tearDown(). Instance properties therefore never carry over between test methods; only static properties (which you should avoid) can leak state.
+
+    :material-book-open-variant: [Docs](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html)
+
+**Q43.** Which of the following statements are true about the Symfony Process component? (select all that apply)  <small>_(Miscellaneous)_</small>
+
+- A. new Process(['git', 'log', $input]) auto-escapes each array element, so $input cannot inject shell syntax
+- B. The default process timeout is 60 seconds; setTimeout(null) disables it
+- C. mustRun() throws a ProcessFailedException when the process exits with a non-zero code
+- D. Process::fromShellCommandline() escapes interpolated variables, making it safe with untrusted input
+- E. run() returns the process standard output as a string
+
+??? success "Answer Q43"
+    **A, B, C**
+
+    The array constructor escapes every argument, the timeout defaults to 60 seconds (nullable to disable), and mustRun() throws ProcessFailedException on failure where run() only returns the exit code. fromShellCommandline() runs a raw string through the shell with no escaping (a command-injection risk), and stdout is read via getOutput(), not from run().
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/process.html)
+
+**Q44.** Which statements about resettable services are true? (select all that apply)  <small>_(Dependency Injection)_</small>
+
+- A. Implementing Symfony\Contracts\Service\ResetInterface autoconfigures the kernel.reset tag
+- B. Only services already instantiated during the request/message get reset
+- C. The messenger:consume worker resets services between messages unless --no-reset is passed
+- D. Resetting replaces the service with a brand-new instance
+- E. A service must be public to be resettable
+
+??? success "Answer Q44"
+    **A, B, C**
+
+    Autoconfiguration tags ResetInterface implementors with kernel.reset; the resetter only touches initialized services; and Messenger workers reset between messages by default (--no-reset opts out). Reset calls a method on the same instance — it does not rebuild it — and visibility is irrelevant since the resetter receives the services internally.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
+
+**Q45.** How do Security's AccessDeniedException and HttpKernel's AccessDeniedHttpException differ?  <small>_(Architecture)_</small>
+
+- A. AccessDeniedHttpException implements HttpExceptionInterface (→ 403 directly); AccessDeniedException is a Security exception the firewall translates to 403 or a redirect to login
+- B. They are aliases of the same class in different namespaces
+- C. AccessDeniedException already carries a 403 status code via HttpExceptionInterface
+
+??? success "Answer Q45"
+    **A**
+
+    They are different classes. Symfony\\Component\\HttpKernel\\Exception\\AccessDeniedHttpException implements HttpExceptionInterface and yields a 403 through the normal error flow. Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException is a Security exception that does NOT implement HttpExceptionInterface; the firewall's exception listener catches it and turns it into a 403 (or a redirect to the login page for unauthenticated users).
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
+
+**Q46.** Which of the following statements are true about the Symfony Lock component? (select all that apply)  <small>_(Miscellaneous)_</small>
+
+- A. acquire() is non-blocking by default: it returns false immediately when the lock is already held
+- B. FlockStore and SemaphoreStore only guarantee mutual exclusion on a single machine
+- C. Locks have a TTL (300 seconds by default), and long jobs must call refresh() to extend it
+- D. acquire() throws a LockConflictedException whenever the lock is already held
+- E. A FlockStore is a safe choice to serialise a cron job across multiple servers
+
+??? success "Answer Q46"
+    **A, B, C**
+
+    The default acquire(false) returns a plain false when the resource is busy, local stores (flock/semaphore) never protect across machines, and the TTL expires mid-job unless refresh() extends it. Non-blocking acquire() does not throw on contention (only blocking acquisition can end in LockConflictedException), and multi-server exclusion needs a shared store such as Redis or a database.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html)
+
+**Q47.** A user with a very long passphrase can change the trailing characters and still log in. Which hasher is in use and why?  <small>_(Security)_</small>
+
+- A. bcrypt — it truncates input at 72 bytes, so bytes beyond that are ignored
+- B. sodium — Argon2id trims trailing whitespace
+- C. auto — it hashes only the first word of the input
+- D. pbkdf2 — it lowercases the input before hashing
+
+??? success "Answer Q47"
+    **A**
+
+    bcrypt has a hard 72-byte input limit; any bytes past 72 are silently ignored, so two passphrases sharing the first 72 bytes verify identically. Very long passphrases therefore lose entropy under bcrypt. sodium (Argon2id) has no such truncation, which is one reason to prefer it for long secrets. The other options invent behaviour that does not exist.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/passwords.html)
+
+**Q48.** ClockInterface::now() returns what type?  <small>_(Miscellaneous)_</small>
+
+- A. A \DateTimeImmutable (a DatePoint)
+- B. A Unix timestamp int
+- C. A mutable \DateTime
+- D. A float of seconds
+
+??? success "Answer Q48"
+    **A**
+
+    now() returns an immutable DatePoint (a \\DateTimeImmutable subclass). Tests swap the NativeClock for a MockClock to freeze or advance time.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/clock.html)
+
+**Q49.** In configureOptions(), which OptionsResolver call derives one option's value from the values of others?  <small>_(Forms)_</small>
+
+- A. setNormalizer('opt', fn (Options $o, $value) => ...)
+- B. setAllowedTypes('opt', 'string')
+- C. setRequired('opt')
+- D. setDefault('opt', fn () => ...) only
+
+??? success "Answer Q49"
+    **A**
+
+    setNormalizer() receives the resolved Options plus the raw value, letting one option depend on others (e.g. force expanded when multiple is false). setAllowedTypes validates a type, setRequired marks an option mandatory, and a default closure cannot read sibling options the way a normalizer can.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/options_resolver.html)
+
+**Q50.** Which PHP function backs Twig's default 'html' escaping strategy?  <small>_(Twig)_</small>
+
+- A. htmlspecialchars() with ENT_QUOTES | ENT_SUBSTITUTE
+- B. strip_tags()
+- C. htmlentities() with ENT_NOQUOTES
+- D. addslashes()
+
+??? success "Answer Q50"
+    **A**
+
+    The EscaperRuntime maps 'html' to htmlspecialchars() with ENT_QUOTES|ENT_SUBSTITUTE (encoding single and double quotes and substituting invalid code units). html_attr uses a stricter attribute encoder, js uses \\xNN hex, css uses CSS hex and url uses rawurlencode — each context has its own encoder because escaping is context-specific.
+
+    :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/filters/escape.html)
+
+**Q51.** What does `cache:clear` run, by default, in addition to removing stale cache?  <small>_(Miscellaneous)_</small>
+
+- A. The cache warmers (CacheWarmerInterface) that pre-build the container, routing, Twig cache and metadata
+- B. The database migrations
+- C. The Messenger workers
+- D. composer install
+
+??? success "Answer Q51"
+    **A**
+
+    cache:clear removes stale cache and then runs the CacheWarmerInterface warmers to pre-build the container, routing matcher/generator, Twig template cache and validator/serializer metadata. cache:warmup warms without clearing. Migrations, workers and composer are separate steps.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/deployment.html)
+
+**Q52.** Cache stampede protection in Symfony Cache is implemented by…  <small>_(Miscellaneous)_</small>
+
+- A. probabilistic early expiration controlled by the $beta factor
+- B. a global mutex acquired on every key
+- C. disabling TTLs entirely
+- D. duplicating the value across all adapters
+
+??? success "Answer Q52"
+    **A**
+
+    As an item nears expiry, one request is probabilistically chosen to recompute early while others serve the cached value ($beta=INF forces it, 0 disables it). There is no per-key mutex.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html#stampede-prevention)
+
+**Q53.** Under FrankenPHP worker mode, a shared service memoizes the current user's preferences in a private array and users start seeing each other's data. What is the idiomatic fix?  <small>_(Dependency Injection)_</small>
+
+- A. Implement ResetInterface (or tag kernel.reset with a method) that clears the memoized array between requests
+- B. Nothing — PHP resets all objects after every request
+- C. Mark the service lazy: true so it is rebuilt per request
+- D. Call cache:clear at the end of every request
+
+??? success "Answer Q53"
+    **A**
+
+    In worker runtimes the container — and thus shared service state — survives across requests; the PHP-FPM "everything dies" assumption no longer holds. The reset mechanism exists exactly for this: clear the request-scoped state in reset(). Laziness only defers construction and cache:clear rebuilds compiled artifacts, not in-memory service state.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset)
+
+**Q54.** A #[MapRequestPayload] argument fails validation. Which status is thrown?  <small>_(Controllers)_</small>
+
+- A. 422 Unprocessable Entity (400 if the body itself is malformed)
+- B. 500 Internal Server Error
+- C. 200 with a null argument
+
+??? success "Answer Q54"
+    **A**
+
+    RequestPayloadValueResolver deserializes then validates; validation errors throw UnprocessableEntityHttpException (422).
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html#mapping-the-whole-request-payload)
+
+**Q55.** Response::HTTP_UNPROCESSABLE_ENTITY corresponds to which numeric code? (choose one)  <small>_(HTTP)_</small>
+
+- A. 422
+- B. 400
+- C. 409
+- D. 429
+
+??? success "Answer Q55"
+    **A**
+
+    The constant keeps the RFC 4918 name 'Unprocessable Entity' but is code 422, the correct code for validation errors on a well-formed body.
+
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
+
+**Q56.** Which of the following statements are true about the Symfony Serializer? (select all that apply)  <small>_(Miscellaneous)_</small>
+
+- A. serialize() works in two stages: normalizers turn objects into arrays, then an encoder turns the array into a string
+- B. #[Groups] attributes only filter properties when a 'groups' key is passed in the serialization context
+- C. PropertyNormalizer reads and writes through getters and setters, respecting PropertyAccess
+- D. By default, null-valued properties are omitted from the JSON output
+
+??? success "Answer Q56"
     **A, B**
 
-    Messenger ships one default bus (messenger.bus.default) but supports many, each configured with its own middleware — so a command bus can wrap handlers in a transaction while an event bus does not. The command/query/ event convention is just that: a convention, not enforced by the code.
+    Serialization is normalize-then-encode, and group filtering is inert until you pass ['groups' => [...]] in the context — without it all readable fields are emitted. PropertyNormalizer accesses properties directly via reflection (ObjectNormalizer is the one using accessors), and null properties are serialized as null unless you enable the skip_null_values context option.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/messenger/multiple_buses.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/serializer.html)
 
-**Q58.** A parent cascades into a child with #[Assert\Valid] and validate() is called with the Default group. The child has a constraint only in a custom 'strict' group. Does it run?  <small>_(Validation)_</small>
+**Q57.** What does app.environment return?  <small>_(Twig)_</small>
 
-- A. No — only the Default group reaches the child, so its 'strict'-only constraint is skipped
-- B. Yes — Valid runs all of the child's groups
-- C. Yes — custom groups always run on cascade
-- D. Only if the child defines a group sequence
+- A. The kernel environment string, e.g. 'dev' or 'prod'
+- B. The operating-system environment variables
+- C. The APP_ENV file path
+- D. A boolean debug flag
+
+??? success "Answer Q57"
+    **A**
+
+    app.environment is the kernel environment (dev/prod/test); app.debug is the boolean debug flag. They are unrelated to OS env vars.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#the-app-global-variable)
+
+**Q58.** Under the unanimous strategy, a voter returns false from voteOnAttribute() for an attribute it does not actually care about. Effect?  <small>_(Security)_</small>
+
+- A. false is ACCESS_DENIED, which blocks access under unanimous; unrelated attributes must be filtered out in supports() so the voter abstains
+- B. false is treated as abstain and has no effect on the outcome
+- C. false grants access under unanimous
+- D. It throws because the attribute is unsupported
 
 ??? success "Answer Q58"
     **A**
 
-    The cascaded group is the current one (Default). A child's custom-group constraint runs only if that custom group actually propagates to it.
+    Returning false from voteOnAttribute() maps to ACCESS_DENIED, not abstain. Under unanimous a single deny blocks access, so a voter that "says no to what isn't mine" silently breaks authorization. The correct pattern is to reject unrelated attributes/subjects in supports(), which makes the base Voter abstain (ACCESS_ABSTAIN, no effect). abstain and deny are distinct, and an unsupported attribute does not throw.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation/groups.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/Voter.php)
 
-**Q59.** A class has a #[Assert\NotBlank] attribute on $name, and a YAML mapping file adds Length to the same $name. Which constraints apply?  <small>_(Validation)_</small>
+**Q59.** A custom collector storing a PDO connection in $this->data breaks profile storage. Why?  <small>_(Miscellaneous)_</small>
 
-- A. Both — all enabled loaders are merged; attributes do not override YAML, the constraints accumulate
-- B. Only the attribute; attributes take precedence
-- C. Only the YAML; file mapping wins
-- D. A MappingException is thrown for the conflict
+- A. $this->data is serialized to storage (via VarDumper's cloner); a live connection/resource is not serializable
+- B. PDO is banned from all services
+- C. Collectors may only store strings
+- D. The data_collector tag rejects objects
 
 ??? success "Answer Q59"
     **A**
 
-    LazyLoadingMetadataFactory merges every active loader's constraints for a class, so attribute and YAML constraints add up rather than one silently overriding the other.
+    Profiles are persisted per token, so $this->data must be serializable — store scalar/array (VarDumper-clonable) data, not live resources like a PDO connection or an entity with a connection. Implement reset() for worker reuse.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/validation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
-**Q61.** What is the classic gotcha with `ctype_digit(123)` (passing an integer)?  <small>_(PHP & Web Security)_</small>
+**Q60.** True or False: UserInterface::getUsername() still exists in Symfony 8.  <small>_(Security)_</small>
 
-- A. Small integers are interpreted as ASCII codes, not their digits, giving surprising results
-- B. It always returns true for any integer
-- C. It throws a TypeError on integers
-- D. It converts the integer to a string first
+- A. True
+- B. False
+
+??? success "Answer Q60"
+    **B**
+
+    False. getUsername() was replaced by getUserIdentifier() (mandatory since 6.0) and no longer exists on UserInterface in Symfony 8. Use getUserIdentifier() for the login identifier the session stores and refreshUser() reloads from.
+
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/UserInterface.php)
+
+**Q61.** For route app_help at /{_locale}/help, what does generateUrl('app_help', ['_locale' => 'es']) produce?  <small>_(Routing)_</small>
+
+- A. /es/help
+- B. /help?_locale=es
+- C. /help/es
+- D. /en/help
 
 ??? success "Answer Q61"
     **A**
 
-    ctype functions treat an int argument in the range -128..255 as an ASCII character code, so ctype_digit(123) checks character code 123 ('{'), not the digits "123" — a false negative. It does not always return true, does not throw, and does not stringify (that is exactly the assumption that bites you). Pass strings: ctype_digit('123') is true. Misconception: assuming numeric arguments are auto-cast to their textual form.
+    _locale is a real placeholder in the path, so it fills the {_locale} segment giving /es/help — not a query string, and not the default en.
 
-    :material-book-open-variant: [Docs](https://www.php.net/manual/en/function.ctype-digit.php)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#localized-routes-i18n)
 
-**Q62.** What does `json_validate($string)` return?  <small>_(PHP & Web Security)_</small>
+**Q62.** What is the canonical order of the controller form-handling calls?  <small>_(Forms)_</small>
 
-- A. A bool indicating whether the string is valid JSON
-- B. The decoded associative array
-- C. A stdClass object
-- D. null on success
+- A. handleRequest(), then isSubmitted() && isValid(), then getData()
+- B. isValid(), then handleRequest()
+- C. submit(), then handleRequest()
+- D. createView(), then isSubmitted()
 
 ??? success "Answer Q62"
     **A**
 
-    json_validate() (8.3) only reports validity as a bool, using less memory than json_decode() for large payloads because it never materialises the structure. It never returns the decoded array or object — that is json_decode()'s job — and it does not return null on success. Misconception: expecting a decoded value; if you need the data, still call json_decode() afterwards.
+    handleRequest() inspects the request and submits the form; only then are isSubmitted()/isValid() meaningful, after which getData() holds the model.
 
-    :material-book-open-variant: [Docs](https://www.php.net/manual/en/function.json-validate.php)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html)
 
-**Q63.** What is the result of ExpressionLanguage::compile('1 + a', ['a'])?  <small>_(Miscellaneous)_</small>
+**Q63.** In Symfony 8, how do you allow everyone (including not-logged-in) on a path?  <small>_(Security)_</small>
 
-- A. The PHP source string "(1 + $a)"
-- B. The integer 1
-- C. A closure you can invoke
-- D. An exception, because $a is undefined
+- A. PUBLIC_ACCESS
+- B. IS_AUTHENTICATED_ANONYMOUSLY
+- C. ROLE_ANONYMOUS
+- D. IS_ANONYMOUS
 
 ??? success "Answer Q63"
     **A**
 
-    compile() emits PHP source, turning the variable name a into $a: "(1 + $a)". It does not evaluate anything (so no undefined-variable error) — use evaluate('1 + a', ['a' => 5]) to get the value 6.
+    Anonymous tokens were removed; PUBLIC_ACCESS is the attribute that opts a path out of authentication.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/expression_language.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
-**Q64.** At the front controller, which call builds the Request object from PHP's superglobals? (choose one)  <small>_(HTTP)_</small>
+**Q64.** You create new Response('hi') and set no cache headers. What Cache-Control does ResponseHeaderBag emit by default? (choose one)  <small>_(HTTP)_</small>
 
-- A. Request::createFromGlobals()
-- B. Request::create()
-- C. new Request($_SERVER)
-- D. Request::createFromRequest()
+- A. no-cache, private
+- B. public, max-age=0
+- C. no-store
+- D. no header is sent at all
 
 ??? success "Answer Q64"
     **A**
 
-    public/index.php calls Request::createFromGlobals(), which reads $_GET, $_POST, $_SERVER, $_COOKIE and $_FILES once into the typed bags. Request::create() builds a synthetic request from explicit arguments (used in tests/sub-requests), and there is no createFromRequest() factory for this purpose.
+    When you set no cache directives, ResponseHeaderBag computes a sensible default of 'no-cache, private', so a bare response is never stored by shared caches. Calling setPublic()/setMaxAge()/setSharedMaxAge() changes this. It is not 'no-store', and a Cache-Control header is always present.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php)
 
-**Q65.** How do you configure eraseCredentials behaviour in security.yaml in Symfony 8?  <small>_(Security)_</small>
+**Q65.** How is a ConstraintValidator subclass wired so you can inject dependencies (e.g. a repository) into it?  <small>_(Validation)_</small>
 
-- A. You don't — eraseCredentials() was removed in 8.0; strip secrets in the user's __serialize()
-- B. Add erase_credentials: true under each firewall
-- C. Set it inside the password_hashers map
-- D. It is enabled by default via the erase_credentials key
+- A. It is autoconfigured as a service tagged validator.constraint_validator (via ConstraintValidatorInterface), so normal autowiring applies
+- B. You must register it manually in services.yaml with a factory
+- C. Validators cannot have dependencies
+- D. You register a compiler pass for each validator
 
 ??? success "Answer Q65"
     **A**
 
-    There is no eraseCredentials configuration key, and there never was — it was a UserInterface method. In Symfony 8 both UserInterface::eraseCredentials() and TokenInterface::eraseCredentials() were removed; the documented replacement is to strip sensitive data (the password) in your user's __serialize() method, which is what runs when the token/user is stored in the session.
+    Implementing ConstraintValidatorInterface (via ConstraintValidator) triggers autoconfiguration with the validator.constraint_validator tag, so validators are services and can have dependencies autowired.
 
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/UPGRADE-8.0.md)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 
-**Q66.** Which is true about shortcuts like `-f`?  <small>_(Console)_</small>
+**Q66.** A higher priority on a tag places the service where in the tagged iterator?  <small>_(Dependency Injection)_</small>
 
-- A. Shortcuts belong to options only; arguments have no shortcuts
-- B. Every argument automatically gets a one-letter shortcut
-- C. Shortcuts are only for VALUE_NONE options
-- D. Shortcuts must be exactly two characters
+- A. Earlier (tagged collections are sorted by descending priority)
+- B. Later
+- C. It has no effect on order
+- D. Randomly
 
 ??? success "Answer Q66"
     **A**
 
-    Only options accept a shortcut (the 2nd argument of addOption); arguments are positional and have no shortcut. Shortcuts work for any option mode, not just VALUE_NONE, and are typically a single character (e.g. -f).
+    Tagged services are ordered by descending priority, so higher priority comes first.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/console/input.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/tags.html#tagged-services-with-priority)
 
-**Q67.** Which event is responsible for turning an exception into a response?  <small>_(Architecture)_</small>
+**Q67.** For a mapped CollectionType to call the parent's adder/remover methods, set…  <small>_(Forms)_</small>
 
-- A. kernel.exception
-- B. kernel.view
-- C. kernel.terminate
+- A. by_reference => false
+- B. allow_add => false
+- C. prototype => false
+- D. mapped => false
 
 ??? success "Answer Q67"
     **A**
 
-    When an exception escapes handleRaw(), HttpKernel dispatches kernel.exception; listeners may set the response.
+    by_reference => false forces the form to call add/remove methods instead of mutating the returned collection in place, keeping associations in sync.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/forms/types/collection.html)
 
-**Q68.** Which built-in controller renders a Twig template purely from route config?  <small>_(Controllers)_</small>
+**Q68.** By default, what is the Serializer's circular reference limit before it throws?  <small>_(Miscellaneous)_</small>
 
-- A. TemplateController
-- B. RenderController
-- C. TwigController
+- A. 1 (unless a circular reference handler or #[MaxDepth] is set)
+- B. 0 — it never throws
+- C. Unlimited
+- D. 10
 
 ??? success "Answer Q68"
     **A**
 
-    TemplateController::__invoke() renders the 'template' default and can set HTTP cache headers, needing no custom class.
+    The default circular reference limit is 1; beyond it a CircularReferenceException is thrown unless a CIRCULAR_REFERENCE_HANDLER or MaxDepth is configured.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/serializer.html#handling-circular-references)
 
-**Q69.** After adding { path: ^/, roles: PUBLIC_ACCESS } at the top of access_control, the ^/admin rule below stops protecting admin. Why?  <small>_(Security)_</small>
+**Q69.** What does Process::run() return?  <small>_(Miscellaneous)_</small>
 
-- A. First match wins; ^/ matches every path including /admin, so the catch-all is enforced and the admin rule is never reached
-- B. PUBLIC_ACCESS globally disables all other access_control rules
-- C. roles must be given as a list, not a string, to take effect
-- D. The admin rule needs a requires_channel to be evaluated
+- A. The integer exit code
+- B. The stdout as a string
+- C. void
+- D. A boolean success flag
 
 ??? success "Answer Q69"
     **A**
 
-    access_control is first-match, top-to-bottom. ^/ matches all paths, so placing it first means /admin hits the PUBLIC_ACCESS rule and the ^/admin rule underneath is never evaluated — admin becomes public. Order specific rules before the ^/ catch-all. PUBLIC_ACCESS is a normal attribute (it does not disable other rules), and the roles syntax/requires_channel are unrelated.
+    run() blocks until completion and returns the exit code; use getOutput() for stdout and mustRun() to throw a ProcessFailedException on failure.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html#securing-url-patterns-access-control)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/process.html#usage)
 
-**Q70.** A test does: $client = static::createClient(); then self::getContainer()->set(PaymentGateway::class, $mock); then $client->request('POST', '/checkout'); — but the real gateway still runs. What is the most likely fix?  <small>_(Testing)_</small>
+**Q70.** What does AbstractController::forward() do?  <small>_(Controllers)_</small>
 
-- A. Call $client->disableReboot() before set(), so the replacement survives the reboot that createClient triggers on the next request
-- B. Call set() again after the request
-- C. Make PaymentGateway public in services.yaml
-- D. Replace self::getContainer() with static::$kernel->getContainer()
+- A. Runs another controller in a sub-request and returns its Response, without a new client request
+- B. Sends a 302 redirect to another route
+- C. Includes a Twig template
 
 ??? success "Answer Q70"
     **A**
 
-    By default the kernel reboots (rebuilding a fresh container) around requests, discarding any set() replacement. disableReboot() keeps the container — and your mock — alive across the request. Calling set() after the request is too late; the class already has visibility (getContainer exposes it); and $kernel->getContainer() hides private services entirely.
+    forward() dispatches a sub-request through the kernel; the browser URL does not change and no 3xx is sent.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/testing.html#mocking-services)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 
-**Q71.** Which version string should you pass as the second argument of trigger_deprecation()?  <small>_(Architecture)_</small>
+**Q71.** `$this->addFlash('notice', 'Saved')` is shorthand for which call?  <small>_(Controllers)_</small>
 
-- A. The version in which the API was DEPRECATED (e.g. '8.1'), not the current running version
-- B. The current installed version at the time the notice fires
-- C. The version in which the code will be REMOVED (the next major)
+- A. getSession()->getFlashBag()->add('notice', 'Saved')
+- B. Setting a response header
+- C. Writing a cookie
 
 ??? success "Answer Q71"
     **A**
 
-    The version argument records when the deprecation was introduced, producing the \"Since <package> <version>: <message>\" format tooling parses. A common mistake is passing the current version, or the removal version — both are wrong. Use the version the API was deprecated in.
+    addFlash() is an AbstractController convenience over the session flash bag.
 
-    :material-book-open-variant: [Docs](https://github.com/symfony/deprecation-contracts)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#flash-messages)
 
-**Q72.** True or false: {# ... #} comments are removed at compile time and never reach the browser.  <small>_(Twig)_</small>
+**Q72.** Which PSR interface does Symfony's service container implement?  <small>_(Architecture)_</small>
 
-- A. True
-- B. False
+- A. PSR-11 (Container)
+- B. PSR-6 (Cache)
+- C. PSR-16 (Simple Cache)
 
 ??? success "Answer Q72"
     **A**
 
-    Twig {# #} comments are stripped during compilation and produce no output, unlike HTML <!-- --> comments which are sent to the client. Use {# #} for template notes you do not want leaking to users.
+    Symfony's ContainerInterface extends Psr\\Container\\ContainerInterface (PSR-11).
 
-    :material-book-open-variant: [Docs](https://twig.symfony.com/doc/3.x/templates.html#twig-language-references)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
-**Q73.** Which lock store provides mutual exclusion across multiple servers?  <small>_(Miscellaneous)_</small>
+**Q73.** How are tagged listeners/subscribers and #[AsEventListener] attributes wired into the dispatcher?  <small>_(Architecture)_</small>
 
-- A. RedisStore
-- B. FlockStore
-- C. SemaphoreStore
-- D. InMemoryStore
+- A. RegisterListenersPass wires them at container compile time, and listener services are instantiated lazily only when their event fires
+- B. The kernel calls addListener() for each on every kernel.request
+- C. They are registered at runtime the first time getSubscribedEvents() is called
 
 ??? success "Answer Q73"
     **A**
 
-    Flock and Semaphore stores are local to one machine, and InMemoryStore is per-process (tests). Shared stores like Redis (or a database store) coordinate locks across servers.
+    The RegisterListenersPass compiler pass scans services tagged kernel.event_listener/kernel.event_subscriber and #[AsEventListener] attributes and wires them into the dispatcher at compile time. Listeners are registered lazily — the service is only constructed when its event actually fires — which keeps boot cheap. You rarely call addListener() at runtime.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/lock.html#available-stores)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/event_dispatcher.html)
 
-**Q74.** createNotFoundException() aborts the action as soon as it is called. True or false?  <small>_(Controllers)_</small>
+**Q74.** How does a recipe auto-register a bundle?  <small>_(Architecture)_</small>
 
-- A. False
-- B. True
+- A. By writing an entry into config/bundles.php
+- B. Via an #[AsBundle] attribute
+- C. By editing services.yaml
 
 ??? success "Answer Q74"
     **A**
 
-    It only returns a NotFoundHttpException object; nothing happens until you `throw` it. Treating it as self-aborting is the classic trap.
+    The bundles configurator adds the bundle class to config/bundles.php, which the kernel reads at boot via MicroKernelTrait::registerBundles().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
-**Q75.** In Symfony's Cookie value object, `httpOnly` defaults to true. True or false?  <small>_(Controllers)_</small>
+**Q75.** Which command runs when you execute `php bin/console` with no arguments?  <small>_(Console)_</small>
 
-- A. True
-- B. False
+- A. list
+- B. help
+- C. about
+- D. debug:container
 
 ??? success "Answer Q75"
     **A**
 
-    Cookie defaults are security-first: httpOnly=true (hidden from JS, mitigating XSS token theft) and sameSite='lax'. JS-readable cookies must opt out explicitly with withHttpOnly(false).
+    The Application's default command is `list`, which prints all available commands grouped by namespace. `help` shows usage for a single command and must be given a name; `about` prints an environment summary; `debug:container` is a FrameworkBundle command. The classic trap is to assume `help` is the default — it is not.
 
-    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/console.html)
 
 ---
 

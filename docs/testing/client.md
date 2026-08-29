@@ -26,7 +26,30 @@
     **Syllabus:** `Automated Tests → The Client` ·
     **Level:** Advanced → Expert ·
     **Est. time:** 30 min ·
+
     **Prerequisites:** [Functional Tests](functional-tests.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le client de test parle au kernel directement en mémoire, comme un navigateur sans interface — et ne suit **jamais** les redirections automatiquement.
+
+### Imagine dans la vraie vie
+Un robot assis à un simulateur de conduite plutôt qu'une vraie voiture sur une vraie route. Il actionne les pédales (envoie des requêtes au kernel en interne, sans vrai réseau), et garde ta session active — se souvenant de tes tickets de parking (le pot de cookies). Mais quand un panneau dit "déviation par ici" (une redirection 302), le robot s'arrête net devant le panneau et attend.
+
+### Dans Symfony
+Tester qu'un formulaire redirige bien après soumission nécessite d'appeler explicitement `$client->followRedirect()` — sinon le test s'arrête à la page intermédiaire de redirection, avant la page finale.
+
+### Exemple simple
+```php
+$client->submitForm('Envoyer', ['form[email]' => 'a@b.com']);
+$client->followRedirect(); // sinon on reste sur la page de redirection
+```
+
+### Comment le mémoriser 🧠
+Le client suit les liens et boutons comme un humain (`clickLink()`, `submitForm()`) mais **jamais** les redirections HTTP sans qu'on le lui demande explicitement.
 
 ---
 
@@ -309,6 +332,8 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `$client->request('GET', '/')` return?"
     - [x] A. A `Symfony\Component\DomCrawler\Crawler` ✅
     - [ ] B. A `Response`
@@ -316,7 +341,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
     - [ ] D. `void`
 
     **Why:** navigation methods return a `Crawler`; the response is fetched with
-    `getResponse()`. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#making-requests).
+    `getResponse()`. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#making-requests).
 
 ??? question "Q2. By default, after a controller returns a 302, the client…"
     - [x] A. Stops on the redirect so you can assert `Location` ✅
@@ -325,7 +350,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
     - [ ] D. Retries the request
 
     **Why:** auto-follow is off by default; use `followRedirect()` /
-    `followRedirects()`. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#redirecting).
+    `followRedirects()`. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#redirecting).
 
 ??? question "Q3. Which call keeps a service replaced with `getContainer()->set()` alive across requests?"
     - [x] A. `$client->disableReboot()` ✅
@@ -334,7 +359,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
     - [ ] D. `$client->restart()`
 
     **Why:** without disabling reboot, the kernel restarts after each request and
-    discards the replacement. **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    discards the replacement. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. `submitForm()` signature is…"
     - [x] A. `submitForm(string $button, array $fieldValues = [], string $method = 'POST')` ✅
@@ -343,7 +368,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
     - [ ] D. `submitForm(string $uri, array $data)`
 
     **Why:** you identify the submit button by text/name, then pass field values.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#submitting-forms).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#submitting-forms).
 
 ## Key takeaways
 
@@ -369,7 +394,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
 - **Confused with:** [Client Configuration](client-configuration.md) — this chapter is behaviour; that one is boot options and server params.
 
 ## Official References
-- [Official Symfony docs — Making requests](https://symfony.com/doc/current/testing.html#making-requests)
+- [Official Symfony docs — Making requests](https://symfony.com/doc/8.0/testing.html#making-requests)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
 - [Symfony source — KernelBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/KernelBrowser.php)
 
@@ -382,7 +407,7 @@ to tweak individual fields, get it from the Crawler (`->form()`) rather than
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#making-requests) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#making-requests) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

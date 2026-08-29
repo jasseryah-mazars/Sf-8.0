@@ -28,6 +28,47 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les groupes permettent de valider seulement un sous-ensemble de règles selon le contexte — pas les mêmes règles à l'inscription et à l'édition du profil.
+
+### Imagine dans la vraie vie
+Les groupes sont les **différentes files de contrôle** à l'aéroport. Un membre d'équipage, un passager national et un passager international passent par des jeux de scanners différents alors que c'est le même point de contrôle. Valider un groupe, c'est choisir la file.
+
+### Dans Symfony
+Un formulaire d'inscription peut exiger un mot de passe (`groups: ['inscription']`), tandis qu'un formulaire d'édition de profil valide le même objet **sans** ce groupe — même entité, règles différentes selon le contexte.
+
+### Exemple simple
+```php
+$validator->validate($utilisateur, null, ['inscription']);
+```
+
+### Comment le mémoriser 🧠
+Le groupe `Default` (celui utilisé quand tu n'en précises aucun) se comporte différemment sur une classe avec une `GroupSequence` — c'est la nuance la plus testée de ce chapitre.
+
+Sometimes only *some* constraints apply — a `User` at *registration* needs a
+password, but at *profile edit* it does not. **Groups** let you tag constraints
+and validate a chosen set.
+
+Every constraint has a `groups` option (default: `['Default']`). You pick which
+groups run by passing them to `validate()`:
+
+```php
+$violations = $validator->validate($user, groups: ['registration']);
+```
+
+If you pass no groups, the validator uses `['Default']`.
+
+!!! question "Predict first"
+    A `User` class defines a `#[Assert\GroupSequence]`. You validate the `Default`
+    group, then the `User` group. Do they behave the same?
+
+??? note "Reveal"
+    No. `Default` triggers the *sequence* (stepwise, stop-on-first-failure); the
+    `{ClassName}` group `User` runs the same constraints *flat*, bypassing the order.
+
+
 ## Theory
 
 Parfois, seules *certaines* constraints s'appliquent — un `User` à
@@ -260,7 +301,7 @@ forms, définissez le groupe via l'option de form `validation_groups` (voir
 
     **Why:** Seuls les groupes demandés s'exécutent ; `Default` n'est pas
     implicite.
-    **Ref:** [Validation groups](https://symfony.com/doc/current/validation/groups.html).
+    **Ref:** [Validation groups](https://symfony.com/doc/8.0/validation/groups.html).
 
 ??? question "Q2. For a class with a `GroupSequence`, validating the `Default` group:"
     - [x] A. Triggers the group sequence ✅
@@ -270,7 +311,7 @@ forms, définissez le groupe via l'option de form `validation_groups` (voir
 
     **Why:** Sur une classe séquencée, `Default` correspond à la séquence ;
     utilisez le groupe `{ClassName}` pour l'exécution à plat.
-    **Ref:** [Group sequence](https://symfony.com/doc/current/validation/sequence_provider.html).
+    **Ref:** [Group sequence](https://symfony.com/doc/8.0/validation/sequence_provider.html).
 
 ??? question "Q3. For class `App\Entity\User` with no sequence, the `{ClassName}` group is:"
     - [ ] A. `App\Entity\User`
@@ -280,7 +321,7 @@ forms, définissez le groupe via l'option de form `validation_groups` (voir
 
     **Why:** Le groupe `{ClassName}` utilise le nom court de la classe et
     équivaut à `Default` tant qu'aucune séquence n'est définie.
-    **Ref:** [Validation groups](https://symfony.com/doc/current/validation/groups.html).
+    **Ref:** [Validation groups](https://symfony.com/doc/8.0/validation/groups.html).
 
 ## Key takeaways
 
@@ -307,7 +348,7 @@ forms, définissez le groupe via l'option de form `validation_groups` (voir
 - **Confused with:** [Form Handling](../forms/handling.md) — dans les forms, vous définissez les groupes via l'option `validation_groups`, pas via l'argument de `validate()`.
 
 ## Official References
-- [Official Symfony docs — Validation groups](https://symfony.com/doc/current/validation/groups.html)
+- [Official Symfony docs — Validation groups](https://symfony.com/doc/8.0/validation/groups.html)
 - [Symfony source — Constraint::DEFAULT_GROUP](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 
 ## Video references
@@ -320,7 +361,7 @@ forms, définissez le groupe via l'option de form `validation_groups` (voir
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/groups.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/groups.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

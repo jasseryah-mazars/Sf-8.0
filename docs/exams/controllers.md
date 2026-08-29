@@ -1,12 +1,26 @@
 # Chapter Exam — Controllers
 
 !!! abstract "How to use"
-    94 questions spanning every subchapter of **Controllers**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
+    101 questions spanning every subchapter of **Controllers**, ordered easy → hard. Answer before revealing each key. For a timed, cross-topic paper use the [Mock Exams](../revision/mock-exam.md).
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
 
 Full theory: [Controllers](../controllers/index.md).
+
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Cette page est une **banque de 94 questions type QCM** sur Controllers, avec correction dépliable sous chaque question. Ce n'est pas un cours : c'est un entraînement, à faire après avoir lu le chapitre.
+
+**Pourquoi ça existe ?** Lire un chapitre donne l'impression d'avoir compris, mais répondre à une question sous forme d'examen (sans relire ses notes) révèle les vraies lacunes — c'est ce que fera l'examen officiel.
+
+**🏠 Analogie de la vraie vie :** C'est le **permis de conduire**. Le code de la route (le cours) explique les règles ; les séries de questions du permis blanc (cette page) vérifient que tu sais les appliquer sous forme de question piège, sans l'aide du livre.
+
+**Symfony dans la vraie vie :** Cours du chapitre → code de la route appris / Question du QCM → question du permis blanc / Réponse dépliable → correction avec explication / Score obtenu → indicateur "prêt à passer l'examen ou pas".
+
+**⚠️ Erreur fréquente :** Déplier la réponse avant d'avoir vraiment tranché son choix. Le cerveau retient beaucoup mieux une explication lue *après* s'être trompé (ou avoir hésité) que lue en passant, sans effort de rappel préalable.
+
+**🧠 Comment le mémoriser :** *« Je réponds d'abord, je vérifie ensuite »* — jamais l'inverse. Note les questions ratées : ce sont exactement les pièges que l'examinateur pose aussi.
 
 ---
 
@@ -21,7 +35,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     For an invokable controller you reference only the class; the ControllerResolver detects the __invoke() method automatically.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q2.** Is the `Action` method suffix required for controller actions in Symfony 8?  <small>_(easy · single)_</small>
 
@@ -34,7 +48,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Attribute routing binds a specific method explicitly, so the Action suffix is purely historical and can be dropped.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q3.** What visibility must a controller action method have to be invoked by the kernel?  <small>_(easy · single)_</small>
 
@@ -47,7 +61,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The kernel invokes the controller callable externally, so the method must be public.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q4.** A controller must extend `AbstractController` to be usable in Symfony 8. True or false?  <small>_(easy · true-false)_</small>
 
@@ -59,7 +73,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Extending `AbstractController` is optional convenience. A controller is any callable returning a Response; a plain invokable class with no base class is perfectly valid.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q5.** When overriding getSubscribedServices() to add a service, what must you do to keep the built-in helpers?  <small>_(easy · single)_</small>
 
@@ -72,7 +86,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Returning only your service replaces the list; merge the parent's subscriptions so render/getUser/etc. still resolve.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#the-base-controller-class-services)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#the-base-controller-class-services)
 
 **Q6.** Which value resolver supplies a `Request` type-hinted controller argument?  <small>_(easy · single)_</small>
 
@@ -85,7 +99,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     RequestValueResolver (priority 120) injects the current Request; RequestAttributeValueResolver handles named route parameters.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q7.** In which parameter bag do matched route parameters appear?  <small>_(easy · single)_</small>
 
@@ -98,7 +112,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The router writes matched parameters into the attributes bag; query is GET data and request is the POST body.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q8.** The `Request` object can be autowired directly into a service constructor. True or false?  <small>_(easy · true-false)_</small>
 
@@ -110,7 +124,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The Request is request-scoped and created per HTTP call, so it is not an autowireable service. Inject RequestStack and call getCurrentRequest().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/request.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/request.html)
 
 **Q9.** What must a controller ultimately produce?  <small>_(easy · single)_</small>
 
@@ -123,7 +137,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     If a controller returns a non-Response, the kernel fires ViewEvent; if no listener produces a Response a LogicException is thrown.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q10.** Where does a controller read incoming cookies from?  <small>_(easy · single)_</small>
 
@@ -136,7 +150,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The cookies ParameterBag wraps $_COOKIE; responses set cookies via $response->headers->setCookie().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q11.** A cookie sent with SameSite=None also requires which attribute?  <small>_(easy · single)_</small>
 
@@ -149,7 +163,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Modern browsers reject SameSite=None cookies unless they are marked Secure (HTTPS-only).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 
 **Q12.** In Symfony's Cookie value object, `httpOnly` defaults to true. True or false?  <small>_(easy · true-false)_</small>
 
@@ -174,7 +188,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The session is request-scoped; RequestStack::getSession() is the stable entry point in services.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 **Q14.** What happens the first time you read a flash message (get/all or app.flashes)?  <small>_(easy · single)_</small>
 
@@ -187,7 +201,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Reading consumes flashes; use peek()/peekAll() to read without removing them.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#flash-messages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#flash-messages)
 
 **Q15.** `$this->addFlash('notice', 'Saved')` is shorthand for which call?  <small>_(easy · single)_</small>
 
@@ -200,7 +214,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     addFlash() is an AbstractController convenience over the session flash bag.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#flash-messages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#flash-messages)
 
 **Q16.** Why are flash messages typically paired with a redirect?  <small>_(easy · single)_</small>
 
@@ -213,7 +227,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Flashes are built to survive exactly one redirect and be shown on the following request, then discarded.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#flash-messages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#flash-messages)
 
 **Q17.** Which method reads flash messages WITHOUT consuming them?  <small>_(easy · trap)_</small>
 
@@ -241,7 +255,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     app.flashes yields a map of type => messages; iterating it calls all() under the hood, which consumes the bag so each message shows exactly once.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#flash-messages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#flash-messages)
 
 **Q19.** What is the default HTTP status code of redirectToRoute()?  <small>_(easy · single)_</small>
 
@@ -254,7 +268,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     RedirectResponse defaults to 302 Found; pass a status argument to change it.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q20.** What is the difference between redirect() and redirectToRoute()?  <small>_(easy · single)_</small>
 
@@ -267,7 +281,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     redirect() is URL-based; redirectToRoute() builds the URL from the router. Both return a RedirectResponse (default 302).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q21.** `redirect()` accepts a route name as its first argument. True or false?  <small>_(easy · true-false)_</small>
 
@@ -279,7 +293,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     redirect() takes a URL (string). To redirect by route name (plus params), use redirectToRoute(), which builds the URL via the router.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q22.** What does AbstractController::forward() do?  <small>_(easy · single)_</small>
 
@@ -292,7 +306,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     forward() dispatches a sub-request through the kernel; the browser URL does not change and no 3xx is sent.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 
 **Q23.** After a forward(), what does the user's address bar show?  <small>_(easy · single)_</small>
 
@@ -305,7 +319,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Forwarding is server-internal within the same request, so no new client navigation occurs.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 
 **Q24.** Which value should you trust to determine an uploaded file's real type?  <small>_(easy · single)_</small>
 
@@ -318,7 +332,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Client-supplied name/MIME are spoofable; getMimeType()/guessExtension() inspect the actual file content.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/upload_file.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/upload_file.html)
 
 **Q25.** What does UploadedFile::move() do when it fails?  <small>_(easy · single)_</small>
 
@@ -344,7 +358,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     TemplateController::__invoke() renders the 'template' default and can set HTTP cache headers, needing no custom class.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route)
 
 **Q27.** How does a value resolver signal that it does not handle an argument?  <small>_(easy · single)_</small>
 
@@ -357,7 +371,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Yielding no value passes the argument to the next resolver in priority order.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q28.** What binds a single typed query parameter such as ?page=2 to an int argument?  <small>_(easy · single)_</small>
 
@@ -370,7 +384,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     #[MapQueryParameter] binds one query value with casting; #[MapQueryString] maps the whole query string into a DTO.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q29.** Which statement best defines a Symfony controller?  <small>_(medium · single)_</small>
 
@@ -383,7 +397,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     A controller is any callable (method, invokable object, closure) the kernel runs to produce a Response; extending AbstractController is optional.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q30.** A route is declared as `#[Route('/', name: 'home')]` on the class `App\Controller\HomeController`, which defines a `public function __invoke(): Response`. Which YAML `controller:` value targets it correctly?  <small>_(medium · code)_</small>
 
@@ -397,7 +411,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     For an invokable controller the `_controller` value is the class name alone; the resolver detects `__invoke()`. Adding `::__invoke` also works but is not idiomatic, and `#invoke` / a made-up service id are invalid.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q31.** Which of these are valid `_controller` formats the ControllerResolver accepts? (choose 3)  <small>_(medium · multiple)_</small>
 
@@ -424,7 +438,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The injected locator exposes exactly the services returned by getSubscribedServices(), not the whole container.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q33.** What happens if you call `$this->render()` without Twig installed?  <small>_(medium · single)_</small>
 
@@ -451,7 +465,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The subscription list fully replaces the inherited one, so you must spread `parent::getSubscribedServices()` alongside your own entry. Returning only your service drops router/twig/security and breaks every helper.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q35.** In getSubscribedServices(), what does prefixing a service with `?` (e.g. `'?'.Environment::class`) mean?  <small>_(medium · trap)_</small>
 
@@ -465,7 +479,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The `?` marks the subscription optional, letting the controller boot even when (say) Twig or the form factory is not installed; the helper then throws a clear LogicException rather than a container error.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
 **Q36.** A developer fetches an application service with `$this->container->get(InvoiceMailer::class)` inside a controller and gets a 'service not found' error. What is the correct fix?  <small>_(medium · debug)_</small>
 
@@ -479,7 +493,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     `$this->container` is the restricted subscriber locator; it only exposes the framework helper services, not your domain services. Inject your own dependencies through the constructor instead of using the locator as a service-locator anti-pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#the-base-controller-class-services)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#the-base-controller-class-services)
 
 **Q37.** Which AbstractController helpers directly return a Response (or subclass)? (choose 3)  <small>_(medium · multiple)_</small>
 
@@ -493,7 +507,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     render/json/redirectToRoute (and file/stream/forward) return a Response or subclass. createNotFoundException() returns a NotFoundHttpException you must throw — it is not a Response and does not abort on its own.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q38.** On a public (no-firewall) route, `return new Response($this->getUser()->getEmail());` fatals with 'Call to a member function getEmail() on null'. Why?  <small>_(medium · debug)_</small>
 
@@ -520,7 +534,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The Request is request-scoped and cannot be injected directly; inject the RequestStack service instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/request.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/request.html)
 
 **Q40.** What does the `$request->request` bag actually contain?  <small>_(medium · trap)_</small>
 
@@ -534,7 +548,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Despite the name, `$request->request` is the InputBag of POST body fields, not 'the request object'. Query lives in `$request->query`, route params in `$request->attributes`.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q41.** `$request->getContent()` is called on a JSON API request. What does it return?  <small>_(medium · code)_</small>
 
@@ -548,7 +562,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     getContent() returns the raw body; it does not decode JSON. Use #[MapRequestPayload] (serializer + validator) or json_decode() yourself to get a structured value.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q42.** Which response class best serves a resumable (range-request) file download?  <small>_(medium · single)_</small>
 
@@ -561,7 +575,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     BinaryFileResponse supports HTTP range requests and X-Sendfile/X-Accel offloading for efficient downloads.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#serving-files)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files)
 
 **Q43.** An action does `return ['id' => 1, 'name' => 'Ada'];` expecting Symfony to auto-serialize it to JSON, but the request fails. Why?  <small>_(medium · debug)_</small>
 
@@ -575,7 +589,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     A non-Response return fires ViewEvent; without a listener that builds a Response, the kernel throws 'The controller must return a Response'. Return $this->json($data) explicitly.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
 
 **Q44.** You already hold a valid JSON string. Which avoids double-encoding it in a JsonResponse?  <small>_(medium · single)_</small>
 
@@ -589,7 +603,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     new JsonResponse($json) / $this->json($json) would JSON-encode the string again (double-encoding). fromJsonString() sets the body verbatim and the application/json Content-Type.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q45.** Why might clearCookie('token') fail to delete the cookie?  <small>_(medium · debug)_</small>
 
@@ -602,7 +616,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Deletion sends an expired Set-Cookie scoped by path/domain; a mismatch targets a different cookie and leaves the original intact.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
 **Q46.** `Cookie::create('t','v')->withSameSite(Cookie::SAMESITE_NONE)` is set without calling `withSecure(true)`. What is the effect in modern browsers?  <small>_(medium · code)_</small>
 
@@ -616,7 +630,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     SameSite=None mandates the Secure attribute; without it the browser drops the cookie. Chain ->withSecure(true) so it is sent only over HTTPS.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 
 **Q47.** An action sets a `theme` cookie on the response, then in the same action reads `$request->cookies->get('theme')` and gets the old value. Why?  <small>_(medium · trap)_</small>
 
@@ -630,7 +644,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Response cookies go out as Set-Cookie headers; the request's cookies bag reflects what the browser already sent. A newly set cookie is only visible on the next request.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 
 **Q48.** Which method regenerates the session id after login to prevent session fixation?  <small>_(medium · single)_</small>
 
@@ -643,7 +657,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     migrate() issues a new session id while keeping data; invalidate() also wipes data. Symfony authenticators call migrate() on login.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 **Q49.** A console command injects RequestStack and calls `getSession()`, which throws SessionNotFoundException. What is the cause and fix?  <small>_(medium · debug)_</small>
 
@@ -657,7 +671,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     getSession() throws SessionNotFoundException (it does not return null) when called outside a request or on a request with no session. Guard the request first: check getCurrentRequest() and hasSession().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 **Q50.** Why is injecting `SessionInterface` directly into a service constructor discouraged in Symfony 8?  <small>_(medium · trap)_</small>
 
@@ -671,7 +685,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Directly autowiring the request-scoped session into a long-lived service is discouraged/removed; RequestStack::getSession() is the stable entry point. You can still type-hint SessionInterface on a controller action (resolved by SessionValueResolver, priority 120).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 **Q51.** Merely type-hinting SessionInterface on an action starts the session. True or false?  <small>_(medium · true-false)_</small>
 
@@ -683,7 +697,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Sessions are lazy: SessionValueResolver injects the session object, but session_start() and the Set-Cookie header only fire on the first read or write. Merely receiving the session does not start it.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 **Q52.** A controller reads `app.session.flashbag.get('success')` for logging, then the Twig template shows no flash. What happened?  <small>_(medium · debug)_</small>
 
@@ -697,7 +711,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     get()/all() consume the flash bag. Reading in the controller drains the messages before Twig can show them. Use peek()/peekAll() when you must read without removing.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#flash-messages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#flash-messages)
 
 **Q53.** Which redirect status codes preserve the original HTTP method and body?  <small>_(medium · single)_</small>
 
@@ -710,7 +724,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     307/308 must not change the request method; 303 always forces GET and 301/302 may downgrade to GET.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q54.** After creating a resource in a POST action, you want the browser to issue a GET to the show page. Which call is correct?  <small>_(medium · code)_</small>
 
@@ -724,7 +738,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     303 See Other forces the follow-up request to GET, the strict form of Post/Redirect/Get. 307 would preserve POST; forward() is internal (no URL change); redirect() takes a URL, not a route name + params.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q55.** A checkout POST persists an order and redirects to the confirmation page to avoid duplicate submissions on refresh. Which status best fits?  <small>_(medium · scenario)_</small>
 
@@ -738,7 +752,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     PRG needs a temporary redirect that ends on a GET. 302 (default) or 303 are correct; 301/308 are cached (wrong and hard to undo), and 307 would replay the POST.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q56.** Why is accidentally using 301 (or 308) for a temporary redirect dangerous?  <small>_(medium · trap)_</small>
 
@@ -752,7 +766,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     301 and 308 signal a permanent move and are cached by browsers; if used by mistake the client keeps redirecting even after you fix the server. Use 302/303 for temporary redirects.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#redirecting)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#redirecting)
 
 **Q57.** How does `forward()` pass a `month` value so the target action can receive it as an `int $month` argument?  <small>_(medium · code)_</small>
 
@@ -766,7 +780,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The second argument to forward() becomes the sub-request's attributes (the $path array), which the argument resolver then maps to the target's named parameters — not through query.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 
 **Q58.** Two controllers need the same 'latest news' logic. Which reuse approach is usually preferable to forwarding?  <small>_(medium · scenario)_</small>
 
@@ -780,7 +794,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Forwarding runs a full kernel pass and couples controllers. A shared service reuses just the logic without routing/events/resolver overhead. Forward when you need another controller's whole Response embedded.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 
 **Q59.** How do you correctly produce a 404 from a controller?  <small>_(medium · single)_</small>
 
@@ -793,7 +807,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     createNotFoundException() returns a NotFoundHttpException you must throw; the kernel then renders the error page.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#managing-errors-and-404-pages)
 
 **Q60.** A controller throws a plain \RuntimeException. What status code results?  <small>_(medium · single)_</small>
 
@@ -806,7 +820,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Only exceptions implementing HttpExceptionInterface set a specific status; any other exception becomes a 500.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 **Q61.** Where do you place a custom production 404 template?  <small>_(medium · config)_</small>
 
@@ -819,7 +833,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The Twig error renderer looks up per-status templates in that path in the prod environment.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 **Q62.** Which one-liner raises a 404 when a repository lookup returns null?  <small>_(medium · code)_</small>
 
@@ -833,7 +847,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The throw expression (PHP 8) combines with `??` so a null lookup throws the 404. Without `throw` the exception is merely assigned/discarded; `?:` and `abort()` are wrong (abort() is not a Symfony helper).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 **Q63.** createNotFoundException() aborts the action as soon as it is called. True or false?  <small>_(medium · trap)_</small>
 
@@ -845,7 +859,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     It only returns a NotFoundHttpException object; nothing happens until you `throw` it. Treating it as self-aborting is the classic trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 **Q64.** With #[MapUploadedFile] and a failing File constraint, what happens?  <small>_(medium · single)_</small>
 
@@ -858,7 +872,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The resolver validates the upload and aborts with an HTTP error when a constraint fails, so the body never executes with invalid input.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q65.** Which signature binds and validates a PDF upload straight into a controller argument?  <small>_(medium · code)_</small>
 
@@ -872,7 +886,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     #[MapUploadedFile] (handled by RequestPayloadValueResolver) binds the UploadedFile and applies inline File/Image constraints, throwing an HTTP exception on failure. The other attributes target payloads/query/user.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q66.** Why must uploaded files be stored outside the web root (or with execution disabled)?  <small>_(medium · trap)_</small>
 
@@ -886,7 +900,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     A script (e.g. .php) saved into a publicly served directory could be requested and executed, yielding RCE. Store uploads outside public/ or disable script execution there, and always use a safe generated name.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/upload_file.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/upload_file.html)
 
 **Q67.** RedirectController configured with permanent: true returns which status?  <small>_(medium · config)_</small>
 
@@ -899,7 +913,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     permanent selects the permanent status code; combined with keepRequestMethod it becomes 308 to preserve the method.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
 
 **Q68.** What status does RedirectController return when the target route/path is empty?  <small>_(medium · trap)_</small>
 
@@ -926,7 +940,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     TemplateController accepts template plus optional maxAge/sharedAge/private to set HTTP cache headers. sharedAge sets the shared-cache TTL (s-maxage). RedirectController/CacheController are wrong for rendering.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route)
 
 **Q70.** A route sets `controller: ...\\RedirectController` (class only) and the request errors. What is missing?  <small>_(medium · trap)_</small>
 
@@ -954,7 +968,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     permanent alone gives 301; adding keepRequestMethod upgrades it to 308 so the HTTP method (e.g. POST) is preserved across the permanent redirect.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route)
 
 **Q72.** Which interface does a custom value resolver implement in Symfony 8?  <small>_(medium · single)_</small>
 
@@ -967,7 +981,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     The split supports()/resolve() interface was removed; resolve() now returns an iterable and yielding nothing declines the argument.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q73.** In a custom resolver, an argument's type does not match. What should `resolve()` do to decline it correctly?  <small>_(medium · code)_</small>
 
@@ -981,7 +995,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     resolve() is typed `: iterable`, so `return null` is a TypeError and `return false` is invalid. Decline by returning an empty array (or a generator that never yields).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q74.** Which tag registers a resolver in the ordered chain, and how is its order controlled?  <small>_(medium · config)_</small>
 
@@ -995,7 +1009,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     Chain resolvers are tagged controller.argument_value_resolver; a higher priority runs earlier. Autoconfiguration tags implementing classes; set an explicit priority only when ordering matters (targeted resolvers use the controller.targeted_value_resolver tag instead).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q75.** An action needs the authenticated user injected as an argument (not via $this->getUser()). Which attribute does this?  <small>_(medium · scenario)_</small>
 
@@ -1009,7 +1023,7 @@ Full theory: [Controllers](../controllers/index.md).
 
     #[CurrentUser] injects the authenticated user via the security UserValueResolver. MapRequestPayload builds a DTO from the body, MapEntity is Doctrine (out of scope), and Autowire is for services.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 **Q76.** Is #[MapEntity] a core HttpKernel value resolver you should study for this syllabus area?  <small>_(medium · trap)_</small>
 
@@ -1023,250 +1037,352 @@ Full theory: [Controllers](../controllers/index.md).
 
     #[MapEntity] belongs to DoctrineBundle and is out of scope for the core HttpKernel resolver chain. The core built-ins are Request/Session (120), BackedEnum/Uid/DateTime/RequestAttribute (100), plus the targeted mapping attributes and #[CurrentUser].
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
-**Q77.** How does AbstractController obtain its helper services?  <small>_(hard · internals)_</small>
+**Q77.** Which statements about HTTP redirects in Symfony controllers are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. redirectToRoute() returns a RedirectResponse with a 302 status by default
+- B. 307 and 308 redirects preserve the original HTTP method and request body
+- C. 301 and 308 are permanent redirects that browsers may cache
+- D. redirect() performs an internal sub-request, so the browser never makes a second request
+- E. Flash messages are lost across a redirect because a new request is made
+
+??? success "Answer Q77"
+    **A, B, C**
+
+    redirectToRoute() and redirect() both return a RedirectResponse defaulting to 302; 307/308 keep the method and body intact, and the permanent codes 301 and 308 may be cached by browsers. A redirect is a real 3xx response triggering a brand-new client request (internal sub-requests are what forward() does), and flash messages are session-backed precisely so they survive that redirect in the Post/Redirect/Get pattern.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
+
+**Q78.** Which statements about sessions in Symfony are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. Sessions are lazy: they are started and the cookie is sent only when the session is first used
+- B. migrate() regenerates the session id while keeping the data, which defends against session fixation
+- C. Flash messages are stored outside the session so they survive session invalidation
+- D. You must call $session->start() manually in every controller before reading attributes
+- E. In a service, the recommended way to get the session is injecting the 'session' service directly
+
+??? success "Answer Q78"
+    **A, B**
+
+    Symfony sessions start lazily on first use, so no cookie is sent for visitors that never touch the session, and migrate() issues a new id while preserving data (invalidate() additionally wipes the data). The flash bag lives inside the session itself, explicit start() calls are unnecessary because access triggers the start, and services should inject RequestStack and call getSession() rather than a 'session' service.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
+
+**Q79.** Which statements about controller responses are true? (select all that apply)  <small>_(medium · multiple)_</small>
+
+- A. An action must return a Response; any other return value needs a kernel.view listener to convert it
+- B. A StreamedResponse generates its content at send time, making it suitable for large outputs
+- C. Response::HTTP_* constants (e.g. Response::HTTP_NOT_FOUND) are the idiomatic way to set status codes
+- D. Returning an array from an action is automatically serialized to JSON by the framework core
+- E. You can still modify the response headers after streaming of a StreamedResponse has begun
+
+??? success "Answer Q79"
+    **A, B, C**
+
+    Controllers must produce a Response object — a non-Response return value triggers kernel.view, and without a listener handling it an error occurs, so arrays are not auto-serialized by core. StreamedResponse executes its callback when the response is sent, which is why headers cannot be changed once streaming starts, and Response::HTTP_* constants keep status codes readable and typo-free.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
+
+**Q80.** For an invokable controller (a class with __invoke()), what value does the router store as _controller?  <small>_(medium · trap)_</small>
+
+- A. The class name only, e.g. App\Controller\ShowOrder
+- B. ClassName::__invoke, mirroring the classic method syntax
+- C. A closure wrapping the class
+- D. The route name, not the class
+
+??? success "Answer Q80"
+    **A**
+
+    Symfony recognizes an invokable controller by its bare class name; it never appends "::__invoke" the way it does for a named action method. Writing ClassName::__invoke as the _controller value is a common but incorrect habit carried over from classic controllers.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html#invokable-controllers)
+
+**Q81.** How does AbstractController obtain its helper services?  <small>_(hard · internals)_</small>
 
 - A. Via a lazy service locator injected through setContainer(), driven by getSubscribedServices()
 - B. Through constructor injection of each service
 - C. The full application container is injected
 
-??? success "Answer Q77"
+??? success "Answer Q81"
     **A**
 
     AbstractController implements ServiceSubscriberInterface; the compiler builds a per-controller locator containing only the subscribed services.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 
-**Q78.** For the URL `/search` (no `?page=`), what does `(int) $request->query->get('page')` evaluate to, and what is the safer call?  <small>_(hard · debug)_</small>
+**Q82.** For the URL `/search` (no `?page=`), what does `(int) $request->query->get('page')` evaluate to, and what is the safer call?  <small>_(hard · debug)_</small>
 
 - A. 0, because get() returns null which casts to 0; use getInt('page', 1) instead
 - B. 1, because get() defaults to 1
 - C. null, and the cast is skipped
 - D. It throws because 'page' is missing
 
-??? success "Answer Q78"
+??? success "Answer Q82"
     **A**
 
     InputBag::get() returns null for a missing key (default default is null), and (int) null is 0 — rarely the intended fallback. getInt('page', 1) coerces and guarantees the type with an explicit default.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html)
 
-**Q79.** When does a StreamedResponse produce its body?  <small>_(hard · internals)_</small>
+**Q83.** When does a StreamedResponse produce its body?  <small>_(hard · internals)_</small>
 
 - A. During send(), by invoking its callback
 - B. When it is constructed
 - C. During the kernel.controller event
 
-??? success "Answer Q79"
+??? success "Answer Q83"
     **A**
 
     The callback runs at send time and streams output; you cannot change headers once streaming has begun.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response)
 
-**Q80.** Inside a StreamedResponse callback, code echoes rows and then calls `$response->headers->set('Content-Type', 'text/csv')`. What is wrong?  <small>_(hard · trap)_</small>
+**Q84.** Inside a StreamedResponse callback, code echoes rows and then calls `$response->headers->set('Content-Type', 'text/csv')`. What is wrong?  <small>_(hard · trap)_</small>
 
 - A. Headers cannot be changed after output has started; set Content-Type before returning the response
 - B. StreamedResponse ignores Content-Type entirely
 - C. The callback must return the header array
 - D. You must use JsonResponse for CSV
 
-??? success "Answer Q80"
+??? success "Answer Q84"
     **A**
 
     The callback runs at send time; once bytes are flushed the headers are already sent, so header changes are ineffective. Set headers on the StreamedResponse before returning it from the action.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response)
 
-**Q81.** When does a lazy Symfony session actually start (session_start + Set-Cookie)?  <small>_(hard · internals)_</small>
+**Q85.** When does a lazy Symfony session actually start (session_start + Set-Cookie)?  <small>_(hard · internals)_</small>
 
 - A. Only when the session is first read or written
 - B. On every request automatically
 - C. When the kernel boots
 
-??? success "Answer Q81"
+??? success "Answer Q85"
     **A**
 
     Lazy sessions avoid emitting a session cookie for requests that never touch the session, preserving cacheability.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
-**Q82.** What is a caching side effect of touching the session on a public page?  <small>_(hard · single)_</small>
+**Q86.** What is a caching side effect of touching the session on a public page?  <small>_(hard · single)_</small>
 
 - A. A Set-Cookie header makes the response uncacheable by shared proxies
 - B. Nothing; sessions never affect HTTP caching
 - C. It disables Twig template caching
 
-??? success "Answer Q82"
+??? success "Answer Q86"
     **A**
 
     Shared caches must not store responses carrying a per-user Set-Cookie, so touching the session prevents shared caching.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/http_cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/http_cache.html)
 
-**Q83.** During a forwarded sub-request, what does Request::isMainRequest() return?  <small>_(hard · internals)_</small>
+**Q87.** During a forwarded sub-request, what does Request::isMainRequest() return?  <small>_(hard · internals)_</small>
 
 - A. false
 - B. true
 - C. null
 
-??? success "Answer Q83"
+??? success "Answer Q87"
     **A**
 
     The sub-request is dispatched with HttpKernelInterface::SUB_REQUEST, so isMainRequest() is false and some listeners (e.g. the firewall) skip.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
-**Q84.** Which constant does forward() pass to HttpKernel::handle(), and what is a consequence for the security firewall?  <small>_(hard · internals)_</small>
+**Q88.** Which constant does forward() pass to HttpKernel::handle(), and what is a consequence for the security firewall?  <small>_(hard · internals)_</small>
 
 - A. HttpKernelInterface::SUB_REQUEST — the firewall does not re-authenticate (isMainRequest() is false)
 - B. HttpKernelInterface::MASTER_REQUEST — the firewall re-runs
 - C. HttpKernelInterface::MAIN_REQUEST — a fresh security context is built
 - D. HttpKernelInterface::ASYNC_REQUEST — the request is queued
 
-??? success "Answer Q84"
+??? success "Answer Q88"
     **A**
 
     Sub-requests are dispatched with SUB_REQUEST (the old MASTER_REQUEST constant was removed; MAIN_REQUEST is used for the main request). Because isMainRequest() is false, listeners like the firewall skip re-authentication.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernelInterface.php)
 
-**Q85.** Which kernel event lets a listener turn an exception into a Response?  <small>_(hard · internals)_</small>
+**Q89.** Which kernel event lets a listener turn an exception into a Response?  <small>_(hard · internals)_</small>
 
 - A. kernel.exception (ExceptionEvent)
 - B. kernel.view
 - C. kernel.terminate
 
-??? success "Answer Q85"
+??? success "Answer Q89"
     **A**
 
     ExceptionEvent listeners can call setResponse(); otherwise the error controller renders the page.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 
-**Q86.** `$this->createNotFoundException('Missing');` is written on its own line, then the action continues and fatals with 'member function on null'. Why?  <small>_(hard · debug)_</small>
+**Q90.** `$this->createNotFoundException('Missing');` is written on its own line, then the action continues and fatals with 'member function on null'. Why?  <small>_(hard · debug)_</small>
 
 - A. createNotFoundException() only builds and returns the exception; without throw the action keeps running with the null entity
 - B. createNotFoundException() logs the error but never stops execution by design of the 404 flow
 - C. The exception is thrown but caught silently by the kernel
 - D. You must return the exception, not throw it
 
-??? success "Answer Q86"
+??? success "Answer Q90"
     **A**
 
     The helper is a factory: it returns a NotFoundHttpException and does not abort. You must `throw` it. Written alone, the exception is created, discarded, and execution continues on the null value.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
-**Q87.** An API must return problem+json error bodies for every HttpException. What is the cleanest app-wide approach?  <small>_(hard · scenario)_</small>
+**Q91.** An API must return problem+json error bodies for every HttpException. What is the cleanest app-wide approach?  <small>_(hard · scenario)_</small>
 
 - A. A kernel.exception listener (or a custom framework.error_controller) that maps exceptions to a JSON Response
 - B. Wrap every action body in try/catch and build JSON manually
 - C. Return new Response('', 404) from each action
 - D. Override every errorXXX.html.twig template
 
-??? success "Answer Q87"
+??? success "Answer Q91"
     **A**
 
     A single kernel.exception listener calling setResponse(), or a custom error_controller, centralises error rendering with content negotiation — far cleaner than per-action try/catch or per-status Twig templates.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
-**Q88.** A user uploads a file larger than `post_max_size` and the action crashes on a null `$request->files->get('avatar')`. What is the underlying cause?  <small>_(hard · debug)_</small>
+**Q92.** A user uploads a file larger than `post_max_size` and the action crashes on a null `$request->files->get('avatar')`. What is the underlying cause?  <small>_(hard · debug)_</small>
 
 - A. Exceeding post_max_size can yield an empty files bag (no exception), so the get() returns null — always null-check
 - B. move() threw a FileException that was swallowed
 - C. getMimeType() returns null for large files
 - D. Symfony automatically rejects the request with a 413
 
-??? success "Answer Q88"
+??? success "Answer Q92"
     **A**
 
     When post_max_size is exceeded, PHP may discard the POST data, leaving an empty files bag rather than raising an exception. Guard the result with an instanceof UploadedFile / isValid() check before using it.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/upload_file.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/upload_file.html)
 
-**Q89.** Which resolvers have the highest default priority (120) in Symfony 8?  <small>_(hard · internals)_</small>
+**Q93.** Which resolvers have the highest default priority (120) in Symfony 8?  <small>_(hard · internals)_</small>
 
 - A. RequestValueResolver and SessionValueResolver
 - B. DefaultValueResolver and VariadicValueResolver
 - C. RequestAttributeValueResolver and BackedEnumValueResolver
 
-??? success "Answer Q89"
+??? success "Answer Q93"
     **A**
 
     Request and Session resolvers run first at priority 120; the attribute, enum, uid and datetime resolvers sit at 100.
 
     :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Resources/config/web.php)
 
-**Q90.** A #[MapRequestPayload] argument fails validation. Which status is thrown?  <small>_(hard · single)_</small>
+**Q94.** A #[MapRequestPayload] argument fails validation. Which status is thrown?  <small>_(hard · single)_</small>
 
 - A. 422 Unprocessable Entity (400 if the body itself is malformed)
 - B. 500 Internal Server Error
 - C. 200 with a null argument
 
-??? success "Answer Q90"
+??? success "Answer Q94"
     **A**
 
     RequestPayloadValueResolver deserializes then validates; validation errors throw UnprocessableEntityHttpException (422).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html#mapping-the-whole-request-payload)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html#mapping-the-whole-request-payload)
 
-**Q91.** How do the #[MapRequestPayload]/#[MapQueryParameter] resolvers get activated?  <small>_(hard · internals)_</small>
+**Q95.** How do the #[MapRequestPayload]/#[MapQueryParameter] resolvers get activated?  <small>_(hard · internals)_</small>
 
 - A. They are targeted resolvers that run only when their attribute is present on the argument
 - B. They always run first in the priority chain
 - C. They require manual registration in services.yaml
 
-??? success "Answer Q91"
+??? success "Answer Q95"
     **A**
 
     These resolvers carry the controller.targeted_value_resolver tag and are invoked only for arguments bearing the matching attribute.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
-**Q92.** In a resolver, what is the difference between yielding nothing and `yield null`?  <small>_(hard · trap)_</small>
+**Q96.** In a resolver, what is the difference between yielding nothing and `yield null`?  <small>_(hard · trap)_</small>
 
 - A. Yielding nothing declines (next resolver runs); yield null binds a real null value to a nullable parameter
 - B. They are identical — both bind null
 - C. yield null declines; yielding nothing binds null
 - D. Both throw because null is not iterable
 
-??? success "Answer Q92"
+??? success "Answer Q96"
     **A**
 
     'Yields nothing' means 'not my argument' and passes control on; 'yield null' is a deliberate null bound to the parameter. Confusing them is the classic resolver bug.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
-**Q93.** Which resolvers/attributes are targeted (activated only by their attribute), not part of the priority chain? (choose 3)  <small>_(hard · multiple)_</small>
+**Q97.** Which resolvers/attributes are targeted (activated only by their attribute), not part of the priority chain? (choose 3)  <small>_(hard · multiple)_</small>
 
 - A. #[MapRequestPayload] / #[MapQueryString] (RequestPayloadValueResolver)
 - B. #[MapQueryParameter] (QueryParameterValueResolver)
 - C. #[MapUploadedFile] (RequestPayloadValueResolver)
 - D. RequestValueResolver (Request type-hint)
 
-??? success "Answer Q93"
+??? success "Answer Q97"
     **A, B, C**
 
     MapRequestPayload/MapQueryString, MapQueryParameter, MapUploadedFile (and #[CurrentUser]) are targeted resolvers, run only when the attribute is present. RequestValueResolver is a priority-120 chain resolver, not targeted.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
-**Q94.** A resolver copied from an old project implements `ArgumentValueResolverInterface` with supports()+resolve() and no longer works in Symfony 8. Why?  <small>_(hard · debug)_</small>
+**Q98.** A resolver copied from an old project implements `ArgumentValueResolverInterface` with supports()+resolve() and no longer works in Symfony 8. Why?  <small>_(hard · debug)_</small>
 
 - A. ArgumentValueResolverInterface was removed; implement ValueResolverInterface with a single resolve(): iterable
 - B. supports() must now return an iterable
 - C. The resolver just needs a higher priority
 - D. resolve() must be renamed to __invoke()
 
-??? success "Answer Q94"
+??? success "Answer Q98"
     **A**
 
     The split supports()/resolve() interface no longer exists in Symfony 8. Use ValueResolverInterface::resolve(Request, ArgumentMetadata): iterable and decline by yielding nothing instead of a supports() check.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/value_resolver.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
+
+**Q99.** Which statements about forward() (internal redirects) are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. forward() creates a sub-request handled inside the same HTTP request, and the browser URL does not change
+- B. Inside the forwarded controller, $request->isMainRequest() returns false
+- C. forward() sends a 307 response so the client replays the request to the other controller
+- D. The forwarded sub-request passes through the security firewall again
+
+??? success "Answer Q99"
+    **A, B**
+
+    forward() duplicates the request and runs another controller as a SUB_REQUEST within the same HTTP request, returning its Response directly — the client sees no new round-trip and the URL stays the same, which is also why isMainRequest() is false inside the target controller. No 3xx response is involved (that is an external redirect), and the firewall does not run again for the sub-request.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/forwarding.html)
+
+**Q100.** Which statements about AbstractController are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. Extending AbstractController is optional — any callable can serve as a controller
+- B. Its helpers get their services from a lazy service locator whose entries are listed in getSubscribedServices()
+- C. Its helper methods like render() and redirectToRoute() are protected, usable only from within the controller
+- D. It injects the full service container, so $this->container->get() can fetch any service in the app
+- E. Extending it is required for constructor autowiring to work in a controller
+
+??? success "Answer Q100"
+    **A, B, C**
+
+    AbstractController is optional convenience built on the service subscriber pattern: a lazy locator, scoped to the services declared in getSubscribedServices(), backs its protected helper methods. The container it holds is that limited locator, not the full application container, and autowiring works for any controller registered as a service — your own dependencies should be constructor-injected regardless of the base class.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller.html)
+
+**Q101.** Which statements about argument value resolvers are correct? (select all that apply)  <small>_(hard · multiple)_</small>
+
+- A. ValueResolverInterface::resolve() returns an iterable, and a resolver declines an argument by yielding nothing
+- B. Attribute resolvers like #[MapRequestPayload] and #[CurrentUser] are targeted: they act only when their attribute is present
+- C. All resolvers in the chain run for every argument and their yielded values are merged
+- D. A custom resolver must implement a supports() method that is called before resolve()
+
+??? success "Answer Q101"
+    **A, B**
+
+    The ArgumentResolver walks the ordered resolver chain and the first resolver that yields a value wins — resolvers opt out by yielding nothing, which replaces the old supports() mechanism removed with ArgumentValueResolverInterface. The targeted resolvers (MapRequestPayload, MapQueryParameter, MapUploadedFile, CurrentUser) activate only when their attribute decorates the argument; results are never merged across resolvers.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 ---
 

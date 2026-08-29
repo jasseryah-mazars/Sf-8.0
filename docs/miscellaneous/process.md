@@ -26,6 +26,33 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Console](../console/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Construis toujours une commande shell avec un tableau d'arguments — chaque élément est automatiquement échappé, ce qu'une simple chaîne shell n'offre jamais.
+
+### Imagine dans la vraie vie
+Process, c'est **confier une course à un assistant**. Écrire la commande sous forme de tableau met **chaque mot dans son propre sac étiqueté** (auto-échappé, rien de mal interprété) — contre aboyer une seule chaîne shell qu'il pourrait mal interpréter.
+
+### Dans Symfony
+```php
+new Process(['ls', '-la', $dossierUtilisateur]); // sûr même si $dossierUtilisateur contient des espaces ou `;`
+```
+
+### Exemple simple
+```php
+$process = new Process(['git', 'log', '--oneline']);
+$process->run();
+echo $process->getOutput();
+```
+
+### Comment le mémoriser 🧠
+`fromShellCommandline()` n'échappe **rien** — c'est un risque d'injection de commande si tu y insères une valeur utilisateur. Préfère toujours le constructeur avec un tableau d'arguments.
+
 ---
 
 ## Theory
@@ -254,13 +281,15 @@ For work that should be deferred/retried, dispatch a
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which constructor auto-escapes each argument?"
     - [x] A. `new Process(['ls', '-la'])` ✅
     - [ ] B. `Process::fromShellCommandline('ls -la')`
     - [ ] C. both equally
 
     **Why:** The array form escapes each element; the shell form does not.
-    **Ref:** [Process](https://symfony.com/doc/current/components/process.html).
+    **Ref:** [Process](https://symfony.com/doc/8.0/components/process.html).
 
 ??? question "Q2. What does `run()` return?"
     - [x] A. The process exit code ✅
@@ -268,14 +297,14 @@ For work that should be deferred/retried, dispatch a
     - [ ] C. `void`
 
     **Why:** `run()` returns the integer exit code; use `getOutput()` for stdout.
-    **Ref:** [Process](https://symfony.com/doc/current/components/process.html#usage).
+    **Ref:** [Process](https://symfony.com/doc/8.0/components/process.html#usage).
 
 ??? question "Q3. The default process timeout is…"
     - [x] A. 60 seconds ✅
     - [ ] B. unlimited
     - [ ] C. 30 seconds
 
-    **Why:** The default is 60 s; pass `null` to disable. **Ref:** [Process timeout](https://symfony.com/doc/current/components/process.html#process-timeout).
+    **Why:** The default is 60 s; pass `null` to disable. **Ref:** [Process timeout](https://symfony.com/doc/8.0/components/process.html#process-timeout).
 
 ## Key takeaways
 
@@ -299,7 +328,7 @@ For work that should be deferred/retried, dispatch a
 - **Confused with:** running work inline — for deferrable/retriable jobs, dispatch a message instead of blocking the request.
 
 ## Official References
-- [Official docs — Process](https://symfony.com/doc/current/components/process.html)
+- [Official docs — Process](https://symfony.com/doc/8.0/components/process.html)
 - [Symfony source — Process](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Process/Process.php)
 
 ## Video references
@@ -311,7 +340,7 @@ For work that should be deferred/retried, dispatch a
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/process.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/process.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -325,4 +354,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](lock.md)</small>
+<small>Related: [Console](../console/index.md) · [Messenger](../messenger/index.md) · [Lock](../appendices/out-of-syllabus/lock.md)</small>

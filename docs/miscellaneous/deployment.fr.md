@@ -33,6 +33,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+En production, Symfony charge le container **déjà compilé** tel quel — il ne redétecte jamais tout seul un changement de config, il faut vider et réchauffer le cache à chaque déploiement.
+
+### Imagine dans la vraie vie
+Déployer en production, c'est la mise en place d'un restaurant avant le service. Pendant la fenêtre calme de préparation, la cuisine pré-découpe et pré-portionne tout (réchauffage du cache) pour qu'aucune préparation ne vole de temps pendant le coup de feu du dîner.
+
+### Dans Symfony
+Modifier `services.yaml` puis déployer sans lancer `cache:clear --env=prod` fait tourner l'application avec l'**ancienne** version compilée du container — le changement n'a strictement aucun effet tant que le cache n'est pas régénéré.
+
+### Exemple simple
+```console
+$ composer install --no-dev --optimize-autoloader
+$ php bin/console cache:clear --env=prod
+$ php bin/console cache:warmup --env=prod
+```
+
+### Comment le mémoriser 🧠
+Si tu changes une "recette" (la config) mais sautes la "re-préparation" (le réchauffage du cache), la cuisine continue de servir l'ancien plat — c'est pour ça qu'il faut toujours vider **et** réchauffer à chaque déploiement.
+
+---
+
+
 ## Theory
 
 Déployer Symfony consiste à livrer le code dans un environnement optimisé pour
@@ -224,7 +248,7 @@ aucune mise en place à faire.
     - [ ] C. `--production`
 
     **Why:** `composer install --no-dev` ignore les paquets de `require-dev`.
-    **Ref:** [Deploying Symfony](https://symfony.com/doc/current/deployment.html).
+    **Ref:** [Deploying Symfony](https://symfony.com/doc/8.0/deployment.html).
 
 ??? question "Q2. What does `composer dump-env prod` create?"
     - [x] A. `.env.local.php` ✅
@@ -232,7 +256,7 @@ aucune mise en place à faire.
     - [ ] C. `config/prod.php`
 
     **Why:** Il compile la cascade en `.env.local.php` pour un chargement rapide.
-    **Ref:** [Configuring env vars in production](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).
+    **Ref:** [Configuring env vars in production](https://symfony.com/doc/8.0/configuration.html#configuring-environment-variables-in-production).
 
 ??? question "Q3. Why set `opcache.validate_timestamps=0` in prod?"
     - [x] A. To skip file-modification checks and serve cached bytecode ✅
@@ -241,7 +265,7 @@ aucune mise en place à faire.
 
     **Why:** Avec des déploiements immuables, sauter les vérifications de timestamps
     maximise les hits d'opcache (réinitialisez plutôt opcache au déploiement).
-    **Ref:** [Performance](https://symfony.com/doc/current/performance.html).
+    **Ref:** [Performance](https://symfony.com/doc/8.0/performance.html).
 
 ## Key takeaways
 
@@ -264,8 +288,8 @@ aucune mise en place à faire.
 - **Confused with:** la reconstruction automatique du dev — la prod ne détecte jamais automatiquement les changements de configuration.
 
 ## Official References
-- [Official docs — Deploying Symfony](https://symfony.com/doc/current/deployment.html)
-- [Official docs — Performance](https://symfony.com/doc/current/performance.html)
+- [Official docs — Deploying Symfony](https://symfony.com/doc/8.0/deployment.html)
+- [Official docs — Performance](https://symfony.com/doc/8.0/performance.html)
 - [Symfony source — CacheWarmerInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/CacheWarmer/CacheWarmerInterface.php)
 
 ## Video references
@@ -277,7 +301,7 @@ aucune mise en place à faire.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon et keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/deployment.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/deployment.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

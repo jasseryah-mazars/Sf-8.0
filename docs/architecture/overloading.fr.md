@@ -31,6 +31,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Surcharger un bundle, c'est changer son comportement sans jamais toucher à ses fichiers dans `vendor/` — chaque type de ressource a son propre "bon endroit" pour être remplacé.
+
+### Imagine dans la vraie vie
+Personnaliser un appartement meublé en location : tu n'arraches jamais les meubles du propriétaire (modifier `vendor/`) ; tu glisses une housse sur son canapé pour changer son aspect (décoration de service), tu accroches tes propres rideaux sur la tringle prévue à cet effet (`templates/bundles/<Nom>/`), et tu règles le chauffage depuis son panneau mural dédié (`config/packages/`).
+
+### Dans Symfony
+Pour changer l'apparence d'une page d'erreur fournie par un bundle tiers, tu crées un template au même chemin sous `templates/bundles/<NomDuBundle>/` — Symfony le préfère automatiquement à celui du bundle, sans toucher au code du bundle.
+
+### Exemple simple
+```
+templates/bundles/TwigBundle/Exception/error404.html.twig
+```
+Ce fichier remplace automatiquement la page 404 par défaut du bundle, sans modifier `vendor/`.
+
+### Comment le mémoriser 🧠
+Chaque changement a **un seul emplacement prévu** — mettre les rideaux sur la mauvaise tringle ne fait tout simplement rien. Et l'héritage de bundle (`getParent()`) a été **définitivement muré** — il n'existe plus.
+
+
 ## Theory
 
 « Overloading » signifie modifier ce que fournit un **bundle tiers** sans éditer son
@@ -267,7 +288,7 @@ l'overloading est réservé aux ressources tierces.
     - [ ] C. Inside `vendor/`
 
     **Why:** Twig résout les surcharges depuis `templates/bundles/<BundleName>/`. **Ref:**
-    [Overriding bundle templates](https://symfony.com/doc/current/bundles/override.html).
+    [Overriding bundle templates](https://symfony.com/doc/8.0/bundles/override.html).
 
 ??? question "Q2. Which is the current way to change a bundle's inherited resources?"
     - [x] A. Per-resource overriding (templates/services/config) ✅
@@ -275,7 +296,7 @@ l'overloading est réservé aux ressources tierces.
     - [ ] C. Editing the bundle in `vendor/`
 
     **Why:** L'héritage de bundle a été supprimé dans Symfony 5. **Ref:**
-    [Overriding bundles](https://symfony.com/doc/current/bundles/override.html).
+    [Overriding bundles](https://symfony.com/doc/8.0/bundles/override.html).
 
 ??? question "Q3. How do you augment a bundle service without replacing it?"
     - [x] A. Decorate it (`#[AsDecorator]` / `decorates:`) ✅
@@ -283,7 +304,7 @@ l'overloading est réservé aux ressources tierces.
     - [ ] C. Use `getParent()`
 
     **Why:** La décoration enveloppe l'original et l'injecte sous forme de `.inner`. **Ref:**
-    [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html).
+    [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html).
 
 ## Key takeaways
 
@@ -307,8 +328,8 @@ l'overloading est réservé aux ressources tierces.
 - **Confused with:** [Bridges](bridges.md) — l'overloading personnalise un bundle existant ; un bridge relie un component à une bibliothèque tierce.
 
 ## Official References
-- [Official docs — Overriding bundles](https://symfony.com/doc/current/bundles/override.html)
-- [Service decoration](https://symfony.com/doc/current/service_container/service_decoration.html)
+- [Official docs — Overriding bundles](https://symfony.com/doc/8.0/bundles/override.html)
+- [Service decoration](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 - [Symfony source — bundles](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bundle)
 
 ## Video references
@@ -321,7 +342,7 @@ l'overloading est réservé aux ressources tierces.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/override.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/override.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

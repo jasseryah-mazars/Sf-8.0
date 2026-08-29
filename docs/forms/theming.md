@@ -26,7 +26,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Rendering forms](rendering.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un thème de formulaire est un jeu de blocs Twig qui décide à quoi ressemble chaque fragment (label, widget, erreurs) — et Symfony cherche toujours le bloc le plus précis d'abord.
+
+### Imagine dans la vraie vie
+Résoudre un bloc de formulaire, c'est comme une réceptionniste qui cherche quelqu'un : elle essaie d'abord le nom complet et unique, puis le nom de famille, puis juste le service, et enfin "n'importe quel employé" — la première entrée qui existe gagne.
+
+### Dans Symfony
+Un thème comme `bootstrap_5_layout.html.twig` fournit uniquement le **balisage HTML** — il ne fournit **aucun CSS** ; tu dois toujours inclure Bootstrap toi-même pour que ça s'affiche correctement.
+
+### Exemple simple
+```twig
+{% form_theme form 'form/mon_theme.html.twig' %}
+```
+
+### Comment le mémoriser 🧠
+"Un patron de couturier taille les coutures, pas le tissu" : un thème intégré façonne le balisage, jamais le style visuel — le CSS reste toujours ta responsabilité.
 
 ## Theory
 
@@ -230,6 +251,8 @@ than a block override. Reach for a full custom theme only when the default
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In which order are candidate blocks tried?"
     - [x] A. Most specific (unique id) → least specific (`form_widget`) ✅
     - [ ] B. Alphabetically
@@ -238,7 +261,7 @@ than a block override. Reach for a full custom theme only when the default
 
     **Why:** The block-prefix hierarchy is walked from the unique per-field name
     down to the root `form_*` block; the first existing block is used.
-    **Ref:** [Form themes](https://symfony.com/doc/current/form/form_themes.html).
+    **Ref:** [Form themes](https://symfony.com/doc/8.0/form/form_themes.html).
 
 ??? question "Q2. What does `bootstrap_5_layout.html.twig` provide?"
     - [ ] A. Bootstrap CSS and JS assets
@@ -248,7 +271,7 @@ than a block override. Reach for a full custom theme only when the default
 
     **Why:** Built-in layouts are theme templates (markup only). You still load
     the CSS framework yourself.
-    **Ref:** [Bootstrap form theme](https://symfony.com/doc/current/form/bootstrap5.html).
+    **Ref:** [Bootstrap form theme](https://symfony.com/doc/8.0/form/bootstrap5.html).
 
 ??? question "Q3. When two global themes define the same block…"
     - [x] A. The last theme in the list wins ✅
@@ -258,7 +281,7 @@ than a block override. Reach for a full custom theme only when the default
 
     **Why:** `twig.form_themes` are applied in order; later entries override
     earlier ones.
-    **Ref:** [Form themes docs](https://symfony.com/doc/current/form/form_themes.html).
+    **Ref:** [Form themes docs](https://symfony.com/doc/8.0/form/form_themes.html).
 
 ## Key takeaways
 
@@ -283,8 +306,8 @@ than a block override. Reach for a full custom theme only when the default
 - **Confused with:** [Twig templating](../twig/index.md) — themes are ordinary Twig blocks applied via `form_theme`/`twig.form_themes`, not a separate engine.
 
 ## Official References
-- [Official Symfony docs — Form themes](https://symfony.com/doc/current/form/form_themes.html)
-- [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/current/form/bootstrap5.html)
+- [Official Symfony docs — Form themes](https://symfony.com/doc/8.0/form/form_themes.html)
+- [Official Symfony docs — Bootstrap 5 form theme](https://symfony.com/doc/8.0/form/bootstrap5.html)
 - [Symfony source — form_div_layout.html.twig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig)
 
 ## Video references
@@ -296,7 +319,7 @@ than a block override. Reach for a full custom theme only when the default
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/form_themes.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/form_themes.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

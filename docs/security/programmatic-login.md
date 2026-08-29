@@ -26,8 +26,30 @@
 
     **Syllabus:** `Security → Programmatic Login` ·
     **Level:** Expert ·
+
     **Est. time:** 20 min ·
     **Prerequisites:** [Authenticators](authenticators.md) · [Authentication](authentication.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le service `Security::login()` permet de connecter un utilisateur depuis le code — après une inscription réussie, par exemple, sans lui faire remplir un formulaire de connexion séparé.
+
+### Imagine dans la vraie vie
+La réception d'un hôtel peut enregistrer un client sans qu'il remplisse lui-même le formulaire — après une réservation de mariage, le réceptionniste swipe le terminal maître et remet une carte-clé. La carte passe par la *même* machine d'encodage et les mêmes registres qu'un enregistrement classique.
+
+### Dans Symfony
+Après une inscription réussie (`$em->persist($utilisateur)`), appeler `$security->login($utilisateur)` connecte immédiatement le nouvel utilisateur — pas besoin de le renvoyer vers une page de connexion pour ressaisir son mot de passe.
+
+### Exemple simple
+```php
+$this->security->login($utilisateur, 'form_login', 'main');
+```
+
+### Comment le mémoriser 🧠
+`login()` exécute le **même pipeline authenticator et les mêmes événements** qu'une connexion interactive classique — ce n'est **pas** un raccourci qui contourne la sécurité normale.
 
 ---
 
@@ -303,6 +325,8 @@ no memory of the previous one.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which service logs a user in programmatically in Symfony 8?"
     - [ ] A. `TokenStorageInterface::setToken()` is the supported API
     - [x] B. `Symfony\Bundle\SecurityBundle\Security::login()` ✅
@@ -311,7 +335,7 @@ no memory of the previous one.
 
     **Why:** The SecurityBundle `Security` service wraps the authenticator
     pipeline; setting tokens manually skips badges, events and listeners.
-    **Ref:** [Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically).
+    **Ref:** [Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically).
 
 ??? question "Q2. When must you pass an authenticator name to `login()`?"
     - [ ] A. Always — it has no default
@@ -321,7 +345,7 @@ no memory of the previous one.
 
     **Why:** With a single authenticator it is unambiguous; with several,
     Symfony refuses to guess. Built-ins are referenced by their config key.
-    **Ref:** [Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically).
+    **Ref:** [Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically).
 
 ??? question "Q3. What does `Security::logout()` do about CSRF by default?"
     - [x] A. It validates the logout CSRF token; pass `false` to skip ✅
@@ -331,7 +355,7 @@ no memory of the previous one.
 
     **Why:** `logout(bool $validateCsrf = true)` — programmatic calls outside
     the logout form must opt out explicitly.
-    **Ref:** [Logout programmatically](https://symfony.com/doc/current/security.html#logging-out).
+    **Ref:** [Logout programmatically](https://symfony.com/doc/8.0/security.html#logging-out).
 
 ??? question "Q4. Which statement about `login()` and events is correct?"
     - [ ] A. It stores a token silently, skipping all events
@@ -342,7 +366,7 @@ no memory of the previous one.
     **Why:** `login()` delegates to the same authenticator machinery as an
     interactive login, so listeners (remember-me, throttling reset, audit)
     all run.
-    **Ref:** [Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically).
+    **Ref:** [Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically).
 
 ## Key takeaways
 
@@ -378,8 +402,8 @@ no memory of the previous one.
   wraps and preserves the original token; `login()` simply replaces it.
 
 ## Official References
-- [Symfony docs — Login programmatically](https://symfony.com/doc/current/security.html#login-programmatically)
-- [Symfony docs — Logging out](https://symfony.com/doc/current/security.html#logging-out)
+- [Symfony docs — Login programmatically](https://symfony.com/doc/8.0/security.html#login-programmatically)
+- [Symfony docs — Logging out](https://symfony.com/doc/8.0/security.html#logging-out)
 - [Symfony source — Security service](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/SecurityBundle/Security.php)
 
 ## Video references
@@ -391,7 +415,7 @@ no memory of the previous one.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#login-programmatically) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#login-programmatically) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

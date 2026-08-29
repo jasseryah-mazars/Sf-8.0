@@ -20,6 +20,20 @@ regexes, and reference types and this stage is largely reading comprehension.
     | **Revision priority** | **High** |
     | **Est. time** | 3–4 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le routeur est l'aiguilleur qui décide, pour chaque URL demandée, quel morceau de code (quel contrôleur) doit répondre.
+
+**Pourquoi ça existe ?** Sans routeur, il faudrait écrire toi-même un immense `if/else` sur l'URL dans un seul fichier géant. Le routeur automatise cette correspondance URL → code, dans les deux sens (il sait aussi reconstruire une URL à partir d'un nom de route).
+
+**🏠 Analogie de la vraie vie :** Un standard téléphonique d'entreprise. Tu composes une extension (l'URL), le standard (le routeur) regarde son annuaire et te connecte au bon bureau (le contrôleur). Et si un collègue change de bureau, le standard peut aussi te donner le nouveau numéro à composer (générer une URL à partir d'un nom).
+
+**Symfony dans la vraie vie :** `#[Route('/produits/{id}')]` est l'entrée d'annuaire ; `UrlMatcher` est le standardiste qui trouve la bonne ligne ; `UrlGenerator` fait l'inverse (nom de route → URL réelle).
+
+**⚠️ Erreur fréquente :** déclarer une route générique (`/produits/{id}`) avant une route spécifique (`/produits/nouveau`) — la première capture tout, la seconde n'est jamais atteinte.
+
+**🧠 Comment le mémoriser :** "Le routeur ne devine jamais — il compare, dans l'ordre, jusqu'à trouver un match."
+
 ## Why routing pairs with controllers
 
 A route is meaningless without a controller to run, and a controller is
@@ -70,6 +84,6 @@ explains every performance and precedence question the exam asks.
 
 ## Official References
 
-- [Symfony documentation — Routing](https://symfony.com/doc/current/routing.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Routing](https://symfony.com/doc/8.0/routing.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -22,7 +22,7 @@ categories:
           Private services can be inlined into their single consumer and pruned
           when unreferenced, shrinking the compiled container, and it discourages
           the service-locator anti-pattern of pulling from the container.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-CONTAINER-02"
         type: "single"
@@ -43,7 +43,7 @@ categories:
         explanation: >-
           Private services are not fetchable by id from the public container; they
           may only be injected. Fetching one throws ServiceNotFoundException.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-CONTAINER-03"
         type: "internals"
@@ -64,7 +64,7 @@ categories:
         explanation: >-
           PhpDumper writes a compiled PHP class with a method per service; the
           runtime uses it directly, never the ContainerBuilder.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection/compilation.html"
 
       - id: "DI-CONTAINER-04"
         type: "internals"
@@ -85,7 +85,7 @@ categories:
         explanation: >-
           Definition/Reference/Alias/Parameter are build-time recipes held by the
           ContainerBuilder; the runtime container holds instances.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection/compilation.html"
 
       - id: "DI-CONTAINER-05"
         type: "true-false"
@@ -104,7 +104,7 @@ categories:
           means the same instance is reused across get() calls. The default service
           is private and shared. A common trap confuses the two — a service can be
           public and non-shared, or private and shared, in any combination.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-CONTAINER-06"
         type: "internals"
@@ -127,7 +127,7 @@ categories:
           and later calls return the same object. shared: false disables caching, so
           the container rebuilds the service on every request. This is orthogonal to
           public/private — the misconception is thinking non-shared implies private.
-        documentation: "https://symfony.com/doc/current/service_container/shared.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/shared.html"
 
       - id: "DI-CONTAINER-07"
         type: "debug"
@@ -151,7 +151,7 @@ categories:
           fix is constructor injection/autowiring, not making it public. It is
           registered and the container is compiled; the misconception is treating
           get() as a general-purpose lookup instead of using DI.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-CONTAINER-08"
         type: "internals"
@@ -174,7 +174,7 @@ categories:
           parameter bag (making it a FrozenParameterBag), then PhpDumper writes the
           optimised class to var/cache. It all happens at build time; nothing about
           compilation is deferred to runtime, which is the key misconception.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection/compilation.html"
 
       # --- built-in-services.md ---
       - id: "DI-BUILTIN-01"
@@ -196,7 +196,7 @@ categories:
         explanation: >-
           The Request is per-cycle and can change across sub-requests, so it is not
           injectable directly. Inject RequestStack and read the current request.
-        documentation: "https://symfony.com/doc/current/service_container/request.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/request.html"
 
       - id: "DI-BUILTIN-02"
         type: "single"
@@ -217,7 +217,7 @@ categories:
         explanation: >-
           debug:autowiring shows the types you can type-hint and which service each
           resolves to; debug:container inspects a definition by id.
-        documentation: "https://symfony.com/doc/current/service_container/debug.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/debug.html"
 
       - id: "DI-BUILTIN-03"
         type: "single"
@@ -238,7 +238,7 @@ categories:
         explanation: >-
           debug:container lists public services and aliases; add --show-private to
           include private ones.
-        documentation: "https://symfony.com/doc/current/service_container/debug.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/debug.html"
 
       - id: "DI-BUILTIN-04"
         type: "trap"
@@ -262,7 +262,7 @@ categories:
           fatals. Guard with getCurrentRequest()?->getLocale() or an early null
           check. RequestStack is autowirable everywhere; the trap is assuming a
           request always exists.
-        documentation: "https://symfony.com/doc/current/service_container/request.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/request.html"
 
       - id: "DI-BUILTIN-05"
         type: "internals"
@@ -285,7 +285,7 @@ categories:
           under the id 'router' with a concrete class, then adds an autowiring alias
           from the interface FQCN (RouterInterface) to that id so type-hints resolve.
           debug:autowiring lists those aliases; debug:container inspects the id.
-        documentation: "https://symfony.com/doc/current/service_container/debug.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/debug.html"
 
       - id: "DI-BUILTIN-06"
         type: "multiple"
@@ -308,7 +308,7 @@ categories:
           discovery tool for finding the right type-hint. A raw Request cannot be
           injected (use RequestStack), and pulling services with $container->get() in
           business code is the service-locator anti-pattern.
-        documentation: "https://symfony.com/doc/current/service_container/debug.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/debug.html"
 
       # --- parameters.md ---
       - id: "DI-PARAM-01"
@@ -330,7 +330,7 @@ categories:
         explanation: >-
           Env placeholders resolve at runtime so a single compiled container works
           across environments; parameters (%x%) are frozen at compile time.
-        documentation: "https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables"
+        documentation: "https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables"
 
       - id: "DI-PARAM-02"
         type: "single"
@@ -351,7 +351,7 @@ categories:
         explanation: >-
           The int: processor casts the raw env string to an integer. Processors
           chain right-to-left.
-        documentation: "https://symfony.com/doc/current/configuration/env_var_processors.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/env_var_processors.html"
 
       - id: "DI-PARAM-03"
         type: "config"
@@ -372,7 +372,7 @@ categories:
         explanation: >-
           param: names a container parameter; a bare string without %% is a
           literal, and env: reads an environment variable.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-PARAM-04"
         type: "single"
@@ -393,7 +393,7 @@ categories:
         explanation: >-
           A doubled percent escapes to a single literal % so it is not treated as a
           parameter reference.
-        documentation: "https://symfony.com/doc/current/configuration.html#configuration-parameters"
+        documentation: "https://symfony.com/doc/8.0/configuration.html#configuration-parameters"
 
       - id: "DI-PARAM-05"
         type: "internals"
@@ -416,7 +416,7 @@ categories:
           TIMEOUT; default:app.timeout supplies the app.timeout parameter as a
           fallback when TIMEOUT is unset; int: then casts the resolved value. The
           misconception is reading it left-to-right, which inverts the meaning.
-        documentation: "https://symfony.com/doc/current/configuration/env_var_processors.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/env_var_processors.html"
 
       - id: "DI-PARAM-06"
         type: "trap"
@@ -439,7 +439,7 @@ categories:
           is a string while the argument expects int. Use %env(int:MAX)%. #[Autowire]
           fully supports env placeholders and no prior parameter declaration is needed;
           the trap is assuming env values are already typed.
-        documentation: "https://symfony.com/doc/current/configuration/env_var_processors.html"
+        documentation: "https://symfony.com/doc/8.0/configuration/env_var_processors.html"
 
       - id: "DI-PARAM-07"
         type: "internals"
@@ -462,7 +462,7 @@ categories:
           freezes it into a FrozenParameterBag, after which parameters are read-only.
           This is why parameters are compile-time constants — the misconception is
           expecting to mutate parameters at runtime.
-        documentation: "https://symfony.com/doc/current/configuration.html#configuration-parameters"
+        documentation: "https://symfony.com/doc/8.0/configuration.html#configuration-parameters"
 
       - id: "DI-PARAM-08"
         type: "debug"
@@ -484,7 +484,7 @@ categories:
           Reading a missing parameter throws ParameterNotFoundException; it never
           returns null. Guard optional lookups with has() before get(). The common
           bug is assuming an absent parameter silently becomes null.
-        documentation: "https://symfony.com/doc/current/configuration.html#configuration-parameters"
+        documentation: "https://symfony.com/doc/8.0/configuration.html#configuration-parameters"
 
       - id: "DI-PARAM-09"
         type: "true-false"
@@ -503,7 +503,7 @@ categories:
           resolves it at runtime, which is exactly why one compiled container works
           across environments and changing an env var needs no cache rebuild. Only
           plain parameters (%x%) are frozen at compile time.
-        documentation: "https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables"
+        documentation: "https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables"
 
       # --- registration.md ---
       - id: "DI-REG-01"
@@ -525,7 +525,7 @@ categories:
         explanation: >-
           PSR-4 auto-registration creates one definition per class using the FQCN
           as the service id.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-REG-02"
         type: "single"
@@ -546,7 +546,7 @@ categories:
         explanation: >-
           Autoconfigure adds tags automatically (e.g. event subscriber); autowire
           is the separate flag that fills arguments by type.
-        documentation: "https://symfony.com/doc/current/service_container.html#the-autoconfigure-option"
+        documentation: "https://symfony.com/doc/8.0/service_container.html#the-autoconfigure-option"
 
       - id: "DI-REG-03"
         type: "single"
@@ -567,7 +567,7 @@ categories:
         explanation: >-
           An alias from the interface id to the concrete service lets autowiring
           resolve the interface type-hint.
-        documentation: "https://symfony.com/doc/current/service_container/alias_private.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/alias_private.html"
 
       - id: "DI-REG-04"
         type: "config"
@@ -590,7 +590,7 @@ categories:
           constructor arguments by type, and autoconfigure applies tags based on
           implemented interfaces. The id is the FQCN. The glob registers every class
           in the directory, not just annotated ones.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-REG-05"
         type: "internals"
@@ -613,7 +613,7 @@ categories:
           later, more specific entry for the same id overrides it. This is the
           idiomatic way to tweak one autowired service. It is not an error and the
           glob does not win.
-        documentation: "https://symfony.com/doc/current/service_container.html"
+        documentation: "https://symfony.com/doc/8.0/service_container.html"
 
       - id: "DI-REG-06"
         type: "trap"
@@ -636,7 +636,7 @@ categories:
           (strings, ints, arrays). Those must be bound explicitly via bind,
           #[Autowire], or a parameter. Objects, aliases, and single implementations
           all autowire fine.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-REG-07"
         type: "debug"
@@ -659,7 +659,7 @@ categories:
           container build. Optional dependencies use nullable constructor args or
           NULL_ON_INVALID_REFERENCE, not a broken alias. The misconception is
           expecting a missing target to become null.
-        documentation: "https://symfony.com/doc/current/service_container/alias_private.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/alias_private.html"
 
       # --- decoration.md ---
       - id: "DI-DECOR-01"
@@ -681,7 +681,7 @@ categories:
         explanation: >-
           DecoratorServicePass renames the decorated service and exposes it as
           .inner so the decorator can delegate to it.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
 
       - id: "DI-DECOR-02"
         type: "trap"
@@ -702,7 +702,7 @@ categories:
         explanation: >-
           #[AsDecorator] declares the decoration; #[AutowireDecorated] resolves the
           parameter to the .inner service.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
 
       - id: "DI-DECOR-03"
         type: "trap"
@@ -723,7 +723,7 @@ categories:
         explanation: >-
           Higher priority decorators are applied first and end up innermost;
           consumers receive the lowest-priority, outermost decorator.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority"
 
       - id: "DI-DECOR-04"
         type: "single"
@@ -744,7 +744,7 @@ categories:
         explanation: >-
           ignore drops the decorator; null would inject null; exception (the
           default) throws when the target is absent.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
 
       - id: "DI-DECOR-05"
         type: "scenario"
@@ -767,7 +767,7 @@ categories:
           to the original), so caching needs the higher number to sit directly around
           the original, and logging the lower number to become the outermost wrapper
           consumers hit first. Assuming lower priority runs first inverts the chain.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html#decoration-priority"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html#decoration-priority"
 
       - id: "DI-DECOR-06"
         type: "debug"
@@ -791,7 +791,7 @@ categories:
           causing infinite recursion. You must reference the renamed original via
           .inner or #[AutowireDecorated]. Visibility and priority are unrelated to
           the loop.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
 
       - id: "DI-DECOR-07"
         type: "config"
@@ -814,7 +814,7 @@ categories:
           nullable this becomes a TypeError at instantiation. The fix is a nullable
           type (?MailerInterface) and nullsafe delegation. ignore (not null) is what
           removes the decorator; exception is the default that throws at build.
-        documentation: "https://symfony.com/doc/current/service_container/service_decoration.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_decoration.html"
 
       # --- tags.md ---
       - id: "DI-TAGS-01"
@@ -836,7 +836,7 @@ categories:
         explanation: >-
           tagged_locator injects a ServiceLocator that instantiates services on
           demand, keyed by the configured index; tagged_iterator yields instances.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       - id: "DI-TAGS-02"
         type: "single"
@@ -857,7 +857,7 @@ categories:
         explanation: >-
           Tagged services are ordered by descending priority, so higher priority
           comes first.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html#tagged-services-with-priority"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html#tagged-services-with-priority"
 
       - id: "DI-TAGS-03"
         type: "single"
@@ -878,7 +878,7 @@ categories:
         explanation: >-
           Autoconfiguration maps an interface to a tag so all implementers are
           tagged without manual annotation.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html"
 
       - id: "DI-TAGS-04"
         type: "single"
@@ -901,7 +901,7 @@ categories:
           iterate all of them), while tagged_locator injects a ServiceLocator that
           builds each service lazily on get() and is keyed for pick-one-of-many. The
           trap is swapping their laziness.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html"
 
       - id: "DI-TAGS-05"
         type: "config"
@@ -925,7 +925,7 @@ categories:
           #[AsTaggedItem(index:)] attribute — not the service id by default. If two
           services resolve to the same key, the later one silently overwrites the
           earlier.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html"
 
       - id: "DI-TAGS-06"
         type: "true-false"
@@ -943,7 +943,7 @@ categories:
           A tag is inert build-time metadata; on its own it does nothing. Something —
           a tagged_iterator/tagged_locator argument or a compiler pass calling
           findTaggedServiceIds() — must consume the tag for it to have any effect.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html"
 
       - id: "DI-TAGS-07"
         type: "code"
@@ -966,7 +966,7 @@ categories:
           iterable of the instantiated tagged services, ordered by descending
           priority. #[AutowireLocator] would give the lazy keyed locator; the
           attribute does not filter down to one service.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html"
       - id: "DI-TAGS-SCENARIO-01"
         type: "scenario"
         difficulty: "hard"
@@ -990,7 +990,7 @@ categories:
           duplicate check and no error. This is the classic "my handler
           vanished" bug; index keys must be treated as unique, like a
           primary key.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       # --- semantic-config.md ---
       - id: "DI-SEMCFG-01"
@@ -1012,7 +1012,7 @@ categories:
         explanation: >-
           Configuration defines allowed keys, types, defaults and validation;
           Extension::load() only consumes the processed result.
-        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/configuration.html"
 
       - id: "DI-SEMCFG-02"
         type: "internals"
@@ -1033,7 +1033,7 @@ categories:
         explanation: >-
           Prepend runs first so a bundle can inject default configuration into
           other bundles before they load.
-        documentation: "https://symfony.com/doc/current/bundles/prepend_extension.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/prepend_extension.html"
 
       - id: "DI-SEMCFG-03"
         type: "single"
@@ -1054,7 +1054,7 @@ categories:
         explanation: >-
           config:dump-reference dumps the schema defined by Configuration;
           debug:config shows the currently resolved values.
-        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/configuration.html"
 
       - id: "DI-SEMCFG-04"
         type: "internals"
@@ -1077,7 +1077,7 @@ categories:
           the extension logic (loadExtension) onto the bundle class itself, so a
           separate Configuration/Extension pair is no longer required. Kernel::build()
           registers compiler passes, not bundle semantic config.
-        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/configuration.html"
 
       - id: "DI-SEMCFG-05"
         type: "trap"
@@ -1100,7 +1100,7 @@ categories:
           prints the schema (allowed keys, types, defaults) defined by Configuration.
           Confusing the two is a common trap — one shows what is set, the other what
           is allowed.
-        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/configuration.html"
 
       - id: "DI-SEMCFG-06"
         type: "code"
@@ -1123,7 +1123,7 @@ categories:
           runs before every extension's load(), and prependExtensionConfig() injects
           config into another bundle's namespace. Doing it in load() would be too late,
           and setParameter() sets a parameter, not another bundle's config.
-        documentation: "https://symfony.com/doc/current/bundles/prepend_extension.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/prepend_extension.html"
 
       - id: "DI-SEMCFG-07"
         type: "single"
@@ -1145,7 +1145,7 @@ categories:
           The root key is derived from the extension/bundle name: the class name minus
           the Bundle suffix, converted to snake_case, giving acme_blog. The
           misconception is using the class name verbatim or keeping the Bundle suffix.
-        documentation: "https://symfony.com/doc/current/bundles/configuration.html"
+        documentation: "https://symfony.com/doc/8.0/bundles/configuration.html"
 
       # --- factories.md ---
       - id: "DI-FACTORY-01"
@@ -1167,7 +1167,7 @@ categories:
         explanation: >-
           With a factory, the container calls the factory and passes the
           definition's arguments to it, not to a constructor.
-        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/factories.html"
 
       - id: "DI-FACTORY-02"
         type: "trap"
@@ -1188,7 +1188,7 @@ categories:
         explanation: >-
           There is no dedicated #[Factory] attribute; factories are configured with
           #[Autowire(factory:)] or in YAML/PHP config.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-FACTORY-03"
         type: "config"
@@ -1209,7 +1209,7 @@ categories:
         explanation: >-
           An array of [reference, method] denotes a method call on a service; a
           static factory uses the 'Class::method' string form.
-        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/factories.html"
 
       - id: "DI-FACTORY-04"
         type: "debug"
@@ -1231,7 +1231,7 @@ categories:
           The '@svc::method' string is invalid syntax for an instance-method factory;
           use the array form ['@svc', 'method']. The 'Class::method' string form is
           reserved for static factories. The other forms are not recognised.
-        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/factories.html"
 
       - id: "DI-FACTORY-05"
         type: "single"
@@ -1254,7 +1254,7 @@ categories:
           the service's __invoke() and stores the return value. Explicitly naming
           __invoke via the '::' string form is invalid; the array form is used for
           named instance methods, not required for invokables.
-        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/factories.html"
 
       - id: "DI-FACTORY-06"
         type: "config"
@@ -1277,7 +1277,7 @@ categories:
           constructor, and arguments are passed to open(), not a constructor. The
           instance-method array form would require an existing service instance, which
           the private constructor prevents.
-        documentation: "https://symfony.com/doc/current/service_container/factories.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/factories.html"
 
       # --- compiler-passes.md ---
       - id: "DI-PASS-01"
@@ -1300,7 +1300,7 @@ categories:
           Compiler passes are registered programmatically via
           ContainerBuilder::addCompilerPass(), typically in Kernel::build() or a
           bundle's build(). There is no core attribute for this.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-02"
         type: "internals"
@@ -1321,7 +1321,7 @@ categories:
         explanation: >-
           PassConfig runs passes in phase order; unspecified passes run in the
           before-optimization phase.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-03"
         type: "internals"
@@ -1342,7 +1342,7 @@ categories:
         explanation: >-
           It returns definitions' ids each mapped to the attributes of every
           occurrence of the tag, used to wire collectors at compile time.
-        documentation: "https://symfony.com/doc/current/service_container/tags.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/tags.html"
 
       - id: "DI-PASS-04"
         type: "internals"
@@ -1363,7 +1363,7 @@ categories:
         explanation: >-
           Compilation deals only with definitions; nothing is instantiated yet, so
           calling get() inside a pass is wrong.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-05"
         type: "scenario"
@@ -1386,7 +1386,7 @@ categories:
           a service that the autowiring/optimization phase might still reference,
           breaking resolution. AFTER_REMOVING runs once pruning is done, and mixing it
           into OPTIMIZE races with autowiring.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-06"
         type: "trap"
@@ -1408,7 +1408,7 @@ categories:
           Within a phase, addCompilerPass orders by priority with higher running
           first. The trap is assuming lower numbers run first (as some other Symfony
           orderings work); for compiler passes higher priority is earlier.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-07"
         type: "debug"
@@ -1431,7 +1431,7 @@ categories:
           Definition objects (findDefinition, addMethodCall, new Reference), never
           live instances. Calling get() during compilation is the classic mistake;
           visibility and spelling are not the cause here.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-08"
         type: "multiple"
@@ -1454,7 +1454,7 @@ categories:
           application Kernel::build() or a bundle's build(). There is no #[CompilerPass]
           attribute and no services.yaml tag that registers a pass — those are common
           invented answers.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       - id: "DI-PASS-09"
         type: "code"
@@ -1477,7 +1477,7 @@ categories:
           determines when in PassConfig the pass runs, and a priority that orders
           passes within that phase (higher first). It has nothing to do with service
           ids, tags, or environments.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 
       # --- autowiring.md ---
       - id: "DI-AUTOWIRE-01"
@@ -1499,7 +1499,7 @@ categories:
         explanation: >-
           Autowiring maps a type-hint to a service; scalars and env vars must be
           bound explicitly with bind or #[Autowire].
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-AUTOWIRE-02"
         type: "single"
@@ -1520,7 +1520,7 @@ categories:
         explanation: >-
           Ambiguity is a hard build error; you disambiguate with a named alias,
           #[Target], #[Autowire(service:)] or bind.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-AUTOWIRE-03"
         type: "single"
@@ -1541,7 +1541,7 @@ categories:
         explanation: >-
           #[Target] binds to a named autowiring alias by name, so renaming the
           constructor parameter does not break wiring.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html#fixing-non-autowireable-arguments"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html#fixing-non-autowireable-arguments"
 
       - id: "DI-AUTOWIRE-04"
         type: "internals"
@@ -1564,7 +1564,7 @@ categories:
           'Type $paramName'. Autowiring matches it when your constructor parameter is
           named identically — which is fragile, so #[Target('requestLogger')] states
           the intent explicitly and survives parameter renames.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-AUTOWIRE-05"
         type: "trap"
@@ -1587,7 +1587,7 @@ categories:
           %param% / %env()% expression), not a service reference. Use the named
           argument service: to pin a service id. Visibility is irrelevant and no @
           prefix is used in attributes.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-AUTOWIRE-06"
         type: "debug"
@@ -1610,7 +1610,7 @@ categories:
           happens if you explicitly opt in with a nullable argument and default
           (?Type $x = null). Autowiring never guesses an arbitrary class or defers to
           runtime — the misconception is expecting null.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       - id: "DI-AUTOWIRE-07"
         type: "multiple"
@@ -1632,7 +1632,7 @@ categories:
           Ambiguity is resolved by explicitly choosing an implementation: a named
           alias, #[Target], #[Autowire(service:)], or bind. Making services public
           only affects fetchability by id and does nothing to disambiguate autowiring.
-        documentation: "https://symfony.com/doc/current/service_container/autowiring.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/autowiring.html"
 
       # --- service-locators.md ---
       - id: "DI-LOCATOR-01"
@@ -1654,7 +1654,7 @@ categories:
         explanation: >-
           A locator's set is explicit and analysable; injecting the whole container
           hides dependencies and is an anti-pattern.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       - id: "DI-LOCATOR-02"
         type: "single"
@@ -1675,7 +1675,7 @@ categories:
         explanation: >-
           A locator defers construction until a service is actually requested,
           which is its main advantage over injecting all candidates.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators"
 
       - id: "DI-LOCATOR-03"
         type: "single"
@@ -1696,7 +1696,7 @@ categories:
         explanation: >-
           ServiceLocator is a PSR-11 container exposing get() and has() over a
           fixed, compile-time set of services.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html#service-locators"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html#service-locators"
 
       - id: "DI-LOCATOR-04"
         type: "single"
@@ -1717,7 +1717,7 @@ categories:
         explanation: >-
           It declares a whitelist; the container injects a matching ServiceLocator
           so services are built only when requested.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       - id: "DI-LOCATOR-05"
         type: "trap"
@@ -1741,7 +1741,7 @@ categories:
           ServiceMethodsSubscriberTrait together with #[SubscribedService] methods
           whose return type names the service. ServiceLocatorTrait builds a locator
           class, and ContainerAwareTrait is the removed container-injection anti-pattern.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       - id: "DI-LOCATOR-06"
         type: "code"
@@ -1764,7 +1764,7 @@ categories:
           when get() requests it, so fetching 'stripe' builds StripeGateway and leaves
           PayPalGateway cold. Locators do not require member services to be public,
           and they build instances, not return strings.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       - id: "DI-LOCATOR-07"
         type: "debug"
@@ -1787,7 +1787,7 @@ categories:
           whitelist throws; unlike the main container there is no NULL_ON_INVALID mode.
           Guard untrusted keys with has() first. It never returns null or falls back
           to another service.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
       - id: "DI-LOCATOR-08"
         type: "scenario"
@@ -1810,7 +1810,7 @@ categories:
           locator: only the selected gateway is instantiated. A tagged_iterator or
           constructor-injecting all five would eagerly build every gateway, and
           injecting the whole container is the anti-pattern the locator replaces.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
 
   - name: "Dependency Injection — Container Internals"
     questions:
@@ -1836,7 +1836,7 @@ categories:
           For a concrete class the dumped container creates a lazy ghost: the very
           same instance, handed out uninitialized, with the real constructor run
           in place on first state access. No external proxy library is involved.
-        documentation: "https://symfony.com/doc/current/service_container/lazy_services.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/lazy_services.html"
 
       - id: "DI-LAZY-02"
         type: "multiple"
@@ -1884,7 +1884,7 @@ categories:
           interface. Unlike a ghost, a proxy is a separate object that forwards to
           the real instance it creates on first use, so proxy !== real instance.
           Identity is only preserved with ghosts (lazy: true on a concrete class).
-        documentation: "https://symfony.com/doc/current/service_container/lazy_services.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/lazy_services.html"
 
       - id: "DI-LAZY-04"
         type: "multiple"
@@ -1907,7 +1907,7 @@ categories:
           lazy key, the Autoconfigure attribute's lazy argument, or the fluent
           ->lazy() call in PHP configuration. There is no LazyInterface contract
           to implement.
-        documentation: "https://symfony.com/doc/current/service_container/lazy_services.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/lazy_services.html"
 
       # --- service-reset.md ---
       - id: "DI-RESET-01"
@@ -1931,7 +1931,7 @@ categories:
           initialized during the request and invokes their configured method(s);
           the container and the instances themselves survive. Never-instantiated
           services are skipped so laziness is not defeated.
-        documentation: "https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset"
+        documentation: "https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset"
 
       - id: "DI-RESET-02"
         type: "multiple"
@@ -1957,7 +1957,7 @@ categories:
           reset between messages by default (--no-reset opts out). Reset calls a
           method on the same instance — it does not rebuild it — and visibility is
           irrelevant since the resetter receives the services internally.
-        documentation: "https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset"
+        documentation: "https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset"
 
       - id: "DI-RESET-03"
         type: "trap"
@@ -1981,7 +1981,7 @@ categories:
           longer holds. The reset mechanism exists exactly for this: clear the
           request-scoped state in reset(). Laziness only defers construction and
           cache:clear rebuilds compiled artifacts, not in-memory service state.
-        documentation: "https://symfony.com/doc/current/reference/dic_tags.html#kernel-reset"
+        documentation: "https://symfony.com/doc/8.0/reference/dic_tags.html#kernel-reset"
 
       # --- container-dump.md ---
       - id: "DI-DUMP-01"
@@ -2006,7 +2006,7 @@ categories:
           plus a preload script to reference from opcache.preload. The
           ContainerBuilder and the YAML files are build-time inputs only — nothing
           re-parses or unserializes them at runtime.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection/compilation.html"
 
       - id: "DI-DUMP-02"
         type: "internals"
@@ -2030,7 +2030,7 @@ categories:
           so it has no standalone factory in the dump. debug:container works from
           the pre-dump ContainerBuilder snapshot where the definition still exists
           — the asymmetry is expected, not a stale cache.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection/compilation.html"
 
       - id: "DI-DUMP-03"
         type: "trap"
@@ -2053,4 +2053,4 @@ categories:
           plain PHP; the runtime never re-reads services.yaml. Only rebuilding the
           cache (cache:clear / cache:warmup) re-runs extension loading, the
           compiler passes and the PhpDumper dump with the new configuration.
-        documentation: "https://symfony.com/doc/current/components/dependency_injection/compilation.html"
+        documentation: "https://symfony.com/doc/8.0/components/dependency_injection/compilation.html"

@@ -18,7 +18,7 @@ categories:
         explanation: >-
           For an invokable controller you reference only the class; the
           ControllerResolver detects the __invoke() method automatically.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-NAMING-02"
         question: "Is the `Action` method suffix required for controller actions in Symfony 8?"
         type: "single"
@@ -36,7 +36,7 @@ categories:
         explanation: >-
           Attribute routing binds a specific method explicitly, so the Action
           suffix is purely historical and can be dropped.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-NAMING-03"
         question: "What visibility must a controller action method have to be invoked by the kernel?"
         type: "single"
@@ -54,7 +54,7 @@ categories:
         explanation: >-
           The kernel invokes the controller callable externally, so the method
           must be public.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-NAMING-04"
         question: "Which statement best defines a Symfony controller?"
         type: "single"
@@ -72,7 +72,7 @@ categories:
         explanation: >-
           A controller is any callable (method, invokable object, closure) the
           kernel runs to produce a Response; extending AbstractController is optional.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-NAMING-05"
         question: >-
           A route is declared as `#[Route('/', name: 'home')]` on the class
@@ -92,7 +92,7 @@ categories:
           For an invokable controller the `_controller` value is the class name
           alone; the resolver detects `__invoke()`. Adding `::__invoke` also works
           but is not idiomatic, and `#invoke` / a made-up service id are invalid.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-NAMING-06"
         question: "Which of these are valid `_controller` formats the ControllerResolver accepts? (choose 3)"
         type: "multiple"
@@ -124,7 +124,7 @@ categories:
           Extending `AbstractController` is optional convenience. A controller is
           any callable returning a Response; a plain invokable class with no base
           class is perfectly valid.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
 
   - name: "Controllers — AbstractController"
     questions:
@@ -145,7 +145,7 @@ categories:
         explanation: >-
           AbstractController implements ServiceSubscriberInterface; the compiler
           builds a per-controller locator containing only the subscribed services.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
       - id: "CTRL-ABSTRACT-02"
         question: "What does `$this->container` hold inside an AbstractController?"
         type: "trap"
@@ -163,7 +163,7 @@ categories:
         explanation: >-
           The injected locator exposes exactly the services returned by
           getSubscribedServices(), not the whole container.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
       - id: "CTRL-ABSTRACT-03"
         question: "What happens if you call `$this->render()` without Twig installed?"
         type: "single"
@@ -199,7 +199,7 @@ categories:
         explanation: >-
           Returning only your service replaces the list; merge the parent's
           subscriptions so render/getUser/etc. still resolve.
-        documentation: "https://symfony.com/doc/current/controller.html#the-base-controller-class-services"
+        documentation: "https://symfony.com/doc/8.0/controller.html#the-base-controller-class-services"
       - id: "CTRL-ABSTRACT-05"
         question: >-
           You extend AbstractController and override getSubscribedServices() to add
@@ -218,7 +218,7 @@ categories:
           The subscription list fully replaces the inherited one, so you must spread
           `parent::getSubscribedServices()` alongside your own entry. Returning only
           your service drops router/twig/security and breaks every helper.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
       - id: "CTRL-ABSTRACT-06"
         question: "In getSubscribedServices(), what does prefixing a service with `?` (e.g. `'?'.Environment::class`) mean?"
         type: "trap"
@@ -235,7 +235,7 @@ categories:
           The `?` marks the subscription optional, letting the controller boot even
           when (say) Twig or the form factory is not installed; the helper then
           throws a clear LogicException rather than a container error.
-        documentation: "https://symfony.com/doc/current/service_container/service_subscribers_locators.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html"
       - id: "CTRL-ABSTRACT-07"
         question: >-
           A developer fetches an application service with
@@ -256,7 +256,7 @@ categories:
           the framework helper services, not your domain services. Inject your own
           dependencies through the constructor instead of using the locator as a
           service-locator anti-pattern.
-        documentation: "https://symfony.com/doc/current/controller.html#the-base-controller-class-services"
+        documentation: "https://symfony.com/doc/8.0/controller.html#the-base-controller-class-services"
       - id: "CTRL-ABSTRACT-08"
         question: "Which AbstractController helpers directly return a Response (or subclass)? (choose 3)"
         type: "multiple"
@@ -273,7 +273,7 @@ categories:
           render/json/redirectToRoute (and file/stream/forward) return a Response or
           subclass. createNotFoundException() returns a NotFoundHttpException you
           must throw — it is not a Response and does not abort on its own.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-ABSTRACT-09"
         question: >-
           On a public (no-firewall) route, `return new Response($this->getUser()->getEmail());`
@@ -313,7 +313,7 @@ categories:
         explanation: >-
           RequestValueResolver (priority 120) injects the current Request;
           RequestAttributeValueResolver handles named route parameters.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-REQUEST-02"
         question: "In which parameter bag do matched route parameters appear?"
         type: "single"
@@ -331,7 +331,7 @@ categories:
         explanation: >-
           The router writes matched parameters into the attributes bag; query is
           GET data and request is the POST body.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "CTRL-REQUEST-03"
         question: "How should a service (not a controller) access the current Request?"
         type: "single"
@@ -349,7 +349,7 @@ categories:
         explanation: >-
           The Request is request-scoped and cannot be injected directly; inject
           the RequestStack service instead.
-        documentation: "https://symfony.com/doc/current/service_container/request.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/request.html"
       - id: "CTRL-REQUEST-04"
         question: >-
           For the URL `/search` (no `?page=`), what does
@@ -368,7 +368,7 @@ categories:
           InputBag::get() returns null for a missing key (default default is null),
           and (int) null is 0 — rarely the intended fallback. getInt('page', 1)
           coerces and guarantees the type with an explicit default.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "CTRL-REQUEST-05"
         question: "What does the `$request->request` bag actually contain?"
         type: "trap"
@@ -385,7 +385,7 @@ categories:
           Despite the name, `$request->request` is the InputBag of POST body fields,
           not 'the request object'. Query lives in `$request->query`, route params in
           `$request->attributes`.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "CTRL-REQUEST-06"
         question: >-
           `$request->getContent()` is called on a JSON API request. What does it return?
@@ -403,7 +403,7 @@ categories:
           getContent() returns the raw body; it does not decode JSON. Use
           #[MapRequestPayload] (serializer + validator) or json_decode() yourself to
           get a structured value.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-REQUEST-07"
         question: "The `Request` object can be autowired directly into a service constructor. True or false?"
         type: "true-false"
@@ -417,7 +417,7 @@ categories:
         explanation: >-
           The Request is request-scoped and created per HTTP call, so it is not an
           autowireable service. Inject RequestStack and call getCurrentRequest().
-        documentation: "https://symfony.com/doc/current/service_container/request.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/request.html"
 
   - name: "Controllers — The Response"
     questions:
@@ -438,7 +438,7 @@ categories:
         explanation: >-
           If a controller returns a non-Response, the kernel fires ViewEvent; if
           no listener produces a Response a LogicException is thrown.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-RESPONSE-02"
         question: "When does a StreamedResponse produce its body?"
         type: "internals"
@@ -456,7 +456,7 @@ categories:
         explanation: >-
           The callback runs at send time and streams output; you cannot change
           headers once streaming has begun.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response"
       - id: "CTRL-RESPONSE-03"
         question: "Which response class best serves a resumable (range-request) file download?"
         type: "single"
@@ -474,7 +474,7 @@ categories:
         explanation: >-
           BinaryFileResponse supports HTTP range requests and X-Sendfile/X-Accel
           offloading for efficient downloads.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#serving-files"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#serving-files"
       - id: "CTRL-RESPONSE-04"
         question: >-
           An action does `return ['id' => 1, 'name' => 'Ada'];` expecting Symfony to
@@ -493,7 +493,7 @@ categories:
           A non-Response return fires ViewEvent; without a listener that builds a
           Response, the kernel throws 'The controller must return a Response'.
           Return $this->json($data) explicitly.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-RESPONSE-05"
         question: >-
           Inside a StreamedResponse callback, code echoes rows and then calls
@@ -512,7 +512,7 @@ categories:
           The callback runs at send time; once bytes are flushed the headers are
           already sent, so header changes are ineffective. Set headers on the
           StreamedResponse before returning it from the action.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response"
       - id: "CTRL-RESPONSE-06"
         question: "You already hold a valid JSON string. Which avoids double-encoding it in a JsonResponse?"
         type: "single"
@@ -529,7 +529,7 @@ categories:
           new JsonResponse($json) / $this->json($json) would JSON-encode the string
           again (double-encoding). fromJsonString() sets the body verbatim and the
           application/json Content-Type.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
 
   - name: "Controllers — Cookies"
     questions:
@@ -550,7 +550,7 @@ categories:
         explanation: >-
           The cookies ParameterBag wraps $_COOKIE; responses set cookies via
           $response->headers->setCookie().
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "CTRL-COOKIES-02"
         question: "A cookie sent with SameSite=None also requires which attribute?"
         type: "single"
@@ -568,7 +568,7 @@ categories:
         explanation: >-
           Modern browsers reject SameSite=None cookies unless they are marked
           Secure (HTTPS-only).
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#setting-cookies"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies"
       - id: "CTRL-COOKIES-03"
         question: "Why might clearCookie('token') fail to delete the cookie?"
         type: "debug"
@@ -586,7 +586,7 @@ categories:
         explanation: >-
           Deletion sends an expired Set-Cookie scoped by path/domain; a mismatch
           targets a different cookie and leaves the original intact.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "CTRL-COOKIES-04"
         question: >-
           `Cookie::create('t','v')->withSameSite(Cookie::SAMESITE_NONE)` is set
@@ -604,7 +604,7 @@ categories:
         explanation: >-
           SameSite=None mandates the Secure attribute; without it the browser drops
           the cookie. Chain ->withSecure(true) so it is sent only over HTTPS.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#setting-cookies"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies"
       - id: "CTRL-COOKIES-05"
         question: "In Symfony's Cookie value object, `httpOnly` defaults to true. True or false?"
         type: "true-false"
@@ -638,7 +638,7 @@ categories:
           Response cookies go out as Set-Cookie headers; the request's cookies bag
           reflects what the browser already sent. A newly set cookie is only visible
           on the next request.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html#setting-cookies"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies"
 
   - name: "Controllers — The Session"
     questions:
@@ -659,7 +659,7 @@ categories:
         explanation: >-
           The session is request-scoped; RequestStack::getSession() is the stable
           entry point in services.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
       - id: "CTRL-SESSION-02"
         question: "When does a lazy Symfony session actually start (session_start + Set-Cookie)?"
         type: "internals"
@@ -677,7 +677,7 @@ categories:
         explanation: >-
           Lazy sessions avoid emitting a session cookie for requests that never
           touch the session, preserving cacheability.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
       - id: "CTRL-SESSION-03"
         question: "Which method regenerates the session id after login to prevent session fixation?"
         type: "single"
@@ -695,7 +695,7 @@ categories:
         explanation: >-
           migrate() issues a new session id while keeping data; invalidate() also
           wipes data. Symfony authenticators call migrate() on login.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
       - id: "CTRL-SESSION-04"
         question: "What is a caching side effect of touching the session on a public page?"
         type: "single"
@@ -713,7 +713,7 @@ categories:
         explanation: >-
           Shared caches must not store responses carrying a per-user Set-Cookie,
           so touching the session prevents shared caching.
-        documentation: "https://symfony.com/doc/current/http_cache.html"
+        documentation: "https://symfony.com/doc/8.0/http_cache.html"
       - id: "CTRL-SESSION-05"
         question: >-
           A console command injects RequestStack and calls `getSession()`, which
@@ -732,7 +732,7 @@ categories:
           getSession() throws SessionNotFoundException (it does not return null) when
           called outside a request or on a request with no session. Guard the request
           first: check getCurrentRequest() and hasSession().
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
       - id: "CTRL-SESSION-06"
         question: >-
           Why is injecting `SessionInterface` directly into a service constructor
@@ -752,7 +752,7 @@ categories:
           discouraged/removed; RequestStack::getSession() is the stable entry point.
           You can still type-hint SessionInterface on a controller action (resolved
           by SessionValueResolver, priority 120).
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
       - id: "CTRL-SESSION-07"
         question: "Merely type-hinting SessionInterface on an action starts the session. True or false?"
         type: "true-false"
@@ -767,7 +767,7 @@ categories:
           Sessions are lazy: SessionValueResolver injects the session object, but
           session_start() and the Set-Cookie header only fire on the first read or
           write. Merely receiving the session does not start it.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
 
   - name: "Controllers — Flash Messages"
     questions:
@@ -788,7 +788,7 @@ categories:
         explanation: >-
           Reading consumes flashes; use peek()/peekAll() to read without removing
           them.
-        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+        documentation: "https://symfony.com/doc/8.0/controller.html#flash-messages"
       - id: "CTRL-FLASH-02"
         question: "`$this->addFlash('notice', 'Saved')` is shorthand for which call?"
         type: "single"
@@ -805,7 +805,7 @@ categories:
             correct: false
         explanation: >-
           addFlash() is an AbstractController convenience over the session flash bag.
-        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+        documentation: "https://symfony.com/doc/8.0/controller.html#flash-messages"
       - id: "CTRL-FLASH-03"
         question: "Why are flash messages typically paired with a redirect?"
         type: "single"
@@ -823,7 +823,7 @@ categories:
         explanation: >-
           Flashes are built to survive exactly one redirect and be shown on the
           following request, then discarded.
-        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+        documentation: "https://symfony.com/doc/8.0/controller.html#flash-messages"
       - id: "CTRL-FLASH-04"
         question: >-
           A controller reads `app.session.flashbag.get('success')` for logging, then
@@ -842,7 +842,7 @@ categories:
           get()/all() consume the flash bag. Reading in the controller drains the
           messages before Twig can show them. Use peek()/peekAll() when you must read
           without removing.
-        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+        documentation: "https://symfony.com/doc/8.0/controller.html#flash-messages"
       - id: "CTRL-FLASH-05"
         question: "Which method reads flash messages WITHOUT consuming them?"
         type: "trap"
@@ -874,7 +874,7 @@ categories:
         explanation: >-
           app.flashes yields a map of type => messages; iterating it calls all()
           under the hood, which consumes the bag so each message shows exactly once.
-        documentation: "https://symfony.com/doc/current/controller.html#flash-messages"
+        documentation: "https://symfony.com/doc/8.0/controller.html#flash-messages"
 
   - name: "Controllers — HTTP Redirects"
     questions:
@@ -894,7 +894,7 @@ categories:
             correct: false
         explanation: >-
           RedirectResponse defaults to 302 Found; pass a status argument to change it.
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
       - id: "CTRL-REDIRECT-02"
         question: "Which redirect status codes preserve the original HTTP method and body?"
         type: "single"
@@ -912,7 +912,7 @@ categories:
         explanation: >-
           307/308 must not change the request method; 303 always forces GET and
           301/302 may downgrade to GET.
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
       - id: "CTRL-REDIRECT-03"
         question: "What is the difference between redirect() and redirectToRoute()?"
         type: "single"
@@ -930,7 +930,7 @@ categories:
         explanation: >-
           redirect() is URL-based; redirectToRoute() builds the URL from the
           router. Both return a RedirectResponse (default 302).
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
       - id: "CTRL-REDIRECT-04"
         question: >-
           After creating a resource in a POST action, you want the browser to issue a
@@ -949,7 +949,7 @@ categories:
           303 See Other forces the follow-up request to GET, the strict form of
           Post/Redirect/Get. 307 would preserve POST; forward() is internal (no URL
           change); redirect() takes a URL, not a route name + params.
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
       - id: "CTRL-REDIRECT-05"
         question: >-
           A checkout POST persists an order and redirects to the confirmation page to
@@ -968,7 +968,7 @@ categories:
           PRG needs a temporary redirect that ends on a GET. 302 (default) or 303
           are correct; 301/308 are cached (wrong and hard to undo), and 307 would
           replay the POST.
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
       - id: "CTRL-REDIRECT-06"
         question: "Why is accidentally using 301 (or 308) for a temporary redirect dangerous?"
         type: "trap"
@@ -985,7 +985,7 @@ categories:
           301 and 308 signal a permanent move and are cached by browsers; if used by
           mistake the client keeps redirecting even after you fix the server. Use
           302/303 for temporary redirects.
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
       - id: "CTRL-REDIRECT-07"
         question: "`redirect()` accepts a route name as its first argument. True or false?"
         type: "true-false"
@@ -999,7 +999,7 @@ categories:
         explanation: >-
           redirect() takes a URL (string). To redirect by route name (plus params),
           use redirectToRoute(), which builds the URL via the router.
-        documentation: "https://symfony.com/doc/current/controller.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/controller.html#redirecting"
 
   - name: "Controllers — Internal Redirects (Forwarding)"
     questions:
@@ -1020,7 +1020,7 @@ categories:
         explanation: >-
           forward() dispatches a sub-request through the kernel; the browser URL
           does not change and no 3xx is sent.
-        documentation: "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+        documentation: "https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller"
       - id: "CTRL-FORWARD-02"
         question: "During a forwarded sub-request, what does Request::isMainRequest() return?"
         type: "internals"
@@ -1038,7 +1038,7 @@ categories:
         explanation: >-
           The sub-request is dispatched with HttpKernelInterface::SUB_REQUEST, so
           isMainRequest() is false and some listeners (e.g. the firewall) skip.
-        documentation: "https://symfony.com/doc/current/components/http_kernel.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_kernel.html"
       - id: "CTRL-FORWARD-03"
         question: "After a forward(), what does the user's address bar show?"
         type: "single"
@@ -1056,7 +1056,7 @@ categories:
         explanation: >-
           Forwarding is server-internal within the same request, so no new client
           navigation occurs.
-        documentation: "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+        documentation: "https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller"
       - id: "CTRL-FORWARD-04"
         question: >-
           How does `forward()` pass a `month` value so the target action can receive
@@ -1075,7 +1075,7 @@ categories:
           The second argument to forward() becomes the sub-request's attributes
           (the $path array), which the argument resolver then maps to the target's
           named parameters — not through query.
-        documentation: "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+        documentation: "https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller"
       - id: "CTRL-FORWARD-05"
         question: >-
           Two controllers need the same 'latest news' logic. Which reuse approach is
@@ -1094,7 +1094,7 @@ categories:
           Forwarding runs a full kernel pass and couples controllers. A shared
           service reuses just the logic without routing/events/resolver overhead.
           Forward when you need another controller's whole Response embedded.
-        documentation: "https://symfony.com/doc/current/controller.html#forwarding-to-another-controller"
+        documentation: "https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller"
       - id: "CTRL-FORWARD-06"
         question: >-
           Which constant does forward() pass to HttpKernel::handle(), and what is a
@@ -1134,7 +1134,7 @@ categories:
         explanation: >-
           createNotFoundException() returns a NotFoundHttpException you must
           throw; the kernel then renders the error page.
-        documentation: "https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages"
+        documentation: "https://symfony.com/doc/8.0/controller.html#managing-errors-and-404-pages"
       - id: "CTRL-ERROR-02"
         question: "A controller throws a plain \\RuntimeException. What status code results?"
         type: "single"
@@ -1152,7 +1152,7 @@ categories:
         explanation: >-
           Only exceptions implementing HttpExceptionInterface set a specific
           status; any other exception becomes a 500.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "CTRL-ERROR-03"
         question: "Where do you place a custom production 404 template?"
         type: "config"
@@ -1170,7 +1170,7 @@ categories:
         explanation: >-
           The Twig error renderer looks up per-status templates in that path in
           the prod environment.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "CTRL-ERROR-04"
         question: "Which kernel event lets a listener turn an exception into a Response?"
         type: "internals"
@@ -1188,7 +1188,7 @@ categories:
         explanation: >-
           ExceptionEvent listeners can call setResponse(); otherwise the error
           controller renders the page.
-        documentation: "https://symfony.com/doc/current/reference/events.html#kernel-exception"
+        documentation: "https://symfony.com/doc/8.0/reference/events.html#kernel-exception"
       - id: "CTRL-ERROR-05"
         question: >-
           `$this->createNotFoundException('Missing');` is written on its own line,
@@ -1207,7 +1207,7 @@ categories:
           The helper is a factory: it returns a NotFoundHttpException and does not
           abort. You must `throw` it. Written alone, the exception is created,
           discarded, and execution continues on the null value.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "CTRL-ERROR-06"
         question: "Which one-liner raises a 404 when a repository lookup returns null?"
         type: "code"
@@ -1224,7 +1224,7 @@ categories:
           The throw expression (PHP 8) combines with `??` so a null lookup throws the
           404. Without `throw` the exception is merely assigned/discarded; `?:` and
           `abort()` are wrong (abort() is not a Symfony helper).
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "CTRL-ERROR-07"
         question: "createNotFoundException() aborts the action as soon as it is called. True or false?"
         type: "trap"
@@ -1238,7 +1238,7 @@ categories:
         explanation: >-
           It only returns a NotFoundHttpException object; nothing happens until you
           `throw` it. Treating it as self-aborting is the classic trap.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
       - id: "CTRL-ERROR-08"
         question: >-
           An API must return problem+json error bodies for every HttpException. What
@@ -1257,7 +1257,7 @@ categories:
           A single kernel.exception listener calling setResponse(), or a custom
           error_controller, centralises error rendering with content negotiation —
           far cleaner than per-action try/catch or per-status Twig templates.
-        documentation: "https://symfony.com/doc/current/controller/error_pages.html"
+        documentation: "https://symfony.com/doc/8.0/controller/error_pages.html"
 
   - name: "Controllers — File Upload"
     questions:
@@ -1278,7 +1278,7 @@ categories:
         explanation: >-
           Client-supplied name/MIME are spoofable; getMimeType()/guessExtension()
           inspect the actual file content.
-        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
+        documentation: "https://symfony.com/doc/8.0/controller/upload_file.html"
       - id: "CTRL-UPLOAD-02"
         question: "What does UploadedFile::move() do when it fails?"
         type: "single"
@@ -1314,7 +1314,7 @@ categories:
         explanation: >-
           The resolver validates the upload and aborts with an HTTP error when a
           constraint fails, so the body never executes with invalid input.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-UPLOAD-04"
         question: >-
           A user uploads a file larger than `post_max_size` and the action crashes
@@ -1333,7 +1333,7 @@ categories:
           When post_max_size is exceeded, PHP may discard the POST data, leaving an
           empty files bag rather than raising an exception. Guard the result with an
           instanceof UploadedFile / isValid() check before using it.
-        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
+        documentation: "https://symfony.com/doc/8.0/controller/upload_file.html"
       - id: "CTRL-UPLOAD-05"
         question: "Which signature binds and validates a PDF upload straight into a controller argument?"
         type: "code"
@@ -1350,7 +1350,7 @@ categories:
           #[MapUploadedFile] (handled by RequestPayloadValueResolver) binds the
           UploadedFile and applies inline File/Image constraints, throwing an HTTP
           exception on failure. The other attributes target payloads/query/user.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-UPLOAD-06"
         question: "Why must uploaded files be stored outside the web root (or with execution disabled)?"
         type: "trap"
@@ -1367,7 +1367,7 @@ categories:
           A script (e.g. .php) saved into a publicly served directory could be
           requested and executed, yielding RCE. Store uploads outside public/ or
           disable script execution there, and always use a safe generated name.
-        documentation: "https://symfony.com/doc/current/controller/upload_file.html"
+        documentation: "https://symfony.com/doc/8.0/controller/upload_file.html"
 
   - name: "Controllers — Built-in Internal Controllers"
     questions:
@@ -1388,7 +1388,7 @@ categories:
         explanation: >-
           TemplateController::__invoke() renders the 'template' default and can
           set HTTP cache headers, needing no custom class.
-        documentation: "https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route"
+        documentation: "https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route"
       - id: "CTRL-BUILTIN-02"
         question: "RedirectController configured with permanent: true returns which status?"
         type: "config"
@@ -1406,7 +1406,7 @@ categories:
         explanation: >-
           permanent selects the permanent status code; combined with
           keepRequestMethod it becomes 308 to preserve the method.
-        documentation: "https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route"
+        documentation: "https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route"
       - id: "CTRL-BUILTIN-03"
         question: "What status does RedirectController return when the target route/path is empty?"
         type: "trap"
@@ -1443,7 +1443,7 @@ categories:
           TemplateController accepts template plus optional maxAge/sharedAge/private
           to set HTTP cache headers. sharedAge sets the shared-cache TTL (s-maxage).
           RedirectController/CacheController are wrong for rendering.
-        documentation: "https://symfony.com/doc/current/templates.html#rendering-a-template-directly-from-a-route"
+        documentation: "https://symfony.com/doc/8.0/templates.html#rendering-a-template-directly-from-a-route"
       - id: "CTRL-BUILTIN-05"
         question: >-
           A route sets `controller: ...\\RedirectController` (class only) and the
@@ -1480,7 +1480,7 @@ categories:
         explanation: >-
           permanent alone gives 301; adding keepRequestMethod upgrades it to 308 so
           the HTTP method (e.g. POST) is preserved across the permanent redirect.
-        documentation: "https://symfony.com/doc/current/routing.html#redirecting-to-urls-and-routes-directly-from-a-route"
+        documentation: "https://symfony.com/doc/8.0/routing.html#redirecting-to-urls-and-routes-directly-from-a-route"
 
   - name: "Controllers — Argument Value Resolvers"
     questions:
@@ -1501,7 +1501,7 @@ categories:
         explanation: >-
           The split supports()/resolve() interface was removed; resolve() now
           returns an iterable and yielding nothing declines the argument.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-02"
         question: "How does a value resolver signal that it does not handle an argument?"
         type: "single"
@@ -1519,7 +1519,7 @@ categories:
         explanation: >-
           Yielding no value passes the argument to the next resolver in priority
           order.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-03"
         question: "Which resolvers have the highest default priority (120) in Symfony 8?"
         type: "internals"
@@ -1555,7 +1555,7 @@ categories:
         explanation: >-
           RequestPayloadValueResolver deserializes then validates; validation
           errors throw UnprocessableEntityHttpException (422).
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html#mapping-the-whole-request-payload"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html#mapping-the-whole-request-payload"
       - id: "CTRL-RESOLVER-05"
         question: "How do the #[MapRequestPayload]/#[MapQueryParameter] resolvers get activated?"
         type: "internals"
@@ -1573,7 +1573,7 @@ categories:
         explanation: >-
           These resolvers carry the controller.targeted_value_resolver tag and are
           invoked only for arguments bearing the matching attribute.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-06"
         question: "What binds a single typed query parameter such as ?page=2 to an int argument?"
         type: "single"
@@ -1591,7 +1591,7 @@ categories:
         explanation: >-
           #[MapQueryParameter] binds one query value with casting; #[MapQueryString]
           maps the whole query string into a DTO.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-07"
         question: >-
           In a custom resolver, an argument's type does not match. What should
@@ -1610,7 +1610,7 @@ categories:
           resolve() is typed `: iterable`, so `return null` is a TypeError and
           `return false` is invalid. Decline by returning an empty array (or a
           generator that never yields).
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-08"
         question: "In a resolver, what is the difference between yielding nothing and `yield null`?"
         type: "trap"
@@ -1627,7 +1627,7 @@ categories:
           'Yields nothing' means 'not my argument' and passes control on; 'yield
           null' is a deliberate null bound to the parameter. Confusing them is the
           classic resolver bug.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-09"
         question: "Which tag registers a resolver in the ordered chain, and how is its order controlled?"
         type: "config"
@@ -1645,7 +1645,7 @@ categories:
           priority runs earlier. Autoconfiguration tags implementing classes; set an
           explicit priority only when ordering matters (targeted resolvers use the
           controller.targeted_value_resolver tag instead).
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-10"
         question: "Which resolvers/attributes are targeted (activated only by their attribute), not part of the priority chain? (choose 3)"
         type: "multiple"
@@ -1662,7 +1662,7 @@ categories:
           MapRequestPayload/MapQueryString, MapQueryParameter, MapUploadedFile (and
           #[CurrentUser]) are targeted resolvers, run only when the attribute is
           present. RequestValueResolver is a priority-120 chain resolver, not targeted.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-11"
         question: >-
           An action needs the authenticated user injected as an argument (not via
@@ -1681,7 +1681,7 @@ categories:
           #[CurrentUser] injects the authenticated user via the security
           UserValueResolver. MapRequestPayload builds a DTO from the body, MapEntity
           is Doctrine (out of scope), and Autowire is for services.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-12"
         question: >-
           A resolver copied from an old project implements
@@ -1701,7 +1701,7 @@ categories:
           The split supports()/resolve() interface no longer exists in Symfony 8. Use
           ValueResolverInterface::resolve(Request, ArgumentMetadata): iterable and
           decline by yielding nothing instead of a supports() check.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-RESOLVER-13"
         question: "Is #[MapEntity] a core HttpKernel value resolver you should study for this syllabus area?"
         type: "trap"
@@ -1719,7 +1719,7 @@ categories:
           HttpKernel resolver chain. The core built-ins are Request/Session (120),
           BackedEnum/Uid/DateTime/RequestAttribute (100), plus the targeted mapping
           attributes and #[CurrentUser].
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
   - name: "Controllers — Multiple Choice Drills"
     questions:
       - id: "CTRL-MC-01"
@@ -1747,7 +1747,7 @@ categories:
           triggering a brand-new client request (internal sub-requests are what
           forward() does), and flash messages are session-backed precisely so they
           survive that redirect in the Post/Redirect/Get pattern.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-MC-02"
         type: "multiple"
         difficulty: "hard"
@@ -1771,7 +1771,7 @@ categories:
           why isMainRequest() is false inside the target controller. No 3xx response
           is involved (that is an external redirect), and the firewall does not run
           again for the sub-request.
-        documentation: "https://symfony.com/doc/current/controller/forwarding.html"
+        documentation: "https://symfony.com/doc/8.0/controller/forwarding.html"
       - id: "CTRL-MC-03"
         type: "multiple"
         difficulty: "medium"
@@ -1797,7 +1797,7 @@ categories:
           lives inside the session itself, explicit start() calls are unnecessary
           because access triggers the start, and services should inject RequestStack
           and call getSession() rather than a 'session' service.
-        documentation: "https://symfony.com/doc/current/session.html"
+        documentation: "https://symfony.com/doc/8.0/session.html"
       - id: "CTRL-MC-04"
         type: "multiple"
         difficulty: "hard"
@@ -1823,7 +1823,7 @@ categories:
           it holds is that limited locator, not the full application container, and
           autowiring works for any controller registered as a service — your own
           dependencies should be constructor-injected regardless of the base class.
-        documentation: "https://symfony.com/doc/current/controller.html"
+        documentation: "https://symfony.com/doc/8.0/controller.html"
       - id: "CTRL-MC-05"
         type: "multiple"
         difficulty: "hard"
@@ -1848,7 +1848,7 @@ categories:
           (MapRequestPayload, MapQueryParameter, MapUploadedFile, CurrentUser)
           activate only when their attribute decorates the argument; results are
           never merged across resolvers.
-        documentation: "https://symfony.com/doc/current/controller/value_resolver.html"
+        documentation: "https://symfony.com/doc/8.0/controller/value_resolver.html"
       - id: "CTRL-MC-06"
         type: "multiple"
         difficulty: "medium"
@@ -1874,7 +1874,7 @@ categories:
           callback when the response is sent, which is why headers cannot be changed
           once streaming starts, and Response::HTTP_* constants keep status codes
           readable and typo-free.
-        documentation: "https://symfony.com/doc/current/components/http_foundation.html"
+        documentation: "https://symfony.com/doc/8.0/components/http_foundation.html"
       - id: "CTRL-NAMING-SCENARIO-01"
         type: "trap"
         difficulty: "medium"
@@ -1896,4 +1896,4 @@ categories:
           it never appends "::__invoke" the way it does for a named action
           method. Writing ClassName::__invoke as the _controller value is a
           common but incorrect habit carried over from classic controllers.
-        documentation: "https://symfony.com/doc/current/controller.html#invokable-controllers"
+        documentation: "https://symfony.com/doc/8.0/controller.html#invokable-controllers"

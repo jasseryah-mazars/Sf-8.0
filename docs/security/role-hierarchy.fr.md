@@ -32,6 +32,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La hiérarchie des rôles fait qu'un rôle "supérieur" hérite automatiquement des droits d'un rôle "inférieur" — sans jamais avoir à les lister tous explicitement.
+
+### Imagine dans la vraie vie
+Les grades militaires : le badge d'un colonel dit "colonel" — rien d'autre. Mais chaque poste de contrôle connaît la chaîne de commandement : colonel implique commandant implique capitaine, donc le colonel passe toute porte qu'un capitaine peut ouvrir.
+
+### Dans Symfony
+Un utilisateur avec seulement `ROLE_ADMIN` stocké sur son token passe automatiquement un `#[IsGranted('ROLE_USER')]` grâce à la hiérarchie — sans que `ROLE_USER` n'ait jamais été explicitement attribué.
+
+### Exemple simple
+```yaml
+role_hierarchy: { ROLE_ADMIN: [ROLE_USER, ROLE_EDITOR] } # un rôle peut impliquer plusieurs
+```
+
+### Comment le mémoriser 🧠
+`$user->getRoles()` **n'étend jamais** la hiérarchie — elle renvoie seulement les rôles réellement stockés. Seuls `isGranted()` et `access_control` résolvent la hiérarchie complète.
+
+---
+
+
 ## Theory
 
 Plutôt que d'attribuer à chaque administrateur `ROLE_USER` *et* `ROLE_ADMIN`
@@ -298,7 +320,7 @@ forcer un lien parent/enfant artificiel.
 
     **Why:** La hiérarchie n'est résolue que pendant les contrôles d'accès
     par le `RoleHierarchyVoter` ; `getRoles()` est votre propre donnée brute.
-    **Ref:** [Hierarchical roles](https://symfony.com/doc/current/security.html#hierarchical-roles).
+    **Ref:** [Hierarchical roles](https://symfony.com/doc/8.0/security.html#hierarchical-roles).
 
 ??? question "Q2. Which service expands a set of roles the way access checks do?"
     - [ ] A. `TokenStorageInterface`
@@ -318,7 +340,7 @@ forcer un lien parent/enfant artificiel.
 
     **Why:** `getReachableRoleNames()` suit la carte récursivement, et
     `isGranted()` comme `access_control` l'utilisent via le voter.
-    **Ref:** [Hierarchical roles](https://symfony.com/doc/current/security.html#hierarchical-roles).
+    **Ref:** [Hierarchical roles](https://symfony.com/doc/8.0/security.html#hierarchical-roles).
 
 ??? question "Q4. Which voter enforces roles when a hierarchy is configured?"
     - [ ] A. `AuthenticatedVoter`
@@ -366,7 +388,7 @@ forcer un lien parent/enfant artificiel.
   le token brut).
 
 ## Official References
-- [Symfony docs — Hierarchical roles](https://symfony.com/doc/current/security.html#hierarchical-roles)
+- [Symfony docs — Hierarchical roles](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
 - [Symfony source — RoleHierarchy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Role/RoleHierarchy.php)
 - [Symfony source — RoleHierarchyVoter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/RoleHierarchyVoter.php)
 
@@ -380,7 +402,7 @@ forcer un lien parent/enfant artificiel.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#hierarchical-roles) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#hierarchical-roles) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

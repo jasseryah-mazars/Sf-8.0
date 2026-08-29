@@ -32,6 +32,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les conventions de nommage Symfony ne sont pas juste esthétiques — elles sont ce qui permet à l'autowiring et au routeur de fonctionner "tout seuls".
+
+### Imagine dans la vraie vie
+Un hôpital où chaque membre du personnel porte un uniforme codé par couleur et un badge : une blouse verte marquée "Chirurgien" (le suffixe `Interface`, le badge FQCN) permet au système de tri d'orienter automatiquement un cas vers la bonne personne, sans que personne n'ait à demander qui fait quoi. Une infirmière en chemise unie non étiquetée peut quand même travailler, mais le système automatisé ne peut plus la faire correspondre à une tâche par son type.
+
+### Dans Symfony
+Nommer un service `App\Service\MonService` (au lieu d'un id arbitraire comme `mon.service.custom`) est ce qui permet l'autowiring par type — Symfony sait injecter la bonne classe simplement en lisant le type-hint du constructeur.
+
+### Exemple simple
+```php
+interface NotifieurInterface {}    // suffixe Interface, obligatoire par convention
+class EmailNotifieur implements NotifieurInterface {}
+```
+
+### Comment le mémoriser 🧠
+Le service id **par défaut** d'une classe autowirée est son **FQCN complet** — pas un nom raccourci choisi à la main. Retiens : "le badge du personnel, c'est son nom complet, pas un surnom."
+
+
 ## Theory
 
 Des noms cohérents rendent le code Symfony prévisible et permettent à
@@ -296,7 +317,7 @@ d'une manière qui casse l'autowiring.
     - [ ] C. Random UUIDs
 
     **Why:** Le FQCN est l'id ; l'autowiring fait correspondre le type. **Ref:**
-    [Service container](https://symfony.com/doc/current/service_container.html).
+    [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. What case are environment variables?"
     - [x] A. UPPER_SNAKE_CASE, usually `APP_`-prefixed ✅
@@ -304,7 +325,7 @@ d'une manière qui casse l'autowiring.
     - [ ] C. kebab-case
 
     **Why:** Les variables d'environnement utilisent l'upper snake case. **Ref:**
-    [Configuration — env vars](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables).
+    [Configuration — env vars](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables).
 
 ??? question "Q3. Which is a correctly named route?"
     - [x] A. `invoice_show` ✅
@@ -312,7 +333,7 @@ d'une manière qui casse l'autowiring.
     - [ ] C. `invoice show`
 
     **Why:** Les routes utilisent le snake_case, typiquement `entity_action`. **Ref:**
-    [Routing](https://symfony.com/doc/current/routing.html).
+    [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -336,9 +357,9 @@ d'une manière qui casse l'autowiring.
 - **Confused with:** [Best Practices](best-practices.md) — le nommage est l'ensemble de règles mécaniques ; les best practices expliquent les choix de conception.
 
 ## Official References
-- [Official docs — Coding standards](https://symfony.com/doc/current/contributing/code/standards.html)
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official docs — Coding standards](https://symfony.com/doc/8.0/contributing/code/standards.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Routing](https://symfony.com/doc/8.0/routing.html)
 
 ## Video references
 
@@ -350,7 +371,7 @@ d'une manière qui casse l'autowiring.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

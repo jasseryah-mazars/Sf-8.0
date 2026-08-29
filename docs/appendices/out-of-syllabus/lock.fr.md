@@ -1,11 +1,12 @@
 # Lock Component
 
-**Exclu de la certification Symfony 8.** Le composant Lock ne figure pas au
-programme officiel de la certification Symfony 8. Ce chapitre est conservé
-comme contenu additionnel / d'approfondissement — voir
-`specs/TraceabilityMatrix.md` pour la séparation officiel/additionnel — et
-n'est pas testé dans les examens générés ni compté dans la couverture
-officielle du syllabus.
+!!! danger "Hors syllabus officiel Symfony 8.0"
+    Le composant Lock ne figure pas au programme officiel de la certification
+    Symfony 8. Ce chapitre est conservé dans les [Appendices](index.md) comme
+    contenu additionnel / d'approfondissement — voir la section « Out-of-scope /
+    Additional Learning » de `specs/TraceabilityMatrix.md` pour la séparation
+    officiel/additionnel — et n'est pas testé dans les examens générés ni
+    compté dans la couverture officielle du syllabus.
 
 !!! tip "In a nutshell"
     Lock empêche deux processus d'exécuter le même travail critique en même
@@ -34,9 +35,24 @@ officielle du syllabus.
     **Syllabus:** `Miscellaneous → Lock` ·
     **Level:** Advanced → Expert ·
     **Est. time:** 35 min ·
-    **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
+    **Prerequisites:** [Dependency Injection](../../dependency-injection/index.md)
 
 ---
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** Le composant Lock empêche deux processus de faire le même travail critique en même temps — par exemple, éviter que deux tâches planifiées identiques ne s'exécutent en double.
+
+**Pourquoi ça existe ?** Sans verrou, deux workers qui démarrent en même temps pourraient tous les deux, par exemple, envoyer la même facture deux fois.
+
+**🏠 Analogie de la vraie vie :** Le panneau "occupé" d'une porte de toilettes. `acquire()` essaie la porte : si elle est libre, tu retournes le panneau et entres ; si elle est déjà occupée, tu reçois un simple "non" et tu repars — tu ne fais pas la queue sauf si tu le demandes explicitement (mode bloquant).
+
+**Symfony dans la vraie vie :** `$lock = $lockFactory->createLock('tache-quotidienne'); if ($lock->acquire()) { /* travail */ $lock->release(); }` — un seul worker à la fois exécute réellement la tâche.
+
+**⚠️ Erreur fréquente :** croire que le Lock component est testé à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus.
+
+**🧠 Comment le mémoriser :** "Un verrou, c'est un panneau `occupé` — `acquire()` par défaut ne fait jamais la queue, il dit juste oui ou non."
+
 
 ## Theory
 
@@ -316,7 +332,7 @@ horizontalement.
     - [ ] B. blocking until free
     - [ ] C. throws if held
 
-    **Why:** Le comportement par défaut est non-blocking ; `acquire(true)` bloque. **Ref:** [Lock](https://symfony.com/doc/current/lock.html#blocking-locks).
+    **Why:** Le comportement par défaut est non-blocking ; `acquire(true)` bloque. **Ref:** [Lock](https://symfony.com/doc/8.0/lock.html#blocking-locks).
 
 ??? question "Q2. Which store works across multiple servers?"
     - [ ] A. `FlockStore`
@@ -324,7 +340,7 @@ horizontalement.
     - [x] C. `RedisStore` ✅
 
     **Why:** Flock/Semaphore sont locaux ; les stores Redis (et base de données) sont partagés.
-    **Ref:** [Lock stores](https://symfony.com/doc/current/components/lock.html#available-stores).
+    **Ref:** [Lock stores](https://symfony.com/doc/8.0/lock.html#available-stores).
 
 ??? question "Q3. Why call `refresh()` during a long critical section?"
     - [x] A. To extend the lock's TTL before it expires ✅
@@ -332,7 +348,7 @@ horizontalement.
     - [ ] C. To switch stores
 
     **Why:** `refresh()` prolonge le TTL pour que le lock ne soit pas considéré comme périmé en plein job.
-    **Ref:** [Expiring locks](https://symfony.com/doc/current/components/lock.html#expiring-locks).
+    **Ref:** [Expiring locks](https://symfony.com/doc/8.0/lock.html#expiring-locks).
 
 ## Key takeaways
 
@@ -351,13 +367,13 @@ horizontalement.
 
 ## Connections
 
-- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — la `LockFactory` est autowirée à partir du DSN de store configuré.
-- **Reused in:** [Messenger](../messenger/index.md) — sérialiser les exécutions de workers en double ; [Process](process.md) — protéger des outils externes partagés.
-- **Confused with:** la protection contre le stampede de [Cache](cache.md) — Lock impose une exclusion mutuelle stricte ; le cache ne fait que réduire les recalculs en double.
+- **Depends on:** [Dependency Injection](../../dependency-injection/index.md) — la `LockFactory` est autowirée à partir du DSN de store configuré.
+- **Reused in:** [Messenger](../../messenger/index.md) — sérialiser les exécutions de workers en double ; [Process](../../miscellaneous/process.md) — protéger des outils externes partagés.
+- **Confused with:** la protection contre le stampede de [Cache](../../miscellaneous/cache.md) — Lock impose une exclusion mutuelle stricte ; le cache ne fait que réduire les recalculs en double.
 
 ## Official References
-- [Official docs — Lock](https://symfony.com/doc/current/lock.html)
-- [Official docs — Lock component](https://symfony.com/doc/current/components/lock.html)
+- [Official docs — Lock](https://symfony.com/doc/8.0/lock.html)
+- [Official docs — Lock component](https://symfony.com/doc/8.0/lock.html)
 - [Symfony source — Lock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Lock/Lock.php)
 
 ## Video references
@@ -370,7 +386,7 @@ horizontalement.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/lock.html#blocking-locks) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/lock.html#blocking-locks) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -384,4 +400,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Cache](cache.md) · [Process](process.md) · [Messenger](../messenger/index.md)</small>
+<small>Related: [Cache](../../miscellaneous/cache.md) · [Process](../../miscellaneous/process.md) · [Messenger](../../messenger/index.md)</small>

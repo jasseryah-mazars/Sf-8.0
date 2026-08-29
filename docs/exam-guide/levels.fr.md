@@ -69,6 +69,21 @@ flowchart LR
 
 <small>Related: [Exam Format & Scoring](format.md) · [Roadmap](../roadmap.md) · [Exam-Day Strategy](strategy.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Elle explique qu'il n'y a **pas** deux examens différents — un seul examen, et ton score décide si tu obtiens "Advanced" ou "Expert".
+
+**Pourquoi ça existe ?** Beaucoup de candidats pensent à tort qu'ils doivent choisir un niveau avant de s'inscrire — ce n'est pas le cas, et cette confusion cause du stress inutile.
+
+**🏠 Analogie de la vraie vie :** Un examen de conduite unique où obtenir 60 % te donne le permis normal, et 90 % te donne une mention "conduite experte" — c'est la même épreuve, pas deux épreuves séparées.
+
+**Symfony dans la vraie vie :** Réviser à fond les "Deep Dive" (les parties internes) de chaque chapitre te prépare autant pour Advanced que pour Expert — viser haut ne coûte jamais de points en moins.
+
+**⚠️ Erreur fréquente :** se dire "je vise seulement Advanced, je peux sauter les parties difficiles" — ça réduit aussi ta marge de sécurité sur les questions Advanced elles-mêmes.
+
+**🧠 Comment le mémoriser :** "Un seul examen, deux résultats possibles — viser Expert protège aussi ton résultat Advanced."
+
+
 ## Official References
 
 - [Official Symfony Certification](https://certification.symfony.com/)

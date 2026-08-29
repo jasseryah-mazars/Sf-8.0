@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un paramètre est figé une fois pour toutes à la compilation ; une variable d'environnement est lue à chaque démarrage — deux mécanismes, deux moments différents.
+
+### Imagine dans la vraie vie
+Les paramètres sont les mesures imprimées d'une recette — fixées au moment où le livre de cuisine est imprimé (compile time). Les variables d'environnement sont la note "sel à volonté" : remplie devant les fourneaux (runtime), pour que la même recette imprimée fonctionne dans chaque cuisine.
+
+### Dans Symfony
+`%env(DATABASE_URL)%` permet au **même** container compilé de fonctionner en local, en test et en production — seule la valeur de la variable d'environnement change, jamais le code ni la config compilée.
+
+### Exemple simple
+```yaml
+parameters:
+    app.page_size: '%env(int:APP_PAGE_SIZE)%' # processeur "int" convertit la chaîne
+```
+
+### Comment le mémoriser 🧠
+Les processeurs d'env (`%env(int:MAX)%`) s'enchaînent **de droite à gauche** — comme des étapes de préparation appliquées une par une avant que le plat n'arrive à table.
+---
+
+
 ## Theory
 
 Un **parameter** est une valeur de configuration nommée, stockée dans le
@@ -315,7 +337,7 @@ plus facile à tester.
     - [ ] D. Never; it is a literal string
 
     **Why:** Les placeholders d'env sont résolus à l'exécution pour qu'un même
-    container compilé fonctionne dans tous les environnements. **Ref:** [Env vars](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables).
+    container compilé fonctionne dans tous les environnements. **Ref:** [Env vars](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables).
 
 ??? question "Q2. What does `%env(int:MAX)%` return?"
     - [ ] A. The string value of `MAX`
@@ -324,7 +346,7 @@ plus facile à tester.
     - [ ] D. A parameter named `int`
 
     **Why:** Le processor `int:` caste la chaîne d'env brute en entier.
-    **Ref:** [Env var processors](https://symfony.com/doc/current/configuration/env_var_processors.html).
+    **Ref:** [Env var processors](https://symfony.com/doc/8.0/configuration/env_var_processors.html).
 
 ??? question "Q3. Which injects the `app.name` parameter into a constructor arg?"
     - [x] A. `#[Autowire(param: 'app.name')]` ✅
@@ -333,7 +355,7 @@ plus facile à tester.
     - [ ] D. Type-hinting `string`
 
     **Why:** `param:` nomme un parameter du container ; une chaîne nue sans `%%`
-    est un littéral. **Ref:** [Autowire attribute](https://symfony.com/doc/current/service_container/autowiring.html).
+    est un littéral. **Ref:** [Autowire attribute](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q4. How do you write a literal percent sign in a parameter value?"
     - [ ] A. `\%`
@@ -342,7 +364,7 @@ plus facile à tester.
     - [ ] D. You cannot
 
     **Why:** Un pourcent doublé s'échappe en un seul `%` littéral.
-    **Ref:** [Parameters](https://symfony.com/doc/current/configuration.html#configuration-parameters).
+    **Ref:** [Parameters](https://symfony.com/doc/8.0/configuration.html#configuration-parameters).
 
 ## Key takeaways
 
@@ -372,8 +394,8 @@ plus facile à tester.
   bundle est validée puis *transformée en* parameters.
 
 ## Official References
-- [Official Symfony docs — Configuration & Parameters](https://symfony.com/doc/current/configuration.html)
-- [Official Symfony docs — Env Var Processors](https://symfony.com/doc/current/configuration/env_var_processors.html)
+- [Official Symfony docs — Configuration & Parameters](https://symfony.com/doc/8.0/configuration.html)
+- [Official Symfony docs — Env Var Processors](https://symfony.com/doc/8.0/configuration/env_var_processors.html)
 - [Symfony source — EnvVarProcessor](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php)
 
 ## Video references
@@ -386,7 +408,7 @@ plus facile à tester.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

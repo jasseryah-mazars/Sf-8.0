@@ -17,6 +17,20 @@
     question. This bank is community-authored and aligned with the syllabus — it
     is not sourced from, or reviewed by, the official Symfony 8 certification.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Un entraînement interactif qui te fait vivre l'examen en conditions proches du réel, avec les mêmes types de questions.
+
+**Pourquoi ça existe ?** Lire de la théorie ne suffit pas — s'entraîner sous forme de questions, avec un minuteur en mode Exam, habitue ton cerveau au format réel avant le jour J.
+
+**🏠 Analogie de la vraie vie :** Un simulateur de vol pour un pilote. Le mode Practice, c'est l'instructeur qui corrige chaque geste immédiatement ; le mode Exam, c'est le vol solo minuté, sans filet, avec le score révélé seulement à l'atterrissage.
+
+**Symfony dans la vraie vie :** Filtrer par domaine (par ex. "Security seulement") et par difficulté permet de cibler précisément ta zone faible, plutôt que de réviser tout au hasard.
+
+**⚠️ Erreur fréquente :** croire que ces questions sont "officielles" — ce sont des questions d'entraînement inspirées du syllabus, jamais des questions réellement posées à l'examen.
+
+**🧠 Comment le mémoriser :** "Practice corrige à chaque coup ; Exam attend la fin du combat pour révéler le score."
+
 The three interaction types mirror the exam exactly:
 
 - **True / False** — pick one of two options.

@@ -26,7 +26,29 @@
     **Syllabus:** `Miscellaneous → Error Handling` ·
     **Level:** Advanced ·
     **Est. time:** 30 min ·
+
     **Prerequisites:** [Request Handling](../architecture/request-handling.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le composant ErrorHandler transforme même les erreurs PHP classiques (warnings, notices) en exceptions rattrapables — pour que tout soit géré de façon uniforme.
+
+### Imagine dans la vraie vie
+Les urgences d'un hôpital. Les incidents bruts arrivant sous toutes les formes — avertissements, erreurs fatales — sont d'abord inscrits sur une fiche patient standard (transformés en exceptions rattrapables), pour être tous traités de la même façon.
+
+### Dans Symfony
+Une simple division par zéro (`DivisionByZeroError`, une erreur PHP native) devient rattrapable exactement comme une exception métier que tu aurais lancée toi-même — grâce à l'ErrorHandler qui uniformise tout.
+
+### Exemple simple
+```php
+try { intdiv(1, 0); } catch (\DivisionByZeroError $e) { /* une VRAIE erreur PHP, rattrapée */ }
+```
+
+### Comment le mémoriser 🧠
+Seule une exception implémentant **`HttpExceptionInterface`** porte un statut personnalisé — tout le reste devient automatiquement une **500**, même une simple `\RuntimeException` sans rapport avec HTTP.
 
 ---
 
@@ -113,7 +135,7 @@ echo $html->getAsString(); // rich debug page with stack traces
 ```mermaid
 flowchart LR
     E[PHP error] --> H[ErrorHandler]
-    H -->|throw| Ex[\ErrorException]
+    H -->|throw| Ex["#92;ErrorException"]
     T[Uncaught throwable] --> FE[FlattenException]
     FE --> R[ErrorRendererInterface]
     R --> O[HTML / JSON / XML]
@@ -240,13 +262,15 @@ custom `error_controller` for full control over rendering.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. An uncaught exception that is NOT an HttpException produces which status?"
     - [ ] A. 404
     - [x] B. 500 ✅
     - [ ] C. 400
 
     **Why:** Only `HttpExceptionInterface` carries a status; otherwise 500.
-    **Ref:** [Errors & exceptions](https://symfony.com/doc/current/controller/error_pages.html).
+    **Ref:** [Errors & exceptions](https://symfony.com/doc/8.0/controller/error_pages.html).
 
 ??? question "Q2. What does the ErrorHandler do with a PHP warning?"
     - [x] A. Converts it into an `\ErrorException` ✅
@@ -254,7 +278,7 @@ custom `error_controller` for full control over rendering.
     - [ ] C. Writes it to the response body
 
     **Why:** `set_error_handler()` throws `\ErrorException` so PHP errors are catchable.
-    **Ref:** [ErrorHandler](https://symfony.com/doc/current/components/error_handler.html).
+    **Ref:** [ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php).
 
 ??? question "Q3. Which serializable object represents a throwable for rendering?"
     - [x] A. `FlattenException` ✅
@@ -262,7 +286,7 @@ custom `error_controller` for full control over rendering.
     - [ ] C. `ErrorEvent`
 
     **Why:** `FlattenException` snapshots the throwable for renderers/loggers.
-    **Ref:** [ErrorHandler](https://symfony.com/doc/current/components/error_handler.html).
+    **Ref:** [ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php).
 
 ## Key takeaways
 
@@ -286,8 +310,8 @@ custom `error_controller` for full control over rendering.
 - **Confused with:** the `kernel.exception` event — the component converts/renders errors; the event flow turns an exception into a `Response`.
 
 ## Official References
-- [Official docs — Error pages](https://symfony.com/doc/current/controller/error_pages.html)
-- [Official docs — ErrorHandler component](https://symfony.com/doc/current/components/error_handler.html)
+- [Official docs — Error pages](https://symfony.com/doc/8.0/controller/error_pages.html)
+- [Official docs — ErrorHandler component](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 ## Video references
@@ -299,7 +323,7 @@ custom `error_controller` for full control over rendering.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller/error_pages.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller/error_pages.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

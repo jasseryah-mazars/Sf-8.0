@@ -26,8 +26,36 @@
 
     **Syllabus:** `Automated Tests → Functional Testing` ·
     **Level:** Advanced → Expert ·
+
     **Est. time:** 30 min ·
     **Prerequisites:** [Unit Tests](unit-tests.md), [Controllers](../controllers/index.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un test fonctionnel démarre le **vrai** kernel et le pilote comme un navigateur pour vérifier qu'une requête entière fonctionne de bout en bout.
+
+### Imagine dans la vraie vie
+Un test fonctionnel est une répétition générale complète sur la vraie scène — décors réels, éclairage réel, toute la troupe — plutôt que des acteurs qui lisent leurs répliques dans une salle annexe. `WebTestCase` est la version avec un siège spectateur (un client navigateur) ; `KernelTestCase` amène juste la troupe sur scène sans public.
+
+### Dans Symfony
+Tester qu'un formulaire d'inscription complet fonctionne — de l'affichage de la page jusqu'à l'enregistrement en base et la redirection — nécessite `WebTestCase`, jamais un simple test unitaire qui ne teste qu'un morceau isolé.
+
+### Exemple simple
+```php
+class InscriptionTest extends WebTestCase {
+    public function testInscription(): void {
+        $client = static::createClient();
+        $client->request('GET', '/inscription');
+        $this->assertResponseIsSuccessful();
+    }
+}
+```
+
+### Comment le mémoriser 🧠
+`self::getContainer()` renvoie le container **spécial de test**, qui te donne accès même aux services **privés** — impossible en production, mais essentiel pour inspecter l'état interne pendant un test.
 
 ---
 
@@ -312,6 +340,8 @@ you to know. Do **not** functional-test pure logic that a fast
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which class adds an HTTP client on top of the kernel booting?"
     - [ ] A. `KernelTestCase`
     - [x] B. `WebTestCase` (extends `KernelTestCase`) ✅
@@ -319,7 +349,7 @@ you to know. Do **not** functional-test pure logic that a fast
     - [ ] D. `BrowserTestCase`
 
     **Why:** `WebTestCase` extends `KernelTestCase` and provides `createClient()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#application-tests).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#application-tests).
 
 ??? question "Q2. Why can `self::getContainer()->get()` return a private service?"
     - [x] A. It returns the special test container (`test.service_container`) ✅
@@ -328,7 +358,7 @@ you to know. Do **not** functional-test pure logic that a fast
     - [ ] D. Private services do not exist in test
 
     **Why:** the `test` env compiles a `TestContainer` exposing private/non-shared
-    services. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#accessing-the-container).
+    services. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#accessing-the-container).
 
 ??? question "Q3. How many times can you call `createClient()` in one test?"
     - [x] A. Once — a second call throws ✅
@@ -337,7 +367,7 @@ you to know. Do **not** functional-test pure logic that a fast
     - [ ] D. Once per HTTP request
 
     **Why:** only one kernel/client may be booted per test; re-calling throws.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. Which config flag makes the `test.client` service available?"
     - [x] A. `framework.test: true` ✅
@@ -346,7 +376,7 @@ you to know. Do **not** functional-test pure logic that a fast
     - [ ] D. `kernel.debug: true`
 
     **Why:** `framework.test: true` (default in `config/packages/test/`) registers
-    the test client and container. **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    the test client and container. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ## Key takeaways
 
@@ -370,7 +400,7 @@ you to know. Do **not** functional-test pure logic that a fast
 - **Confused with:** [Unit Tests](unit-tests.md) — unit tests boot no kernel; functional tests boot the real one.
 
 ## Official References
-- [Official Symfony docs — Testing](https://symfony.com/doc/current/testing.html)
+- [Official Symfony docs — Testing](https://symfony.com/doc/8.0/testing.html)
 - [Symfony source — WebTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/WebTestCase.php)
 - [Symfony source — KernelTestCase](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/KernelTestCase.php)
 
@@ -383,7 +413,7 @@ you to know. Do **not** functional-test pure logic that a fast
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#application-tests) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#application-tests) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -82,8 +82,23 @@ Parcourez-les à peu près dans l'ordre :
 [Web Security Fundamentals](../php-web-security/web-security.md) ·
 [Controllers](../controllers/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Le composant Form transforme un objet PHP en champs HTML à remplir, puis reconvertit les données soumises en cet objet PHP — dans les deux sens, automatiquement.
+
+**Pourquoi ça existe ?** Sans lui, il faudrait écrire à la main chaque `<input>`, relire chaque valeur postée, la valider, et la réassigner à un objet — pour chaque formulaire du site. Le composant Form automatise tout ce travail répétitif.
+
+**🏠 Analogie de la vraie vie :** Un formulaire administratif papier pré-imprimé avec des cases à remplir. Tu le remplis (soumission), un employé le relit et reporte chaque case dans ton dossier (l'objet PHP) — et s'il manque une signature, il te le rend avec l'erreur surlignée (validation).
+
+**Symfony dans la vraie vie :** Une classe `ProduitType` décrit les cases du formulaire ; `$form->handleRequest($request)` lit ce que le visiteur a rempli ; `$form->getData()` te rend l'objet `Produit` déjà rempli et validé.
+
+**⚠️ Erreur fréquente :** appeler `$form->isValid()` sans avoir vérifié `$form->isSubmitted()` avant — ça plante sur un formulaire qui vient d'être affiché, pas encore soumis.
+
+**🧠 Comment le mémoriser :** "Jamais `isValid()` seul — toujours `isSubmitted() && isValid()`, dans cet ordre."
+
+
 ## Official References
 
-- [Symfony documentation — Forms](https://symfony.com/doc/current/forms.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Forms](https://symfony.com/doc/8.0/forms.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -26,6 +26,30 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Twig](../twig/index.md), [Messenger](../messenger/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Mime construit l'email (texte, HTML, pièces jointes) ; Mailer l'envoie via un transport choisi par une seule variable d'environnement.
+
+### Imagine dans la vraie vie
+Une salle de courrier. Mime **assemble l'enveloppe et son contenu** — la lettre (texte/HTML), les photos et pièces jointes imbriquées dans le bon ordre. Mailer est le **commis qui la remet à un transporteur** choisi par `MAILER_DSN`.
+
+### Dans Symfony
+Changer `MAILER_DSN` de `smtp://...` à un service tiers ne nécessite **aucun** changement dans le code qui construit et envoie l'email — seule la configuration change, jamais le code métier.
+
+### Exemple simple
+```php
+$email = (new TemplatedEmail())->to($destinataire)->htmlTemplate('email/bienvenue.html.twig');
+$mailer->send($email);
+```
+
+### Comment le mémoriser 🧠
+Une fois `SendEmailMessage` routé via Messenger, `send()` **met en file d'attente** au lieu d'envoyer immédiatement — l'email part seulement quand un worker consomme le message.
+
 ---
 
 ## Theory
@@ -262,13 +286,15 @@ production unless the email must be confirmed before responding.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `MailerInterface::send()` with Messenger routing configured…"
     - [x] A. dispatches a `SendEmailMessage` to be delivered by a worker ✅
     - [ ] B. always sends synchronously
     - [ ] C. throws if no worker is running
 
     **Why:** Routing `SendEmailMessage` async makes `send()` enqueue it.
-    **Ref:** [Sending messages async](https://symfony.com/doc/current/mailer.html#sending-messages-async).
+    **Ref:** [Sending messages async](https://symfony.com/doc/8.0/mailer.html#sending-messages-async).
 
 ??? question "Q2. Which class renders Twig templates into an email?"
     - [x] A. `Symfony\Bridge\Twig\Mime\TemplatedEmail` ✅
@@ -276,14 +302,14 @@ production unless the email must be confirmed before responding.
     - [ ] C. `Symfony\Component\Mailer\Mailer`
 
     **Why:** `TemplatedEmail` (Twig bridge) carries the template + context.
-    **Ref:** [HTML content](https://symfony.com/doc/current/mailer.html#twig-html-css).
+    **Ref:** [HTML content](https://symfony.com/doc/8.0/mailer.html#twig-html-css).
 
 ??? question "Q3. How are inline images referenced in the HTML body?"
     - [x] A. via a `cid:` reference from `embedFromPath()`/`embed()` ✅
     - [ ] B. as external URLs only
     - [ ] C. they cannot be inlined
 
-    **Why:** Embedded parts are addressed with `cid:<name>`. **Ref:** [Embedding images](https://symfony.com/doc/current/mailer.html#embedding-images).
+    **Why:** Embedded parts are addressed with `cid:<name>`. **Ref:** [Embedding images](https://symfony.com/doc/8.0/mailer.html#embedding-images).
 
 ## Key takeaways
 
@@ -307,8 +333,8 @@ production unless the email must be confirmed before responding.
 - **Confused with:** the Mailer `Envelope` (sender/recipients for the SMTP conversation) vs the visible message headers.
 
 ## Official References
-- [Official docs — Mailer](https://symfony.com/doc/current/mailer.html)
-- [Official docs — Mime](https://symfony.com/doc/current/components/mime.html)
+- [Official docs — Mailer](https://symfony.com/doc/8.0/mailer.html)
+- [Official docs — Mime](https://symfony.com/doc/8.0/components/mime.html)
 - [Symfony source — Mailer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Mailer/Mailer.php)
 
 ## Video references
@@ -320,7 +346,7 @@ production unless the email must be confirmed before responding.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/mailer.html#sending-messages-async) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/mailer.html#sending-messages-async) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

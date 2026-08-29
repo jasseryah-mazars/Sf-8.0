@@ -7,6 +7,20 @@ follow the link for the full chapter.
     Skim before the exam to lock in vocabulary. If a definition feels fuzzy, open
     the linked chapter and do its lab.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Un dictionnaire de tous les termes techniques Symfony utilisés dans ce site, classés par ordre alphabétique — une définition rapide, avec un lien vers le chapitre complet.
+
+**Pourquoi ça existe ?** Pendant une révision rapide, tomber sur un terme oublié ("c'est quoi déjà un Voter ?") ne devrait pas obliger à rouvrir tout un chapitre — une seule ligne suffit souvent à te rafraîchir la mémoire.
+
+**🏠 Analogie de la vraie vie :** Le dictionnaire à la fin d'un manuel scolaire, qu'on consulte vite fait pour un mot précis, sans relire tout le chapitre qui l'explique en détail.
+
+**Symfony dans la vraie vie :** Chercher "Badge" ici te donne une phrase de rappel plus un lien direct vers le chapitre Authenticators — utile pendant un quiz, sans perdre ton fil de révision.
+
+**⚠️ Erreur fréquente :** utiliser le glossaire comme unique moyen d'apprentissage — une ligne de définition ne remplace jamais la compréhension en profondeur du chapitre complet.
+
+**🧠 Comment le mémoriser :** "Le glossaire rafraîchit la mémoire, il ne construit pas la compréhension — pour ça, ouvre le chapitre lié."
+
 ## A
 
 - **AbstractController** — Base controller with helper shortcuts (`render`, `json`,
@@ -51,7 +65,7 @@ follow the link for the full chapter.
 ## E
 
 - **Envelope** — Wraps a Messenger message with **stamps** (metadata). → [messenger](messenger/middleware.md)
-- **ESI (Edge Side Includes)** — Cache fragments independently at a gateway. → [chapter](http-caching/esi.md)
+- **ESI (Edge Side Includes)** — Cache fragments independently at a gateway. → [chapter](appendices/out-of-syllabus/esi.md)
 - **ETag** — Validation cache header (content fingerprint); wins over `Last-Modified`. → [validation](http-caching/validation.md)
 - **EventDispatcher** — Dispatches events to listeners/subscribers by priority. → [chapter](architecture/events.md)
 - **`empty_data`** — Form value used when nothing is submitted. → [creation](forms/creation.md)
@@ -126,5 +140,5 @@ follow the link for the full chapter.
 
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

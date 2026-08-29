@@ -15,7 +15,9 @@ Bootstrapping tasks that everything else depends on. All complete.
   attribution + trademark disclaimer). **Complexity:** S.
 
 ## T-FND-03 — SpecKit documents
-- **Deliverables:** the 13 files in `specs/`. **Complexity:** L.
+- **Deliverables:** the files in `specs/` (started at 13, now 25 as later audit
+  and remediation rounds added their own report/log documents — see
+  `specs/CoworkProgress.md` for the running history). **Complexity:** L.
 
 ## T-FND-04 — Chapter template & conventions
 - **Deliverables:** `docs/_meta/CHAPTER_TEMPLATE.md`,

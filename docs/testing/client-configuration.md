@@ -26,8 +26,30 @@
 
     **Syllabus:** `Automated Tests → Client configuration` ·
     **Level:** Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [The Client](client.md), [Functional Tests](functional-tests.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`createClient($options, $server)` fixe une bonne fois pour toutes des paramètres qui s'appliqueront ensuite à **chaque** requête du test — pas besoin de les répéter à chaque appel.
+
+### Imagine dans la vraie vie
+Briefer un coursier avant une tournée de livraisons. `createClient()` est le moment où tu donnes les instructions permanentes que chaque colis hérite : toujours prendre l'autoroute (`HTTPS`), toujours se présenter à ce dépôt (`HTTP_HOST`).
+
+### Dans Symfony
+Simuler que chaque requête du test vient d'un client HTTPS avec un header d'authentification précis évite de répéter ce header dans chaque appel `$client->request()` du test.
+
+### Exemple simple
+```php
+$client = static::createClient([], ['HTTP_AUTHORIZATION' => 'Bearer '.$token]);
+```
+
+### Comment le mémoriser 🧠
+`$server` est le **deuxième** argument de `createClient()` — pas une liste de chaînes de header ; les headers de requête deviennent des paramètres serveur préfixés `HTTP_`.
 
 ---
 
@@ -328,6 +350,8 @@ on.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `createClient()`'s second argument is…"
     - [x] A. An array of default server parameters ✅
     - [ ] B. An array of request headers as strings
@@ -335,7 +359,7 @@ on.
     - [ ] D. A list of routes
 
     **Why:** `createClient(array $options, array $server)` — server params model
-    `$_SERVER`. **Ref:** [Testing](https://symfony.com/doc/current/testing.html#configuring-the-test-client).
+    `$_SERVER`. **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client).
 
 ??? question "Q2. To send an `Accept: application/json` header you set…"
     - [x] A. `HTTP_ACCEPT => 'application/json'` ✅
@@ -344,7 +368,7 @@ on.
     - [ ] D. `CONTENT_TYPE => 'application/json'`
 
     **Why:** request headers use the `HTTP_` prefix in server params.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#configuring-the-test-client).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client).
 
 ??? question "Q3. `$client->loginUser($user)` does what?"
     - [x] A. Authenticates the session with `$user`, skipping the login form ✅
@@ -353,7 +377,7 @@ on.
     - [ ] D. Returns a JWT
 
     **Why:** it injects a security token for the given `UserInterface`.
-    **Ref:** [Testing — login](https://symfony.com/doc/current/testing.html#logging-in-users-authentication).
+    **Ref:** [Testing — login](https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication).
 
 ??? question "Q4. `$client->insulate()` means each request…"
     - [x] A. Runs in a separate PHP subprocess (no in-process profiler) ✅
@@ -362,7 +386,7 @@ on.
     - [ ] D. Is cached
 
     **Why:** insulation isolates global state at the cost of losing in-process
-    access. **Ref:** [BrowserKit](https://symfony.com/doc/current/components/browser_kit.html).
+    access. **Ref:** [BrowserKit](https://symfony.com/doc/8.0/components/browser_kit.html).
 
 ## Key takeaways
 
@@ -387,8 +411,8 @@ on.
 - **Confused with:** [The Client](client.md) — behaviour (redirects, cookies) lives there; boot options and server params live here.
 
 ## Official References
-- [Official Symfony docs — Configuring the test client](https://symfony.com/doc/current/testing.html#configuring-the-test-client)
-- [Official Symfony docs — Logging in users](https://symfony.com/doc/current/testing.html#logging-in-users-authentication)
+- [Official Symfony docs — Configuring the test client](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client)
+- [Official Symfony docs — Logging in users](https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
 
 ## Video references
@@ -400,7 +424,7 @@ on.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#configuring-the-test-client) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#configuring-the-test-client) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -29,6 +29,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un transformateur de données convertit une valeur entre ce que ton modèle stocke et ce que le navigateur affiche — dans les deux sens.
+
+### Imagine dans la vraie vie
+Un transformateur est un **bureau de change** entre ce que l'utilisateur tape et ce que ton objet stocke. `transform()` remet ta monnaie convertie en devise locale que le navigateur comprend (modèle → vue) ; `reverseTransform()` la reconvertit dans ta devise d'origine à l'entrée (vue → modèle). Présente un montant que le bureau ne peut pas convertir, et il refuse la transaction — il ne te rend pas silencieusement rien.
+
+### Dans Symfony
+Un champ texte "12,50 €" saisi par l'utilisateur doit être reconverti en `float` (12.50) pour l'entité — c'est exactement le travail de `reverseTransform()`, appelé automatiquement à la soumission.
+
+### Exemple simple
+```php
+public function reverseTransform($value): ?float
+{
+    return $value === null ? null : (float) str_replace(',', '.', $value);
+}
+```
+
+### Comment le mémoriser 🧠
+"**T**ransform va vers la **v**ue (affichage), **r**everseTransform revient au **m**odèle (soumission)" — retiens le sens par la lettre : Transform = vers l'écran, Reverse = en arrière vers l'objet.
+
+
 ## Theory
 
 Un champ stocke sa valeur sous trois formes — **model**, **normalized (norm)**,
@@ -358,7 +381,7 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 
     **Why:** `transform` va vers la view (affichage) ; `reverseTransform` va vers
     le model (soumission).
-    **Ref:** [Data transformers](https://symfony.com/doc/current/form/data_transformers.html).
+    **Ref:** [Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html).
 
 ??? question "Q2. `addModelTransformer` converts between…"
     - [x] A. Model and normalized data ✅
@@ -368,7 +391,7 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 
     **Why:** Les model transformers font le pont model↔norm ; les view
     transformers font le pont norm↔view.
-    **Ref:** [Data transformers](https://symfony.com/doc/current/form/data_transformers.html).
+    **Ref:** [Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html).
 
 ??? question "Q3. What should a transformer throw on invalid input?"
     - [x] A. `TransformationFailedException` ✅
@@ -403,8 +426,8 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 - **Confused with:** [Validation](../validation/index.md) — un transform en échec est une erreur de *format* (`invalid_message`), pas une violation de règle métier.
 
 ## Official References
-- [Official Symfony docs — Data transformers](https://symfony.com/doc/current/form/data_transformers.html)
-- [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/current/form/data_transformers.html#example-1-transforming-string-to-datetime)
+- [Official Symfony docs — Data transformers](https://symfony.com/doc/8.0/form/data_transformers.html)
+- [Official Symfony docs — Model/norm/view data](https://symfony.com/doc/8.0/form/data_transformers.html#example-1-transforming-string-to-datetime)
 - [Symfony source — Form.php](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)
 
 ## Video references
@@ -417,7 +440,7 @@ une erreur de *format* ; les règles métier relèvent du Validator.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/data_transformers.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/data_transformers.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

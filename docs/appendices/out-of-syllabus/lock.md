@@ -1,10 +1,12 @@
 # Lock Component
 
-**Excluded from Symfony 8 certification.** The Lock component does not
-appear in the official Symfony 8 certification syllabus. This chapter is
-kept as additional/enrichment content — see `specs/TraceabilityMatrix.md`
-for the official-vs-additional split — and is not tested in generated exams
-or counted toward official syllabus coverage.
+!!! danger "Hors syllabus officiel Symfony 8.0"
+    The Lock component does not appear in the official Symfony 8 certification
+    syllabus. This chapter is kept under [Appendices](index.md) as
+    additional/enrichment content — see `specs/TraceabilityMatrix.md`'s
+    "Out-of-scope / Additional Learning" section for the official-vs-additional
+    split — and is not tested in generated exams or counted toward official
+    syllabus coverage.
 
 !!! tip "In a nutshell"
     Lock stops two processes doing the same critical work at once: get a
@@ -30,9 +32,25 @@ or counted toward official syllabus coverage.
     **Syllabus:** `Miscellaneous → Lock` ·
     **Level:** Advanced → Expert ·
     **Est. time:** 35 min ·
-    **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
+    **Prerequisites:** [Dependency Injection](../../dependency-injection/index.md)
+
+    **Examen Symfony 8 :** NON — hors syllabus officiel, conservé comme enrichissement (voir l'avertissement ci-dessus).
 
 ---
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** Le composant Lock empêche deux processus de faire le même travail critique en même temps — par exemple, éviter que deux tâches planifiées identiques ne s'exécutent en double.
+
+**Pourquoi ça existe ?** Sans verrou, deux workers qui démarrent en même temps pourraient tous les deux, par exemple, envoyer la même facture deux fois.
+
+**🏠 Analogie de la vraie vie :** Le panneau "occupé" d'une porte de toilettes. `acquire()` essaie la porte : si elle est libre, tu retournes le panneau et entres ; si elle est déjà occupée, tu reçois un simple "non" et tu repars — tu ne fais pas la queue sauf si tu le demandes explicitement (mode bloquant).
+
+**Symfony dans la vraie vie :** `$lock = $lockFactory->createLock('tache-quotidienne'); if ($lock->acquire()) { /* travail */ $lock->release(); }` — un seul worker à la fois exécute réellement la tâche.
+
+**⚠️ Erreur fréquente :** croire que le Lock component est testé à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus.
+
+**🧠 Comment le mémoriser :** "Un verrou, c'est un panneau `occupé` — `acquire()` par défaut ne fait jamais la queue, il dit juste oui ou non."
 
 ## Theory
 
@@ -303,7 +321,7 @@ scaled app.
     - [ ] B. blocking until free
     - [ ] C. throws if held
 
-    **Why:** The default is non-blocking; `acquire(true)` blocks. **Ref:** [Lock](https://symfony.com/doc/current/lock.html#blocking-locks).
+    **Why:** The default is non-blocking; `acquire(true)` blocks. **Ref:** [Lock](https://symfony.com/doc/8.0/lock.html#blocking-locks).
 
 ??? question "Q2. Which store works across multiple servers?"
     - [ ] A. `FlockStore`
@@ -311,7 +329,7 @@ scaled app.
     - [x] C. `RedisStore` ✅
 
     **Why:** Flock/Semaphore are local; Redis (and DB) stores are shared.
-    **Ref:** [Lock stores](https://symfony.com/doc/current/components/lock.html#available-stores).
+    **Ref:** [Lock stores](https://symfony.com/doc/8.0/lock.html#available-stores).
 
 ??? question "Q3. Why call `refresh()` during a long critical section?"
     - [x] A. To extend the lock's TTL before it expires ✅
@@ -319,7 +337,7 @@ scaled app.
     - [ ] C. To switch stores
 
     **Why:** `refresh()` prolongs the TTL so the lock isn't considered stale mid-job.
-    **Ref:** [Expiring locks](https://symfony.com/doc/current/components/lock.html#expiring-locks).
+    **Ref:** [Expiring locks](https://symfony.com/doc/8.0/lock.html#expiring-locks).
 
 ## Key takeaways
 
@@ -338,13 +356,13 @@ scaled app.
 
 ## Connections
 
-- **Depends on:** [Dependency Injection](../dependency-injection/index.md) — `LockFactory` is autowired from the configured store DSN.
-- **Reused in:** [Messenger](../messenger/index.md) — serialise duplicate worker runs; [Process](process.md) — guard shared external tools.
-- **Confused with:** [Cache](cache.md) stampede protection — Lock enforces strict mutual exclusion; the cache only reduces duplicate recompute.
+- **Depends on:** [Dependency Injection](../../dependency-injection/index.md) — `LockFactory` is autowired from the configured store DSN.
+- **Reused in:** [Messenger](../../messenger/index.md) — serialise duplicate worker runs; [Process](../../miscellaneous/process.md) — guard shared external tools.
+- **Confused with:** [Cache](../../miscellaneous/cache.md) stampede protection — Lock enforces strict mutual exclusion; the cache only reduces duplicate recompute.
 
 ## Official References
-- [Official docs — Lock](https://symfony.com/doc/current/lock.html)
-- [Official docs — Lock component](https://symfony.com/doc/current/components/lock.html)
+- [Official docs — Lock](https://symfony.com/doc/8.0/lock.html)
+- [Official docs — Lock component](https://symfony.com/doc/8.0/lock.html)
 - [Symfony source — Lock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Lock/Lock.php)
 
 ## Video references
@@ -356,7 +374,7 @@ scaled app.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/lock.html#blocking-locks) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/lock.html#blocking-locks) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -370,4 +388,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Cache](cache.md) · [Process](process.md) · [Messenger](../messenger/index.md)</small>
+<small>Related: [Cache](../../miscellaneous/cache.md) · [Process](../../miscellaneous/process.md) · [Messenger](../../messenger/index.md)</small>

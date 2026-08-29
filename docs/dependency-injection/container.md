@@ -29,7 +29,28 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Symfony Architecture](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le container fabrique tes objets et leur injecte leurs dépendances à ta place — tu décris *comment* construire un service, il fait le reste.
+
+### Imagine dans la vraie vie
+Le container est une cuisine de restaurant. Tu commandes un plat (tu demandes un service) ; la cuisine rassemble et assemble les ingrédients (ses dépendances) et le dresse — tu ne touches jamais aux casseroles (`new`) toi-même.
+
+### Dans Symfony
+Injecter `LoggerInterface` dans le constructeur d'un service suffit — tu n'écris jamais `new Logger(...)` toi-même ; le container sait déjà comment le construire et te le fournit tout prêt.
+
+### Exemple simple
+```php
+public function __construct(private LoggerInterface $logger) {} // le container fournit tout
+```
+
+### Comment le mémoriser 🧠
+Les services sont **privés et partagés par défaut** — "privé" veut dire que seul le container peut les injecter (pas de `$container->get()` direct depuis ton code applicatif), "partagé" veut dire qu'une seule instance est réutilisée partout dans la même requête.
 
 ## Theory
 
@@ -435,6 +456,8 @@ register value objects, entities, or DTOs — build those with `new`. When you n
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Why are Symfony services private by default?"
     - [ ] A. To make them read-only
     - [x] B. So the compiler can inline/remove them and enforce proper DI ✅
@@ -443,7 +466,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
 
     **Why:** Private services can be inlined into their sole consumer and pruned if
     unused, and it discourages the service-locator anti-pattern.
-    **Ref:** [Service container](https://symfony.com/doc/current/service_container.html).
+    **Ref:** [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. When does autowiring resolution happen?"
     - [x] A. At container **compilation** (build time) ✅
@@ -452,7 +475,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
     - [ ] D. During HTTP kernel termination
 
     **Why:** Autowiring is a compiler pass; the dumped container has arguments
-    already resolved. **Ref:** [Autowiring](https://symfony.com/doc/current/service_container/autowiring.html).
+    already resolved. **Ref:** [Autowiring](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q3. `$container->get('some.private.service')` returns…"
     - [ ] A. The service instance
@@ -461,7 +484,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
     - [ ] D. A new instance each call
 
     **Why:** Private services are not fetchable by id from the public container.
-    **Ref:** [Service container](https://symfony.com/doc/current/service_container.html).
+    **Ref:** [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q4. What is stored in `var/cache/prod/`?"
     - [ ] A. The `ContainerBuilder`
@@ -470,7 +493,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
     - [ ] D. Serialized service instances
 
     **Why:** `PhpDumper` writes an optimised PHP class with a method per service.
-    **Ref:** [Compiling the container](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Compiling the container](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ## Key takeaways
 
@@ -502,8 +525,8 @@ register value objects, entities, or DTOs — build those with `new`. When you n
   PSR-11 subset, not the whole container.
 
 ## Official References
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
-- [Official Symfony docs — Compiling the Container](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
+- [Official Symfony docs — Compiling the Container](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
 - [Symfony source — ContainerBuilder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/ContainerBuilder.php)
 
 ## Video references
@@ -515,7 +538,7 @@ register value objects, entities, or DTOs — build those with `new`. When you n
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -32,6 +32,32 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La traduction associe un identifiant de message à une chaîne localisée par langue — et si aucune traduction n'existe, Symfony affiche l'identifiant lui-même plutôt que de planter.
+
+### Imagine dans la vraie vie
+La traduction est un audioguide multilingue de musée. Chaque exposition a un code (l'identifiant du message), et le guide joue la phrase correspondante dans ta langue choisie, se repliant sur une langue régionale puis par défaut quand ta langue exacte n'a pas d'enregistrement. Si aucun enregistrement n'existe nulle part, il lit simplement le code à voix haute au lieu de se taire.
+
+### Dans Symfony
+```twig
+{{ 'produit.ajoute_panier'|trans }}
+```
+Si la clé `produit.ajoute_panier` n'existe dans aucun fichier de traduction, la page affiche littéralement "produit.ajoute_panier" — un signal visible immédiat qu'une traduction manque, plutôt qu'une erreur ou un texte vide.
+
+### Exemple simple
+```yaml
+# messages.fr.yaml
+produit.ajoute_panier: "Ajouté au panier"
+```
+
+### Comment le mémoriser 🧠
+Symfony 8 utilise le **format ICU MessageFormat** (`{count, plural, ...}`) pour la pluralisation — c'est la seule voie, `transchoice` n'existe plus.
+
+---
+
+
 ## Theory
 
 Deux composants coopèrent. **Translation** associe des clés de message à des
@@ -261,7 +287,7 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
     - [ ] C. `%count%` only
 
     **Why:** ICU MessageFormat est le mécanisme actuel ; la syntaxe à pipe est du legacy.
-    **Ref:** [Pluralization](https://symfony.com/doc/current/translation/message_format.html).
+    **Ref:** [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q2. What is returned when a translation key is missing?"
     - [x] A. The message id itself ✅
@@ -269,14 +295,14 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
     - [ ] C. A `TranslationException`
 
     **Why:** Le translator retourne l'id non traduit (journalisé en dev).
-    **Ref:** [Translations](https://symfony.com/doc/current/translation.html).
+    **Ref:** [Translations](https://symfony.com/doc/8.0/translation.html).
 
 ??? question "Q3. Which class gives a localized country name?"
     - [x] A. `Symfony\Component\Intl\Countries` ✅
     - [ ] B. `Symfony\Component\Locale\Country`
     - [ ] C. `Symfony\Component\Translation\Countries`
 
-    **Why:** `Countries::getName()` lit les données ICU embarquées. **Ref:** [Intl](https://symfony.com/doc/current/components/intl.html).
+    **Why:** `Countries::getName()` lit les données ICU embarquées. **Ref:** [Intl](https://symfony.com/doc/8.0/components/intl.html).
 
 ## Key takeaways
 
@@ -300,9 +326,9 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
 - **Confused with:** l'ancienne syntaxe à pipe `apples|apple` — Symfony 8 utilise ICU MessageFormat.
 
 ## Official References
-- [Official docs — Translations](https://symfony.com/doc/current/translation.html)
-- [Official docs — Message format](https://symfony.com/doc/current/translation/message_format.html)
-- [Official docs — Intl](https://symfony.com/doc/current/components/intl.html)
+- [Official docs — Translations](https://symfony.com/doc/8.0/translation.html)
+- [Official docs — Message format](https://symfony.com/doc/8.0/reference/formats/message_format.html)
+- [Official docs — Intl](https://symfony.com/doc/8.0/components/intl.html)
 - [Symfony source — Translator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php)
 
 ## Video references
@@ -315,7 +341,7 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/translation/message_format.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/formats/message_format.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

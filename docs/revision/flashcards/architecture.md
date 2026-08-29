@@ -8,26 +8,40 @@
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Un jeu de **122 flashcards** (question au recto, réponse au verso) sur Symfony Architecture. On lit la question, on répond mentalement, puis on tape pour révéler la réponse.
+
+**Pourquoi ça existe ?** Se tester activement (essayer de répondre avant de voir la réponse) ancre l'information bien mieux que relire passivement un chapitre. Répété à intervalles espacés, c'est la technique de mémorisation la plus efficace connue.
+
+**🏠 Analogie de la vraie vie :** Ce sont les **cartes-vocabulaire** utilisées pour apprendre une langue étrangère : un mot d'un côté, sa traduction de l'autre — on ne progresse qu'en essayant de deviner avant de retourner la carte.
+
+**Symfony dans la vraie vie :** Recto de la carte → une question précise sur Symfony Architecture / Verso → la réponse avec sa justification et un lien vers la doc officielle / Cartes marquées "ratées" → à revoir en priorité au prochain passage.
+
+**⚠️ Erreur fréquente :** Taper pour révéler la réponse trop vite, sans avoir vraiment tenté de répondre — cela transforme l'exercice en simple lecture, avec un gain de mémorisation presque nul.
+
+**🧠 Comment le mémoriser :** *« Je réponds avant de retourner la carte »* — et je note les cartes ratées pour les revoir plus souvent que les autres (répétition espacée).
+
 ??? question "1. What kind of tool is Symfony Flex?"
     **✅ A Composer plugin that resolves aliases and applies recipes**
 
     Flex is a Composer plugin. It runs at Composer install/update time, resolving package aliases and applying recipes; it has no role during HTTP request handling.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/setup.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/setup.html)
 
 ??? question "2. What does the symfony.lock file track?"
     **✅ Which recipes are installed and their versions**
 
     symfony.lock records applied recipes so Flex can detect updates and reverse them; it is distinct from composer.lock (package versions).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/setup.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/setup.html)
 
 ??? question "3. How does a recipe auto-register a bundle?"
     **✅ By writing an entry into config/bundles.php**
 
     The bundles configurator adds the bundle class to config/bundles.php, which the kernel reads at boot via MicroKernelTrait::registerBundles().
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
 ??? question "4. Which repository holds the community (opt-in) recipes?"
     **✅ symfony/recipes-contrib**
@@ -41,7 +55,7 @@
 
     The two files are complementary, not interchangeable. composer.lock pins resolved package versions (Composer's job); symfony.lock pins which recipe versions were applied (Flex's job) so every teammate/CI reproduces the same config and Flex can detect/rollback recipe changes. Both must be committed. The common trap is thinking one supersedes the other or that they should be ignored.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/setup.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/setup.html)
 
 ??? question "6. At which point in a project's lifecycle does Symfony Flex actually run?"
     **✅ Only at Composer time — it subscribes to Composer events like post-install-cmd/post-update-cmd and package install/uninstall**
@@ -55,7 +69,7 @@
 
     `composer require orm` uses the alias `orm`, which resolves to the real package `doctrine/orm`; the alias only affects the name written to composer.json. The recipe is the separate automation (bundles, copy-from-recipe, env, container configurators described in manifest.json) that wires the package into your app. Aliases are convenience; recipes are the work.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/setup.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/setup.html)
 
 ??? question "8. Under which license is Symfony released?"
     **✅ MIT**
@@ -97,7 +111,7 @@
 
     Components are decoupled libraries, each independently versioned and usable without the full framework.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/index.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/index.html)
 
 ??? question "14. What do the symfony/*-contracts packages contain?"
     **✅ Stable interfaces and traits to depend on**
@@ -111,28 +125,28 @@
 
     Components are decoupled; Routing can be installed and used on its own via UrlMatcher/UrlGenerator without the framework.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 ??? question "16. Which mapping of term to definition is entirely correct?"
     **✅ Contract = interfaces/traits; Component = standalone library; Bridge = glue to a third-party lib; Bundle = framework wiring**
 
     The four layers are distinct: contracts (e.g. symfony/service-contracts) ship only interfaces/traits; components (e.g. symfony/routing) are standalone implementations; bridges (e.g. symfony/twig-bridge) glue a component to one specific third-party library; bundles (e.g. symfony/framework-bundle) wire things into the framework with services and config. Confusing bridge with bundle, or contract with component, is the classic exam trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/index.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/index.html)
 
 ??? question "17. Using only the Routing component standalone, what does $matcher->match('/hello/sf') return for a route defined as new Route('/hello/{name}') named 'hello'?"
     **✅ ['_route' => 'hello', 'name' => 'sf']**
 
     UrlMatcher::match() returns an array of the matched route's parameters, including the special _route key with the route name and any placeholder values. No framework or kernel is involved — the component works standalone with a RouteCollection and a RequestContext. It returns parameters, never a Response (that is the framework's job).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 ??? question "18. For a modern application, how should you depend on Symfony code?"
     **✅ Require the individual packages you need (e.g. symfony/routing); the symfony/symfony metapackage is discouraged**
 
     You should require only the individual component/bundle packages you use so the dependency graph stays minimal and each package versions independently. The old symfony/symfony monolithic metapackage is discouraged. Type-hinting contracts/interfaces further decouples you from concrete implementations.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/index.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/index.html)
 
 ??? question "19. What is a Symfony bridge?"
     **✅ An integration layer between a component and a specific third-party library**
@@ -153,7 +167,7 @@
 
     Bridges provide classes; a bundle wires them into the container and exposes configuration.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
 ??? question "22. Which statement distinguishes a bridge from a bundle correctly?"
     **✅ A bridge is a glue library (classes) coupling a component to one third-party lib; a bundle registers services and config in the framework**
@@ -174,161 +188,161 @@
 
     public/ contains index.php and static assets and is the only web-accessible directory.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html)
 
 ??? question "25. Where are bundles enabled in a modern Symfony app?"
     **✅ config/bundles.php**
 
     config/bundles.php maps each bundle class to the environments where it is enabled; the kernel reads it via MicroKernelTrait.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
 ??? question "26. What supplies registerBundles() and registerContainerConfiguration() in a skeleton Kernel?"
     **✅ MicroKernelTrait**
 
     App\\Kernel uses MicroKernelTrait, which implements the boilerplate to load bundles from config/bundles.php and configuration from config/.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/micro_kernel_trait.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html)
 
 ??? question "27. In config/bundles.php an entry reads `WebProfilerBundle::class => ['dev' => true, 'test' => true]`. What does this mean?"
     **✅ The bundle is enabled only in the dev and test environments, not in prod**
 
     config/bundles.php maps each bundle class to an array of environment => bool. The kernel enables the bundle only in the listed environments whose value is true. `['all' => true]` means every environment; `['dev' => true, 'test' => true]` means dev and test only (typical for debugging/profiling bundles).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
 ??? question "28. In prod, why is public/index.php fast and free of YAML parsing on the hot path?"
     **✅ config/ is parsed at compile time into a dumped container in var/cache/<env>/; runtime only loads that compiled container**
 
     Configuration is compiled once into a dumped PHP container under var/cache/<env>/. In prod the kernel simply loads that compiled container, so no YAML parsing happens per request — that is why the front controller stays tiny and the hot path is fast. In dev, ConfigCache checks freshness and rebuilds when source config changes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/micro_kernel_trait.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html)
 
 ??? question "29. How does a modern (Symfony 8) bundle inherit and override another bundle's resources?"
     **✅ It doesn't — bundle inheritance via getParent() was removed; you override each resource type individually**
 
     The getParent() bundle-inheritance mechanism was deprecated in 4.4 and removed in 5.0; it does not exist in Symfony 8. Modern apps override each resource type on its own (templates via templates/bundles/<Name>/, services via decoration/redefinition, config via config/packages/). Mentioning getParent() as a current mechanism is a planted trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/override.html)
 
 ??? question "30. What does the default `App\:` service definition with `resource: '../src/'` and `exclude: '../src/{Kernel.php}'` achieve?"
     **✅ It auto-registers every class under src/ as a service (with autowire/autoconfigure defaults), excluding Kernel.php**
 
     The resource glob discovers classes under src/ and registers each as a service whose id is its FQCN, inheriting the _defaults (autowire: true, autoconfigure: true). exclude keeps non-service classes (like Kernel.php, entities, DTOs) out. Unused private services are then pruned by the compiler. It does not make them public.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "31. For a controller that returns a Response, in what order do the kernel events fire?"
     **✅ kernel.request -> kernel.controller -> kernel.controller_arguments -> kernel.response**
 
     kernel.view is skipped because a Response was returned; the remaining events follow the canonical order, then finish_request and terminate.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "32. When is kernel.view dispatched?"
     **✅ Only when the controller returns a value that is not a Response**
 
     If the controller returns a non-Response value, kernel.view listeners must convert it into a Response.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-view)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-view)
 
 ??? question "33. When is kernel.terminate dispatched?"
     **✅ After the response has been sent to the client, for the main request**
 
     terminate() runs after send() and is not called for sub-requests; it is ideal for slow post-response work.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-terminate)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-terminate)
 
 ??? question "34. A listener calls setResponse() on kernel.request. What happens next?"
     **✅ The controller is skipped and flow continues at kernel.response**
 
     Setting a response on kernel.request short-circuits controller resolution; the response still passes through kernel.response.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-request)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-request)
 
 ??? question "35. What is the value of HttpKernelInterface::MAIN_REQUEST?"
     **✅ 1 (and SUB_REQUEST is 2)**
 
     MAIN_REQUEST is 1 and SUB_REQUEST is 2; the old MASTER_REQUEST constant was removed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "36. What is the full firing order of the linear kernel events when a controller returns a non-Response value that a listener then converts?"
     **✅ request → controller → controller_arguments → view → response → finish_request → (after send) terminate**
 
     The canonical order is request, controller, controller_arguments, view (only when a non-Response is returned), response, finish_request; then after the response is sent, terminate. kernel.exception is the eighth KernelEvents constant but fires out of band, only on error. controller_arguments runs AFTER argument resolution, and view sits between the controller call and response.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "37. What are the respective jobs of ControllerResolverInterface and ArgumentResolverInterface?"
     **✅ ControllerResolver reads the _controller attribute and returns a callable; ArgumentResolver builds the ordered argument array via value resolvers**
 
     ControllerResolverInterface::getController(Request) reads the _controller request attribute (set by the router) and returns a PHP callable. ArgumentResolverInterface::getArguments() then runs a chain of ValueResolverInterface resolvers (request attributes, the Request object, #[MapRequestPayload], services, variadics, defaults) to build the ordered argument list passed to the controller.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "38. Relative to argument resolution, when does kernel.controller_arguments fire?"
     **✅ After ArgumentResolver has built the argument array — listeners edit an already-resolved array via setArguments()**
 
     kernel.controller_arguments is dispatched AFTER ArgumentResolverInterface::getArguments() has produced the final ordered array; listeners receive a ControllerArgumentsEvent and may mutate the already-built array with setArguments(). Assuming it runs before resolution (to feed the resolver) is a common misconception.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-controller-arguments)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-controller-arguments)
 
 ??? question "39. A controller does its work but has no return statement (returns null) and no kernel.view listener handles it. What happens?"
     **✅ The kernel dispatches kernel.view; since no response is set, it throws ControllerDoesNotReturnResponseException**
 
     After the controller runs, handleRaw() checks whether the return value is a Response; if not, it dispatches kernel.view carrying the value. If no listener calls setResponse(), the kernel throws ControllerDoesNotReturnResponseException (a LogicException) with the familiar \"The controller must return a Response object but it returned null\" message. The fix is to return a real Response or register a view listener.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "40. Which statement about sub-requests is correct?"
     **✅ They run the same request→...→finish_request flow but never fire kernel.terminate; RequestStack push/pop restores parent state**
 
     A sub-request (HttpKernelInterface::SUB_REQUEST) runs the full linear flow from kernel.request through kernel.response and kernel.finish_request, but kernel.terminate fires only for the main request after send. handleRaw() pushes the sub-request onto the RequestStack before kernel.request and pops it after kernel.finish_request, restoring the parent request/locale.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "41. What is the signature of HttpKernelInterface::handle() and the role of its $catch argument?"
     **✅ handle(Request $request, int $type = self::MAIN_REQUEST, bool $catch = true): Response — with $catch=true, exceptions are caught and turned into a response via kernel.exception; with $catch=false they propagate**
 
     The contract is handle(Request, int $type = MAIN_REQUEST, bool $catch = true): Response. handle() wraps the private handleRaw() in a try/catch when $catch is true, so an escaped exception is routed through handleThrowable()/kernel.exception into a Response. With $catch=false (common in sub-requests and tests) the exception simply propagates to the caller.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "42. A listener is annotated #[AsEventListener(event: KernelEvents::RESPONSE, priority: -10)] and sets an X-Frame-Options header. When does it run?"
     **✅ On every response passing through kernel.response, after listeners with higher priority (since -10 is below the default 0)**
 
     kernel.response fires for every response (whether from the controller, a view listener, or a short-circuit). Listeners run high priority first; priority -10 is below the default 0, so this header listener runs relatively late. The #[AsEventListener] attribute is wired by RegisterListenersPass at compile time, replacing manual tagging.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-response)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-response)
 
 ??? question "43. Which event is responsible for turning an exception into a response?"
     **✅ kernel.exception**
 
     When an exception escapes handleRaw(), HttpKernel dispatches kernel.exception; listeners may set the response.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 
 ??? question "44. What status code results from an uncaught plain \LogicException?"
     **✅ 500**
 
     Only exceptions implementing HttpExceptionInterface carry a status; any other exception defaults to 500.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 ??? question "45. At what priority is the default ErrorListener registered on kernel.exception?"
     **✅ -128, so custom listeners run first**
 
     ErrorListener runs at a low priority (-128) so your own exception listeners get the first chance to handle the throwable.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 
 ??? question "46. Where do you override the default 404 error template?"
     **✅ templates/bundles/TwigBundle/Exception/error404.html.twig**
 
     TwigBundle resolves error templates from templates/bundles/TwigBundle/Exception/, falling back to error.html.twig.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 ??? question "47. What does the default ErrorListener actually do when it handles a kernel.exception?"
     **✅ It logs the exception, forwards to the error controller as a sub-request, and sets the resulting Response on the event**
@@ -342,14 +356,14 @@
 
     They are different classes. Symfony\\Component\\HttpKernel\\Exception\\AccessDeniedHttpException implements HttpExceptionInterface and yields a 403 through the normal error flow. Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException is a Security exception that does NOT implement HttpExceptionInterface; the firewall's exception listener catches it and turns it into a 403 (or a redirect to the login page for unauthenticated users).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 ??? question "49. A kernel.exception listener inspects getThrowable() and builds a JsonResponse, but the custom page never appears. What is the most likely bug?"
     **✅ The listener forgot to call $event->setResponse() on its branch, so the event's response stays null and the default handler wins**
 
     ExceptionEvent::getResponse() returns null until some listener calls setResponse(). Reading getThrowable() and constructing a response is not enough — you must actually set it on the event. If a branch forgets setResponse(), the response stays null, ErrorListener's default page (or a 500) is used instead, and your custom page never shows.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/reference/events.html#kernel-exception)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/events.html#kernel-exception)
 
 ??? question "50. After kernel.exception is dispatched, what does the kernel do if no listener set a response?"
     **✅ handleThrowable() sees hasResponse() is false and re-throws the original throwable (which surfaces as a 500 when catch is true)**
@@ -363,35 +377,35 @@
 
     NotFoundHttpException maps to 404. AccessDeniedHttpException maps to 403 and BadRequestHttpException to 400. All implement HttpExceptionInterface, so their status code and headers flow through to the produced response; a generic HttpException takes any status code from its constructor.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/controller/error_pages.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/error_pages.html)
 
 ??? question "52. What does a higher listener priority mean?"
     **✅ It runs earlier**
 
     Listeners are sorted by priority in descending order, so higher priorities run first; the default priority is 0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "53. What is the dispatch() signature in Symfony 8 (PSR-14)?"
     **✅ dispatch(object $event, ?string $eventName = null)**
 
     Symfony follows PSR-14: the event object comes first, the name is optional (defaults to the event's class name).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "54. Which method must an event subscriber implement?"
     **✅ public static function getSubscribedEvents(): array**
 
     EventSubscriberInterface defines the static getSubscribedEvents() method returning event names mapped to handlers.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ??? question "55. What does $event->stopPropagation() do?"
     **✅ Prevents the remaining listeners of this event from running**
 
     It sets a flag the dispatcher checks before each listener; only the current event's remaining listeners are skipped.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "56. How does EventDispatcher store and order listeners internally?"
     **✅ It keeps listeners[eventName][priority][] and sorts by priority descending on first dispatch, memoising the sorted list until a listener is added/removed**
@@ -405,77 +419,77 @@
 
     The RegisterListenersPass compiler pass scans services tagged kernel.event_listener/kernel.event_subscriber and #[AsEventListener] attributes and wires them into the dispatcher at compile time. Listeners are registered lazily — the service is only constructed when its event actually fires — which keeps boot cheap. You rarely call addListener() at runtime.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ??? question "58. Which are valid return values from getSubscribedEvents() for a single event? (choose all that apply)"
     **✅ [KernelEvents::RESPONSE => 'onResponse'] ; [KernelEvents::RESPONSE => ['onResponse', -10]] ; [KernelEvents::RESPONSE => [['onFirst', 10], ['onSecond', -10]]]**
 
     getSubscribedEvents() maps event NAMES to handlers. The value may be a method name string, a [method, priority] pair, or a list of such pairs to register several handlers for the same event. Mapping method → event name (reversed) is wrong and a frequent mistake.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ??? question "59. What does dispatch(object $event) return, and how do you read a listener's result?"
     **✅ It always returns the same event object you passed in; results reach you only by listeners mutating that event (e.g. setResponse), never as a listener return value**
 
     dispatch() returns the exact event object passed in — even with no listeners, or when all left it untouched. Listeners themselves return void; the only way data flows back is by mutating the event, which you then read from the returned object. Expecting dispatch() to hand back a listener's return value is the classic bug.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "60. Two listeners for the same event both use the default priority. In what order do they run?"
     **✅ In registration order — the default priority is 0 and equal priorities preserve the order they were added**
 
     The default priority is 0. Listeners are sorted by priority descending, and ties (equal priority) keep their registration order. So two default-priority listeners run first-registered-first. To force an order, set explicit priorities rather than relying on registration order.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "61. What is the key difference between a listener and a subscriber?"
     **✅ A listener is registered against one event; a subscriber declares all the events it handles in getSubscribedEvents()**
 
     A listener is a callable attached to a single event name (via #[AsEventListener] or the kernel.event_listener tag). A subscriber implements EventSubscriberInterface and declares all its events (and priorities) in the static getSubscribedEvents() method — handy when one class handles several related events. Both are wired by RegisterListenersPass.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ??? question "62. Where should business logic live according to the best practices?"
     **✅ In autowired services**
 
     Controllers should be thin and delegate to services, which keeps logic reusable and testable.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/best_practices.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/best_practices.html)
 
 ??? question "63. What visibility should application services have by default?"
     **✅ Private**
 
     Private services let the DI compiler inline and remove them, and discourage the service-locator anti-pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "64. Where do sensitive credentials belong?"
     **✅ The Secrets vault**
 
     Secrets should be stored in the encrypted Secrets vault, while infrastructure config uses env vars and behaviour uses parameters.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/secrets.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/secrets.html)
 
 ??? question "65. What does this services.yaml _defaults block enable: autowire: true, autoconfigure: true, public: false?"
     **✅ Constructor deps are injected by type, services are auto-tagged by the interfaces they implement, and services are private by default**
 
     autowire resolves constructor arguments by type-hint; autoconfigure auto-tags services based on implemented interfaces/attributes (e.g. subscribers get kernel.event_subscriber); public: false keeps them private so the compiler can inline/prune them and you inject rather than fetch. This is the idiomatic Symfony 8 default.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "66. Where should each belong: a database URL, a feature toggle, and a third-party API private key?"
     **✅ Database URL → env var; feature toggle → parameter (or env var if it varies per env); API private key → Secrets vault**
 
     Infrastructure config that varies per environment (database URL) goes in env vars; application behaviour (feature toggle) goes in parameters, or an env var if it changes per environment; sensitive credentials (API private key) go in the encrypted Secrets vault — never committed as plain config.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration/secrets.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration/secrets.html)
 
 ??? question "67. Why is making application services public "to be safe" discouraged?"
     **✅ Public services block the DI compiler from inlining/removing them and invite the service-locator anti-pattern; private + injected is preferred**
 
     Marking services public prevents the compiler from optimising them away or inlining them, and encourages fetching from the container (service location) instead of dependency injection. The best practice is private, autowired services injected via the constructor. Public visibility is only needed in a few edge cases (e.g. legacy get() calls).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "68. How often does a new Symfony minor version ship?"
     **✅ Every six months, in May and November**
@@ -489,14 +503,14 @@
 
     The last minor of each major (X.4) is the LTS; it ships alongside the next major (9.0).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "70. What may a MINOR release NOT do?"
     **✅ Break backward compatibility**
 
     Minors add features and deprecations but never break BC; breaks are reserved for major releases.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "71. What are the maintenance windows for a standard (non-LTS) release?"
     **✅ 8 months of bug fixes and 14 months of security fixes**
@@ -510,70 +524,70 @@
 
     Symfony uses a merge-up model: a fix is committed to the lowest maintained branch that needs it and then merged upward into every newer branch. This keeps behaviour consistent across all maintained versions and avoids a fix being present in an old branch but missing in a newer one.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "73. What is the difference between a PATCH and a MINOR release?"
     **✅ A patch (8.0.1 → 8.0.2) contains bug fixes only; a minor (8.0 → 8.1) adds new features and deprecations but is still BC-safe**
 
     Patch releases carry bug fixes only — no new features, no deprecations, no BC breaks. Minor releases add features and may introduce deprecations, but never break BC. Only majors break BC (by removing previously deprecated code). Confusing patch (bugs only) with minor (features) is a common trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "74. What is a MAJOR release uniquely allowed to do?"
     **✅ Remove deprecated code and break backward compatibility (only for APIs deprecated in the previous major line)**
 
     A major (e.g. 8.x → 9.0) is the only release level permitted to break BC, and only for code that was deprecated during the previous major line. This is what lets you upgrade safely within a major and plan the jump across a major once you have cleared deprecations.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "75. When may Symfony break backward compatibility?"
     **✅ Only in a major release, and only after prior deprecation**
 
     BC breaks are reserved for majors and require the affected API to have been deprecated in the previous major line.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "76. What does the @internal marker mean for the BC promise?"
     **✅ The element is excluded from the BC promise and may change at any time**
 
     @internal marks implementation details not covered by BC, even if they are PHP-public.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "77. How should you customise a final Symfony class in a BC-safe way?"
     **✅ Decorate or compose it**
 
     final classes must not be subclassed; wrap them via decoration so Symfony can change internals without breaking you.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 ??? question "78. Is @experimental code covered by the BC promise?"
     **✅ No — experimental features (often whole components in their first release) are explicitly excluded until marked stable**
 
     @experimental features are excluded from the BC promise until they are stabilised; they may change in any release. Building critical paths on experimental code is risky. Along with @internal and final, @experimental is one of the markers that carve exceptions out of the promise.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/experimental.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "79. Symfony adds a new method to one of its own interfaces in a minor release. Is this a BC break?"
     **✅ Not for code that only USES the interface, but it can break code that IMPLEMENTS it — so only implement interfaces Symfony marks as safe to implement**
 
     The promise is written from two viewpoints. For USING code (calling methods, reading returns) adding a method is safe. For EXTENDING code (your class implementing that interface) a new method is a break, because your class no longer satisfies the contract. Symfony reserves the right to add methods to its interfaces, so you should only implement interfaces meant for implementation.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "80. Which of the following are covered by the BC promise? (choose all that apply)"
     **✅ A public method with no special annotation ; The stable public constructor of a non-final, non-internal class**
 
     Stable public API without @internal/@experimental is covered — regardless of being a method or constructor. @internal is excluded even though PHP-public, and @experimental is excluded until stabilised. The classic misconception is equating PHP `public` with \"covered\"; @internal overrides that.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "81. True or false: a method declared public in PHP but annotated @internal is protected by the BC promise."
     **✅ False**
 
     False. @internal explicitly removes an element from the BC promise even when it is PHP-public. Such methods/classes can change or disappear in any release, so you must not depend on them. PHP visibility and BC coverage are independent.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "82. Which function emits a Symfony deprecation notice, and from which package?"
     **✅ trigger_deprecation() from symfony/deprecation-contracts**
@@ -587,7 +601,7 @@
 
     Deprecations survive the whole major line and are only removed in the next major, per the BC promise.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "84. What is the argument order of trigger_deprecation()?"
     **✅ package, version, message, ...args**
@@ -608,7 +622,7 @@
 
     A service is deprecated via the `deprecated:` key (package/version/message), which maps to Definition::setDeprecated() and triggers a deprecation when the service is referenced. Container-level deprecations like this surface during cache:clear/compile time, whereas method-call deprecations fire at runtime.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/dependency_injection.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/dependency_injection.html)
 
 ??? question "87. At what error level are Symfony deprecations emitted, and do they throw?"
     **✅ They are E_USER_DEPRECATED notices — they do not throw unless your test suite/CI is configured to fail on them**
@@ -629,42 +643,42 @@
 
     Twig resolves overrides from templates/bundles/<BundleName>/, which takes precedence over the bundle's own templates.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/override.html)
 
 ??? question "90. What is the current mechanism to override an inherited bundle resource?"
     **✅ Per-resource overriding of templates, services, translations and config**
 
     Bundle inheritance via getParent() was deprecated in 4.4 and removed in 5.0; modern Symfony overrides each resource type individually.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/override.html)
 
 ??? question "91. How do you augment a bundle service without replacing it?"
     **✅ Decorate it with #[AsDecorator] / the decorates: key**
 
     Decoration wraps the original service (injected as .inner), letting you add behaviour and delegate.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 ??? question "92. When you decorate a service with #[AsDecorator(decorates: 'acme.mailer')], how do you access the original?"
     **✅ Inject the renamed original (the .inner service) via #[AutowireDecorated] and delegate to it**
 
     Decoration renames the original service to a .inner id and injects it into the decorator. The #[AutowireDecorated] attribute (or the special .inner reference in YAML) gives you that original instance so you can add behaviour and delegate. Re-creating it with `new` or fetching it publicly defeats the decoration pattern.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container/service_decoration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container/service_decoration.html)
 
 ??? question "93. A bundle ships translations/messages.en.yaml and your app defines the same domain/locale in translations/. Whose strings win?"
     **✅ The application's translations/ take priority over the bundle's translations**
 
     The application's translations/ directory has higher priority than any bundle's translations. Providing a catalogue with the same domain and locale overrides the bundle's strings — the same convention-based precedence used for template overrides.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/translation.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation.html)
 
 ??? question "94. What happened to bundle inheritance (getParent()) and the legacy Resources/ folder?"
     **✅ getParent() inheritance was deprecated in 4.4 and removed in 5.0; modern bundles use top-level config/, templates/, translations/ instead of Resources/**
 
     Bundle inheritance via getParent() is gone (deprecated 4.4, removed 5.0) and must not be presented as current. Modern bundles also drop the legacy Resources/ layout in favour of top-level config/, templates/ and translations/. Overriding is done per resource type instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/override.html)
 
 ??? question "95. In which months do Symfony minor releases ship?"
     **✅ May and November**
@@ -678,7 +692,7 @@
 
     The LTS (X.4) always ships together with the next major (X+1).0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "97. How often is a new major (and its LTS) released?"
     **✅ Every two years**
@@ -699,7 +713,7 @@
 
     A frequent misconception is that the LTS precedes the next major. In fact X.4 (the LTS) and (X+1).0 release together (8.4 and 9.0 both Nov 2027). Another trap: 8.0 is a standard release, not the LTS — 8.4 is.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "100. A product must run 3+ years without a major upgrade. Which 8.x version should you target and why?"
     **✅ 8.4 (LTS) — it provides 3 years of bug fixes and 4 years of security fixes, the longest support window in 8.x**
@@ -713,21 +727,21 @@
 
     Symfony's EventDispatcherInterface extends the PSR-14 Psr\\EventDispatcher\\EventDispatcherInterface.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "102. Is HttpFoundation's Request a PSR-7 message?"
     **✅ No — a psr-http-message bridge converts between them**
 
     HttpFoundation predates and differs from PSR-7; the psr-http-message bridge converts between HttpFoundation and PSR-7/15/17.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/psr7.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/psr7.html)
 
 ??? question "103. Which PSR interface does Symfony's service container implement?"
     **✅ PSR-11 (Container)**
 
     Symfony's ContainerInterface extends Psr\\Container\\ContainerInterface (PSR-11).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "104. Which PSR does Symfony primarily consume (rather than implement) so you can inject any implementation?"
     **✅ PSR-3 (Logger) via Psr\Log\LoggerInterface**
@@ -748,14 +762,14 @@
 
     PSR-6 models caching as a pool of CacheItem objects (CacheItemPoolInterface::getItem()/save()); PSR-16 (Simple Cache) is a lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter. Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16) is a common trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 ??? question "107. Which PSR does Symfony's Clock component implement, and why inject its interface?"
     **✅ PSR-20 via Psr\Clock\ClockInterface — injecting it makes time testable instead of calling new \DateTime() directly**
 
     Symfony\\Component\\Clock\\Clock implements Psr\\Clock\\ClockInterface (PSR-20). Type-hinting ClockInterface lets you inject a MockClock in tests and control time deterministically, instead of hard-coding new \\DateTime()/now() calls that are impossible to freeze.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/clock.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/clock.html)
 
 ??? question "108. What is the practical difference between Symfony implementing a PSR and consuming a PSR?"
     **✅ Implementing means a Symfony object satisfies the PSR (hand it to any PSR consumer); consuming means Symfony type-hints the PSR so you can inject any implementation**
@@ -769,98 +783,98 @@
 
     The service id is the FQCN; autowiring matches type-hints to these ids.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "110. What naming case do environment variables use?"
     **✅ UPPER_SNAKE_CASE, usually with an APP_ prefix**
 
     Env vars use upper snake case (APP_ENV, APP_DEBUG) and are read in config via processors such as %env(int:APP_PAGE_SIZE)%.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/configuration.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/configuration.html)
 
 ??? question "111. Which is a correctly named route?"
     **✅ invoice_show**
 
     Route names use snake_case, conventionally entity_action.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 ??? question "112. How is an abstract class conventionally named?"
     **✅ With an Abstract prefix, e.g. AbstractController**
 
     Abstract classes take the Abstract prefix; interfaces use the Interface suffix and traits use the Trait suffix.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/standards.html)
 
 ??? question "113. Which set correctly fixes these names: httpClientInterface, Abstract_Controller, blogShow (route), app-page-size (parameter), app_env (env var)?"
     **✅ HttpClientInterface, AbstractController, blog_show, app.page_size, APP_ENV**
 
     Interfaces are PascalCase with the Interface suffix (HttpClientInterface); abstract classes take the Abstract prefix in PascalCase (AbstractController); routes are snake_case (blog_show); parameters are snake/dot-separated lowercase (app.page_size); env vars are UPPER_SNAKE with APP_ prefix (APP_ENV).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/standards.html)
 
 ??? question "114. Why is the Interface suffix more than cosmetic in Symfony?"
     **✅ Autoconfiguration inspects implemented interfaces (e.g. EventSubscriberInterface) to auto-tag services, so correct interface naming/implementation is part of a working contract**
 
     When autoconfigure is on, Symfony auto-tags services based on the interfaces they implement — e.g. implementing EventSubscriberInterface auto-adds the kernel.event_subscriber tag, and ServiceSubscriberInterface, and voter/command interfaces behave similarly. So the Interface suffix marks a real, functional contract that drives wiring, not just style.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/service_container.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/service_container.html)
 
 ??? question "115. Which casing pair is correct for PHP class constants and bundle config keys?"
     **✅ Constants are UPPER_SNAKE_CASE (e.g. MAIN_REQUEST); bundle config keys are snake_case (e.g. framework.http_method_override)**
 
     PHP constants follow UPPER_SNAKE_CASE (HttpKernelInterface::MAIN_REQUEST) and enum cases are PascalCase. Bundle configuration keys are snake_case under the extension's alias (e.g. framework.http_method_override). Mixing these up — camelCase config keys, for instance — is a planted mistake.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/standards.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/standards.html)
 
 ??? question "116. Which of the following statements are true about Symfony Flex? (select all that apply)"
     **✅ Flex is a Composer plugin that resolves package aliases and applies recipes at install/update time ; symfony.lock records which recipes are installed and should be committed to version control ; Bundles enabled by recipes are registered in config/bundles.php, which the kernel reads at boot**
 
     Flex is a Composer plugin that runs only at Composer install/update time, resolving aliases and applying recipes; it plays no role during request handling, so the runtime option is wrong. Applied recipes are tracked in symfony.lock (committed), not in composer.lock which only tracks package versions, and recipe configurators write bundle registrations into config/bundles.php for the kernel to read at boot.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/setup.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/setup.html)
 
 ??? question "117. Which statements accurately describe the Symfony release process? (select all that apply)"
     **✅ Minor versions are released on a time-based schedule in May and November, and a new major arrives every two years ; 8.4 is the Symfony 8 LTS version and ships alongside 9.0**
 
     Symfony follows a time-based schedule: minors in May and November and a new major every two years, with the last minor of a branch (X.4, e.g. 8.4) being the LTS that ships alongside the next major. BC breaks happen only in major versions, never in minors even after deprecation, and standard versions get 8 months of bug fixes / 14 months of security fixes — the 3-year bug-fix window belongs to LTS releases only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "118. Which statements are true about Symfony's backward compatibility promise? (select all that apply)"
     **✅ Public API that is not marked @internal or @experimental stays stable within a major version ; Existing behavior is removed only in the next major version, and only after being deprecated first**
 
     The BC promise guarantees that public, non-@internal, non-@experimental API remains stable within a major, and removals happen only in the next major after a deprecation phase. @internal and @experimental annotations carve exceptions out of the promise regardless of method visibility, and the recommended extension mechanisms are events, decoration and dependency injection rather than inheriting framework classes.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/contributing/code/bc.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "119. Which statements about HttpKernel's request handling and its events are correct? (select all that apply)"
     **✅ kernel.view is dispatched only when the controller returns something other than a Response ; kernel.terminate is dispatched after the response has been sent to the client ; When handle() is called with catch: true, exceptions are caught and kernel.exception is dispatched**
 
     kernel.view fires only for non-Response controller return values, and kernel.terminate runs after the response was already sent, which makes it suitable for heavy post-response work; with catch: true, HttpKernel catches throwables and dispatches kernel.exception. The event order puts kernel.controller before kernel.response, and the controller callable is resolved by ControllerResolverInterface — ArgumentResolverInterface only resolves the controller's arguments.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/http_kernel.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/http_kernel.html)
 
 ??? question "120. Which statements about Symfony's relationship to the PSR standards are true? (select all that apply)"
     **✅ The service container implements PSR-11 and the Clock component implements PSR-20 ; Components type-hint the PSR-3 Psr\Log\LoggerInterface, so any PSR-3 logger can be injected ; The psr-http-message bridge converts between HttpFoundation objects and PSR-7 messages**
 
     Symfony implements PSR-6, PSR-11, PSR-14, PSR-16 and PSR-20 (the container is a PSR-11 ContainerInterface and Clock is PSR-20), and it consumes PSR-3 by type-hinting LoggerInterface so any compliant logger works. HttpFoundation predates and does not implement PSR-7 — the psr-http-message bridge converts between the two object models — and autoloading follows PSR-4, not PSR-0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/psr7.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/psr7.html)
 
 ??? question "121. Which statements about the EventDispatcher component are correct? (select all that apply)"
     **✅ Listeners for an event are invoked in descending priority order (highest priority first) ; stopPropagation() prevents only the remaining listeners of the current event from running**
 
     The dispatcher sorts listeners by priority in descending order, and stopPropagation() halts only the not-yet-called listeners of the event currently being dispatched — other events are unaffected. Subscribers declare all their events in getSubscribedEvents() and are wired automatically (autoconfiguration tags them), and dispatch() follows the PSR-14 signature: the event object first, then an optional event name.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/components/event_dispatcher.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/event_dispatcher.html)
 
 ??? question "122. Which are valid ways to override parts of Symfony or a third-party bundle in an application? (select all that apply)"
     **✅ Override a bundle template by placing a file with the same path under templates/bundles/<BundleName>/ ; Override a service by decorating it or replacing its definition, e.g. via a compiler pass ; Override translations by defining the same key in the application's translations/ directory, which wins over the bundle's**
 
     Per-resource overriding is the supported model: templates placed under templates/bundles/<BundleName>/ shadow the bundle's own, application translations take precedence over bundle translations, and services can be redefined, decorated or altered through a compiler pass. Bundle inheritance via getParent() has been removed, and copying whole bundles into src/ is not an override mechanism at all.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/bundles/override.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/override.html)
 
 ---
 

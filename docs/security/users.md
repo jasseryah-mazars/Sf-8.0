@@ -25,7 +25,31 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Providers](providers.md) · [Password Hashers](password-hashers.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un utilisateur est n'importe quel objet qui implémente `UserInterface` — en Symfony 8, seulement deux méthodes : `getRoles()` et `getUserIdentifier()`.
+
+### Imagine dans la vraie vie
+Un utilisateur est la fiche d'identité au dossier : un nom qui ne change jamais (`getUserIdentifier()`) et une liste d'habilitations (`getRoles()`). Ça dit *qui* tu es et *ce que* tu peux atteindre — pas *comment* tu l'as prouvé au portail.
+
+### Dans Symfony
+Toute classe métier — pas seulement une entité Doctrine — peut implémenter `UserInterface` : un "utilisateur API" chargé depuis un service externe fonctionne exactement pareil qu'un utilisateur en base.
+
+### Exemple simple
+```php
+class Utilisateur implements UserInterface {
+    public function getRoles(): array { return ['ROLE_USER']; }
+    public function getUserIdentifier(): string { return $this->email; }
+}
+```
+
+### Comment le mémoriser 🧠
+`eraseCredentials()` a été **supprimée** en 8.0 — pour retirer un secret avant sérialisation, utilise `__serialize()` à la place.
 
 ## Theory
 
@@ -284,6 +308,8 @@ changes to invalidate existing sessions immediately.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which methods does `UserInterface` declare in Symfony 8?"
     - [ ] A. `getUsername()` and `getRoles()`
     - [x] B. `getRoles()` and `getUserIdentifier()` ✅
@@ -339,7 +365,7 @@ changes to invalidate existing sessions immediately.
   are*, not *how* you proved it.
 
 ## Official References
-- [Symfony docs — The User](https://symfony.com/doc/current/security.html#the-user)
+- [Symfony docs — The User](https://symfony.com/doc/8.0/security.html#the-user)
 - [Symfony source — UserInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/UserInterface.php)
 - [Symfony UPGRADE-8.0 (Security)](https://github.com/symfony/symfony/blob/8.0/UPGRADE-8.0.md)
 
@@ -352,7 +378,7 @@ changes to invalidate existing sessions immediately.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#the-user) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#the-user) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

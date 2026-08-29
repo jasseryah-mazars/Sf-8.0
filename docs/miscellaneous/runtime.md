@@ -27,6 +27,31 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Request Handling](../architecture/request-handling.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le Runtime découple ton point d'entrée (`public/index.php`) de la manière dont l'application tourne réellement — le même fichier fonctionne sous PHP-FPM, CLI, ou des serveurs plus exotiques.
+
+### Imagine dans la vraie vie
+Le Runtime est l'équipe technique d'un théâtre, et ton `index.php` n'est que le script de la pièce. Le même script est joué sans changement dans un amphithéâtre en plein air (PHP-FPM), un petit studio (la CLI), ou une tournée (Swoole, RoadRunner), parce que c'est l'équipe technique — pas le script — qui gère les lumières, le son et le rideau.
+
+### Dans Symfony
+`public/index.php` **renvoie** un callable au lieu d'appeler directement `$kernel->handle()` — c'est le Runtime qui décide ensuite comment exécuter ce callable selon l'environnement (FPM classique ou serveur applicatif persistant).
+
+### Exemple simple
+```php
+return function (array $context): Kernel {
+    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
+```
+
+### Comment le mémoriser 🧠
+Si le "dramaturge" (ton code) attrape lui-même la console lumière en pleine scène (appelle `handle()` directement), le spectacle est joué deux fois — laisse toujours le Runtime gérer l'exécution.
+
 ---
 
 ## Theory
@@ -232,13 +257,15 @@ the app object is created/run. The component is transparent for standard apps.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `public/index.php` return?"
     - [x] A. A callable that produces the app object (e.g. a `Kernel`) ✅
     - [ ] B. A `Response`
     - [ ] C. Nothing — it echoes output
 
     **Why:** The runtime invokes the returned callable, resolving its arguments.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html).
 
 ??? question "Q2. Which env var selects the runtime class?"
     - [x] A. `APP_RUNTIME` ✅
@@ -246,7 +273,7 @@ the app object is created/run. The component is transparent for standard apps.
     - [ ] C. `SYMFONY_RUNTIME`
 
     **Why:** `APP_RUNTIME` (or composer `extra.runtime.class`) chooses the runtime.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html#using-the-runtime).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html#using-the-runtime).
 
 ??? question "Q3. `SymfonyRuntime` extends which class?"
     - [x] A. `GenericRuntime` ✅
@@ -277,7 +304,7 @@ the app object is created/run. The component is transparent for standard apps.
 - **Confused with:** the `Kernel` itself — the runtime *runs* the kernel; it isn't the kernel.
 
 ## Official References
-- [Official docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
+- [Official docs — Runtime](https://symfony.com/doc/8.0/components/runtime.html)
 - [Symfony source — RuntimeInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php)
 - [Symfony source — SymfonyRuntime](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/SymfonyRuntime.php)
 
@@ -290,7 +317,7 @@ the app object is created/run. The component is transparent for standard apps.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/runtime.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/runtime.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

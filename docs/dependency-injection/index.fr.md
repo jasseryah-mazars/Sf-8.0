@@ -82,8 +82,23 @@ Parcourez-les dans l'ordre :
 <small>Related: [Symfony Architecture](../architecture/index.md) ·
 [Controllers](../controllers/index.md) · [Console](../console/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** L'injection de dépendances (DI), c'est laisser Symfony construire tes objets et leur fournir tout ce dont ils ont besoin — au lieu d'écrire `new MonService(new AutreService(...))` toi-même partout.
+
+**Pourquoi ça existe ?** Construire les objets à la main crée des dépendances rigides et difficiles à tester. Le container centralise cette construction : tu déclares "j'ai besoin de X", et il te le fournit déjà assemblé.
+
+**🏠 Analogie de la vraie vie :** Une cuisine de restaurant. Tu commandes un plat (tu demandes un service) ; la cuisine (le container) réunit et assemble les ingrédients (les dépendances) et te sert l'assiette prête — tu ne touches jamais aux fourneaux toi-même.
+
+**Symfony dans la vraie vie :** `public function __construct(private LoggerInterface $logger)` — tu déclares juste ce dont tu as besoin dans le constructeur, et Symfony le fournit automatiquement, sans jamais écrire `new`.
+
+**⚠️ Erreur fréquente :** injecter le container entier (`ContainerInterface`) dans un service applicatif au lieu de déclarer précisément les dépendances nécessaires — un anti-pattern classique repéré à l'examen.
+
+**🧠 Comment le mémoriser :** "Ne construis jamais tes services toi-même — déclare-les, et laisse le container les assembler."
+
+
 ## Official References
 
-- [Symfony documentation — Service Container](https://symfony.com/doc/current/service_container.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Service Container](https://symfony.com/doc/8.0/service_container.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

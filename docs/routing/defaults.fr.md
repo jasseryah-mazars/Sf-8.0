@@ -29,6 +29,60 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une valeur par défaut rend un paramètre optionnel — et seul le **dernier** paramètre d'une route peut être optionnel.
+
+### Imagine dans la vraie vie
+Un formulaire d'adresse postale où la dernière ligne — "Appartement 1" — est optionnelle et supposée quand elle est vide. Tu peux omettre cette ligne finale et la lettre arrive quand même, mais tu ne peux pas laisser la *rue* vide tout en gardant l'appartement — le facteur ne saurait pas quelle ligne manque.
+
+### Dans Symfony
+`{page<\d+>?1}` rend `/blog` équivalent à `/blog/1` — mais on ne peut jamais rendre un segment du milieu optionnel sans rendre tous les segments qui le suivent optionnels aussi.
+
+### Exemple simple
+```php
+#[Route('/blog/{page<\d+>?1}')] // /blog et /blog/2 matchent tous les deux
+```
+
+### Comment le mémoriser 🧠
+Seuls les paramètres **en fin de route** peuvent être optionnels — comme la dernière ligne d'une adresse, jamais une ligne au milieu.
+
+A **default value** makes a placeholder **optional**: if the URL omits it, the
+route still matches and the controller receives the default. `/blog/{page}` with
+`page` defaulting to `1` matches both `/blog` and `/blog/2`.
+
+Two syntaxes, again equivalent:
+
+- **Inline** — `{page<\d+>?1}`: requirement `\d+`, then `?` and the default `1`.
+  Use `?` with **no value** for a `null` default.
+- **`defaults` array** — `defaults: {page: 1}`.
+
+```php
+// Inline: <requirement> before ?, then the default -> /blog and /blog/7 both match
+#[Route('/blog/{page<\d+>?1}', name: 'blog_list')]
+
+// Bare ? with no value -> default is null
+#[Route('/report/{format?}', name: 'report')]
+
+// Equivalent `defaults` array form
+#[Route('/blog/{page}', name: 'blog_list', requirements: ['page' => '\d+'], defaults: ['page' => 1])]
+```
+
+Crucially, **only the trailing placeholders can be optional**. `/{a}/{b}` cannot
+make `a` optional while `b` is required, because the matcher cannot tell where the
+missing segment was.
+
+!!! question "Predict first"
+    `page` defaults to `1`. What does `generateUrl('blog_list', ['page' => 1])`
+    produce — `/blog/1` or `/blog`?
+
+??? note "Reveal"
+    `/blog`. The generator **omits** a trailing segment whose value equals its
+    default, producing the canonical shortest URL. Pass `page => 2` and you get
+    `/blog/2`.
+
+
 ## Theory
 
 Une **valeur par défaut** rend un placeholder **optionnel** : si l'URL l'omet, la
@@ -257,7 +311,7 @@ plutôt qu'une valeur par défaut.
     - [ ] D. `{page<\d+=1>}`
 
     **Why:** la syntaxe inline est `{name<requirement>?default}`.
-    **Ref:** [Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Optional parameters](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ??? question "Q2. `generateUrl('blog', ['page' => 1])` where `page` defaults to 1 produces?"
     - [x] A. `/blog` ✅
@@ -266,7 +320,7 @@ plutôt qu'une valeur par défaut.
     - [ ] D. An exception
 
     **Why:** le generator omet un segment final dont la valeur est égale à la valeur par défaut.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. Which parameter can be made optional in `/{a}/{b}`?"
     - [ ] A. `a` only
@@ -275,7 +329,7 @@ plutôt qu'une valeur par défaut.
     - [ ] D. Neither
 
     **Why:** seuls les placeholders en fin de chemin peuvent être omis de l'URL.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ??? question "Q4. What default does `{slug?}` declare?"
     - [ ] A. Empty string `''`
@@ -284,7 +338,7 @@ plutôt qu'une valeur par défaut.
     - [ ] D. `0`
 
     **Why:** un `?` seul sans valeur définit la valeur par défaut à `null`.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ## Key takeaways
 
@@ -308,7 +362,7 @@ plutôt qu'une valeur par défaut.
 - **Confused with:** [Special attributes](special-attributes.md) — les valeurs par défaut hors chemin comme `_format`/`_locale` n'apparaissent jamais dans le chemin.
 
 ## Official References
-- [Official Symfony docs — Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters)
+- [Official Symfony docs — Optional parameters](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
 ## Video references
@@ -320,7 +374,7 @@ plutôt qu'une valeur par défaut.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences & keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#optional-parameters) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#optional-parameters) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

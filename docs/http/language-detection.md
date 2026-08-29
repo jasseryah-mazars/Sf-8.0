@@ -29,7 +29,28 @@
     **Est. time:** 22 min ·
     **Prerequisites:** [Content Negotiation](content-negotiation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony choisit la langue d'un visiteur en suivant un ordre de priorité précis — et ne propose jamais une langue que le site ne sait pas réellement servir.
+
+### Imagine dans la vraie vie
+Un réceptionniste d'hôtel accueille un client étranger en suivant un ordre : si la réservation précise une langue (`_locale` dans l'URL), il l'utilise ; sinon une préférence enregistrée dans le profil ; sinon les langues que le client dit parler, dans son ordre (`Accept-Language`) ; sinon la langue par défaut de l'hôtel. Il ne choisit jamais une langue que personne au comptoir ne parle réellement (la liste des locales supportées).
+
+### Dans Symfony
+`enabled_locales` définit la liste blanche des langues réellement servies ; deviner une locale hors de cette liste produirait une expérience cassée (templates, traductions absentes) — c'est pour ça que la liste blanche est obligatoire dans l'API sûre.
+
+### Exemple simple
+```php
+$locale = $request->getPreferredLanguage(['fr', 'en']); // jamais autre chose que fr ou en
+```
+
+### Comment le mémoriser 🧠
+`getPreferredLanguage()` **sans argument** peut renvoyer n'importe quoi venant du navigateur — **toujours** lui passer la liste blanche des locales supportées.
 
 ## Theory
 
@@ -254,6 +275,8 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which is the safe way to pick a locale from the browser?"
     - [ ] A. `getLocale()`
     - [x] B. `getPreferredLanguage(['en','fr'])` with a whitelist ✅
@@ -262,7 +285,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
     **Why:** The whitelist form guarantees a supported locale; the others may
     return one you do not support.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. What sets the request locale when a route has `{_locale}`?"
     - [x] A. `LocaleListener` on `kernel.request` calls `setLocale()` ✅
@@ -282,7 +305,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
     **Why:** It restricts valid locales (routing `_locale`, translation
     compilation); `default_locale` sets the fallback.
-    **Ref:** [Translations config](https://symfony.com/doc/current/translation.html).
+    **Ref:** [Translations config](https://symfony.com/doc/8.0/translation.html).
 
 ## Key takeaways
 
@@ -307,8 +330,8 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 - **Confused with:** [Internationalization (Intl)](../miscellaneous/intl.md) — *detecting* the locale (HTTP) vs *translating* content.
 
 ## Official References
-- [Symfony docs — Translations & locale](https://symfony.com/doc/current/translation.html#the-locale-used-in-translations)
-- [Symfony docs — HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html)
+- [Symfony docs — Translations & locale](https://symfony.com/doc/8.0/translation.html#the-locale-used-in-translations)
+- [Symfony docs — HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — LocaleListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/LocaleListener.php)
 
 ## Video references
@@ -320,7 +343,7 @@ translation itself, see [Intl](../miscellaneous/intl.md); for routing mechanics,
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

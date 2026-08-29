@@ -49,7 +49,8 @@ it targets Symfony 7.
 
 1. `docs/` — MkDocs Material site of micro-chapters (one folder per topic area).
 2. `quiz/` — certificationy-compatible YAML question bank.
-3. `specs/` — this SpecKit set (13 documents).
+3. `specs/` — this SpecKit set (started at 13 documents, now 25 as later
+   audit/remediation rounds added their own report and log documents).
 4. `tasks/` — granular, independently-executable task definitions.
 5. Build/deploy tooling (`mkdocs.yml`, `requirements.txt`, GitHub Actions).
 

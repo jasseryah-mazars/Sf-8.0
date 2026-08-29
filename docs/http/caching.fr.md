@@ -38,6 +38,34 @@
     `stale-while-revalidate`, `Vary`, le kernel HttpCache de Symfony — lisez le
     stage dédié : [HTTP Caching](../http-caching/index.md).
 
+## Pour les nuls
+
+### L'idée en une phrase
+Il y a deux façons d'éviter de refaire un travail déjà fait : ne rien redemander tant que c'est "encore bon" (fraîcheur), ou redemander mais recevoir un "rien de neuf" ultra-rapide (validation).
+
+### Imagine dans la vraie vie
+Un plat au frigo porte une date limite : tant qu'elle n'est pas dépassée, tu le manges sans te poser de question — c'est la **fraîcheur**, aucune question posée. L'autre option : tu appelles la personne qui a cuisiné et demandes "c'est toujours pareil ?" — si la réponse est "oui, rien n'a changé", tu t'épargnes de tout recuisiner — c'est la **validation**, et cette réponse courte "rien de neuf" est le fameux `304` sans corps.
+
+### Dans Symfony
+`$response->setPublic()->setMaxAge(3600)` active la fraîcheur (aucune requête au serveur pendant une heure) ; `$response->setETag($hash)` active la validation (le serveur est recontacté, mais répond en 304 si rien n'a changé).
+
+### Exemple simple
+```php
+$response->setLastModified($article->getUpdatedAt());
+$response->setEtag(md5($article->getContent()));
+// Symfony renvoie 304 tout seul si le navigateur montre qu'il a déjà la bonne version
+```
+
+### Comment le mémoriser 🧠
+**Fraîcheur = pas de question du tout** (`max-age`/`s-maxage`). **Validation = question posée, réponse parfois vide** (`ETag`/`Last-Modified` → `304`).
+
+!!! info "Scope"
+    This chapter is a **map, not the territory**. HTTP caching is a whole stage.
+    For depth — reverse proxies, ESI, `s-maxage`, `stale-while-revalidate`,
+    `Vary`, the Symfony HttpCache kernel — read the dedicated stage:
+    [HTTP Caching](../http-caching/index.md).
+
+
 ## Theory
 
 Le cache HTTP permet à un magasin (navigateur, CDN, reverse proxy) de réutiliser
@@ -223,7 +251,7 @@ patterns complets (ESI, reverse proxy, `Vary`) vivent dans le stage
 
     **Why:** Tant que la copie est fraîche (`max-age`), le cache sert sans aucune
     request ; la validation envoie toujours une request conditionnelle.
-    **Ref:** [Symfony HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [Symfony HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q2. `s-maxage` applies to…"
     - [ ] A. the browser cache only
@@ -233,7 +261,7 @@ patterns complets (ESI, reverse proxy, `Vary`) vivent dans le stage
 
     **Why:** `s-maxage` n'est honoré que par les caches partagés et y prime sur
     `max-age`.
-    **Ref:** [Cache expiration](https://symfony.com/doc/current/http_cache/expiration.html).
+    **Ref:** [Cache expiration](https://symfony.com/doc/8.0/http_cache/expiration.html).
 
 ??? question "Q3. What does `Response::isNotModified()` return/produce on a match?"
     - [x] A. true, and turns the response into a bodyless 304 ✅
@@ -267,7 +295,7 @@ patterns complets (ESI, reverse proxy, `Vary`) vivent dans le stage
 - **Confused with:** [Status Codes](status-codes.md) — la validation se termine en **304**, la fraîcheur en **200** servi ; ne mélangez pas les deux modèles.
 
 ## Official References
-- [Symfony docs — HTTP Cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony docs — HTTP Cache](https://symfony.com/doc/8.0/http_cache.html)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
@@ -280,7 +308,7 @@ patterns complets (ESI, reverse proxy, `Vary`) vivent dans le stage
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

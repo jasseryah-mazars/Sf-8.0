@@ -26,9 +26,30 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Host matching](host-matching.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une `condition` est un dernier filtre custom, évalué seulement quand le chemin, l'host et la méthode ne suffisent pas déjà à décider.
+
+### Imagine dans la vraie vie
+Un videur de boîte de nuit posté à la bonne porte du bon bâtiment. Tu as déjà trouvé la bonne adresse (host) et la bonne entrée (chemin + méthode), et maintenant le videur fait un dernier contrôle sur mesure — le bracelet, la liste d'invités. Échoue ce contrôle et tu es simplement refoulé comme si la porte n'existait pas (un 404), jamais "interdit avec une raison".
+
+### Dans Symfony
+`condition: "request.headers.get('User-Agent') matches '/mobile/i'"` peut router les visiteurs mobiles vers un contrôleur dédié, sans jamais toucher au chemin de l'URL lui-même.
+
+### Exemple simple
+```yaml
+api_beta:
+    path: /api/data
+    condition: "context.getMethod() === 'GET' and request.query.has('beta')"
+```
+
+### Comment le mémoriser 🧠
+Une condition **n'affecte jamais** `generateUrl()` — seulement le matching entrant. Le videur ne touche jamais aux invitations imprimées que le club envoie par la poste.
 
 When path, host, method and scheme are not expressive enough, a **`condition`** lets
 you match on an arbitrary boolean **ExpressionLanguage** expression evaluated
@@ -239,6 +260,8 @@ also cannot show a login page).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. A route's `condition` returns false. What is the outcome?"
     - [ ] A. 403 Forbidden
     - [x] B. 404 — the route is not matched ✅
@@ -246,7 +269,7 @@ also cannot show a login page).
     - [ ] D. The controller runs anyway
 
     **Why:** a false condition means the route does not match; matching continues.
-    **Ref:** [Matching conditions](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Matching conditions](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ??? question "Q2. Which are valid inside a routing condition?"
     - [x] A. `context`, `request`, `env()`, `service()` ✅
@@ -255,7 +278,7 @@ also cannot show a login page).
     - [ ] D. `params`, `route()`
 
     **Why:** the routing expression provider exposes exactly these.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ??? question "Q3. Do conditions affect `generateUrl()`?"
     - [ ] A. Yes, generation fails if the condition is false
@@ -264,7 +287,7 @@ also cannot show a login page).
     - [ ] D. Only in debug mode
 
     **Why:** there is no request to evaluate; generation ignores conditions.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ??? question "Q4. To call `service('x')` in a condition, service `x` must…"
     - [x] A. Be tagged `routing.condition_service` (`#[AsRoutingConditionService]`) ✅
@@ -273,7 +296,7 @@ also cannot show a login page).
     - [ ] D. Extend `AbstractController`
 
     **Why:** only tagged services are exposed to the routing expression.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#matching-expressions).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#matching-expressions).
 
 ## Key takeaways
 
@@ -297,7 +320,7 @@ also cannot show a login page).
 - **Confused with:** [Security](../security/index.md) — a failed condition is a 404, not authorization (which is a 403 via voters).
 
 ## Official References
-- [Official Symfony docs — Matching expressions](https://symfony.com/doc/current/routing.html#matching-expressions)
+- [Official Symfony docs — Matching expressions](https://symfony.com/doc/8.0/routing.html#matching-expressions)
 - [Symfony source — UrlMatcher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Matcher/UrlMatcher.php)
 
 ## Video references
@@ -309,7 +332,7 @@ also cannot show a login page).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#matching-expressions) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#matching-expressions) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

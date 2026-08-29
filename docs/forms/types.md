@@ -25,9 +25,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Creating forms](creation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque champ de formulaire est un "type", et les types héritent les uns des autres jusqu'au type racine `FormType` — comme des modèles de formulaires qui héritent d'un modèle maître.
+
+### Imagine dans la vraie vie
+Les types sont des **modèles de formulaires standardisés qui héritent de modèles maîtres**. Un formulaire spécialisé (un champ numéro de TVA) part d'un modèle générique de champ texte et y ajoute quelques règles supplémentaires ; ce modèle s'appuie à son tour sur la mise en page de base commune à tout le bureau (`FormType`).
+
+### Dans Symfony
+`EmailType extends TextType` : un champ email hérite de tout le comportement d'un champ texte, plus une validation de format email en prime — sans dupliquer aucun code.
+
+### Exemple simple
+```php
+public function getParent(): string { return TextType::class; } // FQCN, jamais un nom raccourci
+```
+
+### Comment le mémoriser 🧠
+`getParent()` retourne toujours une **chaîne de classe complète (FQCN)** — il n'existe **pas** de `getName()` en Symfony 8 ; l'identifiant du type, c'est son FQCN lui-même.
 
 Every field *is* a form, and every form is an instance of some **type**. Types
 form an inheritance chain: your custom type declares a **parent**, which declares
@@ -298,6 +317,8 @@ For a one-off, just configure options at `->add()`.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `getParent()` return?"
     - [ ] A. A `FormBuilderInterface`
     - [x] B. The parent type's fully-qualified class name ✅
@@ -306,7 +327,7 @@ For a one-off, just configure options at `->add()`.
 
     **Why:** `getParent()` returns a class string (default `FormType::class`); the
     registry resolves it into the parent chain.
-    **Ref:** [Creating a custom type](https://symfony.com/doc/current/form/create_custom_field_type.html).
+    **Ref:** [Creating a custom type](https://symfony.com/doc/8.0/form/create_custom_field_type.html).
 
 ??? question "Q2. Which object bundles a type with its parents and extensions?"
     - [ ] A. `FormBuilder`
@@ -326,7 +347,7 @@ For a one-off, just configure options at `->add()`.
 
     **Why:** The resolved type walks the chain top-down, so a child can override
     defaults set by its parent.
-    **Ref:** [Form types docs](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form types docs](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -352,8 +373,8 @@ For a one-off, just configure options at `->add()`.
 - **Confused with:** [Built-in types](built-in-types.md) — those are concrete field types; this chapter is the hierarchy/`ResolvedFormType` mechanism behind them.
 
 ## Official References
-- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/current/form/create_custom_field_type.html)
-- [Official Symfony docs — Form type options](https://symfony.com/doc/current/reference/forms/types.html)
+- [Official Symfony docs — Creating a custom form type](https://symfony.com/doc/8.0/form/create_custom_field_type.html)
+- [Official Symfony docs — Form type options](https://symfony.com/doc/8.0/reference/forms/types.html)
 - [Symfony source — ResolvedFormType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/ResolvedFormType.php)
 
 ## Video references
@@ -365,7 +386,7 @@ For a one-off, just configure options at `->add()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/create_custom_field_type.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/create_custom_field_type.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

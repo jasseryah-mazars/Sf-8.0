@@ -25,7 +25,28 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Users](users.md) · [Configuration](configuration.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un user provider **trouve** un utilisateur par son identifiant et le **rafraîchit** à chaque requête — il ne vérifie jamais lui-même un mot de passe.
+
+### Imagine dans la vraie vie
+Un user provider est le bureau des dossiers. Donne-lui un identifiant ("employé n°4471") et il sort le dossier correspondant (`loadUserByIdentifier()`) ; il re-vérifie aussi ce dossier à chaque visite (`refreshUser()`) pour repérer un badge révoqué.
+
+### Dans Symfony
+Si un administrateur révoque les droits d'un utilisateur pendant qu'il est déjà connecté, `refreshUser()` sur la requête suivante recharge ses rôles à jour depuis la base — sans attendre une reconnexion.
+
+### Exemple simple
+```php
+public function loadUserByIdentifier(string $identifier): UserInterface { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+La méthode s'appelle `loadUserByIdentifier()` — l'ancienne `loadUserByUsername()` a **disparu**. Et `refreshUser()` tourne à **chaque** requête statefull.
 
 ## Theory
 
@@ -267,6 +288,8 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which method loads a user by identifier in Symfony 8?"
     - [ ] A. `loadUserByUsername()`
     - [x] B. `loadUserByIdentifier()` ✅
@@ -275,7 +298,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
     **Why:** `loadUserByUsername()` was removed; the loader is
     `loadUserByIdentifier()`.
-    **Ref:** [User providers](https://symfony.com/doc/current/security/user_providers.html).
+    **Ref:** [User providers](https://symfony.com/doc/8.0/security/user_providers.html).
 
 ??? question "Q2. When is `refreshUser()` called?"
     - [ ] A. Only during login
@@ -295,7 +318,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
     **Why:** Providers only load/refresh users; `CheckCredentialsListener`
     verifies `PasswordCredentials`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -324,7 +347,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
   *loads* users; it never verifies credentials.
 
 ## Official References
-- [Symfony docs — User providers](https://symfony.com/doc/current/security/user_providers.html)
+- [Symfony docs — User providers](https://symfony.com/doc/8.0/security/user_providers.html)
 - [Symfony source — InMemoryUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/InMemoryUserProvider.php)
 - [Symfony source — ChainUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/ChainUserProvider.php)
 
@@ -337,7 +360,7 @@ you may skip refresh entirely with a `SelfValidatingPassport`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/user_providers.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/user_providers.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

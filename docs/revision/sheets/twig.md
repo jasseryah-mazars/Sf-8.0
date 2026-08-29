@@ -2,6 +2,20 @@
 
 Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-minute cheat). For the final days. Full detail: [Templating (Twig)](../../twig/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche imprimable, tenant sur une page**, qui résume chaque sous-chapitre de Templating (Twig) en quelques puces "à retenir" suivies d'une ligne "Cheat" très dense.
+
+**Pourquoi ça existe ?** Dans les derniers jours avant l'examen, on veut un support papier ou PDF unique par domaine — pas 10 onglets de navigateur ouverts. Cette fiche condense un domaine entier sur une seule page imprimable.
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de révision recto-verso** qu'un étudiant prépare avant un examen universitaire : tout le cours du semestre réduit à une page, à relire dans le métro le matin de l'épreuve.
+
+**Symfony dans la vraie vie :** Chaque puce "à retenir" → une règle déjà apprise en détail dans le chapitre / La ligne "Cheat:" → la version ultra-compacte, presque un aide-mémoire de syntaxe / Lien "Full detail" → retour au chapitre complet si un point ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Imprimer cette fiche *avant* d'avoir étudié Templating (Twig) en détail, en espérant apprendre directement dessus — le format est trop dense pour un premier apprentissage, il ne fonctionne qu'en rappel.
+
+**🧠 Comment le mémoriser :** *« Une page, un domaine, la veille de l'examen »* — cette fiche est le tout dernier support à consulter, pas le premier.
+
 ## Assets Management
 - `asset('path')` → public URL relative to `public/`, with base path + version.
 - Versioning = cache busting; strategies: static, JSON manifest, empty.
@@ -20,11 +34,11 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 ## Controller Rendering
 - `render(controller(...))` embeds a controller as a sub-request (inline).
-- `render_esi` defers to a reverse proxy; `render_hinclude` to the browser.
+- `render_hinclude` defers loading to the browser via a JS placeholder.
 - Backed by `HttpKernelExtension` → `FragmentHandler` → a `FragmentRenderer`.
 - Use it only when the fragment needs its own logic/data/cache.
 
-**Cheat:** `render(controller('C::m', {a:1}))` = inline sub-request. `render_esi(...)` = reverse-proxy cache, falls back to inline. Enable via `framework.fragments` / `framework.esi`. `include` for cheap fragments; embed for isolated logic.
+**Cheat:** `render(controller('C::m', {a:1}))` = inline sub-request. `render_hinclude(...)` = async placeholder resolved by the browser. Enable direct fragment URLs via `framework.fragments`. `include` for cheap fragments; embed for isolated logic.
 
 ## Debugging Variables
 - `dump()` prints a rich VarDumper view; `{% dump %}` sends it to the collector.

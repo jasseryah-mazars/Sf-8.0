@@ -27,6 +27,29 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Service Registration](registration.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La configuration sémantique est le formulaire de commande d'un bundle, avec un employé qui valide chaque champ avant de le transformer en services réels.
+
+### Imagine dans la vraie vie
+La configuration sémantique est le formulaire de commande imprimé d'un bundle, avec un employé qui valide. L'arbre `Configuration` est le formulaire — quels champs existent, leurs types, leurs valeurs par défaut — et il rejette le non-sens avant qu'il n'atteigne la cuisine.
+
+### Dans Symfony
+Écrire `framework:` dans `config/packages/framework.yaml` déclenche la validation de l'arbre `Configuration` de FrameworkBundle — une clé mal orthographiée est immédiatement rejetée avec une erreur claire, avant même que le container ne compile.
+
+### Exemple simple
+```yaml
+mon_bundle:
+    activer: true  # validé contre l'arbre Configuration du bundle
+```
+
+### Comment le mémoriser 🧠
+`prepend()` s'exécute **avant** tous les appels `load()` — c'est ce qui permet à un bundle de fixer des valeurs par défaut sensées sur la configuration d'un *autre* bundle avant que quiconque ne la remplisse.
 ---
 
 ## Theory
@@ -309,6 +332,8 @@ to set sane defaults for another bundle, not to override user intent.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which class validates a bundle's config schema?"
     - [x] A. `Configuration` (via `TreeBuilder`) ✅
     - [ ] B. `Extension::load()`
@@ -316,7 +341,7 @@ to set sane defaults for another bundle, not to override user intent.
     - [ ] D. `ContainerBuilder`
 
     **Why:** The tree defines allowed keys, types, defaults and validation;
-    `load()` only consumes the processed result. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    `load()` only consumes the processed result. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ??? question "Q2. When does `prepend()` run relative to `load()`?"
     - [x] A. Before all `load()` calls ✅
@@ -325,7 +350,7 @@ to set sane defaults for another bundle, not to override user intent.
     - [ ] D. Only in dev
 
     **Why:** Prepend lets a bundle influence others' config before they load.
-    **Ref:** [Prepending config](https://symfony.com/doc/current/bundles/prepend_extension.html).
+    **Ref:** [Prepending config](https://symfony.com/doc/8.0/bundles/prepend_extension.html).
 
 ??? question "Q3. Which command prints a bundle's config reference tree?"
     - [x] A. `config:dump-reference <bundle>` ✅
@@ -334,7 +359,7 @@ to set sane defaults for another bundle, not to override user intent.
     - [ ] D. `debug:router`
 
     **Why:** It dumps the schema defined by `Configuration`; `debug:config` shows
-    current values. **Ref:** [Configuration](https://symfony.com/doc/current/bundles/configuration.html).
+    current values. **Ref:** [Configuration](https://symfony.com/doc/8.0/bundles/configuration.html).
 
 ## Key takeaways
 
@@ -362,8 +387,8 @@ to set sane defaults for another bundle, not to override user intent.
   semantic config is a *validated schema* that produces parameters/services.
 
 ## Official References
-- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/current/bundles/configuration.html)
-- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/current/bundles/prepend_extension.html)
+- [Official Symfony docs — Bundle Configuration](https://symfony.com/doc/8.0/bundles/configuration.html)
+- [Official Symfony docs — Prepend Extension](https://symfony.com/doc/8.0/bundles/prepend_extension.html)
 - [Symfony source — Extension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Extension/Extension.php)
 
 ## Video references
@@ -375,7 +400,7 @@ to set sane defaults for another bundle, not to override user intent.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles/configuration.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles/configuration.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

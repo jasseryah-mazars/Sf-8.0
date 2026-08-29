@@ -33,6 +33,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une dépréciation est un panneau d'avertissement — "ça marche encore aujourd'hui, mais ça disparaîtra à la prochaine version majeure" — pas une panne immédiate.
+
+### Imagine dans la vraie vie
+Un panneau d'autoroute annonce : "cette sortie ferme au prochain chantier — utilisez la sortie 12 à la place." La bretelle fonctionne parfaitement aujourd'hui ; rien ne t'empêche de l'emprunter, et le panneau n'est qu'un avertissement, pas une barrière. Mais il prévient largement à l'avance et nomme le nouvel itinéraire, te laissant toute une saison pour changer tes habitudes.
+
+### Dans Symfony
+Lancer ton application en environnement `dev` avec le profiler activé fait apparaître chaque dépréciation dans la barre de débogage — c'est le moyen le plus rapide de repérer le code à migrer avant la prochaine version majeure.
+
+### Exemple simple
+```php
+trigger_deprecation('acme/lib', '2.3', 'Method "%s()" is deprecated, use "%s()" instead.', 'oldMethod', 'newMethod');
+```
+
+### Comment le mémoriser 🧠
+Le panneau annonce la sortie **à l'avance**, mais la sortie n'est **réellement démolie qu'au prochain grand chantier** (la prochaine version majeure) — jamais avant.
+
+
 ## Theory
 
 Une **dépréciation** est la promesse qu'une API fonctionne encore *maintenant* mais
@@ -108,7 +128,7 @@ flowchart LR
 
 Verrouiller la CI sur le nombre de dépréciations (le `SYMFONY_DEPRECATIONS_HELPER`
 du PHPUnit bridge) est couvert dans
-[Automated Tests → PHPUnit bridge](../testing/phpunit-bridge.md) — **exclu de la
+[Automated Tests → PHPUnit bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — **exclu de la
 certification Symfony 8**.
 
 ### Marking your own deprecations
@@ -136,7 +156,10 @@ final class Mailer
 
 !!! note "Source reference"
     `trigger_deprecation()` —
-    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php).
+    [symfony/deprecation-contracts `function.php`](https://github.com/symfony/deprecation-contracts/blob/main/function.php)
+    (un package compagnon sans version propre, donc pas de tag `8.0`) ;
+    `Definition::setDeprecated()` utilisé ci-dessous —
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php).
 
 ### Compilation vs runtime
 
@@ -248,7 +271,7 @@ car il est hors du périmètre de la [BC promise](bc-promise.md).
     - [ ] C. Immediately
 
     **Why:** Les dépréciations survivent jusqu'à une majeure, conformément à la promesse de BC. **Ref:**
-    [BC promise](https://symfony.com/doc/current/contributing/code/bc.html).
+    [BC promise](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ## Key takeaways
 
@@ -271,7 +294,7 @@ car il est hors du périmètre de la [BC promise](bc-promise.md).
 - **Confused with:** [Roadmap & Schedule](roadmap-schedule.md) — le calendrier dit *quand* une majeure arrive ; les dépréciations disent *ce qui* sera alors supprimé.
 
 ## Official References
-- [Official docs — deprecations](https://symfony.com/doc/current/setup/upgrade_minor.html)
+- [Official docs — deprecations](https://symfony.com/doc/8.0/setup/upgrade_minor.html)
 - [Deprecation contracts](https://github.com/symfony/deprecation-contracts)
 
 ## Video references
@@ -283,7 +306,7 @@ car il est hors du périmètre de la [BC promise](bc-promise.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — certaines pages de la documentation Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — certaines pages de la documentation Symfony intègrent un screencast.
 
 ## Confidence check
 

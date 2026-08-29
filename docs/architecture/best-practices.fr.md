@@ -31,6 +31,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les bonnes pratiques Symfony disent, en substance : "garde tes contrôleurs fins, mets ta logique dans des services, et range chaque type de config à sa place."
+
+### Imagine dans la vraie vie
+Dans un restaurant bien tenu, le serveur (le contrôleur) prend seulement la commande et rapporte l'assiette finie — il ne cuisine jamais lui-même ; la cuisine se fait à des postes spécialisés (les services) qui partagent le même plan de travail (le container). Garder le serveur "léger" est ce qui permet de servir plusieurs tables à la fois.
+
+### Dans Symfony
+Un contrôleur qui interroge directement la base de données et formate du HTML à la main viole deux règles à la fois — la logique devrait vivre dans un service autowiré et injectable, testable indépendamment du contrôleur.
+
+### Exemple simple
+```php
+// ❌ logique dans le contrôleur
+public function show(): Response { $data = $this->db->query('SELECT ...'); ... }
+
+// ✅ logique déléguée à un service
+public function show(ProductFinder $finder): Response { return $this->render('...', ['p' => $finder->find()]); }
+```
+
+### Comment le mémoriser 🧠
+"Le serveur ne cuisine jamais" : un contrôleur qui contient de la logique métier est le signal d'alarme numéro un à repérer en review de code.
+
+
 ## Theory
 
 Symfony publie un guide officiel de **Best Practices** : des conventions pragmatiques
@@ -92,7 +116,7 @@ flowchart LR
 
 !!! note "Source reference"
     Guide des Best Practices —
-    [symfony.com/doc/current/best_practices.html](https://symfony.com/doc/current/best_practices.html).
+    [symfony.com/doc/8.0/best_practices.html](https://symfony.com/doc/8.0/best_practices.html).
 
 ### Compilation vs runtime angle
 
@@ -206,7 +230,7 @@ documentez-la.
 
     **Why:** Des controllers minces délèguent aux services pour la réutilisation et la
     testabilité.
-    **Ref:** [Best practices](https://symfony.com/doc/current/best_practices.html).
+    **Ref:** [Best practices](https://symfony.com/doc/8.0/best_practices.html).
 
 ??? question "Q2. What visibility should app services have by default?"
     - [x] A. Private ✅
@@ -215,7 +239,7 @@ documentez-la.
 
     **Why:** Les services privés permettent l'optimisation de la dependency injection et
     découragent le service location.
-    **Ref:** [Service container](https://symfony.com/doc/current/service_container.html).
+    **Ref:** [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q3. Where do sensitive credentials belong?"
     - [x] A. The Secrets vault ✅
@@ -223,7 +247,7 @@ documentez-la.
     - [ ] C. Hard-coded parameters
 
     **Why:** Les secrets doivent utiliser le vault, pas une config committée. **Ref:**
-    [Secrets](https://symfony.com/doc/current/configuration/secrets.html).
+    [Secrets](https://symfony.com/doc/8.0/configuration/secrets.html).
 
 ## Key takeaways
 
@@ -247,9 +271,9 @@ documentez-la.
 - **Confused with:** [Naming Conventions](naming-conventions.md) — les conventions sont des règles mécaniques ; les best practices sont le *pourquoi* des applications idiomatiques.
 
 ## Official References
-- [Official Symfony Best Practices](https://symfony.com/doc/current/best_practices.html)
-- [Service container](https://symfony.com/doc/current/service_container.html)
-- [Secrets management](https://symfony.com/doc/current/configuration/secrets.html)
+- [Official Symfony Best Practices](https://symfony.com/doc/8.0/best_practices.html)
+- [Service container](https://symfony.com/doc/8.0/service_container.html)
+- [Secrets management](https://symfony.com/doc/8.0/configuration/secrets.html)
 
 ## Video references
 
@@ -260,7 +284,7 @@ documentez-la.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/best_practices.html) — certaines pages de la documentation Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/best_practices.html) — certaines pages de la documentation Symfony intègrent un screencast.
 
 ## Confidence check
 

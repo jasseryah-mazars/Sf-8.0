@@ -33,6 +33,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Filesystem lève une exception dès qu'une opération échoue (au lieu de renvoyer `false` silencieusement) ; Finder cherche des fichiers avec une syntaxe fluide et lisible.
+
+### Imagine dans la vraie vie
+Filesystem est un déménageur prudent qui crie dès que quelque chose ne va pas plutôt que de laisser tomber silencieusement un carton. Son `dumpFile()` est comme un chef qui dresse un plat entièrement sur une assiette de réserve puis seulement ensuite l'échange sur la table.
+
+### Dans Symfony
+`$finder->files()->in('src')->name('*.php')->date('since yesterday')` trouve tous les fichiers PHP modifiés depuis hier — bien plus lisible que du code `scandir()`/`filemtime()` fait à la main.
+
+### Exemple simple
+```php
+$fs->dumpFile('config/genere.yaml', $contenu); // écriture atomique, jamais de fichier à moitié écrit
+```
+
+### Comment le mémoriser 🧠
+`dumpFile()` écrit dans un **fichier temporaire puis renomme** — cette atomicité garantit qu'un processus concurrent ne verra jamais un fichier à moitié écrit, seulement l'ancienne ou la nouvelle version complète.
+
+---
+
+
 ## Theory
 
 **Filesystem** enveloppe les fonctions fichier de PHP avec des méthodes
@@ -252,7 +274,7 @@ il lui faut des répertoires via `in()`.
     - [ ] C. It compresses the content
 
     **Why:** L'écriture temporaire + rename garantit que les lecteurs voient soit l'ancien contenu, soit le nouveau contenu complet.
-    **Ref:** [Filesystem](https://symfony.com/doc/current/components/filesystem.html).
+    **Ref:** [Filesystem](https://symfony.com/doc/8.0/components/filesystem.html).
 
 ??? question "Q2. `Finder` requires which call to define where to search?"
     - [x] A. `in($dirs)` ✅
@@ -260,14 +282,14 @@ il lui faut des répertoires via `in()`.
     - [ ] C. `search($dirs)`
 
     **Why:** `in()` définit les répertoires de recherche ; sans lui, Finder lève une exception.
-    **Ref:** [Finder](https://symfony.com/doc/current/components/finder.html).
+    **Ref:** [Finder](https://symfony.com/doc/8.0/components/finder.html).
 
 ??? question "Q3. On failure, `Filesystem::copy()`…"
     - [x] A. throws an `IOExceptionInterface` ✅
     - [ ] B. returns `false`
     - [ ] C. returns `null`
 
-    **Why:** Les méthodes de Filesystem signalent les erreurs via des exceptions. **Ref:** [Filesystem](https://symfony.com/doc/current/components/filesystem.html#error-handling).
+    **Why:** Les méthodes de Filesystem signalent les erreurs via des exceptions. **Ref:** [Filesystem](https://symfony.com/doc/8.0/components/filesystem.html#error-handling).
 
 ## Key takeaways
 
@@ -290,8 +312,8 @@ il lui faut des répertoires via `in()`.
 - **Confused with:** les fonctions brutes `glob()`/`scandir()` — Finder ajoute des filtres fluides et renvoie des `SplFileInfo`.
 
 ## Official References
-- [Official docs — Filesystem](https://symfony.com/doc/current/components/filesystem.html)
-- [Official docs — Finder](https://symfony.com/doc/current/components/finder.html)
+- [Official docs — Filesystem](https://symfony.com/doc/8.0/components/filesystem.html)
+- [Official docs — Finder](https://symfony.com/doc/8.0/components/finder.html)
 - [Symfony source — Finder](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Finder/Finder.php)
 
 ## Video references
@@ -303,7 +325,7 @@ il lui faut des répertoires via `in()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon et keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/filesystem.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/filesystem.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -317,4 +339,4 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Process](process.md) · [Lock](lock.md) · [Deployment](deployment.md)</small>
+<small>Related: [Process](process.md) · [Lock](../appendices/out-of-syllabus/lock.md) · [Deployment](deployment.md)</small>

@@ -31,6 +31,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un tag est une étiquette posée sur un service à la compilation — elle ne fait rien toute seule tant qu'un collecteur ne vient pas la ramasser.
+
+### Imagine dans la vraie vie
+Un tag est un autocollant sur une fiche recette — "menu brunch". L'autocollant seul ne fait rien ; un collecteur (le chef qui prépare le service brunch) rassemble toutes les fiches portant cet autocollant sur un même plateau.
+
+### Dans Symfony
+Tous les validateurs de contraintes personnalisés portent le tag `validator.constraint_validator`, ce qui permet au composant Validator de tous les découvrir automatiquement — sans liste manuelle à maintenir.
+
+### Exemple simple
+```php
+#[AutowireIterator('app.notifieur')]
+private iterable $notifieurs; // tous les services tagués 'app.notifieur'
+```
+
+### Comment le mémoriser 🧠
+**Priorité plus haute = plus tôt** dans l'itérateur — comme la place d'une fiche sur le plateau, celles avec une priorité plus haute sont servies en premier.
+---
+
+
 ## Theory
 
 Un **tag** est une étiquette attachée à une définition de service (par ex.
@@ -335,7 +357,7 @@ définitions (pas seulement collecter), il vous faut un
 
     **Why:** Le locator instancie les services à la demande, indexés par la clé
     d'index.
-    **Ref:** [Service subscribers & locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    **Ref:** [Service subscribers & locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. Higher `priority` on a tag means the service is…"
     - [x] A. Earlier in the tagged iterator ✅
@@ -344,7 +366,7 @@ définitions (pas seulement collecter), il vous faut un
     - [ ] D. Ignored
 
     **Why:** Les collections taguées sont triées par priorité décroissante.
-    **Ref:** [Tags with priority](https://symfony.com/doc/current/service_container/tags.html#tagged-services-with-priority).
+    **Ref:** [Tags with priority](https://symfony.com/doc/8.0/service_container/tags.html#tagged-services-with-priority).
 
 ??? question "Q3. How can every implementation of an interface get a tag automatically?"
     - [x] A. `#[AutoconfigureTag]` on the interface or `_instanceof` in YAML ✅
@@ -354,7 +376,7 @@ définitions (pas seulement collecter), il vous faut un
 
     **Why:** L'autoconfiguration associe une interface à un tag pour tous les
     implémenteurs.
-    **Ref:** [Autoconfiguring tags](https://symfony.com/doc/current/service_container/tags.html).
+    **Ref:** [Autoconfiguring tags](https://symfony.com/doc/8.0/service_container/tags.html).
 
 ## Key takeaways
 
@@ -383,8 +405,8 @@ définitions (pas seulement collecter), il vous faut un
   *construit* un locator ; le locator est la primitive générale d'ensemble lazy.
 
 ## Official References
-- [Official Symfony docs — Service Tags](https://symfony.com/doc/current/service_container/tags.html)
-- [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Service Tags](https://symfony.com/doc/8.0/service_container/tags.html)
+- [Official Symfony docs — Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — PriorityTaggedServiceTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PriorityTaggedServiceTrait.php)
 
 ## Video references
@@ -397,7 +419,7 @@ définitions (pas seulement collecter), il vous faut un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

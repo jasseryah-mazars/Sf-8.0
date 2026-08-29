@@ -28,6 +28,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un rôle est une chaîne préfixée `ROLE_` portée sur le token — `IS_AUTHENTICATED_*`/`PUBLIC_ACCESS` ne sont **pas** des rôles malgré les apparences.
+
+### Imagine dans la vraie vie
+Les rôles sont des niveaux d'habilitation imprimés sur ton badge. L'habilitation "Admin" implique l'habilitation "User", comme le badge d'un manager ouvre aussi toutes les portes du personnel — c'est la **hiérarchie des rôles**.
+
+### Dans Symfony
+`role_hierarchy: { ROLE_ADMIN: ROLE_USER }` signifie qu'un utilisateur avec `ROLE_ADMIN` passe automatiquement les vérifications `ROLE_USER`.
+
+### Exemple simple
+```yaml
+security:
+    role_hierarchy: { ROLE_ADMIN: ROLE_USER }
+```
+
+### Comment le mémoriser 🧠
+`IS_AUTHENTICATED_FULLY` n'est **pas** un niveau d'habilitation — c'est *depuis combien de temps* tu t'es identifié (géré par `AuthenticatedVoter`).
+
+
 ## Theory
 
 Un **role** est une simple chaîne de caractères portée par l'utilisateur et le token.
@@ -246,7 +267,7 @@ voient pas de sujet.
 
     **Why:** Les utilisateurs pleinement authentifiés satisfont aussi
     `_REMEMBERED` ; l'inverse n'est pas vrai.
-    **Ref:** [Special attributes](https://symfony.com/doc/current/security.html#security-authorization-access-decision).
+    **Ref:** [Special attributes](https://symfony.com/doc/8.0/security.html#security-authorization-access-decision).
 
 ??? question "Q2. In Symfony 8, 'allow everyone including anonymous' uses…"
     - [ ] A. `IS_AUTHENTICATED_ANONYMOUSLY`
@@ -256,7 +277,7 @@ voient pas de sujet.
 
     **Why:** Les tokens anonymes ont disparu ; `PUBLIC_ACCESS` exclut un chemin
     de l'authentification.
-    **Ref:** [Access control](https://symfony.com/doc/current/security.html).
+    **Ref:** [Access control](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. A role `EDITOR` (no prefix) is checked with `is_granted('EDITOR')`. Result via RoleVoter?"
     - [ ] A. Granted if the user has it
@@ -267,7 +288,7 @@ voient pas de sujet.
     **Why:** Le `RoleVoter` ne prend en charge que `ROLE_*` ; les chaînes sans
     préfixe donnent lieu à une abstention (un voter personnalisé peut néanmoins
     les gérer).
-    **Ref:** [Roles](https://symfony.com/doc/current/security.html#roles).
+    **Ref:** [Roles](https://symfony.com/doc/8.0/security.html#roles).
 
 ## Key takeaways
 
@@ -296,8 +317,8 @@ voient pas de sujet.
   par objet nécessitent un voter.
 
 ## Official References
-- [Symfony docs — Roles](https://symfony.com/doc/current/security.html#roles)
-- [Symfony docs — Role hierarchy](https://symfony.com/doc/current/security.html#hierarchical-roles)
+- [Symfony docs — Roles](https://symfony.com/doc/8.0/security.html#roles)
+- [Symfony docs — Role hierarchy](https://symfony.com/doc/8.0/security.html#hierarchical-roles)
 - [Symfony source — RoleHierarchy](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Role/RoleHierarchy.php)
 
 ## Video references
@@ -309,7 +330,7 @@ voient pas de sujet.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#security-authorization-access-decision) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#security-authorization-access-decision) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

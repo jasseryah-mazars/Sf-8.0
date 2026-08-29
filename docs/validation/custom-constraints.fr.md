@@ -28,6 +28,63 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une contrainte réutilisable, c'est deux classes séparées : une qui décrit la règle (`Constraint`), une qui l'applique (`ConstraintValidator`).
+
+### Imagine dans la vraie vie
+Quand les scanners standards ne détectent pas ta contrebande spécifique, l'aéroport commande un **scanner sur mesure** : la machine qui déclare ce qu'elle cherche (la `Constraint`) plus l'opérateur formé qui la lit et rédige le rapport (le `ConstraintValidator`). L'une décrit la règle, l'autre l'applique.
+
+### Dans Symfony
+Une contrainte `#[NumeroSirenValide]` réutilisable dans toute l'application (client, fournisseur, partenaire) évite de dupliquer la même logique de validation SIREN dans trois callbacks différents.
+
+### Exemple simple
+```php
+class NumeroSirenValide extends Constraint { public string $message = 'SIREN invalide.'; }
+```
+
+### Comment le mémoriser 🧠
+Par défaut, le nom du validateur est le nom de la contrainte **+ "Validator"** — et une règle au niveau classe doit surcharger `getTargets()` pour renvoyer `CLASS_CONSTRAINT`.
+
+When a rule is **reusable** across classes, promote it from a callback to a
+**custom constraint**. A constraint is *two* classes:
+
+1. A `Symfony\Component\Validator\Constraint` subclass — a declarative marker
+   holding options and the default message.
+2. A `Symfony\Component\Validator\ConstraintValidator` subclass — the logic that
+   inspects the value and adds violations.
+
+The constraint links to its validator via `validatedBy()`, which by convention
+returns `static::class . 'Validator'`.
+
+```php
+// 1) the declarative marker: a Constraint subclass holding options + message
+final class Uuid4 extends Constraint
+{
+    public string $message = 'This is not a UUID v4.';
+}
+
+// 2) the logic: a ConstraintValidator subclass, found via validatedBy(),
+//    which by default returns static::class . 'Validator' => Uuid4Validator
+final class Uuid4Validator extends ConstraintValidator
+{
+    public function validate(mixed $value, Constraint $constraint): void
+    {
+        // inspect $value and add violations through $this->context
+    }
+}
+```
+
+!!! question "Predict first"
+    You add `#[\Attribute(\Attribute::TARGET_CLASS)]` to a custom constraint but the
+    validator still treats it as a property constraint. What did you forget?
+
+??? note "Reveal"
+    Override `getTargets()` to return `self::CLASS_CONSTRAINT`. The PHP attribute
+    target and the validator's `getTargets()` are separate switches — you need both.
+
+
 ## Theory
 
 Quand une règle est **réutilisable** entre plusieurs classes, promouvez-la d'un
@@ -412,7 +469,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** `Constraint::validatedBy()` retourne `static::class.'Validator'` par
     convention ; ne le surchargez que pour le changer.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q2. To make a constraint apply at class scope you must…"
     - [ ] A. Set `#[\Attribute(\Attribute::TARGET_CLASS)]` only
@@ -422,7 +479,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** La cible de l'attribut PHP et le `getTargets()` du validator sont
     distincts ; le validator se base sur ce dernier pour décider du placement.
-    **Ref:** [Class constraint validator](https://symfony.com/doc/current/validation/custom_constraint.html#class-constraint-validator).
+    **Ref:** [Class constraint validator](https://symfony.com/doc/8.0/validation/custom_constraint.html#class-constraint-validator).
 
 ??? question "Q3. In a `ConstraintValidator::validate()`, the first thing you should do is…"
     - [x] A. Check `$constraint instanceof YourConstraint` and throw otherwise ✅
@@ -432,7 +489,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** Protéger le type de la constraint avec `UnexpectedTypeException` est
     la première étape documentée.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ??? question "Q4. What does `#[HasNamedArguments]` do?"
     - [x] A. Passes attribute arguments as named constructor arguments ✅
@@ -442,7 +499,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     **Why:** Il active la construction typée par arguments nommés au lieu du style
     hérité à tableau d'options.
-    **Ref:** [Custom constraint](https://symfony.com/doc/current/validation/custom_constraint.html).
+    **Ref:** [Custom constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html).
 
 ## Key takeaways
 
@@ -471,7 +528,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 - **Confused with:** [Callbacks](callbacks.md) — un callback est l'alternative ponctuelle ; ne promouvez en constraint que lorsque la règle est réutilisable.
 
 ## Official References
-- [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/current/validation/custom_constraint.html)
+- [Official Symfony docs — How to create a custom validation constraint](https://symfony.com/doc/8.0/validation/custom_constraint.html)
 - [Symfony source — Constraint](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraint.php)
 
 ## Video references
@@ -484,7 +541,7 @@ expression sur des champs, `#[Assert\Expression]` suffit.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation/custom_constraint.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation/custom_constraint.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -23,9 +23,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Object Validation](object-validation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une contrainte peut viser une propriété, un getter, ou la classe entière — et un objet imbriqué n'est validé que si tu le demandes explicitement.
+
+### Imagine dans la vraie vie
+La portée, c'est **où pointe le scanner** : sur un seul objet (propriété), sur ce qu'un capteur calcule à partir du sac (getter), ou sur le sac entier et la cohérence de son contenu (classe). Et un sac-dans-le-sac n'est ouvert que s'il porte une étiquette "inspecter le contenu" — cette étiquette, c'est `#[Assert\Valid]`.
+
+### Dans Symfony
+Un `Commande` qui contient une collection de `LigneCommande` ne validera **aucune** ligne si `#[Assert\Valid]` manque sur la propriété `$lignes` — même si chaque `LigneCommande` a ses propres contraintes.
+
+### Exemple simple
+```php
+#[Assert\Valid]
+private Collection $lignes; // sans #[Assert\Valid], jamais validées
+```
+
+### Comment le mémoriser 🧠
+"Pas d'étiquette, pas d'inspection" — un objet imbriqué sans `#[Assert\Valid]` explicite reste **invisible** au validateur, même s'il a ses propres règles.
 
 A constraint can be attached at three **scopes**:
 
@@ -313,6 +333,8 @@ graph on every request has a cost. For collections of scalars use `All`
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What makes the validator recurse into a nested object?"
     - [ ] A. Nothing — it always recurses
     - [x] B. `#[Assert\Valid]` on the property holding it ✅
@@ -321,7 +343,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     **Why:** Cascading is opt-in per property via `Valid`; otherwise nested objects
     are ignored.
-    **Ref:** [Valid](https://symfony.com/doc/current/reference/constraints/Valid.html).
+    **Ref:** [Valid](https://symfony.com/doc/8.0/reference/constraints/Valid.html).
 
 ??? question "Q2. A rule needs to compare two properties of the same object. Best scope?"
     - [ ] A. Property scope on each field
@@ -331,7 +353,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     **Why:** Cross-field rules need the whole object, so a class-target constraint
     is correct.
-    **Ref:** [Expression](https://symfony.com/doc/current/reference/constraints/Expression.html).
+    **Ref:** [Expression](https://symfony.com/doc/8.0/reference/constraints/Expression.html).
 
 ??? question "Q3. What property path does a violation from `isActive()` use?"
     - [ ] A. `isActive`
@@ -341,7 +363,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     **Why:** Getter constraints report on the property-ised name; `isActive`/`getActive`
     map to `active`.
-    **Ref:** [Validation — getters](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation — getters](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -365,7 +387,7 @@ graph on every request has a cost. For collections of scalars use `All`
 - **Confused with:** [Built-in Constraints](built-in-constraints.md) — `Valid` cascades into objects; `All` applies constraints to scalar elements.
 
 ## Official References
-- [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation (scopes)](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveContextualValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveContextualValidator.php)
 
 ## Video references
@@ -377,7 +399,7 @@ graph on every request has a cost. For collections of scalars use `All`
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/Valid.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/Valid.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

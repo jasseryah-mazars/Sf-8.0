@@ -26,9 +26,28 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Requirements](requirements.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une valeur par défaut rend un paramètre optionnel — et seul le **dernier** paramètre d'une route peut être optionnel.
+
+### Imagine dans la vraie vie
+Un formulaire d'adresse postale où la dernière ligne — "Appartement 1" — est optionnelle et supposée quand elle est vide. Tu peux omettre cette ligne finale et la lettre arrive quand même, mais tu ne peux pas laisser la *rue* vide tout en gardant l'appartement — le facteur ne saurait pas quelle ligne manque.
+
+### Dans Symfony
+`{page<\d+>?1}` rend `/blog` équivalent à `/blog/1` — mais on ne peut jamais rendre un segment du milieu optionnel sans rendre tous les segments qui le suivent optionnels aussi.
+
+### Exemple simple
+```php
+#[Route('/blog/{page<\d+>?1}')] // /blog et /blog/2 matchent tous les deux
+```
+
+### Comment le mémoriser 🧠
+Seuls les paramètres **en fin de route** peuvent être optionnels — comme la dernière ligne d'une adresse, jamais une ligne au milieu.
 
 A **default value** makes a placeholder **optional**: if the URL omits it, the
 route still matches and the controller receives the default. `/blog/{page}` with
@@ -249,6 +268,8 @@ over defaulting.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which placeholder is optional with a default of 1?"
     - [ ] A. `{page?1<\d+>}`
     - [x] B. `{page<\d+>?1}` ✅
@@ -256,7 +277,7 @@ over defaulting.
     - [ ] D. `{page<\d+=1>}`
 
     **Why:** inline syntax is `{name<requirement>?default}`.
-    **Ref:** [Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Optional parameters](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ??? question "Q2. `generateUrl('blog', ['page' => 1])` where `page` defaults to 1 produces?"
     - [x] A. `/blog` ✅
@@ -265,7 +286,7 @@ over defaulting.
     - [ ] D. An exception
 
     **Why:** the generator omits a trailing segment whose value equals the default.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. Which parameter can be made optional in `/{a}/{b}`?"
     - [ ] A. `a` only
@@ -274,7 +295,7 @@ over defaulting.
     - [ ] D. Neither
 
     **Why:** only trailing placeholders can be omitted from the URL.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ??? question "Q4. What default does `{slug?}` declare?"
     - [ ] A. Empty string `''`
@@ -283,7 +304,7 @@ over defaulting.
     - [ ] D. `0`
 
     **Why:** a bare `?` with no value sets the default to `null`.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#optional-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#optional-parameters).
 
 ## Key takeaways
 
@@ -307,7 +328,7 @@ over defaulting.
 - **Confused with:** [Special attributes](special-attributes.md) — non-path defaults like `_format`/`_locale` never appear in the path.
 
 ## Official References
-- [Official Symfony docs — Optional parameters](https://symfony.com/doc/current/routing.html#optional-parameters)
+- [Official Symfony docs — Optional parameters](https://symfony.com/doc/8.0/routing.html#optional-parameters)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
 ## Video references
@@ -319,7 +340,7 @@ over defaulting.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#optional-parameters) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#optional-parameters) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

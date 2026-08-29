@@ -23,7 +23,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Includes](includes.md), [Controllers](../controllers/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Quand un fragment de page a besoin de ses propres données, on lui fait exécuter son propre mini-contrôleur plutôt que de tout charger dans le contrôleur principal.
+
+### Imagine dans la vraie vie
+Intégrer un contrôleur, c'est comme une page de journal qui envoie un journaliste junior chercher l'encadré "dernières actualités" pendant que l'article principal est déjà mis en page. `render(controller(...))` envoie ce journaliste — une vraie sous-requête — qui revient avec une coupure de presse finie et autonome.
+
+### Dans Symfony
+Un panneau "produits recommandés" affiché sur *chaque* page du site est un candidat idéal : plutôt que de faire calculer les recommandations par chaque contrôleur qui affiche une page, un seul contrôleur dédié s'en charge, appelé depuis le template.
+
+### Exemple simple
+```twig
+{{ render(controller('App\\Controller\\RecoController::afficher')) }}
+```
+
+### Comment le mémoriser 🧠
+`render(controller(...))` déclenche une **vraie sous-requête HttpKernel** — ce n'est pas un simple appel de fonction PHP, le fragment traverse tout le cycle de requête comme une page normale.
 
 ## Theory
 
@@ -102,7 +123,7 @@ flowchart LR
   (`framework.fragments`).
 - `render_esi(...)` also exists as a third strategy, deferring the fragment to a
   reverse proxy. **Excluded from Symfony 8 certification** — see
-  [HTTP Caching → ESI](../http-caching/esi.md).
+  [HTTP Caching → ESI](../appendices/out-of-syllabus/esi.md).
 
 ```yaml
 # config/packages/framework.yaml
@@ -217,6 +238,8 @@ includes unless the fragment genuinely needs isolated logic.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `render(controller('C::m'))` executes the controller as…"
     - [x] A. A sub-request through HttpKernel ✅
     - [ ] B. A static method call, no request
@@ -224,7 +247,7 @@ includes unless the fragment genuinely needs isolated logic.
     - [ ] D. A CLI command
 
     **Why:** The inline renderer issues a `SUB_REQUEST`. **Ref:**
-    [Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers).
+    [Embedding controllers](https://symfony.com/doc/8.0/templates.html#embedding-controllers).
 
 ??? question "Q2. Which handler chooses the fragment renderer?"
     - [x] A. `FragmentHandler` ✅
@@ -253,11 +276,11 @@ includes unless the fragment genuinely needs isolated logic.
 ## Connections
 
 - **Depends on:** [Includes](includes.md) — embedding is the heavier alternative when a plain `include` can't fetch its own data.
-- **Related but excluded:** [HTTP Caching → ESI](../http-caching/esi.md) — `render_esi` uses the same `FragmentHandler` but ESI itself is **excluded from Symfony 8 certification**.
+- **Related but excluded:** [HTTP Caching → ESI](../appendices/out-of-syllabus/esi.md) — `render_esi` uses the same `FragmentHandler` but ESI itself is **excluded from Symfony 8 certification**.
 - **Confused with:** [Controllers](../controllers/index.md) — inline rendering is a real **sub-request**, not a plain method call.
 
 ## Official References
-- [Official — Embedding controllers](https://symfony.com/doc/current/templates.html#embedding-controllers)
+- [Official — Embedding controllers](https://symfony.com/doc/8.0/templates.html#embedding-controllers)
 - [Symfony source — FragmentHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/FragmentHandler.php)
 
 ## Video references
@@ -269,7 +292,7 @@ includes unless the fragment genuinely needs isolated logic.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#embedding-controllers) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#embedding-controllers) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

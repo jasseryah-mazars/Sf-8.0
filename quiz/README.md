@@ -32,7 +32,7 @@ categories:
           Compiler passes are registered programmatically via
           ContainerBuilder::addCompilerPass(), typically in Kernel::build()
           or a bundle's build() method. There is no core attribute for this.
-        documentation: "https://symfony.com/doc/current/service_container/compiler_passes.html"
+        documentation: "https://symfony.com/doc/8.0/service_container/compiler_passes.html"
 ```
 
 ## Rules
@@ -47,7 +47,8 @@ categories:
 
 `php-web-security.yml`, `http.yml`, `architecture.yml`, `controllers.yml`,
 `routing.yml`, `twig.yml`, `forms.yml`, `validation.yml`, `dependency-injection.yml`,
-`security.yml`, `http-caching.yml`, `console.yml`, `testing.yml`, `miscellaneous.yml`.
+`security.yml`, `http-caching.yml`, `console.yml`, `testing.yml`, `miscellaneous.yml`,
+`messenger.yml`.
 
 ---
 
@@ -74,7 +75,7 @@ categories:
         explanation: >-
           Why the correct answer is correct, why the others are wrong, the
           Symfony-internal behaviour that justifies it, and the common misconception.
-        documentation: "https://symfony.com/doc/current/security/voters.html"
+        documentation: "https://symfony.com/doc/8.0/security/voters.html"
 ```
 
 **`type` enum:** `single` · `multiple` · `true-false` · `code` (code-reading) ·

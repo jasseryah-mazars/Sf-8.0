@@ -30,6 +30,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un cookie, c'est un petit mot que le serveur te demande de garder dans ta poche et de remontrer à chaque visite.
+
+### Imagine dans la vraie vie
+Un guichet te remet un petit mot auto-adressé à garder dans ton portefeuille, à montrer à chaque nouvelle lettre que tu écris. `Set-Cookie` te remet ce mot ; l'en-tête `Cookie` de ta prochaine requête, c'est toi qui le présentes de nouveau. Les attributs sont les règles écrites dessus : qui peut le lire (`Domain`/`Path`), le garder au sec (`Secure`), interdire aux inconnus de le lire (`HttpOnly`).
+
+### Dans Symfony
+La session de Symfony repose elle-même sur un cookie (`PHPSESSID` par défaut) : sans ce cookie renvoyé par le navigateur à chaque requête, Symfony ne pourrait jamais relier deux requêtes du même visiteur.
+
+### Exemple simple
+```php
+$cookie = Cookie::create('theme')->withValue('sombre')->withSecure(true)->withHttpOnly(true);
+$response->headers->setCookie($cookie);
+```
+
+### Comment le mémoriser 🧠
+`SameSite=None` **exige** `Secure` — sinon le navigateur refuse purement et simplement le cookie. Retiens : "aucune restriction de site (`None`) n'est autorisée que sous cadenas (`Secure`)."
+
+
 ## Theory
 
 Un **cookie** est une petite paire clé/valeur que le serveur demande au client de
@@ -378,7 +399,7 @@ vous perdez la protection `HttpOnly` — des compromis s'appliquent).
 
 ## Official References
 - [MDN — Set-Cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
-- [Symfony docs — Setting cookies](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies)
+- [Symfony docs — Setting cookies](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies)
 - [Symfony source — Cookie](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Cookie.php)
 
 ## Video references
@@ -390,7 +411,7 @@ vous perdez la protection `HttpOnly` — des compromis s'appliquent).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html#setting-cookies) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html#setting-cookies) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -27,6 +27,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Sérialiser se fait en deux étapes : normaliser (objet → tableau) puis encoder (tableau → chaîne JSON/XML/CSV) — jamais directement objet vers chaîne.
+
+### Imagine dans la vraie vie
+Sérialiser, c'est **faire sa valise** ; désérialiser, c'est la défaire. Les normaliseurs **plient tes objets en une disposition plate et standard** (des tableaux) ; les encodeurs **ferment la valise en une seule chaîne** (JSON/XML/CSV) pour le voyage.
+
+### Dans Symfony
+`$serializer->serialize($produit, 'json')` fait les deux étapes en une seule fois — comprendre qu'il y a réellement deux étapes distinctes explique pourquoi on peut normaliser sans encoder.
+
+### Exemple simple
+```php
+$json = $serializer->serialize($produit, 'json', ['groups' => ['api']]);
+```
+
+### Comment le mémoriser 🧠
+`#[Groups]` ne filtre les champs **que** si tu passes explicitement `['groups' => [...]]` dans le contexte — sans ce contexte, tous les champs sont sérialisés, groupe ou pas.
+
+
 ## Theory
 
 La sérialisation convertit un graphe d'objets vers un format (JSON, XML, CSV, YAML) et
@@ -379,7 +399,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
     - [ ] C. They run in parallel
 
     **Why:** Les objets sont normalisés en tableaux, puis encodés en chaîne.
-    **Ref:** [Serializer](https://symfony.com/doc/current/components/serializer.html).
+    **Ref:** [Serializer](https://symfony.com/doc/8.0/serializer.html).
 
 ??? question "Q2. Which normalizer reads private properties directly?"
     - [ ] A. `ObjectNormalizer`
@@ -387,7 +407,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
     - [ ] C. `GetSetMethodNormalizer`
 
     **Why:** `PropertyNormalizer` utilise la réflexion sur les propriétés, en contournant les accesseurs.
-    **Ref:** [Normalizers](https://symfony.com/doc/current/serializer.html#normalizers).
+    **Ref:** [Normalizers](https://symfony.com/doc/8.0/serializer.html#normalizers).
 
 ??? question "Q3. `#[Groups(['read'])]` takes effect when…"
     - [x] A. `['groups' => ['read']]` is passed in the context ✅
@@ -395,7 +415,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
     - [ ] C. only during deserialization
 
     **Why:** Le filtrage par groupes ne s'applique que lorsque les groupes correspondants figurent dans le contexte.
-    **Ref:** [Serialization groups](https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes).
+    **Ref:** [Serialization groups](https://symfony.com/doc/8.0/serializer.html#using-serialization-groups-attributes).
 
 ## Key takeaways
 
@@ -420,8 +440,8 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
 - **Confused with:** le `json_encode` de PHP — le Serializer ajoute la normalisation, les groupes et la dénormalisation vers des objets typés.
 
 ## Official References
-- [Official docs — Serializer](https://symfony.com/doc/current/serializer.html)
-- [Official docs — Serializer component](https://symfony.com/doc/current/components/serializer.html)
+- [Official docs — Serializer](https://symfony.com/doc/8.0/serializer.html)
+- [Official docs — Serializer component](https://symfony.com/doc/8.0/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)
 
 ## Video references
@@ -433,7 +453,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/serializer.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/serializer.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

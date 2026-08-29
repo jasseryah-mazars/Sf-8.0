@@ -33,6 +33,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le navigateur garde son propre cache privé et obéit à `max-age`/`Expires`, mais un rechargement normal et un rechargement forcé ne se comportent pas du tout pareil.
+
+### Imagine dans la vraie vie
+Un rapport imprimé que tu gardes sur ton propre bureau. Si ta copie est assez récente (encore **fraîche**), tu la lis sans marcher jusqu'aux archives. Un **rechargement normal** appelle les archives pour demander "ça a changé depuis ma copie ?" — souvent la réponse est "non, garde la tienne" (un 304 sans corps). Un **rechargement forcé** jette ta copie et va chercher un exemplaire tout neuf.
+
+### Dans Symfony
+Changer l'URL d'un fichier CSS (`app.abc123.css` → `app.def456.css`) force le navigateur à le retélécharger — vider manuellement le cache du visiteur n'est jamais nécessaire ni possible depuis le serveur.
+
+### Exemple simple
+```
+Rechargement normal (F5)    → max-age=0, revalide, parfois 304
+Rechargement forcé (Ctrl+F5) → no-cache, retéléchargement complet
+```
+
+### Comment le mémoriser 🧠
+On ne "casse" jamais un cache navigateur en le vidant — on change l'**URL** du fichier (fingerprinting), ce qui en fait une ressource jamais vue auparavant.
+
+---
+
+
 ## Theory
 
 Le navigateur possède son propre **cache privé**. Avant d'émettre une request
@@ -297,7 +320,7 @@ cache encore fraîche — vous changez plutôt son **URL** (cache busting).
 
     **Why:** `s-maxage` cible les caches partagés ; le navigateur est un cache
     privé et utilise `max-age`/`Expires`.
-    **Ref:** [HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q2. A normal browser **reload** typically sends…"
     - [ ] A. `Cache-Control: no-store`
@@ -361,7 +384,7 @@ cache encore fraîche — vous changez plutôt son **URL** (cache busting).
   vous appartient.
 
 ## Official References
-- [Symfony docs — HTTP cache](https://symfony.com/doc/current/http_cache.html)
+- [Symfony docs — HTTP cache](https://symfony.com/doc/8.0/http_cache.html)
 - [MDN — Cache-Control (request directives)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#request_directives)
 - [MDN — HTTP caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 
@@ -375,7 +398,7 @@ cache encore fraîche — vous changez plutôt son **URL** (cache busting).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

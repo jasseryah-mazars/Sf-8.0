@@ -29,6 +29,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`router:match` simule une requête et t'explique précisément pourquoi chaque route a matché ou a été rejetée — un GPS pour le routeur.
+
+### Imagine dans la vraie vie
+`router:match` ressemble à un simulateur d'itinéraire GPS : tu entres une destination et il te dit non seulement quelle route il prendrait, mais *pourquoi* il a rejeté les autres — "cette rue est en sens interdit dans ce sens" (mauvaise méthode), "cette route est interdite aux camions" (mauvais host).
+
+### Dans Symfony
+Avant de déboguer "pourquoi mon URL donne-t-elle un 404 ?", lance `php bin/console router:match /mon-url` — la réponse (aucune route ne correspond, ou laquelle correspond) apparaît immédiatement, sans avoir à parcourir tout `mkdocs.yml` équivalent en config de routes.
+
+### Exemple simple
+```console
+$ php bin/console router:match /produits/42 --method=POST
+```
+
+### Comment le mémoriser 🧠
+Le GPS conduit depuis une carte téléchargée sur l'appareil : en production, changer les routes ne change rien tant que tu n'as pas "retéléchargé la carte" (`cache:clear`) — contrairement à `dev`, qui détecte le changement tout seul.
+
+
 ## Theory
 
 Deux commandes console répondent aux questions de routing du quotidien :
@@ -214,7 +234,7 @@ plutôt que de scraper le HTML.
     - [ ] D. `router:debug`
 
     **Why:** `router:match` exécute le matcher (traçable) contre un path donné.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#debugging-routes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#debugging-routes).
 
 ??? question "Q2. After changing routes in the prod environment you must…"
     - [x] A. Clear/warm the cache (`cache:clear`) ✅
@@ -223,7 +243,7 @@ plutôt que de scraper le HTML.
     - [ ] D. Delete `vendor/`
 
     **Why:** le router compilé est construit au warmup du cache et n'est pas rafraîchi
-    automatiquement en prod. **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    automatiquement en prod. **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q3. What does `router:match` use to explain rejections?"
     - [x] A. `TraceableUrlMatcher` ✅
@@ -264,7 +284,7 @@ plutôt que de scraper le HTML.
 - **Confused with:** [URL generation](url-generation.md) — la `_route` du matcher vs le fichier compilé séparé du generator.
 
 ## Official References
-- [Official Symfony docs — Debugging routes](https://symfony.com/doc/current/routing.html#debugging-routes)
+- [Official Symfony docs — Debugging routes](https://symfony.com/doc/8.0/routing.html#debugging-routes)
 - [Symfony source — RouterMatchCommand](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Command/RouterMatchCommand.php)
 
 ## Video references
@@ -276,7 +296,7 @@ plutôt que de scraper le HTML.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#debugging-routes) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#debugging-routes) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

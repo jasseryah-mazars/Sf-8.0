@@ -28,6 +28,72 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le validateur ne dit jamais juste "oui/non" — il te rend une liste détaillée de tout ce qui cloche, même vide.
+
+### Imagine dans la vraie vie
+Le contrôle des bagages à l'aéroport. Toi (la compagnie) ne fouilles jamais les bagages toi-même — tu envoies chacun sur le tapis de contrôle (le `ValidatorInterface`) et reçois un rapport détaillé de tout ce qui a été signalé (la `ConstraintViolationList`). Le tapis ne crie jamais "refusé" — il te tend une liste, même vide.
+
+### Dans Symfony
+`$violations = $validator->validate($produit);` renvoie toujours une liste (jamais un booléen, jamais une exception) — c'est `count($violations)` qui te dit si c'est valide.
+
+### Exemple simple
+```php
+$violations = $validator->validate($produit);
+if (count($violations) > 0) { /* traiter les erreurs */ }
+```
+
+### Comment le mémoriser 🧠
+Le validateur ne **lance jamais** d'exception sur un échec de validation — il rend toujours une liste, même vide. Confondre ça avec un booléen est le piège numéro un.
+
+Symfony validates **values against constraints**. The usual value is an object
+whose *constraints* are declared with PHP attributes. You do not validate by
+hand; you ask the container's `validator` service to do it and read back a
+`ConstraintViolationList`.
+
+```php
+<?php
+declare(strict_types=1);
+
+namespace App\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
+
+class Author
+{
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 2, max: 50)]
+    public string $name = '';
+
+    #[Assert\Email]
+    public ?string $email = null;
+
+    public function __construct(private bool $active = false) {}
+
+    // A getter constraint: the method name minus "get"/"is"/"has" is the path.
+    #[Assert\IsTrue(message: 'The author must be active.')]
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+}
+```
+
+Three placement scopes exist — **property**, **getter** and **class** — covered
+in depth in [Scopes](scopes.md). Here we focus on *running* the validator.
+
+!!! question "Predict first"
+    You call `$validator->validate($author)` on an object with three failing
+    constraints. What is the return type, and how do you tell it failed?
+
+??? note "Reveal"
+    A `ConstraintViolationListInterface` — never a bool, never a thrown exception.
+    You inspect it with `count($violations) > 0`; the three failures are three
+    elements in that one list.
+
+
 ## Theory
 
 Symfony valide **des valeurs contre des constraints**. La valeur habituelle est un
@@ -374,7 +440,7 @@ automatiquement les DTO désérialisés.
     **Why:** `validate()` retourne toujours une liste de violations ; vous
     l'inspectez avec `count()`. Il ne lève jamais d'exception et ne retourne
     jamais de booléen.
-    **Ref:** [Validation](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q2. Which method checks a value *without* modifying the object?"
     - [ ] A. `validate()`
@@ -384,7 +450,7 @@ automatiquement les DTO désérialisés.
 
     **Why:** `validatePropertyValue($objectOrClass, $property, $value)` valide une
     valeur hypothétique ; l'état de l'objet reste intact.
-    **Ref:** [ValidatorInterface](https://symfony.com/doc/current/validation.html).
+    **Ref:** [ValidatorInterface](https://symfony.com/doc/8.0/validation.html).
 
 ??? question "Q3. How is `#[Assert\...]` attribute metadata turned into constraints?"
     - [ ] A. Parsed on every `validate()` call by reflection
@@ -395,7 +461,7 @@ automatiquement les DTO désérialisés.
     **Why:** La `LazyLoadingMetadataFactory` utilise l'`AttributeLoader` pour
     construire la `ClassMetadata`, mise en cache dans un pool PSR-6 pour que la
     réflexion ne s'exécute qu'une fois par classe.
-    **Ref:** [Validator internals](https://symfony.com/doc/current/validation.html).
+    **Ref:** [Validator internals](https://symfony.com/doc/8.0/validation.html).
 
 ## Key takeaways
 
@@ -423,7 +489,7 @@ automatiquement les DTO désérialisés.
 - **Confused with:** [Scopes](scopes.md) — *où* les constraints s'attachent vs *comment* vous exécutez le validator ici.
 
 ## Official References
-- [Official Symfony docs — Validation](https://symfony.com/doc/current/validation.html)
+- [Official Symfony docs — Validation](https://symfony.com/doc/8.0/validation.html)
 - [Symfony source — RecursiveValidator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Validator/RecursiveValidator.php)
 
 ## Video references
@@ -436,7 +502,7 @@ automatiquement les DTO désérialisés.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/validation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/validation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

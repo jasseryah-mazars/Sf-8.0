@@ -24,7 +24,31 @@
     **Est. time:** 35 min ·
     **Prerequisites:** [Authorization](authorization.md) · [Roles](roles.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un voter répond OUI / NON / je-ne-sais-pas pour un droit précis — c'est le moyen d'exprimer des règles par objet que les rôles seuls ne peuvent pas capturer.
+
+### Imagine dans la vraie vie
+Un voter est un juge dans un jury. Interrogé "cette personne peut-elle faire X à Y ?", chaque juge lève une carte pour **accorder** ou **refuser**, ou s'abstient. Une **stratégie** compte les cartes pour rendre le verdict final.
+
+### Dans Symfony
+Un `ArticleVoter` peut décider "cet utilisateur peut éditer *cet* article précis" (parce qu'il en est l'auteur) — une règle qu'aucun simple `ROLE_` ne peut exprimer.
+
+### Exemple simple
+```php
+protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+{
+    return $attribute === 'EDIT' && $subject->getAuteur() === $token->getUser();
+}
+```
+
+### Comment le mémoriser 🧠
+La stratégie par défaut est **affirmative** (un seul "accordé" suffit) — et **s'abstenir n'est PAS refuser** : un voter qui s'abstient n'influence jamais le résultat.
 
 ## Theory
 
@@ -313,6 +337,8 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Default `AccessDecisionManager` strategy?"
     - [x] A. affirmative ✅
     - [ ] B. unanimous
@@ -320,7 +346,7 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
     - [ ] D. priority
 
     **Why:** Affirmative is the default — one granting voter is enough.
-    **Ref:** [Access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q2. `Voter::supports()` returns `false`. The vote is…"
     - [ ] A. `ACCESS_DENIED`
@@ -339,7 +365,7 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
 
     **Why:** With no explicit grant and the default `false`, all-abstain means
     deny.
-    **Ref:** [Access decision](https://symfony.com/doc/current/security/voters.html).
+    **Ref:** [Access decision](https://symfony.com/doc/8.0/security/voters.html).
 
 ??? question "Q4. Which values do the vote constants hold?"
     - [x] A. GRANTED 1, ABSTAIN 0, DENIED -1 ✅
@@ -377,7 +403,7 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
   are the per-object layer.
 
 ## Official References
-- [Symfony docs — Voters](https://symfony.com/doc/current/security/voters.html)
+- [Symfony docs — Voters](https://symfony.com/doc/8.0/security/voters.html)
 - [Symfony source — Voter](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Voter/Voter.php)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
 
@@ -390,7 +416,7 @@ voter needed. For URL-space rules, use [`access_control`](access-control.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

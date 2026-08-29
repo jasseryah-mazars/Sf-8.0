@@ -27,7 +27,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+On traduit avec une clé stable (`welcome.title`), jamais avec la phrase française elle-même écrite en dur — le "livre de traductions" fait la conversion.
+
+### Imagine dans la vraie vie
+Traduire avec `trans` ressemble à utiliser un dictionnaire de phrases organisé en sections (les domaines — `messages`, `admin`) avec une édition par langue (les locales). Tu n'écris jamais une phrase complète en français ; tu cherches un code d'entrée stable comme `welcome.title`, et le dictionnaire renvoie la phrase dans la langue du lecteur.
+
+### Dans Symfony
+`{{ 'welcome.title'|trans }}` reste identique dans le code, peu importe la langue du visiteur — seul le fichier de traduction (`messages.fr.yaml`, `messages.en.yaml`) change selon la locale active.
+
+### Exemple simple
+```twig
+{{ 'cart.items'|trans({'%count%': panier.total}, 'messages') }}
+```
+
+### Comment le mémoriser 🧠
+`transchoice` a été **supprimé** — le seul chemin de pluralisation aujourd'hui est le **format ICU MessageFormat** (`{n, plural, ...}`) dans un domaine `+intl-icu`.
 
 ## Theory
 
@@ -235,6 +256,8 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is the argument order of the `trans` filter?"
     - [x] A. `(parameters, domain, locale)` ✅
     - [ ] B. `(domain, parameters, locale)`
@@ -242,7 +265,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `(parameters, locale, domain)`
 
     **Why:** `message|trans(parameters = {}, domain = 'messages', locale = null)`.
-    **Ref:** [trans filter](https://symfony.com/doc/current/translation.html#translations-in-templates).
+    **Ref:** [trans filter](https://symfony.com/doc/8.0/translation.html#translations-in-templates).
 
 ??? question "Q2. How do you pluralize in Symfony 8 templates?"
     - [ ] A. `transchoice`
@@ -251,7 +274,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `{% pluralize %}`
 
     **Why:** `transchoice` was removed; ICU MessageFormat handles plurals. **Ref:**
-    [Pluralization](https://symfony.com/doc/current/translation/message_format.html).
+    [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q3. A key has no translation for the current locale (and no fallback). What renders?"
     - [x] A. The key string itself ✅
@@ -260,7 +283,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `null`
 
     **Why:** The translator returns the untranslated id. **Ref:**
-    [Translation](https://symfony.com/doc/current/translation.html).
+    [Translation](https://symfony.com/doc/8.0/translation.html).
 
 ## Key takeaways
 
@@ -284,8 +307,8 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 - **Confused with:** [String Interpolation](interpolation.md) — `%name%` placeholders are substituted by the translator, not by `#{}` interpolation.
 
 ## Official References
-- [Official — Translations in templates](https://symfony.com/doc/current/translation.html#translations-in-templates)
-- [Official — Message format (ICU)](https://symfony.com/doc/current/translation/message_format.html)
+- [Official — Translations in templates](https://symfony.com/doc/8.0/translation.html#translations-in-templates)
+- [Official — Message format (ICU)](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
 
 ## Video references
@@ -297,7 +320,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/translation.html#translations-in-templates) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/translation.html#translations-in-templates) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

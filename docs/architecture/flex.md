@@ -27,7 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Code Organization](code-organization.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Flex transforme `composer require` en une fonctionnalité déjà configurée, au lieu de te laisser tout brancher toi-même à la main.
+
+### Imagine dans la vraie vie
+C'est la notice de montage illustrée d'un meuble en kit : le colis livré (le paquet Composer) contient les planches, mais la notice (la recette Flex) te dit exactement où va chaque vis — créer les fichiers de config, enregistrer le bundle, ajouter les variables `.env`. `symfony.lock` est le reçu qui note quelle version de notice tu as suivie.
+
+### Dans Symfony
+Un simple `composer require orm` déclenche Flex, qui télécharge la bibliothèque **et** applique automatiquement sa configuration — sans ça, il faudrait créer chaque fichier de config à la main.
+
+### Exemple simple
+```console
+$ composer require orm
+# Flex ajoute automatiquement config/packages/doctrine.yaml, met à jour .env, etc.
+```
+
+### Comment le mémoriser 🧠
+Flex agit **seulement au moment de `composer require`** — jamais pendant qu'une requête HTTP est traitée. C'est un ouvrier de chantier, pas un employé du magasin ouvert au public.
 
 ## Theory
 
@@ -172,7 +194,11 @@ reads this file at boot, so no manual bundle wiring is needed.
 
 !!! note "Source reference"
     `symfony/flex` Composer plugin — [github.com/symfony/flex](https://github.com/symfony/flex);
-    recipes — [github.com/symfony/recipes](https://github.com/symfony/recipes).
+    recipes — [github.com/symfony/recipes](https://github.com/symfony/recipes). The
+    kernel method Flex-managed bundles feed —
+    `Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait::registerBundles()` —
+    lives in
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php).
 
 ### Compilation vs runtime
 
@@ -275,13 +301,15 @@ You would only avoid it in a non-Symfony project consuming components standalone
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is Symfony Flex?"
     - [x] A. A Composer plugin that applies recipes and resolves aliases ✅
     - [ ] B. A runtime kernel event
     - [ ] C. A templating engine
 
     **Why:** Flex automates package configuration at Composer time. **Ref:**
-    [Symfony Flex](https://symfony.com/doc/current/setup.html#symfony-flex).
+    [Symfony Flex](https://symfony.com/doc/8.0/setup.html#symfony-flex).
 
 ??? question "Q2. What does `symfony.lock` track?"
     - [x] A. Which recipes are installed and their versions ✅
@@ -289,7 +317,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - [ ] C. HTTP sessions
 
     **Why:** It records recipe application, separate from `composer.lock`. **Ref:**
-    [Using Symfony Flex](https://symfony.com/doc/current/setup.html).
+    [Using Symfony Flex](https://symfony.com/doc/8.0/setup.html).
 
 ??? question "Q3. How are bundles auto-registered by a recipe?"
     - [x] A. Entries are written to `config/bundles.php` ✅
@@ -297,7 +325,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
     - [ ] C. In `services.yaml`
 
     **Why:** The `bundles` configurator edits `config/bundles.php`. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ## Key takeaways
 
@@ -321,7 +349,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
 - **Confused with:** [Components](components.md) — Flex is Composer-time automation, not a runtime component.
 
 ## Official References
-- [Official docs — Setup & Flex](https://symfony.com/doc/current/setup.html)
+- [Official docs — Setup & Flex](https://symfony.com/doc/8.0/setup.html)
 - [Symfony Flex source](https://github.com/symfony/flex)
 - [Symfony recipes](https://github.com/symfony/recipes)
 
@@ -334,7 +362,7 @@ You would only avoid it in a non-Symfony project consuming components standalone
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/setup.html#symfony-flex) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/setup.html#symfony-flex) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

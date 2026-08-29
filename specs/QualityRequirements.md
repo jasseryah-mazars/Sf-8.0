@@ -33,7 +33,7 @@ diagrams. Navigation reachable in ≤2 taps via tabbed nav + client-side search.
 ## Q6 — Maintainability
 
 Small independent files; content decoupled from build config. Doc links use
-`doc/current`; source links pin `8.0`. Clear contribution path and templates.
+`doc/8.0`; source links pin `8.0`. Clear contribution path and templates.
 See [FutureMaintenance.md](FutureMaintenance.md).
 
 ## Q7 — Buildability

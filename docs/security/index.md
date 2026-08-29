@@ -34,30 +34,60 @@ the **access-decision manager** polls **voters** to grant or deny. Knowing the
 exact classes, event order and first-match rules is the difference between
 guessing and scoring.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** La sécurité Symfony répond à deux questions séparées : "qui es-tu ?" (authentification) et "as-tu le droit de faire ça ?" (autorisation).
+
+**Pourquoi ça existe ?** Sans ce découpage, chaque contrôleur devrait réinventer sa propre logique de connexion et de permissions. Symfony centralise les deux dans un système cohérent et testé.
+
+**🏠 Analogie de la vraie vie :** Un immeuble de bureaux sécurisé. Le poste de garde à l'entrée vérifie ton identité avec un badge (authentification) ; une fois entré, chaque porte verrouillée vérifie séparément si TON badge précis ouvre CETTE porte précise (autorisation).
+
+**Symfony dans la vraie vie :** Un `authenticator` construit un `Passport` de badges pour vérifier qui tu es (authentification) ; `#[IsGranted('ROLE_ADMIN')]` vérifie ensuite si tu as le droit d'accéder à une page précise (autorisation).
+
+**⚠️ Erreur fréquente :** croire qu'être connecté (authentifié) suffit à tout autoriser — un utilisateur authentifié peut très bien se voir refuser l'accès à une ressource précise par un voter.
+
+**🧠 Comment le mémoriser :** "Authentification = qui es-tu ? Autorisation = as-tu le droit ? — deux questions, deux systèmes."
+
 ## Chapters
 
-- [Authentication](authentication.md) — the firewall/authenticator flow: how a
-  request becomes an authenticated token, stateless vs stateful, entry points.
-- [Authorization](authorization.md) — roles, access decisions, `isGranted()`,
-  `denyAccessUnlessGranted()`, `#[IsGranted]`, attributes vs roles.
 - [Configuration](configuration.md) — `security.yaml` anatomy: providers,
   firewalls, `access_control`, `password_hashers`, `role_hierarchy`.
-- [Providers](providers.md) — user providers: memory, custom
-  `UserProviderInterface`, chain provider, `refreshUser()` (entity is out of scope).
-- [Firewalls](firewalls.md) — matching, the `dev` firewall, `security: false`,
-  first-match order, lazy firewalls, context sharing.
 - [Users](users.md) — `UserInterface`, `PasswordAuthenticatedUserInterface`,
   `getUserIdentifier()`, `EquatableInterface`, the user lifecycle.
+- [Providers](providers.md) — user providers: memory, custom
+  `UserProviderInterface`, chain provider, `refreshUser()` (entity is out of scope).
 - [Password Hashers](password-hashers.md) — `auto`/`bcrypt`/`sodium`, migration
   and rehash (`needsRehash`), `PasswordHasherFactory`, plaintext for tests only.
-- [Roles](roles.md) — `ROLE_` conventions, role hierarchy, the
-  `IS_AUTHENTICATED_*` special attributes, `PUBLIC_ACCESS`.
-- [Access Control Rules](access-control.md) — `access_control` matching,
-  `allow_if` expressions, `requires_channel`, first-match semantics.
+- [Firewalls](firewalls.md) — matching, the `dev` firewall, `security: false`,
+  first-match order, lazy firewalls, context sharing.
+- [Authentication](authentication.md) — the firewall/authenticator flow: how a
+  request becomes an authenticated token, stateless vs stateful, entry points.
 - [Authenticators, Passports & Badges](authenticators.md) — custom
   authenticators, the Passport + badges model, form/JSON/access-token login.
+- [Programmatic Login & Logout](programmatic-login.md) — `Security::login()`,
+  `logout()`, logging a user in after registration, `onLogoutEvent`.
+- [Roles](roles.md) — `ROLE_` conventions, role hierarchy, the
+  `IS_AUTHENTICATED_*` special attributes, `PUBLIC_ACCESS`.
+- [Role Hierarchy](role-hierarchy.md) — `role_hierarchy`, transitive inheritance,
+  and why a hierarchy is resolved at check time, not at login.
+- [Authorization](authorization.md) — roles, access decisions, `isGranted()`,
+  `denyAccessUnlessGranted()`, `#[IsGranted]`, attributes vs roles.
 - [Voters & Voting Strategies](voters.md) — the `Voter` base class,
   grant/deny/abstain, affirmative/consensus/unanimous/priority strategies.
+- [Access Decision Strategies](access-decision-strategies.md) — affirmative,
+  consensus, unanimous, priority, and `allow_if_all_abstain`.
+- [Access Control Rules](access-control.md) — `access_control` matching,
+  `allow_if` expressions, `requires_channel`, first-match semantics.
+- [Impersonation (switch_user)](impersonation.md) — `ROLE_ALLOWED_TO_SWITCH`,
+  `_switch_user`, exiting impersonation, `IS_IMPERSONATOR`.
+- [Login Throttling](login-throttling.md) — `login_throttling`, per-IP vs
+  per-username limiters, and what it does not protect.
+
+!!! note "Reading order"
+    Chapters are listed in the order they teach best, not in syllabus order — see
+    `specs/learning_path.yml`. The syllabus lists Authorization before Firewalls
+    and Users; that order asks you to decide access before establishing who is
+    being secured.
 
 ## Suggested reading order
 
@@ -72,6 +102,6 @@ first for the mental model, then [Configuration](configuration.md) to see it in
 
 ## Official References
 
-- [Symfony documentation — Security](https://symfony.com/doc/current/security.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

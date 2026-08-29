@@ -31,6 +31,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les helpers sont des widgets d'interface réutilisables (prompts, barres de progression, tableaux) accessibles via le `HelperSet` de la commande.
+
+### Imagine dans la vraie vie
+Les helpers sont l'armoire à outils partagée d'un atelier : le mètre ruban, l'étiqueteuse et le tableau perforé sont des outils réutilisables que tout le monde va chercher, en le demandant par nom (`$this->getHelper('question')`) depuis l'armoire (le `HelperSet`).
+
+### Dans Symfony
+Une invite de confirmation avant une opération destructive (`$io->confirm('Supprimer tout ?', false)`) utilise en coulisses `QuestionHelper`, mais `SymfonyStyle` te l'offre déjà tout enveloppé — tu n'as presque jamais besoin d'aller chercher le helper toi-même.
+
+### Exemple simple
+```php
+$progress = $io->createProgressBar(100);
+$progress->advance();
+```
+
+### Comment le mémoriser 🧠
+`SymfonyStyle` est le "couteau suisse" qui enveloppe déjà la plupart des helpers courants — tu n'as besoin de `getHelper()` explicitement que pour un besoin vraiment sur mesure.
+
+---
+
+
 ## Theory
 
 Les helpers sont des utilitaires d'interface réutilisables, disponibles pour chaque
@@ -135,7 +158,7 @@ flowchart LR
 
 !!! note "Source reference"
     `HelperSet`, `QuestionHelper`, `ProgressBar`, `Table` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Console/Helper).
 
 ## Configuration & code
 
@@ -297,7 +320,7 @@ voulu.
     - [ ] D. `SymfonyStyle::helper()`
 
     **Why:** les helpers sont récupérés par leur nom depuis le `HelperSet`. **Ref:**
-    [QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html).
+    [QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html).
 
 ??? question "Q2. Which question type offers a fixed list of answers?"
     - [ ] A. `Question`
@@ -306,7 +329,7 @@ voulu.
     - [ ] D. `HiddenQuestion`
 
     **Why:** `ChoiceQuestion` présente des options sélectionnables. **Ref:**
-    [QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html).
+    [QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html).
 
 ??? question "Q3. What does `ProgressBar::setRedrawFrequency(100)` change?"
     - [x] A. It only redraws every 100 steps, reducing I/O ✅
@@ -315,7 +338,7 @@ voulu.
     - [ ] D. It sleeps 100 ms per step
 
     **Why:** limiter le redessin évite des I/O terminal à chaque petite étape. **Ref:**
-    [ProgressBar](https://symfony.com/doc/current/components/console/helpers/progressbar.html).
+    [ProgressBar](https://symfony.com/doc/8.0/components/console/helpers/progressbar.html).
 
 ??? question "Q4. Which helper hides/moves the terminal cursor?"
     - [ ] A. `FormatterHelper`
@@ -324,7 +347,7 @@ voulu.
     - [ ] D. `ProgressBar`
 
     **Why:** `Symfony\Component\Console\Cursor` émet les codes ANSI du curseur. **Ref:**
-    [Console helpers](https://symfony.com/doc/current/components/console/helpers/index.html).
+    [Console helpers](https://symfony.com/doc/8.0/components/console/helpers/index.html).
 
 ## Key takeaways
 
@@ -353,9 +376,9 @@ voulu.
   stylée au-dessus de ces helpers, donc vous les récupérez rarement à la main.
 
 ## Official References
-- [Official Symfony docs — Console helpers](https://symfony.com/doc/current/components/console/helpers/index.html)
-- [Official Symfony docs — QuestionHelper](https://symfony.com/doc/current/components/console/helpers/questionhelper.html)
-- [Symfony source — Console helpers](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper)
+- [Official Symfony docs — Console helpers](https://symfony.com/doc/8.0/components/console/helpers/index.html)
+- [Official Symfony docs — QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html)
+- [Symfony source — Console helpers](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Console/Helper)
 
 ## Video references
 
@@ -366,7 +389,7 @@ voulu.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/console/helpers/questionhelper.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

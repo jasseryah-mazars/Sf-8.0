@@ -30,6 +30,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+L'authentification répond à une seule question : "qui fait cette requête ?" — elle ne décide jamais ce que cette personne a le droit de faire.
+
+### Imagine dans la vraie vie
+S'authentifier, c'est montrer sa carte d'identité au poste de garde. Tu tends un justificatif — le **Passport** de badges — le garde le vérifie contre les registres, et s'il tient la route, tu reçois un bracelet (le **token**) qui prouve qui tu es pour le reste de ta visite.
+
+### Dans Symfony
+Une fois le token créé après un login réussi, chaque requête suivante sur la même session le retrouve automatiquement — tu n'as pas besoin de re-présenter tes identifiants à chaque page.
+
+### Exemple simple
+```php
+$token = $tokenStorage->getToken();
+$token?->getUser()?->getUserIdentifier(); // qui est connecté maintenant
+```
+
+### Comment le mémoriser 🧠
+Il n'existe **plus** de flag `enable_authenticator_manager` en Symfony 8 — le système authenticator **est** le seul système de sécurité, pas une option parmi d'autres.
+
+---
+
+
 ## Theory
 
 L'**authentification** répond à *« qui effectue cette request ? »*. En
@@ -383,7 +406,7 @@ avec `stateless: true`. Pour un flux personnalisé, écrivez un
     **Why:** `authenticate()` ne fait que construire le Passport ; la
     résolution des badges et les vérifications de credentials ont lieu sur
     `CheckPassportEvent`.
-    **Ref:** [Passport docs](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Passport docs](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ??? question "Q2. What does a stateless firewall NOT do?"
     - [x] A. Persist the token in the session ✅
@@ -393,7 +416,7 @@ avec `stateless: true`. Pour un flux personnalisé, écrivez un
 
     **Why:** Les firewalls stateless n'ont pas de `ContextListener`, donc rien
     n'est stocké ni restauré entre les requests.
-    **Ref:** [Stateless firewalls](https://symfony.com/doc/current/security.html).
+    **Ref:** [Stateless firewalls](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. `supports()` returns `null`. What happens?"
     - [ ] A. The request is rejected
@@ -438,8 +461,8 @@ avec `stateless: true`. Pour un flux personnalisé, écrivez un
   c'est *qui* ; l'autorisation, c'est *ce que vous avez le droit de faire*.
 
 ## Official References
-- [Symfony docs — Security](https://symfony.com/doc/current/security.html)
-- [Symfony docs — Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html)
+- [Symfony docs — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony docs — Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html)
 - [Symfony source — AuthenticatorManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Authentication/AuthenticatorManager.php)
 
 ## Video references
@@ -452,7 +475,7 @@ avec `stateless: true`. Pour un flux personnalisé, écrivez un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/custom_authenticator.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/custom_authenticator.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

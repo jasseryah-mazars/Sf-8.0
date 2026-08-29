@@ -32,6 +32,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`AbstractController` te prête des outils tout faits (`render()`, `redirectToRoute()`...) qu'il ne va chercher qu'au moment où tu les utilises réellement — pas avant.
+
+### Imagine dans la vraie vie
+Ton contrôleur est un réceptionniste qui prend une demande et rend une réponse. `AbstractController` est le comptoir bien équipé derrière lui : un téléphone (`redirectToRoute`), un tampon (`json`), un contrôle de badge (`getUser`), une imprimante (`render`). Le réceptionniste ne va chercher un outil que lorsqu'un visiteur en a réellement besoin — c'est ça, le "aller le chercher à la demande" (le service locator paresseux), pas un tiroir pré-rempli au début de chaque service.
+
+### Dans Symfony
+Étendre `AbstractController` reste 100 % optionnel : un contrôleur qui n'en a pas besoin peut très bien injecter directement les services dont il a réellement besoin via son constructeur.
+
+### Exemple simple
+```php
+class ProduitController extends AbstractController
+{
+    public function afficher(): Response { return $this->render('produit.html.twig'); }
+}
+```
+
+### Comment le mémoriser 🧠
+Les services d'`AbstractController` arrivent via un **service locator paresseux** (`getSubscribedServices()`), **jamais** via le constructeur — c'est le fait préféré de l'examen sur ce chapitre.
+
+
 ## Theory
 
 `Symfony\Bundle\FrameworkBundle\Controller\AbstractController` est une classe de
@@ -352,7 +375,7 @@ devez `throw`. Voir [404 & error pages](error-pages.md).
     - [ ] D. Via static properties set by the kernel.
 
     **Why:** il implémente `ServiceSubscriberInterface` ; le compilateur
-    construit un locator par controller. **Ref:** [service subscribers](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    construit un locator par controller. **Ref:** [service subscribers](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q2. What does `$this->container` hold inside an AbstractController?"
     - [ ] A. The full application container.
@@ -361,7 +384,7 @@ devez `throw`. Voir [404 & error pages](error-pages.md).
     - [ ] D. Only parameters, not services.
 
     **Why:** le locator contient exactement les services retournés par
-    `getSubscribedServices()`. **Ref:** [service subscribers](https://symfony.com/doc/current/service_container/service_subscribers_locators.html).
+    `getSubscribedServices()`. **Ref:** [service subscribers](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html).
 
 ??? question "Q3. What happens if you call `render()` without Twig installed?"
     - [ ] A. A container "service not found" fatal error.
@@ -379,7 +402,7 @@ devez `throw`. Voir [404 & error pages](error-pages.md).
     - [ ] D. It auto-registers every app service.
 
     **Why:** la souscription garde les services lazy et le couplage explicite.
-    **Ref:** [best practices](https://symfony.com/doc/current/best_practices.html).
+    **Ref:** [best practices](https://symfony.com/doc/8.0/best_practices.html).
 
 ## Key takeaways
 
@@ -407,8 +430,8 @@ devez `throw`. Voir [404 & error pages](error-pages.md).
 - **À ne pas confondre avec :** [Naming Conventions](naming-conventions.md) — en hériter est optionnel ; tout callable est un controller valide.
 
 ## Official References
-- [Official Symfony docs — Controllers](https://symfony.com/doc/current/controller.html#the-base-controller-class-services)
-- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/current/service_container/service_subscribers_locators.html)
+- [Official Symfony docs — Controllers](https://symfony.com/doc/8.0/controller.html#the-base-controller-class-services)
+- [Official Symfony docs — Service Subscribers & Locators](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html)
 - [Symfony source — AbstractController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/AbstractController.php)
 
 ## Video references
@@ -420,7 +443,7 @@ devez `throw`. Voir [404 & error pages](error-pages.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/service_subscribers_locators.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

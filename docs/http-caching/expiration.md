@@ -26,8 +26,30 @@
 
     **Syllabus:** `HTTP Caching → Expiration model` ·
     **Level:** Advanced → Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [Cache Types](cache-types.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+L'expiration dit combien de temps une réponse reste "fraîche" — les caches peuvent répondre sans jamais recontacter le serveur pendant cette période.
+
+### Imagine dans la vraie vie
+La fraîcheur est la date "à consommer avant" sur une brique de lait. Tant que la date n'est pas dépassée, tu la sers directement du frigo sans la sentir (un cache la sert sans contacter le serveur d'origine).
+
+### Dans Symfony
+`$response->setMaxAge(3600)` dit au navigateur "ne me redemande rien pendant une heure" — la page suivante visitée dans l'heure est servie instantanément, sans requête réseau.
+
+### Exemple simple
+```php
+$response->setSharedMaxAge(3600); // active AUSSI public automatiquement
+```
+
+### Comment le mémoriser 🧠
+`no-cache` ne veut **pas** dire "ne jamais stocker" (c'est `no-store`) — ça veut dire "toujours revérifier avant de servir", même si la copie semble bonne.
 
 ---
 
@@ -323,9 +345,11 @@ with a cheap 304.
     this because its `private_headers` default includes `Cookie` and
     `Authorization`: a request carrying a session cookie is treated as private and
     not served from (or stored in) the shared cache. Still, never rely on that —
-    keep authenticated responses `private` or uncached, and use [ESI](esi.md).
+    keep authenticated responses `private` or uncached, and use [ESI](../appendices/out-of-syllabus/esi.md).
 
 ## Certification questions
+
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
 
 ??? question "Q1. Which `Cache-Control` directive means 'store but revalidate before reuse'?"
     - [ ] A. `no-store`
@@ -354,7 +378,7 @@ with a cheap 304.
     - [ ] D. Whichever appears first in the header
 
     **Why:** Shared caches resolve freshness as `s-maxage` > `max-age` > `Expires`.
-    **Ref:** [Expiration](https://symfony.com/doc/current/http_cache/expiration.html).
+    **Ref:** [Expiration](https://symfony.com/doc/8.0/http_cache/expiration.html).
 
 ??? question "Q4. How do you emit `must-revalidate` from a `Response`?"
     - [ ] A. `$response->setMustRevalidate()`
@@ -364,7 +388,7 @@ with a cheap 304.
 
     **Why:** There is no dedicated setter; `mustRevalidate()` is a getter. Use
     `setCache()` (or `#[Cache(mustRevalidate: true)]`).
-    **Ref:** [HTTP cache](https://symfony.com/doc/current/http_cache.html).
+    **Ref:** [HTTP cache](https://symfony.com/doc/8.0/http_cache.html).
 
 ??? question "Q5. What accepts a string like `'1 hour'` on `#[Cache]`?"
     - [x] A. `maxage`, `smaxage`, `staleWhileRevalidate`, `staleIfError` ✅
@@ -374,7 +398,7 @@ with a cheap 304.
 
     **Why:** Those numeric-duration options accept an int or a relative date
     string parsed via `DateTimeImmutable`.
-    **Ref:** [#[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute).
+    **Ref:** [#[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute).
 
 ## Key takeaways
 
@@ -404,8 +428,8 @@ with a cheap 304.
   validation *asks the origin* whether the copy changed.
 
 ## Official References
-- [Symfony docs — Expiration](https://symfony.com/doc/current/http_cache/expiration.html)
-- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+- [Symfony docs — Expiration](https://symfony.com/doc/8.0/http_cache/expiration.html)
+- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 - [MDN — Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 - [Symfony source — CacheAttributeListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/EventListener/CacheAttributeListener.php)
@@ -419,7 +443,7 @@ with a cheap 304.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/expiration.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache/expiration.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

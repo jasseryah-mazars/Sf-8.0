@@ -38,6 +38,32 @@
     sont mentionnés que pour que vous sachiez que ce sont les outils qui
     *produisent* les fichiers vers lesquels `asset()` pointe.
 
+## Pour les nuls
+
+### L'idée en une phrase
+`asset()` transforme un nom de fichier simple et stable en une URL publique, avec un numéro de version qui change dès que le fichier change — pour casser le cache automatiquement.
+
+### Imagine dans la vraie vie
+`asset()` est le comptoir du vestiaire. Tu donnes un nom simple et stable — "le manteau gris", `css/app.css` — et il te rend le ticket exact de l'objet actuel, avec le numéro du jour. Quand tu remplaces le manteau par un nouveau, le numéro change, donc personne ne peut repartir avec l'ancien manteau en réutilisant un vieux ticket.
+
+### Dans Symfony
+`{{ asset('css/app.css') }}` génère `/css/app.abc123.css` — quand tu modifies le CSS et redéploies, le hash change automatiquement, forçant le navigateur du visiteur à retélécharger la nouvelle version au lieu de garder l'ancienne en cache.
+
+### Exemple simple
+```twig
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+```
+
+### Comment le mémoriser 🧠
+`asset()` sert les **fichiers statiques** (CSS, JS, images) ; `path()`/`url()` servent les **routes**. Ne les confonds jamais — un fichier statique n'est pas une route Symfony.
+
+!!! info "Scope"
+    This chapter covers the **`asset()` function and versioning only**. The build
+    pipelines **AssetMapper** and **Webpack Encore** exist but are **out of scope**
+    for this content and the exam material here — they are mentioned only so you
+    know they are the tools that *produce* the files `asset()` points at.
+
+
 ## Theory
 
 `asset()` transforme un chemin relatif à `public/` en URL publique, en
@@ -216,7 +242,7 @@ le chemin public/la version finale.
     - [ ] D. An absolute filesystem path
 
     **Why:** `asset()` résout un chemin relatif à `public/` via `Packages`.
-    **Ref:** [Linking to assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets).
+    **Ref:** [Linking to assets](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets).
 
 ??? question "Q2. What is asset versioning for?"
     - [x] A. Cache busting when files change ✅
@@ -225,7 +251,7 @@ le chemin public/la version finale.
     - [ ] D. Route matching
 
     **Why:** Les versions forcent les clients à récupérer les assets modifiés. **Ref:**
-    [Asset versioning](https://symfony.com/doc/current/frontend.html).
+    [Asset versioning](https://symfony.com/doc/8.0/frontend.html).
 
 ??? question "Q3. Which service does `asset()` delegate to?"
     - [x] A. `Symfony\Component\Asset\Packages` ✅
@@ -257,8 +283,8 @@ le chemin public/la version finale.
 - **Confused with:** [URL Generation](urls.md) — `asset()` sert aux fichiers statiques sous `public/` ; `path()`/`url()` aux routes.
 
 ## Official References
-- [Official — Linking to CSS/JS assets](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets)
-- [Official — Asset component](https://symfony.com/doc/current/components/asset.html)
+- [Official — Linking to CSS/JS assets](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets)
+- [Official — Asset component](https://symfony.com/doc/8.0/components/asset.html)
 - [Symfony source — Packages](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Asset/Packages.php)
 
 ## Video references
@@ -271,7 +297,7 @@ le chemin public/la version finale.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#linking-to-css-and-javascript-assets) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#linking-to-css-and-javascript-assets) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

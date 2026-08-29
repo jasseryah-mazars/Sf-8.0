@@ -86,7 +86,7 @@ cycle via the Revision Hub.
   worked solution (learner attempts first). Levels are tagged (Advanced/Expert).
 - **Certification questions** mirror the real formats (single, multiple,
   true/false), include realistic distractors drawn from the chapter's traps, and
-  always carry a **Why** explanation plus a `doc/current` reference.
+  always carry a **Why** explanation plus a `doc/8.0` reference.
 - **Quiz bank** questions (`quiz/<area>.yml`) are the machine-scored counterpart:
   3–6 per chapter, each with `explanation` + `documentation`, re-runnable via
   certificationy-cli for spaced self-testing.
@@ -121,7 +121,7 @@ pedagogically sound chapter:
 | Trap-driven | `!!! danger` traps + `!!! warning` mistakes, every chapter |
 | Active recall | Exercises + hidden solutions; collapsible questions |
 | Spaced repetition | Key takeaways + `!!! tip` cheat sheet; Revision Hub aggregation |
-| Anchored facts | References to `doc/current` + `blob/8.0` source |
+| Anchored facts | References to `doc/8.0` + `blob/8.0` source |
 
 The [Definition of Done](DefinitionOfDone.md) and [Review Checklist](ReviewChecklist.md)
 turn these into pass/fail gates, so the pedagogy cannot silently erode.

@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`forward()` fait exécuter un autre contrôleur en coulisses, sans jamais que le visiteur ne bouge ni que l'URL ne change.
+
+### Imagine dans la vraie vie
+Un guichetier de banque. Un redirect, c'est "ce n'est pas mon bureau — allez au guichet 4", tu bouges physiquement et tout le monde voit que tu fais la queue ailleurs (une nouvelle URL, un aller-retour 3xx). Un forward, c'est le guichetier qui va discrètement en coulisses demander à un collègue de préparer les papiers, puis te les rend au même guichet : tu n'as jamais bougé et l'enseigne au-dessus du guichet n'a jamais changé.
+
+### Dans Symfony
+`$this->forward('AutreController::action', ['id' => $id])` exécute un second contrôleur dans une sous-requête, sans jamais informer le navigateur — celui-ci ne voit qu'une seule requête, une seule URL.
+
+### Exemple simple
+```php
+return $this->forward(ApercuController::class.'::rapide', ['id' => $produit->getId()]);
+```
+
+### Comment le mémoriser 🧠
+Une sous-requête déclenchée par `forward()` a `isMainRequest() === false` — c'est le signal technique qu'on est "en coulisses", pas dans la requête principale du visiteur.
+
+
 ## Theory
 
 Un **forward** exécute un autre controller **au sein de la requête courante** et
@@ -251,7 +271,7 @@ la sortie d'un controller dans un template.
     - [ ] C. Includes a template.
     - [ ] D. Dispatches a message asynchronously.
 
-    **Why:** il dispatche une sub-request à travers le kernel. **Ref:** [forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller).
+    **Why:** il dispatche une sub-request à travers le kernel. **Ref:** [forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller).
 
 ??? question "Q2. During a forwarded sub-request, `isMainRequest()` returns…"
     - [ ] A. true
@@ -259,7 +279,7 @@ la sortie d'un controller dans un template.
     - [ ] C. null
     - [ ] D. throws
 
-    **Why:** la sub-request est dispatchée avec `SUB_REQUEST`. **Ref:** [http kernel](https://symfony.com/doc/current/components/http_kernel.html).
+    **Why:** la sub-request est dispatchée avec `SUB_REQUEST`. **Ref:** [http kernel](https://symfony.com/doc/8.0/components/http_kernel.html).
 
 ??? question "Q3. The user's address bar after a `forward()` shows…"
     - [x] A. the original URL (unchanged) ✅
@@ -269,7 +289,7 @@ la sortie d'un controller dans un template.
 
     **Why:** le forwarding est interne au serveur ; aucune nouvelle requête cliente
     n'a lieu.
-    **Ref:** [forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller).
+    **Ref:** [forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller).
 
 ## Key takeaways
 
@@ -292,7 +312,7 @@ la sortie d'un controller dans un template.
 - **Confused with:** [Built-in Controllers](built-in-controllers.md) — le `RedirectController` redirige le client ; `forward()` non.
 
 ## Official References
-- [Official Symfony docs — Forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+- [Official Symfony docs — Forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 - [Symfony source — HttpKernelInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernelInterface.php)
 
 ## Video references
@@ -305,7 +325,7 @@ la sortie d'un controller dans un template.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -30,6 +30,57 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Twig peut afficher un formulaire entier d'un coup (`form(form)`) ou champ par champ pour un contrôle total (`form_row`, `form_widget`...).
+
+### Imagine dans la vraie vie
+Le rendu, c'est l'**imprimerie** qui met en page ton formulaire papier vierge à partir d'un plan (le `FormView`). `form(form)` imprime toute la page ; les fonctions granulaires (`form_row`, `form_label`, `form_widget`) te laissent placer chaque champ à la main pour une mise en page sur mesure.
+
+### Dans Symfony
+Oublier d'appeler `{{ form_end(form) }}` (ou `form_rest`) peut faire disparaître silencieusement le champ CSRF caché — le formulaire semble fonctionner en dev, mais échoue en soumission car le token n'a jamais été rendu.
+
+### Exemple simple
+```twig
+{{ form_start(form) }}
+{{ form_row(form.email) }}
+{{ form_end(form) }} {# rend aussi les champs restants + le token CSRF caché #}
+```
+
+### Comment le mémoriser 🧠
+`form_end` rend **tout ce qui reste**, y compris le champ CSRF caché — sauf si tu passes explicitement `render_rest: false`. Ne jamais l'oublier sur un rendu granulaire.
+
+Twig form functions turn a `FormView` (the render-time snapshot from
+`createView()`) into HTML. You choose the granularity:
+
+```php
+// createView() produces the render-time FormView snapshot
+$view = $form->createView();
+assert($view instanceof \Symfony\Component\Form\FormView);
+
+// In Twig you pass the form itself; Symfony calls createView() for you
+return $this->render('contact/index.html.twig', ['form' => $form]);
+```
+
+| Function | Renders |
+|---|---|
+| `form(form)` | The entire form (start, all rows, end) |
+| `form_start(form)` / `form_end(form)` | Opening/closing `<form>` tag |
+| `form_row(field)` | Label + widget + errors + help for one field |
+| `form_label` / `form_widget` / `form_errors` / `form_help` | One part of a field |
+| `form_rest(form)` | All not-yet-rendered fields (incl. hidden + CSRF) |
+
+!!! question "Predict first"
+    You render every visible field by hand and finish with
+    `form_end(form, {'render_rest': false})`. What silently goes missing?
+
+??? note "Reveal"
+    The hidden fields — most importantly the **CSRF `_token`**. `form_end` calls
+    `form_rest` by default to emit them; with `render_rest: false` you must render
+    `form_rest`/the token yourself or every submit fails CSRF validation.
+
+
 ## Theory
 
 Les fonctions de form Twig transforment un `FormView` (l'instantané de rendu
@@ -240,7 +291,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     **Why:** `form_row` compose label + widget + erreurs + aide via le bloc de
     thème `field_row`/`*_row`.
-    **Ref:** [Form rendering functions](https://symfony.com/doc/current/form/form_customization.html).
+    **Ref:** [Form rendering functions](https://symfony.com/doc/8.0/form/form_customization.html).
 
 ??? question "Q2. How is the CSRF token normally emitted in the HTML?"
     - [x] A. By `form_rest`, which `form_end` calls by default ✅
@@ -250,7 +301,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     **Why:** Le champ CSRF est un enfant caché rendu par `form_rest` ; `form_end`
     déclenche `form_rest` sauf si `render_rest: false`.
-    **Ref:** [CSRF protection](https://symfony.com/doc/current/security/csrf.html).
+    **Ref:** [CSRF protection](https://symfony.com/doc/8.0/security/csrf.html).
 
 ??? question "Q3. Which shows form-level (non-field) errors?"
     - [x] A. `form_errors(form)` ✅
@@ -260,7 +311,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     **Why:** Passer la vue racine à `form_errors` rend les erreurs attachées au
     form lui-même (p. ex. issues d'une constraint au niveau de la classe).
-    **Ref:** [Form errors](https://symfony.com/doc/current/forms.html).
+    **Ref:** [Form errors](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -289,8 +340,8 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 - **Confused with:** [CSRF protection](csrf.md) — c'est `form_rest`/`form_end` qui émet réellement le token dans le HTML.
 
 ## Official References
-- [Official Symfony docs — Form customization](https://symfony.com/doc/current/form/form_customization.html)
-- [Official Symfony docs — Rendering forms](https://symfony.com/doc/current/forms.html)
+- [Official Symfony docs — Form customization](https://symfony.com/doc/8.0/form/form_customization.html)
+- [Official Symfony docs — Rendering forms](https://symfony.com/doc/8.0/forms.html)
 - [Symfony source — Twig FormExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/FormExtension.php)
 
 ## Video references
@@ -302,7 +353,7 @@ CSRF (via `form_rest` ou `csrf_token()`), ou désactivez explicitement le CSRF.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/form_customization.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/form_customization.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

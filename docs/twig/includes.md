@@ -26,9 +26,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Template Inheritance](inheritance.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+`include` colle un morceau de template réutilisable à l'endroit voulu — et voit par défaut toutes les variables de la page qui l'accueille.
+
+### Imagine dans la vraie vie
+Inclure un fragment, c'est coller une fiche recette réutilisable sur la page d'un plus grand livre de cuisine que tu écris. Par défaut, la fiche peut lire tous les ingrédients déjà listés sur cette page (elle hérite du contexte parent). Ajoute `only` et tu lui donnes à la place une boîte à repas scellée contenant uniquement les ingrédients que tu as choisis pour elle.
+
+### Dans Symfony
+`{{ include('partials/_carte_produit.html.twig', {produit: p}, {with_context: false}) }}` (équivalent à `only`) garantit que le fragment ne dépend d'aucune variable "ambiante" de la page — plus facile à réutiliser ailleurs sans surprise.
+
+### Exemple simple
+```twig
+{{ include('partials/_alerte.html.twig', {message: 'Enregistré !'}, with_context: false) }}
+```
+
+### Comment le mémoriser 🧠
+`include` ne peut **jamais** réécrire un bloc du fragment inclus — c'est `embed` qui ajoute cette capacité, en combinant `include` + surcharge de blocs.
 
 Where **inheritance** fills holes in a layout, **includes** drop a reusable
 fragment *in place* — a card, a menu, a form row. Two forms exist:
@@ -207,6 +226,8 @@ components (modals, cards with slots).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `only` do on an include?"
     - [ ] A. Includes the template once
     - [x] B. Restricts scope to the `with` variables ✅
@@ -255,7 +276,7 @@ components (modals, cards with slots).
 - **Confused with:** [Template Inheritance](inheritance.md) — `include` drops a fragment; only `embed`/`extends` can override blocks.
 
 ## Official References
-- [Official — Including templates](https://symfony.com/doc/current/templates.html#including-templates)
+- [Official — Including templates](https://symfony.com/doc/8.0/templates.html#including-templates)
 - [Twig — include / embed](https://twig.symfony.com/doc/3.x/tags/include.html)
 - [Twig source — FilesystemLoader](https://github.com/twigphp/Twig/blob/3.x/src/Loader/FilesystemLoader.php)
 
@@ -268,7 +289,7 @@ components (modals, cards with slots).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#including-templates) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#including-templates) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -13,6 +13,21 @@ tags:
     **Theory:** [Filters & Functions](../twig/filters-functions.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Créer ton propre filtre Twig (comme `|lower` ou `|date`, mais inventé par toi) et le tester unitairement avant même de l'utiliser dans un vrai template.
+
+**Pourquoi ça existe ?** Twig fournit beaucoup de filtres intégrés, mais un vrai projet a toujours un besoin d'affichage précis non couvert — savoir en créer un proprement est une compétence Symfony de base.
+
+**🏠 Analogie de la vraie vie :** Ajouter ton propre outil personnalisé à une boîte à outils standard — une fois ajouté, il se comporte exactement comme les outils déjà présents, sans que personne ne remarque la différence.
+
+**Symfony dans la vraie vie :** `{{ article.contenu|excerpt(100) }}` appelle ton filtre personnalisé exactement comme `{{ prix|round(2) }}` appelle un filtre intégré — même syntaxe, même comportement.
+
+**⚠️ Erreur fréquente :** oublier de réfléchir à l'échappement automatique — un filtre qui produit du HTML doit explicitement le déclarer (`is_safe: ['html']`), sinon Twig l'échappe et casse l'affichage.
+
+**🧠 Comment le mémoriser :** "Un filtre personnalisé, c'est un outil de plus dans la boîte — indiscernable des outils déjà fournis par Twig."
+
+
 ## Objective
 
 À l'issue de ce lab, vous saurez **écrire un filtre Twig personnalisé**, l'exposer via une

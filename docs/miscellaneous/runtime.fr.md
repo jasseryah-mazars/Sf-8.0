@@ -31,6 +31,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le Runtime découple ton point d'entrée (`public/index.php`) de la manière dont l'application tourne réellement — le même fichier fonctionne sous PHP-FPM, CLI, ou des serveurs plus exotiques.
+
+### Imagine dans la vraie vie
+Le Runtime est l'équipe technique d'un théâtre, et ton `index.php` n'est que le script de la pièce. Le même script est joué sans changement dans un amphithéâtre en plein air (PHP-FPM), un petit studio (la CLI), ou une tournée (Swoole, RoadRunner), parce que c'est l'équipe technique — pas le script — qui gère les lumières, le son et le rideau.
+
+### Dans Symfony
+`public/index.php` **renvoie** un callable au lieu d'appeler directement `$kernel->handle()` — c'est le Runtime qui décide ensuite comment exécuter ce callable selon l'environnement (FPM classique ou serveur applicatif persistant).
+
+### Exemple simple
+```php
+return function (array $context): Kernel {
+    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
+};
+```
+
+### Comment le mémoriser 🧠
+Si le "dramaturge" (ton code) attrape lui-même la console lumière en pleine scène (appelle `handle()` directement), le spectacle est joué deux fois — laisse toujours le Runtime gérer l'exécution.
+
+---
+
+
 ## Theory
 
 Le composant Runtime découple le **point d'entrée** de votre application (le
@@ -247,7 +271,7 @@ est créé/exécuté. Le composant est transparent pour les applications standar
     - [ ] C. Nothing — it echoes output
 
     **Why:** Le runtime invoque le callable retourné, en résolvant ses arguments.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html).
 
 ??? question "Q2. Which env var selects the runtime class?"
     - [x] A. `APP_RUNTIME` ✅
@@ -255,7 +279,7 @@ est créé/exécuté. Le composant est transparent pour les applications standar
     - [ ] C. `SYMFONY_RUNTIME`
 
     **Why:** `APP_RUNTIME` (ou `extra.runtime.class` de composer) choisit le runtime.
-    **Ref:** [Runtime](https://symfony.com/doc/current/components/runtime.html#using-the-runtime).
+    **Ref:** [Runtime](https://symfony.com/doc/8.0/components/runtime.html#using-the-runtime).
 
 ??? question "Q3. `SymfonyRuntime` extends which class?"
     - [x] A. `GenericRuntime` ✅
@@ -286,7 +310,7 @@ est créé/exécuté. Le composant est transparent pour les applications standar
 - **Confused with:** le `Kernel` lui-même — le runtime *exécute* le kernel ; il n'est pas le kernel.
 
 ## Official References
-- [Official docs — Runtime](https://symfony.com/doc/current/components/runtime.html)
+- [Official docs — Runtime](https://symfony.com/doc/8.0/components/runtime.html)
 - [Symfony source — RuntimeInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/RuntimeInterface.php)
 - [Symfony source — SymfonyRuntime](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Runtime/SymfonyRuntime.php)
 
@@ -299,7 +323,7 @@ est créé/exécuté. Le composant est transparent pour les applications standar
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/runtime.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/runtime.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

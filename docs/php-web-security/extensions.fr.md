@@ -28,6 +28,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+PHP tout nu ne sait presque rien faire ; les extensions sont les outils qu'on branche dessus pour lui donner des capacités précises.
+
+### Imagine dans la vraie vie
+Un atelier livré avec juste un établi ne permet pas grand-chose : pour percer, il faut une perceuse ; pour scier, une scie. Ces outils, ce sont les extensions. La fiche de commande du chantier (`composer.json` et ses `ext-*`) liste les outils obligatoires avant même de démarrer — pour ne pas découvrir en plein travail que la perceuse manque.
+
+### Dans Symfony
+Symfony déclare explicitement dans `composer.json` les extensions dont il a besoin (`ext-mbstring`, `ext-intl`...) : Composer refuse l'installation si l'une d'elles manque, plutôt que de laisser planter l'application plus tard au runtime.
+
+### Exemple simple
+```php
+if (!extension_loaded('intl')) {
+    throw new \RuntimeException('L\'extension intl est requise.');
+}
+```
+
+### Comment le mémoriser 🧠
+`strlen()` compte des **octets** (aveugle aux accents), `mb_strlen()` compte des **caractères** (avec un accent = un caractère). "mb" = **m**ulti-**b**yte-conscient, l'ordinaire ne l'est pas.
+
+
 ## Theory
 
 Le cœur de PHP est petit ; la plupart des capacités réelles vivent dans des
@@ -129,7 +151,7 @@ flowchart LR
     Les polyfills de Symfony (`symfony/polyfill-mbstring`, `-intl-*`, `-ctype`)
     fournissent des solutions de repli en userland ; le composant String préfère
     l'extension native —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String).
 
 ## Configuration & code
 
@@ -270,7 +292,7 @@ flowchart LR
 - [PHP: mbstring](https://www.php.net/manual/en/book.mbstring.php)
 - [PHP: Intl](https://www.php.net/manual/en/book.intl.php)
 - [Composer platform dependencies](https://getcomposer.org/doc/articles/composer-platform-dependencies.md)
-- [Symfony source — String component](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String)
+- [Symfony source — String component](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String)
 
 ## Video references
 
@@ -282,7 +304,7 @@ flowchart LR
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/index.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/index.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

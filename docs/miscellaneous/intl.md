@@ -27,6 +27,33 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Twig](../twig/index.md), [Routing locale](../routing/locale.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La traduction associe un identifiant de message à une chaîne localisée par langue — et si aucune traduction n'existe, Symfony affiche l'identifiant lui-même plutôt que de planter.
+
+### Imagine dans la vraie vie
+La traduction est un audioguide multilingue de musée. Chaque exposition a un code (l'identifiant du message), et le guide joue la phrase correspondante dans ta langue choisie, se repliant sur une langue régionale puis par défaut quand ta langue exacte n'a pas d'enregistrement. Si aucun enregistrement n'existe nulle part, il lit simplement le code à voix haute au lieu de se taire.
+
+### Dans Symfony
+```twig
+{{ 'produit.ajoute_panier'|trans }}
+```
+Si la clé `produit.ajoute_panier` n'existe dans aucun fichier de traduction, la page affiche littéralement "produit.ajoute_panier" — un signal visible immédiat qu'une traduction manque, plutôt qu'une erreur ou un texte vide.
+
+### Exemple simple
+```yaml
+# messages.fr.yaml
+produit.ajoute_panier: "Ajouté au panier"
+```
+
+### Comment le mémoriser 🧠
+Symfony 8 utilise le **format ICU MessageFormat** (`{count, plural, ...}`) pour la pluralisation — c'est la seule voie, `transchoice` n'existe plus.
+
 ---
 
 ## Theory
@@ -239,13 +266,15 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which syntax does Symfony 8 use for pluralization?"
     - [x] A. ICU MessageFormat `{count, plural, …}` ✅
     - [ ] B. `singular|plural` pipe syntax
     - [ ] C. `%count%` only
 
     **Why:** ICU MessageFormat is the current mechanism; the pipe syntax is legacy.
-    **Ref:** [Pluralization](https://symfony.com/doc/current/translation/message_format.html).
+    **Ref:** [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q2. What is returned when a translation key is missing?"
     - [x] A. The message id itself ✅
@@ -253,14 +282,14 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
     - [ ] C. A `TranslationException`
 
     **Why:** The translator returns the untranslated id (logged in dev).
-    **Ref:** [Translations](https://symfony.com/doc/current/translation.html).
+    **Ref:** [Translations](https://symfony.com/doc/8.0/translation.html).
 
 ??? question "Q3. Which class gives a localized country name?"
     - [x] A. `Symfony\Component\Intl\Countries` ✅
     - [ ] B. `Symfony\Component\Locale\Country`
     - [ ] C. `Symfony\Component\Translation\Countries`
 
-    **Why:** `Countries::getName()` reads bundled ICU data. **Ref:** [Intl](https://symfony.com/doc/current/components/intl.html).
+    **Why:** `Countries::getName()` reads bundled ICU data. **Ref:** [Intl](https://symfony.com/doc/8.0/components/intl.html).
 
 ## Key takeaways
 
@@ -284,9 +313,9 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 - **Confused with:** the legacy `apples|apple` pipe syntax — Symfony 8 uses ICU MessageFormat.
 
 ## Official References
-- [Official docs — Translations](https://symfony.com/doc/current/translation.html)
-- [Official docs — Message format](https://symfony.com/doc/current/translation/message_format.html)
-- [Official docs — Intl](https://symfony.com/doc/current/components/intl.html)
+- [Official docs — Translations](https://symfony.com/doc/8.0/translation.html)
+- [Official docs — Message format](https://symfony.com/doc/8.0/reference/formats/message_format.html)
+- [Official docs — Intl](https://symfony.com/doc/8.0/components/intl.html)
 - [Symfony source — Translator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php)
 
 ## Video references
@@ -298,7 +327,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/translation/message_format.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/formats/message_format.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

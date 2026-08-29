@@ -29,6 +29,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un mot de passe n'est jamais stocké en clair — seulement une empreinte lente et salée, comparée sans jamais être inversée.
+
+### Imagine dans la vraie vie
+Un hacheur de mot de passe est une broyeuse à sens unique. Tu ne gardes jamais le papier original — seulement son motif broyé unique. Quand quelqu'un prétend connaître le mot de passe, tu broies sa tentative de la même façon et compares les motifs (`verify()`).
+
+### Dans Symfony
+`auto` (actuellement bcrypt) choisit toujours le meilleur algorithme disponible — tu n'as jamais besoin de choisir manuellement entre bcrypt et sodium sauf besoin spécifique.
+
+### Exemple simple
+```php
+$hash = $hasher->hashPassword($utilisateur, $motDePasseClair);
+```
+
+### Comment le mémoriser 🧠
+Le rehash transparent nécessite **les deux** : `migrate_from` **et** un `PasswordUpgraderInterface` — l'un sans l'autre ne fait rien.
+
+
 ## Theory
 
 Les mots de passe ne sont jamais stockés en clair — ils sont **hachés** avec une
@@ -86,7 +106,7 @@ flowchart LR
 !!! note "Source reference"
     `Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory` et
     `UserPasswordHasher` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php).
 
 ### Verification during login
 
@@ -282,7 +302,7 @@ password hasher.
 
     **Why:** `auto` sélectionne le meilleur algorithme disponible et s'adapte
     dans le temps.
-    **Ref:** [Passwords](https://symfony.com/doc/current/security/passwords.html).
+    **Ref:** [Passwords](https://symfony.com/doc/8.0/security/passwords.html).
 
 ??? question "Q2. Transparent rehash on login requires…"
     - [ ] A. Only `migrate_from`
@@ -292,7 +312,7 @@ password hasher.
 
     **Why:** `migrate_from` détecte l'ancien hachage ; l'upgrader persiste le
     nouveau via le flux du `PasswordUpgradeBadge`.
-    **Ref:** [Password migration](https://symfony.com/doc/current/security/passwords.html#password-migration).
+    **Ref:** [Password migration](https://symfony.com/doc/8.0/security/passwords.html#password-migration).
 
 ??? question "Q3. Where is a login password actually verified?"
     - [ ] A. In `getPassword()`
@@ -302,7 +322,7 @@ password hasher.
 
     **Why:** Le badge `PasswordCredentials` est contrôlé par le listener via le
     `verify()` du hasher.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -334,9 +354,9 @@ password hasher.
   indexé par classe d'utilisateur, pas par nom de provider ni de firewall.
 
 ## Official References
-- [Symfony docs — Passwords](https://symfony.com/doc/current/security/passwords.html)
-- [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
-- [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
+- [Symfony docs — Passwords](https://symfony.com/doc/8.0/security/passwords.html)
+- [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
+- [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
 
 ## Video references
 
@@ -348,7 +368,7 @@ password hasher.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/passwords.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/passwords.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

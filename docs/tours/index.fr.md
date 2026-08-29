@@ -6,6 +6,21 @@ exception est levée quand aucun resolver ne correspond*, *ce que le firewall fa
 authenticators ne s'exécutent*. Les Source Tours sont des visites guidées de la poignée de fichiers
 où vivent ces réponses.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Une visite guidée du vrai code source de Symfony, fichier par fichier — pas un cours qui explique un concept, mais une traversée concrète des lignes qui l'implémentent.
+
+**Pourquoi ça existe ?** Certaines questions d'examen ne se répondent qu'en ayant vraiment lu le code source ("quel événement se déclenche en premier ?") — un tour t'entraîne à lire ce code comme un débogueur le ferait, étape par étape.
+
+**🏠 Analogie de la vraie vie :** Une visite guidée d'usine où le guide s'arrête à chaque poste de la chaîne de montage et t'explique ce qui s'y passe exactement — contrairement à une brochure qui décrit juste le produit fini.
+
+**Symfony dans la vraie vie :** Le tour "HttpKernel::handle()" te fait suivre, ligne par ligne, l'ordre exact des huit événements du kernel — l'information exacte qu'un chapitre théorique résume, mais qu'un tour te fait vérifier toi-même dans le vrai fichier.
+
+**⚠️ Erreur fréquente :** lire seulement le "sketch" simplifié du tour sans jamais ouvrir le vrai fichier source en parallèle — le sketch simplifie volontairement, la vraie réponse d'examen vit dans le code réel.
+
+**🧠 Comment le mémoriser :** "Un chapitre t'enseigne le concept ; un tour te montre où il vit vraiment dans le code."
+
+
 ## What a tour is (and is not)
 
 Un tour n'est **pas** un chapitre du syllabus. Il ne ré-enseigne pas la fonctionnalité — les
@@ -54,8 +69,8 @@ pointe le point d'extension disponible à cet endroit précis.
 ## Official References
 
 - [symfony/symfony on GitHub (8.0 branch)](https://github.com/symfony/symfony/tree/8.0)
-- [Symfony Docs — The HttpKernel Component](https://symfony.com/doc/current/components/http_kernel.html)
-- [Symfony Docs — Events and Event Listeners](https://symfony.com/doc/current/event_dispatcher.html)
+- [Symfony Docs — The HttpKernel Component](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [Symfony Docs — Events and Event Listeners](https://symfony.com/doc/8.0/event_dispatcher.html)
 
 ---
 <small>Related: [Request Handling](../architecture/request-handling.md) ·

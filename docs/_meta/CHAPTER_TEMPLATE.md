@@ -110,7 +110,7 @@ Decision guidance. A comparison table or decision tree when there is a real choi
     - [x] B. … ✅
     - [ ] C. …
 
-    **Why:** explanation. **Ref:** [official docs](https://symfony.com/doc/current/...).
+    **Why:** explanation. **Ref:** [official docs](https://symfony.com/doc/8.0/...).
 
 ## Key takeaways
 
@@ -127,7 +127,7 @@ Decision guidance. A comparison table or decision tree when there is a real choi
      Symfony docs for every Symfony concept, and php.net for every PHP concept.
      Add the Symfony source and any RFC/design doc when relevant. -->
 
-- [Official Symfony docs — <topic>](https://symfony.com/doc/current/...)
+- [Official Symfony docs — <topic>](https://symfony.com/doc/8.0/...)
 - [PHP manual — <feature>](https://www.php.net/manual/en/...) <!-- when PHP-relevant -->
 - [Symfony source — <Class>](https://github.com/symfony/symfony/blob/8.0/...)
 

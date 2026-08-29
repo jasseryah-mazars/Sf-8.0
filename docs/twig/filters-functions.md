@@ -24,7 +24,29 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un filtre transforme une valeur avec un tuyau (`|`) ; une fonction se convoque par son nom — deux syntaxes, une même boîte à outils.
+
+### Imagine dans la vraie vie
+Les filtres, c'est une chaîne d'assemblage en cuisine : une valeur glisse sur le tapis et chaque `|` est un poste qui la transforme (`|lower`, `|round`) avant l'emplacement final. Les fonctions, c'est le chef que tu appelles par son nom (`path()`, `max()`) pour aller chercher ou produire quelque chose de neuf.
+
+### Dans Symfony
+`{{ prix|round(2) }}` transforme une valeur déjà en main (le filtre) ; `{{ path('accueil') }}` va chercher une nouvelle information depuis le routeur (la fonction) — deux usages différents, jamais interchangeables.
+
+### Exemple simple
+```twig
+{{ nom|lower|capitalize }}   {# filtres enchaînés, lus de gauche à droite #}
+{{ path('produit_show', {id: 5}) }} {# fonction, appelée par son nom #}
+```
+
+### Comment le mémoriser 🧠
+Un filtre transforme **ce que tu as déjà** ; une fonction **va chercher ou calcule** quelque chose de nouveau. Retiens l'image : le tuyau transporte, la fonction fabrique.
 
 ## Theory
 
@@ -306,6 +328,8 @@ transforms an existing value (`value|price`).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which attribute registers a custom Twig filter?"
     - [x] A. `#[AsTwigFilter]` ✅
     - [ ] B. `#[TwigFilter]`
@@ -314,7 +338,7 @@ transforms an existing value (`value|price`).
 
     **Why:** Current Twig 3.x provides `Twig\Attribute\AsTwigFilter` (and
     `AsTwigFunction`). **Ref:**
-    [Custom extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension).
+    [Custom extensions](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension).
 
 ??? question "Q2. A custom filter returns `<b>x</b>`. Why does the page show escaped text?"
     - [ ] A. Twig never escapes filter output
@@ -357,7 +381,7 @@ transforms an existing value (`value|price`).
 - **Confused with:** [Auto-Escaping](auto-escaping.md) — a filter's HTML output is escaped unless it declares `is_safe`.
 
 ## Official References
-- [Official — Twig extensions](https://symfony.com/doc/current/templates.html#creating-a-twig-extension)
+- [Official — Twig extensions](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension)
 - [Twig — filters & functions reference](https://twig.symfony.com/doc/3.x/#reference)
 - [Twig source — CoreExtension](https://github.com/twigphp/Twig/blob/3.x/src/Extension/CoreExtension.php)
 
@@ -370,7 +394,7 @@ transforms an existing value (`value|price`).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#creating-a-twig-extension) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#creating-a-twig-extension) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

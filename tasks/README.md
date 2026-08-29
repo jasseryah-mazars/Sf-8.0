@@ -19,21 +19,32 @@ complexity, and a review checklist reference.
 | File | Scope |
 |---|---|
 | [foundation.md](foundation.md) | Scaffold, specs, template, CI, quiz schema |
-| [php-web-security.md](php-web-security.md) | 11 chapters |
-| [http.md](http.md) | 10 chapters |
+| [php-web-security.md](php-web-security.md) | 13 chapters |
+| [http.md](http.md) | 11 chapters |
 | [architecture.md](architecture.md) | 16 chapters |
 | [controllers.md](controllers.md) | 13 chapters |
 | [routing.md](routing.md) | 11 chapters |
 | [twig.md](twig.md) | 13 chapters |
 | [forms.md](forms.md) | 11 chapters |
 | [validation.md](validation.md) | 8 chapters |
-| [dependency-injection.md](dependency-injection.md) | 11 chapters |
-| [security.md](security.md) | 11 chapters |
+| [dependency-injection.md](dependency-injection.md) | 14 chapters |
+| [security.md](security.md) | 16 chapters |
 | [http-caching.md](http-caching.md) | 6 chapters |
 | [console.md](console.md) | 8 chapters |
 | [testing.md](testing.md) | 10 chapters |
-| [miscellaneous.md](miscellaneous.md) | 15 chapters |
+| [messenger.md](messenger.md) | 7 chapters (split out of Miscellaneous — its own top-level syllabus domain) |
+| [miscellaneous.md](miscellaneous.md) | 15 chapters (Messenger relocated out — see above) |
 | [quality-gate.md](quality-gate.md) | Cross-cutting QA, build, coverage |
+
+_Chapter counts above are the live count of non-index `.md` files under each
+`docs/<area>/` directory (English source), re-derived this run — several had
+drifted stale over many prior sessions as chapters were added (e.g.
+`php-web-security` gained Attributes/Enums; `security` gained five Expert
+chapters; `dependency-injection` gained Lazy Services/Resettable Services/
+Container Dump). Not every individual `T-<AREA>-NN` task entry inside each file has been
+re-numbered to match this live count — that finer-grained reconciliation is
+tracked as a follow-up in `specs/RemediationLog.md` (P0-02), not silently
+assumed done just because the top-level count above now matches reality._
 
 ## Dependency overview
 

@@ -24,7 +24,29 @@
     **Est. time:** 12 min ·
     **Prerequisites:** [The Session](session.md), [HTTP Redirects](http-redirects.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un flash est un post-it à usage unique : tu le lis une fois, à la prochaine visite, puis il disparaît tout seul.
+
+### Imagine dans la vraie vie
+Le réceptionniste colle un post-it sur le comptoir pour ta *prochaine* visite : "Profil enregistré". Tu reviens (la requête fraîche après redirection), tu le lis une fois, et il est décollé et jeté — la lecture le consomme. `peek()` revient à juste jeter un œil sur le post-it en le laissant collé pour quelqu'un d'autre.
+
+### Dans Symfony
+Le pattern Post/Redirect/Get est fait pour ça : après un formulaire soumis avec succès, on redirige (nouvelle requête) et c'est *cette* nouvelle requête qui affiche et consomme le message flash — pas la requête POST elle-même.
+
+### Exemple simple
+```php
+$this->addFlash('success', 'Produit enregistré !');
+return $this->redirectToRoute('produit_liste'); // le flash s'affichera sur cette page
+```
+
+### Comment le mémoriser 🧠
+Lire un flash **le consomme** — toujours l'associer à une redirection, jamais l'afficher directement sur la même requête qui l'a créé.
 
 ## Theory
 
@@ -211,6 +233,8 @@ flows but means flash-bearing pages are not shared-cacheable.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What happens when you read a flash message?"
     - [x] A. It is returned and removed (consumed). ✅
     - [ ] B. It stays until the session expires.
@@ -218,7 +242,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - [ ] D. It is written to the log.
 
     **Why:** `get`/`all` consume; use `peek` to read without removing.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q2. `$this->addFlash('notice', 'Hi')` is shorthand for…"
     - [x] A. `getSession()->getFlashBag()->add('notice', 'Hi')` ✅
@@ -226,7 +250,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - [ ] C. writing a cookie
     - [ ] D. dispatching an event
 
-    **Why:** it delegates to the session flash bag. **Ref:** [AbstractController](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Why:** it delegates to the session flash bag. **Ref:** [AbstractController](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q3. Why pair a flash with a redirect?"
     - [x] A. The message displays on the next (GET) request, matching the PRG pattern. ✅
@@ -235,7 +259,7 @@ flows but means flash-bearing pages are not shared-cacheable.
     - [ ] D. It prevents CSRF.
 
     **Why:** flashes are designed to survive exactly one redirect and be shown next.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ## Key takeaways
 
@@ -259,7 +283,7 @@ flows but means flash-bearing pages are not shared-cacheable.
 - **Confused with:** [AbstractController](abstract-controller.md) — `addFlash()` is sugar over `getSession()->getFlashBag()->add()`.
 
 ## Official References
-- [Official Symfony docs — Flash Messages](https://symfony.com/doc/current/controller.html#flash-messages)
+- [Official Symfony docs — Flash Messages](https://symfony.com/doc/8.0/controller.html#flash-messages)
 - [Symfony source — FlashBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php)
 
 ## Video references
@@ -271,7 +295,7 @@ flows but means flash-bearing pages are not shared-cacheable.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#flash-messages) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#flash-messages) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

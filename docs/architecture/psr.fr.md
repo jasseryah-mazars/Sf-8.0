@@ -33,6 +33,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les PSR sont des standards communs qui permettent à des bibliothèques PHP écrites par des équipes différentes de fonctionner ensemble sans se connaître.
+
+### Imagine dans la vraie vie
+Des conteneurs maritimes standardisés : parce que tout port, tout navire et tout camion s'accordent sur les mêmes dimensions et fixations (un PSR), une caisse fabriquée par n'importe quel constructeur s'adapte partout, sans adaptation. Symfony construit certaines de ses propres caisses à cette norme (il implémente PSR-6/11/14/16/20), et il accepte aussi volontiers toute caisse déjà conforme qu'on lui tend (il consomme PSR-3).
+
+### Dans Symfony
+`LoggerInterface` (PSR-3) permet d'injecter n'importe quelle bibliothèque de logs compatible PSR-3 dans un service Symfony — Symfony ne fournit pas sa propre interface de logs maison, il consomme le standard existant.
+
+### Exemple simple
+```php
+public function __construct(private LoggerInterface $logger) {} // PSR-3, pas une interface Symfony maison
+```
+
+### Comment le mémoriser 🧠
+`Request`/`Response` de Symfony ne sont **pas** du PSR-7 — un pont dédié (`psr-http-message-bridge`) fait la conversion quand c'est nécessaire. Retiens : "HttpFoundation est antérieur au standard, donc pas nativement conforme."
+
+
 ## Theory
 
 Les **PHP Standards Recommendations (PSR)**, publiées par le PHP-FIG, permettent à des
@@ -245,7 +265,7 @@ PSR qu'en franchissant les frontières entre bibliothèques.
     - [ ] C. PSR-3
 
     **Why:** `EventDispatcherInterface` étend l'interface PSR-14. **Ref:**
-    [EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html).
+    [EventDispatcher](https://symfony.com/doc/8.0/components/event_dispatcher.html).
 
 ??? question "Q2. Is HttpFoundation's Request a PSR-7 message?"
     - [ ] A. Yes
@@ -253,7 +273,7 @@ PSR qu'en franchissant les frontières entre bibliothèques.
     - [ ] C. Only in prod
 
     **Why:** HttpFoundation est antérieur à PSR-7 et en diffère ; utilisez le bridge. **Ref:**
-    [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html).
+    [PSR-7 bridge](https://symfony.com/doc/8.0/components/psr7.html).
 
 ??? question "Q3. Which interface standardises the service container?"
     - [x] A. PSR-11 `Psr\Container\ContainerInterface` ✅
@@ -261,7 +281,7 @@ PSR qu'en franchissant les frontières entre bibliothèques.
     - [ ] C. PSR-16
 
     **Why:** Le container de Symfony implémente PSR-11. **Ref:**
-    [Container](https://symfony.com/doc/current/service_container.html).
+    [Container](https://symfony.com/doc/8.0/service_container.html).
 
 ## Key takeaways
 
@@ -284,8 +304,8 @@ PSR qu'en franchissant les frontières entre bibliothèques.
 
 ## Official References
 - [PHP-FIG PSRs](https://www.php-fig.org/psr/)
-- [PSR-7 bridge](https://symfony.com/doc/current/components/psr7.html)
-- [Clock component](https://symfony.com/doc/current/components/clock.html)
+- [PSR-7 bridge](https://symfony.com/doc/8.0/components/psr7.html)
+- [Clock component](https://symfony.com/doc/8.0/components/clock.html)
 
 ## Video references
 
@@ -297,7 +317,7 @@ PSR qu'en franchissant les frontières entre bibliothèques.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/event_dispatcher.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/event_dispatcher.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

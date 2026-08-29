@@ -9,6 +9,7 @@ memorise under exam time pressure. Run: python tools/gen_flashcards.py
 """
 from __future__ import annotations
 import os, glob, csv, html, yaml
+from generated_blocks import carry_over
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "revision", "flashcards")
@@ -62,7 +63,9 @@ for f in sorted(glob.glob(os.path.join(ROOT, "quiz", "*.yml"))):
         csv_rows.append([qq, back, stem])
     lines += ["---", "", f"<small>Back to [Flashcards](index.md) · "
               f"[{title}](../../{stem}/index.md)</small>"]
-    open(os.path.join(OUT, f"{stem}.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    out = os.path.join(OUT, f"{stem}.md")
+    text = carry_over(out, "\n".join(lines) + "\n")
+    open(out, "w", encoding="utf-8").write(text)
 
 # index page
 idx = ["# Flashcards", "",
@@ -77,11 +80,13 @@ for stem, title in TITLES.items():
     idx.append(f"- [{title}]({stem}.md) — {counts.get(stem,0)} cards")
 idx += ["", "## Anki import", "",
         "Prefer a real SRS app? Import [`quiz/flashcards.csv`](https://github.com/"
-        "jasseryah-mazars/Sf-8.0/blob/main/quiz/flashcards.csv) into "
+        "jasseryah-mazars/Sf-8.0/blob/master/quiz/flashcards.csv) into "
         "[Anki](https://apps.ankiweb.net/) (Basic note type; fields: Front, Back, "
         "Tags; the area tag lets you study one deck at a time).", "",
         "---", "", "<small>Back to [Revision Hub](../index.md)</small>"]
-open(os.path.join(OUT, "index.md"), "w", encoding="utf-8").write("\n".join(idx) + "\n")
+out = os.path.join(OUT, "index.md")
+text = carry_over(out, "\n".join(idx) + "\n")
+open(out, "w", encoding="utf-8").write(text)
 
 with open(os.path.join(ROOT, "quiz", "flashcards.csv"), "w", newline="", encoding="utf-8") as fh:
     w = csv.writer(fh)

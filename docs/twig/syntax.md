@@ -24,7 +24,30 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Controllers](../controllers/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Twig n'a que trois façons d'écrire quelque chose : afficher (`{{ }}`), agir (`{% %}`), commenter (`{# #}`) — trois portes, jamais confondues.
+
+### Imagine dans la vraie vie
+Lire un template Twig, c'est jouer une pièce depuis un script. `{{ … }}` sont les répliques que tu dis **à voix haute** (affichées au public), `{% … %}` sont les didascalies qui façonnent la scène mais ne sont **jamais prononcées**, et `{# … #}` sont les notes du metteur en scène en marge — pour toi seul, jamais jouées.
+
+### Dans Symfony
+`{{ produit.nom }}` affiche le nom à l'écran ; `{% if produit.enStock %}` décide *si* quelque chose s'affiche, sans jamais rien afficher lui-même.
+
+### Exemple simple
+```twig
+{% if produit.enStock %}
+    {{ produit.nom }} {# commentaire invisible au public #}
+{% endif %}
+```
+
+### Comment le mémoriser 🧠
+"Accolades doubles = ce qui sort à l'écran" (`{{ }}`). "Pourcentage = ce qui se passe en coulisses" (`{% %}`). "Dièse = notes personnelles invisibles" (`{# #}`).
 
 ## Theory
 
@@ -306,6 +329,8 @@ prod so a missing optional variable renders as empty rather than erroring.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `{{ 7 // 2 }}` output?"
     - [ ] A. `3.5`
     - [x] B. `3` ✅
@@ -347,7 +372,7 @@ prod so a missing optional variable renders as empty rather than erroring.
 
 ## Official References
 - [Official — Twig for template designers](https://twig.symfony.com/doc/3.x/templates.html)
-- [Official — Creating templates (Symfony)](https://symfony.com/doc/current/templates.html)
+- [Official — Creating templates (Symfony)](https://symfony.com/doc/8.0/templates.html)
 - [Twig source — Environment/Compiler](https://github.com/twigphp/Twig/blob/3.x/src/Environment.php)
 
 ## Video references
@@ -359,7 +384,7 @@ prod so a missing optional variable renders as empty rather than erroring.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

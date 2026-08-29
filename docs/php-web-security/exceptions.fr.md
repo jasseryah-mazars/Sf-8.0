@@ -30,6 +30,32 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`Exception` est une alerte volontaire que ton code déclenche pour un problème gérable ; `Error` est le bâtiment lui-même qui craque — les deux se rattrapent avec `Throwable`.
+
+### Imagine dans la vraie vie
+`Exception`, c'est tirer soi-même l'alarme incendie parce qu'on a repéré un départ de feu contrôlable — on évacue, on gère, la vie reprend. `Error`, c'est une poutre porteuse qui cède toute seule : un défaut structurel du bâtiment, pas une alerte qu'on choisit de déclencher. Un filet qui n'attrape que les alarmes tirées (`catch (\Exception)`) laisse passer la poutre qui s'effondre — il faut le filet plus large, `\Throwable`, pour attraper les deux.
+
+### Dans Symfony
+Une erreur non attrapée dans un contrôleur (une `TypeError` par exemple) remonte jusqu'au kernel HTTP, qui la transforme en réponse 500 — sauf si un listener sur `kernel.exception` l'intercepte avant. Attraper uniquement `\Exception` laisse ces erreurs-là filer droit vers la page d'erreur.
+
+### Exemple simple
+```php
+try {
+    intdiv(1, 0); // DivisionByZeroError, pas une Exception
+} catch (\Throwable $e) { // attrape Error ET Exception
+    // ...
+} finally {
+    // s'exécute toujours, même si catch relance
+}
+```
+
+### Comment le mémoriser 🧠
+`\Throwable` est le grand parapluie ; `\Exception` et `\Error` sont deux personnes différentes dessous. Attraper seulement `\Exception`, c'est laisser `\Error` se faire mouiller.
+
+
 ## Theory
 
 Depuis PHP 7, les **exceptions** et les **erreurs** internes implémentent toutes
@@ -348,7 +374,7 @@ set_error_handler(static function (int $level, string $msg, string $file, int $l
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/index.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/index.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

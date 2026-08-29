@@ -27,7 +27,28 @@
     **Est. time:** 14 min ·
     **Prerequisites:** [HTTP Redirects](http-redirects.md), [Architecture → Request lifecycle](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`forward()` fait exécuter un autre contrôleur en coulisses, sans jamais que le visiteur ne bouge ni que l'URL ne change.
+
+### Imagine dans la vraie vie
+Un guichetier de banque. Un redirect, c'est "ce n'est pas mon bureau — allez au guichet 4", tu bouges physiquement et tout le monde voit que tu fais la queue ailleurs (une nouvelle URL, un aller-retour 3xx). Un forward, c'est le guichetier qui va discrètement en coulisses demander à un collègue de préparer les papiers, puis te les rend au même guichet : tu n'as jamais bougé et l'enseigne au-dessus du guichet n'a jamais changé.
+
+### Dans Symfony
+`$this->forward('AutreController::action', ['id' => $id])` exécute un second contrôleur dans une sous-requête, sans jamais informer le navigateur — celui-ci ne voit qu'une seule requête, une seule URL.
+
+### Exemple simple
+```php
+return $this->forward(ApercuController::class.'::rapide', ['id' => $produit->getId()]);
+```
+
+### Comment le mémoriser 🧠
+Une sous-requête déclenchée par `forward()` a `isMainRequest() === false` — c'est le signal technique qu'on est "en coulisses", pas dans la requête principale du visiteur.
 
 ## Theory
 
@@ -234,13 +255,15 @@ controller output in a template.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `forward()` do?"
     - [x] A. Runs another controller in a sub-request and returns its Response. ✅
     - [ ] B. Sends a 302 redirect to another route.
     - [ ] C. Includes a template.
     - [ ] D. Dispatches a message asynchronously.
 
-    **Why:** it dispatches a sub-request through the kernel. **Ref:** [forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller).
+    **Why:** it dispatches a sub-request through the kernel. **Ref:** [forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller).
 
 ??? question "Q2. During a forwarded sub-request, `isMainRequest()` returns…"
     - [ ] A. true
@@ -248,7 +271,7 @@ controller output in a template.
     - [ ] C. null
     - [ ] D. throws
 
-    **Why:** the sub-request is dispatched with `SUB_REQUEST`. **Ref:** [http kernel](https://symfony.com/doc/current/components/http_kernel.html).
+    **Why:** the sub-request is dispatched with `SUB_REQUEST`. **Ref:** [http kernel](https://symfony.com/doc/8.0/components/http_kernel.html).
 
 ??? question "Q3. The user's address bar after a `forward()` shows…"
     - [x] A. the original URL (unchanged) ✅
@@ -257,7 +280,7 @@ controller output in a template.
     - [ ] D. an internal `/_fragment` URL
 
     **Why:** forwarding is server-internal; no new client request occurs.
-    **Ref:** [forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller).
+    **Ref:** [forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller).
 
 ## Key takeaways
 
@@ -280,7 +303,7 @@ controller output in a template.
 - **Confused with:** [Built-in Controllers](built-in-controllers.md) — `RedirectController` redirects the client; `forward()` does not.
 
 ## Official References
-- [Official Symfony docs — Forwarding](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller)
+- [Official Symfony docs — Forwarding](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller)
 - [Symfony source — HttpKernelInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernelInterface.php)
 
 ## Video references
@@ -292,7 +315,7 @@ controller output in a template.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#forwarding-to-another-controller) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#forwarding-to-another-controller) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

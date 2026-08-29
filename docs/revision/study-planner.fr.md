@@ -64,7 +64,22 @@ flowchart LR
 
 <small>Related: [Roadmap](../roadmap.md) · [Revision Modes](modes.md) · [Mock Exam](mock-exam.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Trois **calendriers de révision tout prêts** (8 semaines, 4 semaines, ou 1 semaine), chacun te disant quel domaine étudier chaque semaine ou chaque jour, en respectant l'ordre logique des prérequis.
+
+**Pourquoi ça existe ?** Sans plan, on révise ce qu'on aime en premier (souvent ce qu'on connaît déjà) et on repousse les domaines difficiles (Architecture, DI, Sécurité) jusqu'à manquer de temps pour eux — alors que ce sont les plus gros contributeurs de points à l'examen.
+
+**🏠 Analogie de la vraie vie :** C'est un **plan d'entraînement de marathon** téléchargé sur une appli : il te dit exactement combien de kilomètres courir chaque semaine, en augmentant progressivement, pour arriver le jour J prêt — pas la veille en panique.
+
+**Symfony dans la vraie vie :** Semaine 1 du planning → domaines fondamentaux (PHP & Web Security, HTTP) / Semaines suivantes → domaines Critiques en priorité (Architecture, DI, Sécurité, Messenger) / Dernière semaine → mocks + révision, pas de nouveau contenu.
+
+**⚠️ Erreur fréquente :** Choisir le plan de 8 semaines puis prendre du retard sans jamais le recalculer — mieux vaut basculer honnêtement sur le plan de 4 semaines (ou 1 semaine) que de garder un planning qu'on sait déjà intenable.
+
+**🧠 Comment le mémoriser :** *« Les domaines Critiques d'abord, la révision pure à la fin »* — quel que soit le plan choisi, cet ordre ne change jamais.
+
+
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

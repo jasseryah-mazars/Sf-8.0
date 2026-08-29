@@ -25,7 +25,28 @@
     **Est. time:** 45 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Sérialiser se fait en deux étapes : normaliser (objet → tableau) puis encoder (tableau → chaîne JSON/XML/CSV) — jamais directement objet vers chaîne.
+
+### Imagine dans la vraie vie
+Sérialiser, c'est **faire sa valise** ; désérialiser, c'est la défaire. Les normaliseurs **plient tes objets en une disposition plate et standard** (des tableaux) ; les encodeurs **ferment la valise en une seule chaîne** (JSON/XML/CSV) pour le voyage.
+
+### Dans Symfony
+`$serializer->serialize($produit, 'json')` fait les deux étapes en une seule fois — comprendre qu'il y a réellement deux étapes distinctes explique pourquoi on peut normaliser sans encoder.
+
+### Exemple simple
+```php
+$json = $serializer->serialize($produit, 'json', ['groups' => ['api']]);
+```
+
+### Comment le mémoriser 🧠
+`#[Groups]` ne filtre les champs **que** si tu passes explicitement `['groups' => [...]]` dans le contexte — sans ce contexte, tous les champs sont sérialisés, groupe ou pas.
 
 ## Theory
 
@@ -373,13 +394,15 @@ groups + max-depth to keep payloads bounded.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In `serialize()`, which runs first?"
     - [x] A. Normalizer, then encoder ✅
     - [ ] B. Encoder, then normalizer
     - [ ] C. They run in parallel
 
     **Why:** Objects are normalized to arrays, then encoded to a string.
-    **Ref:** [Serializer](https://symfony.com/doc/current/components/serializer.html).
+    **Ref:** [Serializer](https://symfony.com/doc/8.0/serializer.html).
 
 ??? question "Q2. Which normalizer reads private properties directly?"
     - [ ] A. `ObjectNormalizer`
@@ -387,7 +410,7 @@ groups + max-depth to keep payloads bounded.
     - [ ] C. `GetSetMethodNormalizer`
 
     **Why:** `PropertyNormalizer` uses reflection on properties, bypassing accessors.
-    **Ref:** [Normalizers](https://symfony.com/doc/current/serializer.html#normalizers).
+    **Ref:** [Normalizers](https://symfony.com/doc/8.0/serializer.html#normalizers).
 
 ??? question "Q3. `#[Groups(['read'])]` takes effect when…"
     - [x] A. `['groups' => ['read']]` is passed in the context ✅
@@ -395,7 +418,7 @@ groups + max-depth to keep payloads bounded.
     - [ ] C. only during deserialization
 
     **Why:** Group filtering only applies when the matching groups are in context.
-    **Ref:** [Serialization groups](https://symfony.com/doc/current/serializer.html#using-serialization-groups-attributes).
+    **Ref:** [Serialization groups](https://symfony.com/doc/8.0/serializer.html#using-serialization-groups-attributes).
 
 ## Key takeaways
 
@@ -420,8 +443,8 @@ groups + max-depth to keep payloads bounded.
 - **Confused with:** PHP's `json_encode` — the Serializer adds normalization, groups, and denormalization back into typed objects.
 
 ## Official References
-- [Official docs — Serializer](https://symfony.com/doc/current/serializer.html)
-- [Official docs — Serializer component](https://symfony.com/doc/current/components/serializer.html)
+- [Official docs — Serializer](https://symfony.com/doc/8.0/serializer.html)
+- [Official docs — Serializer component](https://symfony.com/doc/8.0/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)
 
 ## Video references
@@ -433,7 +456,7 @@ groups + max-depth to keep payloads bounded.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/serializer.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/serializer.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

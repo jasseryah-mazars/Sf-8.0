@@ -29,6 +29,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un firewall définit *comment* les requêtes d'une zone d'URL sont authentifiées — et exactement **un seul** est actif par requête.
+
+### Imagine dans la vraie vie
+Un firewall est le poste de sécurité à l'entrée d'un bâtiment. Chaque aile a son propre poste, mais tu passes exactement **un seul** poste en entrant — le premier dont tu franchis la zone.
+
+### Dans Symfony
+Le firewall `dev` doit être déclaré en **premier** dans `security.yaml`, sinon un firewall plus strict le capturerait avant qu'il n'ait sa chance.
+
+### Exemple simple
+```yaml
+firewalls:
+    dev: { pattern: ^/(_(profiler|wdt)|css|images|js)/, security: false }
+    main: { lazy: true, provider: app_user_provider }
+```
+
+### Comment le mémoriser 🧠
+`security: false` **compte quand même comme un match** — ce firewall doit toujours venir en premier, avant tout firewall qui exigerait une authentification.
+
+
 ## Theory
 
 Un **firewall** est une configuration de sécurité qui s'applique à une tranche
@@ -262,7 +284,7 @@ chemin.
 
     **Why:** La `FirewallMap` renvoie le premier context correspondant ; le
     matching s'arrête là.
-    **Ref:** [Firewalls](https://symfony.com/doc/current/security.html#the-firewall).
+    **Ref:** [Firewalls](https://symfony.com/doc/8.0/security.html#the-firewall).
 
 ??? question "Q2. What does `security: false` do?"
     - [x] A. Disables the security layer for that zone (still counts as the match) ✅
@@ -272,7 +294,7 @@ chemin.
 
     **Why:** Il désactive tous les listeners de sécurité pour les requests
     correspondantes ; utilisé pour le profiler/les assets.
-    **Ref:** [Security config](https://symfony.com/doc/current/security.html).
+    **Ref:** [Security config](https://symfony.com/doc/8.0/security.html).
 
 ??? question "Q3. Two firewalls should share a logged-in session. What do you set?"
     - [ ] A. The same `provider`
@@ -282,7 +304,7 @@ chemin.
 
     **Why:** Le partage exige une clé `context` explicitement identique ; sinon
     chaque firewall possède son propre token.
-    **Ref:** [Firewall context](https://symfony.com/doc/current/security.html).
+    **Ref:** [Firewall context](https://symfony.com/doc/8.0/security.html).
 
 ## Key takeaways
 
@@ -316,8 +338,8 @@ chemin.
   sélectionnent *l'authentification* ; `access_control` gère *l'autorisation*.
 
 ## Official References
-- [Symfony docs — The firewall](https://symfony.com/doc/current/security.html#the-firewall)
-- [Symfony docs — Security config reference](https://symfony.com/doc/current/reference/configuration/security.html)
+- [Symfony docs — The firewall](https://symfony.com/doc/8.0/security.html#the-firewall)
+- [Symfony docs — Security config reference](https://symfony.com/doc/8.0/reference/configuration/security.html)
 - [Symfony source — Firewall](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall.php)
 
 ## Video references
@@ -330,7 +352,7 @@ chemin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security.html#the-firewall) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security.html#the-firewall) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

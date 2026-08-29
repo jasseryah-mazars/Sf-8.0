@@ -30,6 +30,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`Request` range chaque morceau de la requête HTTP dans un tiroir étiqueté, plutôt que de te laisser fouiller dans un tas de superglobales `$_GET`/`$_POST`.
+
+### Imagine dans la vraie vie
+Un employé de bureau ouvre ton courrier et trie chaque partie dans un bac étiqueté : "questions" (query), "formulaire joint" (request/body), "notes en marge" (headers). Tu ne fouilles jamais dans l'enveloppe brute — tu demandes juste le bon bac.
+
+### Dans Symfony
+`$request->query->get('page')` va chercher dans le bac des paramètres d'URL ; `$request->attributes->get('id')` va chercher dans le bac — différent — des paramètres de route extraits par le routeur. Confondre les deux bacs est une source classique d'erreurs.
+
+### Exemple simple
+```php
+public function show(Request $request): Response
+{
+    $id = $request->attributes->get('id'); // vient de la route, pas de l'URL en ?query
+}
+```
+
+### Comment le mémoriser 🧠
+Les paramètres de **route** vivent dans **`attributes`** — pas dans `query`. Retiens : "les attributs, c'est ce que le routeur a *déjà* deviné pour toi."
+
+
 ## Theory
 
 Une request HTTP comporte quatre parties :
@@ -338,7 +361,7 @@ brute aux besoins bas niveau (headers, IP, body brut).
 
     **Why:** `attributes` (un `ParameterBag`) contient les données du framework et
     de la route comme `_route`, `_controller` et les paramètres du chemin.
-    **Ref:** [HttpFoundation](https://symfony.com/doc/current/components/http_foundation.html).
+    **Ref:** [HttpFoundation](https://symfony.com/doc/8.0/components/http_foundation.html).
 
 ??? question "Q2. Which class backs `$request->query`?"
     - [x] A. `InputBag` ✅
@@ -386,7 +409,7 @@ brute aux besoins bas niveau (headers, IP, body brut).
 - **Confused with:** [HTTP Response](response.md) — les `InputBag`/`ParameterBag` entrants vs le `ResponseHeaderBag` sortant.
 
 ## Official References
-- [Symfony docs — HttpFoundation Request](https://symfony.com/doc/current/components/http_foundation.html#accessing-request-data)
+- [Symfony docs — HttpFoundation Request](https://symfony.com/doc/8.0/components/http_foundation.html#accessing-request-data)
 - [Symfony source — Request](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Request.php)
 - [Symfony source — InputBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/InputBag.php)
 
@@ -399,7 +422,7 @@ brute aux besoins bas niveau (headers, IP, body brut).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/http_foundation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

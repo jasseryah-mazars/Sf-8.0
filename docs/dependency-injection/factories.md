@@ -28,6 +28,32 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Service Registration](registration.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une factory construit un service que le container ne peut pas simplement `new` tout seul — il faut une méthode spécialisée qui l'assemble.
+
+### Imagine dans la vraie vie
+Une factory est un plat que la cuisine ne peut pas juste attraper sur l'étagère — il est fait sur commande par un spécialiste (une méthode statique, un autre service) qui l'assemble à partir d'entrées en direct et rend l'assiette finie.
+
+### Dans Symfony
+Construire un client HTTP configuré différemment selon l'environnement (URL de base, timeout) via une méthode statique `HttpClientFactory::creer()` est le cas d'usage classique d'une factory.
+
+### Exemple simple
+```yaml
+services:
+    App\Http\Client:
+        factory: ['App\Http\ClientFactory', 'creer']
+        arguments: ['%env(API_URL)%']
+```
+
+### Comment le mémoriser 🧠
+Les `arguments:` vont à la **méthode de la factory**, jamais à un constructeur — et il n'existe **pas** d'attribut `#[Factory]`, seulement `#[Autowire(factory: ...)]`.
+
 ---
 
 ## Theory
@@ -287,6 +313,8 @@ a service, use [decoration](decoration.md).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Where do a factory-built service's `arguments` go?"
     - [ ] A. To its constructor
     - [x] B. To the factory method ✅
@@ -294,7 +322,7 @@ a service, use [decoration](decoration.md).
     - [ ] D. They are ignored
 
     **Why:** With a factory the container calls the factory and passes `arguments`
-    to it. **Ref:** [Factories](https://symfony.com/doc/current/service_container/factories.html).
+    to it. **Ref:** [Factories](https://symfony.com/doc/8.0/service_container/factories.html).
 
 ??? question "Q2. Which attribute configures a factory-produced value?"
     - [ ] A. `#[Factory]`
@@ -303,7 +331,7 @@ a service, use [decoration](decoration.md).
     - [ ] D. `#[AsAlias]`
 
     **Why:** There is no `#[Factory]` attribute; `#[Autowire(factory:)]` is used.
-    **Ref:** [Autowire attribute](https://symfony.com/doc/current/service_container/autowiring.html).
+    **Ref:** [Autowire attribute](https://symfony.com/doc/8.0/service_container/autowiring.html).
 
 ??? question "Q3. How do you reference an **instance-method** factory in YAML?"
     - [x] A. `factory: ['@service_id', 'method']` ✅
@@ -312,7 +340,7 @@ a service, use [decoration](decoration.md).
     - [ ] D. `factory: @service_id`
 
     **Why:** An array of `[reference, method]` denotes a method on a service.
-    **Ref:** [Factories](https://symfony.com/doc/current/service_container/factories.html).
+    **Ref:** [Factories](https://symfony.com/doc/8.0/service_container/factories.html).
 
 ## Key takeaways
 
@@ -340,7 +368,7 @@ a service, use [decoration](decoration.md).
   decorator *wraps* an existing one.
 
 ## Official References
-- [Official Symfony docs — Using a Factory](https://symfony.com/doc/current/service_container/factories.html)
+- [Official Symfony docs — Using a Factory](https://symfony.com/doc/8.0/service_container/factories.html)
 - [Symfony source — Definition](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Definition.php)
 
 ## Video references
@@ -352,7 +380,7 @@ a service, use [decoration](decoration.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/factories.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/factories.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

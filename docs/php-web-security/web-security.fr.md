@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque protection Symfony existe pour contrer une attaque précise et nommée — comprendre l'attaque rend la défense évidente.
+
+### Imagine dans la vraie vie
+Sécuriser un site web ressemble à sécuriser une maison : on ne répète jamais mot pour mot ce qu'un inconnu crie par la boîte aux lettres (XSS → échappement Twig), on vérifie l'identité de qui prétend agir en ton nom (CSRF → jeton + SameSite), et on installe des serrures inviolables plutôt que de faire confiance à qui secoue la porte (injection SQL → requêtes préparées).
+
+### Dans Symfony
+Twig échappe automatiquement toute variable affichée (protection XSS par défaut), le composant Form ajoute un jeton CSRF caché à chaque formulaire, et le Validator + l'ORM utilisent systématiquement des requêtes préparées — la plupart des défenses sont actives **sans configuration supplémentaire**.
+
+### Exemple simple
+```twig
+{{ commentaire }} {# échappé automatiquement par Twig : pas de <script> exécuté #}
+```
+
+### Comment le mémoriser 🧠
+Associe chaque sigle à son remède en une paire : **XSS → échappement**, **CSRF → jeton**, **SQLi → requêtes préparées**, **mots de passe → `password_hash()`** (jamais en clair, jamais un simple hash MD5).
+
+
 ## Theory
 
 Chaque fonctionnalité de sécurité de Symfony existe pour contrer une menace web
@@ -188,7 +208,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
     Le `Symfony\Component\PasswordHasher\Hasher\SodiumPasswordHasher` de Symfony
     et les drapeaux de cookies CSRF de `HttpFoundation` implémentent ces
     défenses —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher).
 
 ## Configuration & code
 
@@ -281,7 +301,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 
     **Why:** Twig échappe la sortie en HTML par défaut ; `|raw` permet de s'en
     exclure.
-    **Ref:** [Twig escaping](https://symfony.com/doc/current/templates.html#output-escaping).
+    **Ref:** [Twig escaping](https://symfony.com/doc/8.0/templates.html#output-escaping).
 
 ??? question "Q2. Which best prevents SQL injection?"
     - [x] A. Prepared statements with bound parameters ✅
@@ -344,11 +364,11 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 - **Confused with:** [authentication](../security/authentication.md) — les tokens CSRF protègent les requests modifiant l'état, ils n'identifient pas l'utilisateur.
 
 ## Official References
-- [Symfony — Security](https://symfony.com/doc/current/security.html)
-- [Symfony — CSRF](https://symfony.com/doc/current/security/csrf.html)
+- [Symfony — Security](https://symfony.com/doc/8.0/security.html)
+- [Symfony — CSRF](https://symfony.com/doc/8.0/security/csrf.html)
 - [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/)
 - [PHP — password_hash](https://www.php.net/manual/en/function.password-hash.php)
-- [Symfony source — PasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher)
+- [Symfony source — PasswordHasher](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher)
 
 ## Video references
 
@@ -360,7 +380,7 @@ $ok   = password_verify($plain, $hash);           // constant-time compare
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — des tutoriels scénarisés à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes des SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#output-escaping) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -28,6 +28,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [The Service Container](container.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony fournit des centaines de services tout prêts — tu les réclames par leur **type** (une interface), jamais par un identifiant brut à mémoriser.
+
+### Imagine dans la vraie vie
+Les services intégrés du framework sont le garde-manger de la maison — des centaines de produits déjà en stock (`router`, `logger`, `serializer`). Tu ne les cherches pas par numéro d'étagère (id brut) ; tu demandes par *type d'ingrédient* (l'interface autowirée) et la cuisine sait quel bocal prendre.
+
+### Dans Symfony
+Injecter `LoggerInterface` fonctionne sans jamais connaître le nom exact du service de log configuré — Symfony résout automatiquement quelle implémentation concrète fournir.
+
+### Exemple simple
+```console
+$ php bin/console debug:autowiring logger
+```
+
+### Comment le mémoriser 🧠
+Injecte toujours `RequestStack` (puis `getCurrentRequest()`) dans un service — **jamais** un `Request` brut, qui n'existe pas encore au moment où le container construit tes services.
+
 ---
 
 ## Theory
@@ -246,6 +269,8 @@ public and not aliased, you reach it by injecting the owning service, not by id.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. How do you inject the current request into a service?"
     - [ ] A. Type-hint `Request`
     - [x] B. Inject `RequestStack` and call `getCurrentRequest()` ✅
@@ -253,7 +278,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - [ ] D. Use `$container->get('request')`
 
     **Why:** The request is per-cycle and may change; `RequestStack` gives safe
-    access. **Ref:** [RequestStack](https://symfony.com/doc/current/service_container/request.html).
+    access. **Ref:** [RequestStack](https://symfony.com/doc/8.0/service_container/request.html).
 
 ??? question "Q2. Which command shows private services too?"
     - [ ] A. `debug:autowiring`
@@ -262,7 +287,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - [ ] D. `debug:router`
 
     **Why:** By default `debug:container` lists public services and aliases only.
-    **Ref:** [Debugging services](https://symfony.com/doc/current/service_container/debug.html).
+    **Ref:** [Debugging services](https://symfony.com/doc/8.0/service_container/debug.html).
 
 ??? question "Q3. `parameter_bag` is…"
     - [x] A. A service exposing container parameters via `ParameterBagInterface` ✅
@@ -271,7 +296,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
     - [ ] D. A compiler pass
 
     **Why:** It lets services read parameters at runtime through an injected
-    interface. **Ref:** [Parameters](https://symfony.com/doc/current/configuration.html#configuration-parameters).
+    interface. **Ref:** [Parameters](https://symfony.com/doc/8.0/configuration.html#configuration-parameters).
 
 ## Key takeaways
 
@@ -299,8 +324,8 @@ public and not aliased, you reach it by injecting the owning service, not by id.
   an interface, not by raw id.
 
 ## Official References
-- [Official Symfony docs — Debugging services](https://symfony.com/doc/current/service_container/debug.html)
-- [Official Symfony docs — Service Container](https://symfony.com/doc/current/service_container.html)
+- [Official Symfony docs — Debugging services](https://symfony.com/doc/8.0/service_container/debug.html)
+- [Official Symfony docs — Service Container](https://symfony.com/doc/8.0/service_container.html)
 - [Symfony source — FrameworkExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/DependencyInjection/FrameworkExtension.php)
 
 ## Video references
@@ -312,7 +337,7 @@ public and not aliased, you reach it by injecting the owning service, not by id.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container/request.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container/request.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

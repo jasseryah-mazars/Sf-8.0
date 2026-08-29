@@ -2,6 +2,20 @@
 
 Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-minute cheat). For the final days. Full detail: [Security](../../security/index.md).
 
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche imprimable, tenant sur une page**, qui résume chaque sous-chapitre de Security en quelques puces "à retenir" suivies d'une ligne "Cheat" très dense.
+
+**Pourquoi ça existe ?** Dans les derniers jours avant l'examen, on veut un support papier ou PDF unique par domaine — pas 10 onglets de navigateur ouverts. Cette fiche condense un domaine entier sur une seule page imprimable.
+
+**🏠 Analogie de la vraie vie :** C'est la **fiche de révision recto-verso** qu'un étudiant prépare avant un examen universitaire : tout le cours du semestre réduit à une page, à relire dans le métro le matin de l'épreuve.
+
+**Symfony dans la vraie vie :** Chaque puce "à retenir" → une règle déjà apprise en détail dans le chapitre / La ligne "Cheat:" → la version ultra-compacte, presque un aide-mémoire de syntaxe / Lien "Full detail" → retour au chapitre complet si un point ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Imprimer cette fiche *avant* d'avoir étudié Security en détail, en espérant apprendre directement dessus — le format est trop dense pour un premier apprentissage, il ne fonctionne qu'en rappel.
+
+**🧠 Comment le mémoriser :** *« Une page, un domaine, la veille de l'examen »* — cette fiche est le tout dernier support à consulter, pas le premier.
+
 ## Access Control Rules
 - `access_control` = URL-based authorization, first match wins.
 - Matchers: path/host/port/ip(s)/methods; requirements: roles/allow_if/requires_channel.
@@ -9,6 +23,19 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - No subject support and no match ⇒ allowed; use voters for per-object rules.
 
 **Cheat:** First match wins → specific first, `^/` catch-all last. Roles in a rule = OR; `roles` + `allow_if` = AND. `requires_channel: https` = pre-auth redirect. `ips` + `PUBLIC_ACCESS` = LAN allowlist; no match = allowed.
+
+## Access Decision Strategies
+- Four strategies: affirmative (default, one grant wins), consensus
+  (majority + tie flag), unanimous (any deny vetoes), priority (first
+  non-abstain decides).
+- Abstain is neutral in every strategy; all-abstain denies unless
+  `allow_if_all_abstain: true`.
+- Consensus ties default to **granted** (`allow_if_equal_granted_denied: true`).
+- Configure globally at `security.access_decision_manager`; custom logic via
+  `strategy_service` implementing `AccessDecisionStrategyInterface`.
+- Votes are `VoterInterface::ACCESS_GRANTED/ABSTAIN/DENIED` = 1 / 0 / -1.
+
+**Cheat:** affirmative: ∃ grant ⇒ ✔ · consensus: grants > denies (tie ⇒ flag, default ✔) unanimous: no deny ∧ ≥1 grant ⇒ ✔ · priority: first non-abstain decides all abstain ⇒ `allow_if_all_abstain` (default ✘) Config: `security.access_decision_manager.{strategy, strategy_service, service}`
 
 ## Authentication
 - Symfony 8 has one auth system: authenticators + passports + badges + token.
@@ -55,6 +82,33 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 **Cheat:** Firewall = authentication zone; `access_control` = authorization. First match wins — `dev`/`security: false` first, catch-all last. `lazy: true` = auth on token read; `stateless: true` = no session token. Same `context:` ⇒ shared login.
 
+## User Impersonation (switch_user)
+- `switch_user` is per-firewall; defaults: role `ROLE_ALLOWED_TO_SWITCH`,
+  parameter `_switch_user`, exit value `_exit`.
+- The active token becomes a `SwitchUserToken` carrying the target user **and**
+  the original token.
+- Detect impersonation with `IS_IMPERSONATOR` (not the legacy
+  `ROLE_PREVIOUS_ADMIN`).
+- `SwitchUserEvent` fires on switch *and* exit — the hook for auditing, vetoing
+  and custom target resolution.
+- All authorization while switched uses the **target** user's roles.
+
+**Cheat:** Enable: `switch_user: true` (or `{ role: ..., parameter: ... }`). Switch: `?_switch_user=identifier` · Exit: `?_switch_user=_exit`. Check: `is_granted('IS_IMPERSONATOR')`. Internals: `SwitchUserListener` → `SwitchUserToken(originalToken)`. Event: `SwitchUserEvent` (audit / restrict / custom lookup).
+
+## Login Throttling & Rate Limiting
+- `login_throttling: { max_attempts, interval }` on the firewall; requires
+  **symfony/rate-limiter**.
+- Defaults: `max_attempts: 5`, interval `'1 minute'`; counters are
+  username+IP **and** IP alone at 5×.
+- Implemented by `LoginThrottlingListener` on `CheckPassportEvent`; success
+  resets the counter.
+- Custom behaviour = a `RequestRateLimiterInterface` service via the `limiter`
+  option (extend `AbstractRequestRateLimiter`).
+- RateLimiter policies (fixed/sliding window, token bucket) power any custom
+  limiter you define under `framework.rate_limiter`.
+
+**Cheat:** Config: `login_throttling: { max_attempts: N, interval: '15 minutes' }`. Dual default limits: user+IP = N · IP alone = 5N. Hook: `CheckPassportEvent` (blocks **before** credential checks). Custom: `limiter:` → `RequestRateLimiterInterface` service. Needs: `composer require symfony/rate-limiter`.
+
 ## Password Hashers
 - `auto` (recommended), `bcrypt`, `sodium`; `plaintext` for tests only.
 - `PasswordHasherFactory` picks the hasher per user class;
@@ -64,6 +118,20 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 
 **Cheat:** `password_hashers: PasswordAuthenticatedUserInterface: 'auto'`. `hashPassword()` / `isPasswordValid()` / `needsRehash()`. Rehash triggered by `PasswordUpgradeBadge` → `PasswordMigratingListener`. bcrypt: 72-byte limit; sodium: Argon2id, memory-hard.
 
+## Programmatic Login & Logout
+- `Security::login($user, ?$authenticatorName, ?$firewallName, $badges)` —
+  programmatic authentication through the real pipeline.
+- Authenticator name required with multiple authenticators; firewall name when
+  targeting a firewall other than the current one.
+- Badges (e.g. `RememberMeBadge`) make the login behave like its interactive
+  twin; the same events are dispatched.
+- `logout($validateCsrf = true)` dispatches `LogoutEvent`; disable CSRF checks
+  only for non-form flows.
+- Tests use `KernelBrowser::loginUser()` instead — different tool, different
+  layer.
+
+**Cheat:** Service: `Symfony\Bundle\SecurityBundle\Security`. `login(user, 'form_login', 'main', [new RememberMeBadge()])` → `?Response`. Multiple authenticators ⇒ name one; built-ins by config key. `logout(false)` ⇒ skip CSRF validation. Same events as interactive login · tests ⇒ `loginUser()`.
+
 ## User Providers
 - A provider **loads and refreshes** users; it never authenticates them.
 - `loadUserByIdentifier()`, `refreshUser()`, `supportsClass()` are the contract.
@@ -71,6 +139,18 @@ Ultra-condensed, print-friendly recap of every subchapter (key takeaways + last-
 - Memory/chain/custom providers cover non-Doctrine needs (entity is out of scope).
 
 **Cheat:** Contract: `loadUserByIdentifier` / `refreshUser` / `supportsClass`. Add `PasswordUpgraderInterface` for transparent rehash. `memory` for tests; `chain` tries providers in order. Stateless firewall ⇒ no `refreshUser()`.
+
+## Role Hierarchy
+- `security.role_hierarchy` declares role implications, resolved transitively.
+- The hierarchy applies in `isGranted()`, `#[IsGranted]`, Twig and
+  `access_control` — never in `$user->getRoles()`/`$token->getRoleNames()`.
+- `RoleHierarchyInterface::getReachableRoleNames()` is the expansion API for
+  your own services and voters.
+- Under the hood: `RoleHierarchyVoter` (subclass of `RoleVoter`) expands roles
+  before matching the attribute.
+- Store minimal roles; derive the rest — the map is config, not data.
+
+**Cheat:** Config: `security.role_hierarchy: { ROLE_ADMIN: ROLE_USER, ... }`. Transitive: A→B→C ⇒ A reaches C. `isGranted()` expands · `getRoles()` does **not**. Manual expansion: `RoleHierarchyInterface->getReachableRoleNames()`. Voter swap: `RoleVoter` → `RoleHierarchyVoter`.
 
 ## Roles
 - Roles are `ROLE_`-prefixed strings from `getRoles()`, expanded by the hierarchy.

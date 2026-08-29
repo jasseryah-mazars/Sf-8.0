@@ -32,6 +32,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`path()` donne une URL relative utile *à l'intérieur* du site ; `url()` donne une URL absolue utile *en dehors* (email, flux RSS).
+
+### Imagine dans la vraie vie
+Générer une URL, c'est donner des indications à quelqu'un. `path()` est le raccourci "interne au bâtiment" — "salle 204, troisième porte à gauche" — parfaitement clair une fois qu'on est déjà dans le même bâtiment (le même site), mais incompréhensible pour quelqu'un ailleurs. `url()` est l'adresse postale complète avec rue, ville et pays : la seule forme qui fonctionne encore quand le mot est emporté au loin et lu ailleurs.
+
+### Dans Symfony
+Un email envoyé à un utilisateur doit toujours utiliser `url()`, jamais `path()` — un lien relatif dans un email n'a aucun sens hors du contexte d'un navigateur déjà sur ton site.
+
+### Exemple simple
+```twig
+<a href="{{ path('produit_show', {id: p.id}) }}">Voir</a>  {# lien interne au site #}
+<!-- Dans un email : {{ url('produit_show', {id: p.id}) }} -->
+```
+
+### Comment le mémoriser 🧠
+"Si le lien quitte la page (email, RSS, balise canonique), utilise `url()`." Sinon, `path()` suffit et reste plus léger.
+
+
 ## Theory
 
 Ne codez jamais les URL en dur. Générez-les à partir des **noms de routes** pour
@@ -226,7 +247,7 @@ normale dans la page afin de garder les pages agnostiques de l'hôte.
     - [ ] D. `path()` only works in controllers
 
     **Why:** `path()` = `ABSOLUTE_PATH`, `url()` = `ABSOLUTE_URL`. **Ref:**
-    [Linking to pages](https://symfony.com/doc/current/templates.html#linking-to-pages).
+    [Linking to pages](https://symfony.com/doc/8.0/templates.html#linking-to-pages).
 
 ??? question "Q2. `path('search', { q: 'x', extra: 1 })` where `search` is `/search`. Result?"
     - [x] A. `/search?q=x&extra=1` ✅
@@ -235,7 +256,7 @@ normale dans la page afin de garder les pages agnostiques de l'hôte.
     - [ ] D. Error
 
     **Why:** Les paramètres absents du motif de route deviennent la query string. **Ref:**
-    [URL generation](https://symfony.com/doc/current/routing.html#generating-urls).
+    [URL generation](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q3. Which extension provides `path()`/`url()`?"
     - [x] A. `Symfony\Bridge\Twig\Extension\RoutingExtension` ✅
@@ -268,8 +289,8 @@ normale dans la page afin de garder les pages agnostiques de l'hôte.
 - **Confused with:** [Assets](assets.md) — `path()`/`url()` servent aux routes ; `asset()` aux fichiers statiques sous `public/`.
 
 ## Official References
-- [Official — Linking to pages](https://symfony.com/doc/current/templates.html#linking-to-pages)
-- [Official — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
+- [Official — Linking to pages](https://symfony.com/doc/8.0/templates.html#linking-to-pages)
+- [Official — Generating URLs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 - [Symfony source — RoutingExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/RoutingExtension.php)
 
 ## Video references
@@ -282,7 +303,7 @@ normale dans la page afin de garder les pages agnostiques de l'hôte.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html#linking-to-pages) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html#linking-to-pages) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

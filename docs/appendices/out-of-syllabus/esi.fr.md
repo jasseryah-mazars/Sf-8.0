@@ -1,10 +1,12 @@
 # Edge Side Includes (ESI)
 
-**Exclu de la certification Symfony 8.** ESI ne figure pas au programme
-officiel de la certification Symfony 8. Ce chapitre est conservé comme
-contenu additionnel / d'approfondissement — voir `specs/TraceabilityMatrix.md`
-pour la séparation officiel/additionnel — et n'est pas testé dans les examens
-générés ni compté dans la couverture officielle du syllabus.
+!!! danger "Hors syllabus officiel Symfony 8.0"
+    ESI ne figure pas au programme officiel de la certification Symfony 8.
+    Ce chapitre est conservé dans les [Appendices](index.md) comme contenu
+    additionnel / d'approfondissement — voir la section « Out-of-scope /
+    Additional Learning » de `specs/TraceabilityMatrix.md` pour la séparation
+    officiel/additionnel — et n'est pas testé dans les examens générés ni
+    compté dans la couverture officielle du syllabus.
 
 !!! tip "In a nutshell"
     ESI permet à une même page de mélanger les fraîcheurs : les trous
@@ -36,9 +38,24 @@ générés ni compté dans la couverture officielle du syllabus.
     **Syllabus:** `HTTP Caching → Edge Side Includes` ·
     **Level:** Expert ·
     **Est. time:** 22 min ·
-    **Prerequisites:** [Server-Side Caching](server-side.md)
+    **Prerequisites:** [Server-Side Caching](../../http-caching/server-side.md)
 
 ---
+
+## 🧠 Pour les nuls
+
+**C'est quoi ce chapitre ?** ESI permet de découper une page en morceaux mis en cache séparément — le menu du site (rarement modifié) et ton panier personnel (qui change tout le temps) n'ont pas besoin d'être rafraîchis à la même vitesse.
+
+**Pourquoi ça existe ?** Sans ESI, la moindre partie qui change (comme ton panier) obligerait à invalider tout le cache de la page entière — même les parties qui ne changent jamais.
+
+**🏠 Analogie de la vraie vie :** Un panneau d'information de musée : le grand panneau permanent est réimprimé rarement, mais une petite carte encartée "événements du jour" est changée à son propre rythme, sans jamais réimprimer tout le panneau.
+
+**Symfony dans la vraie vie :** `render_esi(controller(...))` insère un morceau qui sera rafraîchi séparément par le reverse proxy — si celui-ci ne supporte pas ESI, Symfony bascule automatiquement sur un rendu classique inline.
+
+**⚠️ Erreur fréquente :** croire qu'ESI est enseigné à l'examen — ce n'est **pas** un sous-sujet officiel du syllabus, seulement un complément utile pour comprendre le cache avancé.
+
+**🧠 Comment le mémoriser :** "ESI = un panneau permanent avec des cartes encartées changées séparément."
+
 
 ## Theory
 
@@ -115,7 +132,7 @@ Surrogate-Control: content="ESI/1.0"
 - `Symfony\Component\HttpKernel\HttpCache\Esi` implémente `SurrogateInterface`
   (et `Ssi` pour le SSI). Il annonce la capacité, détecte les `<esi:include>`
   et les traite. C'est le `$surrogate` passé à
-  [`HttpCache`](server-side.md).
+  [`HttpCache`](../../http-caching/server-side.md).
 - `Symfony\Component\HttpKernel\Fragment\EsiFragmentRenderer` (alias de renderer
   `esi`) transforme une référence de controller en tag `<esi:include>` ; la
   fonction Twig `render_esi` délègue au fragment handler
@@ -303,7 +320,7 @@ convenir.
 
     **Why:** Le renderer ESI vérifie la capacité du surrogate ; sans elle, le
     fragment est rendu inline pour que le template fonctionne quand même.
-    **Ref:** [ESI](https://symfony.com/doc/current/http_cache/esi.html).
+    **Ref:** [ESI](https://symfony.com/doc/8.0/http_cache/esi.html).
 
 ??? question "Q2. What is the main benefit of ESI over full-page caching?"
     - [ ] A. Smaller HTML
@@ -314,7 +331,7 @@ convenir.
     **Why:** ESI met les fragments en cache comme des entrées indépendantes, si
     bien qu'une coquille à longue durée de vie peut coexister avec des parties à
     courte durée de vie ou par utilisateur.
-    **Ref:** [ESI](https://symfony.com/doc/current/http_cache/esi.html).
+    **Ref:** [ESI](https://symfony.com/doc/8.0/http_cache/esi.html).
 
 ??? question "Q3. Which processes the `<esi:include>` tags?"
     - [ ] A. The Twig compiler
@@ -335,7 +352,7 @@ convenir.
     **Why:** `UriSigner` signe les URIs de fragments avec le secret de
     l'application, si bien que seuls les appels de fragments légitimement générés
     sont honorés.
-    **Ref:** [Fragments](https://symfony.com/doc/current/http_cache/esi.html).
+    **Ref:** [Fragments](https://symfony.com/doc/8.0/http_cache/esi.html).
 
 ## Key takeaways
 
@@ -361,15 +378,15 @@ convenir.
 
 ## Connections
 
-- **Depends on:** [Server-Side Caching](server-side.md) — le surrogate qui
+- **Depends on:** [Server-Side Caching](../../http-caching/server-side.md) — le surrogate qui
   remplit les trous ESI est le reverse proxy (`HttpCache`/Varnish).
-- **Reused in:** [Controller Rendering (Twig)](../twig/controller-rendering.md) —
+- **Reused in:** [Controller Rendering (Twig)](../../twig/controller-rendering.md) —
   `render_esi(controller(...))` s'appuie sur la mécanique fragment/sub-request.
-- **Confused with:** [Cache Types](cache-types.md) — l'ESI isole la fraîcheur
+- **Confused with:** [Cache Types](../../http-caching/cache-types.md) — l'ESI isole la fraîcheur
   d'un *fragment* plutôt que de choisir `public`/`private` pour toute la page.
 
 ## Official References
-- [Symfony docs — ESI](https://symfony.com/doc/current/http_cache/esi.html)
+- [Symfony docs — ESI](https://symfony.com/doc/8.0/http_cache/esi.html)
 - [Symfony source — Esi](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpCache/Esi.php)
 - [Symfony source — EsiFragmentRenderer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Fragment/EsiFragmentRenderer.php)
 
@@ -383,7 +400,7 @@ convenir.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/esi.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache/esi.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
@@ -397,5 +414,5 @@ Je suis prêt quand je peux :
 
 ---
 
-<small>Related: [Server-Side Caching](server-side.md) · [Cache Types](cache-types.md) ·
-[Controller Rendering (Twig)](../twig/controller-rendering.md)</small>
+<small>Related: [Server-Side Caching](../../http-caching/server-side.md) · [Cache Types](../../http-caching/cache-types.md) ·
+[Controller Rendering (Twig)](../../twig/controller-rendering.md)</small>

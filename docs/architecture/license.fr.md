@@ -32,6 +32,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le code de Symfony est gratuit à utiliser, modifier et même revendre — la seule règle est de garder la petite mention de copyright ; le nom "Symfony" lui-même est protégé séparément.
+
+### Imagine dans la vraie vie
+Une recette de cuisine publiée gratuitement dans un livre communautaire : n'importe qui peut la cuisiner, l'adapter, et même la vendre dans son propre restaurant fermé au public — la seule règle est de garder la petite mention "recette de…". Le nom et le logo du restaurant original, eux, restent protégés : tu peux dire "fait à partir de la recette de Mamie", mais tu ne peux pas ouvrir un restaurant appelé "Chez Mamie" sans autorisation.
+
+### Dans Symfony
+Tu peux construire une application commerciale et fermée avec Symfony sans jamais publier ton propre code — mais tu ne peux pas appeler ton produit "SymfonyCloud" ou utiliser son logo comme si c'était officiel.
+
+### Exemple simple
+```json
+{ "license": "MIT" }
+```
+
+### Comment le mémoriser 🧠
+**Licence = le CODE** (utilisable librement). **Marque déposée = le NOM/logo** (protégé séparément). Deux papiers différents, deux règles différentes.
+
+
 ## Theory
 
 Symfony (le framework et ses components) est publié sous la **licence MIT** — une
@@ -204,7 +224,7 @@ notice, et faites attention à la marque dans votre marketing.
 - **Confused with:** [BC Promise](bc-promise.md) — une garantie *juridique* sur la licence du code, pas une garantie *technique* sur la stabilité de l'API.
 
 ## Official References
-- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/current/contributing/code/bc.html)
+- [Symfony documentation — Contributing: Backwards Compatibility & licensing](https://symfony.com/doc/8.0/contributing/code/bc.html)
 - [Symfony source — LICENSE (MIT)](https://github.com/symfony/symfony/blob/8.0/LICENSE)
 - [MIT License text](https://opensource.org/license/mit)
 - [Symfony trademark policy](https://symfony.com/trademark)
@@ -219,7 +239,7 @@ notice, et faites attention à la marque dans votre marketing.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/code/bc.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -31,6 +31,24 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un bridge est un adaptateur qui fait parler entre eux un composant Symfony et une bibliothèque tierce précise — sans forcer le composant lui-même à dépendre de cette bibliothèque.
+
+### Imagine dans la vraie vie
+Un adaptateur de voyage électrique : ton chargeur (le composant Symfony) est conçu pour un standard de prise, la prise murale étrangère (une bibliothèque tierce précise) en utilise un autre — l'adaptateur existe uniquement pour faire correspondre les deux formes. Ce n'est ni le chargeur ni la prise ; tu l'achètes séparément justement pour que le chargeur reste universel.
+
+### Dans Symfony
+Le composant PropertyInfo reste indépendant de PHPStan, mais un bridge dédié permet de l'utiliser avec cet outil précis, sans forcer tous les utilisateurs de PropertyInfo à installer PHPStan.
+
+### Exemple simple
+Un bridge vit dans `src/Symfony/Bridge/` — par exemple, un bridge PSR-7 convertit entre les objets `Request`/`Response` de Symfony et les interfaces PSR-7 attendues par une bibliothèque tierce.
+
+### Comment le mémoriser 🧠
+L'adaptateur seul ne branche rien : il faut encore brancher l'ensemble dans le mur (activer le bundle qui l'intègre) avant que le courant ne passe.
+
+
 ## Theory
 
 Un **bridge** est une couche d'intégration qui permet à un composant Symfony de
@@ -193,7 +211,7 @@ pourquoi une classe d'un bridge est (ou n'est pas) disponible.
     - [ ] C. A Twig template
 
     **Why:** Les bridges fournissent des classes ; un bundle les branche. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ## Key takeaways
 
@@ -216,8 +234,8 @@ pourquoi une classe d'un bridge est (ou n'est pas) disponible.
 
 ## Official References
 - [Symfony source — Bridge](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Bridge)
-- [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
-- [Official docs — Bundles](https://symfony.com/doc/current/bundles.html)
+- [Official docs — The Components](https://symfony.com/doc/8.0/components/index.html)
+- [Official docs — Bundles](https://symfony.com/doc/8.0/bundles.html)
 
 ## Video references
 
@@ -228,7 +246,7 @@ pourquoi une classe d'un bridge est (ou n'est pas) disponible.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/bundles.html) — certaines pages de la documentation Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/bundles.html) — certaines pages de la documentation Symfony intègrent un screencast.
 
 ## Confidence check
 

@@ -22,6 +22,20 @@ cookies, sessions, and flash messages.
     | **Revision priority** | **High** |
     | **Est. time** | 3–4 h |
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Un contrôleur est le morceau de code que Symfony appelle une fois qu'il sait quelle route a matché — son seul travail est de transformer une requête en réponse.
+
+**Pourquoi ça existe ?** Il faut bien un endroit où écrire "quand quelqu'un visite `/produits`, voici ce qu'il faut faire". Le contrôleur est cet endroit — volontairement simple, pour que la vraie logique vive ailleurs (dans des services).
+
+**🏠 Analogie de la vraie vie :** Le serveur d'un restaurant. Il prend ta commande (la requête), la transmet à la cuisine (les services), et te rapporte le plat fini (la réponse) — il ne cuisine jamais lui-même.
+
+**Symfony dans la vraie vie :** `Client → client du restaurant`, `Request → commande`, `Controller → serveur`, `Service → cuisine`, `Response → plat servi`.
+
+**⚠️ Erreur fréquente :** mettre la "cuisine" (logique métier, requêtes base de données) directement dans le contrôleur — un serveur qui se met à cuisiner ralentit tout le restaurant.
+
+**🧠 Comment le mémoriser :** "Le contrôleur prend la commande et sert le plat — il ne cuisine jamais."
+
 ## Why this stage matters
 
 A controller is deceptively simple — "return a `Response`" — but the exam probes
@@ -75,6 +89,6 @@ routing, forms, and security become straightforward.
 
 ## Official References
 
-- [Symfony documentation — Controllers](https://symfony.com/doc/current/controller.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Controllers](https://symfony.com/doc/8.0/controller.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

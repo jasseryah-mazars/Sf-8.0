@@ -34,6 +34,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le client de test parle au kernel directement en mémoire, comme un navigateur sans interface — et ne suit **jamais** les redirections automatiquement.
+
+### Imagine dans la vraie vie
+Un robot assis à un simulateur de conduite plutôt qu'une vraie voiture sur une vraie route. Il actionne les pédales (envoie des requêtes au kernel en interne, sans vrai réseau), et garde ta session active — se souvenant de tes tickets de parking (le pot de cookies). Mais quand un panneau dit "déviation par ici" (une redirection 302), le robot s'arrête net devant le panneau et attend.
+
+### Dans Symfony
+Tester qu'un formulaire redirige bien après soumission nécessite d'appeler explicitement `$client->followRedirect()` — sinon le test s'arrête à la page intermédiaire de redirection, avant la page finale.
+
+### Exemple simple
+```php
+$client->submitForm('Envoyer', ['form[email]' => 'a@b.com']);
+$client->followRedirect(); // sinon on reste sur la page de redirection
+```
+
+### Comment le mémoriser 🧠
+Le client suit les liens et boutons comme un humain (`clickLink()`, `submitForm()`) mais **jamais** les redirections HTTP sans qu'on le lui demande explicitement.
+
+---
+
+
 ## Theory
 
 Le client retourné par `static::createClient()` est un
@@ -327,7 +350,7 @@ depuis le Crawler (`->form()`) plutôt que via `submitForm()`.
 
     **Why:** les méthodes de navigation retournent un `Crawler` ; la response se
     récupère avec `getResponse()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#making-requests).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#making-requests).
 
 ??? question "Q2. By default, after a controller returns a 302, the client…"
     - [x] A. Stops on the redirect so you can assert `Location` ✅
@@ -337,7 +360,7 @@ depuis le Crawler (`->form()`) plutôt que via `submitForm()`.
 
     **Why:** le suivi automatique est désactivé par défaut ; utilisez
     `followRedirect()` / `followRedirects()`.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#redirecting).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#redirecting).
 
 ??? question "Q3. Which call keeps a service replaced with `getContainer()->set()` alive across requests?"
     - [x] A. `$client->disableReboot()` ✅
@@ -347,7 +370,7 @@ depuis le Crawler (`->form()`) plutôt que via `submitForm()`.
 
     **Why:** sans désactiver le redémarrage, le kernel repart après chaque
     request et jette le remplacement.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html).
 
 ??? question "Q4. `submitForm()` signature is…"
     - [x] A. `submitForm(string $button, array $fieldValues = [], string $method = 'POST')` ✅
@@ -357,7 +380,7 @@ depuis le Crawler (`->form()`) plutôt que via `submitForm()`.
 
     **Why:** vous identifiez le bouton de soumission par son texte/nom, puis
     passez les valeurs des champs.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#submitting-forms).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#submitting-forms).
 
 ## Key takeaways
 
@@ -384,7 +407,7 @@ depuis le Crawler (`->form()`) plutôt que via `submitForm()`.
 - **Confused with:** [Client Configuration](client-configuration.md) — ce chapitre traite du comportement ; l'autre des options de démarrage et des paramètres serveur.
 
 ## Official References
-- [Official Symfony docs — Making requests](https://symfony.com/doc/current/testing.html#making-requests)
+- [Official Symfony docs — Making requests](https://symfony.com/doc/8.0/testing.html#making-requests)
 - [Symfony source — AbstractBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/BrowserKit/AbstractBrowser.php)
 - [Symfony source — KernelBrowser](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/KernelBrowser.php)
 
@@ -398,7 +421,7 @@ depuis le Crawler (`->form()`) plutôt que via `submitForm()`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#making-requests) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#making-requests) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

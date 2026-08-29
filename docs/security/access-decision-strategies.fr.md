@@ -34,6 +34,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La stratégie décide comment combiner les votes de tous les voters en une seule décision finale — accordé ou refusé.
+
+### Imagine dans la vraie vie
+Quatre façons de faire tourner le même jury : *affirmative* — un seul juré disant "innocent" suffit ; *unanimous* — un seul "coupable" fait couler le verdict peu importe combien disent "innocent" ; *priority* — le juré le plus haut placé qui daigne lever la main tranche seul.
+
+### Dans Symfony
+Avec la stratégie par défaut (`affirmative`), avoir 10 voters qui s'abstiennent et 1 seul qui accorde suffit à autoriser l'accès — même face à une majorité de silence.
+
+### Exemple simple
+```yaml
+security:
+    access_decision_manager: { strategy: unanimous }
+```
+
+### Comment le mémoriser 🧠
+Quand **tous** les voters s'abstiennent, l'accès est **refusé par défaut** — sauf si `allow_if_all_abstain: true` est explicitement configuré.
+
+---
+
+
 ## Theory
 
 Chaque appel à `isGranted()` aboutit dans
@@ -289,7 +312,7 @@ voter, le choix de la stratégie est sans effet par construction.
 
     **Why:** Affirmative est la stratégie par défaut : un seul
     `ACCESS_GRANTED` gagne, quel que soit le nombre de refus.
-    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q2. Under `unanimous`, votes are GRANTED + ABSTAIN + ABSTAIN. Outcome?"
     - [x] A. Granted — abstain is not a deny ✅
@@ -309,7 +332,7 @@ voter, le choix de la stratégie est sans effet par construction.
 
     **Why:** Toutes les stratégies se rabattent sur `allow_if_all_abstain`
     quand aucun voter n'émet de vrai vote, et ce flag vaut `false` par défaut.
-    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q4. Where do you plug a custom decision algorithm?"
     - [ ] A. `security.firewalls.main.strategy`
@@ -320,7 +343,7 @@ voter, le choix de la stratégie est sans effet par construction.
     **Why:** `strategy_service` remplace l'objet stratégie ; `service`
     remplacerait le manager tout entier. Les deux vivent sous
     `security.access_decision_manager`, jamais sous un firewall.
-    **Ref:** [Custom access decision strategy](https://symfony.com/doc/current/security/voters.html#custom-access-decision-strategy).
+    **Ref:** [Custom access decision strategy](https://symfony.com/doc/8.0/security/voters.html#custom-access-decision-strategy).
 
 ## Key takeaways
 
@@ -358,7 +381,7 @@ voter, le choix de la stratégie est sans effet par construction.
   point d'entrée ; la stratégie est la *règle de décompte* tout à la fin.
 
 ## Official References
-- [Symfony docs — Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy)
+- [Symfony docs — Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
 - [Symfony source — AccessDecisionStrategyInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Strategy/AccessDecisionStrategyInterface.php)
 
@@ -372,7 +395,7 @@ voter, le choix de la stratégie est sans effet par construction.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

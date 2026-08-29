@@ -26,8 +26,31 @@
 
     **Syllabus:** `Security → Access Decision Strategies` ·
     **Level:** Expert ·
+
     **Est. time:** 20 min ·
     **Prerequisites:** [Voters](voters.md) · [Authorization](authorization.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La stratégie décide comment combiner les votes de tous les voters en une seule décision finale — accordé ou refusé.
+
+### Imagine dans la vraie vie
+Quatre façons de faire tourner le même jury : *affirmative* — un seul juré disant "innocent" suffit ; *unanimous* — un seul "coupable" fait couler le verdict peu importe combien disent "innocent" ; *priority* — le juré le plus haut placé qui daigne lever la main tranche seul.
+
+### Dans Symfony
+Avec la stratégie par défaut (`affirmative`), avoir 10 voters qui s'abstiennent et 1 seul qui accorde suffit à autoriser l'accès — même face à une majorité de silence.
+
+### Exemple simple
+```yaml
+security:
+    access_decision_manager: { strategy: unanimous }
+```
+
+### Comment le mémoriser 🧠
+Quand **tous** les voters s'abstiennent, l'accès est **refusé par défaut** — sauf si `allow_if_all_abstain: true` est explicitement configuré.
 
 ---
 
@@ -262,6 +285,8 @@ choice is irrelevant by construction.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Default strategy, and its rule?"
     - [x] A. `affirmative` — grants as soon as any voter grants ✅
     - [ ] B. `unanimous` — everyone must grant
@@ -270,7 +295,7 @@ choice is irrelevant by construction.
 
     **Why:** Affirmative is the default: a single `ACCESS_GRANTED` wins,
     regardless of denies.
-    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q2. Under `unanimous`, votes are GRANTED + ABSTAIN + ABSTAIN. Outcome?"
     - [x] A. Granted — abstain is not a deny ✅
@@ -290,7 +315,7 @@ choice is irrelevant by construction.
 
     **Why:** All strategies fall back to `allow_if_all_abstain` when no voter
     casts a real vote, and it defaults to `false`.
-    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy).
+    **Ref:** [Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy).
 
 ??? question "Q4. Where do you plug a custom decision algorithm?"
     - [ ] A. `security.firewalls.main.strategy`
@@ -301,7 +326,7 @@ choice is irrelevant by construction.
     **Why:** `strategy_service` swaps the strategy object; `service` would
     replace the entire manager. Both live under
     `security.access_decision_manager`, never under a firewall.
-    **Ref:** [Custom access decision strategy](https://symfony.com/doc/current/security/voters.html#custom-access-decision-strategy).
+    **Ref:** [Custom access decision strategy](https://symfony.com/doc/8.0/security/voters.html#custom-access-decision-strategy).
 
 ## Key takeaways
 
@@ -335,7 +360,7 @@ choice is irrelevant by construction.
   entry point; the strategy is the *tally rule* at the very end.
 
 ## Official References
-- [Symfony docs — Changing the access decision strategy](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy)
+- [Symfony docs — Changing the access decision strategy](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy)
 - [Symfony source — AccessDecisionManager](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/AccessDecisionManager.php)
 - [Symfony source — AccessDecisionStrategyInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/Authorization/Strategy/AccessDecisionStrategyInterface.php)
 
@@ -348,7 +373,7 @@ choice is irrelevant by construction.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/voters.html#changing-the-access-decision-strategy) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/voters.html#changing-the-access-decision-strategy) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

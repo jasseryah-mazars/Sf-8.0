@@ -27,7 +27,29 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Code Organization](code-organization.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony, c'est une boîte à outils d'appareils indépendants (les composants) plus une cuisine tout équipée qui les branche ensemble pour toi (le framework).
+
+### Imagine dans la vraie vie
+Une bouilloire, un grille-pain et un mixeur fonctionnent très bien chacun de leur côté, débranchés de tout le reste — ce sont les composants. Les "contrats" sont la prise électrique standard sur laquelle chacun se branche, permettant d'échanger une marque contre une autre sans tout recâbler. Le framework, lui, est la cuisine entièrement équipée qui fixe chaque appareil à sa place et fait tout le câblage pour toi.
+
+### Dans Symfony
+Tu peux utiliser `symfony/finder` ou `symfony/console` dans un projet PHP qui n'a rien à voir avec le framework Symfony complet — Laravel et Drupal font exactement ça avec plusieurs composants.
+
+### Exemple simple
+```console
+$ composer require symfony/finder --no-install-recommends
+```
+Aucune installation du framework complet n'est nécessaire pour utiliser ce seul composant.
+
+### Comment le mémoriser 🧠
+**Composant** = appareil autonome. **Contrat** = prise standard entre appareils. **Framework** = cuisine qui branche tout. **Bundle** = meuble qui range un appareil dans la cuisine.
 
 ## Theory
 
@@ -250,13 +272,15 @@ services and configuration, not by instantiating them.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is a Symfony component?"
     - [x] A. A standalone, reusable PHP library shipped as its own package ✅
     - [ ] B. A configuration file
     - [ ] C. A bundle that only runs inside the framework
 
     **Why:** Components are decoupled libraries usable without the framework.
-    **Ref:** [The Components](https://symfony.com/doc/current/components/index.html).
+    **Ref:** [The Components](https://symfony.com/doc/8.0/components/index.html).
 
 ??? question "Q2. What do `symfony/*-contracts` packages contain?"
     - [x] A. Stable interfaces/traits to depend on ✅
@@ -272,7 +296,7 @@ services and configuration, not by instantiating them.
     - [ ] C. Only in dev
 
     **Why:** Components are decoupled and independently installable. **Ref:**
-    [Routing component](https://symfony.com/doc/current/components/routing.html).
+    [Routing component](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -294,7 +318,7 @@ services and configuration, not by instantiating them.
 - **Confused with:** [Interoperability & PSRs](psr.md) — contracts are Symfony-specific interface packages; PSRs are cross-vendor standards.
 
 ## Official References
-- [Official docs — The Components](https://symfony.com/doc/current/components/index.html)
+- [Official docs — The Components](https://symfony.com/doc/8.0/components/index.html)
 - [Symfony Contracts](https://github.com/symfony/contracts)
 - [Symfony source — components](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component)
 
@@ -307,7 +331,7 @@ services and configuration, not by instantiating them.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/index.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/index.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

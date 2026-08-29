@@ -27,6 +27,30 @@
     **Est. time:** 30 min ·
     **Prerequisites:** [Architecture](../architecture/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`dump()` affiche une variable et continue l'exécution ; `dd()` affiche et **arrête tout net** — une seule lettre de différence, un comportement radicalement différent.
+
+### Imagine dans la vraie vie
+VarDumper fonctionne comme un photographe de scène de crime. Le cloneur prend une photographie immuable d'une valeur à un instant donné, pour que les enquêteurs puissent l'étudier plus tard sans perturber la scène en direct.
+
+### Dans Symfony
+Utiliser `dd($variable)` en plein milieu d'un contrôleur arrête immédiatement l'exécution de la requête — pratique pour déboguer vite, mais à **retirer avant tout commit**, sinon la page ne fonctionne plus du tout.
+
+### Exemple simple
+```php
+dump($produit);   // affiche et CONTINUE
+dd($produit);     // affiche et ARRÊTE tout
+```
+
+### Comment le mémoriser 🧠
+"`dd` = **d**ump and **d**ie" — un moyen mnémotechnique simple pour ne jamais confondre les deux fonctions.
+
 ---
 
 ## Theory
@@ -226,27 +250,29 @@ proper observability, not Stopwatch.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which object does VarCloner produce?"
     - [x] A. `Data` ✅
     - [ ] B. `Response`
     - [ ] C. `FlattenException`
 
     **Why:** The cloner builds an immutable `Data` object that dumpers render.
-    **Ref:** [VarDumper](https://symfony.com/doc/current/components/var_dumper.html).
+    **Ref:** [VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html).
 
 ??? question "Q2. What does `dd()` do that `dump()` does not?"
     - [x] A. Stops execution (`exit`) after dumping ✅
     - [ ] B. Dumps to a file
     - [ ] C. Serializes to JSON
 
-    **Why:** `dd()` = dump and die. **Ref:** [The dump() function](https://symfony.com/doc/current/components/var_dumper.html#the-dump-function).
+    **Why:** `dd()` = dump and die. **Ref:** [The dump() function](https://symfony.com/doc/8.0/components/var_dumper.html#the-dump-function).
 
 ??? question "Q3. Stopwatch `getDuration()` is expressed in…"
     - [x] A. milliseconds ✅
     - [ ] B. seconds
     - [ ] C. microseconds
 
-    **Why:** Durations are milliseconds. **Ref:** [Stopwatch](https://symfony.com/doc/current/components/stopwatch.html).
+    **Why:** Durations are milliseconds. **Ref:** [Stopwatch](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php).
 
 ## Key takeaways
 
@@ -268,8 +294,8 @@ proper observability, not Stopwatch.
 - **Confused with:** [Clock](clock.md) — Stopwatch measures elapsed wall time; use `MonotonicClock` for robust durations.
 
 ## Official References
-- [Official docs — VarDumper](https://symfony.com/doc/current/components/var_dumper.html)
-- [Official docs — Stopwatch](https://symfony.com/doc/current/components/stopwatch.html)
+- [Official docs — VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html)
+- [Official docs — Stopwatch](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 - [Symfony source — VarCloner](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/VarDumper/Cloner/VarCloner.php)
 
 ## Video references
@@ -281,7 +307,7 @@ proper observability, not Stopwatch.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/var_dumper.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/var_dumper.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

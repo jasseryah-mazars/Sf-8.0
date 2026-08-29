@@ -28,7 +28,28 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Configuration](configuration.md), [Defaults](defaults.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Générer une URL, c'est composer un numéro depuis les contacts de ton téléphone plutôt que de mémoriser les chiffres — tu appelles "Alice" (le nom de la route), pas son numéro brut.
+
+### Imagine dans la vraie vie
+Tu appelles "Alice" depuis tes contacts plutôt que de mémoriser son numéro — si elle change de numéro, tu le mets à jour une seule fois et tous tes futurs appels fonctionnent encore. Le type de référence, c'est combien du numéro tu composes : le poste interne (`ABSOLUTE_PATH`) ou le numéro complet avec indicatif pour appeler depuis l'étranger (`ABSOLUTE_URL`).
+
+### Dans Symfony
+Écrire `path('produit_show', ['id' => 5])` au lieu de `/produits/5` en dur signifie que si la route change de chemin demain, tous les liens générés se mettent à jour automatiquement.
+
+### Exemple simple
+```php
+$this->generateUrl('produit_show', ['id' => 5]); // jamais '/produits/5' en dur
+```
+
+### Comment le mémoriser 🧠
+Tout paramètre qui ne correspond à aucun placeholder de la route finit automatiquement en **query string** — comme un PIN de conférence qui voyage à côté du numéro composé, pas dedans.
 
 ## Theory
 
@@ -320,6 +341,8 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is the default reference type of `generateUrl()`?"
     - [ ] A. `ABSOLUTE_URL`
     - [x] B. `ABSOLUTE_PATH` ✅
@@ -327,7 +350,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
     - [ ] D. `RELATIVE_PATH`
 
     **Why:** it returns a root-relative path like `/blog/42` by default.
-    **Ref:** [Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls).
+    **Ref:** [Generating URLs](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q2. `generateUrl('blog_show', ['id' => 42, 'utm' => 'x'])` yields?"
     - [x] A. `/blog/42?utm=x` ✅
@@ -336,7 +359,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
     - [ ] D. `/blog/42`
 
     **Why:** parameters that are not placeholders are appended as a query string.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#generating-urls).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#generating-urls).
 
 ??? question "Q3. Which class holds `ABSOLUTE_URL`, `NETWORK_PATH`, etc.?"
     - [ ] A. `UrlGenerator`
@@ -345,7 +368,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
     - [ ] D. `Router`
 
     **Why:** the reference-type constants are defined on the interface.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q4. Why might a console command generate `http://localhost/...`?"
     - [x] A. No `RequestContext` host; `default_uri` not configured ✅
@@ -354,7 +377,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
     - [ ] D. Twig is disabled
 
     **Why:** without a request the generator relies on `router.default_uri`.
-    **Ref:** [Routing in commands](https://symfony.com/doc/current/routing.html#generating-urls-in-commands).
+    **Ref:** [Routing in commands](https://symfony.com/doc/8.0/routing.html#generating-urls-in-commands).
 
 ??? question "Q5. Which Twig function produces an absolute URL?"
     - [ ] A. `path()`
@@ -363,7 +386,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
     - [ ] D. `absolute_url()` only
 
     **Why:** `url()` maps to `ABSOLUTE_URL`; `path()` maps to `ABSOLUTE_PATH`.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#generating-urls-in-templates).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#generating-urls-in-templates).
 
 ## Key takeaways
 
@@ -389,7 +412,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
 - **Confused with:** [Defaults](defaults.md) — a value equal to its default is dropped from the generated URL.
 
 ## Official References
-- [Official Symfony docs — Generating URLs](https://symfony.com/doc/current/routing.html#generating-urls)
+- [Official Symfony docs — Generating URLs](https://symfony.com/doc/8.0/routing.html#generating-urls)
 - [Symfony source — UrlGenerator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Generator/UrlGenerator.php)
 - [Symfony source — RequestContext](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RequestContext.php)
 
@@ -402,7 +425,7 @@ worker. `NETWORK_PATH` is a niche choice for protocol-relative assets;
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#generating-urls) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#generating-urls) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

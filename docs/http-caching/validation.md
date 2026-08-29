@@ -26,8 +26,33 @@
 
     **Syllabus:** `HTTP Caching → Validation model` ·
     **Level:** Advanced → Expert ·
+
     **Est. time:** 25 min ·
     **Prerequisites:** [Expiration](expiration.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+La validation attache une empreinte à une réponse — le serveur peut répondre "rien n'a changé" (304, sans contenu) au lieu de renvoyer toute la page.
+
+### Imagine dans la vraie vie
+Tu gardes une photocopie d'un document et, avant de t'y fier, tu appelles le bureau en citant le numéro de version imprimé dessus : "j'ai la version v3 — toujours à jour ?". Si rien n'a changé, on te dit juste "oui, garde la tienne" au lieu de tout réenvoyer.
+
+### Dans Symfony
+`$response->isNotModified($request)` compare automatiquement l'ETag/Last-Modified de la requête avec celui que tu viens de calculer — s'ils correspondent, la réponse devient un 304 sans corps, économisant toute la bande passante du contenu.
+
+### Exemple simple
+```php
+$response->setEtag(md5($article->getContenu()));
+if ($response->isNotModified($request)) {
+    return $response; // 304, corps automatiquement vidé
+}
+```
+
+### Comment le mémoriser 🧠
+Quand les deux sont envoyés, **ETag l'emporte sur Last-Modified** — le numéro de version imprimé est plus fiable que la date "modifié le".
 
 ---
 
@@ -264,7 +289,7 @@ Use validation when the lifetime is unpredictable but change is cheap to detect
 (entities with an `updatedAt`, files with an mtime). Use pure
 [expiration](expiration.md) when a fixed lifetime is acceptable and you want to
 avoid *any* origin round-trip. For heavy pages where only part changes, cache the
-shell by expiration and revalidate the rest via [ESI](esi.md).
+shell by expiration and revalidate the rest via [ESI](../appendices/out-of-syllabus/esi.md).
 
 !!! danger "Certification traps"
     - `isNotModified()` **mutates** the response (sets 304, strips the body and
@@ -306,6 +331,8 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What does `Response::isNotModified()` do when it returns `true`?"
     - [ ] A. Nothing to the response; just returns a bool
     - [x] B. Sets status 304 and removes the body and content headers ✅
@@ -314,7 +341,7 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
 
     **Why:** It mutates the response in place (304, no body/content headers); you
     still return it yourself.
-    **Ref:** [Validation](https://symfony.com/doc/current/http_cache/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/http_cache/validation.html).
 
 ??? question "Q2. Request has both `If-None-Match` and `If-Modified-Since`. Which decides?"
     - [x] A. The ETag (`If-None-Match`) takes precedence ✅
@@ -334,7 +361,7 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
 
     **Why:** `CacheAttributeListener` hashes the evaluated expression result with
     SHA-256 before using it as the ETag.
-    **Ref:** [#[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute).
+    **Ref:** [#[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute).
 
 ??? question "Q4. Which produces a weak ETag?"
     - [ ] A. `$response->setEtag('abc')`
@@ -344,7 +371,7 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
 
     **Why:** The second `weak` argument to `setEtag()` prefixes `W/`. There is no
     `setWeakEtag()`.
-    **Ref:** [Response API](https://symfony.com/doc/current/http_cache/validation.html).
+    **Ref:** [Response API](https://symfony.com/doc/8.0/http_cache/validation.html).
 
 ## Key takeaways
 
@@ -374,8 +401,8 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
   changed*, not *who may store it*.
 
 ## Official References
-- [Symfony docs — Validation](https://symfony.com/doc/current/http_cache/validation.html)
-- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+- [Symfony docs — Validation](https://symfony.com/doc/8.0/http_cache/validation.html)
+- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 - [MDN — Conditional requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
@@ -388,7 +415,7 @@ shell by expiration and revalidate the rest via [ESI](esi.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/validation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache/validation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

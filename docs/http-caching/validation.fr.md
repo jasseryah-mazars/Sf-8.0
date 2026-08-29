@@ -34,6 +34,31 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+La validation attache une empreinte à une réponse — le serveur peut répondre "rien n'a changé" (304, sans contenu) au lieu de renvoyer toute la page.
+
+### Imagine dans la vraie vie
+Tu gardes une photocopie d'un document et, avant de t'y fier, tu appelles le bureau en citant le numéro de version imprimé dessus : "j'ai la version v3 — toujours à jour ?". Si rien n'a changé, on te dit juste "oui, garde la tienne" au lieu de tout réenvoyer.
+
+### Dans Symfony
+`$response->isNotModified($request)` compare automatiquement l'ETag/Last-Modified de la requête avec celui que tu viens de calculer — s'ils correspondent, la réponse devient un 304 sans corps, économisant toute la bande passante du contenu.
+
+### Exemple simple
+```php
+$response->setEtag(md5($article->getContenu()));
+if ($response->isNotModified($request)) {
+    return $response; // 304, corps automatiquement vidé
+}
+```
+
+### Comment le mémoriser 🧠
+Quand les deux sont envoyés, **ETag l'emporte sur Last-Modified** — le numéro de version imprimé est plus fiable que la date "modifié le".
+
+---
+
+
 ## Theory
 
 Le modèle de **validation** ne prédit pas de durée de vie. À la place, la
@@ -278,7 +303,7 @@ changement est peu coûteux à détecter (entités avec un `updatedAt`, fichiers
 avec un mtime). Utilisez l'[expiration](expiration.md) pure quand une durée de
 vie fixe est acceptable et que vous voulez éviter *tout* aller-retour vers
 l'origine. Pour les pages lourdes dont seule une partie change, mettez en cache
-la coquille par expiration et revalidez le reste via [ESI](esi.md).
+la coquille par expiration et revalidez le reste via [ESI](../appendices/out-of-syllabus/esi.md).
 
 !!! danger "Certification traps"
     - `isNotModified()` **mute** la response (statut 304, suppression du corps et
@@ -334,7 +359,7 @@ la coquille par expiration et revalidez le reste via [ESI](esi.md).
 
     **Why:** Elle mute la response sur place (304, sans corps ni headers de
     contenu) ; vous devez tout de même la retourner vous-même.
-    **Ref:** [Validation](https://symfony.com/doc/current/http_cache/validation.html).
+    **Ref:** [Validation](https://symfony.com/doc/8.0/http_cache/validation.html).
 
 ??? question "Q2. Request has both `If-None-Match` and `If-Modified-Since`. Which decides?"
     - [x] A. The ETag (`If-None-Match`) takes precedence ✅
@@ -354,7 +379,7 @@ la coquille par expiration et revalidez le reste via [ESI](esi.md).
 
     **Why:** `CacheAttributeListener` hache le résultat de l'expression évaluée
     avec SHA-256 avant de l'utiliser comme ETag.
-    **Ref:** [#[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute).
+    **Ref:** [#[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute).
 
 ??? question "Q4. Which produces a weak ETag?"
     - [ ] A. `$response->setEtag('abc')`
@@ -364,7 +389,7 @@ la coquille par expiration et revalidez le reste via [ESI](esi.md).
 
     **Why:** Le second argument `weak` de `setEtag()` préfixe `W/`. Il n'existe
     pas de `setWeakEtag()`.
-    **Ref:** [Response API](https://symfony.com/doc/current/http_cache/validation.html).
+    **Ref:** [Response API](https://symfony.com/doc/8.0/http_cache/validation.html).
 
 ## Key takeaways
 
@@ -400,8 +425,8 @@ la coquille par expiration et revalidez le reste via [ESI](esi.md).
   cela a changé*, pas *qui peut le stocker*.
 
 ## Official References
-- [Symfony docs — Validation](https://symfony.com/doc/current/http_cache/validation.html)
-- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/current/http_cache.html#the-cache-attribute)
+- [Symfony docs — Validation](https://symfony.com/doc/8.0/http_cache/validation.html)
+- [Symfony docs — The #[Cache] attribute](https://symfony.com/doc/8.0/http_cache.html#the-cache-attribute)
 - [MDN — Conditional requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Conditional_requests)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
@@ -415,7 +440,7 @@ la coquille par expiration et revalidez le reste via [ESI](esi.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/http_cache/validation.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/http_cache/validation.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

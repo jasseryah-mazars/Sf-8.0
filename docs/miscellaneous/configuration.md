@@ -26,6 +26,29 @@
     **Est. time:** 40 min ·
     **Prerequisites:** [Dependency Injection](../dependency-injection/index.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Trois outils différents se cachent ici : Config valide une structure, DotEnv charge des fichiers `.env`, ExpressionLanguage évalue des règles dynamiques.
+
+### Imagine dans la vraie vie
+Préparer le poste de travail d'un nouvel employé. Une checklist de réglages (le schéma Config) rejette les choix impossibles avant qu'ils ne s'appliquent. Les préférences par défaut viennent d'une pile de documents de politique (les fichiers `.env`), mais une instruction directe déjà épinglée sur la machine (une vraie variable d'environnement OS) l'emporte toujours sur ce que dit un document.
+
+### Dans Symfony
+Une vraie variable d'environnement OS (`export DATABASE_URL=...`) l'emporte **toujours** sur ce qui est défini dans `.env` ou `.env.local` — utile pour surcharger une config en production sans toucher aux fichiers du projet.
+
+### Exemple simple
+```bash
+# .env.local est ignoré en environnement 'test' — utilise .env.test.local à la place
+```
+
+### Comment le mémoriser 🧠
+`.env.local` est **ignoré en environnement `test`** spécifiquement — c'est le piège classique de ce chapitre, à ne jamais oublier lors du débogage d'une config de test.
+
 ---
 
 ## Theory
@@ -275,13 +298,15 @@ not for heavy computation — it is interpreted.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In which environment is `.env.local` NOT loaded?"
     - [ ] A. dev
     - [ ] B. prod
     - [x] C. test ✅
 
     **Why:** Tests must be deterministic, so `.env.local` is skipped in `test`.
-    **Ref:** [Configuring environments](https://symfony.com/doc/current/configuration.html#selecting-the-active-environment).
+    **Ref:** [Configuring environments](https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment).
 
 ??? question "Q2. `ExpressionLanguage::compile()` returns…"
     - [ ] A. the evaluated value
@@ -289,7 +314,7 @@ not for heavy computation — it is interpreted.
     - [ ] C. an AST node
 
     **Why:** `compile()` transpiles the expression to PHP; `evaluate()` interprets it.
-    **Ref:** [ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html).
+    **Ref:** [ExpressionLanguage](https://symfony.com/doc/8.0/components/expression_language.html).
 
 ??? question "Q3. Which class validates raw config against a tree?"
     - [x] A. `Processor` ✅
@@ -297,7 +322,7 @@ not for heavy computation — it is interpreted.
     - [ ] C. `FileLocator`
 
     **Why:** `Processor::processConfiguration()` merges and validates against the
-    `Configuration` tree. **Ref:** [Config component](https://symfony.com/doc/current/components/config/definition.html).
+    `Configuration` tree. **Ref:** [Config component](https://symfony.com/doc/8.0/components/config/definition.html).
 
 ## Key takeaways
 
@@ -321,9 +346,9 @@ not for heavy computation — it is interpreted.
 - **Confused with:** app-level env vars — the Config component defines **bundle** schemas, not per-app settings.
 
 ## Official References
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Config component](https://symfony.com/doc/current/components/config.html)
-- [Official docs — ExpressionLanguage](https://symfony.com/doc/current/components/expression_language.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Config component](https://symfony.com/doc/8.0/components/config.html)
+- [Official docs — ExpressionLanguage](https://symfony.com/doc/8.0/components/expression_language.html)
 - [Symfony source — Dotenv](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Dotenv/Dotenv.php)
 
 ## Video references
@@ -335,7 +360,7 @@ not for heavy computation — it is interpreted.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html#selecting-the-active-environment) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html#selecting-the-active-environment) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

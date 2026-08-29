@@ -13,6 +13,20 @@
     - Which events still run on the exception path, and when does
       `kernel.terminate` fire relative to the client receiving the response?
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce tour ?** Une traversée de la méthode `handle()` de Symfony — l'unique porte d'entrée par laquelle passe absolument **chaque** requête HTTP de ton application.
+
+**Pourquoi ça existe ?** Comprendre l'ordre exact des huit événements du kernel est un classique de l'examen — et la seule façon de le vérifier avec certitude est de lire le fichier réel qui les déclenche.
+
+**🏠 Analogie de la vraie vie :** Un tapis roulant de tri postal avec huit postes de contrôle fixes. Chaque lettre (requête) passe obligatoirement par les mêmes postes, dans le même ordre, qu'elle soit acceptée normalement ou détournée en cours de route (une exception).
+
+**Symfony dans la vraie vie :** `kernel.request` → `kernel.controller` → `kernel.controller_arguments` → `kernel.view` (si besoin) → `kernel.response` → `kernel.finish_request` → `kernel.terminate`, plus `kernel.exception` en cas d'erreur — cet ordre précis est ce que ce tour te fait vérifier dans le vrai code.
+
+**⚠️ Erreur fréquente :** croire que `kernel.terminate` bloque la réponse envoyée au visiteur — au contraire, il se déclenche **après** que le navigateur a déjà reçu la réponse, pour du nettoyage en coulisses.
+
+**🧠 Comment le mémoriser :** "Le kernel est un tapis roulant à huit postes fixes — la requête ne saute jamais un poste."
+
 ## The map
 
 ```mermaid
@@ -300,8 +314,8 @@ implement `TerminableInterface` for this to be called.
 ## Official References
 
 - [HttpKernel.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/HttpKernel.php)
-- [The HttpKernel Component — the workflow of a request](https://symfony.com/doc/current/components/http_kernel.html)
-- [Built-in Symfony Events (KernelEvents)](https://symfony.com/doc/current/reference/events.html)
+- [The HttpKernel Component — the workflow of a request](https://symfony.com/doc/8.0/components/http_kernel.html)
+- [Built-in Symfony Events (KernelEvents)](https://symfony.com/doc/8.0/reference/events.html)
 
 ---
 <small>Related: [Request Handling](../architecture/request-handling.md) ·

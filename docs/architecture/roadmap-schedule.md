@@ -26,7 +26,29 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [Release Management](release-management.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le calendrier de sortie de Symfony est public et fixé des années à l'avance — pas de surprise, pas de date annoncée à la dernière minute.
+
+### Imagine dans la vraie vie
+Un calendrier scolaire publié des années en avance : tout le monde sait déjà que les rentrées ont lieu à dates fixes (les mineures de mai et novembre), et qu'une nouvelle promotion "longue durée" arrive tous les deux ans (la LTS `X.4` avec la nouvelle version majeure). Comme les dates sont fixées si loin à l'avance, chacun peut planifier son inscription sans être pris de court.
+
+### Dans Symfony
+Une équipe technique peut planifier sa migration Symfony 9 dès aujourd'hui, car la date de sortie (novembre 2027, avec la LTS 8.4) est connue publiquement des années à l'avance.
+
+### Exemple simple
+```console
+$ php bin/console about
+# Affiche la version Symfony actuelle et sa date de fin de vie
+```
+
+### Comment le mémoriser 🧠
+Le calendrier ne change jamais de rythme : **mai + novembre** pour les mineures, **tous les deux ans** pour les majeures — retiens-le comme une horloge qui ne s'arrête jamais.
 
 ## Theory
 
@@ -85,7 +107,9 @@ LTS** and jump majors deliberately.
 
 !!! note "Source reference"
     Live dates and end-of-life bars —
-    [symfony.com/releases](https://symfony.com/releases).
+    [symfony.com/releases](https://symfony.com/releases). The 8.0 branch this
+    roadmap tracks is browsable at
+    [github.com/symfony/symfony/tree/8.0](https://github.com/symfony/symfony/tree/8.0).
 
 ### Why publish so far ahead
 
@@ -152,6 +176,8 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. In which months do Symfony minors ship?"
     - [x] A. May and November ✅
     - [ ] B. January and July
@@ -166,7 +192,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
     - [ ] C. After 9.0
 
     **Why:** `X.4` and `(X+1).0` ship together. **Ref:**
-    [Release process](https://symfony.com/doc/current/contributing/community/releases.html).
+    [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How often is a new major/LTS released?"
     - [x] A. Every 2 years ✅
@@ -197,7 +223,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
 
 ## Official References
 - [Symfony releases & schedule](https://symfony.com/releases)
-- [Release process](https://symfony.com/doc/current/contributing/community/releases.html)
+- [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -208,7 +234,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/contributing/community/releases.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

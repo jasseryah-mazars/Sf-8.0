@@ -1,12 +1,26 @@
 # Master Cheat Sheet
 
-The highest-yield, glanceable facts across all 14 topic areas. This is a
+The highest-yield, glanceable facts across all 15 topic areas. This is a
 **skeleton for the night before** — each section links to the full area for detail.
 Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 
 !!! tip "How to use it"
     Cover the right-hand column and recite it. If a section feels thin, open its
     topic index (linked in each heading) for the full chapters and cheat sheets.
+
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Une **fiche récapitulative ultra-condensée** : une ou deux lignes par notion clé, pour les 15 domaines du syllabus, sans aucune explication détaillée.
+
+**Pourquoi ça existe ?** La veille de l'examen, il est trop tard pour relire 15 chapitres complets. Ce dont on a besoin, c'est de vérifier que les faits sont encore frais en mémoire — pas de les réapprendre.
+
+**🏠 Analogie de la vraie vie :** C'est **l'antisèche autorisée par le prof** avant un contrôle : une feuille recto-verso avec juste les formules, pas les démonstrations. Elle ne sert qu'à rafraîchir une mémoire déjà construite.
+
+**Symfony dans la vraie vie :** Chaque ligne de la fiche → un fait déjà appris en détail dans le chapitre correspondant / Le lien "area" en tête de section → retour au cours complet si le fait ne "sonne" plus familier.
+
+**⚠️ Erreur fréquente :** Utiliser cette fiche comme *premier* support d'apprentissage. Elle est illisible pour quelqu'un qui découvre la notion — elle ne fonctionne que comme rappel après un vrai apprentissage.
+
+**🧠 Comment le mémoriser :** *« Cache la colonne de droite, récite-la »* — si tu n'y arrives pas, c'est que ce n'est pas une fiche qu'il te faut, mais le chapitre complet.
 
 ## 1. PHP & Web Security → [area](../php-web-security/index.md)
 
@@ -147,7 +161,18 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Events:** `console.command`, `console.signal`, `console.error`,
   `console.terminate`.
 
-## 13. Automated Tests → [area](../testing/index.md)
+## 13. Messenger → [area](../messenger/index.md)
+
+- **Up-weighted** on the Symfony 8 exam. `MessageBusInterface::dispatch()`
+  returns an **`Envelope`** wrapping the message + **stamps** (metadata).
+- Handlers via **`#[AsMessageHandler]`**; the middleware pipeline is
+  **russian-doll** (`$stack->next()->handle($envelope, $stack)`).
+- **Transports** (Doctrine, AMQP, Redis, `sync`, `in-memory`) are DSN-configured;
+  worker via `messenger:consume`.
+- **Retry strategy** (exponential backoff + **jitter**, default 0.1) +
+  **failure transport** for exhausted retries.
+
+## 14. Automated Tests → [area](../testing/index.md)
 
 - **Base classes:** `KernelTestCase` (services), `WebTestCase` (HTTP via `Client`).
 - **Client:** `request()`, `submitForm()`, `followRedirect()`; **Crawler:**
@@ -157,12 +182,8 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 - **Container in tests:** `static::getContainer()`.
 - **Deprecations:** PHPUnit bridge + `SYMFONY_DEPRECATIONS_HELPER`.
 
-## 14. Miscellaneous → [area](../miscellaneous/index.md)
+## 15. Miscellaneous → [area](../miscellaneous/index.md)
 
-- **Messenger (up-weighted):** `MessageBusInterface::dispatch()`, `Envelope` +
-  **stamps**, handlers via **`#[AsMessageHandler]`**, transports (Doctrine, AMQP,
-  Redis, `sync`, `in-memory`), **middleware**, **retry strategy** + **failure
-  transport**, worker via `messenger:consume`.
 - **Serializer:** normalizers + encoders; `serialize()` / `deserialize()`; formats
   json/xml/csv/yaml.
 - **Cache:** PSR-6 `CacheItemPoolInterface`, PSR-16, Symfony Contracts
@@ -178,4 +199,4 @@ Everything here is Symfony 8 / PHP 8.4 / Twig 3.x.
 ## Official References
 
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)

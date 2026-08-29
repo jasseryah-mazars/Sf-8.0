@@ -23,9 +23,31 @@
     **Syllabus:** `Miscellaneous → Clock` ·
     **Level:** Advanced ·
     **Est. time:** 25 min ·
-    **Prerequisites:** [Testing](../testing/phpunit-bridge.md)
+    **Prerequisites:** [Testing](../appendices/out-of-syllabus/phpunit-bridge.md)
+
+    **Examen Symfony 8 :** OUI
 
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le composant Clock remplace `new \DateTime()` par une horloge injectable, pour que le code dépendant du temps devienne facilement testable.
+
+### Imagine dans la vraie vie
+Une horloge, c'est **l'horloge murale de la pièce — que tu peux remplacer par un accessoire de théâtre**. En production, c'est la vraie horloge murale (`NativeClock`). En test, tu accroches une fausse horloge (`MockClock`) dont tu règles les aiguilles à la main.
+
+### Dans Symfony
+Tester qu'un abonnement expire bien "dans 30 jours" sans attendre 30 jours réels devient trivial avec `MockClock` — tu avances le temps instantanément.
+
+### Exemple simple
+```php
+$horloge = new MockClock('2026-01-01');
+$horloge->sleep(86400); // avance d'un jour, instantanément
+```
+
+### Comment le mémoriser 🧠
+`ClockInterface::now()` renvoie toujours un **`DatePoint` immuable** (un `\DateTimeImmutable`) — jamais un `\DateTime` mutable classique.
 
 ## Theory
 
@@ -123,7 +145,7 @@ In tests, `Symfony\Component\Clock\Test\ClockSensitiveTrait` saves/restores the
 global clock around each test and provides `self::mockTime()`. With a `MockClock`
 you can freeze "now", then `$clock->sleep(3600)` to jump an hour with no real
 delay — perfect for token-expiry, TTL and scheduling tests. See
-[PHPUnit Bridge](../testing/phpunit-bridge.md).
+[PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md).
 
 ```php
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
@@ -288,12 +310,14 @@ clock. Trivial scripts with no time-dependent logic don't need it.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `ClockInterface::now()` returns…"
     - [x] A. a `\DateTimeImmutable` (a `DatePoint`) ✅
     - [ ] B. a Unix timestamp `int`
     - [ ] C. a mutable `\DateTime`
 
-    **Why:** It returns an immutable date/time. **Ref:** [Clock](https://symfony.com/doc/current/components/clock.html).
+    **Why:** It returns an immutable date/time. **Ref:** [Clock](https://symfony.com/doc/8.0/components/clock.html).
 
 ??? question "Q2. Which clock advances time without real delay for tests?"
     - [x] A. `MockClock` ✅
@@ -301,14 +325,14 @@ clock. Trivial scripts with no time-dependent logic don't need it.
     - [ ] C. `MonotonicClock`
 
     **Why:** `MockClock` lets you set/advance time (its `sleep()` is virtual).
-    **Ref:** [Testing with Clock](https://symfony.com/doc/current/components/clock.html#usage-in-tests).
+    **Ref:** [Testing with Clock](https://symfony.com/doc/8.0/components/clock.html#usage-in-tests).
 
 ??? question "Q3. Which clock is best for measuring elapsed durations?"
     - [x] A. `MonotonicClock` ✅
     - [ ] B. `NativeClock`
     - [ ] C. `MockClock`
 
-    **Why:** It is monotonic and immune to system clock adjustments. **Ref:** [Clock](https://symfony.com/doc/current/components/clock.html).
+    **Why:** It is monotonic and immune to system clock adjustments. **Ref:** [Clock](https://symfony.com/doc/8.0/components/clock.html).
 
 ## Key takeaways
 
@@ -328,11 +352,11 @@ clock. Trivial scripts with no time-dependent logic don't need it.
 ## Connections
 
 - **Depends on:** [Dependency Injection](../dependency-injection/index.md) — the `clock` service (`NativeClock`) is autowired via `ClockInterface`.
-- **Reused in:** [PHPUnit Bridge](../testing/phpunit-bridge.md) — `ClockSensitiveTrait` swaps in a `MockClock`; [Messenger](../messenger/index.md) delays/retries reason about "now".
+- **Reused in:** [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — `ClockSensitiveTrait` swaps in a `MockClock`; [Messenger](../messenger/index.md) delays/retries reason about "now".
 - **Confused with:** `MonotonicClock` — that one is for measuring *durations*, not reading wall-clock "now".
 
 ## Official References
-- [Official docs — Clock](https://symfony.com/doc/current/components/clock.html)
+- [Official docs — Clock](https://symfony.com/doc/8.0/components/clock.html)
 - [Symfony source — ClockInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/ClockInterface.php)
 - [Symfony source — MockClock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Clock/MockClock.php)
 
@@ -345,7 +369,7 @@ clock. Trivial scripts with no time-dependent logic don't need it.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/clock.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/clock.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 
@@ -359,4 +383,4 @@ I'm ready when I can:
 
 ---
 
-<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../testing/phpunit-bridge.md) · [Messenger](../messenger/index.md)</small>
+<small>Related: [Debugging](debugging.md) · [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) · [Messenger](../messenger/index.md)</small>

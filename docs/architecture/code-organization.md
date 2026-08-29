@@ -27,7 +27,30 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Flex](flex.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un projet Symfony range tout à un endroit prévisible — chaque type de fichier a un tiroir dédié, comme dans un atelier bien organisé.
+
+### Imagine dans la vraie vie
+Dans un atelier bien rangé, chaque outil a son tiroir étiqueté : n'importe quel ouvrier — ou tout nouvel outil livré — sait exactement où chercher sans demander. `public/` est le comptoir que voient les clients, `src/` est l'établi de travail, `var/` est le bac de sciure qu'on balaie régulièrement, `config/` est le classeur d'instructions.
+
+### Dans Symfony
+Une recette Flex sait automatiquement où déposer un nouveau fichier de config (`config/packages/`) précisément parce que la structure est standardisée partout — c'est ce qui rend l'automatisation possible.
+
+### Exemple simple
+```
+public/index.php   ← seul point d'entrée web
+src/Controller/    ← tes contrôleurs
+config/bundles.php ← bundles activés
+```
+
+### Comment le mémoriser 🧠
+`public/` est **le seul** dossier exposé au web — tout le reste (`src/`, `config/`, `var/`) est invisible depuis l'extérieur, même si le serveur les lit en coulisses.
 
 ## Theory
 
@@ -268,13 +291,15 @@ code.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which directory is the web root?"
     - [x] A. `public/` ✅
     - [ ] B. `src/`
     - [ ] C. `web/`
 
     **Why:** `public/` holds `index.php` and assets; nothing else is web-accessible.
-    **Ref:** [Directory structure](https://symfony.com/doc/current/configuration.html).
+    **Ref:** [Directory structure](https://symfony.com/doc/8.0/configuration.html).
 
 ??? question "Q2. Where are bundles enabled?"
     - [x] A. `config/bundles.php` ✅
@@ -282,7 +307,7 @@ code.
     - [ ] C. `src/Kernel.php` manually
 
     **Why:** The bundles map lives in `config/bundles.php`. **Ref:**
-    [Bundles](https://symfony.com/doc/current/bundles.html).
+    [Bundles](https://symfony.com/doc/8.0/bundles.html).
 
 ??? question "Q3. What supplies `registerBundles()` in a skeleton Kernel?"
     - [x] A. `MicroKernelTrait` ✅
@@ -290,7 +315,7 @@ code.
     - [ ] C. `FrameworkBundle` extension
 
     **Why:** The trait implements the boilerplate. **Ref:**
-    [MicroKernelTrait](https://symfony.com/doc/current/configuration/micro_kernel_trait.html).
+    [MicroKernelTrait](https://symfony.com/doc/8.0/configuration/micro_kernel_trait.html).
 
 ## Key takeaways
 
@@ -314,8 +339,8 @@ code.
 - **Confused with:** [Framework Overloading](overloading.md) — app config in `config/` vs overriding a bundle's shipped config are different concerns.
 
 ## Official References
-- [Official docs — Configuration & structure](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Best practices](https://symfony.com/doc/current/best_practices.html)
+- [Official docs — Configuration & structure](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Best practices](https://symfony.com/doc/8.0/best_practices.html)
 - [Symfony source — MicroKernelTrait](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Kernel/MicroKernelTrait.php)
 
 ## Video references
@@ -327,7 +352,7 @@ code.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/configuration.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/configuration.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

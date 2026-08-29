@@ -154,8 +154,13 @@ def build_report(docs_dir: Path, chapters: list[Path]) -> tuple[str, int, int]:
             compliant += 1
         per_file.append((path, seq, violations))
 
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from repo_meta import stamp_line
+
     lines: list[str] = []
     lines.append("# Section Order Report")
+    lines.append("")
+    lines.append(stamp_line("tools/check_section_order.py"))
     lines.append("")
     lines.append("Audit of the relative order of recurring chapter sections against the")
     lines.append("empirically derived canonical template. Report-only; sections not in the")

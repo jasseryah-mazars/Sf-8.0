@@ -26,8 +26,31 @@
 
     **Syllabus:** `Security → Impersonation` ·
     **Level:** Expert ·
+
     **Est. time:** 20 min ·
     **Prerequisites:** [Firewalls](firewalls.md) · [Roles](roles.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+`switch_user` permet à un administrateur de "devenir" temporairement un autre utilisateur pour voir l'application exactement comme lui — sans connaître son mot de passe.
+
+### Imagine dans la vraie vie
+Un superviseur du support avec un badge maître peut temporairement "pointer" en tant que n'importe quel employé pour voir le bâtiment exactement comme cet employé le voit. Le garde garde le propre badge du superviseur au comptoir (le token original) et le lui rend quand il signe le registre de sortie.
+
+### Dans Symfony
+Un support client peut se connecter en tant qu'un client qui signale un bug (`?_switch_user=client@exemple.com`) pour reproduire exactement ce qu'il voit — sans jamais avoir eu accès à son mot de passe.
+
+### Exemple simple
+```
+https://monapp.com/admin?_switch_user=jean@exemple.com   # devenir Jean
+https://monapp.com/admin?_switch_user=_exit               # revenir à soi-même
+```
+
+### Comment le mémoriser 🧠
+Vérifie l'impersonation avec l'attribut **`IS_IMPERSONATOR`** — l'ancien style `ROLE_PREVIOUS_ADMIN` est obsolète, ne l'utilise plus.
 
 ---
 
@@ -145,7 +168,7 @@ switch **and** on every exit. Typical uses:
   user provider as the identifier. To let admins switch by something else
   (e.g. e-mail while identifiers are UUIDs), a listener can look the user up
   itself and replace the target user on the event — see the
-  [official guide](https://symfony.com/doc/current/security/impersonating_user.html)
+  [official guide](https://symfony.com/doc/8.0/security/impersonating_user.html)
   for the supported pattern in your exact version.
 - **Extra restrictions:** throw an exception from the listener to veto a switch
   (e.g. forbid impersonating other admins).
@@ -296,6 +319,8 @@ full session swap.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. How does a privileged user stop impersonating?"
     - [ ] A. `?_switch_user=exit`
     - [x] B. `?_switch_user=_exit` ✅
@@ -304,7 +329,7 @@ full session swap.
 
     **Why:** The same configured parameter with the special `_exit` value
     restores the original token.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q2. Which attribute detects that the current user is impersonating someone?"
     - [ ] A. `ROLE_PREVIOUS_ADMIN`
@@ -314,7 +339,7 @@ full session swap.
 
     **Why:** `IS_IMPERSONATOR` is granted only when the active token is a
     `SwitchUserToken`; `ROLE_PREVIOUS_ADMIN` is the legacy spelling.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ??? question "Q3. Where does Symfony keep the admin's authentication during a switch?"
     - [ ] A. In a dedicated session key `_security_previous`
@@ -334,7 +359,7 @@ full session swap.
 
     **Why:** `switch_user: true` defaults to requiring
     `ROLE_ALLOWED_TO_SWITCH`; override it with the `role` option.
-    **Ref:** [Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html).
+    **Ref:** [Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html).
 
 ## Key takeaways
 
@@ -370,7 +395,7 @@ full session swap.
   reversible by design.
 
 ## Official References
-- [Symfony docs — Impersonating a user](https://symfony.com/doc/current/security/impersonating_user.html)
+- [Symfony docs — Impersonating a user](https://symfony.com/doc/8.0/security/impersonating_user.html)
 - [Symfony source — SwitchUserListener](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Firewall/SwitchUserListener.php)
 - [Symfony source — SwitchUserEvent](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Http/Event/SwitchUserEvent.php)
 
@@ -383,7 +408,7 @@ full session swap.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/impersonating_user.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/impersonating_user.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

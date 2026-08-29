@@ -26,7 +26,30 @@
     **Syllabus:** `Console → Events` ·
     **Level:** Advanced ·
     **Est. time:** 25 min ·
+
     **Prerequisites:** [Custom commands](custom-commands.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Une commande exécutée via le framework déclenche quatre événements dans un ordre fixe — et `TERMINATE` s'exécute **toujours**, même en cas d'erreur.
+
+### Imagine dans la vraie vie
+Un vol commercial diffuse la même séquence fixe d'annonces. L'embarquement est annoncé avant que l'avion ne bouge (COMMAND). Si un incident moteur survient, l'équipage note un rapport — mais seulement si quelque chose a vraiment mal tourné (ERROR). L'annonce "nous avons atteint la porte, merci d'avoir volé avec nous" passe toujours, que le vol ait été fluide ou détourné (TERMINATE).
+
+### Dans Symfony
+Un listener sur `ConsoleEvents::TERMINATE` peut forcer un code de sortie différent (par exemple, transformer un avertissement non bloquant en échec explicite pour le pipeline CI) — c'est la toute dernière chance de changer le résultat.
+
+### Exemple simple
+```php
+#[AsEventListener(event: ConsoleEvents::TERMINATE)]
+public function onTerminate(ConsoleTerminateEvent $event): void { $event->setExitCode(1); }
+```
+
+### Comment le mémoriser 🧠
+L'ordre est **COMMAND → (ERROR seulement si quelque chose lève une exception) → TERMINATE** — `TERMINATE` s'exécute toujours, c'est ta dernière chance de changer le code de sortie.
 
 ---
 
@@ -279,6 +302,8 @@ use the `SIGNAL` event for app-wide concerns.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What is the correct dispatch order for a successful command?"
     - [x] A. `COMMAND` then `TERMINATE` ✅
     - [ ] B. `TERMINATE` then `COMMAND`
@@ -286,7 +311,7 @@ use the `SIGNAL` event for app-wide concerns.
     - [ ] D. `COMMAND` then `ERROR`
 
     **Why:** `ERROR` only fires on a throwable; `TERMINATE` always fires last.
-    **Ref:** [Console events](https://symfony.com/doc/current/components/console/events.html).
+    **Ref:** [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q2. Which event lets you change the exit code no matter what happened?"
     - [ ] A. `ConsoleEvents::COMMAND`
@@ -295,7 +320,7 @@ use the `SIGNAL` event for app-wide concerns.
     - [ ] D. It cannot be changed after execution
 
     **Why:** `ConsoleTerminateEvent::setExitCode()` is the last chance. **Ref:**
-    [Console events](https://symfony.com/doc/current/components/console/events.html).
+    [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q3. What exit code results from `ConsoleCommandEvent::disableCommand()`?"
     - [ ] A. 0
@@ -304,7 +329,7 @@ use the `SIGNAL` event for app-wide concerns.
     - [ ] D. 255
 
     **Why:** `RETURN_CODE_DISABLED` is 113. **Ref:**
-    [Console events](https://symfony.com/doc/current/components/console/events.html).
+    [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q4. Which interface lets a command react to `SIGTERM`?"
     - [x] A. `SignalableCommandInterface` ✅
@@ -313,7 +338,7 @@ use the `SIGNAL` event for app-wide concerns.
     - [ ] D. `EventSubscriberInterface`
 
     **Why:** implement `getSubscribedSignals()` and `handleSignal()`. **Ref:**
-    [Console signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals).
+    [Console signals](https://symfony.com/doc/8.0/components/console/events.html#handling-command-signals).
 
 ## Key takeaways
 
@@ -340,8 +365,8 @@ use the `SIGNAL` event for app-wide concerns.
   are overridable methods, not dispatched events.
 
 ## Official References
-- [Official Symfony docs — Console events](https://symfony.com/doc/current/components/console/events.html)
-- [Official Symfony docs — Handling signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals)
+- [Official Symfony docs — Console events](https://symfony.com/doc/8.0/components/console/events.html)
+- [Official Symfony docs — Handling signals](https://symfony.com/doc/8.0/components/console/events.html#handling-command-signals)
 - [Symfony source — ConsoleEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/ConsoleEvents.php)
 
 ## Video references
@@ -353,7 +378,7 @@ use the `SIGNAL` event for app-wide concerns.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/console/events.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/console/events.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

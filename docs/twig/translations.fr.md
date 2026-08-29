@@ -31,6 +31,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+On traduit avec une clé stable (`welcome.title`), jamais avec la phrase française elle-même écrite en dur — le "livre de traductions" fait la conversion.
+
+### Imagine dans la vraie vie
+Traduire avec `trans` ressemble à utiliser un dictionnaire de phrases organisé en sections (les domaines — `messages`, `admin`) avec une édition par langue (les locales). Tu n'écris jamais une phrase complète en français ; tu cherches un code d'entrée stable comme `welcome.title`, et le dictionnaire renvoie la phrase dans la langue du lecteur.
+
+### Dans Symfony
+`{{ 'welcome.title'|trans }}` reste identique dans le code, peu importe la langue du visiteur — seul le fichier de traduction (`messages.fr.yaml`, `messages.en.yaml`) change selon la locale active.
+
+### Exemple simple
+```twig
+{{ 'cart.items'|trans({'%count%': panier.total}, 'messages') }}
+```
+
+### Comment le mémoriser 🧠
+`transchoice` a été **supprimé** — le seul chemin de pluralisation aujourd'hui est le **format ICU MessageFormat** (`{n, plural, ...}`) dans un domaine `+intl-icu`.
+
+
 ## Theory
 
 Traduisez un message en le faisant passer par **`trans`** :
@@ -247,7 +267,7 @@ utilisez l'ICU ou les filtres intl (`format_number`, `format_currency`) — voir
     - [ ] D. `(parameters, locale, domain)`
 
     **Why:** `message|trans(parameters = {}, domain = 'messages', locale = null)`.
-    **Ref:** [trans filter](https://symfony.com/doc/current/translation.html#translations-in-templates).
+    **Ref:** [trans filter](https://symfony.com/doc/8.0/translation.html#translations-in-templates).
 
 ??? question "Q2. How do you pluralize in Symfony 8 templates?"
     - [ ] A. `transchoice`
@@ -256,7 +276,7 @@ utilisez l'ICU ou les filtres intl (`format_number`, `format_currency`) — voir
     - [ ] D. `{% pluralize %}`
 
     **Why:** `transchoice` a été supprimé ; ICU MessageFormat gère les pluriels. **Ref:**
-    [Pluralization](https://symfony.com/doc/current/translation/message_format.html).
+    [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q3. A key has no translation for the current locale (and no fallback). What renders?"
     - [x] A. The key string itself ✅
@@ -265,7 +285,7 @@ utilisez l'ICU ou les filtres intl (`format_number`, `format_currency`) — voir
     - [ ] D. `null`
 
     **Why:** Le translator retourne l'identifiant non traduit. **Ref:**
-    [Translation](https://symfony.com/doc/current/translation.html).
+    [Translation](https://symfony.com/doc/8.0/translation.html).
 
 ## Key takeaways
 
@@ -289,8 +309,8 @@ utilisez l'ICU ou les filtres intl (`format_number`, `format_currency`) — voir
 - **Confused with:** [String Interpolation](interpolation.md) — les placeholders `%name%` sont substitués par le translator, pas par l'interpolation `#{}`.
 
 ## Official References
-- [Official — Translations in templates](https://symfony.com/doc/current/translation.html#translations-in-templates)
-- [Official — Message format (ICU)](https://symfony.com/doc/current/translation/message_format.html)
+- [Official — Translations in templates](https://symfony.com/doc/8.0/translation.html#translations-in-templates)
+- [Official — Message format (ICU)](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
 
 ## Video references
@@ -303,7 +323,7 @@ utilisez l'ICU ou les filtres intl (`format_number`, `format_currency`) — voir
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/translation.html#translations-in-templates) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/translation.html#translations-in-templates) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

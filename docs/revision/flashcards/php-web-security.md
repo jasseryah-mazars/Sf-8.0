@@ -1,12 +1,26 @@
 # Flashcards — PHP & Web Security
 
-112 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
+123 cards. **Read the question, answer in your head, then tap to reveal.** Mark the ones you miss and cycle them again.
 
 !!! tip "How to drill"
     First pass: reveal every card. Later passes: only the ones you missed. Spread passes over days.
 
 !!! danger "Not an official exam"
     Practice question, not an official exam question. This bank is community-authored and aligned with the syllabus — it is not sourced from, or reviewed by, the official Symfony 8 certification.
+
+## 🧠 Pour les nuls
+
+**C'est quoi ?** Un jeu de **112 flashcards** (question au recto, réponse au verso) sur PHP & Web Security. On lit la question, on répond mentalement, puis on tape pour révéler la réponse.
+
+**Pourquoi ça existe ?** Se tester activement (essayer de répondre avant de voir la réponse) ancre l'information bien mieux que relire passivement un chapitre. Répété à intervalles espacés, c'est la technique de mémorisation la plus efficace connue.
+
+**🏠 Analogie de la vraie vie :** Ce sont les **cartes-vocabulaire** utilisées pour apprendre une langue étrangère : un mot d'un côté, sa traduction de l'autre — on ne progresse qu'en essayant de deviner avant de retourner la carte.
+
+**Symfony dans la vraie vie :** Recto de la carte → une question précise sur PHP & Web Security / Verso → la réponse avec sa justification et un lien vers la doc officielle / Cartes marquées "ratées" → à revoir en priorité au prochain passage.
+
+**⚠️ Erreur fréquente :** Taper pour révéler la réponse trop vite, sans avoir vraiment tenté de répondre — cela transforme l'exercice en simple lecture, avec un gain de mémorisation presque nul.
+
+**🧠 Comment le mémoriser :** *« Je réponds avant de retourner la carte »* — et je note les cartes ratées pour les revoir plus souvent que les autres (répétition espacée).
 
 ??? question "1. What does the backed-enum method `Suit::tryFrom('X')` return when 'X' is not a valid case?"
     **✅ null**
@@ -624,10 +638,10 @@
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/book.opcache.php)
 
-??? question "89. For immutable production deploys, why set `opcache.validate_timestamps=0`?"
-    **✅ It stops OPcache stat-ing files for changes each request, saving I/O since code never changes**
+??? question "89. You deploy a code change to a server running `opcache.validate_timestamps=0` but forget to reset OPcache. What do requests serve?"
+    **✅ The stale, previously-cached bytecode — OPcache never notices the file changed**
 
-    With validate_timestamps=0 OPcache trusts cached bytecode without checking file mtimes on each request, removing a filesystem stat per script — ideal when deploys are immutable (you clear OPcache on release instead). It does not resize memory, does not cache data, and does not disable OPcache (it makes it more aggressive). Misconception: thinking it turns caching off — it turns off the freshness check.
+    With validate_timestamps=0, OPcache trusts its cached bytecode unconditionally and never stats the source file to check for changes — that stat-per-request is exactly what the setting removes for performance. Forgetting to reset/clear OPcache (or restart PHP-FPM) after a deploy means every request keeps serving the OLD compiled code indefinitely, silently, with no error. This is precisely why the setting is only safe for immutable deploys that reset OPcache as part of the release step (see the Deployment chapter's own question on why the setting exists in the first place).
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/opcache.configuration.php)
 
@@ -713,28 +727,28 @@
 
     Twig HTML-escapes variables by default (context-aware), so injected markup renders as inert text. It does not strip tags (it encodes them), does not send CSP (a separate, complementary defence), and does not encrypt output. The |raw filter opts out and reintroduces the risk. Misconception: thinking escaping removes content — it encodes it so the browser treats it as data.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
 ??? question "102. Which technique best prevents SQL injection?"
     **✅ Prepared statements with bound parameters**
 
     Binding sends the data separately from the SQL text, so input can never alter the query structure. addslashes is fragile and charset-dependent, a WAF is defence-in-depth not a fix, and HTML-escaping addresses XSS, not SQL. Symfony apps use PDO/DBAL with bound parameters. Misconception: believing escaping input is equivalent to parameterisation — only binding structurally separates code from data.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "103. Session fixation is primarily mitigated by…"
     **✅ Regenerating the session id on login**
 
     Migrating to a new session id at authentication invalidates any attacker-planted id — Symfony does this automatically on login. Longer ids help against guessing (not fixation), logout-only deletion leaves the login window open, and encoding an id changes nothing about the attack. Misconception: conflating fixation (attacker sets the id pre-login) with hijacking (attacker steals the cookie) — they need different defences.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "104. Which response header defends against clickjacking?"
     **✅ X-Frame-Options: DENY (or CSP frame-ancestors)**
 
     X-Frame-Options: DENY (or CSP frame-ancestors 'none') forbids the page from being framed, defeating invisible-iframe clickjacking. X-Content-Type-Options stops MIME sniffing, Referrer-Policy limits referer leakage, and Accept-Language is a request header. Misconception: assuming any security header helps against any attack — each header targets a specific threat.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "105. What is the correct way to store user passwords?"
     **✅ password_hash() with bcrypt or argon2id**
@@ -748,42 +762,42 @@
 
     XSS defence must be context-aware: a value safe as HTML text can still break out inside JavaScript or a URL, so you need the js or url escaping strategy there. HTML escaping is not universally sufficient, Twig does not silently disable escaping in script tags, and URLs routinely carry user data (which must be url-encoded). Misconception: treating one escaping strategy as a cure-all across all output contexts.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
 ??? question "107. In Twig, `{{ comment }}` renders the value `<script>alert(1)</script>`. What is output and why is it safe?"
     **✅ &lt;script&gt;alert(1)&lt;/script&gt; — escaped to inert text, so the script never runs**
 
     Twig auto-escapes to HTML entities, so the browser shows the literal text and executes nothing. It does not run the script (that would require |raw), does not strip the tag (it encodes it), and does not error on the content. Only |raw on this value would reintroduce the XSS. Misconception: assuming the tag is removed rather than entity-encoded.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/templates.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/templates.html)
 
 ??? question "108. In framework.yaml, which session cookie settings harden against hijacking and CSRF?"
     **✅ cookie_secure: auto, cookie_httponly: true, cookie_samesite: lax**
 
     Secure (auto = on when HTTPS) keeps the cookie off plain HTTP, HttpOnly blocks JS access (anti-theft via XSS), and SameSite=lax curbs CSRF by not sending the cookie on cross-site navigations. The second option disables every protection; lifetime and domain settings alone do not harden against these attacks. Misconception: thinking SameSite=None (without Secure) is a safe default — it widens exposure.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 ??? question "109. How do the `HttpOnly` and `Secure` cookie flags differ?"
     **✅ HttpOnly blocks JavaScript access to the cookie; Secure restricts it to HTTPS connections**
 
     HttpOnly hides the cookie from document.cookie (mitigating theft via XSS); Secure ensures the cookie is only sent over TLS (mitigating network sniffing). They solve different problems, are not synonyms, and the third option swaps their meanings. Neither affects lifetime (that is Max-Age/ Expires). Misconception: assuming one flag covers both JS access and transport security.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/session.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/session.html)
 
 ??? question "110. True or False: a CSRF token is an authentication mechanism."
     **✅ False**
 
     A CSRF token proves a state-changing request originated from your own form/session, not that a particular user is authenticated — those are separate concerns. Authentication establishes identity; the CSRF token defends already-authenticated sessions from forged cross-site requests. Misconception: treating CSRF tokens as login/identity checks rather than request-origin proof for state-changing actions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security/csrf.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security/csrf.html)
 
 ??? question "111. Which pairings of threat and Symfony/PHP defence are correct? (choose two)"
     **✅ XSS is mitigated by Twig context-aware auto-escaping ; SQL injection is mitigated by prepared statements with bound parameters**
 
     XSS→output escaping and SQLi→parameter binding are the canonical pairings. CSRF is mitigated by tokens plus SameSite cookies (not output escaping, which addresses XSS), and clickjacking is mitigated by X-Frame-Options/CSP (password hashing protects stored credentials, an unrelated concern). Misconception: assuming one defence generalises across threats — each attack has its own countermeasure.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/current/security.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
 
 ??? question "112. A developer verifies passwords with `if ($hash == $storedHash)`. What is wrong and what is the fix?"
     **✅ == is non-constant-time (timing attack) and re-hashes wrongly; use password_verify()/hash_equals()**
@@ -791,6 +805,83 @@
     Comparing hashes with == (or ===) leaks timing information and does not re-derive the hash from the candidate password; you must call password_verify($plain, $storedHash), which is constant-time and handles the embedded salt. hash_equals() is the constant-time primitive for comparing known strings. === does not fix the timing leak, and md5 is broken. Misconception: treating password checking as a plain string comparison.
 
     :material-book-open-variant: [Docs](https://www.php.net/manual/en/function.password-verify.php)
+
+??? question "113. Which of the following statements are true about PHP anonymous functions and closures? (select all that apply)"
+    **✅ function () use ($x) {} captures $x by value at definition time; use (&$x) captures by reference ; Arrow functions (fn) auto-capture the enclosing scope by value and cannot capture by reference**
+
+    A use clause copies the variable when the closure is defined (add & for a live reference), and fn auto-captures by value only — it has no use list and no by-reference form. Closure::bind() is static and returns a new closure, leaving the original untouched, and an arrow function is limited to a single expression.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/functions.anonymous.php)
+
+??? question "114. Which of the following statements are true about PHP traits? (select all that apply)"
+    **✅ Method precedence is: the class's own method beats a trait method, which beats an inherited parent method ; Two used traits defining the same method cause a fatal error unless resolved with insteadof/as ; A static property declared in a trait is a separate copy for each class that uses the trait**
+
+    Precedence is class > trait > parent, unresolved same-name methods from two traits are fatal (fix with insteadof and/or as), and static trait state is bound to each using class independently. Traits are not types — you cannot type-hint or instanceof them — and a trait method never overrides the using class's own method.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.traits.php)
+
+??? question "115. Which of the following statements are true about PHP interfaces and type variance? (select all that apply)"
+    **✅ Return types are covariant: an override may narrow the return type (Animal → Cat) ; Parameter types are contravariant: an override may widen a parameter type ; instanceof used on a non-object value returns false instead of throwing**
+
+    Variance follows Liskov substitution: overrides may narrow returns and widen parameters (reversing either is a fatal error), and instanceof safely yields false for non-objects. PHP has single class inheritance — only interfaces can be multiply inherited — and intersection types accept only class/interface names, never scalars.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.variance.php)
+
+??? question "116. Which of the following statements are true about PHP error and exception handling? (select all that apply)"
+    **✅ catch (\Exception $e) does not catch a TypeError; you need \Throwable (or an Error type) to catch engine errors ; finally always executes, and a return inside finally overrides a return or throw from the try block**
+
+    Error and Exception are separate branches under Throwable, so an Exception catch block misses TypeError and friends, and finally runs on every exit path — its return silently wins over the try block's outcome. Uncaught exceptions are handled by set_exception_handler() (set_error_handler() intercepts traditional warnings/notices), and DivisionByZeroError extends Error, not Exception.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.exceptions.php)
+
+??? question "117. Which of the following statements are true about the SPL and generators? (select all that apply)"
+    **✅ A generator is a lazy, single-use Iterator: once fully consumed it cannot be rewound ; SplObjectStorage keys entries by object identity and can attach data to each object ; Iterator requires five methods (current/key/next/rewind/valid), while IteratorAggregate only requires getIterator()**
+
+    Generators produce values lazily and cannot be rewound after consumption, SplObjectStorage maps data by object identity (something plain arrays cannot do), and IteratorAggregate delegates iteration through a single getIterator() method versus Iterator's five. SplPriorityQueue ordering among equal priorities is not stable, and count($obj) requires Countable — ArrayAccess only enables the $obj[$k] bracket syntax.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/book.spl.php)
+
+??? question "118. Which of the following statements are true about the PHP object model? (select all that apply)"
+    **✅ static:: resolves to the called class at runtime (late static binding), while self:: is fixed at compile time to the declaring class ; clone performs a shallow copy: object-typed properties still reference the same objects unless __clone() deep-copies them**
+
+    Late static binding makes new static() subclass-safe where new self() would pin the parent class, and clone copies references shallowly until __clone() duplicates them. __get() fires only for inaccessible or undefined properties (accessible ones are read directly), and callable is not a valid property type, so it cannot be used in constructor promotion.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.oop5.late-static-bindings.php)
+
+??? question "119. Which of the following statements are true about web security fundamentals? (select all that apply)"
+    **✅ The HttpOnly cookie flag prevents JavaScript from reading the session cookie, mitigating cookie theft via XSS ; Regenerating the session id on login is the primary defence against session fixation ; password_hash() embeds the generated salt in its output, so you must not prepend your own**
+
+    HttpOnly blocks script access to cookies, a fresh session id at authentication invalidates any attacker-planted id, and password_hash() stores the salt inside the returned hash. Escaping must match the output context — HTML entities do not neutralise script or URL contexts — and a CSRF token only proves the request originated from your own form/session, not who the user is.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/security.html)
+
+??? question "120. You put #[LogCall] on a method but nothing in your code ever calls getAttributes() on it. Does LogCall's constructor run?"
+    **✅ No — nothing instantiates it, so the constructor never runs**
+
+    An attribute is inert metadata. getAttributes() only returns data (name, arguments, target); newInstance() is the one call that constructs the object and autoloads its class. With nothing reading the attribute at all, LogCall's constructor never executes.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.attributes.php)
+
+??? question "121. A team member declares #[\Attribute(\Attribute::TARGET_METHOD)] on a custom Endpoint attribute, then applies it twice to the same method to register two names. What happens?"
+    **✅ PHP raises a fatal error — the attribute is not marked IS_REPEATABLE**
+
+    A target flag alone does not allow repetition. Applying the same non-repeatable attribute class more than once to the same target is rejected outright; \Attribute::IS_REPEATABLE must be added to the flags (as Symfony's own #[Route] does) for that to be legal.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.attributes.reflection.php)
+
+??? question "122. Status::from('unknown') is called where 'unknown' matches no case. What happens?"
+    **✅ \ValueError is thrown**
+
+    from() is strict: an unmatched backing value throws \ValueError. Only tryFrom() returns null on a miss — the two are not interchangeable, and this exact distinction is a frequent exam trap.
+
+    :material-book-open-variant: [Docs](https://www.php.net/manual/en/language.enumerations.backed.php)
+
+??? question "123. A controller action is typed public function show(Status $status). A request arrives for a {status} route value that matches no Status case. What does the client receive?"
+    **✅ A 404 Not Found — the resolver catches the ValueError and raises NotFoundHttpException**
+
+    BackedEnumValueResolver calls Status::from($value) internally and catches the resulting ValueError/TypeError itself, converting it into a NotFoundHttpException — an invalid enum value in a route is a 404, never an unhandled exception reaching the client as a 500.
+
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/controller/value_resolver.html)
 
 ---
 

@@ -24,7 +24,28 @@
     **Est. time:** 12 min ·
     **Prerequisites:** [The Response](response.md), [Routing → URL generation](../routing/url-generation.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Un redirect fait faire au navigateur un vrai aller-retour vers une nouvelle URL — contrairement à un simple traitement interne, l'adresse dans la barre change vraiment.
+
+### Imagine dans la vraie vie
+Le réceptionniste dit "c'est traité au guichet 4 — allez-y." Le visiteur traverse physiquement le hall et rejoint une nouvelle file : une requête toute neuve, une nouvelle URL dans la barre d'adresse. Contraste avec un `forward()` : le réceptionniste va lui-même chercher la réponse en coulisses — même visite, même URL, pas de trajet supplémentaire.
+
+### Dans Symfony
+`redirectToRoute('accueil')` génère l'URL depuis le nom de route (résiste aux changements de config de routing) — `redirect('/accueil')` prend une URL brute, plus fragile si l'URL change un jour.
+
+### Exemple simple
+```php
+return $this->redirectToRoute('produit_liste', [], Response::HTTP_MOVED_PERMANENTLY); // 301
+```
+
+### Comment le mémoriser 🧠
+**302** (par défaut) et **303** peuvent changer la méthode HTTP en GET ; **307** et **308** la préservent toujours — retiens "3 et 8 tiennent parole" (307/308 préservent la méthode).
 
 ## Theory
 
@@ -205,13 +226,15 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Default status code of `redirectToRoute()`?"
     - [ ] A. 301
     - [x] B. 302 ✅
     - [ ] C. 303
     - [ ] D. 307
 
-    **Why:** `RedirectResponse` defaults to 302 Found. **Ref:** [redirecting](https://symfony.com/doc/current/controller.html#redirecting).
+    **Why:** `RedirectResponse` defaults to 302 Found. **Ref:** [redirecting](https://symfony.com/doc/8.0/controller.html#redirecting).
 
 ??? question "Q2. Which status codes preserve the HTTP method and body?"
     - [ ] A. 301 and 302
@@ -228,7 +251,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
     - [ ] D. They are aliases.
 
     **Why:** the former is URL-based, the latter builds the URL from the router.
-    **Ref:** [redirecting](https://symfony.com/doc/current/controller.html#redirecting).
+    **Ref:** [redirecting](https://symfony.com/doc/8.0/controller.html#redirecting).
 
 ## Key takeaways
 
@@ -251,7 +274,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
 - **Confused with:** [Internal Redirects](internal-redirects.md) — a forward is same-request with no 3xx; a redirect is a new client request.
 
 ## Official References
-- [Official Symfony docs — Redirecting](https://symfony.com/doc/current/controller.html#redirecting)
+- [Official Symfony docs — Redirecting](https://symfony.com/doc/8.0/controller.html#redirecting)
 - [Symfony source — RedirectResponse](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/RedirectResponse.php)
 
 ## Video references
@@ -263,7 +286,7 @@ allow-list targets. Prefer `redirectToRoute()` so the target is always internal.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#redirecting) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#redirecting) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

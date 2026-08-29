@@ -1,6 +1,9 @@
 # Tasks — Miscellaneous
 
-**Area dir:** `docs/miscellaneous/` · **Quiz:** `quiz/miscellaneous.yml` · **Revision priority:** High (Messenger Critical) · **Prerequisites:** Architecture, DI
+**Area dir:** `docs/miscellaneous/` · **Quiz:** `quiz/miscellaneous.yml` · **Revision priority:** Medium · **Prerequisites:** Architecture, DI
+
+Messenger was split out into its own top-level domain — see
+[tasks/messenger.md](messenger.md) (Critical priority, tracked separately).
 
 > Acceptance for every task below = passes [DefinitionOfDone](../specs/DefinitionOfDone.md) + [ReviewChecklist](../specs/ReviewChecklist.md). Deliverables = chapter file + nav entry + 3–6 quiz questions + Matrix row ✅.
 
@@ -58,12 +61,13 @@
 - **Complexity:** M.
 - **Review:** [ReviewChecklist](../specs/ReviewChecklist.md).
 
-## T-MISC-08 — Messenger component
-- **Description:** Author `docs/miscellaneous/messenger.md` covering *Messenger component* at Expert depth (theory, deep dive with internals, ≥1 Mermaid where applicable, code in attributes/YAML, traps, exercises+solutions, inline questions, revision, refs).
-- **Depends on:** T-MISC-00.
-- **Deliverables:** the chapter file; 3–6 questions in `quiz/miscellaneous.yml`; Matrix row for *Messenger component* set to ✅.
-- **Complexity:** M.
-- **Review:** [ReviewChecklist](../specs/ReviewChecklist.md).
+## T-MISC-08 — Messenger component (superseded — see tasks/messenger.md)
+- **Status: done, relocated.** Messenger was originally authored here as
+  `docs/miscellaneous/messenger.md`, then split into its own top-level domain
+  (`docs/messenger/`, 7 subchapters + index) because the official syllabus
+  presents it as an autonomous topic area, not a Miscellaneous subsection. This
+  entry is kept for history; the live task breakdown for Messenger is
+  [tasks/messenger.md](messenger.md).
 
 ## T-MISC-09 — Mime & Mailer components
 - **Description:** Author `docs/miscellaneous/mailer.md` covering *Mime & Mailer components* at Expert depth (theory, deep dive with internals, ≥1 Mermaid where applicable, code in attributes/YAML, traps, exercises+solutions, inline questions, revision, refs).

@@ -21,6 +21,20 @@ in the syllabus.
     - **Dependencies:** builds on Architecture + DI
     - **Revision priority:** **High** overall.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Un regroupement d'outils utilitaires puissants mais indépendants les uns des autres : convertir des objets en JSON (Serializer), envoyer des emails (Mailer), lire l'heure de façon testable (Clock), lancer des commandes système (Process), et bien d'autres.
+
+**Pourquoi ça existe ?** Plutôt que de réinventer ces briques dans chaque projet, Symfony les fournit toutes faites, chacune utilisable seule ou ensemble.
+
+**🏠 Analogie de la vraie vie :** Le tiroir à outils divers d'un bricoleur : un mètre, une lampe torche, du ruban adhésif — chaque outil sert un besoin précis, sans lien direct entre eux, mais tous utiles au bon moment.
+
+**Symfony dans la vraie vie :** `$serializer->serialize($produit, 'json')` convertit un objet PHP en JSON pour une API ; `$mailer->send($email)` envoie un email — deux outils totalement indépendants l'un de l'autre.
+
+**⚠️ Erreur fréquente :** penser que ces composants doivent être utilisés ensemble ou dans un ordre précis — chacun résout un problème séparé, à piocher selon le besoin.
+
+**🧠 Comment le mémoriser :** "Chaque outil de ce tiroir répond à un besoin précis — prends celui qu'il te faut, ignore les autres."
+
 ## Chapters
 
 - [Configuration (Config, DotEnv, ExpressionLanguage)](configuration.md) — TreeBuilder,
@@ -43,7 +57,7 @@ in the syllabus.
   attachments/embedding, async sending via Messenger, the Mime part model.
 - [Filesystem & Finder Components](filesystem-finder.md) — file operations and
   the fluent file iterator.
-- [Lock Component](lock.md) — `LockFactory`, blocking vs non-blocking, stores,
+- [Lock Component](../appendices/out-of-syllabus/lock.md) — `LockFactory`, blocking vs non-blocking, stores,
   expiring/auto-refreshing and shared locks.
 - [Web Profiler & Data Collectors](profiler.md) — the toolbar, custom
   `DataCollectorInterface`, when it runs, prod disabling.
@@ -59,7 +73,7 @@ in the syllabus.
 Start with the data-shaping components — [Serializer](serializer.md),
 [PropertyAccess](property-access.md), and [Mailer](mailer.md) — followed by
 the infrastructure set
-([Cache](cache.md), [Lock](lock.md), [Process](process.md),
+([Cache](cache.md), [Lock](../appendices/out-of-syllabus/lock.md), [Process](process.md),
 [Filesystem & Finder](filesystem-finder.md)). Fold in
 [Config](configuration.md), [Runtime](runtime.md), [Clock](clock.md) and
 [Intl](intl.md), and finish with the operational trio
@@ -68,6 +82,6 @@ the infrastructure set
 
 ## Official References
 
-- [Symfony documentation — Symfony Components](https://symfony.com/doc/current/components/index.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Symfony Components](https://symfony.com/doc/8.0/components/index.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -20,7 +20,7 @@ categories:
         explanation: >-
           Symfony ships no unit-test base class; pure unit tests extend PHPUnit's
           TestCase directly. No kernel is booted and no container is built.
-        documentation: "https://symfony.com/doc/current/testing.html#unit-tests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#unit-tests"
 
       - id: "TEST-UNIT-02"
         type: "single"
@@ -207,7 +207,7 @@ categories:
           The test environment (framework.test: true) compiles a TestContainer
           that keeps references to used private/non-shared services so tests can
           fetch and replace them. static::$kernel->getContainer() does not.
-        documentation: "https://symfony.com/doc/current/testing.html#accessing-the-container"
+        documentation: "https://symfony.com/doc/8.0/testing.html#accessing-the-container"
 
       - id: "TEST-FUNC-02"
         type: "single"
@@ -228,7 +228,7 @@ categories:
         explanation: >-
           WebTestCase adds the KernelBrowser client on top of the kernel-booting
           KernelTestCase. Use KernelTestCase when you need only the container.
-        documentation: "https://symfony.com/doc/current/testing.html#application-tests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#application-tests"
 
       - id: "TEST-FUNC-03"
         type: "single"
@@ -249,7 +249,7 @@ categories:
         explanation: >-
           Only one kernel/client may be booted per test; calling createClient()
           again throws a LogicException.
-        documentation: "https://symfony.com/doc/current/testing.html#your-first-application-test"
+        documentation: "https://symfony.com/doc/8.0/testing.html#your-first-application-test"
 
       - id: "TEST-FUNC-04"
         type: "scenario"
@@ -271,7 +271,7 @@ categories:
           KernelTestCase boots the kernel and gives you self::getContainer() with no
           browser. WebTestCase adds the HTTP client and is reserved for tests that
           make requests; a plain TestCase boots no kernel at all.
-        documentation: "https://symfony.com/doc/current/testing.html#integration-tests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#integration-tests"
 
       - id: "TEST-FUNC-05"
         type: "scenario"
@@ -293,7 +293,7 @@ categories:
           Symfony\Component\Console\Tester\CommandTester wraps a single command:
           execute() supplies input, then getDisplay() returns captured output and
           getStatusCode() the exit code. ApplicationTester covers the whole app.
-        documentation: "https://symfony.com/doc/current/console.html#testing-commands"
+        documentation: "https://symfony.com/doc/8.0/console.html#testing-commands"
 
       - id: "TEST-FUNC-06"
         type: "config"
@@ -316,7 +316,7 @@ categories:
           createClient() cannot find test.client. It does not toggle redirect
           following (a client method) nor the profiler, and it only affects the
           test environment.
-        documentation: "https://symfony.com/doc/current/reference/configuration/framework.html#test"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/framework.html#test"
 
       - id: "TEST-FUNC-07"
         type: "internals"
@@ -336,7 +336,7 @@ categories:
           kernel after each request unless you call disableReboot(). It does not
           reuse a stale kernel, and it does not disable rebooting by default —
           that is an explicit opt-out.
-        documentation: "https://symfony.com/doc/current/testing.html#application-tests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#application-tests"
 
       - id: "TEST-FUNC-08"
         type: "true-false"
@@ -353,7 +353,7 @@ categories:
           returning a KernelBrowser) is what it adds on top of the kernel-booting
           and container-access behaviour it inherits. If you do not need HTTP, use
           KernelTestCase directly.
-        documentation: "https://symfony.com/doc/current/testing.html#application-tests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#application-tests"
 
   - name: "Testing — Framework Objects & Service Mocking"
     questions:
@@ -376,7 +376,7 @@ categories:
         explanation: >-
           Unused private services are optimised away even in the test container;
           only used private/non-shared services remain reachable.
-        documentation: "https://symfony.com/doc/current/testing.html#accessing-the-container"
+        documentation: "https://symfony.com/doc/8.0/testing.html#accessing-the-container"
 
       - id: "TEST-FWOBJ-02"
         type: "single"
@@ -398,7 +398,7 @@ categories:
           The test container returned by self::getContainer() allows ->set() to
           override a (used) service with a double. Do this before issuing the request
           so the kernel uses the replacement.
-        documentation: "https://symfony.com/doc/current/testing.html#mocking-services"
+        documentation: "https://symfony.com/doc/8.0/testing.html#mocking-services"
 
       - id: "TEST-FWOBJ-03"
         type: "internals"
@@ -418,7 +418,7 @@ categories:
           TestContainer (test.service_container), that retains references to used
           private/non-shared services. It is a compile-time construct, not runtime
           reflection, and unused private services are still removed.
-        documentation: "https://symfony.com/doc/current/testing.html#accessing-the-container"
+        documentation: "https://symfony.com/doc/8.0/testing.html#accessing-the-container"
 
       - id: "TEST-FWOBJ-04"
         type: "code"
@@ -442,7 +442,7 @@ categories:
           container — and your mock — alive across the request. Calling set() after
           the request is too late; the class already has visibility (getContainer
           exposes it); and $kernel->getContainer() hides private services entirely.
-        documentation: "https://symfony.com/doc/current/testing.html#mocking-services"
+        documentation: "https://symfony.com/doc/8.0/testing.html#mocking-services"
 
       - id: "TEST-FWOBJ-05"
         type: "trap"
@@ -461,7 +461,7 @@ categories:
           self::getContainer() method, which returns the TestContainer. $this->container
           does not exist on the base test classes, and static::$kernel->getContainer()
           returns the normal container where private services are hidden.
-        documentation: "https://symfony.com/doc/current/testing.html#accessing-the-container"
+        documentation: "https://symfony.com/doc/8.0/testing.html#accessing-the-container"
 
       - id: "TEST-FWOBJ-06"
         type: "scenario"
@@ -482,7 +482,7 @@ categories:
           tests nothing; insulate() runs a subprocess and would still call the real
           gateway; hand-instantiating with nulls abandons the point of a functional
           test.
-        documentation: "https://symfony.com/doc/current/testing.html#mocking-services"
+        documentation: "https://symfony.com/doc/8.0/testing.html#mocking-services"
 
   - name: "Testing — The Client"
     questions:
@@ -505,7 +505,7 @@ categories:
         explanation: >-
           Navigation methods return a Crawler over the response DOM. Fetch the
           response object with $client->getResponse().
-        documentation: "https://symfony.com/doc/current/testing.html#making-requests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#making-requests"
 
       - id: "TEST-CLIENT-02"
         type: "single"
@@ -526,7 +526,7 @@ categories:
         explanation: >-
           Auto-follow is off by default. Use followRedirect() to follow the last
           redirect once, or followRedirects() to toggle auto-following.
-        documentation: "https://symfony.com/doc/current/testing.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/testing.html#redirecting"
 
       - id: "TEST-CLIENT-03"
         type: "single"
@@ -547,7 +547,7 @@ categories:
         explanation: >-
           By default the kernel reboots after each request, discarding
           replacements. disableReboot() preserves the container between requests.
-        documentation: "https://symfony.com/doc/current/testing.html#mocking-services"
+        documentation: "https://symfony.com/doc/8.0/testing.html#mocking-services"
 
       - id: "TEST-CLIENT-04"
         type: "debug"
@@ -566,7 +566,7 @@ categories:
           was not a 3xx there is nothing to follow and it throws a LogicException.
           It is unrelated to setUp(), css-selector, or the profiler. Assert the
           redirect first (assertResponseRedirects) before following it.
-        documentation: "https://symfony.com/doc/current/testing.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/testing.html#redirecting"
 
       - id: "TEST-CLIENT-05"
         type: "trap"
@@ -585,7 +585,7 @@ categories:
           followRedirects(true|false) (plural) switches auto-following on or off for
           the rest of the test. Swapping their meaning is a classic exam trap;
           followRedirects() is a mode toggle, not a one-shot action.
-        documentation: "https://symfony.com/doc/current/testing.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/testing.html#redirecting"
 
       - id: "TEST-CLIENT-06"
         type: "code"
@@ -603,7 +603,7 @@ categories:
           You identify the submit button by its text/name/id/value first, then pass
           the field values and optionally the HTTP method. submitForm() locates the
           enclosing form for you; if you already hold a Form object, use submit($form).
-        documentation: "https://symfony.com/doc/current/testing.html#submitting-forms"
+        documentation: "https://symfony.com/doc/8.0/testing.html#submitting-forms"
 
       - id: "TEST-CLIENT-07"
         type: "internals"
@@ -622,7 +622,7 @@ categories:
           HttpFoundation Request and passes it straight to HttpKernel::handle(),
           so the whole stack (routing, controllers, security) runs in-process with
           no network. The browser keeps a cookie jar and history from the responses.
-        documentation: "https://symfony.com/doc/current/testing.html#making-requests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#making-requests"
 
   - name: "Testing — The Crawler"
     questions:
@@ -645,7 +645,7 @@ categories:
         explanation: >-
           filter() converts the CSS selector to XPath via CssSelectorConverter, so
           the css-selector component is required. filterXPath() works without it.
-        documentation: "https://symfony.com/doc/current/components/dom_crawler.html"
+        documentation: "https://symfony.com/doc/8.0/components/dom_crawler.html"
 
       - id: "TEST-CRAWLER-02"
         type: "debug"
@@ -664,7 +664,7 @@ categories:
           first matched node and throw when the Crawler is empty, unless you supply a
           default argument, e.g. text(''). The selector is valid CSS and browser-kit
           is unrelated; html() would throw identically on an empty set.
-        documentation: "https://symfony.com/doc/current/components/dom_crawler.html#node-values"
+        documentation: "https://symfony.com/doc/8.0/components/dom_crawler.html#node-values"
 
       - id: "TEST-CRAWLER-03"
         type: "multiple"
@@ -684,7 +684,7 @@ categories:
           all return a new Crawler holding the matched subset. text() and attr()
           instead read a scalar from the first node (and throw on an empty set
           without a default), so they are not node-set operations.
-        documentation: "https://symfony.com/doc/current/components/dom_crawler.html"
+        documentation: "https://symfony.com/doc/8.0/components/dom_crawler.html"
 
       - id: "TEST-CRAWLER-04"
         type: "internals"
@@ -703,7 +703,7 @@ categories:
           the CSS selector into an XPath expression and then calls filterXPath();
           this is why the css-selector component is required for filter() but not
           for filterXPath(). There is no regex-over-HTML or browser-kit involvement.
-        documentation: "https://symfony.com/doc/current/components/dom_crawler.html"
+        documentation: "https://symfony.com/doc/8.0/components/dom_crawler.html"
 
       - id: "TEST-CRAWLER-05"
         type: "trap"
@@ -726,7 +726,7 @@ categories:
           existing field values; the array argument overrides just the fields you
           name, leaving the rest at their rendered defaults. It is not a plain array,
           a Response, nor an empty form.
-        documentation: "https://symfony.com/doc/current/testing.html#forms"
+        documentation: "https://symfony.com/doc/8.0/testing.html#forms"
 
       - id: "TEST-CRAWLER-06"
         type: "single"
@@ -749,7 +749,7 @@ categories:
           ->link() builds a DomCrawler\Link you pass to $client->click(). There is no
           href() or getLink() convenience returning a Link, and Link is not
           constructed directly from a Crawler in tests.
-        documentation: "https://symfony.com/doc/current/testing.html#clicking-links"
+        documentation: "https://symfony.com/doc/8.0/testing.html#clicking-links"
 
   - name: "Testing — Request/Response Introspection"
     questions:
@@ -772,7 +772,7 @@ categories:
         explanation: >-
           It asserts the response is in the successful (2xx) range. Use
           assertResponseStatusCodeSame(n) to check an exact code.
-        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+        documentation: "https://symfony.com/doc/8.0/testing.html#the-assertions"
 
       - id: "TEST-INTRO-02"
         type: "single"
@@ -793,7 +793,7 @@ categories:
         explanation: >-
           The ...Same variant requires an exact match; ...Contains checks a
           substring.
-        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+        documentation: "https://symfony.com/doc/8.0/testing.html#the-assertions"
 
       - id: "TEST-INTRO-03"
         type: "single"
@@ -816,7 +816,7 @@ categories:
           assertResponse*/assertSelector* helpers come from the BrowserKit/DomCrawler
           assertion traits mixed into WebTestCase; assertSelectorTextContains() checks
           a CSS-selected element's text.
-        documentation: "https://symfony.com/doc/current/testing.html#testing-the-response-status-code-headers-and-content"
+        documentation: "https://symfony.com/doc/8.0/testing.html#testing-the-response-status-code-headers-and-content"
 
       - id: "TEST-INTRO-04"
         type: "debug"
@@ -838,7 +838,7 @@ categories:
           followRedirect() before the selector assertion loads the target DOM. The
           assertion works fine after POST and does not depend on a prior status
           assertion.
-        documentation: "https://symfony.com/doc/current/testing.html#redirecting"
+        documentation: "https://symfony.com/doc/8.0/testing.html#redirecting"
 
       - id: "TEST-INTRO-05"
         type: "trap"
@@ -856,7 +856,7 @@ categories:
           With no arguments it merely checks the response is a 3xx redirect. Provide
           assertResponseRedirects('/target', 302) to also assert the Location and/or
           the exact status. It does not follow the redirect nor assert success.
-        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+        documentation: "https://symfony.com/doc/8.0/testing.html#the-assertions"
 
       - id: "TEST-INTRO-06"
         type: "multiple"
@@ -876,7 +876,7 @@ categories:
           all exist in the BrowserKit/WebTest assertion traits. There is no
           assertResponseBodyEquals (use getResponse()->getContent() with a PHPUnit
           string assertion) nor assertControllerSame helper.
-        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+        documentation: "https://symfony.com/doc/8.0/testing.html#the-assertions"
 
       - id: "TEST-INTRO-07"
         type: "code"
@@ -897,7 +897,7 @@ categories:
           the conventional code for a form redisplayed with validation errors.
           assertResponseIsSuccessful() would fail (422 is not 2xx), redirects apply
           to 3xx, and asserting an error element checks content, not the status.
-        documentation: "https://symfony.com/doc/current/testing.html#the-assertions"
+        documentation: "https://symfony.com/doc/8.0/testing.html#the-assertions"
 
   - name: "Testing — The Profiler in Tests"
     questions:
@@ -920,7 +920,7 @@ categories:
         explanation: >-
           enableProfiler() opts the next request into profiling; calling it after
           the request collects nothing and getProfile() returns false.
-        documentation: "https://symfony.com/doc/current/testing/profiling.html"
+        documentation: "https://symfony.com/doc/8.0/testing/profiling.html"
 
       - id: "TEST-PROFILER-02"
         type: "single"
@@ -941,7 +941,7 @@ categories:
         explanation: >-
           WebTestCase provides mailer assertions backed by the mailer data
           collector, so you rarely touch the raw collector.
-        documentation: "https://symfony.com/doc/current/mailer.html#testing-emails"
+        documentation: "https://symfony.com/doc/8.0/mailer.html#testing-emails"
 
       - id: "TEST-PROFILER-03"
         type: "trap"
@@ -964,7 +964,7 @@ categories:
           does not throw) when no profile was collected — typically because
           enableProfiler() was not called before the request. Guard with
           assertNotFalse($profile) before reading collectors.
-        documentation: "https://symfony.com/doc/current/testing/profiling.html"
+        documentation: "https://symfony.com/doc/8.0/testing/profiling.html"
 
       - id: "TEST-PROFILER-04"
         type: "config"
@@ -986,7 +986,7 @@ categories:
           The test profiler config sets collect: false for speed, so profiling is
           off unless a test calls enableProfiler() before the request. It is fully
           configurable and is not limited to redirects.
-        documentation: "https://symfony.com/doc/current/reference/configuration/framework.html#profiler"
+        documentation: "https://symfony.com/doc/8.0/reference/configuration/framework.html#profiler"
 
       - id: "TEST-PROFILER-05"
         type: "code"
@@ -1006,7 +1006,7 @@ categories:
           enableProfiler() opts in the NEXT request; here it runs after the only
           request, so that request was never profiled and getProfile() returns false.
           The call order must be enableProfiler() then request() then getProfile().
-        documentation: "https://symfony.com/doc/current/testing/profiling.html"
+        documentation: "https://symfony.com/doc/8.0/testing/profiling.html"
 
       - id: "TEST-PROFILER-06"
         type: "scenario"
@@ -1025,7 +1025,7 @@ categories:
           time, events, mailer). Enable it before the request, then read the
           collectors from the Profile. assertRouteSame covers the route but not the
           duration; insulate() actually removes in-process profiler access.
-        documentation: "https://symfony.com/doc/current/testing/profiling.html"
+        documentation: "https://symfony.com/doc/8.0/testing/profiling.html"
 
   - name: "Testing — Client Configuration"
     questions:
@@ -1048,7 +1048,7 @@ categories:
         explanation: >-
           createClient(array $options, array $server) — the second array models
           server parameters (HTTP_* headers, HTTPS, PHP_AUTH_USER, etc.).
-        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+        documentation: "https://symfony.com/doc/8.0/testing.html#configuring-the-test-client"
 
       - id: "TEST-CLICFG-02"
         type: "single"
@@ -1069,7 +1069,7 @@ categories:
         explanation: >-
           Request headers become HTTP_-prefixed server parameters. CONTENT_TYPE,
           HTTPS, PHP_AUTH_USER and PHP_AUTH_PW are the unprefixed exceptions.
-        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+        documentation: "https://symfony.com/doc/8.0/testing.html#configuring-the-test-client"
 
       - id: "TEST-CLICFG-03"
         type: "single"
@@ -1090,7 +1090,7 @@ categories:
         explanation: >-
           loginUser() injects a security token for a real user object so you can
           test authorized behaviour without driving the login form.
-        documentation: "https://symfony.com/doc/current/testing.html#logging-in-users-authentication"
+        documentation: "https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication"
 
       - id: "TEST-CLICFG-04"
         type: "single"
@@ -1111,7 +1111,7 @@ categories:
         explanation: >-
           Insulated requests run in a fresh subprocess to isolate global state, at
           the cost of losing in-process access to the profiler and container.
-        documentation: "https://symfony.com/doc/current/components/browser_kit.html"
+        documentation: "https://symfony.com/doc/8.0/components/browser_kit.html"
 
       - id: "TEST-CLICFG-05"
         type: "multiple"
@@ -1131,7 +1131,7 @@ categories:
           CONTENT_TYPE, HTTPS, PHP_AUTH_USER and PHP_AUTH_PW are special-cased with no
           prefix. HTTP_ACCEPT and HTTP_X_REQUESTED_WITH are ordinary headers and keep
           the prefix.
-        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+        documentation: "https://symfony.com/doc/8.0/testing.html#configuring-the-test-client"
 
       - id: "TEST-CLICFG-06"
         type: "debug"
@@ -1153,7 +1153,7 @@ categories:
           data) instead of the 5th $server argument. PHP_AUTH_USER is correctly
           unprefixed, and Basic auth is testable via server params — the position is
           the bug.
-        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+        documentation: "https://symfony.com/doc/8.0/testing.html#configuring-the-test-client"
 
       - id: "TEST-CLICFG-07"
         type: "scenario"
@@ -1174,7 +1174,7 @@ categories:
           the requested path (and, for multiple firewalls, the correct firewall name).
           It is independent of the profiler and insulate(), and its whole point is to
           skip the login form.
-        documentation: "https://symfony.com/doc/current/testing.html#logging-in-users-authentication"
+        documentation: "https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication"
 
       - id: "TEST-CLICFG-08"
         type: "code"
@@ -1195,7 +1195,7 @@ categories:
           default server parameters merged into every subsequent request(). No
           request is sent yet, 'debug' is a boolean option (not an environment name),
           and the values are defaults, not a one-off request.
-        documentation: "https://symfony.com/doc/current/testing.html#configuring-the-test-client"
+        documentation: "https://symfony.com/doc/8.0/testing.html#configuring-the-test-client"
 
   - name: "Testing — PHPUnit Bridge"
     questions:
@@ -1219,7 +1219,7 @@ categories:
         explanation: >-
           The bridge's PHPUnit extension (registered under <extensions><bootstrap
           .../>) wires the DeprecationErrorHandler, ClockMock and DnsMock.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html"
 
       - id: "TEST-BRIDGE-02"
         type: "single"
@@ -1241,7 +1241,7 @@ categories:
         explanation: >-
           It is read from the environment; commonly set via <php><server
           name="SYMFONY_DEPRECATIONS_HELPER" .../></php> or the shell.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration"
 
       - id: "TEST-BRIDGE-03"
         type: "single"
@@ -1263,7 +1263,7 @@ categories:
         explanation: >-
           max[total]=0 sets a zero threshold, so any deprecation fails the suite.
           weak reports without failing, and disabled=1 turns collection off entirely.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration"
 
       - id: "TEST-BRIDGE-04"
         type: "config"
@@ -1285,7 +1285,7 @@ categories:
           load the SymfonyExtension. The old <listeners><listener> (SymfonyTestsListener)
           approach belongs to PHPUnit 9 and earlier; there is no <php><extension> tag,
           and the extension is not auto-registered.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html"
 
       - id: "TEST-BRIDGE-05"
         type: "trap"
@@ -1305,7 +1305,7 @@ categories:
           the time-sensitive group (#[Group('time-sensitive')]); without that group
           the real functions run. The extension handles registration, sleep() IS
           among the mocked functions, and the deprecations helper is unrelated.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#time-sensitive-tests"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#time-sensitive-tests"
 
       - id: "TEST-BRIDGE-06"
         type: "scenario"
@@ -1326,7 +1326,7 @@ categories:
           time-sensitive is the tool for legacy code calling global time()/sleep()
           directly. Real sleep() is slow, and a one-shot createMock stub cannot model
           advancing time.
-        documentation: "https://symfony.com/doc/current/components/clock.html#writing-time-sensitive-tests"
+        documentation: "https://symfony.com/doc/8.0/components/clock.html#writing-time-sensitive-tests"
 
       - id: "TEST-BRIDGE-07"
         type: "true-false"
@@ -1344,7 +1344,7 @@ categories:
           SymfonyExtension in the PHPUnit config and running plain PHPUnit
           (bin/phpunit). The extension provides the same deprecation collection and
           clock/DNS mocking without the wrapper.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html"
 
   - name: "Testing — Handling Deprecated Code"
     questions:
@@ -1368,7 +1368,7 @@ categories:
           self = your code, direct = a dependency you call directly, indirect =
           deep inside a dependency's internals, legacy = tests excluded from
           thresholds.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail"
 
       - id: "TEST-DEPR-02"
         type: "single"
@@ -1389,7 +1389,7 @@ categories:
         explanation: >-
           weak collects and prints deprecations without enforcing thresholds.
           disabled=1 turns collection off; max[...] enforces limits.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration"
 
       - id: "TEST-DEPR-03"
         type: "single"
@@ -1410,7 +1410,7 @@ categories:
         explanation: >-
           Symfony\Bridge\PhpUnit\Attribute\IgnoreDeprecations replaces the old
           @group legacy for excluding a test's deprecations from the report.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html"
 
       - id: "TEST-DEPR-04"
         type: "multiple"
@@ -1430,7 +1430,7 @@ categories:
           deep inside a dependency's internals, and legacy (marked tests) is excluded
           from thresholds. The two false options swap direct/indirect and mislabel
           indirect as your own setup.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail"
 
       - id: "TEST-DEPR-05"
         type: "code"
@@ -1449,7 +1449,7 @@ categories:
           current API for asserting an emitted E_USER_DEPRECATED message. The old
           ExpectDeprecationTrait::expectDeprecation() and the @expectedDeprecation
           annotation were removed in Symfony 7.0, and deprecations are not exceptions.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail"
 
       - id: "TEST-DEPR-06"
         type: "trap"
@@ -1468,7 +1468,7 @@ categories:
           threshold, so you retain visibility. disabled=1 turns the handler off so
           nothing is collected or reported. The pair is a common trap when their
           behaviours are swapped; neither of them fails the build.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration"
 
       - id: "TEST-DEPR-07"
         type: "scenario"
@@ -1488,7 +1488,7 @@ categories:
           over time. disabled=1 and weak both remove the safety net for new
           deprecations, and blanket #[IgnoreDeprecations] hides everything, including
           regressions.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#making-tests-fail"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#making-tests-fail"
 
   - name: "Testing — Multiple Choice Drills"
     questions:
@@ -1516,7 +1516,7 @@ categories:
           Navigation methods like request() return a Crawler — the Response must be
           read via getResponse() — and redirects are only followed after calling
           followRedirect() (once) or followRedirects() (toggle), never automatically.
-        documentation: "https://symfony.com/doc/current/testing.html#making-requests"
+        documentation: "https://symfony.com/doc/8.0/testing.html#making-requests"
 
       - id: "TEST-MC-02"
         type: "multiple"
@@ -1544,7 +1544,7 @@ categories:
           profiler and container access. createClient() takes ($options, $server),
           so server parameters are the second argument, and loginUser() requires an
           actual user object, not just a username.
-        documentation: "https://symfony.com/doc/current/testing.html#logging-in-users-authentication"
+        documentation: "https://symfony.com/doc/8.0/testing.html#logging-in-users-authentication"
 
       - id: "TEST-MC-03"
         type: "multiple"
@@ -1571,7 +1571,7 @@ categories:
           mutating the original, and text()/attr() operate on the first node,
           throwing on an empty set unless a default value is passed. Nothing converts
           XPath to CSS; the conversion goes the other way.
-        documentation: "https://symfony.com/doc/current/components/dom_crawler.html"
+        documentation: "https://symfony.com/doc/8.0/components/dom_crawler.html"
 
       - id: "TEST-MC-04"
         type: "multiple"
@@ -1597,7 +1597,7 @@ categories:
           two are not equivalent. A baseline records currently-known deprecations so
           later runs fail only on new ones. max[self]=0 constrains only the self
           bucket — max[total]=0 is the mode that fails on any bucket.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html#configuration"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html#configuration"
 
       - id: "TEST-MC-05"
         type: "multiple"
@@ -1624,7 +1624,7 @@ categories:
           services hidden. Because the client reboots the kernel between requests,
           set() replacements disappear unless disableReboot() is called, and the
           removed static::$container property must not be used.
-        documentation: "https://symfony.com/doc/current/testing.html#retrieving-services-in-the-test"
+        documentation: "https://symfony.com/doc/8.0/testing.html#retrieving-services-in-the-test"
 
       - id: "TEST-MC-06"
         type: "multiple"
@@ -1651,7 +1651,7 @@ categories:
           assertResponseRedirects() with no arguments only verifies a 3xx status
           (pass a target and/or code to be more specific). Selector assertions use
           CSS selectors, so they do require the css-selector component.
-        documentation: "https://symfony.com/doc/current/testing.html"
+        documentation: "https://symfony.com/doc/8.0/testing.html"
 
       - id: "TEST-MC-07"
         type: "multiple"
@@ -1678,4 +1678,4 @@ categories:
           mocking is opt-in per group (time-sensitive / dns-sensitive) rather than
           applied globally. Reporting is tuned through the SYMFONY_DEPRECATIONS_HELPER
           env/server variable; no equivalent PHPUnit CLI flag exists.
-        documentation: "https://symfony.com/doc/current/components/phpunit_bridge.html"
+        documentation: "https://symfony.com/doc/8.0/components/phpunit_bridge.html"

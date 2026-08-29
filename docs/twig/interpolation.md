@@ -26,9 +26,31 @@
     **Est. time:** 15 min ·
     **Prerequisites:** [Twig Syntax](syntax.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+`#{...}` insère une variable dans une chaîne — mais ça ne fonctionne que dans des guillemets **doubles**, jamais des guillemets simples.
+
+### Imagine dans la vraie vie
+Assembler une lettre type. `#{...}` est le champ de fusion — mais la fusion ne se déclenche que sur le papier à en-tête officiel (les chaînes en guillemets doubles) ; tape-le sur un brouillon (guillemets simples) et le champ s'imprime tel quel, comme du texte littéral.
+
+### Dans Symfony
+```twig
+"Bonjour #{nom}"   {# fusion : affiche "Bonjour Alice" #}
+'Bonjour #{nom}'   {# littéral : affiche "Bonjour #{nom}" tel quel #}
+```
+
+### Exemple simple
+```twig
+{% set message = "Total : #{prix} €" %}
+```
+
+### Comment le mémoriser 🧠
+`~` colle des morceaux **en texte** (comme des feuilles agrafées bout à bout) ; `+` additionne des **nombres**. Le calcul (`+`) se termine toujours avant l'agrafage (`~`) — précédence plus basse pour `~`.
 
 Three ways to build a string from parts:
 
@@ -104,7 +126,7 @@ arithmetic in precedence (see [Syntax](syntax.md)), so `1 + 1 ~ "x"` is `"2x"`.
 
 ```mermaid
 flowchart LR
-    A["\"a #{x} b\""] --> L[Lexer detects #{ }]
+    A["&quot;a #35;{x} b&quot;"] --> L["Lexer detects #35;{ }"]
     L --> E[Expression token x]
     E --> C["compile: 'a ' ~ x ~ ' b'"]
     C --> O[echo]
@@ -181,6 +203,8 @@ placeholders (translation strings use `%name%` placeholders — see
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Where does `#{...}` interpolation work?"
     - [x] A. Only inside double-quoted strings ✅
     - [ ] B. In any string
@@ -242,7 +266,7 @@ placeholders (translation strings use `%name%` placeholders — see
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/index.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/index.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

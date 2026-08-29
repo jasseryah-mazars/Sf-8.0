@@ -28,6 +28,58 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrainte est un scanner spécialisé — `NotBlank` refuse une chaîne vide, `NotNull` accepte une chaîne vide mais refuse `null`.
+
+### Imagine dans la vraie vie
+Chaque contrainte est **un scanner** sur la ligne de contrôle : le rayon X vérifie la forme (`Length`), le renifleur détecte les liquides (`Email`/`Regex`). `NotBlank` signifie "le sac doit contenir quelque chose" ; `NotNull` signifie seulement "un sac doit être sur le tapis" — un sac vide compte encore.
+
+### Dans Symfony
+```php
+#[Assert\NotBlank]   // refuse '', null, et les tableaux vides
+#[Assert\NotNull]     // accepte '' mais refuse null
+```
+
+### Exemple simple
+```php
+#[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+public string $nom = '';
+```
+
+### Comment le mémoriser 🧠
+"Blank refuse le vide, Null refuse seulement l'absence" — `NotBlank` est presque toujours ce que tu veux pour un champ texte utilisateur.
+
+All built-in constraints live in `Symfony\Component\Validator\Constraints\` and
+are imported as `use Symfony\Component\Validator\Constraints as Assert;`. Each is
+a small value object; its options are constructor arguments. You attach it as an
+attribute on the value it guards.
+
+```php
+// all built-in constraints live in Symfony\Component\Validator\Constraints\
+use Symfony\Component\Validator\Constraints as Assert; // conventional alias
+
+class Product
+{
+    // the constraint is a small value object; options are constructor arguments
+    #[Assert\Length(min: 3, max: 50)]
+    public string $name = '';
+}
+```
+
+The catalogue is large — the exam tests the **common ones and their edge cases**,
+not obscure options. Learn the categories below.
+
+!!! question "Predict first"
+    A nullable `?string $email` carries only `#[Assert\Email]` and is left `null`.
+    Does validation report an error?
+
+??? note "Reveal"
+    No. Like most constraints, `Email` skips `null`/`''` and never runs. To make
+    "missing" an error, stack `#[Assert\NotBlank]` (or `NotNull`) in front of it.
+
+
 ## Theory
 
 Toutes les constraints intégrées vivent dans
@@ -401,7 +453,7 @@ que lorsque la règle est réutilisable et propre à votre domaine, ou un
 
     **Why:** `NotBlank` considère `''`/`[]`/les chaînes blanches comme invalides ;
     `NotNull` n'échoue que sur un `null` strict, donc `''` et `0` le passent.
-    **Ref:** [NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html).
+    **Ref:** [NotBlank](https://symfony.com/doc/8.0/reference/constraints/NotBlank.html).
 
 ??? question "Q2. To validate every element of an indexed array against constraints, use:"
     - [ ] A. `Collection`
@@ -411,7 +463,7 @@ que lorsque la règle est réutilisable et propre à votre domaine, ou un
 
     **Why:** `All` applique les constraints données à chaque élément ;
     `Collection` valide les *clés* d'un tableau associatif.
-    **Ref:** [All](https://symfony.com/doc/current/reference/constraints/All.html).
+    **Ref:** [All](https://symfony.com/doc/8.0/reference/constraints/All.html).
 
 ??? question "Q3. A nested object property has its own constraints but they never run. Why?"
     - [ ] A. The validator does not support nesting
@@ -421,7 +473,7 @@ que lorsque la règle est réutilisable et propre à votre domaine, ou un
 
     **Why:** La cascade est opt-in via `Valid` ; sans lui, l'objet imbriqué n'est
     pas traversé.
-    **Ref:** [Valid](https://symfony.com/doc/current/reference/constraints/Valid.html).
+    **Ref:** [Valid](https://symfony.com/doc/8.0/reference/constraints/Valid.html).
 
 ??? question "Q4. `#[Assert\Email]` on an empty string returns:"
     - [x] A. No violation (empty values pass) ✅
@@ -431,7 +483,7 @@ que lorsque la règle est réutilisable et propre à votre domaine, ou un
 
     **Why:** Comme la plupart des constraints, `Email` ignore les valeurs
     vides/null ; associez-le à `NotBlank` pour rejeter le vide.
-    **Ref:** [Email](https://symfony.com/doc/current/reference/constraints/Email.html).
+    **Ref:** [Email](https://symfony.com/doc/8.0/reference/constraints/Email.html).
 
 ## Key takeaways
 
@@ -458,7 +510,7 @@ que lorsque la règle est réutilisable et propre à votre domaine, ou un
 - **Confused with:** [Custom Constraints](custom-constraints.md) — commencez ici ; n'écrivez la vôtre que lorsqu'aucune constraint intégrée ne convient.
 
 ## Official References
-- [Official Symfony docs — Constraints reference](https://symfony.com/doc/current/reference/constraints.html)
+- [Official Symfony docs — Constraints reference](https://symfony.com/doc/8.0/reference/constraints.html)
 - [Symfony source — Constraints/](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Validator/Constraints)
 
 ## Video references
@@ -471,7 +523,7 @@ que lorsque la règle est réutilisable et propre à votre domaine, ou un
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/reference/constraints/NotBlank.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/constraints/NotBlank.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

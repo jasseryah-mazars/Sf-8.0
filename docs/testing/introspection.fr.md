@@ -34,6 +34,28 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Utilise les assertions intégrées (`assertResponseIsSuccessful()`...) plutôt que de lire `getResponse()` à la main — elles affichent la réponse en cas d'échec, ce qui accélère énormément le débogage.
+
+### Imagine dans la vraie vie
+Les helpers d'introspection sont la checklist qualité en bout de chaîne de montage, plutôt que toi qui scrutes chaque pièce à la main. Au lieu de démonter le produit fini pour lire un numéro de série, tu coches des contrôles standards qui tamponnent succès ou échec — et quand un échoue, le poste photographie automatiquement l'objet défectueux.
+
+### Dans Symfony
+`$this->assertResponseIsSuccessful()` échoue avec un message détaillé montrant tout le contenu de la réponse (utile pour voir une trace d'erreur PHP) — bien plus lisible qu'un simple `assertEquals(200, $response->getStatusCode())`.
+
+### Exemple simple
+```php
+$this->assertResponseStatusCodeSame(201); // code exact, pas juste "un 2xx"
+```
+
+### Comment le mémoriser 🧠
+`assertResponseIsSuccessful()` accepte **n'importe quel 2xx** — utilise `assertResponseStatusCodeSame()` quand tu veux vérifier un code **exact** (201 précisément, pas juste "un succès").
+
+---
+
+
 ## Theory
 
 Après une request, vous pouvez inspecter deux choses : les **objets** bruts
@@ -342,7 +364,7 @@ des assertions, utilisez directement le [Crawler](crawler.md).
 
     **Why:** il vérifie que la response est dans la plage de succès (2xx) ;
     utilisez `assertResponseStatusCodeSame` pour les codes exacts.
-    **Ref:** [Testing assertions](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing assertions](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ??? question "Q2. Which asserts an exact element text (not substring)?"
     - [ ] A. `assertSelectorTextContains('h1', 'Hi')`
@@ -352,7 +374,7 @@ des assertions, utilisez directement le [Crawler](crawler.md).
 
     **Why:** `...Same` exige une correspondance exacte ; `...Contains` est une
     sous-chaîne.
-    **Ref:** [Testing assertions](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing assertions](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ??? question "Q3. To assert the matched route name you use…"
     - [x] A. `assertRouteSame('app_home')` ✅
@@ -361,7 +383,7 @@ des assertions, utilisez directement le [Crawler](crawler.md).
     - [ ] D. `assertResponseRedirects()`
 
     **Why:** `assertRouteSame` vérifie l'attribut de request `_route`.
-    **Ref:** [Testing assertions](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing assertions](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ??? question "Q4. Where do the response assertions ultimately delegate?"
     - [x] A. PHPUnit `Constraint` objects under `...Test\Constraint` ✅
@@ -371,7 +393,7 @@ des assertions, utilisez directement le [Crawler](crawler.md).
 
     **Why:** chaque helper enveloppe une Constraint PHPUnit pour une bonne
     sortie de diff.
-    **Ref:** [Testing](https://symfony.com/doc/current/testing.html#the-assertions).
+    **Ref:** [Testing](https://symfony.com/doc/8.0/testing.html#the-assertions).
 
 ## Key takeaways
 
@@ -401,7 +423,7 @@ des assertions, utilisez directement le [Crawler](crawler.md).
 - **Confused with:** [The Crawler](crawler.md) — le Crawler *interroge* le DOM ; `assertSelector*` fait des *assertions* dessus.
 
 ## Official References
-- [Official Symfony docs — The assertions](https://symfony.com/doc/current/testing.html#the-assertions)
+- [Official Symfony docs — The assertions](https://symfony.com/doc/8.0/testing.html#the-assertions)
 - [Symfony source — HttpFoundation test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpFoundation/Test/Constraint)
 - [Symfony source — DomCrawler test constraints](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/DomCrawler/Test/Constraint)
 
@@ -415,7 +437,7 @@ des assertions, utilisez directement le [Crawler](crawler.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing.html#the-assertions) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing.html#the-assertions) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

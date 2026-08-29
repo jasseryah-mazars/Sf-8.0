@@ -14,6 +14,20 @@ tags:
     **Theory:** [Functional Tests](../testing/functional-tests.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Tester un service isolé avec `KernelTestCase` (juste le container, sans HTTP), puis tester une page entière avec `WebTestCase` (comme un vrai visiteur qui navigue).
+
+**Pourquoi ça existe ?** Ces deux niveaux de test répondent à des besoins différents — vérifier qu'un service calcule juste (rapide, isolé) contre vérifier qu'une page entière fonctionne de bout en bout (plus lent, plus complet).
+
+**🏠 Analogie de la vraie vie :** Tester une seule pièce détachée sur un établi (`KernelTestCase`) contre faire rouler la voiture complète sur circuit (`WebTestCase`) — les deux sont utiles, à des échelles différentes.
+
+**Symfony dans la vraie vie :** `static::getContainer()->get(MonService::class)` dans un `KernelTestCase` te donne accès même aux services privés — impossible en dehors des tests.
+
+**⚠️ Erreur fréquente :** utiliser systématiquement `WebTestCase` (lourd, démarre tout) là où `KernelTestCase` (plus léger) suffirait amplement pour tester un service isolé.
+
+**🧠 Comment le mémoriser :** "`KernelTestCase` = juste le moteur. `WebTestCase` = la voiture entière, prête à rouler."
+
 ## Objective
 
 After this lab you can, test-first:

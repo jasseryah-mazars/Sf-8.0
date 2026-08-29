@@ -27,6 +27,31 @@
     **Est. time:** 25 min ·
     **Prerequisites:** [Configuration](configuration.md), [Runtime](runtime.md)
 
+    **Examen Symfony 8 :** OUI
+
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+En production, Symfony charge le container **déjà compilé** tel quel — il ne redétecte jamais tout seul un changement de config, il faut vider et réchauffer le cache à chaque déploiement.
+
+### Imagine dans la vraie vie
+Déployer en production, c'est la mise en place d'un restaurant avant le service. Pendant la fenêtre calme de préparation, la cuisine pré-découpe et pré-portionne tout (réchauffage du cache) pour qu'aucune préparation ne vole de temps pendant le coup de feu du dîner.
+
+### Dans Symfony
+Modifier `services.yaml` puis déployer sans lancer `cache:clear --env=prod` fait tourner l'application avec l'**ancienne** version compilée du container — le changement n'a strictement aucun effet tant que le cache n'est pas régénéré.
+
+### Exemple simple
+```console
+$ composer install --no-dev --optimize-autoloader
+$ php bin/console cache:clear --env=prod
+$ php bin/console cache:warmup --env=prod
+```
+
+### Comment le mémoriser 🧠
+Si tu changes une "recette" (la config) mais sautes la "re-préparation" (le réchauffage du cache), la cuisine continue de servir l'ancien plat — c'est pour ça qu'il faut toujours vider **et** réchauffer à chaque déploiement.
+
 ---
 
 ## Theory
@@ -206,13 +231,15 @@ image build so the running container does zero setup.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which flag excludes dev dependencies during deploy?"
     - [x] A. `--no-dev` ✅
     - [ ] B. `--prod`
     - [ ] C. `--production`
 
     **Why:** `composer install --no-dev` skips `require-dev` packages.
-    **Ref:** [Deploying Symfony](https://symfony.com/doc/current/deployment.html).
+    **Ref:** [Deploying Symfony](https://symfony.com/doc/8.0/deployment.html).
 
 ??? question "Q2. What does `composer dump-env prod` create?"
     - [x] A. `.env.local.php` ✅
@@ -220,7 +247,7 @@ image build so the running container does zero setup.
     - [ ] C. `config/prod.php`
 
     **Why:** It compiles the cascade into `.env.local.php` for fast loading.
-    **Ref:** [Configuring env vars in production](https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production).
+    **Ref:** [Configuring env vars in production](https://symfony.com/doc/8.0/configuration.html#configuring-environment-variables-in-production).
 
 ??? question "Q3. Why set `opcache.validate_timestamps=0` in prod?"
     - [x] A. To skip file-modification checks and serve cached bytecode ✅
@@ -228,7 +255,7 @@ image build so the running container does zero setup.
     - [ ] C. To disable opcache
 
     **Why:** With immutable deploys, skipping timestamp checks maximises opcache
-    hits (reset opcache on deploy instead). **Ref:** [Performance](https://symfony.com/doc/current/performance.html).
+    hits (reset opcache on deploy instead). **Ref:** [Performance](https://symfony.com/doc/8.0/performance.html).
 
 ## Key takeaways
 
@@ -251,8 +278,8 @@ image build so the running container does zero setup.
 - **Confused with:** dev's auto-rebuild — prod never auto-detects config changes.
 
 ## Official References
-- [Official docs — Deploying Symfony](https://symfony.com/doc/current/deployment.html)
-- [Official docs — Performance](https://symfony.com/doc/current/performance.html)
+- [Official docs — Deploying Symfony](https://symfony.com/doc/8.0/deployment.html)
+- [Official docs — Performance](https://symfony.com/doc/8.0/performance.html)
 - [Symfony source — CacheWarmerInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/CacheWarmer/CacheWarmerInterface.php)
 
 ## Video references
@@ -264,7 +291,7 @@ image build so the running container does zero setup.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/deployment.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/deployment.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

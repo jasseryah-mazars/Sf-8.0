@@ -28,6 +28,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un user provider **trouve** un utilisateur par son identifiant et le **rafraîchit** à chaque requête — il ne vérifie jamais lui-même un mot de passe.
+
+### Imagine dans la vraie vie
+Un user provider est le bureau des dossiers. Donne-lui un identifiant ("employé n°4471") et il sort le dossier correspondant (`loadUserByIdentifier()`) ; il re-vérifie aussi ce dossier à chaque visite (`refreshUser()`) pour repérer un badge révoqué.
+
+### Dans Symfony
+Si un administrateur révoque les droits d'un utilisateur pendant qu'il est déjà connecté, `refreshUser()` sur la requête suivante recharge ses rôles à jour depuis la base — sans attendre une reconnexion.
+
+### Exemple simple
+```php
+public function loadUserByIdentifier(string $identifier): UserInterface { /* ... */ }
+```
+
+### Comment le mémoriser 🧠
+La méthode s'appelle `loadUserByIdentifier()` — l'ancienne `loadUserByUsername()` a **disparu**. Et `refreshUser()` tourne à **chaque** requête statefull.
+
+
 ## Theory
 
 Un **user provider** charge les users depuis un stockage. Ce n'est *pas* la
@@ -281,7 +301,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
 
     **Why:** `loadUserByUsername()` a été supprimée ; le chargeur est
     `loadUserByIdentifier()`.
-    **Ref:** [User providers](https://symfony.com/doc/current/security/user_providers.html).
+    **Ref:** [User providers](https://symfony.com/doc/8.0/security/user_providers.html).
 
 ??? question "Q2. When is `refreshUser()` called?"
     - [ ] A. Only during login
@@ -301,7 +321,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
 
     **Why:** Les providers ne font que charger/rafraîchir les users ; le
     `CheckCredentialsListener` vérifie les `PasswordCredentials`.
-    **Ref:** [Custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html).
+    **Ref:** [Custom authenticator](https://symfony.com/doc/8.0/security/custom_authenticator.html).
 
 ## Key takeaways
 
@@ -331,7 +351,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
   ne fait que *charger* les users ; il ne vérifie jamais les credentials.
 
 ## Official References
-- [Symfony docs — User providers](https://symfony.com/doc/current/security/user_providers.html)
+- [Symfony docs — User providers](https://symfony.com/doc/8.0/security/user_providers.html)
 - [Symfony source — InMemoryUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/InMemoryUserProvider.php)
 - [Symfony source — ChainUserProvider](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Security/Core/User/ChainUserProvider.php)
 
@@ -344,7 +364,7 @@ rafraîchissement avec un `SelfValidatingPassport`.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/user_providers.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/user_providers.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

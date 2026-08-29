@@ -26,6 +26,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`{% for %}` parcourt une liste et te donne gratuitement des infos utiles (index, premier, dernier) via la variable spéciale `loop`.
+
+### Imagine dans la vraie vie
+`{% for %}` est un guide de musée qui fait visiter chaque exposition à un groupe : la variable `loop` est le presse-papier du guide qui indique à quel arrêt on en est (`index`), si c'est le premier ou le dernier (`first`/`last`), et combien il en reste. `for … else` est le panneau "galerie fermée" affiché quand il n'y a rien à visiter.
+
+### Dans Symfony
+`{% for produit in produits %}...{% else %}<p>Aucun produit.</p>{% endfor %}` affiche automatiquement un message de repli sans jamais avoir à écrire un `{% if produits is empty %}` séparé.
+
+### Exemple simple
+```twig
+{% for p in produits %}
+    {{ loop.index }}. {{ p.nom }}{% if loop.last %} (dernier){% endif %}
+{% else %}
+    Aucun produit.
+{% endfor %}
+```
+
+### Comment le mémoriser 🧠
+Twig n'a **pas** de `break`/`continue` — pour filtrer, écris `for x in items if condition` directement dans la boucle, pas un `if` imbriqué avec un `continue` imaginaire.
+
+
 ## Theory
 
 ### `for`
@@ -326,7 +350,7 @@ lignes dans Twig.
 - **Confused with:** [Twig Syntax](syntax.md) — `is empty` (vrai pour `0`/`''`/`[]`/`null`) est plus large que `is null`.
 
 ## Official References
-- [Official — Loops in templates](https://symfony.com/doc/current/templates.html)
+- [Official — Loops in templates](https://symfony.com/doc/8.0/templates.html)
 - [Twig — for / if tags](https://twig.symfony.com/doc/3.x/tags/for.html)
 - [Twig source — ForNode](https://github.com/twigphp/Twig/blob/3.x/src/Node/ForNode.php)
 
@@ -340,7 +364,7 @@ lignes dans Twig.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences SymfonyCon & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/templates.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/templates.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

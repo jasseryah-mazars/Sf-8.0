@@ -33,6 +33,30 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Le profiler doit être armé **avant** la requête — l'activer après, ou l'oublier, donne un résultat vide, pas une erreur.
+
+### Imagine dans la vraie vie
+Le profiler est une boîte noire d'avion qu'il faut armer *avant* le décollage. Pendant les vols de test normaux, l'enregistreur est éteint pour économiser. Si tu actionnes l'interrupteur après l'atterrissage — ou l'oublies — puis vas lire la boîte noire, il n'y a tout simplement rien : elle lit vide (`false`), pas juste un enregistrement blanc.
+
+### Dans Symfony
+Vérifier qu'un email a bien été envoyé pendant un test nécessite `$client->enableProfiler()` **avant** l'appel `$client->request()` — sinon `getProfile()` renverra `false` et le test échouera pour la mauvaise raison.
+
+### Exemple simple
+```php
+$client->enableProfiler(); // AVANT la requête
+$client->request('POST', '/inscription');
+$profile = $client->getProfile();
+```
+
+### Comment le mémoriser 🧠
+`getProfile()` renvoie **`false`**, pas `null`, quand le profiler n'a rien enregistré — vérifie toujours avec `!== false`, pas juste un test de vérité classique.
+
+---
+
+
 ## Theory
 
 Le **Profiler** enregistre ce qui s'est passé pendant une request — controller,
@@ -309,7 +333,7 @@ surcoût : n'activez-le que dans les tests qui en ont besoin.
     - [ ] D. It is enabled automatically in test
 
     **Why:** il active la request *suivante* ; l'appeler après ne collecte rien.
-    **Ref:** [Testing — profiler](https://symfony.com/doc/current/testing/profiling.html).
+    **Ref:** [Testing — profiler](https://symfony.com/doc/8.0/testing/profiling.html).
 
 ??? question "Q2. `$client->getProfile()` when profiling was not enabled returns…"
     - [x] A. `false` ✅
@@ -318,7 +342,7 @@ surcoût : n'activez-le que dans les tests qui en ont besoin.
     - [ ] D. Throws
 
     **Why:** il retourne `false` si aucun profile n'a été collecté.
-    **Ref:** [Testing — profiler](https://symfony.com/doc/current/testing/profiling.html).
+    **Ref:** [Testing — profiler](https://symfony.com/doc/8.0/testing/profiling.html).
 
 ??? question "Q3. The recommended way to assert a sent email is…"
     - [x] A. `assertEmailCount()` / `getMailerMessage()` from MailerAssertionsTrait ✅
@@ -328,7 +352,7 @@ surcoût : n'activez-le que dans les tests qui en ont besoin.
 
     **Why:** `WebTestCase` fournit des assertions mailer adossées au collector
     mailer.
-    **Ref:** [Mailer testing](https://symfony.com/doc/current/mailer.html#testing-emails).
+    **Ref:** [Mailer testing](https://symfony.com/doc/8.0/mailer.html#testing-emails).
 
 ??? question "Q4. In the `test` environment, `framework.profiler.collect` defaults to…"
     - [x] A. `false` — profiles collected only per opted-in request ✅
@@ -338,7 +362,7 @@ surcoût : n'activez-le que dans les tests qui en ont besoin.
 
     **Why:** la configuration du profiler en test pose `collect: false` pour la
     vitesse.
-    **Ref:** [Profiler config](https://symfony.com/doc/current/reference/configuration/framework.html#profiler).
+    **Ref:** [Profiler config](https://symfony.com/doc/8.0/reference/configuration/framework.html#profiler).
 
 ## Key takeaways
 
@@ -362,8 +386,8 @@ surcoût : n'activez-le que dans les tests qui en ont besoin.
 - **Confused with:** [Web Profiler & Data Collectors](../miscellaneous/profiler.md) — ce chapitre-là concerne la toolbar de dev ; ici on vérifie les collectors dans les tests.
 
 ## Official References
-- [Official Symfony docs — Profiling tests](https://symfony.com/doc/current/testing/profiling.html)
-- [Official Symfony docs — Testing emails](https://symfony.com/doc/current/mailer.html#testing-emails)
+- [Official Symfony docs — Profiling tests](https://symfony.com/doc/8.0/testing/profiling.html)
+- [Official Symfony docs — Testing emails](https://symfony.com/doc/8.0/mailer.html#testing-emails)
 - [Symfony source — Profiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Profiler/Profiler.php)
 
 ## Video references
@@ -376,7 +400,7 @@ surcoût : n'activez-le que dans les tests qui en ont besoin.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/testing/profiling.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/testing/profiling.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

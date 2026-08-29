@@ -15,7 +15,7 @@ plateforme. Classées par qualité pour la préparation à la certification.
 1. **[SymfonyCasts](https://symfonycasts.com/)** — la référence absolue. Scénarisé,
    piloté par les tests, du débutant à l'expert. Cherchez leurs parcours par sujet
    (ci-dessous).
-2. **[Official Symfony documentation](https://symfony.com/doc/current/)** — la
+2. **[Official Symfony documentation](https://symfony.com/doc/8.0/)** — la
    source de vérité unique ; l'examen est rédigé à partir d'elle.
 3. **[Symfony on YouTube](https://www.youtube.com/@Symfony)** — les conférences
    **SymfonyLive** et **SymfonyCon**, dont beaucoup portent sur les mécanismes
@@ -30,18 +30,18 @@ plateforme. Classées par qualité pour la préparation à la certification.
 | Domaine | Recherche SymfonyCasts | Point d'entrée dans la doc |
 |---|---|---|
 | PHP & Web Security | "PHP" / parcours OOP | [php.net manual](https://www.php.net/manual/en/) |
-| HTTP | "HTTP" / HttpClient | [components/http_foundation](https://symfony.com/doc/current/components/http_foundation.html) |
-| Architecture | "Symfony Fundamentals", "Deep Dive" | [components/http_kernel](https://symfony.com/doc/current/components/http_kernel.html) |
-| Controllers / Routing | "Symfony 7 Fundamentals" | [controller](https://symfony.com/doc/current/controller.html) · [routing](https://symfony.com/doc/current/routing.html) |
-| Twig | "Twig" | [templates](https://symfony.com/doc/current/templates.html) |
-| Forms | "Symfony Forms" | [forms](https://symfony.com/doc/current/forms.html) |
-| Validation | "Symfony Forms" (partie validation) | [validation](https://symfony.com/doc/current/validation.html) |
-| Dependency Injection | "Symfony Fundamentals: Services" | [service_container](https://symfony.com/doc/current/service_container.html) |
-| Security | "Symfony Security" | [security](https://symfony.com/doc/current/security.html) |
-| HTTP Caching | "HTTP Caching" | [http_cache](https://symfony.com/doc/current/http_cache.html) |
-| Console | "Console Commands" | [console](https://symfony.com/doc/current/console.html) |
-| Testing | "Testing" | [testing](https://symfony.com/doc/current/testing.html) |
-| Messenger & divers | "Messenger", "Serializer" | [messenger](https://symfony.com/doc/current/messenger.html) |
+| HTTP | "HTTP" / HttpClient | [components/http_foundation](https://symfony.com/doc/8.0/components/http_foundation.html) |
+| Architecture | "Symfony Fundamentals", "Deep Dive" | [components/http_kernel](https://symfony.com/doc/8.0/components/http_kernel.html) |
+| Controllers / Routing | "Symfony 7 Fundamentals" | [controller](https://symfony.com/doc/8.0/controller.html) · [routing](https://symfony.com/doc/8.0/routing.html) |
+| Twig | "Twig" | [templates](https://symfony.com/doc/8.0/templates.html) |
+| Forms | "Symfony Forms" | [forms](https://symfony.com/doc/8.0/forms.html) |
+| Validation | "Symfony Forms" (partie validation) | [validation](https://symfony.com/doc/8.0/validation.html) |
+| Dependency Injection | "Symfony Fundamentals: Services" | [service_container](https://symfony.com/doc/8.0/service_container.html) |
+| Security | "Symfony Security" | [security](https://symfony.com/doc/8.0/security.html) |
+| HTTP Caching | "HTTP Caching" | [http_cache](https://symfony.com/doc/8.0/http_cache.html) |
+| Console | "Console Commands" | [console](https://symfony.com/doc/8.0/console.html) |
+| Testing | "Testing" | [testing](https://symfony.com/doc/8.0/testing.html) |
+| Messenger & divers | "Messenger", "Serializer" | [messenger](https://symfony.com/doc/8.0/messenger.html) |
 
 !!! tip "Highest-leverage prep loop"
     Lisez la page de doc → regardez le chapitre SymfonyCasts correspondant → faites
@@ -64,7 +64,22 @@ repérer les pièges (voir aussi l'[Exam-Day Strategy](exam-guide/strategy.md)) 
 
 <small>Related: [Exam Guide](exam-guide/index.md) · [Roadmap](roadmap.md) · [Revision Hub](revision/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Une liste de ressources externes complémentaires (vidéos, documentation officielle) pour approfondir un sujet au-delà de ce que ce site couvre.
+
+**Pourquoi ça existe ?** Regarder quelqu'un expliquer un concept en vidéo, ou lire la documentation officielle directement, aide certains apprenants différemment qu'un texte écrit seul.
+
+**🏠 Analogie de la vraie vie :** La bibliographie recommandée à la fin d'un cours universitaire — pas obligatoire pour réussir, mais utile pour qui veut creuser un sujet précis plus en profondeur.
+
+**Symfony dans la vraie vie :** La documentation officielle (`symfony.com/doc/8.0/`) reste la source de vérité ultime — l'examen est écrit en se basant dessus, donc en cas de doute, elle prime toujours sur toute autre ressource, y compris ce site.
+
+**⚠️ Erreur fréquente :** regarder une vidéo ancienne présentant une version de Symfony antérieure à la 8.0 et mémoriser des comportements devenus obsolètes.
+
+**🧠 Comment le mémoriser :** "En cas de doute, la doc officielle 8.0 a toujours le dernier mot."
+
+
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -28,14 +28,35 @@
           artifact is for (dumped class, per-service factories,
           `.preload.php`, XML debug dump).
     - [ ] Trace the compilation flow: extension `load()` → `PassConfig` phases
-          → `PhpDumper::dump()`.
-    - [ ] Explain why `debug:container` lists services the dumped code
-          inlined, and what a frozen container forbids at runtime.
 
     **Syllabus:** `Dependency Injection → Compiled Container` ·
     **Level:** Expert ·
     **Est. time:** 20 min ·
     **Prerequisites:** [Compiler Passes](compiler-passes.md)
+    **Examen Symfony 8 :** OUI
+---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Le container compilé est du PHP tout ce qu'il y a de plus ordinaire, écrit sur disque une seule fois — c'est pour ça qu'utiliser Symfony en production est rapide.
+
+### Imagine dans la vraie vie
+La compilation, c'est transformer le plan d'un architecte en maison préfabriquée. Le plan (YAML/attributs/`Definition`) est examiné par des inspecteurs dans un ordre fixe (les phases de compiler pass), les couloirs internes redondants sont fusionnés en pièces (services privés inlinés), puis l'usine coule le béton (`PhpDumper` écrit les fichiers PHP).
+
+### Dans Symfony
+Modifier `services.yaml` en production **ne change absolument rien** tant que le cache n'est pas reconstruit — le container à l'exécution lit uniquement les fichiers PHP déjà générés dans `var/cache/{env}/`, jamais le YAML source.
+
+### Exemple simple
+```console
+$ php bin/console cache:clear --env=prod  # seule façon de faire prendre en compte un changement
+```
+
+### Comment le mémoriser 🧠
+Un service privé visible dans `debug:container` peut n'avoir **aucune factory du tout** — inliné ou supprimé pendant les passes de nettoyage. Voir un service dans le debug ne garantit pas qu'il existe encore comme objet séparé dans le container compilé.
+          → `PhpDumper::dump()`.
+    - [ ] Explain why `debug:container` lists services the dumped code
+          inlined, and what a frozen container forbids at runtime.
 
 ---
 
@@ -78,7 +99,7 @@ and a content hash, so treat these as shapes, not exact strings):
 | `{KernelClass}Container.xml` | Debug-mode snapshot of the **pre-dump** `ContainerBuilder`, used by `debug:container` |
 
 Two dot-prefixed parameters shape the dump (see the
-[performance docs](https://symfony.com/doc/current/performance.html)):
+[performance docs](https://symfony.com/doc/8.0/performance.html)):
 `.container.dumper.inline_factories` (inline every factory into a single
 container file instead of per-service files) and
 `.container.dumper.inline_class_loader` (let the dumped code inline class
@@ -284,6 +305,8 @@ services).
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. Which artifact does `debug:container` rely on, and why can it show services absent from the dumped code?"
     - [x] A. A build-time snapshot of the ContainerBuilder — inlined/removed privates still exist there ✅
     - [ ] B. The dumped PHP container — it lists exactly the generated factories
@@ -292,7 +315,7 @@ services).
 
     **Why:** The command inspects pre-dump definitions; the removing passes
     inline or prune private services from the generated code afterwards.
-    **Ref:** [Container compilation](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Container compilation](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ??? question "Q2. Correct order of the PassConfig phases?"
     - [x] A. before-optimization → optimization → before-removing → removing → after-removing ✅
@@ -302,7 +325,7 @@ services).
 
     **Why:** `PassConfig` hard-codes the five phases; priority only orders
     passes *within* a phase.
-    **Ref:** [Container compilation](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Container compilation](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ??? question "Q3. You edit services.yaml on a prod server. When does the container reflect it?"
     - [ ] A. Immediately — YAML is re-read per request
@@ -312,7 +335,7 @@ services).
 
     **Why:** Prod executes the dumped PHP container and does not track config
     resources; only a rebuild re-runs compilation.
-    **Ref:** [Container compilation](https://symfony.com/doc/current/components/dependency_injection/compilation.html).
+    **Ref:** [Container compilation](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html).
 
 ??? question "Q4. What is `{Kernel}Container.preload.php` for?"
     - [x] A. It lists hot container/service classes for OPcache preloading via `opcache.preload` ✅
@@ -323,7 +346,7 @@ services).
     **Why:** The dumper generates a preload script; referencing it from
     `opcache.preload` compiles those classes into shared memory at server
     start.
-    **Ref:** [Performance](https://symfony.com/doc/current/performance.html).
+    **Ref:** [Performance](https://symfony.com/doc/8.0/performance.html).
 
 ## Key takeaways
 
@@ -364,8 +387,8 @@ services).
 
 ## Official References
 
-- [Official Symfony docs — Compiling the Container](https://symfony.com/doc/current/components/dependency_injection/compilation.html)
-- [Official Symfony docs — Performance (preloading, inline factories)](https://symfony.com/doc/current/performance.html)
+- [Official Symfony docs — Compiling the Container](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html)
+- [Official Symfony docs — Performance (preloading, inline factories)](https://symfony.com/doc/8.0/performance.html)
 - [Symfony source — PhpDumper](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Dumper/PhpDumper.php)
 - [Symfony source — PassConfig](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Compiler/PassConfig.php)
 
@@ -378,7 +401,7 @@ services).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/dependency_injection/compilation.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/dependency_injection/compilation.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

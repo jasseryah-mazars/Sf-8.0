@@ -27,7 +27,29 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Code Organization](code-organization.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Les conventions de nommage Symfony ne sont pas juste esthétiques — elles sont ce qui permet à l'autowiring et au routeur de fonctionner "tout seuls".
+
+### Imagine dans la vraie vie
+Un hôpital où chaque membre du personnel porte un uniforme codé par couleur et un badge : une blouse verte marquée "Chirurgien" (le suffixe `Interface`, le badge FQCN) permet au système de tri d'orienter automatiquement un cas vers la bonne personne, sans que personne n'ait à demander qui fait quoi. Une infirmière en chemise unie non étiquetée peut quand même travailler, mais le système automatisé ne peut plus la faire correspondre à une tâche par son type.
+
+### Dans Symfony
+Nommer un service `App\Service\MonService` (au lieu d'un id arbitraire comme `mon.service.custom`) est ce qui permet l'autowiring par type — Symfony sait injecter la bonne classe simplement en lisant le type-hint du constructeur.
+
+### Exemple simple
+```php
+interface NotifieurInterface {}    // suffixe Interface, obligatoire par convention
+class EmailNotifieur implements NotifieurInterface {}
+```
+
+### Comment le mémoriser 🧠
+Le service id **par défaut** d'une classe autowirée est son **FQCN complet** — pas un nom raccourci choisi à la main. Retiens : "le badge du personnel, c'est son nom complet, pas un surnom."
 
 ## Theory
 
@@ -279,13 +301,15 @@ clearer, and never in a way that breaks autowiring.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. How are service IDs written for app services in modern Symfony?"
     - [x] A. The fully-qualified class name (FQCN) ✅
     - [ ] B. Lowercase dotted strings only
     - [ ] C. Random UUIDs
 
     **Why:** The FQCN is the id; autowiring matches by type. **Ref:**
-    [Service container](https://symfony.com/doc/current/service_container.html).
+    [Service container](https://symfony.com/doc/8.0/service_container.html).
 
 ??? question "Q2. What case are environment variables?"
     - [x] A. UPPER_SNAKE_CASE, usually `APP_`-prefixed ✅
@@ -293,7 +317,7 @@ clearer, and never in a way that breaks autowiring.
     - [ ] C. kebab-case
 
     **Why:** Env vars use upper snake case. **Ref:**
-    [Configuration — env vars](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables).
+    [Configuration — env vars](https://symfony.com/doc/8.0/configuration.html#configuration-based-on-environment-variables).
 
 ??? question "Q3. Which is a correctly named route?"
     - [x] A. `invoice_show` ✅
@@ -301,7 +325,7 @@ clearer, and never in a way that breaks autowiring.
     - [ ] C. `invoice show`
 
     **Why:** Routes use snake_case, typically `entity_action`. **Ref:**
-    [Routing](https://symfony.com/doc/current/routing.html).
+    [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -325,9 +349,9 @@ clearer, and never in a way that breaks autowiring.
 - **Confused with:** [Best Practices](best-practices.md) — naming is the mechanical rule set; best practices explain the design choices.
 
 ## Official References
-- [Official docs — Coding standards](https://symfony.com/doc/current/contributing/code/standards.html)
-- [Official docs — Configuration](https://symfony.com/doc/current/configuration.html)
-- [Official docs — Routing](https://symfony.com/doc/current/routing.html)
+- [Official docs — Coding standards](https://symfony.com/doc/8.0/contributing/code/standards.html)
+- [Official docs — Configuration](https://symfony.com/doc/8.0/configuration.html)
+- [Official docs — Routing](https://symfony.com/doc/8.0/routing.html)
 
 ## Video references
 
@@ -338,7 +362,7 @@ clearer, and never in a way that breaks autowiring.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/service_container.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/service_container.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

@@ -14,6 +14,20 @@ tags:
     [Arguments & options](../console/options-arguments.md) ·
     **Mode:** TDD
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce lab ?** Écrire une commande console personnalisée et la tester entièrement sans jamais la lancer réellement dans un vrai terminal — via `CommandTester`.
+
+**Pourquoi ça existe ?** Tester une commande à la main (la lancer, lire la sortie, vérifier le code retour) est lent et pas reproductible — `CommandTester` simule tout ça en PHP pur, dans une suite de tests automatisée.
+
+**🏠 Analogie de la vraie vie :** Répéter une pièce de théâtre devant une caméra qui enregistre chaque réplique et chaque geste, pour vérifier après coup que tout s'est bien passé — sans avoir besoin d'un vrai public à chaque répétition.
+
+**Symfony dans la vraie vie :** `$tester->execute(['--limite' => 10])` puis `$tester->getDisplay()` te donne exactement ce qu'un utilisateur verrait dans son terminal, sans jamais ouvrir un vrai terminal.
+
+**⚠️ Erreur fréquente :** renvoyer un entier arbitraire au lieu de `Command::SUCCESS`/`FAILURE` — les scripts qui enchaînent des commandes dépendent de ces codes précis pour savoir si ça a réussi.
+
+**🧠 Comment le mémoriser :** "`CommandTester` fait jouer ta commande sans jamais ouvrir un vrai terminal."
+
 ## Objective
 
 After this lab you can **write a console command test first** and then implement the

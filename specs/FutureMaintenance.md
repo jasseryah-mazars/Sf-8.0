@@ -15,13 +15,18 @@ operational counterpart to [QualityRequirements Q6](QualityRequirements.md)
 | External doc/source URLs | Link rot | Continuous |
 | Exam syllabus revision | Topic weights, added/removed items | Symfony-driven |
 
-Because doc links use `doc/current`, prose about *current* behavior tends to stay
-valid across minors; **version-pinned facts, deprecations, and defaults** are what
-need active maintenance.
+Doc links are pinned to `doc/8.0` (not `doc/current`), per the certification's
+requirement to verify against Symfony 8.0 exclusively — so prose does **not**
+auto-track newer minors the way a `doc/current` link would have. When Symfony
+8.1/8.2 ship, the version-pinned facts, deprecations, and defaults described here
+are what need active review before the baseline moves.
 
 ## 2. Versioning policy
 
-- **Doc links:** always `symfony.com/doc/current/...` (tracks latest stable).
+- **Doc links:** always `symfony.com/doc/8.0/...` (pinned to the certified
+  Symfony 8.0 branch — deliberately does **not** track newer minors; see the
+  baseline-change process below before ever repointing this to `doc/current`
+  or a later version).
 - **Source links:** pin the branch the content targets — `blob/8.0` today; bump to
   `blob/9.0` only when the platform's baseline moves.
 - **Baseline statement:** the "Symfony 8.0 / PHP 8.4+ / Twig 3.x" baseline lives in
@@ -56,7 +61,7 @@ need active maintenance.
 
 - [ ] `mkdocs build --strict` catches broken **internal** links automatically.
 - [ ] Periodically validate **external** links (docs, source) with a link checker;
-      `doc/current` should be stable, but source line anchors on `blob/8.0` can move
+      `doc/8.0` is pinned and should stay stable, but source line anchors on `blob/8.0` can move
       — prefer file-level source links over line-pinned ones for durability.
 - [ ] Fix or re-point dead references; note any doc pages Symfony has restructured.
 
@@ -137,6 +142,69 @@ keep it out of the committed config so the main build stays unaffected:
       cover_title: Symfony 8 Expert Certification Prep
       enabled_if_env: ENABLE_PDF
 ```
+
+## 10. Official syllabus revision process (added P3, this run)
+
+This mission's compliance run established a **six-status traceability
+schema** (absent / structure / partiel / validé techniquement / validé
+éditorialement / conforme — see `specs/TraceabilityMatrix.md`'s own legend)
+and a set of automated checks that assume the current 175-subtopic taxonomy.
+When Symfony (or the certification vendor) revises the official syllabus —
+adds, removes, or re-weights topics — follow this order, not an ad-hoc edit:
+
+1. **Re-verify the source, don't assume.** Fetch
+   `certification.symfony.com/exams/symfony.html` fresh (this run's network
+   egress to that domain was blocked — confirmed via a failed fetch, not
+   assumed — so this step could not be executed this run; a future session
+   with reachable network must do it before touching anything else).
+2. **Update `specs/OfficialSyllabusBaseline.md` first** — it exists
+   specifically to hold the syllabus snapshot *before* the matrix or docs
+   change, with its own explicit "this tracks, but is not itself, the
+   official syllabus" banner kept intact. Diff the new fetch against the
+   existing baseline; note every add/remove/reweight explicitly.
+3. **Update `tools/gen_traceability_matrix.py`'s `SYLLABUS` list** to match
+   — add/remove/relabel rows; do not hand-edit
+   `specs/TraceabilityMatrix.md` itself (it's regenerated, not
+   hand-maintained — see the file's own header).
+4. **For a removed topic:** move its chapter(s) to
+   `docs/appendices/out-of-syllabus/` with the same "Hors syllabus officiel
+   Symfony 8.0" admonition the three existing exclusions use (see
+   `tools/check_exclusions.py`'s own list — add the new chapter's slug
+   there too, in the `EXCLUDED` tuple, so the consistency check covers it),
+   tag its quiz questions `out_of_scope: true`, and add a row to
+   `specs/TraceabilityMatrix.md`'s "Out-of-scope / Additional Learning"
+   section (via the generator, not by hand).
+5. **For an added topic:** follow §6 above ("How to add a chapter") —
+   Matrix row, chapter file, quiz questions, `mkdocs.yml` nav entry.
+6. **Regenerate every derived report**, in this order, and re-run the full
+   check suite before committing:
+   `tools/gen_traceability_matrix.py` → `tools/audit.py` →
+   `tools/final_audit.py` → `tools/check_section_order.py` →
+   `tools/check_exclusions.py` → `tools/validate_quiz.py` →
+   `tools/check_quiz_duplicates.py` → `tools/check_placeholders.py` →
+   `tools/check_editorial_structure.py` → `tools/check_doc_version_refs.py`
+   → the four `tools/lint_*.py` tools → `mkdocs build --strict`.
+7. **Never claim "conforme" or a coverage percentage as officially
+   verified** without having actually completed step 1 against a live
+   fetch in that same session — the six-status schema's "conforme" is
+   this project's own completeness bar (structural + technical +
+   editorial validation + a French translation), not an assertion that
+   the item matches a re-fetched official source, unless step 1 was done.
+
+## 11. Tools added by the P0–P3 compliance run (2026-08-27)
+
+For a future maintainer wondering what each of these does before deleting
+or modifying one — every one has its own docstring with more detail:
+
+| Tool | Purpose | CI status |
+|---|---|---|
+| `tools/repo_meta.py` | Shared provenance-stamp helper (commit/branch/date) for generated reports | n/a (library) |
+| `tools/check_report_freshness.py` | Flags a generated report whose stamped commit != current HEAD | informational (non-blocking) |
+| `tools/check_exclusions.py` | Verifies the out-of-syllabus exclusion list stays consistent (files, nav, quiz tags, matrix section) | **blocking** |
+| `tools/lint_yaml.py` / `lint_twig.py` / `lint_xml.py` | Syntax/structure checks for fenced code snippets (YAML fully; Twig block-tag pairing only; XML well-formedness) | **blocking** |
+| `tools/check_quiz_duplicates.py` | Jaccard token-overlap near-duplicate scan across the quiz bank (lexical heuristic, human review required per pair) | informational (non-blocking) |
+| `tools/check_editorial_structure.py` | Nav<->docs consistency, code-fence balance, empty-heading detection | **blocking** |
+| `tools/check_site_quality.py` + `_site_quality_check.js` | Real headless-Chromium + axe-core accessibility/quality audit (needs `npm install --prefix tools` first) | **not** wired into CI (Chromium/npm cost + needs human judgment on 2 of its findings) — on-demand only |
 
 ## Non-gating quality checks
 

@@ -32,6 +32,29 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Une commande exécutée via le framework déclenche quatre événements dans un ordre fixe — et `TERMINATE` s'exécute **toujours**, même en cas d'erreur.
+
+### Imagine dans la vraie vie
+Un vol commercial diffuse la même séquence fixe d'annonces. L'embarquement est annoncé avant que l'avion ne bouge (COMMAND). Si un incident moteur survient, l'équipage note un rapport — mais seulement si quelque chose a vraiment mal tourné (ERROR). L'annonce "nous avons atteint la porte, merci d'avoir volé avec nous" passe toujours, que le vol ait été fluide ou détourné (TERMINATE).
+
+### Dans Symfony
+Un listener sur `ConsoleEvents::TERMINATE` peut forcer un code de sortie différent (par exemple, transformer un avertissement non bloquant en échec explicite pour le pipeline CI) — c'est la toute dernière chance de changer le résultat.
+
+### Exemple simple
+```php
+#[AsEventListener(event: ConsoleEvents::TERMINATE)]
+public function onTerminate(ConsoleTerminateEvent $event): void { $event->setExitCode(1); }
+```
+
+### Comment le mémoriser 🧠
+L'ordre est **COMMAND → (ERROR seulement si quelque chose lève une exception) → TERMINATE** — `TERMINATE` s'exécute toujours, c'est ta dernière chance de changer le code de sortie.
+
+---
+
+
 ## Theory
 
 Quand les commandes s'exécutent au sein du framework, l'`Application` dispatche des
@@ -296,7 +319,7 @@ préoccupations à l'échelle de l'application.
 
     **Why:** `ERROR` ne se déclenche que sur un throwable ; `TERMINATE` se déclenche
     toujours en dernier.
-    **Ref:** [Console events](https://symfony.com/doc/current/components/console/events.html).
+    **Ref:** [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q2. Which event lets you change the exit code no matter what happened?"
     - [ ] A. `ConsoleEvents::COMMAND`
@@ -305,7 +328,7 @@ préoccupations à l'échelle de l'application.
     - [ ] D. It cannot be changed after execution
 
     **Why:** `ConsoleTerminateEvent::setExitCode()` est la dernière chance. **Ref:**
-    [Console events](https://symfony.com/doc/current/components/console/events.html).
+    [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q3. What exit code results from `ConsoleCommandEvent::disableCommand()`?"
     - [ ] A. 0
@@ -314,7 +337,7 @@ préoccupations à l'échelle de l'application.
     - [ ] D. 255
 
     **Why:** `RETURN_CODE_DISABLED` vaut 113. **Ref:**
-    [Console events](https://symfony.com/doc/current/components/console/events.html).
+    [Console events](https://symfony.com/doc/8.0/components/console/events.html).
 
 ??? question "Q4. Which interface lets a command react to `SIGTERM`?"
     - [x] A. `SignalableCommandInterface` ✅
@@ -323,7 +346,7 @@ préoccupations à l'échelle de l'application.
     - [ ] D. `EventSubscriberInterface`
 
     **Why:** implémentez `getSubscribedSignals()` et `handleSignal()`. **Ref:**
-    [Console signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals).
+    [Console signals](https://symfony.com/doc/8.0/components/console/events.html#handling-command-signals).
 
 ## Key takeaways
 
@@ -351,8 +374,8 @@ préoccupations à l'échelle de l'application.
   sont des méthodes redéfinissables, pas des events dispatchés.
 
 ## Official References
-- [Official Symfony docs — Console events](https://symfony.com/doc/current/components/console/events.html)
-- [Official Symfony docs — Handling signals](https://symfony.com/doc/current/components/console/events.html#handling-command-signals)
+- [Official Symfony docs — Console events](https://symfony.com/doc/8.0/components/console/events.html)
+- [Official Symfony docs — Handling signals](https://symfony.com/doc/8.0/components/console/events.html#handling-command-signals)
 - [Symfony source — ConsoleEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/ConsoleEvents.php)
 
 ## Video references
@@ -364,7 +387,7 @@ préoccupations à l'échelle de l'application.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/components/console/events.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/components/console/events.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

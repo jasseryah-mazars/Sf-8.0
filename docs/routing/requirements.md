@@ -26,9 +26,28 @@
     **Est. time:** 20 min ·
     **Prerequisites:** [Configuration](configuration.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
 
-## Theory
+## Pour les nuls
+
+### L'idée en une phrase
+Une "requirement" restreint la forme qu'une valeur d'URL peut prendre — une valeur qui ne correspond pas ne déclenche pas d'erreur, elle fait juste échouer la route (404).
+
+### Imagine dans la vraie vie
+La fente à pièces d'un distributeur automatique : elle n'accepte qu'une pièce du bon diamètre. Une pièce de la mauvaise forme ne déclenche pas de voyant d'erreur — elle glisse simplement et tombe, laissant la place au mécanisme suivant (le matching passe à la route suivante, aboutissant à un 404).
+
+### Dans Symfony
+`{id<\d+>}` garantit qu'un `id` non numérique dans l'URL ne fait **jamais** matcher cette route — la requête tombe sur la route suivante, ou finit en 404 si rien d'autre ne correspond.
+
+### Exemple simple
+```php
+#[Route('/produits/{id<\d+>}')] // seul un id numérique matche cette route
+```
+
+### Comment le mémoriser 🧠
+Une requirement vérifie la **forme**, pas la **validité métier** — un `id` numérique qui n'existe pas en base passe quand même la requirement ; c'est au contrôleur de gérer le 404 ensuite.
 
 By default a placeholder `{id}` matches **any character except `/`** (regex
 `[^/]+`). A **requirement** narrows that pattern to a specific regular expression,
@@ -253,6 +272,8 @@ complex business logic in a route regex.
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. `/blog/{page<\d+>}` receives `/blog/latest`. What happens?"
     - [ ] A. Controller runs with `page = 'latest'`
     - [ ] B. A 400 Bad Request from the router
@@ -260,7 +281,7 @@ complex business logic in a route regex.
     - [ ] D. `page` is cast to `0`
 
     **Why:** the requirement is compiled into the regex, so a non-numeric value
-    simply fails to match. **Ref:** [Parameter validation](https://symfony.com/doc/current/routing.html#parameters-validation).
+    simply fails to match. **Ref:** [Parameter validation](https://symfony.com/doc/8.0/routing.html#parameters-validation).
 
 ??? question "Q2. Which two are equivalent?"
     - [x] A. `{id<\d+>}` and `requirements: {id: '\d+'}` ✅
@@ -269,7 +290,7 @@ complex business logic in a route regex.
     - [ ] D. `{id}` and `{id<.+>}`
 
     **Why:** inline `<...>` is syntactic sugar for a `requirements` entry.
-    **Ref:** [Routing requirements](https://symfony.com/doc/current/routing.html#parameters-validation).
+    **Ref:** [Routing requirements](https://symfony.com/doc/8.0/routing.html#parameters-validation).
 
 ??? question "Q3. What is the default regex for a placeholder without a requirement?"
     - [ ] A. `.+`
@@ -278,7 +299,7 @@ complex business logic in a route regex.
     - [ ] D. `.*`
 
     **Why:** placeholders match any characters except the `/` separator by default.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q4. How do you let one parameter capture multiple path segments?"
     - [ ] A. `{path<\w+>}`
@@ -287,7 +308,7 @@ complex business logic in a route regex.
     - [ ] D. It is impossible
 
     **Why:** overriding the requirement to `.+` allows the token to span slashes.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#slash-in-parameters).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#slash-in-parameters).
 
 ## Key takeaways
 
@@ -311,7 +332,7 @@ complex business logic in a route regex.
 - **Confused with:** [Validation](../validation/index.md) — routing regex disambiguates matching; business validity is the Validator's job.
 
 ## Official References
-- [Official Symfony docs — Parameter validation](https://symfony.com/doc/current/routing.html#parameters-validation)
+- [Official Symfony docs — Parameter validation](https://symfony.com/doc/8.0/routing.html#parameters-validation)
 - [Symfony source — RouteCompiler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/RouteCompiler.php)
 
 ## Video references
@@ -323,7 +344,7 @@ complex business logic in a route regex.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#parameters-validation) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#parameters-validation) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

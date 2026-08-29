@@ -139,6 +139,21 @@ tous les témoignages :
 
 <small>Related: [Exam Format & Scoring](format.md) · [Top Certification Traps](../revision/traps.md) · [Memory Aids](../revision/memory-aids.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Des tactiques concrètes pour gérer ton temps et éviter les pièges le jour de l'examen — connaître Symfony ne suffit pas si tu gères mal les 90 minutes.
+
+**Pourquoi ça existe ?** Un candidat qui bloque 10 minutes sur une seule question difficile perd un temps qu'il ne pourra jamais rattraper sur les 74 autres questions.
+
+**🏠 Analogie de la vraie vie :** Un examen scolaire classique où le conseil "fais d'abord les questions faciles, reviens sur les difficiles ensuite" évite de perdre des points faciles à cause du temps passé sur une question piège.
+
+**Symfony dans la vraie vie :** Repérer un mot comme "always"/"never"/"by default" dans une question vrai/faux change souvent la réponse — lire vite peut te faire manquer exactement le mot qui inverse la bonne réponse.
+
+**⚠️ Erreur fréquente :** laisser une question sans réponse — il n'y a pas de pénalité pour une mauvaise réponse, donc répondre au hasard vaut toujours mieux que de laisser vide.
+
+**🧠 Comment le mémoriser :** "Trois passages : réponds vite à ce que tu sais, reviens sur ce que tu as marqué, relis à la fin — jamais de case vide."
+
+
 ## Official References
 
 - [Official Symfony Certification](https://certification.symfony.com/)

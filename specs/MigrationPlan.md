@@ -48,7 +48,7 @@ content:
 - **PHP baseline → 8.4+** — rewrite the PHP API topic around 8.3/8.4 features
   (property hooks, asymmetric visibility, `new` in initializers, typed class
   constants, `#[\Override]`, `json_validate()`, DNF types, `readonly` classes).
-- **All Symfony links → `doc/current`**; source links pin `blob/8.0`.
+- **All Symfony links → `doc/8.0`**; source links pin `blob/8.0`.
 - **HTTP Caching down-weighted** — keep full coverage, mark revision priority Medium.
 - **Messenger up-weighted** — expand into multiple sub-sections, raise priority.
 - **Ban deprecated APIs** — show modern replacements only.
@@ -81,7 +81,7 @@ flowchart LR
 | Phase | Deliverable | Exit criterion |
 |---|---|---|
 | P0 Scaffold | Repo, `mkdocs.yml` nav, template, conventions, CI | `mkdocs build --strict` green on empty stubs |
-| P1 Specs | This SpecKit set (13 docs) | All specs complete, cross-linked, no TODOs |
+| P1 Specs | This SpecKit set (started at 13 docs, now 25) | All specs complete, cross-linked, no TODOs |
 | P2 Roadmap + IA | Landing pages (Home, Roadmap, Exam Guide, Revision Hub) | Nav resolves; entry paths clear |
 | P3 Author chapters | 14 area indexes + all micro-chapters | Each passes [DefinitionOfDone](DefinitionOfDone.md) |
 | P4 Quiz bank | `quiz/<area>.yml`, 3–6 Q per chapter | Valid schema; explanations + docs present |
@@ -98,7 +98,7 @@ P5 passes; the upstream list is never mutated.
 | Syllabus drift vs upstream list | Track official syllabus directly; Matrix is source of truth |
 | Content debt (some areas lag) | Per-chapter DoD gate + Matrix status per row |
 | Version regressions (7.x sneaks in) | Ban list + Review Checklist "no deprecated APIs" |
-| Link rot to Symfony docs | Use `doc/current`; periodic link sweep (see [FutureMaintenance](FutureMaintenance.md)) |
+| Link rot to Symfony docs | Use `doc/8.0`; periodic link sweep (see [FutureMaintenance](FutureMaintenance.md)) |
 
 ## Related specs
 

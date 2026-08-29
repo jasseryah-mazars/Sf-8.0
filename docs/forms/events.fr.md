@@ -31,6 +31,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Les événements de formulaire sont des points de contrôle pendant qu'un formulaire se construit et se soumet — l'occasion d'ajouter des champs dynamiquement ou de nettoyer les données brutes.
+
+### Imagine dans la vraie vie
+Ce sont des **postes de contrôle pendant qu'un formulaire se remplit et se soumet**. Pendant la préparation du formulaire vierge, tu passes par `PRE_SET_DATA`/`POST_SET_DATA` — le moment d'ajouter des champs selon qui le remplit. Quand tu le rends, tu passes par `PRE_SUBMIT`, puis `SUBMIT`, puis `POST_SUBMIT`.
+
+### Dans Symfony
+Un formulaire de commande affichant des champs différents selon un produit déjà choisi utilise typiquement `PRE_SET_DATA` pour ajouter dynamiquement les bons champs avant l'affichage.
+
+### Exemple simple
+```php
+$builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) { /* ... */ });
+```
+
+### Comment le mémoriser 🧠
+On ne peut **ajouter des champs** qu'aux points de contrôle précoces (`PRE_SET_DATA`, `PRE_SUBMIT`) — jamais après que le formulaire est déjà lié.
+
+
 ## Theory
 
 Le cycle de vie du form dispatch des events à des points fixes pour vous permettre
@@ -370,7 +390,7 @@ Validator, pas un hook POST_SUBMIT.
 
     **Why:** La soumission dispatch PRE_SUBMIT (raw), SUBMIT (norm), POST_SUBMIT
     (model), dans cet ordre.
-    **Ref:** [Form events](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q2. On PRE_SUBMIT, `$event->getData()` returns…"
     - [x] A. The raw submitted view data (array/string) ✅
@@ -380,7 +400,7 @@ Validator, pas un hook POST_SUBMIT.
 
     **Why:** PRE_SUBMIT se déclenche avant la transformation, donc les données
     sont les valeurs brutes de la request.
-    **Ref:** [Form events docs](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events docs](https://symfony.com/doc/8.0/form/events.html).
 
 ??? question "Q3. To add a field based on the submitted value, listen on…"
     - [x] A. PRE_SUBMIT ✅
@@ -390,7 +410,7 @@ Validator, pas un hook POST_SUBMIT.
 
     **Why:** Les champs doivent être ajoutés avant la liaison ; PRE_SUBMIT vous
     donne la valeur brute pendant que le form est encore mutable.
-    **Ref:** [Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html).
+    **Ref:** [Dynamic form modification](https://symfony.com/doc/8.0/form/dynamic_form_modification.html).
 
 ??? question "Q4. Which event does the validator extension hook to run validation?"
     - [x] A. POST_SUBMIT ✅
@@ -400,7 +420,7 @@ Validator, pas un hook POST_SUBMIT.
 
     **Why:** La validation s'exécute après la liaison des données au model, via
     un listener POST_SUBMIT. Il n'existe pas d'event de validation dédié.
-    **Ref:** [Form events docs](https://symfony.com/doc/current/form/events.html).
+    **Ref:** [Form events docs](https://symfony.com/doc/8.0/form/events.html).
 
 ## Key takeaways
 
@@ -427,8 +447,8 @@ Validator, pas un hook POST_SUBMIT.
 - **Confused with:** [EventDispatcher](../architecture/events.md) — les form events utilisent le même dispatcher mais un jeu `FormEvents` distinct, pas les events du kernel.
 
 ## Official References
-- [Official Symfony docs — Form events](https://symfony.com/doc/current/form/events.html)
-- [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/current/form/dynamic_form_modification.html)
+- [Official Symfony docs — Form events](https://symfony.com/doc/8.0/form/events.html)
+- [Official Symfony docs — Dynamic form modification](https://symfony.com/doc/8.0/form/dynamic_form_modification.html)
 - [Symfony source — FormEvents](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormEvents.php)
 
 ## Video references
@@ -441,7 +461,7 @@ Validator, pas un hook POST_SUBMIT.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/form/events.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/form/events.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

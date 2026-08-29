@@ -28,6 +28,26 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Symfony ajoute automatiquement un champ caché invisible qui prouve que le formulaire a bien été soumis depuis ton propre site — pas depuis un site pirate.
+
+### Imagine dans la vraie vie
+Le champ caché `_token` est un **badge délivré au poste de sécurité**. Quand le formulaire est affiché, le poste délivre un badge lié à ta visite. À la soumission, le garde vérifie que le badge correspond avant de laisser passer la requête. Un site pirate peut faire toquer ton navigateur à la porte, mais il ne peut ni lire ni forger ton badge.
+
+### Dans Symfony
+Le champ `_token` est ajouté **automatiquement** par le composant Form dans chaque formulaire — tu n'as jamais besoin de l'ajouter toi-même.
+
+### Exemple simple
+```php
+$resolver->setDefaults(['csrf_token_id' => 'inscription_item']);
+```
+
+### Comment le mémoriser 🧠
+Le token est validé sur **`PRE_SUBMIT`**. Le **CSRF sans état** (`stateless_token_ids`, 7.2+) ne nécessite aucune session — utile pour les API.
+
+
 ## Theory
 
 Le **CSRF** (Cross-Site Request Forgery) piège le navigateur d'un utilisateur
@@ -286,7 +306,7 @@ garder le CSRF.
 
     **Why:** Le `CsrfValidationListener` s'exécute sur PRE_SUBMIT, extrait
     `_token` des données brutes et le valide.
-    **Ref:** [CSRF protection](https://symfony.com/doc/current/security/csrf.html).
+    **Ref:** [CSRF protection](https://symfony.com/doc/8.0/security/csrf.html).
 
 ??? question "Q2. What does `csrf_token_id` control?"
     - [ ] A. The hidden field's HTML name
@@ -296,7 +316,7 @@ garder le CSRF.
 
     **Why:** `csrf_token_id` est la chaîne d'intention ; `csrf_field_name`
     définit le nom du champ HTML.
-    **Ref:** [Form CSRF options](https://symfony.com/doc/current/reference/forms/types/form.html).
+    **Ref:** [Form CSRF options](https://symfony.com/doc/8.0/reference/forms/types/form.html).
 
 ??? question "Q3. Stateless CSRF (7.2+) primarily removes the need for…"
     - [x] A. A server-side session to store tokens ✅
@@ -306,7 +326,7 @@ garder le CSRF.
 
     **Why:** Le `SameOriginCsrfTokenManager` valide via double-submit cookie +
     vérifications d'origine, donc aucun token n'est stocké en session.
-    **Ref:** [Stateless CSRF](https://symfony.com/doc/current/security/csrf.html#csrf-protection-in-login-forms).
+    **Ref:** [Stateless CSRF](https://symfony.com/doc/8.0/security/csrf.html#csrf-protection-in-login-forms).
 
 ## Key takeaways
 
@@ -331,8 +351,8 @@ garder le CSRF.
 - **Confused with:** [Form events](events.md) — le token est vérifié par un listener sur `PRE_SUBMIT`, pas dans une phase de validation séparée.
 
 ## Official References
-- [Official Symfony docs — CSRF protection](https://symfony.com/doc/current/security/csrf.html)
-- [Official Symfony docs — Form type CSRF options](https://symfony.com/doc/current/reference/forms/types/form.html)
+- [Official Symfony docs — CSRF protection](https://symfony.com/doc/8.0/security/csrf.html)
+- [Official Symfony docs — Form type CSRF options](https://symfony.com/doc/8.0/reference/forms/types/form.html)
 - [Symfony source — FormTypeCsrfExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Csrf/Type/FormTypeCsrfExtension.php)
 
 ## Video references
@@ -344,7 +364,7 @@ garder le CSRF.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/security/csrf.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/security/csrf.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

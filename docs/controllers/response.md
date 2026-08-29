@@ -27,7 +27,28 @@
     **Est. time:** 14 min ·
     **Prerequisites:** [HTTP → Response](../http/response.md)
 
+    **Examen Symfony 8 :** OUI
+
 ---
+
+## Pour les nuls
+
+### L'idée en une phrase
+Chaque contrôleur doit rendre une enveloppe scellée (`Response`) — repartir les mains vides fait planter l'application.
+
+### Imagine dans la vraie vie
+Le réceptionniste (le contrôleur) doit toujours rendre une enveloppe scellée au visiteur — jamais le laisser repartir les mains vides. Le type d'enveloppe dépend du contenu : une simple lettre (`Response`, HTML), un mémo structuré (`JsonResponse`), un colis entier (`BinaryFileResponse`), ou une dictée en direct page par page (`StreamedResponse`).
+
+### Dans Symfony
+Oublier de retourner une `Response` dans une action déclenche une `LogicException` — sauf si un listener `kernel.view` sait construire une réponse à partir de ce que tu as retourné (par exemple un tableau, avec un bundle dédié).
+
+### Exemple simple
+```php
+public function api(): JsonResponse { return $this->json(['statut' => 'ok']); }
+```
+
+### Comment le mémoriser 🧠
+Choisis le sous-type par la nature du contenu : JSON → `JsonResponse`, fichier téléchargeable → `BinaryFileResponse`, flux progressif → `StreamedResponse`.
 
 ## Theory
 
@@ -250,6 +271,8 @@ $file->setAutoLastModified();
 
 ## Certification questions
 
+*Question d'entraînement inspirée du syllabus — jamais une question officielle de l'examen.*
+
 ??? question "Q1. What must every controller return?"
     - [x] A. A `Symfony\Component\HttpFoundation\Response` (or trigger a view listener). ✅
     - [ ] B. An array that Symfony auto-serializes.
@@ -257,7 +280,7 @@ $file->setAutoLastModified();
     - [ ] D. `void`; Symfony renders the matching template.
 
     **Why:** the kernel requires a `Response`; a non-Response fires `kernel.view`.
-    **Ref:** [controller](https://symfony.com/doc/current/controller.html).
+    **Ref:** [controller](https://symfony.com/doc/8.0/controller.html).
 
 ??? question "Q2. When does a `StreamedResponse` produce its body?"
     - [ ] A. When constructed.
@@ -266,7 +289,7 @@ $file->setAutoLastModified();
     - [ ] D. When the profiler collects data.
 
     **Why:** the callback runs at send time, streaming output chunk by chunk.
-    **Ref:** [streaming response](https://symfony.com/doc/current/components/http_foundation.html#streaming-a-response).
+    **Ref:** [streaming response](https://symfony.com/doc/8.0/components/http_foundation.html#streaming-a-response).
 
 ??? question "Q3. Which class best serves a resumable file download?"
     - [ ] A. `Response`
@@ -275,7 +298,7 @@ $file->setAutoLastModified();
     - [ ] D. `JsonResponse`
 
     **Why:** it supports HTTP range requests and X-Sendfile offloading.
-    **Ref:** [serving files](https://symfony.com/doc/current/components/http_foundation.html#serving-files).
+    **Ref:** [serving files](https://symfony.com/doc/8.0/components/http_foundation.html#serving-files).
 
 ## Key takeaways
 
@@ -299,7 +322,7 @@ $file->setAutoLastModified();
 - **Confused with:** [Error Pages](error-pages.md) — errors are produced by *throwing*, not by building an error `Response`.
 
 ## Official References
-- [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/current/components/http_foundation.html)
+- [Official Symfony docs — HttpFoundation Response](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Symfony source — Response](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Response.php)
 
 ## Video references
@@ -311,7 +334,7 @@ $file->setAutoLastModified();
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

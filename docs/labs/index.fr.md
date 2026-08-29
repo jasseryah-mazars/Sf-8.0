@@ -49,7 +49,22 @@ vous comparer.
 
 <small>Related: [Roadmap](../roadmap.md) · [Revision Hub](../revision/index.md)</small>
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette page ?** Le point d'entrée vers les exercices pratiques (labs) — un par domaine — où tu construis réellement du code au lieu de juste lire de la théorie.
+
+**Pourquoi ça existe ?** Lire "comment fonctionne un Voter" et être capable d'en écrire un soi-même sous pression sont deux compétences différentes — les labs entraînent la seconde, indispensable le jour de l'examen (et en vrai travail).
+
+**🏠 Analogie de la vraie vie :** Les travaux pratiques (TD) à l'université, en complément du cours magistral : le cours explique la théorie, le TD te fait manipuler toi-même, avec un corrigé caché à consulter seulement après avoir essayé.
+
+**Symfony dans la vraie vie :** Le lab Security te fait écrire un vrai `Voter` testé unitairement — pas juste lire sa définition, mais le construire, le tester, et le comparer à une solution de référence.
+
+**⚠️ Erreur fréquente :** ouvrir la solution cachée avant d'avoir vraiment essayé — ça donne l'illusion de comprendre sans avoir consolidé la compétence pratique.
+
+**🧠 Comment le mémoriser :** "Essaie d'abord, compare ensuite — jamais l'inverse."
+
+
 ## Official References
 
-- [Symfony documentation home](https://symfony.com/doc/current/)
-- [Testing](https://symfony.com/doc/current/testing.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
+- [Testing](https://symfony.com/doc/8.0/testing.html)

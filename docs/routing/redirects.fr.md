@@ -29,6 +29,71 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+`RedirectController` permet de rediriger uniquement via la configuration de route — sans écrire la moindre classe PHP.
+
+### Imagine dans la vraie vie
+Un ordre de réexpédition de courrier au bureau de poste : le courrier pour l'ancienne adresse est automatiquement transféré vers la nouvelle, et tu décides si le déménagement est permanent (301) ou temporaire (302).
+
+### Dans Symfony
+Une ancienne URL SEO-importante (`/anciens-produits`) peut rediriger en 301 vers `/produits` directement dans la config de routes — sans jamais créer de contrôleur dédié pour ça.
+
+### Exemple simple
+```yaml
+ancienne_url:
+    path: /anciens-produits
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults: { route: 'produits', permanent: true }
+```
+
+### Comment le mémoriser 🧠
+Un GET vers une URL avec un slash final manquant est redirigé automatiquement en 301 — mais un **POST** dans la même situation reçoit un **405**, jamais une redirection silencieuse qui perdrait le corps de la requête.
+
+Sometimes a URL should not run business logic — it should just **redirect** to
+another URL or route. Symfony ships a ready-made controller,
+`Symfony\Bundle\FrameworkBundle\Controller\RedirectController`, so you can define
+redirects **declaratively in route config** without writing a controller.
+
+Two actions:
+
+- `RedirectController::redirectAction` — redirect to another **route** (by name),
+  forwarding parameters.
+- `RedirectController::urlRedirectAction` — redirect to a **literal path/URL**.
+
+Both accept `permanent` (301 vs 302) and can force `scheme`/`httpPort`/`httpsPort`.
+For redirects that depend on logic, redirect from the controller instead (see
+[Controllers → HTTP Redirects](../controllers/http-redirects.md)).
+
+```yaml
+# redirectAction: target a route by NAME
+legacy_home:
+    path: /home
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: app_dashboard   # target route name
+        permanent: true        # 301 (default false = 302)
+
+# urlRedirectAction: target a literal PATH/URL, optionally forcing the scheme
+legacy_docs:
+    path: /old-docs
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /docs            # literal target path
+        scheme: https          # httpPort / httpsPort can be forced too
+```
+
+!!! question "Predict first"
+    A route is defined as `/blog/`. A `GET /blog` and a `POST /blog` both arrive.
+    What does each one get?
+
+??? note "Reveal"
+    `GET /blog` → **301** redirect to `/blog/` (the trailing-slash auto-redirect for
+    safe methods). `POST /blog` → **405**, because redirecting would silently turn
+    the POST into a GET.
+
+
 ## Theory
 
 Parfois, une URL ne doit exécuter aucune logique métier — elle doit simplement
@@ -254,7 +319,7 @@ préférez un 302 tant qu'une cible est encore susceptible de changer.
     - [ ] D. Direct match, no redirect
 
     **Why:** `RedirectableUrlMatcher` émet un 301 vers l'URL canonique avec slash pour
-    les méthodes sûres. **Ref:** [Trailing slash](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes).
+    les méthodes sûres. **Ref:** [Trailing slash](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes).
 
 ??? question "Q2. `POST /blog` where the route is `/blog/` yields?"
     - [ ] A. 301 redirect
@@ -263,7 +328,7 @@ préférez un 302 tant qu'une cible est encore susceptible de changer.
     - [ ] D. 308 redirect
 
     **Why:** rediriger un POST changerait sa méthode, donc le matcher retourne un 405.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes).
 
 ??? question "Q3. Which controller action redirects to a route **name**?"
     - [x] A. `RedirectController::redirectAction` ✅
@@ -272,7 +337,7 @@ préférez un 302 tant qu'une cible est encore susceptible de changer.
     - [ ] D. `RedirectController::nameAction`
 
     **Why:** `redirectAction` prend un default `route` ; `urlRedirectAction` prend un
-    `path`. **Ref:** [Redirecting](https://symfony.com/doc/current/routing.html).
+    `path`. **Ref:** [Redirecting](https://symfony.com/doc/8.0/routing.html).
 
 ??? question "Q4. `permanent: true` sets which status code?"
     - [x] A. 301 ✅
@@ -281,7 +346,7 @@ préférez un 302 tant qu'une cible est encore susceptible de changer.
     - [ ] D. 308
 
     **Why:** `permanent` active un 301 ; la valeur par défaut est un 302.
-    **Ref:** [Routing](https://symfony.com/doc/current/routing.html).
+    **Ref:** [Routing](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 
@@ -305,7 +370,7 @@ préférez un 302 tant qu'une cible est encore susceptible de changer.
 - **Confused with:** [Controllers → HTTP Redirects](../controllers/http-redirects.md) — redirections uniquement en config vs `redirectToRoute()` piloté par la logique.
 
 ## Official References
-- [Official Symfony docs — Redirecting URLs](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes)
+- [Official Symfony docs — Redirecting URLs](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes)
 - [Symfony source — RedirectController](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Controller/RedirectController.php)
 
 ## Video references
@@ -317,7 +382,7 @@ préférez un 302 tant qu'une cible est encore susceptible de changer.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/routing.html#redirecting-urls-with-trailing-slashes) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/routing.html#redirecting-urls-with-trailing-slashes) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

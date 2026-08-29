@@ -15,6 +15,20 @@ It is a long file; this tour is your trail map through it.
     - Where does validation actually happen — and why is `isValid()` before
       `isSubmitted()` a `LogicException`?
 
+## 🧠 Pour les nuls
+
+**C'est quoi ce tour ?** Le trajet complet d'un formulaire Symfony, de sa création jusqu'à sa validation — avec les six événements qui se déclenchent en chemin.
+
+**Pourquoi ça existe ?** Mémoriser les deux séquences d'événements (`PRE_SET_DATA`→`POST_SET_DATA` et `PRE_SUBMIT`→`SUBMIT`→`POST_SUBMIT`) sans les avoir vues dans le vrai fichier `Form.php` reste abstrait — ce tour ancre cette théorie dans le code réel.
+
+**🏠 Analogie de la vraie vie :** Le cycle de vie d'une commande dans un restaurant : la carte est présentée vierge (création), remplie par le client (soumission), puis vérifiée en cuisine avant d'être confirmée (validation) — chaque étape a son propre moment précis.
+
+**Symfony dans la vraie vie :** Appeler `$form->isValid()` **avant** `$form->isSubmitted()` déclenche une `LogicException` — ce tour montre exactement pourquoi, en suivant le code qui refuse de valider un formulaire jamais soumis.
+
+**⚠️ Erreur fréquente :** confondre les données "modèle", "normalisées" et "vue" — ce sont trois représentations différentes des mêmes données, transformées à des moments précis du cycle.
+
+**🧠 Comment le mémoriser :** "Créer, puis remplir, puis soumettre, puis valider — jamais dans le désordre."
+
 ## The map
 
 ```mermaid
@@ -262,10 +276,10 @@ extensions (e.g. inject an extra `var` for the template).
 ## Official References
 
 - [Form.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Form.php)
-- [Form Events](https://symfony.com/doc/current/form/events.html)
-- [Data Transformers](https://symfony.com/doc/current/form/data_transformers.html)
-- [Forms — processing](https://symfony.com/doc/current/forms.html#processing-forms)
-- [When and How to Use Data Mappers](https://symfony.com/doc/current/form/data_mappers.html)
+- [Form Events](https://symfony.com/doc/8.0/form/events.html)
+- [Data Transformers](https://symfony.com/doc/8.0/form/data_transformers.html)
+- [Forms — processing](https://symfony.com/doc/8.0/forms.html#processing-forms)
+- [When and How to Use Data Mappers](https://symfony.com/doc/8.0/form/data_mappers.html)
 
 ---
 <small>Related: [Form Events](../forms/events.md) ·

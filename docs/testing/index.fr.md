@@ -27,6 +27,21 @@ d'exhaustivité mais est **exclu de la certification Symfony 8**.
       fiables sont la visibilité de `self::getContainer()`, les helpers
       `assertResponse*` et les modes du deprecation helper.
 
+## 🧠 Pour les nuls
+
+**C'est quoi cette étape ?** Tester une application Symfony, c'est vérifier automatiquement qu'une classe isolée fonctionne (test unitaire) ou qu'une page entière répond correctement (test fonctionnel) — sans jamais tester à la main dans un navigateur.
+
+**Pourquoi ça existe ?** Sans tests automatisés, chaque changement de code risque de casser silencieusement une fonctionnalité existante ailleurs dans l'application.
+
+**🏠 Analogie de la vraie vie :** Tester une seule pièce détachée sur un établi (test unitaire) contre faire rouler la voiture entière sur circuit (test fonctionnel) — les deux ont leur utilité, à des échelles différentes.
+
+**Symfony dans la vraie vie :** `KernelTestCase` démarre juste le kernel pour tester un service isolé ; `WebTestCase` démarre tout et simule un vrai visiteur naviguant sur le site via un `Client`.
+
+**⚠️ Erreur fréquente :** écrire uniquement des tests fonctionnels lourds là où un test unitaire rapide suffirait — ça ralentit inutilement toute la suite de tests.
+
+**🧠 Comment le mémoriser :** "Test unitaire = une pièce sur l'établi. Test fonctionnel = la voiture entière sur circuit."
+
+
 ## Why this stage matters
 
 Le testing est l'endroit où tout le framework se rejoint : un test fonctionnel
@@ -55,7 +70,7 @@ d'étude.
   headers, environnement/debug, requests isolées.
 - [Request/Response Introspection](introspection.md) — `getRequest()`/`getResponse()`
   et les helpers `assertResponse*` / `assertSelector*`.
-- [PHPUnit Bridge](phpunit-bridge.md) — collecte des dépréciations, mocking de l'horloge/du DNS,
+- [PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) — collecte des dépréciations, mocking de l'horloge/du DNS,
   `SYMFONY_DEPRECATIONS_HELPER`, l'extension PHPUnit de Symfony. **Exclu de la
   certification Symfony 8.**
 - [Handling Deprecated Code](deprecations.md) — `#[IgnoreDeprecations]`, modes du
@@ -70,10 +85,10 @@ Apprenez le trio [Client](client.md), [Crawler](crawler.md) et
 pilote et vérifie réellement. Terminez par le groupe intégration framework et
 diagnostics : [Framework Objects](framework-objects.md),
 [Client Configuration](client-configuration.md), [Profiler](profiler.md),
-[PHPUnit Bridge](phpunit-bridge.md) et [Deprecations](deprecations.md).
+[PHPUnit Bridge](../appendices/out-of-syllabus/phpunit-bridge.md) et [Deprecations](deprecations.md).
 
 ## Official References
 
-- [Symfony documentation — Testing](https://symfony.com/doc/current/testing.html)
-- [Symfony documentation home](https://symfony.com/doc/current/)
+- [Symfony documentation — Testing](https://symfony.com/doc/8.0/testing.html)
+- [Symfony documentation home](https://symfony.com/doc/8.0/)
 - [Official certification syllabus](https://certification.symfony.com/exams/symfony.html)

@@ -27,6 +27,27 @@
 
 ---
 
+## Pour les nuls
+
+### L'idée en une phrase
+Un flash est un post-it à usage unique : tu le lis une fois, à la prochaine visite, puis il disparaît tout seul.
+
+### Imagine dans la vraie vie
+Le réceptionniste colle un post-it sur le comptoir pour ta *prochaine* visite : "Profil enregistré". Tu reviens (la requête fraîche après redirection), tu le lis une fois, et il est décollé et jeté — la lecture le consomme. `peek()` revient à juste jeter un œil sur le post-it en le laissant collé pour quelqu'un d'autre.
+
+### Dans Symfony
+Le pattern Post/Redirect/Get est fait pour ça : après un formulaire soumis avec succès, on redirige (nouvelle requête) et c'est *cette* nouvelle requête qui affiche et consomme le message flash — pas la requête POST elle-même.
+
+### Exemple simple
+```php
+$this->addFlash('success', 'Produit enregistré !');
+return $this->redirectToRoute('produit_liste'); // le flash s'affichera sur cette page
+```
+
+### Comment le mémoriser 🧠
+Lire un flash **le consomme** — toujours l'associer à une redirection, jamais l'afficher directement sur la même requête qui l'a créé.
+
+
 ## Theory
 
 Un **flash message** est une notification à usage unique stockée dans la session
@@ -230,7 +251,7 @@ un flash message ne sont pas cachables par un cache partagé.
     - [ ] D. It is written to the log.
 
     **Why:** `get`/`all` consomment ; utilisez `peek` pour lire sans supprimer.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q2. `$this->addFlash('notice', 'Hi')` is shorthand for…"
     - [x] A. `getSession()->getFlashBag()->add('notice', 'Hi')` ✅
@@ -238,7 +259,7 @@ un flash message ne sont pas cachables par un cache partagé.
     - [ ] C. writing a cookie
     - [ ] D. dispatching an event
 
-    **Why:** la méthode délègue au flash bag de la session. **Ref:** [AbstractController](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Why:** la méthode délègue au flash bag de la session. **Ref:** [AbstractController](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ??? question "Q3. Why pair a flash with a redirect?"
     - [x] A. The message displays on the next (GET) request, matching the PRG pattern. ✅
@@ -247,7 +268,7 @@ un flash message ne sont pas cachables par un cache partagé.
     - [ ] D. It prevents CSRF.
 
     **Why:** les flash messages sont conçus pour survivre à exactement un redirect et être affichés ensuite.
-    **Ref:** [flash messages](https://symfony.com/doc/current/controller.html#flash-messages).
+    **Ref:** [flash messages](https://symfony.com/doc/8.0/controller.html#flash-messages).
 
 ## Key takeaways
 
@@ -271,7 +292,7 @@ un flash message ne sont pas cachables par un cache partagé.
 - **Confused with:** [AbstractController](abstract-controller.md) — `addFlash()` est du sucre syntaxique autour de `getSession()->getFlashBag()->add()`.
 
 ## Official References
-- [Official Symfony docs — Flash Messages](https://symfony.com/doc/current/controller.html#flash-messages)
+- [Official Symfony docs — Flash Messages](https://symfony.com/doc/8.0/controller.html#flash-messages)
 - [Symfony source — FlashBag](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php)
 
 ## Video references
@@ -283,7 +304,7 @@ un flash message ne sont pas cachables par un cache partagé.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/current/controller.html#flash-messages) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/controller.html#flash-messages) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 
