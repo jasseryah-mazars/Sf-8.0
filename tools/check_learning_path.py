@@ -98,7 +98,14 @@ def flashcards_next(directory: str, slug: str) -> str | None:
     if not os.path.exists(path):
         return None
     text = open(path, encoding="utf-8").read()
-    m = re.search(r"Continue to the next[^\n]*?\]\(([^)\s]+)\)", text)
+    # Both phrasings are in use. Matching only "Continue to the next" meant this
+    # rule silently checked NOTHING: every deck in php-web-security says
+    # "Next topic:", so the function returned None for all of them and the check
+    # reported OK across 169 topics while three consecutive decks pointed at the
+    # wrong chapter. A rule that can never fire is worse than no rule — it is a
+    # rule everyone believes is running.
+    m = re.search(r"(?:Continue to the next|Next topic|Next stage)[^\n]*?\]\(([^)\s]+)\)",
+                  text)
     return m.group(1) if m else None
 
 

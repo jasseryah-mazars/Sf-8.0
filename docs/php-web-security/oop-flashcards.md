@@ -240,4 +240,4 @@
 
 ---
 
-<small>Back to the lesson: [Object-Oriented Programming](oop.md) · [Retake the topic exam](oop-exam.md) · Next topic: [Attributes](attributes.md)</small>
+<small>Back to the lesson: [Object-Oriented Programming](oop.md) · [Retake the topic exam](oop-exam.md) · Next topic: [Interfaces & Type Declarations](interfaces.md)</small>

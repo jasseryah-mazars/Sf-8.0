@@ -263,4 +263,4 @@
 
 ---
 
-<small>Back to the lesson: [Attributes](attributes.md) · [Retake the topic exam](attributes-exam.md) · Next topic: [Interfaces & Type Declarations](interfaces.md)</small>
+<small>Back to the lesson: [Attributes](attributes.md) · [Retake the topic exam](attributes-exam.md) · Next topic: [Anonymous Functions & Closures](closures.md)</small>
