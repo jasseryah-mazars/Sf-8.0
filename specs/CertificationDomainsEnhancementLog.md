@@ -323,9 +323,32 @@ French reader still on a 404. It is recorded with its resolutions so the fix is 
 short, mechanical job the moment `.fr.md` is in scope — not left as an unexplained
 red check.
 
-## Topics 11–13 — not started
+## Topics 11–13 — `extensions`, `spl`, `web-security` — the lot is complete
 
-`extensions`, `spl` and `web-security` remain in their original single-file form.
+Dispatched with the exam-first ordering now standard for this lot. All three agents again
+stopped at the session rate limit, and again after the work that mattered: every activity
+file and every lesson was on disk, only the index polish was outstanding.
 
-Outstanding within the lot: the lessons for `traits`, `enums` and `namespaces` are migrated
-but not yet enriched to Expert depth.
+| Topic | Exam questions | Exercises | Cards | Lesson lines |
+|---|---|---|---|---|
+| `extensions` | 27 (4 migrated + 23 new) | 7 | 47 | 1,225 |
+| `spl` | 30 (5 migrated + 25 new) | 7 | 41 | 1,128 |
+| `web-security` | 33 (5 migrated + 28 new) | 7 | 48 | 1,073 |
+
+These are the three deepest lessons in the lot. `web-security` is also the one written around
+a constraint: its French sidecar carries a broken `sequenceDiagram` this mission may not
+touch, so the English diagram uses `·` separators and the French one stays quarantined.
+
+## Lot 1 — final counts
+
+**13 topics × 4 files = 52 files**, all present, non-empty and passing
+`check_topic_journey`. No lesson retains a `## Certification questions` section; all 55
+original in-lesson questions were migrated with none lost, verified concept by concept
+against the pre-migration text.
+
+| Measure | Value |
+|---|---|
+| Exam questions | **292** (55 migrated + 237 new) |
+| Guided exercises | **91** (7 per topic) |
+| Flashcards | **421** |
+| Lessons at Expert depth | 13 / 13 |

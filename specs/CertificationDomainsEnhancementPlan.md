@@ -163,9 +163,9 @@ carries its pre-lot depth. It is an honest half-step, not a synonym for done.
 | 8 | `traits` | done | done | done | done | done | green | see log |
 | 9 | `enums` | done | done | done | done | done | green | see log |
 | 10 | `namespaces` | done | done | done | done | done | green | see log |
-| 11 | `extensions` | pending | pending | pending | pending | pending | pending | — |
-| 12 | `spl` | pending | pending | pending | pending | pending | pending | — |
-| 13 | `web-security` | pending | pending | pending | pending | pending | pending | — |
+| 11 | `extensions` | done | done | done | done | done | green | see log |
+| 12 | `spl` | done | done | done | done | done | green | see log |
+| 13 | `web-security` | done | done | done | done | done | green | see log |
 
 Execution detail per topic is recorded in `specs/CertificationDomainsEnhancementLog.md`;
 the end-of-lot verification is in `specs/CertificationDomainsFinalAudit.md`.

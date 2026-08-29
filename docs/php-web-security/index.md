@@ -90,9 +90,16 @@ enrichment — see the repository's `specs/TraceabilityMatrix.md`):
   Full journey: [exercises](namespaces-exercises.md) · [exam](namespaces-exam.md) ·
   [flashcards](namespaces-flashcards.md).
 - [PHP Extensions](extensions.md) — `mbstring`, `intl`, `ctype`, `iconv`,
-  `pdo`, `opcache` and how to detect/require them.
+  `pdo`, `opcache`, how to detect and require them, and what
+  `symfony/polyfill-*` does and does not replace.
+  Full journey: [exercises](extensions-exercises.md) · [exam](extensions-exam.md) ·
+  [flashcards](extensions-flashcards.md).
 - [SPL](spl.md) — `ArrayAccess`, `Iterator`/`IteratorAggregate`, `Countable`,
-  `SplStack`/`Queue`/`Heap`/`PriorityQueue`, `SplObjectStorage`, generators.
+  `SplStack`/`Queue`/`Heap`/`PriorityQueue`, `SplObjectStorage`, the iterator
+  decorators (`LimitIterator`, `CallbackFilterIterator`,
+  `RecursiveIteratorIterator`) and generators (`yield`, `yield from`, `send()`).
+  Full journey: [exercises](spl-exercises.md) · [exam](spl-exam.md) ·
+  [flashcards](spl-flashcards.md).
 - [Web Security Fundamentals](web-security.md) — XSS, CSRF, SQL injection,
   session hijacking/fixation, clickjacking, HTTPS/HSTS, security headers,
   password storage — framed as what Symfony protects against.
