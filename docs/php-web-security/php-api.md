@@ -343,7 +343,7 @@ the failure into the right HTTP response. See
 [value resolvers](../controllers/value-resolvers.md).
 
 !!! note "Symfony 8.0 source reference"
-    https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
+    https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
 
 **First-class callables appear throughout the source.** `ProxyHelper` uses
 `->invoke(...)` to build a `Closure` from a reflection method — the 8.1 syntax, chosen
@@ -963,7 +963,7 @@ much as a correctness one — see [Web security fundamentals](web-security.md).
 - [PHP: array_find()](https://www.php.net/manual/en/function.array-find.php)
 - [PHP: json_validate()](https://www.php.net/manual/en/function.json-validate.php)
 - [Symfony 8.0: Lazy services](https://symfony.com/doc/8.0/service_container/lazy_services.html)
-- [Symfony source — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
+- [Symfony source — BackedEnumValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
 - [Symfony source — LazyServiceDumper](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/LazyProxy/PhpDumper/LazyServiceDumper.php)
 
 ## Video references

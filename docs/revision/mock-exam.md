@@ -855,7 +855,7 @@
 
     Profiles are persisted per token, so $this->data must be serializable — store scalar/array (VarDumper-clonable) data, not live resources like a PDO connection or an entity with a connection. Implement reset() for worker reuse.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 **Q60.** True or False: UserInterface::getUsername() still exists in Symfony 8.  <small>_(Security)_</small>
 

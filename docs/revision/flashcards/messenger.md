@@ -48,7 +48,7 @@
 
     It prevents dispatching side-effect messages (e.g. a confirmation email) before the surrounding work commits, so a failure/rollback cancels them. It has nothing to do with delays, multi-bus fan-out, or retries.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger/dispatch_after_current_bus.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html)
 
 ??? question "5. A dispatched message throws NoHandlerForMessageException. What is the most likely cause?"
     **✅ The handler class is missing #[AsMessageHandler] (or its __invoke argument type does not match the message)**
@@ -62,14 +62,14 @@
 
     Messenger ships one default bus (messenger.bus.default) but supports many, each configured with its own middleware — so a command bus can wrap handlers in a transaction while an event bus does not. The command/query/ event convention is just that: a convention, not enforced by the code.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger/multiple_buses.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html)
 
 ??? question "7. An order handler dispatches an 'order confirmed' email message, but the email is sent even when the surrounding DB transaction rolls back. What fixes this?"
     **✅ Dispatch the email message with DispatchAfterCurrentBusStamp so it is delivered only after the current handler finishes successfully**
 
     DispatchAfterCurrentBusStamp defers the inner dispatch until the current message finishes handling successfully, so a rollback cancels the email. A delay only postpones sending, the unrecoverable exception affects the email's own retries, and sync routing would send it immediately during the transaction.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger/dispatch_after_current_bus.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html)
 
 ??? question "8. $envelope->last(HandledStamp::class) returns null. Which situation explains this best?"
     **✅ The message was routed to an async transport, so it has not been handled in this process yet**

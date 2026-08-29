@@ -559,7 +559,7 @@
         interchangeable — demonstrable in three lines of PHP, and a real risk now that
         passphrase managers are common.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/NativePasswordHasher.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/NativePasswordHasher.php
 
 ??? question "What does `algorithm: 'auto'` actually build, and which hasher writes new hashes?"
     Think before revealing the answer.
@@ -575,7 +575,7 @@
         hashers in the chain exist for verification and migration, and the selection may
         legitimately change in a future release — which is why `needsRehash()` exists.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php
 
 ??? question "Where does a rehash happen, and which interface stores the result?"
     Think before revealing the answer.

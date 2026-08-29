@@ -329,7 +329,7 @@ scaled app.
     - [x] C. `RedisStore` ✅
 
     **Why:** Flock/Semaphore are local; Redis (and DB) stores are shared.
-    **Ref:** [Lock stores](https://symfony.com/doc/8.0/components/lock.html#available-stores).
+    **Ref:** [Lock stores](https://symfony.com/doc/8.0/lock.html#available-stores).
 
 ??? question "Q3. Why call `refresh()` during a long critical section?"
     - [x] A. To extend the lock's TTL before it expires ✅
@@ -337,7 +337,7 @@ scaled app.
     - [ ] C. To switch stores
 
     **Why:** `refresh()` prolongs the TTL so the lock isn't considered stale mid-job.
-    **Ref:** [Expiring locks](https://symfony.com/doc/8.0/components/lock.html#expiring-locks).
+    **Ref:** [Expiring locks](https://symfony.com/doc/8.0/lock.html#expiring-locks).
 
 ## Key takeaways
 
@@ -362,7 +362,7 @@ scaled app.
 
 ## Official References
 - [Official docs — Lock](https://symfony.com/doc/8.0/lock.html)
-- [Official docs — Lock component](https://symfony.com/doc/8.0/components/lock.html)
+- [Official docs — Lock component](https://symfony.com/doc/8.0/lock.html)
 - [Symfony source — Lock](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Lock/Lock.php)
 
 ## Video references

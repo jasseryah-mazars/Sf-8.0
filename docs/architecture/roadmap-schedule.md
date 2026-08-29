@@ -192,7 +192,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
     - [ ] C. After 9.0
 
     **Why:** `X.4` and `(X+1).0` ship together. **Ref:**
-    [Release process](https://symfony.com/doc/8.0/contributing/community/releases.html).
+    [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How often is a new major/LTS released?"
     - [x] A. Every 2 years ✅
@@ -223,7 +223,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
 
 ## Official References
 - [Symfony releases & schedule](https://symfony.com/releases)
-- [Release process](https://symfony.com/doc/8.0/contributing/community/releases.html)
+- [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -234,7 +234,7 @@ follow: latest standard (features early) vs LTS (stability). There is no separat
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/community/releases.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

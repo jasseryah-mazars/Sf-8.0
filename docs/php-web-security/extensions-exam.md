@@ -453,7 +453,7 @@ All questions target **PHP 8.4** and **Symfony 8.0**.
         English month names on a French page, unsorted accented names — rather than an
         exception in the log.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String/AbstractUnicodeString.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String/AbstractUnicodeString.php
 
 ??? question "Question 18 · Which constraint needs what"
     Symfony's `Locale`, `Country` and `Currency` validation constraints check their value

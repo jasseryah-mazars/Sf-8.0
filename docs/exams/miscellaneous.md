@@ -36,7 +36,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     ArrayAdapter stores items in memory for the current request/process only, so nothing persists across requests — useful for deterministic tests.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache/adapters/memcached_adapter.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache/adapters/memcached_adapter.html)
 
 **Q2.** Which composer flag excludes require-dev packages when deploying to production?  <small>_(easy · single)_</small>
 
@@ -104,7 +104,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     Flock and Semaphore stores are local to one machine, and InMemoryStore is per-process (tests). Shared stores like Redis (or a database store) coordinate locks across servers.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#available-stores)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#available-stores)
 
 **Q7.** Which class renders Twig templates into an email body?  <small>_(easy · single)_</small>
 
@@ -216,7 +216,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     Throwables are normalised into a FlattenException — a serializable snapshot (class, message, status, trace) that error renderers (HTML/JSON/XML) turn into output and that is safe to log. HttpException is a throwable, not the snapshot.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/error_handler.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 **Q15.** Which service tag registers a custom data collector (with a toolbar/panel)?  <small>_(easy · single)_</small>
 
@@ -230,7 +230,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     The data_collector tag wires a DataCollectorInterface; supplying a `template` attribute makes its toolbar badge and panel appear. Autoconfigure applies the tag automatically for services implementing the interface.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 **Q16.** What does the translator return when a message id has no translation in the active locale or its fallbacks?  <small>_(easy · trap)_</small>
 
@@ -326,7 +326,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     With PSR-6, CacheItemInterface::get() returns null both for an absent key and for a genuinely stored null, so you must call isHit() to tell them apart. The contracts callback API sidesteps this ambiguity; there is no hasKey() or miss exception.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 **Q23.** In serialize(), which stage runs first?  <small>_(medium · internals)_</small>
 
@@ -340,7 +340,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     serialize() normalizes the object to an array/scalars, then encodes that to a string. deserialize() reverses it: decode then denormalize.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/serializer.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/serializer.html)
 
 **Q24.** #[Groups(['read'])] on a property takes effect when…  <small>_(medium · trap)_</small>
 
@@ -578,7 +578,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     Locks have a TTL to avoid deadlocks after crashes. refresh() prolongs it so a still-working owner keeps exclusivity; without it another process could acquire the lock after the TTL, breaking mutual exclusion.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#expiring-locks)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#expiring-locks)
 
 **Q41.** Which is the correct guard to skip work another process is already doing?  <small>_(medium · code)_</small>
 
@@ -606,7 +606,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true) defaults to a 300 second TTL and releases the lock when the Lock object is destroyed. Long jobs should raise the TTL and call refresh() to avoid premature expiry.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#expiring-locks)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#expiring-locks)
 
 **Q43.** With Messenger routing configured for emails, MailerInterface::send() will…  <small>_(medium · scenario)_</small>
 
@@ -716,7 +716,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     getDuration() returns milliseconds, and the autowirable debug.stopwatch service is only registered in debug (dev/test). Injecting Stopwatch in prod therefore causes a wiring error.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/stopwatch.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 
 **Q51.** A service that autowires Symfony\Component\Stopwatch\Stopwatch works in dev but fails to boot in prod. Why?  <small>_(medium · debug)_</small>
 
@@ -730,7 +730,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     Stopwatch's framework service is registered only when debug is enabled, so in prod there is nothing to inject and the container fails. Use it for ad-hoc dev profiling only; for prod metrics use real observability.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/stopwatch.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 
 **Q52.** An uncaught exception that does NOT implement HttpExceptionInterface produces which status code?  <small>_(medium · trap)_</small>
 
@@ -758,7 +758,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     ErrorHandler registers set_error_handler() to throw \\ErrorException for PHP errors (warnings, notices, fatals via a shutdown function), making them catchable. It does not turn them into HttpExceptions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/error_handler.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 **Q54.** In a controller, which throw produces a 404 rendered by the framework error controller?  <small>_(medium · scenario)_</small>
 
@@ -800,7 +800,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     Profiles are persisted per token, so $this->data must be serializable — store scalar/array (VarDumper-clonable) data, not live resources like a PDO connection or an entity with a connection. Implement reset() for worker reuse.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 **Q57.** Which mechanism does Symfony 8 use for translation pluralization?  <small>_(medium · single)_</small>
 
@@ -814,7 +814,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     ICU MessageFormat handles plural/select rules with locale-aware categories (one/few/many/other); the old pipe syntax is legacy.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 **Q58.** What is the default translation domain, and what file naming applies ICU formatting?  <small>_(medium · config)_</small>
 
@@ -828,7 +828,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     When no domain is passed, trans() uses messages; validators and security are separate domains. ICU MessageFormat is applied to catalogues named with the +intl-icu suffix — forgetting it means ICU rules are not parsed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 **Q59.** What makes Filesystem::dumpFile() safe against partial reads?  <small>_(medium · internals)_</small>
 
@@ -941,7 +941,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or tags. PSR-6 uses CacheItem objects and supports tags through a TagAwareAdapter as well as expiration.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 **Q67.** Cache stampede protection in Symfony Cache is implemented by…  <small>_(hard · internals)_</small>
 
@@ -1067,7 +1067,7 @@ Full theory: [Miscellaneous](../miscellaneous/index.md).
 
     Normal collect() runs on kernel.response, too early for post-response data (final dumps, cache calls). LateDataCollectorInterface::lateCollect() runs later at terminate, when that data is complete.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 **Q76.** Which of the following statements are true about the Symfony Lock component? (select all that apply)  <small>_(hard · multiple)_</small>
 

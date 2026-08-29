@@ -118,7 +118,7 @@ Full theory: [Messenger](../messenger/index.md).
 
     DispatchAfterCurrentBusStamp defers the inner dispatch until the current message finishes handling successfully, so a rollback cancels the email. A delay only postpones sending, the unrecoverable exception affects the email's own retries, and sync routing would send it immediately during the transaction.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger/dispatch_after_current_bus.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html)
 
 **Q8.** How do you retrieve a synchronous handler's return value after MessageBusInterface::dispatch()?  <small>_(medium · code)_</small>
 
@@ -315,7 +315,7 @@ Full theory: [Messenger](../messenger/index.md).
 
     It prevents dispatching side-effect messages (e.g. a confirmation email) before the surrounding work commits, so a failure/rollback cancels them. It has nothing to do with delays, multi-bus fan-out, or retries.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger/dispatch_after_current_bus.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html)
 
 **Q22.** Which statements about Messenger buses are correct? (choose 2)  <small>_(hard · multiple)_</small>
 
@@ -329,7 +329,7 @@ Full theory: [Messenger](../messenger/index.md).
 
     Messenger ships one default bus (messenger.bus.default) but supports many, each configured with its own middleware — so a command bus can wrap handlers in a transaction while an event bus does not. The command/query/ event convention is just that: a convention, not enforced by the code.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger/multiple_buses.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/messenger.html)
 
 **Q23.** $envelope->last(HandledStamp::class) returns null. Which situation explains this best?  <small>_(hard · trap)_</small>
 

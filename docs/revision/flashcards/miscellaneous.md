@@ -34,7 +34,7 @@
 
     PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or tags. PSR-6 uses CacheItem objects and supports tags through a TagAwareAdapter as well as expiration.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 ??? question "3. Cache stampede protection in Symfony Cache is implemented by…"
     **✅ probabilistic early expiration controlled by the $beta factor**
@@ -48,7 +48,7 @@
 
     ArrayAdapter stores items in memory for the current request/process only, so nothing persists across requests — useful for deterministic tests.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache/adapters/memcached_adapter.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache/adapters/memcached_adapter.html)
 
 ??? question "5. Your CacheInterface::get() callback returns null on the first call. What happens on the next call before expiry?"
     **✅ null is returned as a cache hit; the callback is NOT run again**
@@ -76,14 +76,14 @@
 
     With PSR-6, CacheItemInterface::get() returns null both for an absent key and for a genuinely stored null, so you must call isHit() to tell them apart. The contracts callback API sidesteps this ambiguity; there is no hasKey() or miss exception.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 ??? question "9. In serialize(), which stage runs first?"
     **✅ The normalizer (object to array), then the encoder (array to string)**
 
     serialize() normalizes the object to an array/scalars, then encodes that to a string. deserialize() reverses it: decode then denormalize.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/serializer.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/serializer.html)
 
 ??? question "10. #[Groups(['read'])] on a property takes effect when…"
     **✅ the context includes ['groups' => ['read']]**
@@ -258,14 +258,14 @@
 
     Flock and Semaphore stores are local to one machine, and InMemoryStore is per-process (tests). Shared stores like Redis (or a database store) coordinate locks across servers.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#available-stores)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#available-stores)
 
 ??? question "35. Why call refresh() during a long critical section?"
     **✅ To extend the lock's TTL so it is not considered expired mid-job**
 
     Locks have a TTL to avoid deadlocks after crashes. refresh() prolongs it so a still-working owner keeps exclusivity; without it another process could acquire the lock after the TTL, breaking mutual exclusion.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#expiring-locks)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#expiring-locks)
 
 ??? question "36. Which is the correct guard to skip work another process is already doing?"
     **✅ if (!$lock->acquire()) { return; }**
@@ -279,7 +279,7 @@
 
     createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true) defaults to a 300 second TTL and releases the lock when the Lock object is destroyed. Long jobs should raise the TTL and call refresh() to avoid premature expiry.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#expiring-locks)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#expiring-locks)
 
 ??? question "38. With Messenger routing configured for emails, MailerInterface::send() will…"
     **✅ dispatch a SendEmailMessage to be delivered by a worker**
@@ -398,14 +398,14 @@
 
     getDuration() returns milliseconds, and the autowirable debug.stopwatch service is only registered in debug (dev/test). Injecting Stopwatch in prod therefore causes a wiring error.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/stopwatch.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 
 ??? question "55. A service that autowires Symfony\Component\Stopwatch\Stopwatch works in dev but fails to boot in prod. Why?"
     **✅ The debug.stopwatch service exists only in debug mode, so the dependency is missing in prod**
 
     Stopwatch's framework service is registered only when debug is enabled, so in prod there is nothing to inject and the container fails. Use it for ad-hoc dev profiling only; for prod metrics use real observability.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/stopwatch.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 
 ??? question "56. An uncaught exception that does NOT implement HttpExceptionInterface produces which status code?"
     **✅ 500**
@@ -419,14 +419,14 @@
 
     ErrorHandler registers set_error_handler() to throw \\ErrorException for PHP errors (warnings, notices, fatals via a shutdown function), making them catchable. It does not turn them into HttpExceptions.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/error_handler.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 ??? question "58. Which serializable object represents a throwable for rendering and logging?"
     **✅ FlattenException**
 
     Throwables are normalised into a FlattenException — a serializable snapshot (class, message, status, trace) that error renderers (HTML/JSON/XML) turn into output and that is safe to log. HttpException is a throwable, not the snapshot.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/error_handler.html)
+    :material-book-open-variant: [Docs](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 ??? question "59. In a controller, which throw produces a 404 rendered by the framework error controller?"
     **✅ throw new NotFoundHttpException('...') — it implements HttpExceptionInterface with status 404**
@@ -447,28 +447,28 @@
 
     The data_collector tag wires a DataCollectorInterface; supplying a `template` attribute makes its toolbar badge and panel appear. Autoconfigure applies the tag automatically for services implementing the interface.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 ??? question "62. A custom collector storing a PDO connection in $this->data breaks profile storage. Why?"
     **✅ $this->data is serialized to storage (via VarDumper's cloner); a live connection/resource is not serializable**
 
     Profiles are persisted per token, so $this->data must be serializable — store scalar/array (VarDumper-clonable) data, not live resources like a PDO connection or an entity with a connection. Implement reset() for worker reuse.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 ??? question "63. Your metric is only complete after the response is sent. Which interface should the collector implement?"
     **✅ LateDataCollectorInterface (its lateCollect() runs at kernel.terminate)**
 
     Normal collect() runs on kernel.response, too early for post-response data (final dumps, cache calls). LateDataCollectorInterface::lateCollect() runs later at terminate, when that data is complete.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler/data_collector.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/profiler.html)
 
 ??? question "64. Which mechanism does Symfony 8 use for translation pluralization?"
     **✅ ICU MessageFormat, e.g. {count, plural, one {…} other {# …}}**
 
     ICU MessageFormat handles plural/select rules with locale-aware categories (one/few/many/other); the old pipe syntax is legacy.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 ??? question "65. What does the translator return when a message id has no translation in the active locale or its fallbacks?"
     **✅ The message id itself (and it is logged in dev)**
@@ -489,7 +489,7 @@
 
     When no domain is passed, trans() uses messages; validators and security are separate domains. ICU MessageFormat is applied to catalogues named with the +intl-icu suffix — forgetting it means ICU rules are not parsed.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 ??? question "68. What makes Filesystem::dumpFile() safe against partial reads?"
     **✅ It writes to a temporary file then atomically renames it into place**

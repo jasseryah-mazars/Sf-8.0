@@ -402,7 +402,7 @@ groups + max-depth to keep payloads bounded.
     - [ ] C. They run in parallel
 
     **Why:** Objects are normalized to arrays, then encoded to a string.
-    **Ref:** [Serializer](https://symfony.com/doc/8.0/components/serializer.html).
+    **Ref:** [Serializer](https://symfony.com/doc/8.0/serializer.html).
 
 ??? question "Q2. Which normalizer reads private properties directly?"
     - [ ] A. `ObjectNormalizer`
@@ -444,7 +444,7 @@ groups + max-depth to keep payloads bounded.
 
 ## Official References
 - [Official docs — Serializer](https://symfony.com/doc/8.0/serializer.html)
-- [Official docs — Serializer component](https://symfony.com/doc/8.0/components/serializer.html)
+- [Official docs — Serializer component](https://symfony.com/doc/8.0/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)
 
 ## Video references
@@ -456,7 +456,7 @@ groups + max-depth to keep payloads bounded.
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/8.0/components/serializer.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/serializer.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

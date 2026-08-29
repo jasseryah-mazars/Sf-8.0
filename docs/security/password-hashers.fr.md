@@ -106,7 +106,7 @@ flowchart LR
 !!! note "Source reference"
     `Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory` et
     `UserPasswordHasher` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php).
 
 ### Verification during login
 
@@ -355,8 +355,8 @@ password hasher.
 
 ## Official References
 - [Symfony docs — Passwords](https://symfony.com/doc/8.0/security/passwords.html)
-- [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
-- [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
+- [Symfony source — PasswordHasherFactory](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php)
+- [Symfony source — UserPasswordHasher](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/UserPasswordHasher.php)
 
 ## Video references
 

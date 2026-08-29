@@ -274,7 +274,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
     - [ ] C. `%count%` only
 
     **Why:** ICU MessageFormat is the current mechanism; the pipe syntax is legacy.
-    **Ref:** [Pluralization](https://symfony.com/doc/8.0/translation/message_format.html).
+    **Ref:** [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q2. What is returned when a translation key is missing?"
     - [x] A. The message id itself ✅
@@ -314,7 +314,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 
 ## Official References
 - [Official docs — Translations](https://symfony.com/doc/8.0/translation.html)
-- [Official docs — Message format](https://symfony.com/doc/8.0/translation/message_format.html)
+- [Official docs — Message format](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 - [Official docs — Intl](https://symfony.com/doc/8.0/components/intl.html)
 - [Symfony source — Translator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php)
 
@@ -327,7 +327,7 @@ for `trans` in templates see [Twig translations](../twig/translations.md).
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — scripted, code-along tutorials.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — SymfonyCon conference talks & keynotes.
-    - [Official docs for this topic](https://symfony.com/doc/8.0/translation/message_format.html) — some Symfony doc pages embed a screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/formats/message_format.html) — some Symfony doc pages embed a screencast.
 
 ## Confidence check
 

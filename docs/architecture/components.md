@@ -296,7 +296,7 @@ services and configuration, not by instantiating them.
     - [ ] C. Only in dev
 
     **Why:** Components are decoupled and independently installable. **Ref:**
-    [Routing component](https://symfony.com/doc/8.0/components/routing.html).
+    [Routing component](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 

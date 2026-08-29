@@ -399,7 +399,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
     - [ ] C. They run in parallel
 
     **Why:** Les objets sont normalisés en tableaux, puis encodés en chaîne.
-    **Ref:** [Serializer](https://symfony.com/doc/8.0/components/serializer.html).
+    **Ref:** [Serializer](https://symfony.com/doc/8.0/serializer.html).
 
 ??? question "Q2. Which normalizer reads private properties directly?"
     - [ ] A. `ObjectNormalizer`
@@ -441,7 +441,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
 
 ## Official References
 - [Official docs — Serializer](https://symfony.com/doc/8.0/serializer.html)
-- [Official docs — Serializer component](https://symfony.com/doc/8.0/components/serializer.html)
+- [Official docs — Serializer component](https://symfony.com/doc/8.0/serializer.html)
 - [Symfony source — Serializer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Serializer/Serializer.php)
 
 ## Video references
@@ -453,7 +453,7 @@ d'objets profonds gagnent à combiner groupes + max-depth pour garder des payloa
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés, à coder en suivant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes de SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/8.0/components/serializer.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/serializer.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

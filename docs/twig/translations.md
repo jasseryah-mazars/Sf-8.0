@@ -274,7 +274,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
     - [ ] D. `{% pluralize %}`
 
     **Why:** `transchoice` was removed; ICU MessageFormat handles plurals. **Ref:**
-    [Pluralization](https://symfony.com/doc/8.0/translation/message_format.html).
+    [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q3. A key has no translation for the current locale (and no fallback). What renders?"
     - [x] A. The key string itself ✅
@@ -308,7 +308,7 @@ inside a plain message, use ICU or the intl filters (`format_number`,
 
 ## Official References
 - [Official — Translations in templates](https://symfony.com/doc/8.0/translation.html#translations-in-templates)
-- [Official — Message format (ICU)](https://symfony.com/doc/8.0/translation/message_format.html)
+- [Official — Message format (ICU)](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 - [Symfony source — TranslationExtension](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bridge/Twig/Extension/TranslationExtension.php)
 
 ## Video references

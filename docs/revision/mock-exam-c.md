@@ -192,7 +192,7 @@
 
     createLock(string $resource, ?float $ttl = 300.0, bool $autoRelease = true) defaults to a 300 second TTL and releases the lock when the Lock object is destroyed. Long jobs should raise the TTL and call refresh() to avoid premature expiry.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/lock.html#expiring-locks)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/lock.html#expiring-locks)
 
 **Q13.** A route is declared as `#[Route('/', name: 'home')]` on the class `App\Controller\HomeController`, which defines a `public function __invoke(): Response`. Which YAML `controller:` value targets it correctly?  <small>_(Controllers)_</small>
 
@@ -774,7 +774,7 @@ For a non-premium object with $vatNumber = null, what happens?
 
     Components are decoupled; Routing can be installed and used on its own via UrlMatcher/UrlGenerator without the framework.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q54.** What does dispatch(object $event) return, and how do you read a listener's result?  <small>_(Architecture)_</small>
 
@@ -995,7 +995,7 @@ For a non-premium object with $vatNumber = null, what happens?
 
     PSR-16 SimpleCache is a thin key/value API with no items, deferred saves or tags. PSR-6 uses CacheItem objects and supports tags through a TagAwareAdapter as well as expiration.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 **Q70.** A test does: $client = static::createClient(); then self::getContainer()->set(PaymentGateway::class, $mock); then $client->request('POST', '/checkout'); — but the real gateway still runs. What is the most likely fix?  <small>_(Testing)_</small>
 

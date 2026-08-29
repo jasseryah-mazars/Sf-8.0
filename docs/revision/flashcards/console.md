@@ -34,7 +34,7 @@
 
     `make:*` generators ship with the optional symfony/maker-bundle dev dependency. `cache:clear` and `debug:router` come from FrameworkBundle, and `about` is a core Console command. Expecting `make:*` to be part of the core framework is a classic certification trick.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/SymfonyMakerBundle/index.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
 ??? question "3. How does `bin/console` obtain the console Application in Symfony 8?"
     **✅ It returns a closure that the Runtime component executes to build the kernel and Application**

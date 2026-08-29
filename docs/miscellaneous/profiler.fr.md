@@ -297,7 +297,7 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
     - [ ] C. `profiler.panel`
 
     **Why:** Le tag `data_collector` (avec un `template`) câble le collector +
-    le panneau. **Ref:** [Creating a data collector](https://symfony.com/doc/8.0/profiler/data_collector.html).
+    le panneau. **Ref:** [Creating a data collector](https://symfony.com/doc/8.0/profiler.html).
 
 ??? question "Q3. Should the profiler run in production?"
     - [ ] A. Yes, for monitoring
@@ -330,7 +330,7 @@ l'observabilité en prod, utilisez de vraies métriques/du tracing.
 
 ## Official References
 - [Official docs — Profiler](https://symfony.com/doc/8.0/profiler.html)
-- [Official docs — Custom data collector](https://symfony.com/doc/8.0/profiler/data_collector.html)
+- [Official docs — Custom data collector](https://symfony.com/doc/8.0/profiler.html)
 - [Symfony source — DataCollectorInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/DataCollector/DataCollectorInterface.php)
 
 ## Video references

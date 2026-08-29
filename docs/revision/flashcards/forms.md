@@ -34,7 +34,7 @@
 
     Without data_class the data mapper maps children into and out of an array. Set data_class to bind the form to an object instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_class.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html)
 
 ??? question "3. Where should field-adding logic live in a form type?"
     **✅ In buildForm(), using the FormBuilderInterface**

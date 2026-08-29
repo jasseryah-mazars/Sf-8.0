@@ -286,7 +286,7 @@ inheritance of framework classes.
 ## Official References
 - [Backward Compatibility promise](https://symfony.com/doc/8.0/contributing/code/bc.html)
 - [Conventions — @internal / @final](https://symfony.com/doc/8.0/contributing/code/conventions.html)
-- [Experimental features](https://symfony.com/doc/8.0/contributing/code/experimental.html)
+- [Experimental features](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 

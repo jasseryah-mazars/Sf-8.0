@@ -271,7 +271,7 @@ precise, verifiable behaviour.
     It throws an **`AlreadySubmittedException`** — a form can be submitted only
     once. The same applies to mutating a submitted form, e.g. `add()`ing a child
     after submission.
-    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/form/direct_submit.html)
+    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/forms.html)
 
 ??? question "What happens if you render fields manually and forget `form_rest()` (so no `_token` is printed)?"
     The next submission fails CSRF validation — a guaranteed **"invalid token"**

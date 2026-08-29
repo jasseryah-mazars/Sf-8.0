@@ -46,7 +46,7 @@ categories:
           dependency. `cache:clear` and `debug:router` come from FrameworkBundle, and
           `about` is a core Console command. Expecting `make:*` to be part of the core
           framework is a classic certification trick.
-        documentation: "https://symfony.com/doc/8.0/bundles/SymfonyMakerBundle/index.html"
+        documentation: "https://symfony.com/doc/8.0/bundles.html"
 
       - id: "CON-BUILTIN-03"
         type: "internals"

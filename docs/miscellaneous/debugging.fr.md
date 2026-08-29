@@ -275,7 +275,7 @@ pas Stopwatch.
     - [ ] B. seconds
     - [ ] C. microseconds
 
-    **Why:** Les durées sont en millisecondes. **Ref:** [Stopwatch](https://symfony.com/doc/8.0/components/stopwatch.html).
+    **Why:** Les durées sont en millisecondes. **Ref:** [Stopwatch](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php).
 
 ## Key takeaways
 
@@ -298,7 +298,7 @@ pas Stopwatch.
 
 ## Official References
 - [Official docs — VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html)
-- [Official docs — Stopwatch](https://symfony.com/doc/8.0/components/stopwatch.html)
+- [Official docs — Stopwatch](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 - [Symfony source — VarCloner](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/VarDumper/Cloner/VarCloner.php)
 
 ## Video references

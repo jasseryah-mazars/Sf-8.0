@@ -302,7 +302,7 @@ pas en les instanciant.
     - [ ] C. Only in dev
 
     **Why:** Les components sont découplés et installables indépendamment. **Ref:**
-    [Routing component](https://symfony.com/doc/8.0/components/routing.html).
+    [Routing component](https://symfony.com/doc/8.0/routing.html).
 
 ## Key takeaways
 

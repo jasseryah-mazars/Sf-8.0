@@ -278,7 +278,7 @@ custom `error_controller` for full control over rendering.
     - [ ] C. Writes it to the response body
 
     **Why:** `set_error_handler()` throws `\ErrorException` so PHP errors are catchable.
-    **Ref:** [ErrorHandler](https://symfony.com/doc/8.0/components/error_handler.html).
+    **Ref:** [ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php).
 
 ??? question "Q3. Which serializable object represents a throwable for rendering?"
     - [x] A. `FlattenException` ✅
@@ -286,7 +286,7 @@ custom `error_controller` for full control over rendering.
     - [ ] C. `ErrorEvent`
 
     **Why:** `FlattenException` snapshots the throwable for renderers/loggers.
-    **Ref:** [ErrorHandler](https://symfony.com/doc/8.0/components/error_handler.html).
+    **Ref:** [ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php).
 
 ## Key takeaways
 
@@ -311,7 +311,7 @@ custom `error_controller` for full control over rendering.
 
 ## Official References
 - [Official docs — Error pages](https://symfony.com/doc/8.0/controller/error_pages.html)
-- [Official docs — ErrorHandler component](https://symfony.com/doc/8.0/components/error_handler.html)
+- [Official docs — ErrorHandler component](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 - [Symfony source — ErrorHandler](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/ErrorHandler/ErrorHandler.php)
 
 ## Video references

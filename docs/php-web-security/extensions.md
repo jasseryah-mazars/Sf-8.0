@@ -627,7 +627,7 @@ function call plus PHP-level string work per invocation, which is what "For best
 performance" in its `suggest` block is quietly referring to.
 
 !!! note "Symfony 8.0 source reference"
-    https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String/AbstractUnicodeString.php
+    https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String/AbstractUnicodeString.php
 
 ### How Symfony degrades when ICU is missing
 
@@ -1187,7 +1187,7 @@ in-process, more INI directives, more parsers exposed to untrusted input.
 - [Symfony 8.0: Translation](https://symfony.com/doc/8.0/translation.html)
 - [Symfony 8.0: The String component](https://symfony.com/doc/8.0/string.html)
 - [Symfony 8.0: The Intl component](https://symfony.com/doc/8.0/components/intl.html)
-- [Symfony source — `AbstractUnicodeString`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String/AbstractUnicodeString.php)
+- [Symfony source — `AbstractUnicodeString`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String/AbstractUnicodeString.php)
 - [Symfony source — `AboutCommand`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php)
 - [Symfony source — `LocaleValidator`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Validator/Constraints/LocaleValidator.php)
 - [Symfony source — monorepo `composer.json`](https://github.com/symfony/symfony/blob/8.0/composer.json)

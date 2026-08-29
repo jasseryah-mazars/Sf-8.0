@@ -136,7 +136,7 @@ read the current request lazily.
 
 !!! note "Source reference"
     `RequestValueResolver` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php).
 
 ### Prefer explicit resolvers for input
 
@@ -351,7 +351,7 @@ returns a scalar or `null`, never an array.)
 ## Official References
 - [Official Symfony docs — HttpFoundation Request](https://symfony.com/doc/8.0/components/http_foundation.html)
 - [Official Symfony docs — Request as controller argument](https://symfony.com/doc/8.0/controller.html)
-- [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)
+- [Symfony source — RequestValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/RequestValueResolver.php)
 
 ## Video references
 

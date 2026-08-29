@@ -295,7 +295,7 @@ request — it is a CLI/deploy step.
     - [ ] D. `about`
 
     **Why:** `make:*` commands come from the optional MakerBundle. **Ref:**
-    [MakerBundle](https://symfony.com/doc/8.0/bundles/SymfonyMakerBundle/index.html).
+    [MakerBundle](https://symfony.com/doc/8.0/bundles.html).
 
 ??? question "Q3. How does `bin/console` obtain the `Application` in Symfony 8?"
     - [ ] A. It calls `Application::create()` statically

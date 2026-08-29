@@ -151,7 +151,7 @@ flowchart LR
     Les polyfills de Symfony (`symfony/polyfill-mbstring`, `-intl-*`, `-ctype`)
     fournissent des solutions de repli en userland ; le composant String préfère
     l'extension native —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String).
 
 ## Configuration & code
 
@@ -292,7 +292,7 @@ flowchart LR
 - [PHP: mbstring](https://www.php.net/manual/en/book.mbstring.php)
 - [PHP: Intl](https://www.php.net/manual/en/book.intl.php)
 - [Composer platform dependencies](https://getcomposer.org/doc/articles/composer-platform-dependencies.md)
-- [Symfony source — String component](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String)
+- [Symfony source — String component](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String)
 
 ## Video references
 

@@ -435,7 +435,7 @@ qu'ils restent déterministes.
 
 ## Official References
 - [Official docs — Cache](https://symfony.com/doc/8.0/cache.html)
-- [Official docs — Cache contracts](https://symfony.com/doc/8.0/components/cache.html)
+- [Official docs — Cache contracts](https://symfony.com/doc/8.0/cache.html)
 - [Symfony source — CacheInterface](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Contracts/Cache/CacheInterface.php)
 
 ## Video references

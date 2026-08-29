@@ -158,7 +158,7 @@ flowchart LR
 
 !!! note "Source reference"
     `HelperSet`, `QuestionHelper`, `ProgressBar`, `Table` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Console/Helper).
 
 ## Configuration & code
 
@@ -378,7 +378,7 @@ voulu.
 ## Official References
 - [Official Symfony docs — Console helpers](https://symfony.com/doc/8.0/components/console/helpers/index.html)
 - [Official Symfony docs — QuestionHelper](https://symfony.com/doc/8.0/components/console/helpers/questionhelper.html)
-- [Symfony source — Console helpers](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Console/Helper)
+- [Symfony source — Console helpers](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/Console/Helper)
 
 ## Video references
 

@@ -376,7 +376,7 @@
         **Why it matters:** an invalid enum in a URL is a plain **404**, not a 500 — the single
         most testable Symfony fact about enums.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
 
 ??? question "Name the three cases where `BackedEnumValueResolver` declines to resolve an argument."
     Think before revealing the answer.
@@ -390,7 +390,7 @@
         works with no route parameter, and why a **pure** enum type-hint fails with "could not be
         resolved" instead of a 404.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
 
 ??? question "What does `EnumRequirement` produce, and what can you pass to it?"
     Think before revealing the answer.

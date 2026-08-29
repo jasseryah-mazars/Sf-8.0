@@ -398,7 +398,7 @@ CSRF for you).
 
     **Why:** With no `data_class`, the data mapper maps children into/out of an
     array. Set `data_class` to bind to an object.
-    **Ref:** [Form types](https://symfony.com/doc/8.0/form/data_class.html).
+    **Ref:** [Form types](https://symfony.com/doc/8.0/forms.html).
 
 ## Key takeaways
 
@@ -426,7 +426,7 @@ CSRF for you).
 
 ## Official References
 - [Official Symfony docs — Forms](https://symfony.com/doc/8.0/forms.html)
-- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/8.0/form/data_class.html)
+- [Official Symfony docs — How to define the data_class](https://symfony.com/doc/8.0/forms.html)
 - [Symfony source — FormFactory](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/FormFactory.php)
 
 ## Video references

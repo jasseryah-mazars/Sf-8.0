@@ -41,7 +41,7 @@ categories:
         explanation: >-
           Without data_class the data mapper maps children into and out of an
           array. Set data_class to bind the form to an object instead.
-        documentation: "https://symfony.com/doc/8.0/form/data_class.html"
+        documentation: "https://symfony.com/doc/8.0/forms.html"
       - id: "FORM-CREATE-03"
         question: "Where should field-adding logic live in a form type?"
         type: "single"

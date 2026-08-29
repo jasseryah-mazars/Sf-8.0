@@ -256,7 +256,7 @@
 
     serialize() normalizes the object to an array/scalars, then encodes that to a string. deserialize() reverses it: decode then denormalize.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/serializer.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/serializer.html)
 
 **Q17.** What does #[HasNamedArguments] do on a custom Constraint constructor?  <small>_(Validation)_</small>
 

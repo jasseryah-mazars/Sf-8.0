@@ -552,7 +552,7 @@
 
     transchoice was removed; pluralization uses ICU MessageFormat, which is applied to catalogues whose domain ends with +intl-icu.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 ??? question "77. A translation key has no entry for the current locale and no fallback. What is rendered?"
     **✅ The key string itself**
@@ -566,14 +566,14 @@
 
     Both transchoice() and the |transchoice filter were removed. Pluralization is now expressed with ICU MessageFormat ({count, plural, one{...} other{...}}) in a +intl-icu domain. trans has no separate count argument — you pass count as an ICU parameter.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 ??? question "79. Which catalogue file name enables ICU MessageFormat parsing for English?"
     **✅ messages+intl-icu.en.yaml**
 
     A domain suffixed +intl-icu (e.g. messages+intl-icu.en.yaml) is parsed with the IntlFormatter, unlocking plural/select and locale-aware formatting. Putting ICU syntax in a plain messages.en.yaml file makes the braces render literally.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 ??? question "80. After {% trans_default_domain 'admin' %}, what does {{ 'dashboard.title'|trans }} use?"
     **✅ The 'admin' domain, because trans_default_domain sets it for the rest of the template**
@@ -587,7 +587,7 @@
 
     count=1 matches the CLDR 'one' category in English, and # inside the branch is replaced by the number, giving '1 item'. # prints the value (not a literal hash), 'one' is a category label not output, and =0 only matches the exact value 0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/translation/message_format.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 
 ??? question "82. Which service does the Twig trans filter ultimately call?"
     **✅ Symfony\Contracts\Translation\TranslatorInterface::trans() (via TranslationExtension)**

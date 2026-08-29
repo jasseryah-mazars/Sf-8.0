@@ -125,7 +125,7 @@
 
     Components are decoupled; Routing can be installed and used on its own via UrlMatcher/UrlGenerator without the framework.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 ??? question "16. Which mapping of term to definition is entirely correct?"
     **✅ Contract = interfaces/traits; Component = standalone library; Bridge = glue to a third-party lib; Bundle = framework wiring**
@@ -139,7 +139,7 @@
 
     UrlMatcher::match() returns an array of the matched route's parameters, including the special _route key with the route name and any placeholder values. No framework or kernel is involved — the component works standalone with a RouteCollection and a RequestContext. It returns parameters, never a Response (that is the framework's job).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 ??? question "18. For a modern application, how should you depend on Symfony code?"
     **✅ Require the individual packages you need (e.g. symfony/routing); the symfony/symfony metapackage is discouraged**
@@ -503,7 +503,7 @@
 
     The last minor of each major (X.4) is the LTS; it ships alongside the next major (9.0).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "70. What may a MINOR release NOT do?"
     **✅ Break backward compatibility**
@@ -524,7 +524,7 @@
 
     Symfony uses a merge-up model: a fix is committed to the lowest maintained branch that needs it and then merged upward into every newer branch. This keeps behaviour consistent across all maintained versions and avoids a fix being present in an old branch but missing in a newer one.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "73. What is the difference between a PATCH and a MINOR release?"
     **✅ A patch (8.0.1 → 8.0.2) contains bug fixes only; a minor (8.0 → 8.1) adds new features and deprecations but is still BC-safe**
@@ -566,7 +566,7 @@
 
     @experimental features are excluded from the BC promise until they are stabilised; they may change in any release. Building critical paths on experimental code is risky. Along with @internal and final, @experimental is one of the markers that carve exceptions out of the promise.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/experimental.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "79. Symfony adds a new method to one of its own interfaces in a minor release. Is this a BC break?"
     **✅ Not for code that only USES the interface, but it can break code that IMPLEMENTS it — so only implement interfaces Symfony marks as safe to implement**
@@ -692,7 +692,7 @@
 
     The LTS (X.4) always ships together with the next major (X+1).0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "97. How often is a new major (and its LTS) released?"
     **✅ Every two years**
@@ -713,7 +713,7 @@
 
     A frequent misconception is that the LTS precedes the next major. In fact X.4 (the LTS) and (X+1).0 release together (8.4 and 9.0 both Nov 2027). Another trap: 8.0 is a standard release, not the LTS — 8.4 is.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "100. A product must run 3+ years without a major upgrade. Which 8.x version should you target and why?"
     **✅ 8.4 (LTS) — it provides 3 years of bug fixes and 4 years of security fixes, the longest support window in 8.x**
@@ -762,7 +762,7 @@
 
     PSR-6 models caching as a pool of CacheItem objects (CacheItemPoolInterface::getItem()/save()); PSR-16 (Simple Cache) is a lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter. Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16) is a common trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 ??? question "107. Which PSR does Symfony's Clock component implement, and why inject its interface?"
     **✅ PSR-20 via Psr\Clock\ClockInterface — injecting it makes time testable instead of calling new \DateTime() directly**
@@ -839,7 +839,7 @@
 
     Symfony follows a time-based schedule: minors in May and November and a new major every two years, with the last minor of a branch (X.4, e.g. 8.4) being the LTS that ships alongside the next major. BC breaks happen only in major versions, never in minors even after deprecation, and standard versions get 8 months of bug fixes / 14 months of security fixes — the 3-year bug-fix window belongs to LTS releases only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ??? question "118. Which statements are true about Symfony's backward compatibility promise? (select all that apply)"
     **✅ Public API that is not marked @internal or @experimental stays stable within a major version ; Existing behavior is removed only in the next major version, and only after being deprecated first**

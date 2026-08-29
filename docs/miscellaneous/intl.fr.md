@@ -287,7 +287,7 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
     - [ ] C. `%count%` only
 
     **Why:** ICU MessageFormat est le mécanisme actuel ; la syntaxe à pipe est du legacy.
-    **Ref:** [Pluralization](https://symfony.com/doc/8.0/translation/message_format.html).
+    **Ref:** [Pluralization](https://symfony.com/doc/8.0/reference/formats/message_format.html).
 
 ??? question "Q2. What is returned when a translation key is missing?"
     - [x] A. The message id itself ✅
@@ -327,7 +327,7 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
 
 ## Official References
 - [Official docs — Translations](https://symfony.com/doc/8.0/translation.html)
-- [Official docs — Message format](https://symfony.com/doc/8.0/translation/message_format.html)
+- [Official docs — Message format](https://symfony.com/doc/8.0/reference/formats/message_format.html)
 - [Official docs — Intl](https://symfony.com/doc/8.0/components/intl.html)
 - [Symfony source — Translator](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Translation/Translator.php)
 
@@ -341,7 +341,7 @@ Pour la détection de locale depuis l'URL ou les en-têtes, voir
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/8.0/translation/message_format.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/reference/formats/message_format.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

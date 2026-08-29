@@ -197,7 +197,7 @@ branche suivre : la dernière standard (fonctionnalités en avance) ou la LTS
     - [ ] C. After 9.0
 
     **Why:** `X.4` et `(X+1).0` sortent ensemble. **Ref:**
-    [Release process](https://symfony.com/doc/8.0/contributing/community/releases.html).
+    [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html).
 
 ??? question "Q3. How often is a new major/LTS released?"
     - [x] A. Every 2 years ✅
@@ -228,7 +228,7 @@ branche suivre : la dernière standard (fonctionnalités en avance) ou la LTS
 
 ## Official References
 - [Symfony releases & schedule](https://symfony.com/releases)
-- [Release process](https://symfony.com/doc/8.0/contributing/community/releases.html)
+- [Release process](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 ## Video references
 
@@ -240,7 +240,7 @@ branche suivre : la dernière standard (fonctionnalités en avance) ou la LTS
 
     - [SymfonyCasts screencasts](https://symfonycasts.com/tracks/symfony) — tutoriels scénarisés à suivre en codant.
     - [Symfony official YouTube](https://www.youtube.com/@SymfonyOfficial) — conférences et keynotes SymfonyCon.
-    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/community/releases.html) — certaines pages de la doc Symfony intègrent un screencast.
+    - [Official docs for this topic](https://symfony.com/doc/8.0/contributing/code/bc.html) — certaines pages de la doc Symfony intègrent un screencast.
 
 ## Confidence check
 

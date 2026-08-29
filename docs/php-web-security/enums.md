@@ -685,7 +685,7 @@ different moments. Knowing which one answered is the difference between fixing a
 fixing an enum.
 
 !!! note "Symfony 8.0 source reference"
-    https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
+    https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
 
 ## Default behavior
 
@@ -935,7 +935,7 @@ of "unchecked string flows into SQL or a template" bugs (see
 - [Symfony docs — Backed enum route parameters](https://symfony.com/doc/8.0/routing.html#backed-enum-parameters)
 - [Symfony docs — EnumType field](https://symfony.com/doc/8.0/reference/forms/types/enum.html)
 - [Symfony docs — Doctrine entity field types](https://symfony.com/doc/8.0/doctrine.html#entity-field-types)
-- [Symfony source — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
+- [Symfony source — BackedEnumValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
 - [Symfony source — EnumType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Core/Type/EnumType.php)
 - [Symfony source — EnumRequirement](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Routing/Requirement/EnumRequirement.php)
 

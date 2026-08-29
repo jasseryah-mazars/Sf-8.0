@@ -705,7 +705,7 @@ All questions target **PHP 8.4** and **Symfony 8.0**.
         The point of `auto` is that this answer may legitimately change in a future release
         — which is the whole reason `needsRehash()` exists.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php
 
 ??? question "Question 26 · Execution order"
     Passwords must be rehashed after a hasher upgrade. Put the steps in the order Symfony
@@ -795,7 +795,7 @@ All questions target **PHP 8.4** and **Symfony 8.0**.
         (`PasswordHasherInterface::MAX_PASSWORD_LENGTH`) is a DoS protection against
         multi-megabyte "passwords", not a bcrypt concern.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/NativePasswordHasher.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/NativePasswordHasher.php
 
 ## Timing, redirects, mass assignment and uploads
 

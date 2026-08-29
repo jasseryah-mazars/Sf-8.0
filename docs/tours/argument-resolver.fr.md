@@ -3,7 +3,7 @@
 **Source anchors :**
 [`Controller/ControllerResolver.php` (8.0)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ControllerResolver.php)
 et
-[`Controller/ArgumentResolver.php` (8.0)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
+[`Controller/ArgumentResolver.php` (8.0)](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 — ouvrez les deux côte à côte. Ce tour passe au microscope les Stops 3 et 5 du
 [tour HttpKernel::handle()](httpkernel-handle.md).
 
@@ -253,7 +253,7 @@ possède l'argument** — c'est précisément pourquoi l'examen le demande.
 ## Official References
 
 - [ControllerResolver.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ControllerResolver.php)
-- [ArgumentResolver.php (8.0 source)](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
+- [ArgumentResolver.php (8.0 source)](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver.php)
 - [Extending Action Argument Resolving](https://symfony.com/doc/8.0/controller/value_resolver.html)
 - [Mapping Request Data to Typed Objects](https://symfony.com/doc/8.0/controller.html#mapping-request-data-to-typed-objects)
 

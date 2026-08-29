@@ -605,7 +605,7 @@
         **Why it matters:** it is the canonical example of "missing extension ⇒ degraded output,
         not an exception", which is the harder failure mode to notice in production.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/String/AbstractUnicodeString.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/String/AbstractUnicodeString.php
 
 ??? question "Which Symfony console command reports OPcache status, the Intl locale and the PHP version?"
     Think before revealing the answer.

@@ -358,7 +358,7 @@ Full theory: [Forms](../forms/index.md).
 
     Without data_class the data mapper maps children into and out of an array. Set data_class to bind the form to an object instead.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/form/data_class.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/forms.html)
 
 **Q25.** A developer writes `public function configureOptions(OptionsResolver $resolver): void { return ['data_class' => Contact::class]; }`. Why does the form type fail to compile / behave?  <small>_(medium · code)_</small>
 

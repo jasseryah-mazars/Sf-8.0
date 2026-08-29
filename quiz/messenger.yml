@@ -101,7 +101,7 @@ categories:
     explanation: It prevents dispatching side-effect messages (e.g. a confirmation email) before the surrounding
       work commits, so a failure/rollback cancels them. It has nothing to do with delays, multi-bus fan-out,
       or retries.
-    documentation: https://symfony.com/doc/8.0/messenger/dispatch_after_current_bus.html
+    documentation: https://symfony.com/doc/8.0/messenger.html
   - id: MISC-MSG-18
     question: A dispatched message throws NoHandlerForMessageException. What is the most likely cause?
     type: debug
@@ -149,7 +149,7 @@ categories:
     explanation: 'Messenger ships one default bus (messenger.bus.default) but supports many, each configured
       with its own middleware — so a command bus can wrap handlers in a transaction while an event bus
       does not. The command/query/ event convention is just that: a convention, not enforced by the code.'
-    documentation: https://symfony.com/doc/8.0/messenger/multiple_buses.html
+    documentation: https://symfony.com/doc/8.0/messenger.html
   - id: MISC-MSG-22
     question: An order handler dispatches an 'order confirmed' email message, but the email is sent even
       when the surrounding DB transaction rolls back. What fixes this?
@@ -175,7 +175,7 @@ categories:
       handling successfully, so a rollback cancels the email. A delay only postpones sending, the unrecoverable
       exception affects the email's own retries, and sync routing would send it immediately during the
       transaction.
-    documentation: https://symfony.com/doc/8.0/messenger/dispatch_after_current_bus.html
+    documentation: https://symfony.com/doc/8.0/messenger.html
   - id: MISC-MSG-23
     question: $envelope->last(HandledStamp::class) returns null. Which situation explains this best?
     type: trap

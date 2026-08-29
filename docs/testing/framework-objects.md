@@ -122,7 +122,7 @@ flowchart TD
 !!! note "Source reference"
     `self::getContainer()` returns `test.service_container`, a `TestContainer`
     exposing non-public services
-    ([symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)).
+    ([symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/TestContainer.php)).
 
 ### `getContainer()` vs `$kernel->getContainer()`
 
@@ -371,7 +371,7 @@ and swapping a `MockClock` over global clock mocking.
 ## Official References
 - [Official Symfony docs — Accessing the container](https://symfony.com/doc/8.0/testing.html#accessing-the-container)
 - [Official Symfony docs — Mocking services](https://symfony.com/doc/8.0/testing.html#mocking-services)
-- [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/DependencyInjection/Test/TestContainer.php)
+- [Symfony source — TestContainer](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Bundle/FrameworkBundle/Test/TestContainer.php)
 
 ## Video references
 

@@ -50,7 +50,7 @@ Full theory: [Console](../console/index.md).
 
     `make:*` generators ship with the optional symfony/maker-bundle dev dependency. `cache:clear` and `debug:router` come from FrameworkBundle, and `about` is a core Console command. Expecting `make:*` to be part of the core framework is a classic certification trick.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles/SymfonyMakerBundle/index.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/bundles.html)
 
 **Q3.** What integer value does `Command::INVALID` represent?  <small>_(easy · single)_</small>
 

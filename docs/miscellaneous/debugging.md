@@ -272,7 +272,7 @@ proper observability, not Stopwatch.
     - [ ] B. seconds
     - [ ] C. microseconds
 
-    **Why:** Durations are milliseconds. **Ref:** [Stopwatch](https://symfony.com/doc/8.0/components/stopwatch.html).
+    **Why:** Durations are milliseconds. **Ref:** [Stopwatch](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php).
 
 ## Key takeaways
 
@@ -295,7 +295,7 @@ proper observability, not Stopwatch.
 
 ## Official References
 - [Official docs — VarDumper](https://symfony.com/doc/8.0/components/var_dumper.html)
-- [Official docs — Stopwatch](https://symfony.com/doc/8.0/components/stopwatch.html)
+- [Official docs — Stopwatch](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Stopwatch/Stopwatch.php)
 - [Symfony source — VarCloner](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/VarDumper/Cloner/VarCloner.php)
 
 ## Video references

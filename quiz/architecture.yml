@@ -293,7 +293,7 @@ categories:
         explanation: >-
           Components are decoupled; Routing can be installed and used on its own
           via UrlMatcher/UrlGenerator without the framework.
-        documentation: "https://symfony.com/doc/8.0/components/routing.html"
+        documentation: "https://symfony.com/doc/8.0/routing.html"
       - id: "ARCH-COMPONENTS-04"
         type: "trap"
         difficulty: "medium"
@@ -338,7 +338,7 @@ categories:
           values. No framework or kernel is involved — the component works standalone
           with a RouteCollection and a RequestContext. It returns parameters, never a
           Response (that is the framework's job).
-        documentation: "https://symfony.com/doc/8.0/components/routing.html"
+        documentation: "https://symfony.com/doc/8.0/routing.html"
       - id: "ARCH-COMPONENTS-06"
         type: "trap"
         difficulty: "medium"
@@ -1380,7 +1380,7 @@ categories:
         explanation: >-
           The last minor of each major (X.4) is the LTS; it ships alongside the
           next major (9.0).
-        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-REL-03"
         type: "single"
         difficulty: "medium"
@@ -1436,7 +1436,7 @@ categories:
           branch that needs it and then merged upward into every newer branch. This
           keeps behaviour consistent across all maintained versions and avoids a fix
           being present in an old branch but missing in a newer one.
-        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-REL-06"
         type: "trap"
         difficulty: "medium"
@@ -1553,7 +1553,7 @@ categories:
           stabilised; they may change in any release. Building critical paths on
           experimental code is risky. Along with @internal and final, @experimental is
           one of the markers that carve exceptions out of the promise.
-        documentation: "https://symfony.com/doc/8.0/contributing/code/experimental.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-BC-05"
         type: "internals"
         difficulty: "hard"
@@ -1907,7 +1907,7 @@ categories:
             correct: false
         explanation: >-
           The LTS (X.4) always ships together with the next major (X+1).0.
-        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-ROAD-03"
         type: "single"
         difficulty: "easy"
@@ -1963,7 +1963,7 @@ categories:
           A frequent misconception is that the LTS precedes the next major. In fact X.4
           (the LTS) and (X+1).0 release together (8.4 and 9.0 both Nov 2027). Another
           trap: 8.0 is a standard release, not the LTS — 8.4 is.
-        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-ROAD-06"
         type: "scenario"
         difficulty: "medium"
@@ -2105,7 +2105,7 @@ categories:
           lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter.
           Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16)
           is a common trap.
-        documentation: "https://symfony.com/doc/8.0/components/cache.html"
+        documentation: "https://symfony.com/doc/8.0/cache.html"
       - id: "ARCH-PSR-07"
         type: "single"
         difficulty: "medium"
@@ -2334,7 +2334,7 @@ categories:
           versions, never in minors even after deprecation, and standard versions get
           8 months of bug fixes / 14 months of security fixes — the 3-year bug-fix
           window belongs to LTS releases only.
-        documentation: "https://symfony.com/doc/8.0/contributing/community/releases.html"
+        documentation: "https://symfony.com/doc/8.0/contributing/code/bc.html"
       - id: "ARCH-MC-03"
         type: "multiple"
         difficulty: "medium"

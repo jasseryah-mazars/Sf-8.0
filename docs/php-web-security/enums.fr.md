@@ -167,7 +167,7 @@ public function byStatus(Status $status): Response
 !!! note "Référence source"
     `Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver`
     et `Symfony\Component\Form\Extension\Core\Type\EnumType` —
-    [symfony/symfony `8.0`](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
+    [symfony/symfony `8.0`](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
 
 ### Comportement en cas d'absence
 
@@ -345,7 +345,7 @@ pas porter.
 
     **Pourquoi :** le resolver appelle `from()` et intercepte lui-même
     `\ValueError`/`TypeError`, levant `NotFoundHttpException`.
-    **Réf :** [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
+    **Réf :** [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php).
 
 ??? question "Q4. Qu'une case d'enum ne peut-elle PAS avoir ?"
     - [ ] A. Des méthodes
@@ -394,7 +394,7 @@ pas porter.
 ## Références officielles
 - [Manuel PHP — Enumerations](https://www.php.net/manual/en/language.enumerations.php)
 - [Manuel PHP — Enums backés](https://www.php.net/manual/en/language.enumerations.backed.php)
-- [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
+- [Source Symfony — BackedEnumValueResolver](https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php)
 - [Source Symfony — EnumType](https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/Form/Extension/Core/Type/EnumType.php)
 
 ## Références vidéo

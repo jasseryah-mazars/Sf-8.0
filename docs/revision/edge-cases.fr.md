@@ -291,7 +291,7 @@ syllabus, chacune cachant un comportement précis et vérifiable.
     Il lève une **`AlreadySubmittedException`** — un form ne peut être soumis
     qu'une seule fois. Il en va de même pour la mutation d'un form soumis, p. ex.
     faire `add()` d'un enfant après la soumission.
-    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/form/direct_submit.html)
+    **Ref:** [Symfony Forms — direct submit](https://symfony.com/doc/8.0/forms.html)
 
 ??? question "What happens if you render fields manually and forget `form_rest()` (so no `_token` is printed)?"
     La soumission suivante échoue à la validation CSRF — une erreur **"invalid

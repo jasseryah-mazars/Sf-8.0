@@ -1704,7 +1704,7 @@ categories:
         explanation: >-
           transchoice was removed; pluralization uses ICU MessageFormat, which is
           applied to catalogues whose domain ends with +intl-icu.
-        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/reference/formats/message_format.html"
 
       - id: "TWIG-TRANS-03"
         question: "A translation key has no entry for the current locale and no fallback. What is rendered?"
@@ -1748,7 +1748,7 @@ categories:
           is now expressed with ICU MessageFormat ({count, plural, one{...}
           other{...}}) in a +intl-icu domain. trans has no separate count argument —
           you pass count as an ICU parameter.
-        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/reference/formats/message_format.html"
 
       - id: "TWIG-TRANS-05"
         question: "Which catalogue file name enables ICU MessageFormat parsing for English?"
@@ -1771,7 +1771,7 @@ categories:
           the IntlFormatter, unlocking plural/select and locale-aware formatting.
           Putting ICU syntax in a plain messages.en.yaml file makes the braces render
           literally.
-        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/reference/formats/message_format.html"
 
       - id: "TWIG-TRANS-06"
         question: "After {% trans_default_domain 'admin' %}, what does {{ 'dashboard.title'|trans }} use?"
@@ -1816,7 +1816,7 @@ categories:
           is replaced by the number, giving '1 item'. # prints the value (not a
           literal hash), 'one' is a category label not output, and =0 only matches the
           exact value 0.
-        documentation: "https://symfony.com/doc/8.0/translation/message_format.html"
+        documentation: "https://symfony.com/doc/8.0/reference/formats/message_format.html"
 
       - id: "TWIG-TRANS-08"
         question: "Which service does the Twig trans filter ultimately call?"

@@ -125,7 +125,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     Components are decoupled; Routing can be installed and used on its own via UrlMatcher/UrlGenerator without the framework.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q9.** What is a Symfony bridge?  <small>_(easy · single)_</small>
 
@@ -255,7 +255,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     The last minor of each major (X.4) is the LTS; it ships alongside the next major (9.0).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 **Q19.** True or false: a method declared public in PHP but annotated @internal is protected by the BC promise.  <small>_(easy · true-false)_</small>
 
@@ -478,7 +478,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     UrlMatcher::match() returns an array of the matched route's parameters, including the special _route key with the route name and any placeholder values. No framework or kernel is involved — the component works standalone with a RouteCollection and a RequestContext. It returns parameters, never a Response (that is the framework's job).
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/routing.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/routing.html)
 
 **Q36.** For a modern application, how should you depend on Symfony code?  <small>_(medium · trap)_</small>
 
@@ -999,7 +999,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     @experimental features are excluded from the BC promise until they are stabilised; they may change in any release. Building critical paths on experimental code is risky. Along with @internal and final, @experimental is one of the markers that carve exceptions out of the promise.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/experimental.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 **Q76.** Which of the following are covered by the BC promise? (choose all that apply)  <small>_(medium · multiple)_</small>
 
@@ -1156,7 +1156,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     The LTS (X.4) always ships together with the next major (X+1).0.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 **Q88.** Which sequence correctly lists the Symfony 8.x release dates?  <small>_(medium · single)_</small>
 
@@ -1182,7 +1182,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     A frequent misconception is that the LTS precedes the next major. In fact X.4 (the LTS) and (X+1).0 release together (8.4 and 9.0 both Nov 2027). Another trap: 8.0 is a standard release, not the LTS — 8.4 is.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 **Q90.** A product must run 3+ years without a major upgrade. Which 8.x version should you target and why?  <small>_(medium · scenario)_</small>
 
@@ -1234,7 +1234,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     PSR-6 models caching as a pool of CacheItem objects (CacheItemPoolInterface::getItem()/save()); PSR-16 (Simple Cache) is a lighter get()/set()/delete() API, exposed by Symfony's Psr16Cache adapter. Confusing the pool/item model (PSR-6) with the simple key/value API (PSR-16) is a common trap.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/components/cache.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/cache.html)
 
 **Q94.** Which PSR does Symfony's Clock component implement, and why inject its interface?  <small>_(medium · single)_</small>
 
@@ -1514,7 +1514,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     Symfony uses a merge-up model: a fix is committed to the lowest maintained branch that needs it and then merged upward into every newer branch. This keeps behaviour consistent across all maintained versions and avoids a fix being present in an old branch but missing in a newer one.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 **Q115.** Symfony adds a new method to one of its own interfaces in a minor release. Is this a BC break?  <small>_(hard · internals)_</small>
 
@@ -1596,7 +1596,7 @@ Full theory: [Symfony Architecture](../architecture/index.md).
 
     Symfony follows a time-based schedule: minors in May and November and a new major every two years, with the last minor of a branch (X.4, e.g. 8.4) being the LTS that ships alongside the next major. BC breaks happen only in major versions, never in minors even after deprecation, and standard versions get 8 months of bug fixes / 14 months of security fixes — the 3-year bug-fix window belongs to LTS releases only.
 
-    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/community/releases.html)
+    :material-book-open-variant: [Docs](https://symfony.com/doc/8.0/contributing/code/bc.html)
 
 **Q121.** Which statements about HttpKernel's request handling and its events are correct? (select all that apply)  <small>_(hard · multiple)_</small>
 

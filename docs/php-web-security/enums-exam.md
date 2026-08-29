@@ -540,7 +540,7 @@ All questions target **PHP 8.4** and **Symfony 8.0**.
         resolver returns `[null]` only when the request attribute itself is `null`. **D** invents a
         silent fallback that would hide bad URLs and produce wrong pages.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
 
 ??? question "Question 21"
     In which of these situations does `BackedEnumValueResolver` **not** produce a value? (choose two)
@@ -566,7 +566,7 @@ All questions target **PHP 8.4** and **Symfony 8.0**.
         produces a value — if the attribute is already a `BackedEnum`, it is returned as-is, which
         is why a custom listener may pre-convert route values without breaking anything.
 
-        **Official reference:** https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
+        **Official reference:** https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/HttpKernel/Controller/ArgumentResolver/BackedEnumValueResolver.php
 
 ??? question "Question 22"
     You want `/cards/{suit}` to accept only `D` and `S` out of a four-case `Suit` enum, and to 404

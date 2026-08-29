@@ -509,7 +509,7 @@ best hasher first and only falls back to the others when `needsRehash()` says th
 hash is out of date.
 
 !!! note "Symfony 8.0 source reference"
-    https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php
+    https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/PasswordHasherFactory.php
 
 ### The bcrypt 72-byte guard
 
@@ -529,7 +529,7 @@ and old hashes keep verifying. A separate guard rejects anything longer than
 against multi-megabyte "passwords", not a bcrypt concern.
 
 !!! note "Symfony 8.0 source reference"
-    https://github.com/symfony/symfony/blob/8.0/src/Symfony/Component/PasswordHasher/Hasher/NativePasswordHasher.php
+    https://github.com/symfony/symfony/tree/8.0/src/Symfony/Component/PasswordHasher/Hasher/NativePasswordHasher.php
 
 ## All supported cases and variations
 
