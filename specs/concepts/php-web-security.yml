@@ -1,0 +1,547 @@
+# Concept coverage matrix — PHP & Web Security
+#
+# What this is for: "the topic is covered" cannot be inferred from a question
+# count. Twenty-eight questions can pile onto three ideas and leave ten
+# untouched. This file names the ideas, so coverage becomes a fact a tool can
+# check rather than a claim a writer makes about their own work.
+#
+# Each concept must appear in the lesson, in at least one exam question, and on
+# at least one flashcard. tools/check_expert_readiness.py fails a topic when a
+# concept is taught but never examined, and reports questions and cards that
+# match no concept at all — that second direction is what catches decorative
+# content and a keyword set that has gone stale.
+#
+# How matching works, and its honest limit: a concept is "present" in a file when
+# any of its `keywords` appears there. Keywords are chosen to be discriminating —
+# API names, language keywords, version markers — which is reliable on a corpus
+# this technical, but it is EVIDENCE, NOT PROOF. A question can mention
+# `insteadof` without really testing conflict resolution. Confirming that the
+# question tests the concept is the reviewer agent's Pass B, not this file's job.
+# Treat a green result as "nothing is obviously missing", never as "this is good".
+#
+# status mirrors specs/learning_path.yml: OFFICIAL concepts count towards syllabus
+# coverage, ADDITIONAL ones never do.
+
+domain: php-web-security
+
+topics:
+
+  php-api:
+    status: OFFICIAL
+    concepts:
+      - id: implicit_nullable_deprecation
+        title: "Implicitly nullable parameters are deprecated in 8.4"
+        keywords: ["implicitly nullable", "= null", "deprecat"]
+      - id: deprecated_attribute
+        title: "#[\\Deprecated] (8.4) — its targets and what it emits"
+        keywords: ["#[\\Deprecated", "Deprecated]"]
+      - id: property_hooks
+        title: Property hooks (8.4) — get/set, backed and virtual
+        keywords: ["property hook", "{ get", "{ set", "virtual property"]
+      - id: asymmetric_visibility
+        title: Asymmetric visibility (8.4) — private(set), protected(set)
+        keywords: ["private(set)", "protected(set)", "asymmetric visibilit"]
+      - id: readonly
+        title: readonly properties and readonly classes
+        keywords: ["readonly"]
+      - id: enums_language
+        title: Enums as a language feature
+        keywords: ["enum", "BackedEnum", "UnitEnum", "tryFrom", "from("]
+      - id: first_class_callables
+        title: First-class callable syntax (8.1) and its limits
+        keywords: ["first-class callable", "(...)"]
+      - id: named_arguments
+        title: Named arguments and their ordering rules
+        keywords: ["named argument", "named parameter"]
+      - id: match_expression
+        title: match (8.0) — strict comparison, exhaustiveness, UnhandledMatchError
+        keywords: ["match(", "match (", "UnhandledMatchError"]
+      - id: nullsafe
+        title: Nullsafe operator and short-circuiting
+        keywords: ["nullsafe", "?->"]
+      - id: new_in_initializers
+        title: new in initializers (8.1) and where it is forbidden
+        keywords: ["initializer", "initialiser"]
+      - id: type_declarations
+        title: Union, intersection and DNF types
+        keywords: ["union type", "intersection type", "DNF"]
+      - id: override_attribute
+        title: "#[\\Override] (8.3)"
+        keywords: ["#[\\Override]", "Override]"]
+      - id: json_validate
+        title: json_validate() (8.3)
+        keywords: ["json_validate"]
+      - id: lazy_objects
+        title: Lazy objects (8.4)
+        keywords: ["lazy object", "newLazyProxy", "newLazyGhost"]
+
+  oop:
+    status: OFFICIAL
+    concepts:
+      - id: signature_compatibility
+        title: Signature compatibility, and which methods are exempt
+        keywords: ["signature compatib", "exempt", "#[\\Override]", "Override]"]
+      - id: visibility
+        title: Visibility — public, protected, private
+        keywords: ["protected", "private "]
+      - id: static_members
+        title: Static properties and methods
+        keywords: ["static ", "self::", "static::"]
+      - id: late_static_binding
+        title: Late static binding — forwarding vs non-forwarding calls
+        keywords: ["late static binding", "static::", "forwarding call"]
+      - id: constructor_promotion
+        title: Constructor property promotion
+        keywords: ["promotion", "promoted"]
+      - id: magic_methods
+        title: Magic methods and overloading
+        keywords: ["__get", "__set", "__call", "magic method"]
+      - id: clone_semantics
+        title: clone and __clone — shallow by default
+        keywords: ["clone", "__clone"]
+      - id: inheritance_final
+        title: abstract and final in class hierarchies
+        keywords: ["final ", "abstract "]
+      - id: property_hooks_oop
+        title: Property hooks in a class body (8.4)
+        keywords: ["property hook", "{ get", "{ set"]
+      - id: asymmetric_visibility_oop
+        title: Asymmetric property visibility (8.4)
+        keywords: ["private(set)", "protected(set)", "asymmetric"]
+      - id: readonly_oop
+        title: readonly and what 8.3/8.4 changed
+        keywords: ["readonly"]
+
+  interfaces:
+    status: OFFICIAL
+    concepts:
+      - id: interface_basics
+        title: Declaring and implementing an interface
+        keywords: ["interface ", "implements"]
+      - id: interface_constants
+        title: Interface constants and their 8.1 override rule
+        keywords: ["interface constant", "const "]
+      - id: interface_properties
+        title: Interface properties (8.4) and the get/set asymmetry
+        keywords: ["interface propert", "{ get", "{ set"]
+      - id: covariance
+        title: Covariant return types
+        keywords: ["covarian", "variance rule"]
+      - id: contravariance
+        title: Contravariant parameter types
+        keywords: ["contravarian"]
+      - id: property_variance
+        title: Properties are invariant, and the 8.4 exception
+        keywords: ["invariant", "property variance"]
+      - id: instanceof
+        title: instanceof and type checks
+        keywords: ["instanceof"]
+      - id: union_intersection_dnf
+        title: Union, intersection and DNF type declarations
+        keywords: ["union type", "intersection type", "DNF", "never", "void"]
+      - id: two_interfaces
+        title: Satisfying two interfaces with different signatures
+        keywords: ["two interfaces", "both interfaces"]
+      - id: variance_fatal
+        title: Variance violations are link-time fatals, not catchable
+        keywords: ["link-time", "fatal error", "compile-time", "variance violation"]
+
+  attributes:
+    status: OFFICIAL
+    concepts:
+      - id: attribute_declaration
+        title: Declaring an attribute class with #[\Attribute]
+        keywords: ["#[\\Attribute", "Attribute]"]
+      - id: attribute_targets
+        title: TARGET_* flags and what they restrict
+        keywords: ["TARGET_", "Attribute::TARGET"]
+      - id: repeatable_attributes
+        title: IS_REPEATABLE and repeated attributes
+        keywords: ["IS_REPEATABLE", "repeatab"]
+      - id: reflection_reading
+        title: Reading attributes back with Reflection
+        keywords: ["getAttributes", "ReflectionAttribute"]
+      - id: attribute_arguments
+        title: Attribute arguments are constant expressions
+        keywords: ["getArguments", "constant expression", "argument"]
+      - id: new_instance
+        title: newInstance() is when validation and autoloading happen
+        keywords: ["newInstance"]
+      - id: attribute_inheritance
+        title: Attributes are not inherited
+        keywords: ["inherit"]
+      - id: is_instanceof
+        title: ReflectionAttribute::IS_INSTANCEOF
+        keywords: ["IS_INSTANCEOF"]
+      - id: builtin_attributes
+        title: "Built-in attributes: #[\\Override], #[\\Deprecated], #[\\SensitiveParameter]"
+        keywords: ["#[\\Override", "#[\\Deprecated", "SensitiveParameter", "AllowDynamicProperties"]
+      - id: symfony_attributes
+        title: How Symfony reads its own attributes
+        keywords: ["#[Route", "AsCommand", "AsEventListener", "Symfony"]
+
+  closures:
+    status: OFFICIAL
+    concepts:
+      - id: legacy_callables
+        title: create_function() and string callables, and why they are gone
+        keywords: ["create_function", "string callable"]
+      - id: closure_class
+        title: Every anonymous function is a Closure instance
+        keywords: ["Closure", "instanceof Closure"]
+      - id: use_capture
+        title: use () captures by value at creation time
+        keywords: ["use (", "capture"]
+      - id: use_by_reference
+        title: use (&$x) captures by reference
+        keywords: ["use (&", "by reference"]
+      - id: arrow_functions
+        title: Arrow functions capture automatically and cannot be multi-statement
+        keywords: ["arrow function", "fn ("]
+      - id: bind_scope
+        title: bindTo/Closure::bind and the scope argument
+        keywords: ["bindTo", "Closure::bind"]
+      - id: closure_call
+        title: Closure::call()
+        keywords: ["Closure::call", "->call("]
+      - id: first_class_callable_syntax
+        title: f(...) and what it cannot be applied to
+        keywords: ["first-class callable", "(...)"]
+      - id: from_callable
+        title: Closure::fromCallable() versus f(...)
+        keywords: ["fromCallable"]
+      - id: static_closures
+        title: Static anonymous functions have no $this
+        keywords: ["static function", "static fn", "static closure"]
+      - id: closures_in_symfony
+        title: Where Symfony uses closures
+        keywords: ["Symfony", "TwigFilter", "service closure", "lazy"]
+
+  abstract-classes:
+    status: OFFICIAL
+    concepts:
+      - id: abstract_class_basics
+        title: An abstract class cannot be instantiated
+        keywords: ["abstract class", "cannot be instantiated"]
+      - id: abstract_methods
+        title: One unimplemented abstract member makes the class abstract
+        keywords: ["abstract method", "abstract function"]
+      - id: two_failure_moments
+        title: Missing implementation is compile-time; new is a catchable Error
+        keywords: ["compile-time", "link-time", "Error"]
+      - id: abstract_vs_interface
+        title: Abstract class versus interface — state, constructor, single inheritance
+        keywords: ["interface", "extends", "implements"]
+      - id: template_method
+        title: The template method pattern — final skeleton, abstract hooks
+        keywords: ["template method"]
+      - id: abstract_properties
+        title: Abstract properties (8.4)
+        keywords: ["abstract propert", "{ get", "{ set"]
+      - id: override_rules
+        title: Implementing an abstract member follows the override rules
+        keywords: ["covarian", "contravarian", "visibility"]
+      - id: abstract_exclusions
+        title: abstract never combines with final or private, and takes no body
+        keywords: ["final", "private", "no body"]
+      - id: symfony_abstract_classes
+        title: "Symfony's Abstract* classes: AbstractController, AbstractType"
+        keywords: ["AbstractController", "AbstractType", "AbstractAuthenticator", "Command::execute", "Symfony"]
+
+  exceptions:
+    status: OFFICIAL
+    concepts:
+      - id: throwable_hierarchy
+        title: Throwable, Error and Exception branches
+        keywords: ["Throwable", "Error", "Exception"]
+      - id: error_branch
+        title: "The Error branch: TypeError, ValueError, ArithmeticError"
+        keywords: ["TypeError", "ValueError", "ArithmeticError", "DivisionByZero"]
+      - id: spl_exceptions
+        title: The SPL exception tree — Logic versus Runtime
+        keywords: ["LogicException", "RuntimeException", "InvalidArgument"]
+      - id: catch_syntax
+        title: Multi-catch, non-capturing catch, catch order
+        keywords: ["catch (", "catch("]
+      - id: finally_semantics
+        title: finally, and return inside finally
+        keywords: ["finally"]
+      - id: previous_exception
+        title: Exception chaining with $previous
+        keywords: ["getPrevious", "previous"]
+      - id: error_handler
+        title: set_error_handler and what it can and cannot handle
+        keywords: ["set_error_handler", "ErrorException"]
+      - id: error_levels
+        title: Error levels and error_reporting
+        keywords: ["E_WARNING", "E_NOTICE", "error_reporting", "E_USER"]
+      - id: strict_types
+        title: strict_types and coercion at the boundary
+        keywords: ["strict_types"]
+      - id: custom_exceptions
+        title: Designing custom exceptions
+        keywords: ["custom exception", "extends \\Exception", "extends Exception"]
+      - id: symfony_http_exceptions
+        title: HttpExceptionInterface and the status-code mapping
+        keywords: ["HttpException", "NotFoundHttpException", "HttpExceptionInterface"]
+
+  traits:
+    status: OFFICIAL
+    concepts:
+      - id: trait_introspection
+        title: Introspecting traits — class_uses, ReflectionClass::getTraits, getDeclaringClass
+        keywords: ["class_uses", "getTraits", "getDeclaringClass", "Reflection"]
+      - id: trait_basics
+        title: Declaring and using a trait
+        keywords: ["trait ", "use "]
+      - id: precedence
+        title: Precedence — class beats trait beats inherited
+        keywords: ["precedence", "overrid"]
+      - id: conflict_insteadof
+        title: Conflict resolution with insteadof
+        keywords: ["insteadof"]
+      - id: aliasing_as
+        title: as for aliasing and changing visibility
+        keywords: [" as ", "aliasing", "visibility"]
+      - id: abstract_trait_members
+        title: Abstract members in a trait
+        keywords: ["abstract"]
+      - id: static_trait_members
+        title: Static members are per-using-class
+        keywords: ["static"]
+      - id: trait_properties
+        title: Trait properties and identical-definition rules
+        keywords: ["propert"]
+      - id: trait_constants
+        title: Trait constants (8.2)
+        keywords: ["constant", "const "]
+      - id: traits_from_traits
+        title: Traits composed from traits
+        keywords: ["composed", "trait uses", "nested trait"]
+      - id: self_static_in_trait
+        title: self, static and __CLASS__ inside a trait
+        keywords: ["__CLASS__", "self::", "static::"]
+      - id: as_final
+        title: "as final (8.3)"
+        keywords: ["as final"]
+
+  enums:
+    status: OFFICIAL
+    concepts:
+      - id: pure_enums
+        title: Pure enums and UnitEnum
+        keywords: ["pure enum", "UnitEnum"]
+      - id: backed_enums
+        title: Backed enums and BackedEnum
+        keywords: ["backed enum", "BackedEnum"]
+      - id: cases_method
+        title: cases() and its ordering guarantee
+        keywords: ["cases()"]
+      - id: from_tryfrom
+        title: from() throws ValueError; tryFrom() returns null
+        keywords: ["tryFrom", "from(", "ValueError"]
+      - id: enum_methods
+        title: Enums may have methods, constants, interfaces and traits
+        keywords: ["method", "implements", "const"]
+      - id: enum_restrictions
+        title: What an enum may never have — state, inheritance, new, clone
+        keywords: ["cannot", "may not", "never", "readonly"]
+      - id: enum_identity
+        title: Cases are singletons, so === works
+        keywords: ["===", "singleton", "identity"]
+      - id: enum_in_match
+        title: Enums in match, and exhaustiveness
+        keywords: ["match"]
+      - id: enum_serialization
+        title: Serialization rules for enums
+        keywords: ["serial", "json_encode", "JsonSerializable"]
+      - id: enum_reflection
+        title: ReflectionEnum
+        keywords: ["ReflectionEnum", "Reflection"]
+      - id: enum_symfony_routing
+        title: Enums in routing requirements and controller arguments
+        keywords: ["Route", "controller argument", "requirement"]
+      - id: enum_symfony_forms
+        title: EnumType in Forms
+        keywords: ["EnumType", "form"]
+      - id: enum_doctrine
+        title: Doctrine enum mapping
+        keywords: ["Doctrine", "enumType"]
+
+  namespaces:
+    status: ADDITIONAL
+    concepts:
+      - id: declare_ordering
+        title: What may legally appear before a namespace declaration
+        keywords: ["before a `namespace`", "before a namespace", "declare(", "ordering"]
+      - id: name_resolution
+        title: Unqualified, qualified and fully qualified names
+        keywords: ["unqualified", "qualified", "fully qualified"]
+      - id: what_namespaces_affect
+        title: What a namespace declaration actually affects — classes, functions, constants only
+        keywords: ["affected by a namespace", "classes, interfaces", "only affects"]
+      - id: global_fallback
+        title: Functions and constants fall back to global scope; classes do not
+        keywords: ["fallback", "global scope", "global function"]
+      - id: use_class
+        title: use for classes
+        keywords: ["use "]
+      - id: use_function_const
+        title: use function and use const
+        keywords: ["use function", "use const"]
+      - id: aliasing
+        title: Aliasing with as
+        keywords: [" as ", "alias"]
+      - id: group_use
+        title: Group use declarations
+        keywords: ["group use", "use App\\{", "{"]
+      - id: namespace_operator
+        title: The namespace operator and __NAMESPACE__
+        keywords: ["__NAMESPACE__", "namespace\\"]
+      - id: use_is_compile_time
+        title: use is compile-time and does not autoload
+        keywords: ["compile-time", "autoload", "costs nothing", "zero cost"]
+      - id: dynamic_class_names
+        title: Class names in strings are always fully qualified
+        keywords: ["string", "dynamic", "variable class"]
+      - id: multiple_namespaces
+        title: Multiple namespaces per file and the brace syntax
+        keywords: ["multiple namespace", "brace"]
+      - id: psr4
+        title: PSR-4 autoloading
+        keywords: ["PSR-4", "psr-4", "namespace prefix", "expected to find"]
+      - id: composer_autoload
+        title: composer autoload, autoload-dev and optimisation
+        keywords: ["composer", "autoload-dev", "optimize-autoloader", "classmap"]
+
+  extensions:
+    status: ADDITIONAL
+    concepts:
+      - id: what_is_extension
+        title: An extension is a registered module, not a library you include
+        keywords: ["extension", "module"]
+      - id: membership_categories
+        title: Bundled, core, PECL and how they differ
+        keywords: ["bundled", "PECL", "core"]
+      - id: mbstring
+        title: mbstring — multibyte versus byte semantics
+        keywords: ["mbstring", "mb_strlen", "mb_substr"]
+      - id: encodings
+        title: Bytes, code points and graphemes
+        keywords: ["grapheme", "code point", "byte"]
+      - id: intl
+        title: intl — Collator, NumberFormatter, IntlDateFormatter, ICU data
+        keywords: ["intl", "Collator", "NumberFormatter", "IntlDateFormatter", "ICU"]
+      - id: ctype
+        title: ctype and its two sharp edges
+        keywords: ["ctype", "ctype_digit"]
+      - id: iconv
+        title: iconv versus mbstring
+        keywords: ["iconv"]
+      - id: pdo
+        title: PDO is an interface; drivers are separate extensions
+        keywords: ["PDO", "pdo_mysql", "driver"]
+      - id: opcache
+        title: OPcache caches bytecode; validate_timestamps and preloading
+        keywords: ["opcache", "OPcache", "preload", "validate_timestamps"]
+      - id: detecting_extensions
+        title: Detecting and requiring extensions
+        keywords: ["extension_loaded", "get_loaded_extensions", "ext-", "check-platform-reqs"]
+      - id: polyfills
+        title: What symfony/polyfill-* does and does not replace
+        keywords: ["polyfill"]
+
+  spl:
+    status: ADDITIONAL
+    concepts:
+      - id: stringable
+        title: Stringable, and why it is implemented implicitly
+        keywords: ["Stringable", "__toString"]
+      - id: arrayaccess
+        title: ArrayAccess, and what isset()/?? do to it
+        keywords: ["ArrayAccess", "offsetExists", "offsetGet"]
+      - id: iterator
+        title: Iterator and the exact foreach call order
+        keywords: ["Iterator", "rewind", "valid", "current", "next"]
+      - id: iterator_aggregate
+        title: IteratorAggregate and getIterator()
+        keywords: ["IteratorAggregate", "getIterator"]
+      - id: countable
+        title: Countable
+        keywords: ["Countable", "count()"]
+      - id: traversable
+        title: Traversable cannot be implemented directly
+        keywords: ["Traversable"]
+      - id: spl_data_structures
+        title: SplStack, SplQueue, SplFixedArray, SplDoublyLinkedList
+        keywords: ["SplStack", "SplQueue", "SplFixedArray", "SplDoublyLinkedList"]
+      - id: spl_heaps
+        title: SplHeap, SplMinHeap, SplMaxHeap, SplPriorityQueue
+        keywords: ["SplHeap", "SplMinHeap", "SplMaxHeap", "SplPriorityQueue"]
+      - id: spl_object_storage
+        title: SplObjectStorage as set and as map
+        keywords: ["SplObjectStorage", "attach", "detach"]
+      - id: iterator_decorators
+        title: LimitIterator, CallbackFilterIterator, RecursiveIteratorIterator
+        keywords: ["LimitIterator", "CallbackFilterIterator", "RecursiveIteratorIterator", "ArrayIterator"]
+      - id: generators
+        title: Generators — yield, yield from, send(), getReturn()
+        keywords: ["yield", "Generator", "getReturn", "send("]
+      - id: iterator_to_array
+        title: iterator_to_array and the preserve-keys trap
+        keywords: ["iterator_to_array"]
+      - id: spl_in_symfony
+        title: Where Symfony uses the SPL
+        keywords: ["Finder", "RewindableGenerator", "Symfony"]
+
+  web-security:
+    status: ADDITIONAL
+    concepts:
+      - id: xss
+        title: XSS — reflected, stored, DOM
+        keywords: ["XSS", "cross-site scripting"]
+      - id: twig_escaping
+        title: Twig auto-escaping is contextual; what |raw disables
+        keywords: ["auto-escap", "autoescape", "|raw", "escape"]
+      - id: csrf
+        title: CSRF and Symfony's token manager
+        keywords: ["CSRF", "csrf_token"]
+      - id: samesite
+        title: SameSite cookies and why Lax is not a complete defence
+        keywords: ["SameSite", "samesite"]
+      - id: sql_injection
+        title: SQL injection — prepared statements versus concatenation
+        keywords: ["SQL injection", "prepared statement", "prepare("]
+      - id: doctrine_parameters
+        title: Why DQL parameters are safe and concatenation is not
+        keywords: ["DQL", "setParameter", "Doctrine"]
+      - id: session_fixation
+        title: Session fixation and migration on login
+        keywords: ["session fixation", "migrate", "session_regenerate"]
+      - id: session_cookie_flags
+        title: cookie_httponly, cookie_secure, use_strict_mode
+        keywords: ["httponly", "cookie_secure", "use_strict_mode"]
+      - id: clickjacking
+        title: Clickjacking, X-Frame-Options and frame-ancestors
+        keywords: ["clickjack", "X-Frame-Options", "frame-ancestors"]
+      - id: https_hsts
+        title: HTTPS and HSTS
+        keywords: ["HSTS", "Strict-Transport-Security", "HTTPS"]
+      - id: security_headers
+        title: CSP, Referrer-Policy, X-Content-Type-Options, Permissions-Policy
+        keywords: ["Content-Security-Policy", "CSP", "Referrer-Policy", "X-Content-Type-Options"]
+      - id: password_storage
+        title: password_hash, bcrypt versus argon2id, the auto hasher
+        keywords: ["password_hash", "argon2", "bcrypt", "auto hasher"]
+      - id: password_rehashing
+        title: Rehashing and PasswordUpgraderInterface
+        keywords: ["needsRehash", "PasswordUpgrader", "rehash"]
+      - id: timing_attacks
+        title: Timing attacks and hash_equals
+        keywords: ["hash_equals", "timing attack"]
+      - id: open_redirect
+        title: Open redirects
+        keywords: ["open redirect", "redirect"]
+      - id: file_upload
+        title: File-upload risks
+        keywords: ["upload"]
