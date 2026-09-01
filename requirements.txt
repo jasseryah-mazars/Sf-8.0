@@ -9,4 +9,4 @@ pygments==2.18.0
 mkdocs-material-extensions==1.3.1
 mkdocs-git-revision-date-localized-plugin==1.3.0
 # Bilingual site (EN default + FR translations as *.fr.md suffix files).
-mkdocs-static-i18n==1.2.3
+mkdocs-static-i18n==1.3.1
